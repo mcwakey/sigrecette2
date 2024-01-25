@@ -38,7 +38,7 @@ class RecoveriesDataTable extends DataTable
             ->editColumn('reference', function (Payment $payment) {
                 return $payment->reference;
             })
-            ->editColumn('tax_labels.id', function (Payment $payment) {
+            ->editColumn('tax_labels.code', function (Payment $payment) {
                 return $payment->code ?? '';
             })
             ->editColumn('nic', function (Payment $payment) {
@@ -113,10 +113,10 @@ class RecoveriesDataTable extends DataTable
             Column::make('taxpayers.name')->title(__('taxpayer'))->addClass('d-flex align-items-center'),
             Column::make('no_avis')->title(__('invoice no'))->name('no_avis'),
             Column::make('reference')->title(__("reference no"))->name("reference"),
-            Column::make('tax_labels.id')->title(__('taxlabel')),
-            Column::make('nic')->title(__('nic')),
-            Column::make('taxpayers.latitude')->title(__('gps')),
-            Column::make('taxpayers.address')->title(__('address')),
+            Column::make('tax_labels.code')->title(__('code')),
+            Column::make('nic')->title(__('nic'))->visible(false),
+            Column::make('taxpayers.latitude')->title(__('gps'))->visible(false),
+            Column::make('taxpayers.address')->title(__('address'))->visible(false),
             Column::make('amount')->title(__('amount paid')),
             Column::make('remaining_amount')->title(__('balance')),
             Column::make('status')->title(__('status')),

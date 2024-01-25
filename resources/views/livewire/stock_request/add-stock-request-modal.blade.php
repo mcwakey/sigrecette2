@@ -39,6 +39,7 @@
                                     <option>{{ __('select an option') }}</option>
                                     <option value="TICKET">TICKET</option>
                                     <option value="TIMBRE">TIMBRE</option>
+                                    <option value="AUTRE">AUTRE</option>
                                 </select>
                                     @endif
                                 <!--end::Input-->
@@ -99,7 +100,7 @@
                         <div class="row mb-7">
                             <div class="col-md-3">
                                 <!--begin::Label-->
-                                <label class="required fs-6 fw-semibold mb-2">{{ __('start no') }}</label>
+                                <label class="fs-6 fw-semibold mb-2">{{ __('start no') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input data-kt-action="load_drop" -->
                                 <input type="text" wire:model="start_no" name="start_no" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('start no') }}" data-kt-action="change_qty" />
@@ -177,7 +178,7 @@
                                                 {{ $stock_request->qty }} 
                                             </td>
                                             <td>
-                                                {{ $stock_request->qty*$stock_request->taxable->tariff }}
+                                                {{ $stock_request->qty*$stock_request->taxable?->tariff }}
                                             </td>
                                             <td>
                                                 {{ $stock_request->start_no." - ".$stock_request->end_no }}

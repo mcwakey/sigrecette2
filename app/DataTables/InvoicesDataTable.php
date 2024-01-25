@@ -47,8 +47,8 @@ class InvoicesDataTable extends DataTable
             ->editColumn('taxpayers.latitude', function (Invoice $invoice) {
                 return ($invoice->taxpayer->latitude ?? '-').' : '.($invoice->taxpayer->longitude ?? '-');
             })
-            ->editColumn('tax_labels.id', function (Invoice $invoice) {
-                return $invoice->invoiceitems()->first()->taxpayer_taxable->taxable->tax_label->name ?? '';
+            ->editColumn('tax_labels.code', function (Invoice $invoice) {
+                return $invoice->invoiceitems()->first()->taxpayer_taxable->taxable->tax_label->code ?? '';
             })
             ->editColumn('total', function (Invoice $invoice) {
                 if ($invoice->reduce_amount != '')
@@ -100,9 +100,11 @@ class InvoicesDataTable extends DataTable
                         // ->where('taxables.tax_label_id', 'LIKE', '%' . ($this->taxlabel ?? '') . '%')
                         // ->where('invoices.validity', 'EXPIRED')
                         ->select('invoices.*')
-                ->whereBetween('invoices.created_at', [$this->startDate, $this->endDate])
+                        ->whereBetween('invoices.created_at', [$this->startDate, $this->endDate])
                         ->distinct()
                         ->newQuery();
+
+
         if ($this->notDelivery!==null && $this->notDelivery) {
             $query->whereNull('delivery_date');
         }elseif ($this->notDelivery!==null && !$this->notDelivery)  {
@@ -142,11 +144,11 @@ class InvoicesDataTable extends DataTable
             Column::make('taxpayers.name')->title(__('taxpayer'))->addClass('d-flex align-items-center'),
             Column::make('invoice_no')->title(__('invoice no')),
             Column::make('order_no')->title(__('order no')),
-            Column::make('nic')->title(__('nic')),
+            Column::make('nic')->title(__('nic'))->visible(false),
             Column::make('zones.name')->title(__('zone')),
-            Column::make('taxpayers.address')->title(__('address')),
-            Column::make('taxpayers.latitude')->title(__('gps')),
-            Column::make('tax_labels.id')->title(__('taxlabel')),
+            Column::make('taxpayers.address')->title(__('address'))->visible(false),
+            Column::make('taxpayers.latitude')->title(__('gps'))->visible(false),
+            Column::make('tax_labels.code')->title(__('code')),
             Column::make('total')->title(__('amount'))->name('amount'),
             Column::make('status')->title(__('aproval')),
             Column::make('delivery_date')->title( __('delivery date'))->addClass('text-nowrap'),

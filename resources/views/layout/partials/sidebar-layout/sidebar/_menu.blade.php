@@ -71,7 +71,7 @@
 
             <!--begin:Menu item-->
             <div data-kt-menu-trigger="click"
-                class="menu-item menu-accordion {{ request()->routeIs('invoices') ? 'here show' : '' }}">
+                class="menu-item menu-accordion {{ request()->routeIs('invoices.*') ? 'here show' : '' }}">
                 <!--begin:Menu link-->
                 <span class="menu-link">
                     <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>

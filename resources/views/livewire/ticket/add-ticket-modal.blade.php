@@ -38,6 +38,7 @@
                                     <!-- <option value="Jours">Jours</option> -->
                                     <option value="TICKET">TICKET</option>
                                     <option value="TIMBRE">TIMBRE</option>
+                                    <option value="AUTRE">AUTRE</option>
                                 </select>
                                 <!--end::Input-->
                                 @error('unit')

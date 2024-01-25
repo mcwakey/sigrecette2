@@ -174,7 +174,7 @@ $stock_r = \App\Models\StockRequest::find($data[0]);
             Prise en charge par le Régisseur des valeurs inactives   pour un montant de   {{number_to_words($stock_r->qty* $stock_r->taxable->tariff)}} FCFA</td>
         <td colspan="5" style="border: none; margin: 0;text-align: left">
             Arrêté le montant des valeurs vendues à {{number_to_words(intval($vv_qty)* $stock_r->taxable->tariff)}}
-            et le montant des valeurs en stock à .. {{number_to_words($vv_total)}}
+            et le montant des valeurs en stock à .. {{number_to_words(isset($vv_total)?$vv_total:0)}}
         </td>
     </tr>
     <tr>

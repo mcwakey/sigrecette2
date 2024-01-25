@@ -79,8 +79,12 @@ class StockTransfersDataTable extends DataTable
             })
             ->editColumn('vv_qty', function (StockTransfer $stock_transfer) {
                 if (!$stock_transfer->vv_qty) {
-                    $vv_qty =  "";
-                } else {
+                    if ($stock_transfer->rd_qty){
+                        $vv_qty =  "0";
+                    }else {
+                        $vv_qty =  "";
+                    }
+                }else {
                     $vv_qty = $stock_transfer->vv_qty ;
                 }
 
@@ -88,7 +92,12 @@ class StockTransfersDataTable extends DataTable
             })
             ->editColumn('vv_total', function (StockTransfer $stock_transfer) {
                 if (!$stock_transfer->vv_qty) {
-                    $vv_total =  "";
+                    if ($stock_transfer->rd_qty){
+                        $vv_total =  "0";
+                    }else {
+                        $vv_total =  "";
+                    }
+                    // $vv_total =  "";
                 } else {
                     $vv_total = $stock_transfer->vv_qty * $stock_transfer->taxable->tariff; 
                 }
