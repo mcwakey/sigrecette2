@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('nic');
             $table->string('status')->default('PENDING');
             $table->string('pay_status')->default('OWING');
-            $table->double('amount');
-            $table->unsignedBigInteger('taxpayer_id')->default(1);
+            $table->double('amount')->default(0);
+            $table->unsignedBigInteger('taxpayer_id')->nullable();
             $table->foreign('taxpayer_id')->references('id')->on('taxpayers');
             // $table->unsignedBigInteger('taxpayer_taxable_id')->default(1);
             // $table->foreign('taxpayer_taxable_id')->references('id')->on('taxpayer_taxables');
