@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Taxpayer;
 use App\DataTables\TaxpayersDataTable;
 use App\DataTables\TaxpayerInvoicesDataTable;
+use App\DataTables\TaxpayerTaxablesDataTable;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -37,16 +38,64 @@ class TaxpayerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Taxpayer $taxpayer, TaxpayerInvoicesDataTable $dataTable)
+    public function show(Taxpayer $taxpayer, TaxpayerInvoicesDataTable $invoicesDataTable, TaxpayerTaxablesDataTable $taxablesDataTable)
     {
         // Assuming you want to pass the $taxpayer to the show view
         // return view('pages.taxpayers.show', compact('taxpayer'))
         //     ->with('dataTable', $dataTable->html());
         //return $dataTable->render('pages/taxpayers.show')-> with ('taxpayer', $taxpayer);
         
-        return $dataTable->with('id', $taxpayer->id)
+        return $invoicesDataTable->with('id', $taxpayer->id)
                 ->render('pages/taxpayers.show', compact('taxpayer'));
     }   
+
+    /**
+     * Display the specified resource.
+     */
+    // public function show(Taxpayer $taxpayer, TaxpayerInvoicesDataTable $invoicesDataTable, TaxpayerTaxablesDataTable $taxablesDataTable)
+    // {
+    //     // Assuming you want to pass the $taxpayer to the show view
+
+    //     // return view('pages.taxpayers.show', compact('taxpayer'))
+    //     //     ->with('invoicesDataTable', $invoicesDataTable->with('id', $taxpayer->id)->html());
+    //         // ->with('taxablesDataTable', $taxablesDataTable->with('id', $taxpayer->id)->html());
+
+    //     //return $dataTable->render('pages/taxpayers.show')-> with ('taxpayer', $taxpayer);
+        
+    //     // return $dataTable->with('id', $taxpayer->id), 
+                
+    //     $invoicesDataTable->with('id', $taxpayer->id)
+    //             ->render('pages/taxpayers.show', compact('taxpayer'));
+    // }   
+
+    // public function show(Taxpayer $taxpayer, TaxpayerInvoicesDataTable $invoicesDataTable, TaxpayerTaxablesDataTable $taxablesDataTable)
+    // {
+    //     // Pass the $taxpayer object and its ID to both DataTables
+    //     $invoicesDataTable->with('id', $taxpayer->id)->with('taxpayer', $taxpayer);
+    //     $taxablesDataTable->with('id', $taxpayer->id)->with('taxpayer', $taxpayer);
+        
+    //     // Render the show view with both DataTables
+    //     return view('pages.taxpayers.show', compact('taxpayer'))->with([
+    //         'invoicesDataTable' => $invoicesDataTable->render(),
+    //         'taxablesDataTable' => $taxablesDataTable->render(),
+    //     ]);
+    // }
+
+    // public function show(Taxpayer $taxpayer, TaxpayerInvoicesDataTable $invoicesDataTable, TaxpayerTaxablesDataTable $taxablesDataTable)
+    // {
+    //     // Pass the $taxpayer object and its ID to both DataTables
+    //     $invoicesDataTable->with('id', $taxpayer->id)->with('taxpayer', $taxpayer);
+    //     $taxablesDataTable->with('id', $taxpayer->id)->with('taxpayer', $taxpayer);
+        
+    //     // Get the HTML content of both DataTables
+    //     //$invoicesDataTableHtml = $invoicesDataTable->render();
+    //     //$taxablesDataTableHtml = $taxablesDataTable->render();
+        
+    //     // Render the show view with both DataTables HTML content and the $taxpayer object
+    //     return view('pages.taxpayers.show', compact('taxpayer', 'invoicesDataTableHtml', 'taxablesDataTableHtml'));
+    // }
+
+
 
 //     public function show($identifier, TaxablesDataTable $dataTable)
 // {
