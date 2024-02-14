@@ -119,8 +119,8 @@
                                     <option value="Femme">Femme</option>
                                 </select> -->
 
-                                <select wire:model="id_type" name="id_type" class="form-select form-select-solid" name="task_status" data-kt-select2="false" data-placeholder="Select option" data-allow-clear="true" data-hide-search="true">
-                                    <option>{{ __('select id type') }}</option>
+                                <select wire:model="id_type" data-dropdown-parent="#kt_modal_add_taxpayer"  name="id_type" class="form-select form-select-solid" name="task_status" data-kt-select2="true" data-placeholder="Select option" data-allow-clear="true" data-hide-search="false">
+                                    <!-- <option>{{ __('select id type') }}</option> -->
                                     @foreach($id_types as $id_type)
                                     <option value="{{ $id_type->name}}">{{ $id_type->name }}</option>
                                     @endforeach
@@ -215,8 +215,10 @@
 
                                 <select wire:model="canton" name="canton" class="form-select form-select-solid" data-allow-clear="true">
                                     <option>{{ __('select district') }}</option>
+
                                     @foreach($cantons as $canton)
-                                    <option value="{{ $canton->name }}">{{ $canton->name }}</option>
+            
+                                    <option value="{{ $canton->id }}">{{ $canton->name }}</option>
                                     @endforeach
                                 </select>
 
@@ -232,7 +234,7 @@
                                 <select wire:model="town" name="town" class="form-select form-select-solid" data-dropdown-parent="#kt_modal_add_taxpayer">
                                 <option>{{ __('select town') }}Select a town</option>
                                 @foreach($towns as $town)
-                                    <option value="{{ $town->name}}">{{ $town->name }}</option>
+                                    <option value="{{ $town->id }}">{{ $town->name }}</option>
                                 @endforeach
                                 </select>
                                 <!--end::Input-->
@@ -248,7 +250,7 @@
                                     data-dropdown-parent="#kt_modal_add_taxpayer">
                                     <option>{{ __('select erea') }}</option>
                                     @foreach($ereas as $erea)
-                                    <option value="{{ $erea->name }}">{{ $erea->name }}</option>
+                                    <option value="{{ $erea->id }}">{{ $erea->name }}</option>
                                     @endforeach
                                 </select>
                                 <!--end::Input-->
