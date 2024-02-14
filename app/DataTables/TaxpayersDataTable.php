@@ -8,9 +8,12 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Yajra\DataTables\Html\Button;
 
 class TaxpayersDataTable extends DataTable
 {
+
+
     /**
      * Build the DataTable class.
      *
@@ -33,7 +36,7 @@ class TaxpayersDataTable extends DataTable
                 return $taxpayer->canton;
             })
             ->editColumn('town', function (Taxpayer $taxpayer) {
-                return $taxpayer->town. " - " . $taxpayer->erea;
+                return $taxpayer->town . " - " . $taxpayer->erea;
             })
             ->editColumn('erea', function (Taxpayer $taxpayer) {
                 return $taxpayer->erea;
@@ -74,6 +77,13 @@ class TaxpayersDataTable extends DataTable
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(7)
+            ->dom("<'d-flex justify-content-end absolute top-0'B>")
+            ->buttons([
+                'print',
+                'excel',
+                'csv',
+                'pdf',
+            ])
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/taxpayers/columns/_draw-scripts.js')) . "}");
     }
 
@@ -83,14 +93,14 @@ class TaxpayersDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('taxpayer')->title(__('taxpayer'))->addClass('d-flex align-items-center')->name('name'),
-            Column::make('gender')->title(__('gender')),
-            Column::make('mobilephone')->title(__('mobilephone'))->addClass('d-flex align-items-center')->name('mobilephone'),
-            Column::make('canton')->title(__('canton')),
-            Column::make('town')->title(__('town')),
-            Column::make('address')->title(__('address')),
-            Column::make('zone')->title(__('zone')),
-            Column::make('created_at')->title(__('joined date'))->addClass('text-nowrap'),
+            Column::make('taxpayer')->title(__('taxpayer'))->addClass('d-flex align-items-center taxpayer')->name('name'),
+            Column::make('gender')->title(__('gender'))->addClass('gender'),
+            Column::make('mobilephone')->title(__('mobilephone'))->addClass('d-flex align-items-center mobilephone')->name('mobilephone'),
+            Column::make('canton')->title(__('canton'))->addClass('canton'),
+            Column::make('town')->title(__('town'))->addClass('twon'),
+            Column::make('address')->title(__('address'))->addClass('address'),
+            Column::make('zone')->title(__('zone'))->class('zone'),
+            Column::make('created_at')->title(__('joined date'))->addClass('text-nowrap created_at'),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
                 ->exportable(true)

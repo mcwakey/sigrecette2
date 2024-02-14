@@ -66,21 +66,24 @@ class AddTaxpayerModal extends Component
     public function render()
     {
         $cantons = Canton::all();
-        $towns = Town::all();
-        $ereas = Erea::all();
+        // $towns = Town::all();
+        // $ereas = Erea::all();
         $genders = Gender::all();
         $id_types = IdType::all();
         $zones = Zone::all();
 
         // Assuming you have a public property $canton in your Livewire component
-        //$towns = $this->canton ? Town::where('canton_id', $this->canton)->get() : collect();
-        //$ereas = $this->town ? Erea::where('town_id', $this->town)->get() : collect();
+        $towns = $this->canton ? Town::where('canton_id', $this->canton)->get() : [];
+        $ereas = $this->town ? Erea::where('town_id', $this->town)->get() :  [];
 
         return view('livewire.taxpayer.add-taxpayer-modal', compact('cantons', 'towns', 'ereas', 'genders', 'id_types', 'zones'));
     }
 
     public function submit()
     {
+
+        // dd($this->id_type);
+
         // Validate the form input data
         $this->validate();
 
