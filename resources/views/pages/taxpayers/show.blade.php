@@ -328,6 +328,8 @@
                         </div>
                         <!--end::Card body-->
                     </div>
+
+
                     <!--end::Card-->
                     <!--begin::Tasks-->
                     <div class="card card-flush mb-6 mb-xl-9">
@@ -420,50 +422,52 @@
                         <!--end::Card header-->
                         <!--end::Card header-->
                         <!--begin::Card body-->
-                        <div class="card-body pt-0 pb-5">
-                            <!--begin::Table wrapper-->
-                            <div class="table-responsive">
-                                <!--begin::Table-->
-                                <table class="table align-middle table-row-dashed gy-5" id="kt_table_users_login_session">
-                                    <thead class="border-bottom border-gray-200 fs-7 fw-bold">
-                                        <tr class="text-start text-muted text-uppercase gs-0">
-                                            <th class="min-w-50px">{{ __('create date') }}</th>
-                                            <th class="min-w-50px">{{ __('invoice no') }}</th>
-                                            <th class="min-w-50px">{{ __('order no') }}</th>
-                                            <th class="min-w-50px">{{ __('nic') }}</th>
-                                            <th class="min-w-50px">{{ __('amount') }}</th>
-                                            <th class="min-w-50px">{{ __('status') }}</th>
-                                            <th class="min-w-50px">{{ __('receipt date') }}</th>
-                                            <th class="min-w-50px">{{ __('actions') }}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="fs-6 fw-semibold text-gray-600">
-                                    @foreach($taxpayer->invoices as $invoice)
-                                        <tr>
-                                            <td>{{ $invoice->created_at->format('Y-m-d') }}</td>
-                                            <td>{{ $invoice->invoice_no}}</td>
-                                            <td>{{ $invoice->order_no}}</td>
-                                            <td>{{ $invoice->nic}}</td>
-                                            <td>{{ $invoice->amount}}</td>
+                        <div class="card">
+    <!--begin::Card header-->
+    <div class="card-header border-0 pt-6">
+        <!--begin::Card title-->
+        <div class="card-title">
+            <!--begin::Search-->
+            <div class="d-flex align-items-center position-relative my-1">
+                {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
+                <input type="text" data-kt-taxpayer_invoices-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search Invoice" id="mySearchInput"/>
+            </div>
+            <!--end::Search-->
+        </div>
+        <!--begin::Card title-->
 
-                                            @if($invoice->status == 'SUCCESS')
-                                            <td><span class="badge badge-light-success">{{ $invoice->status}}</span></td>
-                                            @elseif($invoice->status == 'REJECTED')
-                                            <td><span class="badge badge-light-danger">{{ $invoice->status}}</span></td>
-                                            @else
-                                            <td><span class="badge badge-light-warning">{{ $invoice->status}}</span></td>
-                                            @endif
+        <!--begin::Card toolbar-->
+        <div class="card-toolbar">
+            <!--begin::Toolbar-->
+            <div class="d-flex justify-content-end" data-kt-taxpayer_invoices-table-toolbar="base">
+                <!--begin::Add user-->
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice">
+                    {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                    {{ __('New Invoice') }}
+                </button>
+                <!--end::Add user-->
+            </div>
+            <!--end::Toolbar-->
 
-                                            <td>{{ $invoice->updated_at->format('Y-m-d')}}</td>
-                                            <td><a href="#" class="btn btn-light bnt-active-light-success btn-sm">{{ __('view') }}</a></td>
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
-                                </table>
-                                <!--end::Table-->
-                            </div>
-                            <!--end::Table wrapper-->
-                        </div>
+            <!--begin::Modal-->
+            <livewire:invoice.add-invoice-modal></livewire:invoice.add-invoice-modal>
+            <!--end::Modal-->
+        </div>
+        <!--end::Card toolbar-->
+    </div>
+    <!--end::Card header-->
+
+    <!--begin::Card body-->
+    <div class="card-body py-4">
+        <!--begin::Table-->
+        <div class="table-responsive">
+            
+            {{ $dataTable->table() }}
+        </div>
+        <!--end::Table-->
+    </div>
+    <!--end::Card body-->
+</div>
                         <!--end::Card body-->
                     </div>
 
@@ -471,51 +475,6 @@
 
                     
 
-    <div class="card">
-        <!--begin::Card header-->
-        <div class="card-header border-0 pt-6">
-            <!--begin::Card title-->
-            <div class="card-title">
-                <!--begin::Search-->
-                <div class="d-flex align-items-center position-relative my-1">
-                    {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
-                    <input type="text" data-kt-taxpayer_invoices-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search Invoice" id="mySearchInput"/>
-                </div>
-                <!--end::Search-->
-            </div>
-            <!--begin::Card title-->
-
-            <!--begin::Card toolbar-->
-            <div class="card-toolbar">
-                <!--begin::Toolbar-->
-                <div class="d-flex justify-content-end" data-kt-taxpayer_invoices-table-toolbar="base">
-                    <!--begin::Add user-->
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice">
-                        {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        {{ __('New Invoice') }}
-                    </button>
-                    <!--end::Add user-->
-                </div>
-                <!--end::Toolbar-->
-
-                <!--begin::Modal-->
-                <livewire:invoice.add-invoice-modal></livewire:invoice.add-invoice-modal>
-                <!--end::Modal-->
-            </div>
-            <!--end::Card toolbar-->
-        </div>
-        <!--end::Card header-->
-
-        <!--begin::Card body-->
-        <div class="card-body py-4">
-            <!--begin::Table-->
-            <div class="table-responsive">
-                {{ $dataTable->table() }}
-            </div>
-            <!--end::Table-->
-        </div>
-        <!--end::Card body-->
-    </div>
 
                     <!--end::Card-->
                     <!--begin::Card-->
@@ -955,7 +914,19 @@
         </script>
         
         {{ $dataTable->scripts() }}
+        {{-- $taxablesDataTable->scripts() --}}
         <script>
+            document.getElementById('mySearchInput').addEventListener('keyup', function () {
+                window.LaravelDataTables['taxpayer_taxables-table'].search(this.value).draw();
+            });
+            document.addEventListener('livewire:init', function () {
+                Livewire.on('success', function () {
+                    $('#kt_modal_add_invoice').modal('hide');
+                    window.LaravelDataTables['taxpayer_taxables-table'].ajax.reload();
+                });
+            });
+        </script>
+        <!-- <script>
             document.getElementById('mySearchInput').addEventListener('keyup', function () {
                 window.LaravelDataTables['taxpayer_invoices-table'].search(this.value).draw();
             });
@@ -965,6 +936,6 @@
                     window.LaravelDataTables['taxpayer_invoices-table'].ajax.reload();
                 });
             });
-        </script>
+        </script> -->
     @endpush
 </x-default-layout>
