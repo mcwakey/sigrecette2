@@ -84,8 +84,6 @@ class TaxpayersDataTable extends DataTable
                 'csv',
                 'pdf',
             ])
-            // ->searching(false)
-
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/taxpayers/columns/_draw-scripts.js')) . "}");
     }
 
