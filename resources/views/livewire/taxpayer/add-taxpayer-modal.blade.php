@@ -1,6 +1,6 @@
 <div class="modal fade" id="kt_modal_add_taxpayer" tabindex="-1" aria-hidden="true" wire:ignore.self>
     <!--begin::Modal dialog-->
-    <div class="modal-dialog modal-dialog-centered mw-800px">
+    <div class="modal-dialog modal-dialog-centered mw-950px">
         <!--begin::Modal content-->
         <div class="modal-content">
             <!--begin::Modal header-->
@@ -19,7 +19,7 @@
             <div class="modal-body px-5 my-7">
                 <!--begin::Form-->
                 <form id="kt_modal_add_taxpayer_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
-                    <input type="hidden" wire:model="taxpayer_id" name="taxpayer_id" value="{{ $taxpayer_id }}"/>
+                    <input type="hidden" wire:model="taxpayer_id" name="taxpayer_id" value="{{ $taxpayer_id }}" />
                     <!--begin::Scroll-->
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_taxpayer_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_taxpayer_header" data-kt-scroll-wrappers="#kt_modal_add_taxpayer_scroll" data-kt-scroll-offset="300px">
                         <!--begin::Input group-->
@@ -30,11 +30,11 @@
                             <!--begin::Image placeholder-->
                             <style>
                                 .image-input-placeholder {
-                                    background-image: url('{{ image('svg/files/blank-image.svg') }}');
+                                    background-image: url('{{ image(' svg/files/blank-image.svg') }}');
                                 }
 
                                 [data-bs-theme="dark"] .image-input-placeholder {
-                                    background-image: url('{{ image('svg/files/blank-image-dark.svg') }}');
+                                    background-image: url('{{ image(' svg/files/blank-image-dark.svg') }}');
                                 }
                             </style>
                             <!--end::Image placeholder-->
@@ -42,17 +42,17 @@
                             <div class="image-input image-input-outline image-input-placeholder {{ $avatar || $saved_avatar ? '' : 'image-input-empty' }}" data-kt-image-input="true">
                                 <!--begin::Preview existing avatar-->
                                 @if($avatar)
-                                    <div class="image-input-wrapper w-125px h-125px" style="background-image: url({{ $avatar ? $avatar->temporaryUrl() : '' }});"></div>
+                                <div class="image-input-wrapper w-125px h-125px" style="background-image: url({{ $avatar ? $avatar->temporaryUrl() : '' }});"></div>
                                 @else
-                                    <div class="image-input-wrapper w-125px h-125px" style="background-image: url({{ $saved_avatar }});"></div>
+                                <div class="image-input-wrapper w-125px h-125px" style="background-image: url({{ $saved_avatar }});"></div>
                                 @endif
                                 <!--end::Preview existing avatar-->
                                 <!--begin::Label-->
                                 <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" title="Change avatar">
                                     {!! getIcon('pencil','fs-7') !!}
                                     <!--begin::Inputs-->
-                                    <input type="file" wire:model="avatar" name="avatar" accept=".png, .jpg, .jpeg"/>
-                                    <input type="hidden" name="avatar_remove"/>
+                                    <input type="file" wire:model="avatar" name="avatar" accept=".png, .jpg, .jpeg" />
+                                    <input type="hidden" name="avatar_remove" />
                                     <!--end::Inputs-->
                                 </label>
                                 <!--end::Label-->
@@ -83,7 +83,7 @@
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('fullname') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="name" name="name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('fullname') }}"/>
+                                <input type="text" wire:model="name" name="name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('fullname') }}" />
                                 <!--end::Input-->
                                 @error('name')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -93,9 +93,8 @@
                                 <label class="fs-6 fw-semibold mb-2">{{ __('gender') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <select wire:model="gender" name="gender" class="form-select form-select-solid"
-                                    data-dropdown-parent="#kt_modal_add_taxpayer">
-                                    <option>{{ __('select gender') }}</option>
+                                <select wire:model="gender" name="gender" class="form-select form-select-solid" data-dropdown-parent="#kt_modal_add_taxpayer">
+                                    <option>{{ __('select an option') }}</option>
                                     @foreach($genders as $gender)
                                     <option value="{{ $gender->name}}">{{ $gender->name }}</option>
                                     @endforeach
@@ -119,8 +118,8 @@
                                     <option value="Femme">Femme</option>
                                 </select> -->
 
-                                <select wire:model="id_type" data-dropdown-parent="#kt_modal_add_taxpayer"  name="id_type" class="form-select form-select-solid" name="task_status" data-kt-select2="true" data-placeholder="Select option" data-allow-clear="true" data-hide-search="false">
-                                    <!-- <option>{{ __('select id type') }}</option> -->
+                                <select wire:model="id_type" name="id_type" class="form-select form-select-solid" data-dropdown-parent="#kt_modal_add_taxpayer" data-allow-clear="true">
+                                    <option>{{ __('select an option') }}</option>
                                     @foreach($id_types as $id_type)
                                     <option value="{{ $id_type->name}}">{{ $id_type->name }}</option>
                                     @endforeach
@@ -138,7 +137,7 @@
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('id number') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="id_number" name="id_number" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('id number') }}"/>
+                                <input type="text" wire:model="id_number" name="id_number" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('id number') }}" />
                                 <!--end::Input-->
                                 @error('id_number')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -150,7 +149,7 @@
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('mobilephone') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="mobilephone" name="mobilephone" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="9123456789"/>
+                                <input type="text" wire:model="mobilephone" name="mobilephone" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="9123456789" />
                                 <!--end::Input-->
                                 @error('mobilephone')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -160,7 +159,7 @@
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('telephone') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="telephone" name="telephone" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="9123456789"/>
+                                <input type="text" wire:model="telephone" name="telephone" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="9123456789" />
                                 <!--end::Input-->
                                 @error('telephone')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -173,12 +172,12 @@
                             <label class="required fw-semibold fs-6 mb-2">{{ __('email') }}</label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="email" wire:model="email" name="email" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="example@domain.com"/>
+                            <input type="email" wire:model="email" name="email" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="example@domain.com" />
                             <!--end::Input-->
                             @error('email')
                             <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
-                        
+
                         <div class="separator saperator-dashed my-5"></div>
 
                         <div class="row mb-7">
@@ -187,7 +186,7 @@
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('longitude') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="longitude" name="longitude" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="0.123456789"/>
+                                <input type="text" wire:model="longitude" name="longitude" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="0.123456789" />
                                 <!--end::Input-->
                                 @error('longitude')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -197,7 +196,7 @@
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('latitude') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="latitude" name="latitude" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="0.123456789"/>
+                                <input type="text" wire:model="latitude" name="latitude" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="0.123456789" />
                                 <!--end::Input-->
                                 @error('latitude')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -213,12 +212,10 @@
                                     data-dropdown-parent="#kt_modal_add_taxpayer">
                                 </select> -->
 
-                                <select wire:model="canton" name="canton" class="form-select form-select-solid" data-allow-clear="true">
-                                    <option>{{ __('select district') }}</option>
-
+                                <select wire:model="canton" name="canton" class="form-select form-select-solid">
+                                    <option>{{ __('select an option') }}</option>
                                     @foreach($cantons as $canton)
-            
-                                    <option value="{{ $canton->id }}">{{ $canton->name }}</option>
+                                    <option data-kt-action="load_drop" value="{{ $canton->id }}">{{ $canton->name }}</option>
                                     @endforeach
                                 </select>
 
@@ -231,11 +228,11 @@
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('town') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <select wire:model="town" name="town" class="form-select form-select-solid" data-dropdown-parent="#kt_modal_add_taxpayer">
-                                <option>{{ __('select town') }}Select a town</option>
-                                @foreach($towns as $town)
+                                <select wire:model="town_id" name="town_id" class="form-select form-select-solid">
+                                    <option>{{ __('select an option') }}</option>
+                                    @foreach($towns as $town)
                                     <option value="{{ $town->id }}">{{ $town->name }}</option>
-                                @endforeach
+                                    @endforeach
                                 </select>
                                 <!--end::Input-->
                                 @error('town')
@@ -243,12 +240,11 @@
                             </div>
                             <div class="col-md-4">
                                 <!--begin::Label-->
-                                <label class="required fw-semibold fs-6 mb-2">{{ __('Erea') }}</label>
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('erea') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <select wire:model="erea" name="erea" class="form-select form-select-solid"
-                                    data-dropdown-parent="#kt_modal_add_taxpayer">
-                                    <option>{{ __('select erea') }}</option>
+                                <select wire:model="erea_id" name="erea_id" class="form-select form-select-solid" data-dropdown-parent="#kt_modal_add_taxpayer">
+                                    <option>{{ __('select an option') }}</option>
                                     @foreach($ereas as $erea)
                                     <option value="{{ $erea->id }}">{{ $erea->name }}</option>
                                     @endforeach
@@ -272,10 +268,10 @@
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('zone') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <select wire:model="zone_id" name="zone_id" class="form-select form-select-solid" data-dropdown-parent="#kt_modal_add_taxpayer" >
-                                    <option>{{ __('select zone') }}</option>
+                                <select wire:model="zone_id" name="zone_id" class="form-select form-select-solid" data-dropdown-parent="#kt_modal_add_taxpayer">
+                                    <option>{{ __('select an option') }}</option>
                                     @foreach($zones as $zone)
-                                    <option value="{{ $zone->name }}">{{ $zone->name }}</option>
+                                    <option value="{{ $zone->id }}">{{ $zone->name }}</option>
                                     @endforeach
                                 </select>
                                 <!--end::Input-->
@@ -292,7 +288,7 @@
                         <button type="submit" class="btn btn-success" data-kt-taxpayers-modal-action="submit">
                             <span class="indicator-label" wire:loading.remove>{{ __('submit') }}</span>
                             <span class="indicator-progress" wire:loading wire:target="submit">
-                            {{ __('please wait') }}
+                                {{ __('please wait') }}
                                 <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                             </span>
                         </button>

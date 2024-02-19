@@ -13,10 +13,12 @@ class TaxpayerTaxable extends Model
         'name',
         'seize',
         'location',
+        'longitude',
+        'latitude',
         'taxpayer_id',
         'taxable_id',
-        // 'penalty',
-        // 'penalty_type',
+        'billable',
+        'invoice_id',
         // 'tax_label_id',
     ];
 

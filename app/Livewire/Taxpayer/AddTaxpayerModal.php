@@ -31,12 +31,16 @@ class AddTaxpayerModal extends Component
     public $longitude;
     public $latitude;
     public $canton;
-    public $town;
-    public $erea;
+    public $town_id;
+    public $erea_id;
     public $address;
     public $zone_id;
     public $avatar;
     public $saved_avatar;
+
+    
+    public $towns=[];
+    public $ereas=[];
 
     public $edit_mode = false;
 
@@ -50,33 +54,34 @@ class AddTaxpayerModal extends Component
         'telephone' => 'required|string|min:10|max:10',
         'longitude' => 'nullable',
         'latitude' => 'nullable',
-        'canton' => 'required',
-        'town' => 'required',
-        'erea' => 'required',
         'address' => 'required|string',
+        //'canton' => 'required',
+        'town_id' => 'required',
+        'erea_id' => 'required',
         'zone_id' => 'required',
         'avatar' => 'nullable|sometimes|image|max:1024',
     ];
 
     protected $listeners = [
         'delete_user' => 'deleteUser',
-        'update_user' => 'updateUser',
+        'update_taxpayer' => 'updateTaxPayer',
+        'load_drop' => 'loadDrop',
     ];
 
     public function render()
     {
         $cantons = Canton::all();
-        // $towns = Town::all();
-        // $ereas = Erea::all();
+        //$towns = Town::all();
+        //$ereas = Erea::all();
         $genders = Gender::all();
         $id_types = IdType::all();
         $zones = Zone::all();
 
         // Assuming you have a public property $canton in your Livewire component
-        $towns = $this->canton ? Town::where('canton_id', $this->canton)->get() : [];
-        $ereas = $this->town ? Erea::where('town_id', $this->town)->get() :  [];
+        //$towns = $this->canton ? Town::where('canton_id', $this->canton)->get() : [];
+        //$ereas = $this->town ? Erea::where('town_id', $this->town)->get() :  [];
 
-        return view('livewire.taxpayer.add-taxpayer-modal', compact('cantons', 'towns', 'ereas', 'genders', 'id_types', 'zones'));
+        return view('livewire.taxpayer.add-taxpayer-modal', compact('cantons', 'genders', 'id_types', 'zones'));
     }
 
     public function submit()
@@ -98,10 +103,10 @@ class AddTaxpayerModal extends Component
                 'telephone' => $this->telephone,
                 'longitude' => $this->longitude,
                 'latitude' => $this->latitude,
-                'canton' => $this->canton,
-                'town' => $this->town,
-                'erea' => $this->erea,
                 'address' => $this->address,
+                //'canton' => $this->canton,
+                'town_id' => $this->town_id,
+                'erea_id' => $this->erea_id,
                 'zone_id' => $this->zone_id,
             ];
 
@@ -148,6 +153,28 @@ class AddTaxpayerModal extends Component
         $this->reset();
     }
 
+    public function loadDrop($id)
+    {
+        //dd($id);
+    }
+
+    public function updatedCanton($value)
+    {
+        //dd($value);
+        //$this->taxables = Taxable::where('tax_label_id', $value)->get(); // Load taxables based on tax label ID
+        $this->towns = Town::where('canton_id', $value)->get(); // Load taxables based on tax label ID
+
+        $this->ereas = Erea::where('town_id', $value)->get(); // Load taxables based on tax label ID
+    }
+
+    public function updatedTown($value)
+    {
+        //dd($value);
+        //$this->taxables = Taxable::where('tax_label_id', $value)->get(); // Load taxables based on tax label ID
+        //$this->towns = Town::where('canton_id', $value)->get(); // Load taxables based on tax label ID
+
+    }
+
     public function deleteUser($id)
     {
         // Prevent deletion of current Taxpayer
@@ -163,8 +190,10 @@ class AddTaxpayerModal extends Component
         $this->dispatch('success', 'Taxpayer successfully deleted');
     }
 
-    public function updateUser($id)
+    public function updateTaxPayer($id)
     {
+        //dd($id);
+
         $this->edit_mode = true;
 
         $taxpayer = Taxpayer::find($id);
@@ -180,10 +209,10 @@ class AddTaxpayerModal extends Component
         $this->telephone = $taxpayer->telephone;
         $this->longitude = $taxpayer->longitude;
         $this->latitude = $taxpayer->latitude;
-        $this->canton = $taxpayer->canton;
-        $this->town = $taxpayer->town;
-        $this->erea = $taxpayer->erea;
         $this->address = $taxpayer->address;
+        //$this->canton = $taxpayer->town->name;
+        $this->town_id = $taxpayer->town_id;
+        $this->erea_id = $taxpayer->erea_id;
         $this->zone_id = $taxpayer->zone_id;
     }
 

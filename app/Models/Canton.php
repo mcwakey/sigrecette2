@@ -14,4 +14,9 @@ class Canton extends Model
     {
         return $this->hasMany(Town::class);
     }
+
+    public function ereas()
+    {
+        return $this->hasMany(Erea::class);
+    }
 }

@@ -25,10 +25,14 @@ class AddTaxpayerTaxableModal extends Component
     public $name;
     public $seize;
     public $location;
+    public $longitude;
+    public $latitude;
     public $taxable_id;
     public $taxpayer_id;
 
-    // public $penalty;
+    public $taxlabel_id;
+
+    public $taxables=[];
     // public $penalty_type;
     // public $tax_label_id;
 
@@ -41,6 +45,7 @@ class AddTaxpayerTaxableModal extends Component
     // public $zone_id;
     // public $avatar;
     // public $saved_avatar;
+
 
     public $edit_mode = false;
 
@@ -56,8 +61,8 @@ class AddTaxpayerTaxableModal extends Component
         //'tax_label' => 'required',
         // 'tax_label_id' => 'required',
 
-        // 'longitude' => 'nullable',
-        // 'latitude' => 'nullable',
+        'longitude' => 'required',
+        'latitude' => 'required',
         // 'canton' => 'required',
         // 'town' => 'required',
         // 'erea' => 'required',
@@ -67,8 +72,12 @@ class AddTaxpayerTaxableModal extends Component
     ];
 
     protected $listeners = [
-        'delete_user' => 'deleteUser',
-        'update_user' => 'updateUser',
+        'delete_taxpayer' => 'deleteUser',
+        'update_taxable' => 'updateTaxpayerTaxable',
+        'add_taxable' => 'addTaxpayerTaxable',
+        'update_checkbox' => 'updateCheckbox',
+        'load_taxables' => 'loadTaxables',
+        //'loadTaxable' => 'loadTaxable',
     ];
 
     public function render()
@@ -77,20 +86,59 @@ class AddTaxpayerTaxableModal extends Component
         //$towns = Town::all();
         //$ereas = Erea::all();
         //$genders = Gender::all();
-        //$taxpayers = Taxpayer::all();
-        $taxables = Taxable::all();
+        $taxlabels = TaxLabel::all();
+        //$taxables = Taxable::all();
 
         // Assuming you have a public property $canton in your Livewire component
-        //$towns = $this->canton ? Town::where('canton_id', $this->canton)->get() : collect();
+       
         //$ereas = $this->town ? Erea::where('town_id', $this->town)->get() : collect();
 
-        return view('livewire.taxpayer_taxable.add-taxpayer-taxable-modal', compact('taxables'));
+        return view('livewire.taxpayer_taxable.add-taxpayer-taxable-modal', compact('taxlabels'));
     }
+
+    public function loadTaxables($id)
+    {
+    
+    }
+
+    public function updatedTaxlabelId($value)
+    {
+        $this->taxables = Taxable::where('tax_label_id', $value)->get(); // Load taxables based on tax label ID
+        //$this->reset('taxables');
+        
+        //dd($this->taxables);
+        // $this->loadTaxables($value); // Call the loadTaxables method when tax label ID is updated
+    }
+
+    public function updateCheckbox($id)
+    {
+        // Find the taxpayer by ID
+        //dd($id);
+        $taxpayer_taxables = TaxpayerTaxable::findOrFail($id);
+
+        // Update the invoice_id field based on the checkbox state
+            //dd($taxpayer_taxables->billable);
+        if ($taxpayer_taxables->billable == 0){
+            $taxpayer_taxables->update([
+                'billable' => '1'
+            ]);
+        }else {
+            $taxpayer_taxables->update([
+                'billable' => '0'
+            ]);
+        }
+
+        //$taxpayer_taxables = TaxpayerTaxable::findOrFail($id);
+        //    dd($taxpayer_taxables->billable);
+    }
+
 
     public function submit()
     {
         // Validate the form input data
         $this->validate();
+
+        //dd($this->taxpayer_id);
 
         DB::transaction(function () {
             // Prepare the data for creating a new Taxable
@@ -104,7 +152,8 @@ class AddTaxpayerTaxableModal extends Component
                 // 'penalty_type' => $this->penalty_type,
                 // 'tax_label_id' => $this->tax_label_id,
 
-                // 'latitude' => $this->latitude,
+                'longitude' => $this->longitude,
+                'latitude' => $this->latitude,
                 // 'canton' => $this->canton,
                 // 'town' => $this->town,
                 // 'erea' => $this->erea,
@@ -170,34 +219,37 @@ class AddTaxpayerTaxableModal extends Component
         $this->dispatch('success', 'Asset successfully deleted');
     }
 
-    public function updateUser($id)
+    public function updateTaxpayerTaxable($id)
     {
         $this->edit_mode = true;
 
         $taxpayer_taxable = TaxpayerTaxable::find($id);
 
         $this->taxpayer_taxable_id = $taxpayer_taxable->id;
-        //$this->saved_avatar = $taxable->profile_photo_url;
         $this->name = $taxpayer_taxable->name;
         $this->seize = $taxpayer_taxable->seize;
         $this->location = $taxpayer_taxable->location;
+        $this->longitude = $taxpayer_taxable->longitude;
+        $this->latitude = $taxpayer_taxable->latitude;
         $this->taxable_id = $taxpayer_taxable->taxable_id;
         $this->taxpayer_id = $taxpayer_taxable->taxpayer_id;
-        // $this->penalty = $taxpayer_taxable->penalty;
-        // $this->penalty_type = $taxpayer_taxable->penalty_type;
-        
-        //$this->tax_label = $taxable->tax_labels?->first()->name ?? '';
-
-        // $this->mobilephone = $taxable->mobilephone;
-        // $this->telephone = $taxable->telephone;
-        // $this->longitude = $taxable->longitude;
-        // $this->latitude = $taxable->latitude;
-        // $this->canton = $taxable->canton;
-        // $this->town = $taxable->town;
-        // $this->erea = $taxable->erea;
-        // $this->address = $taxable->address;
-        // $this->zone_id = $taxable->zone_id;
+        $this->taxlabel_id = $taxpayer_taxable->taxlabel_id;
     }
+
+    public function addTaxpayerTaxable($id)
+    {
+        $taxpayer = Taxpayer::find($id);
+
+        $this->taxpayer_id = $taxpayer->id;
+    }
+
+    // public function loadTaxable($id)
+    // {
+    //     $taxables = Taxable::find($id);
+
+
+    //     return $this->taxlabel ? Taxable::where('taxlabel_id', $this->taxlabel)->get() : collect();
+    // }
 
     public function hydrate()
     {

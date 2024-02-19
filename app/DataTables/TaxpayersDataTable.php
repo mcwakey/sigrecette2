@@ -12,8 +12,6 @@ use Yajra\DataTables\Html\Button;
 
 class TaxpayersDataTable extends DataTable
 {
-
-
     /**
      * Build the DataTable class.
      *
@@ -23,6 +21,9 @@ class TaxpayersDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->rawColumns(['taxpayer', 'last_login_at'])
+            ->editColumn('id', function (Taxpayer $taxpayer) {
+                return $taxpayer->id;
+            })
             ->editColumn('taxpayer', function (Taxpayer $taxpayer) {
                 return view('pages/taxpayers.columns._taxpayer', compact('taxpayer'));
             })
@@ -32,20 +33,20 @@ class TaxpayersDataTable extends DataTable
             ->editColumn('mobilephone', function (Taxpayer $taxpayer) {
                 return view('pages/taxpayers.columns._phone', compact('taxpayer'));
             })
-            ->editColumn('canton', function (Taxpayer $taxpayer) {
-                return $taxpayer->canton;
+            ->editColumn('canton_id', function (Taxpayer $taxpayer) {
+                return $taxpayer->town->canton->name;
             })
-            ->editColumn('town', function (Taxpayer $taxpayer) {
-                return $taxpayer->town . " - " . $taxpayer->erea;
+            ->editColumn('town_id', function (Taxpayer $taxpayer) {
+                return $taxpayer->town->name;
             })
-            ->editColumn('erea', function (Taxpayer $taxpayer) {
-                return $taxpayer->erea;
+            ->editColumn('erea_id', function (Taxpayer $taxpayer) {
+                return $taxpayer->erea->name;
             })
             ->editColumn('address', function (Taxpayer $taxpayer) {
                 return $taxpayer->address;
             })
-            ->editColumn('zone', function (Taxpayer $taxpayer) {
-                return $taxpayer->zone_id;
+            ->editColumn('zone_id', function (Taxpayer $taxpayer) {
+                return $taxpayer->zone->name;
             })
             ->editColumn('created_at', function (Taxpayer $taxpayer) {
                 return $taxpayer->created_at->format('d M Y');
@@ -69,15 +70,16 @@ class TaxpayersDataTable extends DataTable
      */
     public function html(): HtmlBuilder
     {
+
         return $this->builder()
             ->setTableId('taxpayers-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            //->dom("") // Add pagination ('p') and other controls ('i') at the bottom
+            ->dom("<'d-flex justify-content-end'B> ".'rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
-            ->orderBy(7)
-            ->dom("<'d-flex justify-content-end absolute top-0'B>")
+            ->orderBy(0)
             ->buttons([
                 'print',
                 'excel',
@@ -93,18 +95,20 @@ class TaxpayersDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('taxpayer')->title(__('taxpayer'))->addClass('d-flex align-items-center taxpayer')->name('name'),
-            Column::make('gender')->title(__('gender'))->addClass('gender'),
-            Column::make('mobilephone')->title(__('mobilephone'))->addClass('d-flex align-items-center mobilephone')->name('mobilephone'),
-            Column::make('canton')->title(__('canton'))->addClass('canton'),
-            Column::make('town')->title(__('town'))->addClass('twon'),
-            Column::make('address')->title(__('address'))->addClass('address'),
-            Column::make('zone')->title(__('zone'))->class('zone'),
-            Column::make('created_at')->title(__('joined date'))->addClass('text-nowrap created_at'),
+            Column::make('id')->title(__('id'))->visible(false),
+            Column::make('taxpayer')->title(__('taxpayer'))->addClass('d-flex align-items-center')->name('name'),
+            Column::make('gender')->title(__('gender')),
+            Column::make('mobilephone')->title(__('mobilephone'))->addClass('text-nowrap')->name('mobilephone'),
+            Column::make('canton_id')->title(__('canton'))->name('name'),
+            Column::make('town_id')->title(__('town')),
+            Column::make('erea_id')->title(__('erea')),
+            Column::make('address')->title(__('address')),
+            Column::make('zone_id')->title(__('zone')),
+            //Column::make('created_at')->title(__('joined date'))->addClass('text-nowrap created_at')->visible(false),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
-                ->exportable(true)
-                ->printable(true)
+                ->exportable(false)
+                ->printable(false)
                 ->width(60)
         ];
     }

@@ -19,8 +19,8 @@ class InvoiceFactory extends Factory
     {
         return [
             'invoice_no' => fake()->randomNumber(2, 1, 9) . Str::random(3) . fake()->randomNumber(2, 0, 9),
-            'order_no' => "00" . random_int(1, 10),
-            'nic' =>  "00" . random_int(1, 10),
+            //'order_no' => "00" . random_int(1, 10),
+            //'nic' =>  "00" . random_int(1, 10),
             'status' => fake()->randomElement(['PENDING', 'REJECTED', 'SUCCESS']),
             'taxpayer_id' => random_int(4950, 5000),
         ];

@@ -2,7 +2,7 @@
 KTMenu.init();
 
 // Add click event listener to delete buttons
-document.querySelectorAll('[data-kt-action="delete_row"]').forEach(function (element) {
+document.querySelectorAll('[data-kt-action="delete_taxpayer"]').forEach(function (element) {
     element.addEventListener('click', function () {
         Swal.fire({
             text: 'Êtes-vous sûr de vouloir supprimer ?',
@@ -24,9 +24,23 @@ document.querySelectorAll('[data-kt-action="delete_row"]').forEach(function (ele
 });
 
 // Add click event listener to update buttons
-document.querySelectorAll('[data-kt-action="update_row"]').forEach(function (element) {
+document.querySelectorAll('[data-kt-action="update_taxpayer"]').forEach(function (element) {
     element.addEventListener('click', function () {
-        Livewire.dispatch('update_user', [this.getAttribute('data-kt-user-id')]);
+        Livewire.dispatch('update_taxpayer', [this.getAttribute('data-kt-user-id')]);
+    });
+});
+
+// // Add click event listener to update buttons
+// document.querySelectorAll('[data-kt-action="load_dropa"]').forEach(function (element) {
+//     element.addEventListener('click', function () {
+//         Livewire.dispatch('load_dropa', [this.getAttribute('data-kt-user-id')]);
+//     });
+// });
+
+// Add click event listener to update buttons
+document.querySelectorAll('[data-kt-action="load_drop"]').forEach(function (element) {
+    element.addEventListener('click', function () {
+        Livewire.dispatch('load_drop', [this.getAttribute('data-kt-user-id')]);
     });
 });
 

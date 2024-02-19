@@ -8,6 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Invoice extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'taxpayer_id',
+        'amount',
+        // 'password',
+        // 'last_login_at',
+        // 'last_login_ip',
+        // 'profile_photo_path',
+    ];
     
     public function taxpayer()
     {

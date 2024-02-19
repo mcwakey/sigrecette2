@@ -8,8 +8,10 @@
     {{ Breadcrumbs::render('taxpayers.index') }}
     @endsection
 
+    <div class="card">
 
-    <header class="card-header d-flex justify-content-between border-0 mb-2 pt-6 w-100">
+
+    <div class="card-header d-flex justify-content-between border-0 mb-2 pt-6 w-100">
         <!--begin::Card title-->
         <div class="card-title">
             <!--begin::Search-->
@@ -20,14 +22,16 @@
             <!--end::Search-->
         </div>
 
-        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice">
-            {!! getIcon('plus', 'fs-2', '', 'i') !!}
-            {{ __('New Invoice') }}
-        </button>
-    </header>
+        <button type="button" class="btn btn-light-success h-15 ms-auto" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer">
+        <i class="ki-duotone ki-add-files fs-3">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                        <span class="path3"></span>
+                                        <span class="path4"></span>
+                                        <span class="path5"></span>
+                                    </i>{{ __('new taxpayer') }}</button>
 
-    <div class="card">
-        <livewire:taxpayer.add-taxpayer-modal></livewire:taxpayer.add-taxpayer-modal>
+</div>
 
         <!--begin::Card body-->
         <div class="card-body py-4">
@@ -40,6 +44,8 @@
         <!--end::Card body-->
     </div>
 
+
+        <livewire:taxpayer.add-taxpayer-modal></livewire:taxpayer.add-taxpayer-modal>
 
     @push('scripts')
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css">

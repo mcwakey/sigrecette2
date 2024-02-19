@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('tariff');
             $table->string('unit')->nullable();
-            $table->string('modality');
+            $table->string('modality')->nullable();
             $table->string('periodicity');
             $table->string('penalty')->nullable();
             $table->string('penalty_type')->nullable();

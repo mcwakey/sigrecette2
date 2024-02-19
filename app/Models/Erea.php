@@ -9,8 +9,13 @@ class Erea extends Model
 {
     use HasFactory;
 
-    public function town()
+    public function canton()
     {
-        return $this->belongsTo(Town::class);
+        return $this->belongsTo(Canton::class);
+    }
+
+    public function taxpayers()
+    {
+        return $this->hasMany(Taxpayer::class);
     }
 }

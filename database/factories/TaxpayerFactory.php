@@ -29,11 +29,11 @@ class TaxpayerFactory extends Factory
             'telephone' => fake()->phoneNumber(),
             'longitude' => fake()->randomFloat(10, -180, 180), 
             'latitude' => fake()->randomFloat(10, -180, 180),
-            'canton' => fake()->city(),
-            'town' => fake()->city(),
-            'erea' => fake()->city(),
             'address' => fake()->streetAddress(),
-            'zone_id' => random_int(1, 6),
+            //'canton' => fake()->city(),
+            'town_id' => random_int(1, 6),
+            'erea_id' => random_int(1, 2),
+            'zone_id' => random_int(1, 10),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
         ];

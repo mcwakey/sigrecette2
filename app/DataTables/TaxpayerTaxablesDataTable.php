@@ -21,6 +21,12 @@ class TaxpayerTaxablesDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->rawColumns(['status'])
+            ->editColumn('id', function (TaxpayerTaxable $taxpayer_taxable) {
+                return $taxpayer_taxable->id;
+            })
+            ->editColumn('billable', function (TaxpayerTaxable $taxpayer_taxable) {
+                return view('pages.taxpayer_taxables.columns._bill', compact('taxpayer_taxable'));
+            })
             ->editColumn('taxpayer_taxable', function (TaxpayerTaxable $taxpayer_taxable) {
                 return view('pages.taxpayer_taxables.columns._label', compact('taxpayer_taxable'));
             })
@@ -34,7 +40,7 @@ class TaxpayerTaxablesDataTable extends DataTable
                 return view('pages.taxpayer_taxables.columns._seize', compact('taxpayer_taxable'));
             })
             ->editColumn('status', function (TaxpayerTaxable $taxpayer_taxable) {
-                return '';
+                return view('pages.taxpayer_taxables.columns._status', compact('taxpayer_taxable'));
             })
             ->editColumn('location', function (TaxpayerTaxable $taxpayer_taxable) {
                 return view('pages.taxpayer_taxables.columns._location', compact('taxpayer_taxable'));
@@ -42,8 +48,8 @@ class TaxpayerTaxablesDataTable extends DataTable
             // ->editColumn('created_at', function (TaxpayerTaxable $taxpayer_taxable) {
             //     return $taxpayer_taxable->created_at->format('d M Y');
             // })
-            ->addColumn('action', function (TaxpayerTaxable $taxable) {
-                return view('pages.taxpayer_taxables.columns._actions', compact('taxable'));
+            ->addColumn('action', function (TaxpayerTaxable $taxpayer_taxable) {
+                return view('pages.taxpayer_taxables.columns._actions', compact('taxpayer_taxable'));
             })
             ->setRowId('id');
     }
@@ -68,7 +74,9 @@ class TaxpayerTaxablesDataTable extends DataTable
             ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
-            ->orderBy(1)
+            ->orderBy(0, 'desc')
+            ->pageLength(3) // Set the default number of rows per page to 3
+            ->lengthMenu([[3, 10, 25, 50, -1], [3, 10, 25, 50, "All"]]) // Define options for the number of rows per page
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/taxpayer_taxables/columns/_draw-scripts.js')) . "}");
     }
 
@@ -78,19 +86,21 @@ class TaxpayerTaxablesDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('taxpayer_taxable')->title(__('taxpayer_taxable'))->addClass('text-nowrap'),
+            Column::make('id')->title(__('id'))->exportable(false)->printable(false)->visible(false), 
+            Column::make('billable')->title(__('empty'))->addClass('text-nowrap')->exportable(false)->printable(false),
+            Column::make('taxpayer_taxable')->title(__('taxable'))->addClass('text-nowrap')->name('name'),
             //Column::make('taxpayer_taxable_no')->title(__('taxpayer_taxable no')),
             //Column::make('tax_type')->title(__('tax_type')),
-            Column::make('name')->title(__('tax_name')),
+            Column::make('name')->title(__('asset name')),
             //Column::make('seize')->title(__('amount')),
             Column::make('seize')->title(__('seize'))->addClass('text-nowrap'),
             Column::make('status')->title(__('status')),
             Column::make('location')->title(__('location'))->addClass('text-nowrap'),
             //Column::make('created_at')->title(__('created Date'))->addClass('text-nowrap'),
-            Column::computed('action')
+            Column::computed('action')->title(__('action'))
                 ->addClass('text-end text-nowrap')
-                ->exportable(true)
-                ->printable(true)
+                ->exportable(false)
+                ->printable(false)
                 ->width(60)
                 // ->buttons(
                 //     Button::make('create'),

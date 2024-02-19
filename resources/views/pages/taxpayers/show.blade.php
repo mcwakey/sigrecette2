@@ -5,7 +5,7 @@
     @endsection
 
     @section('breadcrumbs')
-        {{ Breadcrumbs::render('taxpayers.show', $taxpayer) }}
+    {{ Breadcrumbs::render('taxpayers.show', $taxpayer) }}
     @endsection
 
     <!--begin::Layout-->
@@ -22,11 +22,11 @@
                         <!--begin::Avatar-->
                         <div class="symbol symbol-100px symbol-circle mb-7">
                             @if($taxpayer->profile_photo_url)
-                                <img src="{{ $user->profile_photo_url }}" alt="image"/>
+                            <img src="{{ $taxpayer->profile_photo_url }}" alt="image" />
                             @else
-                                <div class="symbol-label fs-3 {{ app(\App\Actions\GetThemeType::class)->handle('bg-light-? text-?', $taxpayer->name) }}">
-                                    {{ substr($taxpayer->name, 0, 1) }}
-                                </div>
+                            <div class="symbol-label fs-3 {{ app(\App\Actions\GetThemeType::class)->handle('bg-light-? text-?', $taxpayer->name) }}">
+                                {{ substr($taxpayer->name, 0, 1) }}
+                            </div>
                             @endif
                         </div>
                         <!--end::Avatar-->
@@ -35,11 +35,9 @@
                         <!--end::Name-->
                         <!--begin::Position-->
                         <div class="mb-9">
-                            {{-- @foreach($user->roles as $role) --}}
-                                <!--begin::Badge-->
-                                <div class="badge badge-lg badge-light-danger d-inline">{{ $taxpayer->gender}}</div>
-                                <!--begin::Badge-->
-                            {{-- @endforeach --}}
+                            <!--begin::Badge-->
+                            <div class="badge badge-lg badge-light-danger d-inline">{{ $taxpayer->gender}}</div>
+                            <!--begin::Badge-->
                         </div>
                         <!--end::Position-->
                         <!--begin::Info-->
@@ -55,8 +53,8 @@
                         </div> -->
                         <!--end::Info heading-->
                         <!-- <div class="d-flex flex-wrap flex-center"> -->
-                            <!--begin::Stats-->
-                            <!-- <div class="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
+                        <!--begin::Stats-->
+                        <!-- <div class="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
                                 <div class="fs-4 fw-bold text-gray-700">
                                     <span class="w-75px">243 000</span>
                                     <i class="ki-duotone ki-arrow-up fs-3 text-success">
@@ -66,9 +64,9 @@
                                 </div>
                                 <div class="fw-semibold text-muted">Total</div>
                             </div> -->
-                            <!--end::Stats-->
-                            <!--begin::Stats-->
-                            <!-- <div class="border border-gray-300 border-dashed rounded py-3 px-3 mx-4 mb-3">
+                        <!--end::Stats-->
+                        <!--begin::Stats-->
+                        <!-- <div class="border border-gray-300 border-dashed rounded py-3 px-3 mx-4 mb-3">
                                 <div class="fs-4 fw-bold text-gray-700">
                                     <span class="w-50px">56 000</span>
                                     <i class="ki-duotone ki-arrow-down fs-3 text-danger">
@@ -78,9 +76,9 @@
                                 </div>
                                 <div class="fw-semibold text-muted">Paid</div>
                             </div> -->
-                            <!--end::Stats-->
-                            <!--begin::Stats-->
-                            <!-- <div class="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
+                        <!--end::Stats-->
+                        <!--begin::Stats-->
+                        <!-- <div class="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
                                 <div class="fs-4 fw-bold text-gray-700">
                                     <span class="w-50px">188</span>
                                     <i class="ki-duotone ki-arrow-up fs-3 text-success">
@@ -90,7 +88,7 @@
                                 </div>
                                 <div class="fw-semibold text-muted">Open</div>
                             </div> -->
-                            <!--end::Stats-->
+                        <!--end::Stats-->
                         <!-- </div> -->
                         <!--end::Info-->
                     </div>
@@ -104,11 +102,10 @@
                             </span>
                         </div>
                         <span data-bs-toggle="tooltip" data-bs-trigger="hover" title="{{ __('edit Taxpayers details') }}">
-                            <a href="#" class="btn btn-sm btn-light-success" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer" data-kt-action="update_row">{{ __('edit') }}</a>
+                            <a href="#" class="btn btn-sm btn-light-success" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer" data-kt-action="update_taxpayer">{{ __('edit') }}</a>
                         </span>
                     </div>
 
-                
                     <!--end::Details toggle-->
                     <div class="separator"></div>
                     <!--begin::Details content-->
@@ -116,7 +113,7 @@
                         <div class="pb-5 fs-6">
                             <!--begin::Details item-->
                             <div class="fw-bold mt-5">{{ __('account id') }}</div>
-                            <div class="text-gray-600">{{ $taxpayer->tnif }}</div>
+                            <div class="text-gray-600">{{ $taxpayer->id }}</div>
                             <!--begin::Details item-->
                             <!--begin::Details item-->
                             <div class="fw-bold mt-5">{{ __('mobilephone') }}</div>
@@ -129,16 +126,22 @@
                             </div>
                             <!--begin::Details item-->
                             <!--begin::Details item-->
+                            <div class="fw-bold mt-5">{{ __('canton') }}</div>
+                            <div class="text-gray-600">{{ $taxpayer->town->canton->name }}
+                            </div>
+                            <div class="fw-bold mt-5">{{ __('town') }}</div>
+                            <div class="text-gray-600">{{ $taxpayer->town->name}}
+                            </div>
+                            <div class="fw-bold mt-5">{{ __('erea') }}</div>
+                            <div class="text-gray-600">{{ $taxpayer->erea->name }}
+                            </div>
                             <div class="fw-bold mt-5">{{ __('address') }}</div>
                             <div class="text-gray-600">{{ $taxpayer->address }}
-                                <br />{{ $taxpayer->erea }},
-                                <br />{{ $taxpayer->town }},
-                                <br />{{ $taxpayer->canton }}.
                             </div>
                             <!--begin::Details item-->
                             <!--begin::Details item-->
                             <div class="fw-bold mt-5">{{ __('zone') }}</div>
-                            <div class="text-gray-600"><span class="badge badge-light-info">{{ $taxpayer->zone_id }}</span></div>
+                            <div class="text-gray-600"><span class="badge badge-light-info">{{ $taxpayer->zone->name }}</span></div>
                             <!--begin::Details item-->
                             <!--begin::Details item-->
                             <div class="fw-bold mt-5">{{ __('joined date') }}</div>
@@ -175,43 +178,40 @@
                 <!--begin:::Tab item-->
                 <li class="nav-item ms-auto">
                     <!--begin::Action menu-->
-                    <a href="#" class="btn btn-success ps-7" data-kt-menu-trigger="click" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">{{ __('actions') }}
+                    <a href="#" class="btn btn-success ps-7" data-kt-menu-trigger="click" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">{{ __('more here') }}
                         <i class="ki-duotone ki-down fs-2 me-0"></i></a>
                     <!--begin::Menu-->
                     <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold py-4 w-250px fs-6" data-kt-menu="true">
                         <!--begin::Menu item-->
-                        <div class="menu-item px-5">
+                        <!-- <div class="menu-item px-5">
                             <div class="menu-content text-muted pb-2 px-5 fs-7 text-uppercase">{{ __('payments') }}</div>
-                        </div>
+                        </div> -->
                         <!--end::Menu item-->
                         <!--begin::Menu item-->
-                        <div class="menu-item px-5">
+                        <!-- <div class="menu-item px-5">
                             <a href="#" class="menu-link px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer_taxable">{{ __('create asset') }}</a>
-                        </div>
-                        
-                        <livewire:taxpayer_taxable.add-taxpayer-taxable-modal></livewire:taxpayer_taxable.add-taxpayer-taxable-modal>
+                        </div> -->
 
                         <!--end::Menu item-->
                         <!--begin::Menu item-->
-                        <div class="menu-item px-5">
+                        <!-- <div class="menu-item px-5">
                             <a href="#" class="menu-link px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer">{{ __('create invoice') }}</a>
-                        </div>
+                        </div> -->
                         <!--end::Menu item-->
                         <!--begin::Menu item-->
-                        <div class="menu-item px-5">
+                        <!-- <div class="menu-item px-5">
                             <a href="#" class="menu-link px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer">{{ __('create payment') }}</a>
-                                <span class="ms-2" data-bs-toggle="tooltip" title="Specify a target name for future usage and reference">
-                                    <i class="ki-duotone ki-information fs-7">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                        <span class="path3"></span>
-                                    </i>
-                                </span></a>
-                        </div>
+                            <span class="ms-2" data-bs-toggle="tooltip" title="Specify a target name for future usage and reference">
+                                <i class="ki-duotone ki-information fs-7">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                    <span class="path3"></span>
+                                </i>
+                            </span></a>
+                        </div> -->
                         <!--end::Menu item-->
                         <!--begin::Menu item-->
                         <!--begin::Menu separator-->
-                        <div class="separator my-3"></div>
                         <!--end::Menu separator-->
                         <!--begin::Menu item-->
                         <div class="menu-item px-5">
@@ -220,14 +220,26 @@
                         <!--end::Menu item-->
                         <!--begin::Menu item-->
                         <div class="menu-item px-5">
-                            <a href="#" class="menu-link px-5">{{ __('reports') }}</a>
+                            <a href="#" class="menu-link px-5">{{ __('reports et stats') }}</a>
+                        </div>
+                        <div class="menu-item px-5">
+                            <a href="#" class="menu-link px-5">{{ __('statement of account') }}</a>
                         </div>
                         <!--end::Menu item-->
+
+                        <div class="separator my-3"></div>
+
+                        <div class="menu-item px-5">
+                            <div class="menu-content text-muted pb-2 px-5 fs-7 text-uppercase">{{ __('setting') }}</div>
+                        </div>
                         <!--begin::Menu item-->
                         <div class="menu-item px-5 my-1">
                             <a href="#" class="menu-link px-5">{{ __('account settings') }}</a>
                         </div>
                         <!--end::Menu item-->
+
+                        <div class="separator my-3"></div>
+
                         <!--begin::Menu item-->
                         <div class="menu-item px-5">
                             <a href="#" class="menu-link text-danger px-5">{{ __('delete taxpayer') }}</a>
@@ -251,12 +263,13 @@
                             <!--begin::Card title-->
                             <div class="card-title flex-column">
                                 <h2 class="mb-1">{{ __('taxpayers assets') }}</h2>
-                                <div class="fs-6 fw-semibold text-muted">{{ __('registered assets') }}</div>
+                                <!-- <div class="fs-6 fw-semibold text-muted">{{ __('registered assets') }}</div> -->
                             </div>
                             <!--end::Card title-->
                             <!--begin::Card toolbar-->
+
                             <div class="card-toolbar">
-                            <button type="button" class="btn btn-light-success btn-sm" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer_taxable">
+                                <button type="button" class="btn btn-light-success ms-auto me-5" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer_taxable" data-kt-action="add_taxable">
                                     <i class="ki-duotone ki-add-files fs-3">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
@@ -264,7 +277,19 @@
                                         <span class="path4"></span>
                                         <span class="path5"></span>
                                     </i>{{ __('create asset') }}</button>
+
+                                <button type="button" class="btn btn-light-danger ms-auto" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice" data-kt-action="add_invoice">
+                                    <i class="ki-duotone ki-add-files fs-3">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                        <span class="path3"></span>
+                                        <span class="path4"></span>
+                                        <span class="path5"></span>
+                                    </i>{{ __('create invoice') }}</button>
                             </div>
+
+
+
                             <!-- <div class="card-toolbar">
                                 <button type="button" class="btn btn-light-primary btn-sm" data-bs-toggle="modal" data-bs-target="#kt_modal_add_schedule">
                                     <i class="ki-duotone ki-brush fs-3">
@@ -278,57 +303,32 @@
                         </div>
                         <!--end::Card header-->
                         <!--begin::Card body-->
-                        <div class="card-body p-9 pt-4">
-                            <!--begin::Tab Content-->
-                            <div class="tab-content">
-                                <!--begin::Day-->
-                                <div id="kt_schedule_day_1" class="tab-pane fade show active">
-                                    <!--begin::Time-->
-                                    @foreach($taxpayer->taxpayertaxables as $taxpayertaxable)
-                                        <div class="row">
-                                            <div class="d-flex flex-stack position-relative mt-6">
-                                                <!--begin::Bar-->
-                                                <div class="position-absolute h-100 w-4px bg-secondary rounded top-0 start-0"></div>
-                                                <!--end::Bar-->
-                                                <!--begin::Info-->
-                                                    <div class="col-md-7 fw-semibold ms-5">
-                                                        <!--begin::Title-->
-                                                        <a href="#" class="fs-5 fw-bold text-gray-900 text-hover-success mb-2">{{ $taxpayertaxable->taxable->tax_label->name }}</a> -> {{ $taxpayertaxable->taxable->name }}
-                                                        <!--end::Title-->
-                                                        <!--begin::Time-->
-                                                        <div class="fs-7 mb-1">{{ $taxpayertaxable->name }} : {{ $taxpayertaxable->seize }}
-                                                            <span class="fs-7 text-muted text-uppercase">{{ $taxpayertaxable->taxable->unit }}</span>
-                                                        </div>
-                                                        <!--end::Time-->
-                                                        <!--begin::User-->
-                                                        <div class="fs-7 mb-1">{{ __('located at') }}
-                                                            <span class="fs-7 text-muted">{{ $taxpayertaxable->location }}</span>
-                                                        </div>
-                                                        <!--end::User-->
-                                                    </div>
-                                                    <div class="col-md-2 fw-semibold ms-5">
-                                                        @if($taxpayertaxable->invoice_id == null)
-                                                        <div class="badge badge-lg badge-light-danger d-inline">{{ __('not billed') }}</div>
-                                                        @else
-                                                        <div class="badge badge-lg badge-light-success d-inline">{{ __('billed') }} : {{ $taxpayertaxable->invoice->invoice_no }}</div>
-                                                        @endif
-                                                    </div>
-                                                <!--end::Info-->
-                                                <!--begin::Action-->
-                                                <a href="#" class="btn btn-light bnt-active-light-success btn-sm">{{ __('view') }}</a>
-                                                <!--end::Action-->
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                    <!--end::Time-->
-                                </div>
-                                <!--end::Day-->
-                            </div>
-                            <!--end::Tab Content-->
-                        </div>
-                        <!--end::Card body-->
-                    </div>
+                        <div class="card">
 
+                            <div class="card-header border-0 pt-6">
+                                <!--begin::Card title-->
+                                <div class="card-title">
+                                    <!--begin::Search-->
+                                    <div class="d-flex align-items-center position-relative my-1">
+                                        {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
+                                        <input type="text" data-kt-taxpayer_invoices-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search Invoice" id="mySearchInput" />
+                                    </div>
+                                    <!--end::Search-->
+                                </div>
+                                <!--begin::Card title-->
+                            </div>
+
+                            <div class="card-body py-4">
+                                <!--begin::Table-->
+                                <div class="table-responsive">
+
+                                    {{ $dataTable->table() }}
+                                </div>
+                                <!--end::Table-->
+                            </div>
+                            <!--end::Card body-->
+                        </div>
+                    </div>
 
                     <!--end::Card-->
                     <!--begin::Tasks-->
@@ -366,10 +366,6 @@
                     <!--end::Tasks-->
                 </div>
 
-                <!--begin::Modal-->
-                <livewire:taxpayer.add-taxpayer-modal></livewire:taxpayer.add-taxpayer-modal>
-                <!--end::Modal-->
-
                 <!--end:::Tab pane-->
                 <!--begin:::Tab pane-->
                 <div class="tab-pane fade" id="kt_user_view_overview_security" role="tabpanel">
@@ -382,98 +378,321 @@
                                 <h2>{{ __('taxpayers invoices') }}</h2>
                                 <!-- <div class="fs-6 fw-semibold text-muted">{{ __('most recents payments') }}</div> -->
                             </div>
-                            <!--end::Card title-->
-                            <!--begin::Card toolbar-->
-                            <div class="card-toolbar">
-                                <!--begin::Add-->
-                                <!--begin::Add-->
-                                <button type="button" wire:click="selectTaxpayer({{ $taxpayer->id }})" class="btn btn-light-success btn-sm"data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice">
-                                    <i class="ki-duotone ki-fingerprint-scanning fs-3">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                        <span class="path3"></span>
-                                        <span class="path4"></span>
-                                        <span class="path5"></span>
-                                    </i>{{ __('create invoice') }}</button>
-
-                                    <div class="menu-item px-3">
-                                        <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer" data-kt-action="update_row">
-                                        {{ __('edit') }}
-                                        </a>
-                                    </div>
-                                <!--begin::Menu-->
-                                <!-- <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-6 w-200px py-4" data-kt-menu="true"> -->
-                                    <!--begin::Menu item-->
-                                    <!-- <div class="menu-item px-3"> -->
-                                        <!-- <a href="#" class="menu-link px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_add_auth_app">Use authenticator app</a> -->
-                                    <!-- </div> -->
-                                    <!--end::Menu item-->
-                                    <!--begin::Menu item-->
-                                    <!-- <div class="menu-item px-3">
-                                        <a href="#" class="menu-link px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_add_one_time_password">Enable one-time password</a>
-                                    </div> -->
-                                    <!--end::Menu item-->
-                                <!-- </div> -->
-                                <!--end::Menu-->
-                                <!--end::Add-->
-                            </div>
-                            <!--end::Card toolbar-->
                         </div>
                         <!--end::Card header-->
                         <!--end::Card header-->
                         <!--begin::Card body-->
                         <div class="card">
-    <!--begin::Card header-->
-    <div class="card-header border-0 pt-6">
-        <!--begin::Card title-->
-        <div class="card-title">
-            <!--begin::Search-->
-            <div class="d-flex align-items-center position-relative my-1">
-                {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
-                <input type="text" data-kt-taxpayer_invoices-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search Invoice" id="mySearchInput"/>
-            </div>
-            <!--end::Search-->
-        </div>
-        <!--begin::Card title-->
+                            <!--begin::Card header-->
+                            <div class="card-header border-0 pt-6">
+                                <!--begin::Card title-->
+                                <div class="card-title">
+                                    <!--begin::Search-->
+                                    <div class="d-flex align-items-center position-relative my-1">
+                                        {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
+                                        <input type="text" data-kt-taxpayer_invoices-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search Invoice" id="mySearchInput" />
+                                    </div>
+                                    <!--end::Search-->
+                                </div>
+                                <!--begin::Card title-->
 
-        <!--begin::Card toolbar-->
-        <div class="card-toolbar">
-            <!--begin::Toolbar-->
-            <div class="d-flex justify-content-end" data-kt-taxpayer_invoices-table-toolbar="base">
-                <!--begin::Add user-->
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice">
-                    {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                    {{ __('New Invoice') }}
-                </button>
-                <!--end::Add user-->
-            </div>
-            <!--end::Toolbar-->
+                                <!--begin::Card toolbar-->
+                                <div class="card-toolbar">
+                                    <!--begin::Toolbar-->
+                                    <div class="d-flex justify-content-end" data-kt-taxpayer_invoices-table-toolbar="base">
+                                        <!--begin::Add user-->
+                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice">
+                                            {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                                            {{ __('New Invoice') }}
+                                        </button>
+                                        <!--end::Add user-->
+                                    </div>
+                                    <!--end::Toolbar-->
+                                </div>
+                                <!--end::Card toolbar-->
+                            </div>
+                            <!--end::Card header-->
 
-            <!--begin::Modal-->
-            <livewire:invoice.add-invoice-modal></livewire:invoice.add-invoice-modal>
-            <!--end::Modal-->
-        </div>
-        <!--end::Card toolbar-->
-    </div>
-    <!--end::Card header-->
+                            <!--begin::Card body-->
 
-    <!--begin::Card body-->
-    <div class="card-body py-4">
-        <!--begin::Table-->
-        <div class="table-responsive">
-            
-            {{ $dataTable->table() }}
-        </div>
-        <!--end::Table-->
-    </div>
-    <!--end::Card body-->
-</div>
+                            <div class="card-body pt-0 pb-5">
+                                <!--begin::Table wrapper-->
+                                <div class="table-responsive">
+                                    <!--begin::Table-->
+                                    <table class="table align-middle table-row-dashed gy-5" id="kt_table_taxpayer_invoices">
+                                        <thead class="border-bottom border-gray-200 fs-7 fw-bold">
+                                            <tr class="text-start text-muted text-uppercase gs-0">
+                                                <th class="min-w-50px">{{ __('invoice date') }}</th>
+                                                <th class="min-w-50px">{{ __('invoice no') }}</th>
+                                                <th class="min-w-50px">{{ __('order no') }}</th>
+                                                <th class="min-w-50px">{{ __('nic') }}</th>
+                                                <th class="min-w-50px">{{ __('amount') }}</th>
+                                                <th class="min-w-50px">{{ __('status') }}</th>
+                                                <th class="min-w-50px">{{ __('delivery') }}</th>
+                                                <th class="min-w-50px">{{ __('delivery date') }}</th>
+                                                <th class="min-w-50px">{{ __('aproval') }}</th>
+                                                <th class="min-w-50px">{{ __('actions') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="fs-6 fw-semibold text-gray-600">
+                                            @foreach($taxpayer->invoices as $invoice)
+                                            <tr>
+                                                <td>{{ $invoice->created_at->format('Y-m-d') }}</td>
+                                                <td>{{ $invoice->id}}</td>
+                                                <td>
+                                                    @if($invoice->order_no == NULL)
+
+                                                    <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-menu-target="#kt-users-tasks" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                                        <i class="ki-duotone ki-pencil fs-3">
+                                                            <span class="path1"></span>
+                                                            <span class="path2"></span>
+                                                        </i>
+                                                    </button>
+
+                                                    <!--begin::Task menu-->
+                                                    <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" data-kt-menu-id="kt-users-tasks">
+                                                        <!--begin::Header-->
+                                                        <div class="px-7 py-5">
+                                                            <div class="fs-5 text-gray-900 fw-bold">Metre a jour le No d'ordre</div>
+                                                        </div>
+                                                        <!--end::Header-->
+                                                        <!--begin::Menu separator-->
+                                                        <div class="separator border-gray-200"></div>
+                                                        <!--end::Menu separator-->
+                                                        <!--begin::Form-->
+                                                        <form class="form px-7 py-5" data-kt-menu-id="kt-users-tasks-form">
+                                                            <!--begin::Input group-->
+                                                            <div class="fv-row mb-5">
+                                                                <!--begin::Input-->
+                                                                <input type="text" wire:model="name" name="name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('fullname') }}" />
+                                                                <!-- <select class="form-select form-select-solid" name="task_status" data-kt-select2="true" data-placeholder="Select option" data-allow-clear="true" data-hide-search="true">
+                                                <option></option>
+                                                <option value="1">Approved</option>
+                                                <option value="2">Pending</option>
+                                                <option value="3">In Process</option>
+                                                <option value="4">Rejected</option>
+                                            </select> -->
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                            <!--begin::Actions-->
+                                                            <div class="d-flex justify-content-end">
+                                                                <button type="button" class="btn btn-sm btn-light btn-active-light-primary me-2" data-kt-users-update-task-status="reset">Reset</button>
+                                                                <button type="submit" class="btn btn-sm btn-primary" data-kt-users-update-task-status="submit">
+                                                                    <span class="indicator-label">Apply</span>
+                                                                    <span class="indicator-progress">Please wait...
+                                                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                                                </button>
+                                                            </div>
+                                                            <!--end::Actions-->
+                                                        </form>
+                                                        <!--end::Form-->
+                                                    </div>
+                                                    <!--end::Task menu-->
+
+                                                    @else
+
+                                                    {{ $invoice->order_no}}
+
+                                                    @endif
+
+                                                </td>
+                                                <td>{{ $invoice->taxpayer->id . $invoice->id}}</td>
+                                                <td>{{ $invoice->amount}}</td>
+
+                                                <td>
+                                                    @if($invoice->pay_status="OWING")
+                                                    <span class="badge badge-light-danger">{{ $invoice->pay_status}}</span>
+                                                    @else
+                                                    <span class="badge badge-light-success">{{ $invoice->pay_status}}</span>
+                                                    @endif
+                                                </td>
+
+                                                <td>
+                                                    @if($invoice->pay_status="OWING")
+                                                    <span class="badge badge-light-danger">NOT DELIVERED</span>
+                                                    @else
+                                                    <span class="badge badge-light-success">DELIVERED</span>
+                                                    @endif
+                                                </td>
+
+                                                <td>
+                                                    @if($invoice->pay_status="OWING")
+                                                    -
+                                                    @else
+                                                    {{ $invoice->updated_at->format('Y-m-d') }}
+                                                    @endif
+                                                </td>
+
+
+                                                <td>
+                                                    @if($invoice->status=="PENDING")
+                                                    <span class="badge badge-light-primary">{{ $invoice->status}}</span>
+                                                    <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-menu-target="#kt-users-tasks" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                                        <i class="ki-duotone ki-setting-3 fs-3">
+                                                            <span class="path1"></span>
+                                                            <span class="path2"></span>
+                                                            <span class="path3"></span>
+                                                            <span class="path4"></span>
+                                                            <span class="path5"></span>
+                                                        </i>
+                                                    </button>
+                                                    @elseif($invoice->status=="APROVED")
+                                                    <span class="badge badge-light-success">{{ $invoice->status}}</span>
+                                                    @elseif($invoice->status=="REJECTED")
+                                                    <span class="badge badge-light-danger">{{ $invoice->status}}</span>
+                                                    @elseif($invoice->status=="REJECTED-EDIT")
+                                                    <span class="badge badge-light-warning">{{ $invoice->status}}</span>
+                                                    <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-menu-target="#kt-users-tasks" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                                        <i class="ki-duotone ki-setting-3 fs-3">
+                                                            <span class="path1"></span>
+                                                            <span class="path2"></span>
+                                                            <span class="path3"></span>
+                                                            <span class="path4"></span>
+                                                            <span class="path5"></span>
+                                                        </i>
+                                                    </button>
+                                                    @elseif($invoice->status=="DRAFT")
+                                                    <span class="badge badge-light-secondary">{{ $invoice->status}}</span>
+                                                    <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-menu-target="#kt-users-tasks" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                                        <i class="ki-duotone ki-setting-3 fs-3">
+                                                            <span class="path1"></span>
+                                                            <span class="path2"></span>
+                                                            <span class="path3"></span>
+                                                            <span class="path4"></span>
+                                                            <span class="path5"></span>
+                                                        </i>
+                                                    </button>
+                                                    @else
+                                                    <span class="badge badge-light-info">{{ $invoice->status}}</span>
+                                                    @endif
+
+
+                                                    <!--begin::Task menu-->
+                                                    <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" data-kt-menu-id="kt-users-tasks">
+                                                        <!--begin::Header-->
+                                                        <div class="px-7 py-5">
+                                                            <div class="fs-5 text-gray-900 fw-bold">Metre a jour le status</div>
+                                                        </div>
+                                                        <!--end::Header-->
+                                                        <!--begin::Menu separator-->
+                                                        <div class="separator border-gray-200"></div>
+                                                        <!--end::Menu separator-->
+                                                        <!--begin::Form-->
+                                                        <form class="form px-7 py-5" data-kt-menu-id="kt-users-tasks-form">
+                                                            <!--begin::Input group-->
+                                                            <div class="fv-row mb-5">
+                                                                <!--begin::Label-->
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <select class="form-select form-select-solid" name="task_status" data-kt-select2="true" data-placeholder="Select option" data-allow-clear="true" data-hide-search="false">
+                                                                    <option></option>
+                                                                    @if($invoice->status=="PENDING")
+                                                                    <option value="APROVED">APROVE</option>
+                                                                    <option value="REJECTED">REJECT</option>
+                                                                    <option value="REJECTED-EDIT">REJECT FOR EDIT</option>
+                                                                    @elseif($invoice->status=="DRAFT")
+                                                                    <option value="PENDING">APROVE</option>
+                                                                    <option value="CANCELED">CANCEL</option>
+                                                                    @elseif($invoice->status=="REJECTED-EDIT")
+                                                                    <option value="PENDING">APROVE</option>
+                                                                    @endif
+                                                                </select>
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                            <!--begin::Actions-->
+                                                            <div class="d-flex justify-content-end">
+                                                                <button type="button" class="btn btn-sm btn-light btn-active-light-primary me-2" data-kt-users-update-task-status="reset">Reset</button>
+                                                                <button type="submit" class="btn btn-sm btn-primary" data-kt-users-update-task-status="submit">
+                                                                    <span class="indicator-label">Apply</span>
+                                                                    <span class="indicator-progress">Please wait...
+                                                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                                                </button>
+                                                            </div>
+                                                            <!--end::Actions-->
+                                                        </form>
+                                                        <!--end::Form-->
+                                                    </div>
+                                                    <!--end::Task menu-->
+
+                                                </td>
+                                                <!--end::Menu-->
+
+                                                <td>
+
+                                                    <a href="#" class="btn btn-light btn-active-light-success btn-flex btn-center btn-sm" data-kt-menu-target="#kt-users-actions" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                                        {{ __('actions') }}
+                                                        <i class="ki-duotone ki-down fs-5 ms-1"></i>
+                                                    </a>
+
+                                                    <!--begin::Menu-->
+                                                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4" data-kt-menu="true" data-kt-menu-id="#kt-users-actions">
+                                                        <!--begin::Menu item-->
+
+                                                        <div class="menu-item px-3">
+                                                            <a href="{{ route('taxpayers.show', $taxpayer) }}" class="menu-link px-3">
+                                                                {{ __('view') }}
+                                                            </a>
+                                                        </div>
+
+                                                        @if($invoice->status=="PENDING")
+                                                        <div class="menu-item px-3">
+                                                            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer" data-kt-action="update_taxpayer">
+                                                                {{ __('edit') }}
+                                                            </a>
+                                                        </div>
+                                                        @elseif($invoice->status=="CANCELED")
+                                                        <div class="menu-item px-3">
+                                                            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer->id }}" data-kt-action="delete_taxpayer">
+                                                                {{ __('delete') }}
+                                                            </a>
+                                                        </div>
+                                                        @elseif($invoice->status=="DRAFT")
+                                                        <div class="menu-item px-3">
+                                                            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer" data-kt-action="update_taxpayer">
+                                                                {{ __('edit') }}
+                                                            </a>
+                                                        </div>
+                                                        <div class="menu-item px-3">
+                                                            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer->id }}" data-kt-action="delete_taxpayer">
+                                                                {{ __('delete') }}
+                                                            </a>
+                                                        </div>
+                                                        @elseif($invoice->status=="REJECTED-EDIT")
+                                                        <div class="menu-item px-3">
+                                                            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer" data-kt-action="update_taxpayer">
+                                                                {{ __('edit') }}
+                                                            </a>
+                                                        </div>
+                                                        @endif
+                                                        <!--end::Menu item-->
+
+                                                        <!--begin::Menu item-->
+                                                        <!--end::Menu item-->
+
+                                                        <!--begin::Menu item-->
+                                                        <!--end::Menu item-->
+                                                    </div>
+                                                    <!--end::Menu-->
+
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    <!--end::Table-->
+                                </div>
+                                <!--end::Table wrapper-->
+                            </div>
+                            <!--end::Card body-->
+                        </div>
                         <!--end::Card body-->
                     </div>
 
-                    
 
-                    
+
+
 
 
                     <!--end::Card-->
@@ -500,16 +719,16 @@
                                     </i>{{ __('create payment') }}</button>
                                 <!--begin::Menu-->
                                 <!-- <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-6 w-200px py-4" data-kt-menu="true"> -->
-                                    <!--begin::Menu item-->
-                                    <!-- <div class="menu-item px-3"> -->
-                                        <!-- <a href="#" class="menu-link px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_add_auth_app">Use authenticator app</a> -->
-                                    <!-- </div> -->
-                                    <!--end::Menu item-->
-                                    <!--begin::Menu item-->
-                                    <!-- <div class="menu-item px-3">
+                                <!--begin::Menu item-->
+                                <!-- <div class="menu-item px-3"> -->
+                                <!-- <a href="#" class="menu-link px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_add_auth_app">Use authenticator app</a> -->
+                                <!-- </div> -->
+                                <!--end::Menu item-->
+                                <!--begin::Menu item-->
+                                <!-- <div class="menu-item px-3">
                                         <a href="#" class="menu-link px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_add_one_time_password">Enable one-time password</a>
                                     </div> -->
-                                    <!--end::Menu item-->
+                                <!--end::Menu item-->
                                 <!-- </div> -->
                                 <!--end::Menu-->
                                 <!--end::Add-->
@@ -535,19 +754,19 @@
                                         </tr>
                                     </thead>
                                     <tbody class="fs-6 fw-semibold text-gray-600">
-                                    @foreach($taxpayer->invoices as $invoice)
+                                        @foreach($taxpayer->invoices as $invoice)
                                         <tr>
                                             <td>{{ $invoice->created_at->format('Y-m-d') }}</td>
                                             <td>{{ $invoice->order_no}}</td>
                                             <td>{{ $invoice->invoice_no}}</td>
                                             <td>1000.00</td>
-                                            
+
                                             <td><span class="badge badge-light-secondary">CASH</span></td>
 
                                             <td>PAIMENT POUR MARS</td>
                                             <td><a href="#" class="btn btn-light bnt-active-light-success btn-sm">{{ __('view') }}</a></td>
                                         </tr>
-                                    @endforeach
+                                        @endforeach
                                     </tbody>
                                 </table>
                                 <!--end::Table-->
@@ -558,8 +777,6 @@
                     </div>
                     <!--end::Card-->
                 </div>
-                
-                <livewire:invoice.add-invoice-modal></livewire:invoice.add-invoice-modal>
 
                 <!--end:::Tab pane-->
                 <!--begin:::Tab pane-->
@@ -822,6 +1039,19 @@
         </div>
         <!--end::Content-->
     </div>
+
+    <!--begin::Modal-->
+    <livewire:taxpayer.add-taxpayer-modal></livewire:taxpayer.add-taxpayer-modal>
+    <!--end::Modal-->
+
+    <!--begin::Modal-->
+    <livewire:invoice.add-invoice-modal></livewire:invoice.add-invoice-modal>
+    <!--end::Modal-->
+
+    <!--begin::Modal-->
+    <livewire:taxpayer_taxable.add-taxpayer-taxable-modal></livewire:taxpayer_taxable.add-taxpayer-taxable-modal>
+    <!--end::Modal-->
+
     <!--end::Layout-->
     <!--begin::Modals-->
     <!--begin::Modal - Update user details-->
@@ -851,32 +1081,32 @@
     <!--end::Modals-->
 
     @push('scripts')
-        <script>
-            var map_render = L.map('location_map').setView([8.2, 1.1], 8); // Set initial coordinates and zoom level
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-            }).addTo(map_render);
-		</script>
-        <script type="text/javascript">
-            var taxpayer = @json($taxpayer); // Convert Laravel object to JSON
+    <script>
+        var map_render = L.map('location_map').setView([8.2, 1.1], 8); // Set initial coordinates and zoom level
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map_render);
+    </script>
+    <script type="text/javascript">
+        var taxpayer = @json($taxpayer); // Convert Laravel object to JSON
 
-            // Log the taxpayer data to the console
-            console.log('Taxpayer data:', taxpayer);
+        // Log the taxpayer data to the console
+        console.log('Taxpayer data:', taxpayer);
 
-            // Check if taxpayer has latitude and longitude properties
-            if (taxpayer.latitude && taxpayer.longitude) {
-                // Trim spaces and convert to numeric values
-                var latitude = parseFloat(taxpayer.latitude.trim());
-                var longitude = parseFloat(taxpayer.longitude.trim());
+        // Check if taxpayer has latitude and longitude properties
+        if (taxpayer.latitude && taxpayer.longitude) {
+            // Trim spaces and convert to numeric values
+            var latitude = parseFloat(taxpayer.latitude.trim());
+            var longitude = parseFloat(taxpayer.longitude.trim());
 
-                // Create a custom popup content
+            // Create a custom popup content
 
-                    // Gender: ${taxpayer.gender}<br>
-                    // ID Type: ${taxpayer.id_type}<br>
-                    // ID Number: ${taxpayer.id_number}<br>
-                    // Telephone: ${taxpayer.telephone}<br>
+            // Gender: ${taxpayer.gender}<br>
+            // ID Type: ${taxpayer.id_type}<br>
+            // ID Number: ${taxpayer.id_number}<br>
+            // Telephone: ${taxpayer.telephone}<br>
 
-                var popupContent = `
+            var popupContent = `
                     <strong>${taxpayer.name}</strong><br>
                     Mobile Phone: ${taxpayer.mobilephone}<br>
                     Canton: ${taxpayer.canton}<br>
@@ -885,48 +1115,115 @@
                     Address: ${taxpayer.address}
                 `;
 
+            // Log a message when adding the marker
+            console.log('Adding marker for taxpayer:', taxpayer.name);
+
+            // Add the marker to the map with a custom popup
+            L.marker([latitude, longitude]).addTo(map_render)
+                .bindPopup(popupContent);
+            // Display custom popup on click
+
+            // Animate the map to the marker's position with a specific zoom level
+            map_render.flyTo([latitude, longitude], 13, {
+                duration: 8, // Animation duration in seconds
+                easeLinearity: 0.5, // Animation easing factor (0.5 for a smooth effect)
+            });
+        } else {
+            // Log a message when there is missing or invalid latitude or longitude
+            console.log('Taxpayer does not have valid latitude or longitude:', taxpayer);
+        }
+    </script>
+    <script type="text/javascript">
+    var taxpayer_taxables = @json($taxpayer->taxpayer_taxables); // Convert Laravel collection to JSON
+
+    // Log the taxpayer_taxables data to the console
+    console.log('Taxpayer Taxables data:', taxpayer_taxables);
+
+    // Custom red icon for the marker
+    var greenIcon = L.icon({
+        iconUrl: 'http://leafletjs.com/examples/custom-icons/leaf-green.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+    var redIcon = L.icon({
+        iconUrl: 'http://leafletjs.com/examples/custom-icons/leaf-red.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+
+    // Check if taxpayer_taxables is not empty
+    if (taxpayer_taxables.length > 0) {
+        // Loop through each taxpayer_taxable item
+        taxpayer_taxables.forEach(function(taxpayer_taxable) {
+            // Check if taxpayer_taxable has latitude and longitude properties
+            if (taxpayer_taxable.latitude && taxpayer_taxable.longitude) {
+                // Trim spaces and convert to numeric values
+                var latitude = parseFloat(taxpayer_taxable.latitude.trim());
+                var longitude = parseFloat(taxpayer_taxable.longitude.trim());
+
+                // Create a custom popup content
+                var popupContent = `
+                    <strong>${taxpayer_taxable.name}</strong><br>
+                    Mobile Phone: ${taxpayer_taxable.seize}<br>
+                    Address: ${taxpayer_taxable.location}
+                `;
+
                 // Log a message when adding the marker
-                console.log('Adding marker for taxpayer:', taxpayer.name);
+                console.log('Adding marker for taxpayer_taxable:', taxpayer_taxable.name);
 
-                // Add the marker to the map with a custom popup
-                L.marker([latitude, longitude]).addTo(map_render)
-                    .bindPopup(popupContent);
-                    // Display custom popup on click
+                // Add the marker to the map with a custom red icon and popup
+                if (taxpayer_taxable.invoice_id == null) {
+                    L.marker([latitude, longitude], { icon: redIcon }).addTo(map_render)
+                        .bindPopup(popupContent);
+                } else {
+                    L.marker([latitude, longitude], { icon: greenIcon }).addTo(map_render)
+                        .bindPopup(popupContent);
+                }
 
-                // Animate the map to the marker's position with a specific zoom level
-                map_render.flyTo([latitude, longitude], 13, {
-                    duration: 8, // Animation duration in seconds
-                    easeLinearity: 0.5, // Animation easing factor (0.5 for a smooth effect)
-                });
             } else {
                 // Log a message when there is missing or invalid latitude or longitude
-                console.log('Taxpayer does not have valid latitude or longitude:', taxpayer);
+                console.log('taxpayer_taxable does not have valid latitude or longitude:', taxpayer_taxable);
             }
-        </script>
+        });
+    } else {
+        // Log a message when taxpayer_taxables is empty
+        console.log('Taxpayer Taxables data is empty.');
+    }
+</script>
 
-        <script>
-            // document.addEventListener('livewire:init', function () {
-            //     Livewire.on('success', function () {
-            //         $('#kt_modal_add_taxpayer_taxable').modal('hide');
-            //         window.LaravelDataTables['taxpayers-table'].ajax.reload();
-            //     });
-            // });
-        </script>
-        
-        {{ $dataTable->scripts() }}
-        {{-- $taxablesDataTable->scripts() --}}
-        <script>
-            document.getElementById('mySearchInput').addEventListener('keyup', function () {
-                window.LaravelDataTables['taxpayer_taxables-table'].search(this.value).draw();
+
+    <script>
+        // document.addEventListener('livewire:init', function () {
+        //     Livewire.on('success', function () {
+        //         $('#kt_modal_add_taxpayer_taxable').modal('hide');
+        //         window.LaravelDataTables['taxpayers-table'].ajax.reload();
+        //     });
+        // });
+    </script>
+
+    {{ $dataTable->scripts() }}
+    <script>
+        document.getElementById('mySearchInput').addEventListener('keyup', function() {
+            window.LaravelDataTables['taxpayer_taxables-table'].search(this.value).draw();
+        });
+        document.addEventListener('livewire:init', function() {
+            Livewire.on('success', function() {
+                $('#kt_modal_add_invoice').modal('hide');
+                window.LaravelDataTables['taxpayer_taxables-table'].ajax.reload();
             });
-            document.addEventListener('livewire:init', function () {
-                Livewire.on('success', function () {
-                    $('#kt_modal_add_invoice').modal('hide');
-                    window.LaravelDataTables['taxpayer_taxables-table'].ajax.reload();
-                });
+        });
+        document.addEventListener('livewire:init', function() {
+            Livewire.on('success', function() {
+                $('#kt_modal_add_taxpayer_taxable').modal('hide');
+                window.LaravelDataTables['taxpayer_taxables-table'].ajax.reload();
             });
-        </script>
-        <!-- <script>
+        });
+    </script>
+    <!-- <script>
             document.getElementById('mySearchInput').addEventListener('keyup', function () {
                 window.LaravelDataTables['taxpayer_invoices-table'].search(this.value).draw();
             });

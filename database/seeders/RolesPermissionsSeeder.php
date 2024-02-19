@@ -15,13 +15,15 @@ class RolesPermissionsSeeder extends Seeder
     public function run(): void
     {
         $abilities = [
-            'read',
-            'write',
+            'view',
+            'edit',
             'create',
+            'delete',
         ];
 
         $permissions_by_role = [
-            'administrator' => [
+            'super_administrator' => [
+                'taxpayer',
                 'user management',
                 'content management',
                 'financial management',
@@ -32,25 +34,37 @@ class RolesPermissionsSeeder extends Seeder
                 'database management',
                 'repository management',
             ],
-            'developer' => [
+            'administrator' => [
+                'taxpayer',
+                'user management',
+                'content management',
+                'financial management',
+                'reporting',
+                'payroll',
+                'disputes management',
                 'api controls',
                 'database management',
                 'repository management',
             ],
-            'analyst' => [
+            'agent_assiette' => [
+                'api controls',
+                'database management',
+                'repository management',
+            ],
+            'agent_regisseur' => [
                 'content management',
                 'financial management',
                 'reporting',
                 'payroll',
             ],
-            'support' => [
+            'agent_recouvrement' => [
                 'reporting',
             ],
-            'trial' => [
+            'agent_collecteur' => [
             ],
         ];
 
-        foreach ($permissions_by_role['administrator'] as $permission) {
+        foreach ($permissions_by_role['super_administrator'] as $permission) {
             foreach ($abilities as $ability) {
                 Permission::create(['name' => $ability . ' ' . $permission]);
             }
@@ -66,7 +80,7 @@ class RolesPermissionsSeeder extends Seeder
             Role::create(['name' => $role])->syncPermissions($full_permissions_list);
         }
 
-        User::find(1)->assignRole('administrator');
-        User::find(2)->assignRole('developer');
+        User::find(1)->assignRole('super_administrator');
+        //User::find(2)->assignRole('developer');
     }
 }

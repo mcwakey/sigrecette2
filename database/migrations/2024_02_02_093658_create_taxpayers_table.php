@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -14,7 +15,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('taxpayers', function (Blueprint $table) {
-            $table->id();
+            $table->id()->from(10001);;
 		    $table->string('tnif')->unique()->nullable();
             $table->string('name');
             $table->string('gender');
@@ -24,11 +25,24 @@ return new class extends Migration
             $table->string('telephone');
             $table->string('longitude');
             $table->string('latitude');
-            $table->string('canton');
-            $table->string('town');
-            $table->string('erea');
             $table->string('address');
-            $table->string('zone_id');
+
+            //$table->string('canton_id');
+            //$table->unsignedBigInteger('canton')->default(1);
+            //$table->foreign('canton')->references('id')->on('cantons');
+
+            //$table->string('town');
+            $table->unsignedBigInteger('town_id')->default(1);
+            $table->foreign('town_id')->references('id')->on('towns');
+
+            // $table->string('erea');
+            $table->unsignedBigInteger('erea_id')->default(1);
+            $table->foreign('erea_id')->references('id')->on('ereas');
+            
+            //$table->string('zone_id');
+            $table->unsignedBigInteger('zone_id')->default(1);
+            $table->foreign('zone_id')->references('id')->on('zones');
+
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
@@ -37,6 +51,8 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+        
+        //DB::statement("ALTER TABLE books AUTO_INCREMENT = 10000;");
     }
 
     /**

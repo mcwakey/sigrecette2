@@ -6,7 +6,7 @@
             <!--begin::Modal header-->
             <div class="modal-header" id="kt_modal_add_taxpayer_taxable_header">
                 <!--begin::Modal title-->
-                <h2 class="fw-bold">{{ __('new asset') }}</h2>
+                <h2 class="fw-bold">{{ __('assets') }}</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
@@ -19,7 +19,8 @@
             <div class="modal-body px-5 my-7">
                 <!--begin::Form-->
                 <form id="kt_modal_add_taxpayer_taxable_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
-                    <input type="hidden" wire:model="taxpayer_taxable_id" name="taxpayer_taxable_id" value="{{ $taxpayer_taxable_id }}"/>
+                    <input type="hidden" wire:model="taxpayer_taxable_id" name="taxpayer_taxable_id"  value="{{ $taxpayer_taxable_id }}"/>
+                    <input type="hidden" wire:model="taxpayer_id" name="taxpayer_id" value="{{ $taxpayer_id }}"/>
                     <!--begin::Scroll-->
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_taxpayer_taxable_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_taxpayer_taxable_header" data-kt-scroll-wrappers="#kt_modal_add_taxpayer_taxable_scroll" data-kt-scroll-offset="300px">
                         
@@ -28,17 +29,18 @@
                         <div class="row mb-7">
                             <div class="col-md-12">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-semibold mb-2">{{ __('taxpayers') }}</label>
+                                <label class="fs-6 fw-semibold mb-2">{{ __('taxlabels') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <select wire:model="taxpayer_id" name="taxpayer_id" class="form-select form-select-solid"
-                                    data-dropdown-parent="#kt_modal_add_taxpayer_taxable">
+       
+                                <select wire:model="taxlabel_id" name="taxlabel_id" class="form-select form-select-solid" data-dropdown-parent="#kt_modal_add_taxpayer_taxable">
                                     <option>{{ __('select an option') }}</option>
-                                    <!-- <option value="Homme">Homme</option>
-                                    <option value="Femme">Femme</option> -->
+                                    @foreach($taxlabels as $taxlabel)
+                                    <option data-kt-action="load_taxables" value="{{ $taxlabel->id}}">{{ $taxlabel->name }}</option>
+                                    @endforeach
                                 </select>
                                 <!--end::Input-->
-                                @error('gender')
+                                @error('taxlabel_id')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>
@@ -51,17 +53,16 @@
                                 <label class="fs-6 fw-semibold mb-2">{{ __('taxables') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <select wire:model="taxable_id" name="taxable_id" class="form-select form-select-solid"
-                                    data-dropdown-parent="#kt_modal_add_taxpayer_taxable">
+                                <select wire:model="taxable_id" name="taxable_id" class="form-select form-select-solid" data-dropdown-parent="#kt_modal_add_taxpayer_taxable">
                                     <option>{{ __('select an option') }}</option>
-                                    @foreach($taxables as $tax_label)
-                                    <option value="{{ $tax_label->id}}">{{ $tax_label->name }}</option>
+                                    @foreach($taxables as $taxable)
+                                    <option value="{{ $taxable->id}}">{{ $taxable->name }}</option>
                                     @endforeach
                                     <!-- <option value="Homme">Homme</option>
                                     <option value="Femme">Femme</option> -->
                                 </select>
                                 <!--end::Input-->
-                                @error('gender')
+                                @error('taxable_id')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>
@@ -88,17 +89,39 @@
                                 <!--begin::Input-->
                                 <input type="text" wire:model="seize" name="seize" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('seize') }}"/>
                                 <!--end::Input-->
-                                @error('tariff')
+                                @error('seize')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div class="col-md-6">
                                 <!--begin::Label-->
-                                <label class="required fw-semibold fs-6 mb-2">{{ __('location') }}</label>
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('address') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="text" wire:model="location" name="location" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('location') }}"/>
                                 <!--end::Input-->
-                                @error('tariff')
+                                @error('location')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
+                        <div class="row mb-7">
+                            <div class="col-md-6">
+                                <!--begin::Label-->
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('longitude') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" wire:model="longitude" name="longitude" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('longitude') }}"/>
+                                <!--end::Input-->
+                                @error('longitude')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <!--begin::Label-->
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('latitude') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" wire:model="latitude" name="latitude" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('latitude') }}"/>
+                                <!--end::Input-->
+                                @error('latitude')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>

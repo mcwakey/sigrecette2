@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\InvoicesDataTable;
 use App\Models\Taxpayer;
 use App\DataTables\TaxpayersDataTable;
 use App\DataTables\TaxpayerInvoicesDataTable;
@@ -18,6 +19,25 @@ class TaxpayerController extends Controller
     {
         return $dataTable->render('pages/taxpayers.list');
     }
+
+    // public function index()
+    // {
+    //     // Instantiate both data tables
+    //     $taxpayersDataTable = app()->make(TaxpayersDataTable::class);
+    //     $invoicesDataTable = app()->make(InvoicesDataTable::class);
+    
+    //     // Render both data tables into variables
+    //     $taxpayersDataTableHtml = $taxpayersDataTable->render('pages.taxpayers.list');
+    //     //dd($taxpayersDataTableHtml);
+
+    //     $invoicesDataTableHtml = $invoicesDataTable->render('pages.taxpayers.list');
+    //     //dd($taxpayersDataTable);
+    
+    //     // Pass both data tables HTML to the view
+    //     return view('pages.taxpayers.list', compact('taxpayersDataTableHtml', 'invoicesDataTableHtml'));
+    // }
+    
+
 
     /**
      * Show the form for creating a new resource.
@@ -45,7 +65,7 @@ class TaxpayerController extends Controller
         //     ->with('dataTable', $dataTable->html());
         //return $dataTable->render('pages/taxpayers.show')-> with ('taxpayer', $taxpayer);
         
-        return $invoicesDataTable->with('id', $taxpayer->id)
+        return $taxablesDataTable->with('id', $taxpayer->id)
                 ->render('pages/taxpayers.show', compact('taxpayer'));
     }   
 

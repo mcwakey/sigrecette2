@@ -12,34 +12,16 @@ class IdTypesSeeder extends Seeder
      */
     public function run(): void
     {
-        $demoGender = IdType::create([
-            'name'              => 'CNI',
-            'status'             => 'ACTIVE',
-        ]);
+        $idTypeNames = [
+            'CNI',
+            'PASSPORT',
+            'PERMIS DE CONDUIRE',
+            'CARTE D\'ELECTEUR',
+            'CARTE DE SEJOUR',
+        ];
 
-        $demoGender1 = IdType::create([
-            'name'              => 'PASSPORT',
-            'status'             => 'ACTIVE',
-        ]);
-
-        $demoGender2 = IdType::create([
-            'name'              => 'PERMIS DE CONDUIRE',
-            'status'             => 'ACTIVE',
-        ]);
-
-        $demoGender3 = IdType::create([
-            'name'              => 'CARTE D\'ELECTEUR',
-            'status'             => 'ACTIVE',
-        ]);
-
-        $demoGender4 = IdType::create([
-            'name'              => 'CARTE DE SEJOUR',
-            'status'             => 'ACTIVE',
-        ]);
-
-        // $demoGender = IdType::create([
-        //     'name'              => 'PASSPORT',
-        //     'status'             => 'ACTIVE',
-        // ]);
+        foreach ($idTypeNames as $name) {
+            IdType::create(['name' => $name]);
+        }
     }
 }

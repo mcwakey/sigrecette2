@@ -15,8 +15,13 @@ class Town extends Model
         return $this->belongsTo(Canton::class);
     }
 
-    public function ereas()
+    public function taxpayers()
     {
-        return $this->hasMany(Erea::class);
+        return $this->hasMany(Taxpayer::class);
     }
+
+    // public function ereas()
+    // {
+    //     return $this->hasMany(Erea::class);
+    // }
 }

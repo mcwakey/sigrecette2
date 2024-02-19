@@ -23,15 +23,79 @@ document.querySelectorAll('[data-kt-action="delete_row"]').forEach(function (ele
     });
 });
 
+
+
 // Add click event listener to update buttons
-document.querySelectorAll('[data-kt-action="update_row"]').forEach(function (element) {
+document.querySelectorAll('[data-kt-action="update_taxpayer"]').forEach(function (element) {
     element.addEventListener('click', function () {
-        Livewire.dispatch('update_user', [this.getAttribute('data-kt-user-id')]);
+        Livewire.dispatch('update_taxpayer', [this.getAttribute('data-kt-user-id')]);
     });
 });
+
+// Add click event listener to update buttons
+document.querySelectorAll('[data-kt-action="update_taxpayer"]').forEach(function (element) {
+    element.addEventListener('click', function () {
+        Livewire.dispatch('update_taxpayer', [this.getAttribute('data-kt-user-id')]);
+    });
+});
+
+// Add click event listener to update buttons
+document.querySelectorAll('[data-kt-action="load_taxables"]').forEach(function (element) {
+    element.addEventListener('click', function () {
+        Livewire.dispatch('load_taxables', [this.getAttribute('data-kt-user-id')]);
+    });
+});
+
+// Add change event listener to checkbox inputs
+document.querySelectorAll('[data-kt-action="update_checkbox"]').forEach(function (element) {
+    element.addEventListener('change', function () {
+        // Get the value of the checkbox
+        //var value = this.checked;
+
+        
+        //dd(this.checked);
+        // Dispatch a Livewire event with the checkbox value
+        Livewire.dispatch('update_checkbox', [this.getAttribute('data-kt-user-id')]);
+    });
+});
+
+
+// Add click event listener to update buttons
+document.querySelectorAll('[data-kt-action="update_taxable"]').forEach(function (element) {
+    element.addEventListener('click', function () {
+        Livewire.dispatch('update_taxable', [this.getAttribute('data-kt-user-id')]);
+    });
+});
+
+// Add click event listener to update buttons
+document.querySelectorAll('[data-kt-action="add_invoice"]').forEach(function (element) {
+    element.addEventListener('click', function () {
+        Livewire.dispatch('add_invoice', [this.getAttribute('data-kt-user-id')]);
+    });
+});
+
+// Add click event listener to update buttons
+document.querySelectorAll('[data-kt-action="add_taxable"]').forEach(function (element) {
+    element.addEventListener('click', function () {
+        Livewire.dispatch('add_taxable', [this.getAttribute('data-kt-user-id')]);
+    });
+});
+
+// Add click event listener to update buttons
+// document.querySelectorAll('[data-kt-action="update_row"]').forEach(function (element) {
+//     element.addEventListener('click', function () {
+//         Livewire.dispatch('update_user', [this.getAttribute('data-kt-user-id')]);
+//     });
+// });
 
 // Listen for 'success' event emitted by Livewire
 Livewire.on('success', (message) => {
     // Reload the users-table datatable
     LaravelDataTables['taxables-table'].ajax.reload();
 });
+
+// // Listen for 'success' event emitted by Livewire
+// Livewire.on('success', (message) => {
+//     // Reload the users-table datatable
+//     'kt_table_taxpayer_invoices'.ajax.reload();
+// });

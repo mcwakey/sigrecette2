@@ -24,10 +24,10 @@ class Taxpayer extends Model
         'telephone',
         'longitude',
         'latitude',
-        'canton',
-        'town',
-        'erea',
         'address',
+        //'canton',
+        'town_id',
+        'erea_id',
         'zone_id',
         'email',
         'password',
@@ -70,7 +70,22 @@ class Taxpayer extends Model
         return $this->hasMany(Address::class);
     }
 
-    public function taxpayertaxables()
+    public function town()
+    {
+        return $this->belongsTo(Town::class);
+    }
+
+    public function erea()
+    {
+        return $this->belongsTo(Erea::class);
+    }
+
+    public function zone()
+    {
+        return $this->belongsTo(Zone::class);
+    }
+
+    public function taxpayer_taxables()
     {
         return $this->hasMany(TaxpayerTaxable::class);
     }

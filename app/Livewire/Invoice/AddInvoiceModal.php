@@ -7,6 +7,7 @@ use App\Models\Erea;
 use App\Models\Gender;
 use App\Models\IdType;
 use App\Models\Invoice;
+use App\Models\InvoiceItem;
 use App\Models\Taxpayer;
 use App\Models\TaxpayerTaxable;
 use App\Models\Town;
@@ -20,16 +21,31 @@ class AddInvoiceModal extends Component
 {
     //use WithFileUploads;
 
-    public $name;
     public $invoice_id;
-    public $invoice_no;
-    public $order_no;
-    public $nic;
-    public $status;
-    public $taxpayer_id;
 
+    public $name;
     public $tnif;
+    public $zone;
 
+    public $qty;
+    public $s_amount;
+    public $taxpayer_taxable_id;
+
+    // public $qty=[];
+    // public $s_amount=[];
+    // public $taxpayer_taxable_id=[];
+    //public $invoice_id;
+    //public $status;
+
+    public $taxpayer_id;
+    public $amount;
+
+    // public function reduce($index)
+    // {
+    //     $product_id = $this->inputs[$index]['id'];
+    //     $this->inputs[$index]['qty'] -= 1;
+    //     $this->updateCart($product_id, $this->inputs[$index]['qty']);
+    // }
     //public $created_at;
     // public $mobilephone;
     // public $email;
@@ -56,11 +72,17 @@ class AddInvoiceModal extends Component
 
     protected $rules = [
         // 'invoice_id' => 'required|string',
-        'invoice_no' => 'required',
-        'order_no' => 'required',
-        'nic' => 'required',
-        'status' => 'required|string',
-        //'taxpayer_id' => 'required',
+        // 'invoice_no' => 'required',
+        // 'order_no' => 'required',
+        // 'nic' => 'required',
+        // 'status' => 'required|string',
+        
+        "s_amount" =>"required",
+        "taxpayer_taxable_id" =>"required",
+        "qty" =>"required",
+
+        'taxpayer_id' => 'required',
+        'amount' => 'required',
 
         // 'telephone' => 'required|string|min:10|max:10',
         // 'longitude' => 'nullable',
@@ -75,7 +97,8 @@ class AddInvoiceModal extends Component
 
     protected $listeners = [
         'delete_user' => 'deleteUser',
-        'update_user' => 'updateUser',
+        'update_invoice' => 'updateInvoice',
+        'add_invoice' => 'addInvoice',
     ];
 
     // public $taxpayer_id; // Define public property to hold taxpayer_id
@@ -96,8 +119,8 @@ class AddInvoiceModal extends Component
         $taxpayers = Taxpayer::all();
         //$taxpayer_taxables = TaxpayerTaxable::all();
 
-        $taxpayer_taxables = $this->invoice_id ? TaxpayerTaxable::where('invoice_id', $this->invoice_id)->get() : collect();
-        $taxpayer_id = $this->taxpayer_id;
+        $taxpayer_taxables = $this->taxpayer_id ? TaxpayerTaxable::where('taxpayer_id', $this->taxpayer_id)->where('billable', 1)->get() : collect();
+        //$taxpayer_id = $this->taxpayer_id;
 
         // Assuming you have a public property $canton in your Livewire component
         //$towns = $this->canton ? Town::where('canton_id', $this->canton)->get() : collect();
@@ -105,75 +128,106 @@ class AddInvoiceModal extends Component
 
         //return view('livewire.invoice.add-invoice-modal', ['taxpayer_id' => $this->taxpayer_id]);
     
-        return view('livewire.invoice.add-invoice-modal', compact('taxpayers','taxpayer_taxables','taxpayer_id'));
+        return view('livewire.invoice.add-invoice-modal', compact('taxpayers','taxpayer_taxables'));
     }
+
+    // public function submit()
+    // {
+    //     // Validate the form input data
+    //     $this->validate();
+
+    //     DB::transaction(function () {
+
+    //         $data = [
+    //             //save into Invoice_items table
+    //             "taxpayer_taxable_id" => $this->taxpayer_taxable_id,
+    //             "qty" => $this->qty,
+    //             "s_amount" => $this->s_amount,
+
+    //             //save into Invoice table
+    //             'taxpayer_id' => $this->taxpayer_id,
+    //             'amount' => $this->amount,
+
+    //         ];
+
+    //         $invoice = Invoice::find($this->invoice_id) ?? Invoice::create($data);
+
+    //         if ($this->edit_mode) {
+    //             foreach ($data as $k => $v) {
+    //                 $invoice->$k = $v;
+    //             }
+    //             $invoice->save();
+    //         }
+
+    //         if ($this->edit_mode) {
+    //             $this->dispatch('success', __('Invoice updated'));
+    //         } else {
+    //             $this->dispatch('success', __('New Invoice created'));
+    //         }
+    //     });
+
+    //     $this->reset();
+    // }
 
     public function submit()
-    {
-        // Validate the form input data
-        $this->validate();
+{
+    //dd($this->validate());
 
-        DB::transaction(function () {
-            // Prepare the data for creating a new invoice
-            $data = [
-                'invoice_no' => $this->invoice_no,
-                'order_no' => $this->order_no,
-                'nic' => $this->nic,
-                'status' => $this->status,
-                //'taxpayer_id' => $this->taxpayer_id,
+    // Validate the form input data
+    //$this->validate();
 
-                // 'telephone' => $this->telephone,
-                // 'longitude' => $this->longitude,
-                // 'latitude' => $this->latitude,
-                // 'canton' => $this->canton,
-                // 'town' => $this->town,
-                // 'erea' => $this->erea,
-                // 'address' => $this->address,
-                // 'zone_id' => $this->zone_id,
-            ];
+    DB::transaction(function () {
 
-            // if ($this->avatar) {
-            //     $data['profile_photo_path'] = $this->avatar->store('avatars', 'public');
-            // } else {
-            //     $data['profile_photo_path'] = null;
-            // }
+        // Prepare data for Invoice
+        $invoiceData = [
+            'taxpayer_id' => $this->taxpayer_id,
+            'amount' => $this->amount,
+        ];
 
-            // if (!$this->edit_mode) {
-            //     $data['password'] = Hash::make($this->email);
-            // }
+        //dd($invoiceData);
 
-            // Update or Create a new invoice record in the database
-            //$data['email'] = $this->email;
-            $invoice = Invoice::find($this->invoice_id) ?? Invoice::create($data);
+        // Create or update Invoice record
+        $invoice = Invoice::find($this->invoice_id) ?? Invoice::create($invoiceData);
 
-            if ($this->edit_mode) {
-                foreach ($data as $k => $v) {
-                    $invoice->$k = $v;
-                }
-                $invoice->save();
-            }
+        //dd($this->taxpayer_taxable_id);
 
-            if ($this->edit_mode) {
-                // Assign selected role for user
-                //$taxpayer->syncRoles($this->role);
+        // Prepare data for Invoice_items
+        $invoiceItemsData = [
+            'invoice_id' => $invoice->id,
+            'taxpayer_taxable_id' => $this->taxpayer_taxable_id,
+            'qty' => $this->qty,
+            'amount' => $this->s_amount,
+        ];
 
-                // Emit a success event with a message
-                $this->dispatch('success', __('Invoice updated'));
-            } else {
-                // Assign selected role for user
-                //$taxpayer->assignRole($this->role);
+        //dd($invoiceItemsData);
 
-                // Send a password reset link to the user's email
-                //Password::sendResetLink($taxpayer->only('email'));
+        // Create or update Invoice_items record
+        //$invoice->invoiceItems()->updateOrCreate(['id' => $this->invoice_item_id], $invoiceItemsData);
+        $invoiceItems = InvoiceItem::find($this->taxpayer_taxable_id) ?? InvoiceItem::create($invoiceItemsData);
 
-                // Emit a success event with a message
-                $this->dispatch('success', __('New Invoice created'));
-            }
-        });
+        $taxpayerTaxableData = [
+            'invoice_id' => $invoice->id,
+            'billable' => '0',
+        ];
 
-        // Reset the form fields after successful submission
-        $this->reset();
-    }
+        $taxpayerTaxable = TaxpayerTaxable::find($this->taxpayer_taxable_id);
+
+        $taxpayerTaxable->update($taxpayerTaxableData);
+
+        //dd($invoice);
+
+        // Dispatch success message
+        if ($this->edit_mode) {
+            $this->dispatch('success', __('Invoice updated'));
+        } else {
+            $this->dispatch('success', __('New Invoice created'));
+        }
+    });
+
+    // Reset form fields after successful submission
+    $this->reset();
+}
+
 
     public function deleteUser($id)
     {
@@ -190,11 +244,18 @@ class AddInvoiceModal extends Component
         $this->dispatch('success', 'Invoice successfully deleted');
     }
 
-    public function updateUser($id)
+    public function updateInvoice($id)
     {
         $this->edit_mode = true;
 
         $invoice = Invoice::find($id);
+
+        //dd($invoice, $id);
+
+        //if (!$invoice) {
+            //$this->dispatch('error', 'Invoice not found');
+        //    return;
+        //}
         //$taxpayer_taxables = TaxpayerTaxable::where('invoice_id', $id)->get();
         //$taxpayer = Taxpayer::where('name', 'John Doe')->first();
 
@@ -202,10 +263,10 @@ class AddInvoiceModal extends Component
         //$this->taxpayer_id = $id;
         $this->invoice_id = $invoice->id;
         //$this->saved_avatar = $invoice->profile_photo_url;
-        $this->invoice_no = $invoice->invoice_no;
-        $this->order_no = $invoice->order_no;
-        $this->nic = $invoice->nic;
-        $this->status = $invoice->status;
+        //$this->invoice_no = $invoice->invoice_no;
+        //$this->order_no = $invoice->order_no;
+        //$this->nic = $invoice->nic;
+        //$this->status = $invoice->status;
         //$this->created_at = $invoice->created_at->format('Y-m-d');
         //$this->name = $invoice->taxpayer->name;
         //$this->email = $invoice->taxpayer->email;
@@ -219,7 +280,17 @@ class AddInvoiceModal extends Component
         //$this->town = $invoice->taxpayer->town;
         //$this->erea = $invoice->taxpayer->erea;
         //$this->address = $invoice->taxpayer->address;
-        //$this->zone_id = $invoice->taxpayer->zone_id;
+        $this->zone = $invoice->taxpayer->zone_id;
+    }
+
+    public function addInvoice($id)
+    {
+        $taxpayer = Taxpayer::find($id);
+
+        $this->taxpayer_id = $taxpayer->id;
+        $this->name = $taxpayer->name;
+        $this->tnif = $taxpayer->tnif;
+        $this->zone = $taxpayer->zone_id;
     }
 
     public function hydrate()

@@ -8,13 +8,13 @@ use Spatie\Permission\Models\Role;
 
 // Home
 Breadcrumbs::for('home', function (BreadcrumbTrail $trail) {
-    $trail->push('Home', route('dashboard'));
+    $trail->push(__('home'), route('dashboard'));
 });
 
 // Home > Dashboard
 Breadcrumbs::for('dashboard', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
-    $trail->push('Dashboard', route('dashboard'));
+    $trail->push(__('dashboard'), route('dashboard'));
 });
 
 // Home > Dashboard > User Management
@@ -57,7 +57,7 @@ Breadcrumbs::for('user-management.permissions.index', function (BreadcrumbTrail 
 // Home > Dashboard > Taxpayers 
 Breadcrumbs::for('taxpayers.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
-    $trail->push('taxpayers', route('taxpayers.index'));
+    $trail->push(__('taxpayers'), route('taxpayers.index'));
 });
 
 // Home > Dashboard > Taxpayers > Taxpayer > [Taxpayer]

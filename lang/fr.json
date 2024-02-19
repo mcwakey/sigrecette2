@@ -62,7 +62,7 @@
     "settings" : "Configurations",
     "taxable materials" : "Matieres Taxable",
     "cantons" : "Contons",
-    "towns" : "Villes/Villages",
+    "towns" : "Villes/villages",
     "ereas" : "Quartiers",
     "user management" : "Gestion d'utilisateurs",
     "users" : "Utilisateurs",
@@ -98,9 +98,9 @@
 
     "canton" : "Canton",
     "town" : "Ville/village",
-    "erea" : "Quartier",
+    "erea" : "Localité/Quartier",
     "taxpayer" : "Contribuable",
-    "mobilephone" : "Téléphone portable",
+    "mobilephone" : "Téléphone",
     "joined date" : "Date d'inscription",
     "zone" : "Zone",
     "address" : "Adresse",
@@ -172,6 +172,21 @@
     
     "gps" : "GPS",
     "invoices" : "Avis",
+    "reports et stats" : "Reports & Stats",
+    "setting" : "Parametre",
+    "statement of account" : "Relevé de compte",
+
+    "more here" : "En savoir plus ici",
+    "assets" : "Actifs",
+    "taxlabels" : "Étiquettes fiscales",
+    "select an option" : "Sélectionner une option",
+    "taxables" : "Matériaux imposables",
+    "empty" : " ",
+    "id" : "ID",
+    "taxable" : "Matériel imposable",
+    "seize" : "Dimension",
+
+
 
     
 

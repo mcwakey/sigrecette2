@@ -78,6 +78,7 @@ class AddUserModal extends Component
 
             // Update or Create a new user record in the database
             $data['email'] = $this->email;
+            //dd($data);
             $user = User::find($this->user_id) ?? User::create($data);
 
             if ($this->edit_mode) {

@@ -14,6 +14,7 @@ use App\Models\Taxpayer;
 use App\Models\TaxpayerTaxable;
 use App\Models\Town;
 use App\Models\User;
+use App\Models\Zone;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -28,21 +29,30 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UsersSeeder::class,
             RolesPermissionsSeeder::class,
+            TaxpayersSeeder::class,
+            CantonsSeeder::class,
+            TownsSeeder::class,
+            EreasSeeder::class,
+            TaxLabelsSeeder::class,
+            TaxablesSeeder::class,
+            ZonesSeeder::class,
+            // InvoiceSeeder::class,
+            // TaxpayerTaxablesSeeder::class,
             GendersSeeder::class,
             IdTypesSeeder::class,
         ]);
 
 
         User::factory(20)->create();
-        Address::factory(20)->create();
+        //Address::factory(20)->create();
         Taxpayer::factory(5000)->create();
-        Canton::factory(10)->create();
-        Town::factory(30)->create();
-        Erea::factory(100)->create();
-        TaxLabel::factory(10)->create();
-        Taxable::factory(100)->create();
-        Invoice::factory(5)->create();
-        TaxpayerTaxable::factory(20)->create();
+        //Canton::factory(10)->create();
+        //Town::factory(30)->create();
+        //Erea::factory(100)->create();
+        //TaxLabel::factory(10)->create();
+        //Taxable::factory(100)->create();
+        //Invoice::factory(5)->create();
+        //TaxpayerTaxable::factory(20)->create();
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',

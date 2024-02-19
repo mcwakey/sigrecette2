@@ -18,6 +18,6 @@
     <a href="{{ route('taxpayers.show', $taxpayer) }}" class="text-gray-800 text-hover-primary mb-1">
         {{ $taxpayer->name }}
     </a>
-    <span>{{ $taxpayer->tnif }}</span>
+    <span>{{ $taxpayer->id }}</span>
 </div>
 <!--begin::User details-->
