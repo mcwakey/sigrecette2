@@ -67,6 +67,7 @@ class AddTaxpayerModal extends Component
         'update_taxpayer' => 'updateTaxPayer',
         'load_drop' => 'loadDrop',
     ];
+    
 
     public function render()
     {
