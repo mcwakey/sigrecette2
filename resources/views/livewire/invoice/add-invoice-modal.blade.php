@@ -22,10 +22,10 @@
                     <input type="text" wire:model="invoice_id" name="invoice_id" value="{{ $invoice_id }}"/>
                     <input type="text" wire:model="taxpayer_id" name="taxpayer_id" value="{{ $taxpayer_id }}"/>
                     <!--begin::Scroll-->
-                    
+
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_invoice_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_invoice_header" data-kt-scroll-wrappers="#kt_modal_add_invoice_scroll" data-kt-scroll-offset="300px">
                         <!--begin::Input group-->
-                        
+
                         <div class="row mb-7">
                             <div class="col-md-4">
                                 <!--begin::Label-->
@@ -43,7 +43,7 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="text" wire:model="tnif" name="tnif" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('tnif') }}"/>
-                                
+
                                 <!--end::Input-->
                                 @error('zone_id')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -54,7 +54,7 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="text" wire:model="zone" name="zone" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('zone') }}"/>
-                                
+
                                 <!--end::Input-->
                                 @error('zone_id')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -63,7 +63,7 @@
 
                         <div class="separator separator-dashed my-2"></div>
 
-                        
+
                         <div class="table-responsive mb-10">
                             <!--begin::Table-->
                             <table class="table g-5 gs-0 mb-0 fw-bolder text-gray-700" data-kt-element="items">
@@ -80,11 +80,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
+
                                 @foreach($taxpayer_taxables as $taxpayer_taxable)
                                     <tr class="border-bottom border-bottom-dashed" data-kt-element="item">
                                         <td class="pe-7">
-                                        <select wire:model="taxpayer_taxable_id" name="taxpayer_taxable_id[]" class="form-select form-select-solid" data-dropdown-parent="#kt_modal_add_invoice">
+                                        <select wire:model="taxpayer_taxable_id.{{ $loop->index }}"  wire:key="{{ $loop->index }}" name="taxpayer_taxable_id[]" class="form-select form-select-solid" data-dropdown-parent="#kt_modal_add_invoice">
                                             <option value="{{ $taxpayer_taxable->id }}">{{ $taxpayer_taxable->name }}</option>
                                             @foreach($taxpayer_taxables as $taxpayer_taxable_kid)
                                             <option value="{{ $taxpayer_taxable_kid->id }}">{{ $taxpayer_taxable_kid->name }}</option>
@@ -96,7 +96,7 @@
                                             <input type="text" class="form-control form-control-solid" name="mesure" placeholder="m3" value="m3"/>
                                         </td> -->
                                         <td class="ps-0">
-                                            <input wire:model="qty.{{ loop.index }}" name="qty[]" class="form-control form-control-solid mb-2" type="number" min="1" placeholder="1" value="{{ $taxpayer_taxable->seize }}" />
+                                            <input wire:model="qty.{{ $loop->index }}" wire:key="{{ $loop->index }}"  name="qty[]" class="form-control form-control-solid mb-2" type="number" min="1" placeholder="1" value="{{ $taxpayer_taxable->seize }}" />
                                         </td>
                                         <td>
                                             <input class="form-control form-control-solid" type="text" name="mesure" placeholder="Unité d’assiette" value="{{ $taxpayer_taxable->taxable->unit }}"/>
@@ -109,7 +109,7 @@
                                         </td>
                                         <td class="pt-8 text-end text-nowrap">FCFA
                                         <span data-kt-element="total">0.00</span>
-                                        <input  wire:model="s_amount" name="s_amount[]" type="text" class="form-control form-control-solid text-end" placeholder="s_amount" value=""/>
+                                        <input  wire:model="s_amount.{{ $loop->index }}"  wire:key="{{ $loop->index }}" name="s_amount[]" type="text" class="form-control form-control-solid text-end" placeholder="s_amount" value=""/>
                                         </td>
 
 
@@ -147,7 +147,7 @@
                                         <span data-kt-element="grand-total">0.00</span>
                                         <input type="text" class="form-control form-control-solid text-end" wire:model="amount" name="amount" placeholder="Total" value=""/>
                                     </th>
-                        
+
                                     </tr>
                                 </tfoot>
                             </table>

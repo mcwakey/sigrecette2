@@ -27,9 +27,9 @@ class AddInvoiceModal extends Component
     public $tnif;
     public $zone;
 
-    public $qty;
-    public $s_amount;
-    public $taxpayer_taxable_id;
+    public $qty=[];
+    public $s_amount=[];
+    public $taxpayer_taxable_id=[];
 
     // public $qty=[];
     // public $s_amount=[];
@@ -76,7 +76,7 @@ class AddInvoiceModal extends Component
         // 'order_no' => 'required',
         // 'nic' => 'required',
         // 'status' => 'required|string',
-        
+
         "s_amount" =>"required",
         "taxpayer_taxable_id" =>"required",
         "qty" =>"required",
@@ -102,7 +102,7 @@ class AddInvoiceModal extends Component
     ];
 
     // public $taxpayer_id; // Define public property to hold taxpayer_id
-    
+
     // // Constructor to accept taxpayer_id
     // public function mount($taxpayer_id)
     // {
@@ -127,7 +127,7 @@ class AddInvoiceModal extends Component
         //$ereas = $this->town ? Erea::where('town_id', $this->town)->get() : collect();
 
         //return view('livewire.invoice.add-invoice-modal', ['taxpayer_id' => $this->taxpayer_id]);
-    
+
         return view('livewire.invoice.add-invoice-modal', compact('taxpayers','taxpayer_taxables'));
     }
 
@@ -171,7 +171,9 @@ class AddInvoiceModal extends Component
 
     public function submit()
 {
-    //dd($this->validate());
+
+
+
 
     // Validate the form input data
     //$this->validate();
