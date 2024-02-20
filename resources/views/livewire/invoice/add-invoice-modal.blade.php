@@ -96,7 +96,7 @@
                                             <input type="text" class="form-control form-control-solid" name="mesure" placeholder="m3" value="m3"/>
                                         </td> -->
                                         <td class="ps-0">
-                                            <input wire:model="qty" name="qty[]" class="form-control form-control-solid mb-2" type="number" min="1" placeholder="1" value="{{ $taxpayer_taxable->seize }}" />
+                                            <input wire:model="qty.{{ loop.index }}" name="qty[]" class="form-control form-control-solid mb-2" type="number" min="1" placeholder="1" value="{{ $taxpayer_taxable->seize }}" />
                                         </td>
                                         <td>
                                             <input class="form-control form-control-solid" type="text" name="mesure" placeholder="Unité d’assiette" value="{{ $taxpayer_taxable->taxable->unit }}"/>

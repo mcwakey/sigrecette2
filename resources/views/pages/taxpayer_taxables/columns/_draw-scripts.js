@@ -32,16 +32,17 @@ document.querySelectorAll('[data-kt-action="update_taxpayer"]').forEach(function
     });
 });
 
-// Add click event listener to update buttons
-document.querySelectorAll('[data-kt-action="update_taxpayer"]').forEach(function (element) {
-    element.addEventListener('click', function () {
-        Livewire.dispatch('update_taxpayer', [this.getAttribute('data-kt-user-id')]);
-    });
-});
+// // Add click event listener to update buttons
+// document.querySelectorAll('[data-kt-action="update_taxpayer"]').forEach(function (element) {
+//     element.addEventListener('click', function () {
+//         Livewire.dispatch('update_taxpayer', [this.getAttribute('data-kt-user-id')]);
+//     });
+// });
 
 // Add click event listener to update buttons
 document.querySelectorAll('[data-kt-action="load_taxables"]').forEach(function (element) {
     element.addEventListener('click', function () {
+        console.log('load_taxables');
         Livewire.dispatch('load_taxables', [this.getAttribute('data-kt-user-id')]);
     });
 });
@@ -73,6 +74,20 @@ document.querySelectorAll('[data-kt-action="add_invoice"]').forEach(function (el
         Livewire.dispatch('add_invoice', [this.getAttribute('data-kt-user-id')]);
     });
 });
+
+// Add click event listener to update buttons
+document.querySelectorAll('[data-kt-action="update_invoice"]').forEach(function (element) {
+    element.addEventListener('click', function () {
+        Livewire.dispatch('update_invoice', [this.getAttribute('data-kt-user-id')]);
+    });
+});
+
+// // Add click event listener to update buttons
+// document.querySelectorAll('[data-kt-action="add_invoice"]').forEach(function (element) {
+//     element.addEventListener('click', function () {
+//         Livewire.dispatch('add_invoice', [this.getAttribute('data-kt-user-id')]);
+//     });
+// });
 
 // Add click event listener to update buttons
 document.querySelectorAll('[data-kt-action="add_taxable"]').forEach(function (element) {

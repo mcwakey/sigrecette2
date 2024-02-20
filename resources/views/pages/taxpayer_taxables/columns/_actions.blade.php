@@ -11,14 +11,12 @@
         </a>
     </div> -->
     
-    @if ($auth->role->permissions->contains('name', 'taxable_view'))
     <div class="menu-item px-3">
         <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer_taxable->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer_taxable" data-kt-action="update_taxable">
         {{ __('view') }}
         </a>
     </div>
     <!--end::Menu item-->
-    @endif
 
     <!--begin::Menu item-->
     <div class="menu-item px-3">

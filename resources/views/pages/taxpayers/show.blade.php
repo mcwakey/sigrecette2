@@ -397,18 +397,14 @@
                                 <!--begin::Card title-->
 
                                 <!--begin::Card toolbar-->
-                                <div class="card-toolbar">
-                                    <!--begin::Toolbar-->
+                                <!-- <div class="card-toolbar">
                                     <div class="d-flex justify-content-end" data-kt-taxpayer_invoices-table-toolbar="base">
-                                        <!--begin::Add user-->
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice">
                                             {!! getIcon('plus', 'fs-2', '', 'i') !!}
                                             {{ __('New Invoice') }}
                                         </button>
-                                        <!--end::Add user-->
                                     </div>
-                                    <!--end::Toolbar-->
-                                </div>
+                                </div> -->
                                 <!--end::Card toolbar-->
                             </div>
                             <!--end::Card header-->
@@ -442,15 +438,26 @@
                                                 <td>
                                                     @if($invoice->order_no == NULL)
 
-                                                    <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-menu-target="#kt-users-tasks" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                                    <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-user-id="{{ $invoice->id }}" data-bs-target="#kt_modal_add_orderno" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-action="update_invoice">
+                                    <!-- <button type="button" class="" data-kt-menu-target="#kt-orderno-modal"> -->
                                                         <i class="ki-duotone ki-pencil fs-3">
                                                             <span class="path1"></span>
                                                             <span class="path2"></span>
                                                         </i>
                                                     </button>
+                                                    
+                                                    <!-- <button type="button" class="btn btn-light-danger ms-auto" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_update_orderno" data-kt-action="add_invoice">
+                                    <i class="ki-duotone ki-add-files fs-3">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                        <span class="path3"></span>
+                                        <span class="path4"></span>
+                                        <span class="path5"></span>
+                                    </i>{{ __('create invoice') }}</button> -->
 
                                                     <!--begin::Task menu-->
-                                                    <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" data-kt-menu-id="kt-users-tasks">
+                                                    
+                                                    <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" data-kt-menu-id="kt_modal_add_orderno" tabindex="-1" aria-hidden="true" wire:ignore.self>
                                                         <!--begin::Header-->
                                                         <div class="px-7 py-5">
                                                             <div class="fs-5 text-gray-900 fw-bold">Metre a jour le No d'ordre</div>
@@ -460,34 +467,12 @@
                                                         <div class="separator border-gray-200"></div>
                                                         <!--end::Menu separator-->
                                                         <!--begin::Form-->
-                                                        <form class="form px-7 py-5" data-kt-menu-id="kt-users-tasks-form">
-                                                            <!--begin::Input group-->
-                                                            <div class="fv-row mb-5">
-                                                                <!--begin::Input-->
-                                                                <input type="text" wire:model="name" name="name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('fullname') }}" />
-                                                                <!-- <select class="form-select form-select-solid" name="task_status" data-kt-select2="true" data-placeholder="Select option" data-allow-clear="true" data-hide-search="true">
-                                                <option></option>
-                                                <option value="1">Approved</option>
-                                                <option value="2">Pending</option>
-                                                <option value="3">In Process</option>
-                                                <option value="4">Rejected</option>
-                                            </select> -->
-                                                                <!--end::Input-->
-                                                            </div>
-                                                            <!--end::Input group-->
-                                                            <!--begin::Actions-->
-                                                            <div class="d-flex justify-content-end">
-                                                                <button type="button" class="btn btn-sm btn-light btn-active-light-primary me-2" data-kt-users-update-task-status="reset">Reset</button>
-                                                                <button type="submit" class="btn btn-sm btn-primary" data-kt-users-update-task-status="submit">
-                                                                    <span class="indicator-label">Apply</span>
-                                                                    <span class="indicator-progress">Please wait...
-                                                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
-                                                                </button>
-                                                            </div>
-                                                            <!--end::Actions-->
-                                                        </form>
+                                                        
+                                                        <livewire:invoice.add-orderno-form />
+
                                                         <!--end::Form-->
                                                     </div>
+    
                                                     <!--end::Task menu-->
 
                                                     @else
@@ -554,6 +539,7 @@
                                                     </button>
                                                     @elseif($invoice->status=="DRAFT")
                                                     <span class="badge badge-light-secondary">{{ $invoice->status}}</span>
+                                                    <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-user-id="{{ $invoice->id }}" data-kt-menu-target="#kt_modal_add_status" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-action="update_invoice">
                                                     <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-menu-target="#kt-users-tasks" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                                                         <i class="ki-duotone ki-setting-3 fs-3">
                                                             <span class="path1"></span>
@@ -569,7 +555,7 @@
 
 
                                                     <!--begin::Task menu-->
-                                                    <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" data-kt-menu-id="kt-users-tasks">
+                                                    <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" data-kt-menu-id="kt_modal_add_status">
                                                         <!--begin::Header-->
                                                         <div class="px-7 py-5">
                                                             <div class="fs-5 text-gray-900 fw-bold">Metre a jour le status</div>
@@ -579,39 +565,7 @@
                                                         <div class="separator border-gray-200"></div>
                                                         <!--end::Menu separator-->
                                                         <!--begin::Form-->
-                                                        <form class="form px-7 py-5" data-kt-menu-id="kt-users-tasks-form">
-                                                            <!--begin::Input group-->
-                                                            <div class="fv-row mb-5">
-                                                                <!--begin::Label-->
-                                                                <!--end::Label-->
-                                                                <!--begin::Input-->
-                                                                <select class="form-select form-select-solid" name="task_status" data-kt-select2="true" data-placeholder="Select option" data-allow-clear="true" data-hide-search="false">
-                                                                    <option></option>
-                                                                    @if($invoice->status=="PENDING")
-                                                                    <option value="APROVED">APROVE</option>
-                                                                    <option value="REJECTED">REJECT</option>
-                                                                    <option value="REJECTED-EDIT">REJECT FOR EDIT</option>
-                                                                    @elseif($invoice->status=="DRAFT")
-                                                                    <option value="PENDING">APROVE</option>
-                                                                    <option value="CANCELED">CANCEL</option>
-                                                                    @elseif($invoice->status=="REJECTED-EDIT")
-                                                                    <option value="PENDING">APROVE</option>
-                                                                    @endif
-                                                                </select>
-                                                                <!--end::Input-->
-                                                            </div>
-                                                            <!--end::Input group-->
-                                                            <!--begin::Actions-->
-                                                            <div class="d-flex justify-content-end">
-                                                                <button type="button" class="btn btn-sm btn-light btn-active-light-primary me-2" data-kt-users-update-task-status="reset">Reset</button>
-                                                                <button type="submit" class="btn btn-sm btn-primary" data-kt-users-update-task-status="submit">
-                                                                    <span class="indicator-label">Apply</span>
-                                                                    <span class="indicator-progress">Please wait...
-                                                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
-                                                                </button>
-                                                            </div>
-                                                            <!--end::Actions-->
-                                                        </form>
+                                                        
                                                         <!--end::Form-->
                                                     </div>
                                                     <!--end::Task menu-->
