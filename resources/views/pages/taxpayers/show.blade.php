@@ -565,6 +565,7 @@
                                                         <div class="separator border-gray-200"></div>
                                                         <!--end::Menu separator-->
                                                         <!--begin::Form-->
+                                                        <livewire:invoice.add-status-form />
                                                         
                                                         <!--end::Form-->
                                                     </div>
