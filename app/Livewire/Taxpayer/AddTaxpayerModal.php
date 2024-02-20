@@ -38,36 +38,71 @@ class AddTaxpayerModal extends Component
     public $avatar;
     public $saved_avatar;
 
-    
-    public $towns=[];
-    public $ereas=[];
+
+    public $towns = [];
+    public $ereas = [];
 
     public $edit_mode = false;
 
-    protected $rules = [
-        'name' => 'required|string',
-        'email' => 'required|email',
-        'gender' => 'required',
-        'id_type' => 'required',
-        'id_number' => 'required|string',
-        'mobilephone' => 'required|string|min:10|max:10',
-        'telephone' => 'required|string|min:10|max:10',
-        'longitude' => 'nullable',
-        'latitude' => 'nullable',
-        'address' => 'required|string',
-        //'canton' => 'required',
-        'town_id' => 'required',
-        'erea_id' => 'required',
-        'zone_id' => 'required',
-        'avatar' => 'nullable|sometimes|image|max:1024',
-    ];
+    // protected $rules = [
+    //     'name' => 'required|string',
+    //     'email' => 'required|email',
+    //     'gender' => 'required',
+    //     'id_type' => 'required',
+    //     'id_number' => 'required|string',
+    //     'mobilephone' => 'required|string|min:10|max:10',
+    //     'telephone' => 'required|string|min:10|max:10',
+    //     'longitude' => 'nullable',
+    //     'latitude' => 'nullable',
+    //     'address' => 'required|string',
+    //     //'canton' => 'required',
+    //     'town_id' => 'required',
+    //     'erea_id' => 'required',
+    //     'zone_id' => 'required',
+    //     'avatar' => 'nullable|sometimes|image|max:1024',
+    // ];
+
+    protected function rules()
+    {
+        return [
+            'name' => 'required|string',
+            'email' => 'required|email',
+            'gender' => 'required',
+            'id_type' => 'required',
+            'id_number' => 'required|string',
+
+            'telephone' => [
+                'required',
+                'string',
+                'min:8',
+                'max:8',
+                new \App\Rules\ValidPhoneNumber,
+            ],
+
+            'mobilephone' => [
+                'required',
+                'string',
+                'min:8',
+                'max:8',
+                new \App\Rules\ValidPhoneNumber,
+            ],
+            'longitude' => 'nullable',
+            'latitude' => 'nullable',
+            'address' => 'required|string',
+            //'canton' => 'required',
+            'town_id' => 'required',
+            'erea_id' => 'required',
+            'zone_id' => 'required',
+            'avatar' => 'nullable|sometimes|image|max:1024',
+        ];
+    }
 
     protected $listeners = [
         'delete_user' => 'deleteUser',
         'update_taxpayer' => 'updateTaxPayer',
         'load_drop' => 'loadDrop',
     ];
-    
+
 
     public function render()
     {
