@@ -24,7 +24,7 @@ class LogsUserActivity
                 ]),
                 'response' => json_encode([
                     'status' => $response->status(),
-                    'content' => $response->getContent(),
+                    //'content' => $response->getContent(),
                 ]),
             ]);
         }
