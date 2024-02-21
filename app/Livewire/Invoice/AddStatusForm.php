@@ -22,7 +22,7 @@ class AddStatusForm extends Component
 
     protected $listeners = [
         //'delete_user' => 'deleteUser',
-        'update_invoice' => 'updateInvoice',
+        'update_status' => 'updateStatus',
         //'add_invoice' => 'addInvoice',
     ];
     public function render()
@@ -31,37 +31,37 @@ class AddStatusForm extends Component
     }
 
     public function submit()
-{
-    //dd($this->validate());
+    {
+        //dd($this->status);
 
-    // Validate the form input data
-    $this->validate();
+        // Validate the form input data
+        $this->validate();
 
-    DB::transaction(function () {
+        DB::transaction(function () {
 
-        // Prepare data for Invoice
-        $data = [
-            'status' => $this->status,
-        ];
+            // Prepare data for Invoice
+            $data = [
+                'status' => $this->status,
+            ];
 
-        //dd($invoiceData);
+            //dd($invoiceData);
 
-        // Create or update Invoice record
-        $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
+            // Create or update Invoice record
+            $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
 
-        
-        $this->invoice_id = $invoice->id;
+            
+            $this->invoice_id = $invoice->id;
 
-        foreach ($data as $k => $v) {
-            $invoice->$k = $v;
-        }
-        $invoice->save();
-            $this->dispatch('success', __('Invoice updated'));
-    });
+            foreach ($data as $k => $v) {
+                $invoice->$k = $v;
+            }
+            $invoice->save();
+                $this->dispatch('success', __('Invoice updated'));
+        });
 
-    // Reset form fields after successful submission
-    $this->reset();
-}
+        // Reset form fields after successful submission
+        $this->reset();
+    }
 
 // public function updateInvoice($id)
 // {
@@ -72,17 +72,17 @@ class AddStatusForm extends Component
 //     $this->zone = $invoice->taxpayer->zone_id;
 // }
 
-    public function updateInvoice($id)
+    public function updateStatus($id)
     {
 
         $invoice = Invoice::find($id);
 
         $this->invoice_id = $invoice->id;
-        $this->invoice_id = $invoice->status;
+        $this->status = $invoice->status;
 
-        $this->$invoice = $invoice;
+        //$this->$invoice = $invoice;
 
-        dd($this->invoice);
+        //dd($this->invoice_id);
 
     }
 

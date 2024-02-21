@@ -26,18 +26,18 @@ class InvoicesDataTable extends DataTable
             ->editColumn('taxpayer', function (Invoice $invoice) {
                 return view('pages/invoices.columns._invoice', compact('invoice'));
             })
-            ->editColumn('invoice_no', function (Invoice $invoice) {
-                return $invoice->invoice_no;
+            ->editColumn('id', function (Invoice $invoice) {
+                return $invoice->id;
             })
             ->editColumn('order_no', function (Invoice $invoice) {
                 return $invoice->order_no;
             })
-            ->editColumn('nic', function (Invoice $invoice) {
-                return $invoice->nic;
+            ->editColumn('id', function (Invoice $invoice) {
+                return $invoice->id.$invoice->taxpayer->id;
             })
 
             ->editColumn('zone', function (Invoice $invoice) {
-                return $invoice->taxpayer->zone_id;
+                return $invoice->taxpayer->zone->name;
             })
             ->editColumn('address', function (Invoice $invoice) {
                 return $invoice->taxpayer->address;
@@ -46,7 +46,7 @@ class InvoicesDataTable extends DataTable
                 return $invoice->taxpayer->latitude . ' ,' . $invoice->taxpayer->longitude;
             })
             ->editColumn('total', function (Invoice $invoice) {
-                return '';
+                return $invoice->amount;
             })
             ->editColumn('statuss', function (Invoice $invoice) {
                 return sprintf('<div class="badge badge-light fw-bold">%s</div>', $invoice->status);
@@ -96,9 +96,9 @@ class InvoicesDataTable extends DataTable
     {
         return [
             Column::make('taxpayer')->title(__('taxpayer'))->addClass('d-flex align-items-center')->name('taxpayer'),
-            Column::make('invoice_no')->title(__('invoice no')),
+            Column::make('id')->title(__('invoice no')),
             Column::make('order_no')->title(__('order no')),
-            Column::make('nic')->title(__('nic')),
+            Column::make('id')->title(__('nic')),
 
             Column::make('zone')->title(__('zone')),
             Column::make('address')->title(__('address')),

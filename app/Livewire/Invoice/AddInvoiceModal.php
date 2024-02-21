@@ -27,9 +27,9 @@ class AddInvoiceModal extends Component
     public $tnif;
     public $zone;
 
-    public $qty=[];
-    public $s_amount=[];
-    public $taxpayer_taxable_id=[];
+    public $qty;
+    public $s_amount = [];
+    public $taxpayer_taxable_id = [];
 
     // public $qty=[];
     // public $s_amount=[];
@@ -77,9 +77,9 @@ class AddInvoiceModal extends Component
         // 'nic' => 'required',
         // 'status' => 'required|string',
 
-        "s_amount" =>"required",
-        "taxpayer_taxable_id" =>"required",
-        "qty" =>"required",
+        "s_amount" => "required",
+        "taxpayer_taxable_id" => "required",
+        "qty" => "required",
 
         'taxpayer_id' => 'required',
         'amount' => 'required',
@@ -99,6 +99,7 @@ class AddInvoiceModal extends Component
         'delete_user' => 'deleteUser',
         'update_invoice' => 'updateInvoice',
         'add_invoice' => 'addInvoice',
+        'load_invoice' => 'loadInvoice',
     ];
 
     // public $taxpayer_id; // Define public property to hold taxpayer_id
@@ -128,7 +129,7 @@ class AddInvoiceModal extends Component
 
         //return view('livewire.invoice.add-invoice-modal', ['taxpayer_id' => $this->taxpayer_id]);
 
-        return view('livewire.invoice.add-invoice-modal', compact('taxpayers','taxpayer_taxables'));
+        return view('livewire.invoice.add-invoice-modal', compact('taxpayers', 'taxpayer_taxables'));
     }
 
     // public function submit()
@@ -170,65 +171,69 @@ class AddInvoiceModal extends Component
     // }
 
     public function submit()
-{
+    {
 
 
+       
 
+        // Validate the form input data
+        $this->validate();
 
-    // Validate the form input data
-    //$this->validate();
+        DB::transaction(function () {
 
-    DB::transaction(function () {
+            // Prepare data for Invoice
+            $invoiceData = [
+                'taxpayer_id' => $this->taxpayer_id,
+                'amount' => $this->amount,
+            ];
 
-        // Prepare data for Invoice
-        $invoiceData = [
-            'taxpayer_id' => $this->taxpayer_id,
-            'amount' => $this->amount,
-        ];
+            //dd($invoiceData);
 
-        //dd($invoiceData);
+            // Create or update Invoice record
+            $invoice = Invoice::find($this->invoice_id) ?? Invoice::create($invoiceData);
+            
 
-        // Create or update Invoice record
-        $invoice = Invoice::find($this->invoice_id) ?? Invoice::create($invoiceData);
+            $taxpayerTaxableData = [
+                'invoice_id' => $invoice->id,
+                'billable' => '0',
+            ];
 
-        //dd($this->taxpayer_taxable_id);
+            $taxpayerTaxables = TaxpayerTaxable::whereIn('id', $this->taxpayer_taxable_id)->get();
 
-        // Prepare data for Invoice_items
-        $invoiceItemsData = [
-            'invoice_id' => $invoice->id,
-            'taxpayer_taxable_id' => $this->taxpayer_taxable_id,
-            'qty' => $this->qty,
-            'amount' => $this->s_amount,
-        ];
+            foreach ($taxpayerTaxables as $taxpayerTaxable) {
+                $taxpayerTaxable->update($taxpayerTaxableData);
+            }
 
-        //dd($invoiceItemsData);
+            // Prepare data for Invoice_items
+            $invoiceItemsData = [
+                'invoice_id' => $invoice->id,
+                'taxpayer_taxable_id' => $this->taxpayer_taxable_id,
+                'qty' => $this->qty,
+                'amount' => $this->s_amount,
+            ];
 
-        // Create or update Invoice_items record
-        //$invoice->invoiceItems()->updateOrCreate(['id' => $this->invoice_item_id], $invoiceItemsData);
-        $invoiceItems = InvoiceItem::find($this->taxpayer_taxable_id) ?? InvoiceItem::create($invoiceItemsData);
+            //dd($invoiceItemsData);
 
-        $taxpayerTaxableData = [
-            'invoice_id' => $invoice->id,
-            'billable' => '0',
-        ];
+            foreach ($this->taxpayer_taxable_id as $index => $taxpayer_taxable_id) {
+                InvoiceItem::create([
+                    'invoice_id' => $invoice->id,
+                    'taxpayer_taxable_id' => $taxpayer_taxable_id,
+                    'qty' => $this->qty,
+                    'amount' => $this->s_amount[$index],
+                ]);
+            }
 
-        $taxpayerTaxable = TaxpayerTaxable::find($this->taxpayer_taxable_id);
+            // Dispatch success message
+            if ($this->edit_mode) {
+                $this->dispatch('success', __('Invoice updated'));
+            } else {
+                $this->dispatch('success', __('New Invoice created'));
+            }
+        });
 
-        $taxpayerTaxable->update($taxpayerTaxableData);
-
-        //dd($invoice);
-
-        // Dispatch success message
-        if ($this->edit_mode) {
-            $this->dispatch('success', __('Invoice updated'));
-        } else {
-            $this->dispatch('success', __('New Invoice created'));
-        }
-    });
-
-    // Reset form fields after successful submission
-    $this->reset();
-}
+        // Reset form fields after successful submission
+        $this->reset();
+    }
 
 
     public function deleteUser($id)
@@ -255,7 +260,7 @@ class AddInvoiceModal extends Component
         //dd($invoice, $id);
 
         //if (!$invoice) {
-            //$this->dispatch('error', 'Invoice not found');
+        //$this->dispatch('error', 'Invoice not found');
         //    return;
         //}
         //$taxpayer_taxables = TaxpayerTaxable::where('invoice_id', $id)->get();
@@ -293,6 +298,31 @@ class AddInvoiceModal extends Component
         $this->name = $taxpayer->name;
         $this->tnif = $taxpayer->tnif;
         $this->zone = $taxpayer->zone_id;
+    }
+
+    public function loadInvoice($id, $value)
+    {
+        //dd($id, $value);
+        //$taxpayer = Taxpayer::find($id);
+        $taxpayer_taxables = $this->taxpayer_id ? TaxpayerTaxable::where('taxpayer_id', $id)->where('billable', 1)->get() : collect();
+
+        //$this->s_amount[$id] = 10;
+        // $this->name = $taxpayer->name;
+        // $this->tnif = $taxpayer->tnif;
+        // $this->zone = $taxpayer->zone_id;
+
+        // foreach ($taxpayer_taxables as $taxable) {
+        //     // Update the values in the component properties
+        //     $this->s_amount[$taxable->id] = 10;
+        // }
+        foreach ($taxpayer_taxables as $index => $taxable) {
+            // Update the value in the component properties using the loop index as the key
+            $this->s_amount[$index] = $taxable->seize * $taxable->taxable->tariff * $value;
+            //$this->qty[$index] = $taxable->seize;
+            $this->taxpayer_taxable_id[$index] = $taxable->id;
+        }
+        
+        $this->amount = array_sum($this->s_amount);
     }
 
     public function hydrate()

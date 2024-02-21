@@ -439,21 +439,12 @@
                                                     @if($invoice->order_no == NULL)
 
                                                     <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-user-id="{{ $invoice->id }}" data-bs-target="#kt_modal_add_orderno" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-action="update_invoice">
-                                    <!-- <button type="button" class="" data-kt-menu-target="#kt-orderno-modal"> -->
+
                                                         <i class="ki-duotone ki-pencil fs-3">
                                                             <span class="path1"></span>
                                                             <span class="path2"></span>
                                                         </i>
                                                     </button>
-                                                    
-                                                    <!-- <button type="button" class="btn btn-light-danger ms-auto" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_update_orderno" data-kt-action="add_invoice">
-                                    <i class="ki-duotone ki-add-files fs-3">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                        <span class="path3"></span>
-                                        <span class="path4"></span>
-                                        <span class="path5"></span>
-                                    </i>{{ __('create invoice') }}</button> -->
 
                                                     <!--begin::Task menu-->
                                                     
@@ -513,7 +504,7 @@
                                                 <td>
                                                     @if($invoice->status=="PENDING")
                                                     <span class="badge badge-light-primary">{{ $invoice->status}}</span>
-                                                    <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-menu-target="#kt-users-tasks" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                                    <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-user-id="{{ $invoice->id }}" data-kt-menu-target="#kt_modal_add_status" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-action="update_status">
                                                         <i class="ki-duotone ki-setting-3 fs-3">
                                                             <span class="path1"></span>
                                                             <span class="path2"></span>
@@ -528,7 +519,7 @@
                                                     <span class="badge badge-light-danger">{{ $invoice->status}}</span>
                                                     @elseif($invoice->status=="REJECTED-EDIT")
                                                     <span class="badge badge-light-warning">{{ $invoice->status}}</span>
-                                                    <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-menu-target="#kt-users-tasks" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                                    <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-user-id="{{ $invoice->id }}" data-kt-menu-target="#kt_modal_add_status" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-action="update_status">
                                                         <i class="ki-duotone ki-setting-3 fs-3">
                                                             <span class="path1"></span>
                                                             <span class="path2"></span>
@@ -539,8 +530,8 @@
                                                     </button>
                                                     @elseif($invoice->status=="DRAFT")
                                                     <span class="badge badge-light-secondary">{{ $invoice->status}}</span>
-                                                    <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-user-id="{{ $invoice->id }}" data-kt-menu-target="#kt_modal_add_status" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-action="update_invoice">
-                                                    <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-menu-target="#kt-users-tasks" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                                    <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-user-id="{{ $invoice->id }}" data-kt-menu-target="#kt_modal_add_status" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-action="update_status">
+                                                    <!-- <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-menu-target="#kt-users-tasks" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"> -->
                                                         <i class="ki-duotone ki-setting-3 fs-3">
                                                             <span class="path1"></span>
                                                             <span class="path2"></span>
@@ -1161,6 +1152,7 @@
     </script>
 
     {{ $dataTable->scripts() }}
+    
     <script>
         document.getElementById('mySearchInput').addEventListener('keyup', function() {
             window.LaravelDataTables['taxpayer_taxables-table'].search(this.value).draw();

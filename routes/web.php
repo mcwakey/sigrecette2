@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\TaxableController;
 use App\Http\Controllers\TaxpayerController;
+use App\Http\Controllers\TownsController;
 use App\DataTables\TaxpayerInvoicesDataTable;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +40,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::name('settings.')->group(function () {
         Route::resource('/taxables', TaxableController::class);
+        Route::resource('/towns', TownsController::class);
         //Route::resource('/user-management/permissions', PermissionManagementController::class);
     });
 
