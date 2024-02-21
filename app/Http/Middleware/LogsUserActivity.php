@@ -16,11 +16,10 @@ class LogsUserActivity
         if (auth()->check()) {
             UserLogs::create([
                 'user_id' => auth()->id(),
-                'ip_address' => $request->ip(),
+                'ip_address' => $request->getClientIp(),
                 'request' => json_encode([
-                    'path' => $request->path(),
+                    'path' => $request->url(),
                     'method' => $request->method(),
-                    'input' => $request->all(),
                 ]),
                 'response' => json_encode([
                     'status' => $response->status(),
