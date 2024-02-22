@@ -20,30 +20,30 @@ return new class extends Migration
             $table->string('name');
             $table->string('gender');
             $table->string('id_type');
-            $table->string('id_number');
+            $table->string('id_number')->nullable();
             $table->string('mobilephone');
             $table->string('telephone');
-            $table->string('longitude');
-            $table->string('latitude');
-            $table->string('address');
+            $table->string('longitude')->nullable();
+            $table->string('latitude')->nullable();
+            $table->string('address')->nullable();
 
             //$table->string('canton_id');
             //$table->unsignedBigInteger('canton')->default(1);
             //$table->foreign('canton')->references('id')->on('cantons');
 
             //$table->string('town');
-            $table->unsignedBigInteger('town_id')->default(1);
+            $table->unsignedBigInteger('town_id')->nullable();
             $table->foreign('town_id')->references('id')->on('towns');
 
             // $table->string('erea');
-            $table->unsignedBigInteger('erea_id')->default(1);
+            $table->unsignedBigInteger('erea_id')->nullable();
             $table->foreign('erea_id')->references('id')->on('ereas');
             
             //$table->string('zone_id');
-            $table->unsignedBigInteger('zone_id')->default(1);
+            $table->unsignedBigInteger('zone_id')->nullable();
             $table->foreign('zone_id')->references('id')->on('zones');
 
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('avatar')->nullable();

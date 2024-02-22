@@ -66,18 +66,19 @@ class AddTaxpayerModal extends Component
     {
         return [
             'name' => 'required|string',
-            'email' => 'required|email',
+            'email' => 'nullable|sometimes|email',
             'gender' => 'required',
             'id_type' => 'required',
-            'id_number' => 'required|string',
+            'id_number' => 'nullable',
 
-            'telephone' => [
-                'required',
-                'string',
-                'min:8',
-                'max:8',
-                new \App\Rules\ValidPhoneNumber,
-            ],
+             'telephone' => 'nullable',
+            //  [
+            //     'required',
+            //     'string',
+            //     'min:8',
+            //     'max:8',
+            //     new \App\Rules\ValidPhoneNumber,
+            // ],
 
             'mobilephone' => [
                 'required',
@@ -88,11 +89,11 @@ class AddTaxpayerModal extends Component
             ],
             'longitude' => 'nullable',
             'latitude' => 'nullable',
-            'address' => 'required|string',
+            'address' => 'nullable',
             //'canton' => 'required',
-            'town_id' => 'required',
-            'erea_id' => 'required',
-            'zone_id' => 'required',
+            'town_id' => 'nullable',
+            'erea_id' => 'nullable',
+            'zone_id' => 'nullable',
             'avatar' => 'nullable|sometimes|image|max:1024',
         ];
     }

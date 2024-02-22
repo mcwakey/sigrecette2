@@ -127,13 +127,28 @@
                             <!--begin::Details item-->
                             <!--begin::Details item-->
                             <div class="fw-bold mt-5">{{ __('canton') }}</div>
-                            <div class="text-gray-600">{{ $taxpayer->town->canton->name }}
+                            <div class="text-gray-600">
+                                @if ( $taxpayer->town )
+                                    {{ $taxpayer->town->canton->name }}
+                                @else
+                                    {{ __('not filled') }}
+                                @endif
                             </div>
                             <div class="fw-bold mt-5">{{ __('town') }}</div>
-                            <div class="text-gray-600">{{ $taxpayer->town->name}}
+                            <div class="text-gray-600">
+                                @if ( $taxpayer->town )
+                                    {{ $taxpayer->town->name}}
+                                @else
+                                    {{ __('not filled') }}
+                                @endif
                             </div>
                             <div class="fw-bold mt-5">{{ __('erea') }}</div>
-                            <div class="text-gray-600">{{ $taxpayer->erea->name }}
+                            <div class="text-gray-600">
+                                @if ( $taxpayer->erea )
+                                    {{ $taxpayer->erea->name }}
+                                @else
+                                    {{ __('not filled') }}
+                                @endif
                             </div>
                             <div class="fw-bold mt-5">{{ __('address') }}</div>
                             <div class="text-gray-600">{{ $taxpayer->address }}
@@ -141,7 +156,11 @@
                             <!--begin::Details item-->
                             <!--begin::Details item-->
                             <div class="fw-bold mt-5">{{ __('zone') }}</div>
-                            <div class="text-gray-600"><span class="badge badge-light-info">{{ $taxpayer->zone->name }}</span></div>
+                                <div class="text-gray-600">
+                                    @if ( $taxpayer->erea )
+                                        <span class="badge badge-light-info">{{ $taxpayer->zone->name }}</span>
+                                    @endif
+                                </div>
                             <!--begin::Details item-->
                             <!--begin::Details item-->
                             <div class="fw-bold mt-5">{{ __('joined date') }}</div>
@@ -321,7 +340,6 @@
                             <div class="card-body py-4">
                                 <!--begin::Table-->
                                 <div class="table-responsive">
-
                                     {{ $dataTable->table() }}
                                 </div>
                                 <!--end::Table-->
@@ -986,6 +1004,8 @@
         <!--end::Content-->
     </div>
 
+    <livewire:taxpayer_taxable.add-taxpayer-taxable-modal></livewire:taxpayer_taxable.add-taxpayer-taxable-modal>
+
     <!--begin::Modal-->
     <livewire:taxpayer.add-taxpayer-modal></livewire:taxpayer.add-taxpayer-modal>
     <!--end::Modal-->
@@ -995,7 +1015,6 @@
     <!--end::Modal-->
 
     <!--begin::Modal-->
-    <livewire:taxpayer_taxable.add-taxpayer-taxable-modal></livewire:taxpayer_taxable.add-taxpayer-taxable-modal>
     <!--end::Modal-->
 
     <!--end::Layout-->

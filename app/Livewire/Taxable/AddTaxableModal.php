@@ -86,7 +86,7 @@ class AddTaxableModal extends Component
     public function submit()
     {
         // Validate the form input data
-        $this->validate();
+        //$this->validate();
 
         DB::transaction(function () {
             // Prepare the data for creating a new Taxable

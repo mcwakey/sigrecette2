@@ -72,7 +72,7 @@
                         <div class="row mb-7">
                             <div class="col-md-12">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-semibold mb-2">{{ __('name') }}</label>
+                                <label class="fs-6 fw-semibold mb-2">{{ __('description') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="text" wire:model="name" name="name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('name') }}"/>

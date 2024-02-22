@@ -34,19 +34,38 @@ class TaxpayersDataTable extends DataTable
                 return view('pages/taxpayers.columns._phone', compact('taxpayer'));
             })
             ->editColumn('canton_id', function (Taxpayer $taxpayer) {
-                return $taxpayer->town->canton->name;
+                if ($taxpayer->town) {
+                    return $taxpayer->town->canton->name;
+                } else {
+                    return '';
+                }
+                //return $taxpayer->town->canton->name;
             })
             ->editColumn('town_id', function (Taxpayer $taxpayer) {
-                return $taxpayer->town->name;
+                if ($taxpayer->town){
+                    return $taxpayer->town->name;
+                } else {
+                    return ''; 
+                }
             })
             ->editColumn('erea_id', function (Taxpayer $taxpayer) {
-                return $taxpayer->erea->name;
+                if ($taxpayer->erea){
+                    return $taxpayer->town->name;
+                } else {
+                    return ''; 
+                } 
+                //return $taxpayer->erea->name;
             })
             ->editColumn('address', function (Taxpayer $taxpayer) {
                 return $taxpayer->address;
             })
             ->editColumn('zone_id', function (Taxpayer $taxpayer) {
-                return $taxpayer->zone->name;
+                if ($taxpayer->zone){
+                    return $taxpayer->zone->name;
+                } else {
+                    return ''; 
+                } 
+                //return $taxpayer->zone->name;
             })
             ->editColumn('created_at', function (Taxpayer $taxpayer) {
                 return $taxpayer->created_at->format('d M Y');
@@ -96,10 +115,10 @@ class TaxpayersDataTable extends DataTable
     {
         return [
             Column::make('id')->title(__('id'))->visible(false),
-            Column::make('taxpayer')->title(__('taxpayer'))->addClass('d-flex align-items-center')->name('name'),
+            Column::make('taxpayer')->title(__('taxpayer'))->addClass('d-flex align-items-center'),
             Column::make('gender')->title(__('gender')),
-            Column::make('mobilephone')->title(__('mobilephone'))->addClass('text-nowrap')->name('mobilephone'),
-            Column::make('canton_id')->title(__('canton'))->name('name'),
+            Column::make('mobilephone')->title(__('mobilephone'))->addClass('text-nowrap'),
+            Column::make('canton_id')->title(__('canton')),
             Column::make('town_id')->title(__('town')),
             Column::make('erea_id')->title(__('erea')),
             Column::make('address')->title(__('address')),
