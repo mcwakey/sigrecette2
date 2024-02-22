@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('id_type');
             $table->string('id_number')->nullable();
             $table->string('mobilephone');
-            $table->string('telephone');
+            $table->string('telephone')->nullable();
             $table->string('longitude')->nullable();
             $table->string('latitude')->nullable();
             $table->string('address')->nullable();
@@ -38,7 +38,7 @@ return new class extends Migration
             // $table->string('erea');
             $table->unsignedBigInteger('erea_id')->nullable();
             $table->foreign('erea_id')->references('id')->on('ereas');
-            
+
             //$table->string('zone_id');
             $table->unsignedBigInteger('zone_id')->nullable();
             $table->foreign('zone_id')->references('id')->on('zones');
@@ -51,7 +51,7 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
-        
+
         //DB::statement("ALTER TABLE books AUTO_INCREMENT = 10000;");
     }
 
