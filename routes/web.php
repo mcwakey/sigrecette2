@@ -1,23 +1,17 @@
 <?php
 
+use App\Http\Controllers\TaxLabelController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TownsController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\TaxableController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\TaxpayerController;
-use App\DataTables\TaxpayerInvoicesDataTable;
-<<<<<<< Updated upstream
-use App\Http\Controllers\TaxLabelController;
-use Illuminate\Support\Facades\Route;
-=======
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\Apps\RoleManagementController;
 use App\Http\Controllers\Apps\UserManagementController;
 use App\Http\Controllers\Apps\PermissionManagementController;
->>>>>>> Stashed changes
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
