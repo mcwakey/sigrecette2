@@ -1,7 +1,7 @@
 <x-default-layout>
 
     @section('title')
-    {{ __('Taxables') }}
+    {{ __('taxables') }}
     @endsection
 
     @section('breadcrumbs')
@@ -16,7 +16,7 @@
                 <!--begin::Search-->
                 <div class="d-flex align-items-center position-relative my-1">
                     {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
-                    <input type="text" data-kt-taxpayer-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search Taxpayer" id="mySearchInput"/>
+                    <input type="text" data-kt-taxpayer-table-filter="search" class="form-control w-250px ps-13" placeholder="{{ __('search') }}" id="mySearchInput"/>
                 </div>
                 <!--end::Search-->
             </div>
@@ -29,7 +29,7 @@
                     <!--begin::Add user-->
                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxable">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        {{ __('New Taxable') }}
+                        {{ __('new taxable') }}
                     </button>
                     <!--end::Add user-->
                 </div>

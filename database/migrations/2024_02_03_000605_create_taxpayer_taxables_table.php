@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('taxpayer_taxables', function (Blueprint $table) {
-            $table->id();
+            $table->id()->from(10001);
             $table->string('name');
             $table->string('seize');
             $table->string('location');

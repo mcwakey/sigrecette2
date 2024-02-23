@@ -12,6 +12,7 @@ class Taxable extends Model
     protected $fillable = [
         'name',
         'tariff',
+        'tariff_type',
         'unit',
         'modality',
         'periodicity',

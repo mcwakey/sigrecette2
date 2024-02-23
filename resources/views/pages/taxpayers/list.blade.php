@@ -17,12 +17,12 @@
             <!--begin::Search-->
             <div class="d-flex align-items-center position-relative my-1">
                 {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
-                <input type="text" data-kt-taxpayer-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="{{ __('search taxpayer') }}" id="mySearchInput" />
+                <input type="text" data-kt-taxpayer-table-filter="search" class="form-control w-250px ps-13" placeholder="{{ __('search') }}" id="mySearchInput" />
             </div>
             <!--end::Search-->
         </div>
 
-        <button type="button" class="btn btn-light-success h-15 ms-auto" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer">
+        <button type="button" class="btn btn-light-success h-45px ms-auto" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer">
         <i class="ki-duotone ki-add-files fs-3">
                                         <span class="path1"></span>
                                         <span class="path2"></span>

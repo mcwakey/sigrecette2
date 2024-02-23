@@ -19,9 +19,9 @@
     "search_payer" : "Rechercher un Contribuable",
     "action" : "Action",
     "created_date" : "Date de Création",
-    "telephone" : "Téléphone",
-    "national_id" :"Carte D'identité",
-    "add_tax_payer":"Ajouter Un Contribuable",
+    "telephone" : "Autre téléphone",
+    "national_id" :"Carte d'identité",
+    "add_tax_payer":"Ajouter un Contribuable",
     "bio_info" : "Informations du Contribuable",
     "prepare" : "Préparer",
     "add" : "Ajouter",
@@ -98,11 +98,11 @@
 
     "canton" : "Canton",
     "town" : "Ville/village",
-    "erea" : "Localité/Quartier",
+    "erea" : "Quartier/Localité",
     "taxpayer" : "Contribuable",
     "mobilephone" : "Téléphone",
     "joined date" : "Date d'inscription",
-    "zone" : "Zone",
+    "zone" : "Zone fiscale",
     "address" : "Adresse",
     
 
@@ -124,15 +124,14 @@
     "overview" : "Aperçu",
     "create payment" : "Ajouter un Paiement",
     "create invoice" : "Ajouter une Avis",
-    "create asset" : "Ajouter un Actif",
+    "create asset" : "Ajouter une Taxation",
     "payments" : "Paiements",
     "cancel" : "Annuler",
     "account" : "Compte",
     "reports" : "Rapports",
     "account settings" : "Paramètres du compte",
     "delete taxpayer" : "Supprimer le contribuable",
-    "registered assets" : "Actifs enregistrés",
-    "taxpayers assets" : "Actifs du contribuable",
+    "taxpayers assets" : "Taxations du contribuable",
     "located at" : "Situé à :",
     "dimensions" : "Dimensions :",
     "taxpayers geolocation" : "Géolocalisation du contribuable",
@@ -146,7 +145,7 @@
     "invoice no" : "No d'avis",
     "order no" : "No d'ordre",
     "nic" : "NIC",
-    "asset name" : "Nom de l'actif",
+    "asset name" : "Nom de la Taxation",
     "receipt date" : "Date de réception",
     
     "create date" : "Date de création",
@@ -177,14 +176,51 @@
     "statement of account" : "Relevé de compte",
 
     "more here" : "En savoir plus ici",
-    "assets" : "Actifs",
-    "taxlabels" : "Étiquettes fiscales",
+    "assets" : "Taxations",
+    "taxlabels" : "Libellés fiscaux",
     "select an option" : "Sélectionner une option",
-    "taxables" : "Matériaux imposables",
+    "taxables" : "Matières Taxables",
     "empty" : " ",
     "id" : "ID",
-    "taxable" : "Matériel imposable",
+    "taxable" : "Matière Taxable",
     "seize" : "Dimension",
+
+    "description" : "Description",
+    "new taxlabel" : "Nouveau Libellé Fiscale",
+    "category" : "Catégorie de Recette",
+    "taxlabel" : "Libellé Fiscal",
+    "code" : "Code d'Imputation",
+
+    "new taxable": "Nouvelle Matière Taxable",
+    "tariff": "Tarif",
+    "unit": "Unité",
+    "modality": "Modalité",
+    "periodicity": "Périodicité",
+    "created at": "Date de création",
+    "search": "Rechercher",
+
+    "fixed" : "MONTANT FIXE",
+    "percent" : "POURCENTAGE",
+    "type" : "Type",
+    "number" : "Nombre",
+    "surface" : "Superficie",
+    "volume" : "Volume",
+    
+    "tariff type" : "Type de Tarif ",
+
+    "social work": "Raison Sociale",
+    "work category": "Catégorie d'Activités",
+    "work": "Activité Principale",
+    "other work": "Autre Activité",
+    "file no": "No de dossier",
+    "authorisation": "Autorisation",
+    "auth reference": "Référence",
+    "nif": "NIF",
+
+
+
+
+
 
 
 

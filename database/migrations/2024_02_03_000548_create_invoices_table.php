@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('invoices', function (Blueprint $table) {
-            $table->id()->from(100001);;
+            $table->id()->from(100001);
             //$table->string('invoice_no');
             $table->string('order_no')->nullable();
             //$table->string('nic');

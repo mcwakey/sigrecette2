@@ -3,7 +3,8 @@
 use App\Actions\SamplePermissionApi;
 use App\Actions\SampleRoleApi;
 use App\Actions\SampleUserApi;
-use App\Models\User;
+use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\TaxpayerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,19 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/v1/auth', [AuthController::class, 'auth']);
+
+Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
+    Route::post('/auth/logout', [AuthController::class, 'logout']);
+
+    Route::resource('taxpayers', TaxpayerController::class)->only([
+        'show',
+        'index',
+        'store',
+    ]);
+});
+
 
 Route::prefix('v1')->group(function () {
 

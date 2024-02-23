@@ -35,38 +35,96 @@ class AddTaxpayerModal extends Component
     public $erea_id;
     public $address;
     public $zone_id;
+
+    public $file_no;
+    public $category_work;
+    public $work;
+    public $other_work;
+    public $authorisation;
+    public $auth_reference;
+    public $nif;
+    public $social_work;
+    //public $zone_id;
+
     public $avatar;
     public $saved_avatar;
 
-    
-    public $towns=[];
-    public $ereas=[];
+
+    public $towns = [];
+    public $ereas = [];
 
     public $edit_mode = false;
 
-    protected $rules = [
-        'name' => 'required|string',
-        'email' => 'required|email',
-        'gender' => 'required',
-        'id_type' => 'required',
-        'id_number' => 'required|string',
-        'mobilephone' => 'required|string|min:10|max:10',
-        'telephone' => 'required|string|min:10|max:10',
-        'longitude' => 'nullable',
-        'latitude' => 'nullable',
-        'address' => 'required|string',
-        //'canton' => 'required',
-        'town_id' => 'required',
-        'erea_id' => 'required',
-        'zone_id' => 'required',
-        'avatar' => 'nullable|sometimes|image|max:1024',
-    ];
+    // protected $rules = [
+    //     'name' => 'required|string',
+    //     'email' => 'required|email',
+    //     'gender' => 'required',
+    //     'id_type' => 'required',
+    //     'id_number' => 'required|string',
+    //     'mobilephone' => 'required|string|min:10|max:10',
+    //     'telephone' => 'required|string|min:10|max:10',
+    //     'longitude' => 'nullable',
+    //     'latitude' => 'nullable',
+    //     'address' => 'required|string',
+    //     //'canton' => 'required',
+    //     'town_id' => 'required',
+    //     'erea_id' => 'required',
+    //     'zone_id' => 'required',
+    //     'avatar' => 'nullable|sometimes|image|max:1024',
+    // ];
+
+    protected function rules()
+    {
+        return [
+            'name' => 'required|string',
+            'email' => 'nullable|sometimes|email',
+            'gender' => 'required',
+            'id_type' => 'required',
+            'id_number' => 'nullable',
+
+             'telephone' => 'nullable',
+            //  [
+            //     'required',
+            //     'string',
+            //     'min:8',
+            //     'max:8',
+            //     new \App\Rules\ValidPhoneNumber,
+            // ],
+
+            'mobilephone' => [
+                'required',
+                'string',
+                'min:8',
+                'max:8',
+                new \App\Rules\ValidPhoneNumber,
+            ],
+            'longitude' => 'nullable',
+            'latitude' => 'nullable',
+            'address' => 'nullable',
+
+            // 'file_no' => 'required',
+            // 'category_work' => 'required',
+            // 'work' => 'required',
+            // 'other_work' => 'required',
+            // 'authorisation' => 'required',
+            // 'auth_reference' => 'required',
+            // 'nif' => 'required',
+            // 'social_work' => 'required',
+
+            //'canton' => 'required',
+            'town_id' => 'nullable',
+            'erea_id' => 'nullable',
+            'zone_id' => 'nullable',
+            'avatar' => 'nullable|sometimes|image|max:1024',
+        ];
+    }
 
     protected $listeners = [
         'delete_user' => 'deleteUser',
         'update_taxpayer' => 'updateTaxPayer',
         'load_drop' => 'loadDrop',
     ];
+
 
     public function render()
     {
@@ -104,11 +162,23 @@ class AddTaxpayerModal extends Component
                 'longitude' => $this->longitude,
                 'latitude' => $this->latitude,
                 'address' => $this->address,
+
+                'file_no' => $this->file_no,
+                'category_work' => $this->category_work,
+                'work' => $this->work,
+                'other_work' => $this->other_work,
+                'authorisation' => $this->authorisation,
+                'auth_reference' => $this->auth_reference,
+                'nif' => $this->nif,
+                'social_work' => $this->social_work,
+
                 //'canton' => $this->canton,
                 'town_id' => $this->town_id,
                 'erea_id' => $this->erea_id,
                 'zone_id' => $this->zone_id,
             ];
+
+            //dd($data);
 
             if ($this->avatar) {
                 $data['profile_photo_path'] = $this->avatar->store('avatars', 'public');
@@ -165,6 +235,14 @@ class AddTaxpayerModal extends Component
         $this->towns = Town::where('canton_id', $value)->get(); // Load taxables based on tax label ID
 
         $this->ereas = Erea::where('town_id', $value)->get(); // Load taxables based on tax label ID
+
+        
+
+        $taxpayer = Taxpayer::find($value);
+
+        $this->town_id = $taxpayer->town_id;
+        $this->erea_id = $taxpayer->erea_id;
+        $this->zone_id = $taxpayer->zone_id;
     }
 
     public function updatedTown($value)
@@ -210,7 +288,17 @@ class AddTaxpayerModal extends Component
         $this->longitude = $taxpayer->longitude;
         $this->latitude = $taxpayer->latitude;
         $this->address = $taxpayer->address;
-        //$this->canton = $taxpayer->town->name;
+
+        $this->file_no = $taxpayer->file_no;
+        $this->category_work = $taxpayer->category_work;
+        $this->work = $taxpayer->work;
+        $this->other_work = $taxpayer->other_work;
+        $this->authorisation = $taxpayer->authorisation;
+        $this->auth_reference = $taxpayer->auth_reference;
+        $this->nif = $taxpayer->nif;
+        $this->social_work = $taxpayer->social_work;
+
+        $this->canton = $taxpayer->town->canton->id;
         $this->town_id = $taxpayer->town_id;
         $this->erea_id = $taxpayer->erea_id;
         $this->zone_id = $taxpayer->zone_id;

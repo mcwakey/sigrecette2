@@ -21,24 +21,30 @@ class TaxablesDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->rawColumns(['taxable', 'last_login_at'])
+            // ->editColumn('name', function (Taxable $taxable) {
+            //     return $taxable->name;
+            // })
             ->editColumn('taxable', function (Taxable $taxable) {
                 return view('pages/taxables.columns._taxable', compact('taxable'));
             })
             ->editColumn('tariff', function (Taxable $taxable) {
                 return $taxable->tariff;
             })
+            ->editColumn('tariff_type', function (Taxable $taxable) {
+                return $taxable->tariff_type;
+            })
             ->editColumn('unit', function (Taxable $taxable) {
                 return $taxable->unit;
             })
-            ->editColumn('modality', function (Taxable $taxable) {
-                return $taxable->modality;
-            })
+            // ->editColumn('modality', function (Taxable $taxable) {
+            //     return $taxable->modality;
+            // })
             ->editColumn('periodicity', function (Taxable $taxable) {
                 return $taxable->periodicity;
             })
-            ->editColumn('penalty', function (Taxable $taxable) {
-                return $taxable->penalty.$taxable->penalty_type;
-            })
+            // ->editColumn('penalty', function (Taxable $taxable) {
+            //     return $taxable->penalty.$taxable->penalty_type;
+            // })
             ->editColumn('created_at', function (Taxable $taxable) {
                 return $taxable->created_at->format('d M Y');
             })
@@ -78,14 +84,16 @@ class TaxablesDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('taxable')->addClass('d-flex align-items-center')->name('name'),
+            Column::make('taxable')->addClass('d-flex align-items-center')->name('name')->title(__('taxable')),
+            //Column::make('name')->title(__('taxable')),
             //Column::make('gender')->title('Tax Name'),
-            Column::make('tariff')->title('tariff'),
-            Column::make('unit')->title('unit'),
-            Column::make('periodicity')->title('periodicity'),
-            Column::make('modality')->title('modality'),
-            Column::make('penalty')->title('penalty'),
-            Column::make('created_at')->title('created Date')->addClass('text-nowrap'),
+            Column::make('tariff')->title(__('tariff')),
+            Column::make('tariff_type')->title(__('tariff type')),
+            Column::make('unit')->title(__('unit')),
+            Column::make('periodicity')->title(__('periodicity')),
+            // Column::make('modality')->title(__('modality')),
+            // Column::make('penalty')->title(__('penalty')),
+            Column::make('created_at')->title(__('created at'))->addClass('text-nowrap'),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
                 ->exportable(true)

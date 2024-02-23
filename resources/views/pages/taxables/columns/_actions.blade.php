@@ -6,8 +6,8 @@
 <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4" data-kt-menu="true">
     <!--begin::Menu item-->
     <div class="menu-item px-3">
-        <a href="{{ route('settings.taxables.show', $taxable) }}" class="menu-link px-3">
-            View
+        <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxable->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxable" data-kt-action="view_row">
+        {{ __('view') }}
         </a>
     </div>
     <!--end::Menu item-->
@@ -15,7 +15,7 @@
     <!--begin::Menu item-->
     <div class="menu-item px-3">
         <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxable->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxable" data-kt-action="update_row">
-            Edit
+        {{ __('edit') }}
         </a>
     </div>
     <!--end::Menu item-->
@@ -23,7 +23,7 @@
     <!--begin::Menu item-->
     <div class="menu-item px-3">
         <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxable->id }}" data-kt-action="delete_row">
-            Delete
+        {{ __('delete') }}
         </a>
     </div>
     <!--end::Menu item-->

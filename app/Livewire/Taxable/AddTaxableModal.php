@@ -22,6 +22,7 @@ class AddTaxableModal extends Component
     public $taxable_id;
     public $name;
     public $tariff;
+    public $tariff_type;
     public $unit;
     public $modality;
     public $periodicity;
@@ -42,13 +43,14 @@ class AddTaxableModal extends Component
     public $edit_mode = false;
 
     protected $rules = [
-        'name' => 'required|string',
+        'name' => 'required',
         'tariff' => 'required',
-        'unit' => 'nullable',
-        'modality' => 'required',
-        'periodicity' => 'required|string',
-        'penalty' => 'nullable',
-        'penalty_type' => 'nullable',
+        'tariff_type' => 'required',
+        'unit' => 'required',
+        //'modality' => 'required',
+        'periodicity' => 'required',
+        //'penalty' => 'nullable',
+        //'penalty_type' => 'nullable',
         //'tax_label' => 'required',
         'tax_label_id' => 'required',
 
@@ -93,6 +95,7 @@ class AddTaxableModal extends Component
             $data = [
                 'name' => $this->name,
                 'tariff' => $this->tariff,
+                'tariff_type' => $this->tariff_type,
                 'unit' => $this->unit,
                 'modality' => $this->modality,
                 'periodicity' => $this->periodicity,
@@ -174,8 +177,10 @@ class AddTaxableModal extends Component
 
         $this->taxable_id = $taxable->id;
         //$this->saved_avatar = $taxable->profile_photo_url;
+        $this->tax_label_id = $taxable->tax_label_id;
         $this->name = $taxable->name;
         $this->tariff = $taxable->tariff;
+        $this->tariff_type = $taxable->tariff_type;
         $this->unit = $taxable->unit;
         $this->modality = $taxable->modality;
         $this->periodicity = $taxable->periodicity;
