@@ -27,6 +27,15 @@ return new class extends Migration
             $table->string('latitude')->nullable();
             $table->string('address')->nullable();
 
+            $table->string('file_no')->nullable();
+            $table->string('social_work')->nullable();
+            $table->string('category_work')->nullable();
+            $table->string('work')->nullable();
+            $table->string('other_work')->nullable();
+            $table->string('authorisation')->default("NO");
+            $table->string('auth_reference')->nullable();
+            $table->string('nif')->nullable();
+
             //$table->string('canton_id');
             //$table->unsignedBigInteger('canton')->default(1);
             //$table->foreign('canton')->references('id')->on('cantons');

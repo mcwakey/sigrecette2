@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('tax_labels', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('category')->default(1);
+            $table->string('code')->nullable();
             $table->string('status')->default('ACTIVE');
             $table->timestamps();
         });

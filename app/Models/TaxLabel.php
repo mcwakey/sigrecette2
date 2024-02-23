@@ -9,6 +9,12 @@ class TaxLabel extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'category',
+        'code',
+    ];
+
     public function taxables()
     {
         return $this->hasMany(Taxable::class);

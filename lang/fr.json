@@ -182,8 +182,45 @@
     "taxables" : "Matières Taxables",
     "empty" : " ",
     "id" : "ID",
-    "taxable" : "Matériel imposable",
+    "taxable" : "Matière Taxable",
     "seize" : "Dimension",
+
+    "description" : "Description",
+    "new taxlabel" : "Nouveau Libellé Fiscale",
+    "category" : "Catégorie de Recette",
+    "taxlabel" : "Libellé Fiscal",
+    "code" : "Code d'Imputation",
+
+    "new taxable": "Nouvelle Matière Taxable",
+    "tariff": "Tarif",
+    "unit": "Unité",
+    "modality": "Modalité",
+    "periodicity": "Périodicité",
+    "created at": "Date de création",
+    "search": "Rechercher",
+
+    "fixed" : "MONTANT FIXE",
+    "percent" : "POURCENTAGE",
+    "type" : "Type",
+    "number" : "Nombre",
+    "surface" : "Superficie",
+    "volume" : "Volume",
+    
+    "tariff type" : "Type de Tarif ",
+
+    "social work": "Raison Sociale",
+    "work category": "Catégorie d'Activités",
+    "work": "Activité Principale",
+    "other work": "Autre Activité",
+    "file no": "No de dossier",
+    "authorisation": "Autorisation",
+    "auth reference": "Référence",
+    "nif": "NIF",
+
+
+
+
+
 
 
 

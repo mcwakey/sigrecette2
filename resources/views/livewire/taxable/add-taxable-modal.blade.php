@@ -6,7 +6,7 @@
             <!--begin::Modal header-->
             <div class="modal-header" id="kt_modal_add_taxable_header">
                 <!--begin::Modal title-->
-                <h2 class="fw-bold">{{ __('new taxable') }}</h2>
+                <h2 class="fw-bold">{{ __('taxables') }}</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
@@ -19,7 +19,9 @@
             <div class="modal-body px-5 my-7">
                 <!--begin::Form-->
                 <form id="kt_modal_add_taxable_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
-                    <input type="hidden" wire:model="taxable_id" name="taxable_id" value="{{ $taxable_id }}"/>
+                    <input type="hidden" wire:model="taxable_id" name="taxable_id"/>
+                    <input type="hidden" wire:model="modality" name="modality"  value="Quitance"/>
+
                     <!--begin::Scroll-->
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_taxable_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_taxable_header" data-kt-scroll-wrappers="#kt_modal_add_taxable_scroll" data-kt-scroll-offset="300px">
                         
@@ -28,14 +30,14 @@
                         <div class="row mb-7">
                             <div class="col-md-12">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-semibold mb-2">{{ __('label') }}</label>
+                                <label class="required fs-6 fw-semibold mb-2">{{ __('taxlabel') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <select wire:model="tax_label_id" name="tax_label_id" class="form-select form-select-solid"
+                                <select wire:model="tax_label_id" name="tax_label_id" class="form-select"
                                     data-dropdown-parent="#kt_modal_add_taxable">
-                                    <option>{{ __('select gender') }}</option>
+                                    <option>{{ __('select an option') }}</option>
                                     @foreach($tax_labels as $tax_label)
-                                    <option value="{{ $tax_label->id}}">{{ $tax_label->name }}</option>
+                                    <option value="{{ $tax_label->id}}">{{ $tax_label->code }} -- {{ $tax_label->name }}</option>
                                     @endforeach
                                     <!-- <option value="Homme">Homme</option>
                                     <option value="Femme">Femme</option> -->
@@ -49,82 +51,79 @@
                         <div class="separator saperator-dashed my-5"></div>
 
                         <div class="row mb-7">
-                            <div class="col-md-12">
+                            <div class="col-md-8">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-semibold mb-2">{{ __('name') }}</label>
+                                <label class="required fs-6 fw-semibold mb-2">{{ __('taxable') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="name" name="name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('name') }}"/>
+                                <input type="text" wire:model="name" name="name" class="form-control mb-3 mb-lg-0" placeholder="{{ __('taxable') }}"/>
                                 <!--end::Input-->
                                 @error('name')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
+                            <div class="col-md-4">
+                                <!--begin::Label-->
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('periodicity') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select wire:model="periodicity" name="periodicity" class="form-select"
+                                    data-dropdown-parent="#kt_modal_add_taxable">
+                                    <option>{{ __('select an option') }}</option>
+                                    <option value="Jours">Jours</option>
+                                    <option value="Mois">Mois</option>
+                                    <option value="Ans">Ans</option>
+                                    <option value="Forfait">Forfait</option>
+                                </select>
+                                <!--end::Input-->
+                                @error('periodicity')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
                         </div>
                         <div class="row mb-7">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('tariff') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="tariff" name="tariff" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('tariff') }}"/>
+                                <input type="text" wire:model="tariff" name="tariff" class="form-control mb-3 mb-lg-0" placeholder="{{ __('tariff') }}"/>
                                 <!--end::Input-->
                                 @error('tariff')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <!--begin::Label-->
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('tariff type') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select wire:model="tariff_type" name="tariff_type" class="form-select" data-dropdown-parent="#kt_modal_add_taxable">
+                                    <option>{{ __('select an option') }}</option>
+                                    <option value="FIXED">{{ __('fixed') }}</option>
+                                    <option value="PERCENT">{{ __('percent') }}</option>
+                                </select>
+                                <!--end::Input-->
+                                @error('periodicity')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-4">
                                 <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('unit') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <!-- <select aria-label="Select an ID Type" data-control="select2" data-placeholder="Select an ID Type..." class="form-select form-select-solid"
+                                <!-- <select aria-label="Select an ID Type" data-control="select2" data-placeholder="Select an ID Type..." class="form-select"
                                     data-dropdown-parent="#kt_modal_add_taxable">
                                     <option value="Homme">Homme</option>
                                     <option value="Femme">Femme</option>
                                 </select> -->
 
-                                <select wire:model="unit" name="unit" class="form-select form-select-solid" name="task_status" data-kt-select2="false" data-placeholder="Select option" data-allow-clear="true" data-hide-search="true">
-                                    <option>{{ __('select id type') }}</option>
-                                    <option value="m2">m2</option>
-                                    <!-- <option value="1">Approved</option>
-                                    <option value="2">Pending</option>
-                                    <option value="3">In Process</option>
-                                    <option value="4">Rejected</option> -->
+                                <select wire:model="unit" name="unit" class="form-select" name="task_status" data-kt-select2="false" data-placeholder="Select option" data-allow-clear="true" data-hide-search="true">
+                                    <option>{{ __('select an option') }}</option>
+                                    <option value="Type">{{ __('type') }}</option>
+                                    <option value="Nombre">{{ __('number') }}</option>
+                                    <option value="Superficie">{{ __('surface') }}</option>
+                                    <option value="Volume">{{ __('volume') }}</option>
                                 </select>
                                 <!--end::Input-->
                                 @error('unit')
-                                <span class="text-danger">{{ $message }}</span> @enderror
-                            </div>
-                        </div>
-                        <div class="row mb-7">
-                            <div class="col-md-6">
-                                <!--begin::Label-->
-                                <label class="required fw-semibold fs-6 mb-2">{{ __('modality') }}</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <select wire:model="modality" name="modality" class="form-select form-select-solid"
-                                    data-dropdown-parent="#kt_modal_add_taxable">
-                                    <option>{{ __('select gender') }}</option>
-                                    <option value="Ticket">Ticket</option>
-                                    <option value="Quitance">Quitance</option>
-                                    <option value="Timbre">Timbre</option>
-                                </select>
-                                <!--end::Input-->
-                                @error('modality')
-                                <span class="text-danger">{{ $message }}</span> @enderror
-                            </div>
-                            <div class="col-md-6">
-                                <!--begin::Label-->
-                                <label class="required fw-semibold fs-6 mb-2">{{ __('periodicity') }}</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <select wire:model="periodicity" name="periodicity" class="form-select form-select-solid"
-                                    data-dropdown-parent="#kt_modal_add_taxable">
-                                    <option>{{ __('select gender') }}</option>
-                                    <option value="Mois">Mois</option>
-                                    <option value="Forfait">Forfait</option>
-                                </select>
-                                <!--end::Input-->
-                                @error('periodicity')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>

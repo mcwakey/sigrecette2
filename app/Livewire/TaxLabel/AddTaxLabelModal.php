@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Livewire\Taxable;
+namespace App\Livewire\TaxLabel;
 
 use App\Models\Canton;
 use App\Models\Erea;
 use App\Models\Gender;
 use App\Models\IdType;
-use App\Models\Taxable;
 use App\Models\TaxLabel;
 use App\Models\Town;
 use Livewire\Component;
@@ -15,20 +14,19 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 
-class AddTaxableModal extends Component
+class AddTaxLabelModal extends Component
 {
     use WithFileUploads;
 
-    public $taxable_id;
-    public $name;
-    public $tariff;
-    public $tariff_type;
-    public $unit;
-    public $modality;
-    public $periodicity;
-    public $penalty;
-    public $penalty_type;
+    // public $tax_label_id;
     public $tax_label_id;
+    public $name;
+    public $category;
+    public $code;
+    // public $modality;
+    // public $periodicity;
+    // public $penalty;
+    // public $penalty_type;
 
     // public $longitude;
     // public $latitude;
@@ -43,16 +41,15 @@ class AddTaxableModal extends Component
     public $edit_mode = false;
 
     protected $rules = [
-        'name' => 'required',
-        'tariff' => 'required',
-        'tariff_type' => 'required',
-        'unit' => 'required',
-        //'modality' => 'required',
-        'periodicity' => 'required',
-        //'penalty' => 'nullable',
-        //'penalty_type' => 'nullable',
-        //'tax_label' => 'required',
-        'tax_label_id' => 'required',
+        'name' => 'required|string',
+        'category' => 'required',
+        'code' => 'required',
+        // 'modality' => 'required',
+        // 'periodicity' => 'required|string',
+        // 'penalty' => 'nullable',
+        // 'penalty_type' => 'nullable',
+        // //'tax_label' => 'required',
+        // 'tax_label_id' => 'required',
 
         // 'longitude' => 'nullable',
         // 'latitude' => 'nullable',
@@ -76,13 +73,13 @@ class AddTaxableModal extends Component
         //$ereas = Erea::all();
         //$genders = Gender::all();
         //$id_types = IdType::all();
-        $tax_labels = TaxLabel::all();
+        // $tax_labels = TaxLabel::all();
 
         // Assuming you have a public property $canton in your Livewire component
         //$towns = $this->canton ? Town::where('canton_id', $this->canton)->get() : collect();
         //$ereas = $this->town ? Erea::where('town_id', $this->town)->get() : collect();
 
-        return view('livewire.taxable.add-taxable-modal', compact('tax_labels'));
+        return view('livewire.tax_label.add-tax-label-modal');
     }
 
     public function submit()
@@ -91,17 +88,16 @@ class AddTaxableModal extends Component
         $this->validate();
 
         DB::transaction(function () {
-            // Prepare the data for creating a new Taxable
+            // Prepare the data for creating a new TaxLabel
             $data = [
                 'name' => $this->name,
-                'tariff' => $this->tariff,
-                'tariff_type' => $this->tariff_type,
-                'unit' => $this->unit,
-                'modality' => $this->modality,
-                'periodicity' => $this->periodicity,
-                'penalty' => $this->penalty,
-                'penalty_type' => $this->penalty_type,
-                'tax_label_id' => $this->tax_label_id,
+                'category' => $this->category,
+                'code' => $this->code,
+                // 'modality' => $this->modality,
+                // 'periodicity' => $this->periodicity,
+                // 'penalty' => $this->penalty,
+                // 'penalty_type' => $this->penalty_type,
+                // 'tax_label_id' => $this->tax_label_id,
 
                 // 'latitude' => $this->latitude,
                 // 'canton' => $this->canton,
@@ -121,32 +117,32 @@ class AddTaxableModal extends Component
             //     $data['password'] = Hash::make($this->email);
             // }
 
-            // Update or Create a new Taxable record in the database
+            // Update or Create a new TaxLabel record in the database
             //$data['email'] = $this->email;
-            $taxable = Taxable::find($this->taxable_id) ?? Taxable::create($data);
+            $tax_label = TaxLabel::find($this->tax_label_id) ?? TaxLabel::create($data);
 
             if ($this->edit_mode) {
                 foreach ($data as $k => $v) {
-                    $taxable->$k = $v;
+                    $tax_label->$k = $v;
                 }
-                $taxable->save();
+                $tax_label->save();
             }
 
             if ($this->edit_mode) {
                 // Assign selected role for user
-                //$taxable->syncRoles($this->tax_label);
+                //$tax_label->syncRoles($this->tax_label);
 
                 // Emit a success event with a message
-                $this->dispatch('success', __('Taxable updated'));
+                $this->dispatch('success', __('TaxLabel updated'));
             } else {
                 // Assign selected role for user
-                //$taxable->assignRole($this->tax_label);
+                //$tax_label->assignRole($this->tax_label);
 
                 // Send a password reset link to the user's email
-                //Password::sendResetLink($taxable->only('email'));
+                //Password::sendResetLink($tax_label->only('email'));
 
                 // Emit a success event with a message
-                $this->dispatch('success', __('New Taxable created'));
+                $this->dispatch('success', __('New TaxLabel created'));
             }
         });
 
@@ -156,48 +152,46 @@ class AddTaxableModal extends Component
 
     public function deleteUser($id)
     {
-        // Prevent deletion of current Taxable
+        // Prevent deletion of current TaxLabel
         // if ($id == Auth::id()) {
-        //     $this->dispatch('error', 'Taxable cannot be deleted');
+        //     $this->dispatch('error', 'TaxLabel cannot be deleted');
         //     return;
         // }
 
         // Delete the user record with the specified ID
-        Taxable::destroy($id);
+        TaxLabel::destroy($id);
 
         // Emit a success event with a message
-        $this->dispatch('success', 'Taxable successfully deleted');
+        $this->dispatch('success', 'TaxLabel successfully deleted');
     }
 
     public function updateUser($id)
     {
         $this->edit_mode = true;
 
-        $taxable = Taxable::find($id);
+        $tax_label = TaxLabel::find($id);
 
-        $this->taxable_id = $taxable->id;
-        //$this->saved_avatar = $taxable->profile_photo_url;
-        $this->tax_label_id = $taxable->tax_label_id;
-        $this->name = $taxable->name;
-        $this->tariff = $taxable->tariff;
-        $this->tariff_type = $taxable->tariff_type;
-        $this->unit = $taxable->unit;
-        $this->modality = $taxable->modality;
-        $this->periodicity = $taxable->periodicity;
-        $this->penalty = $taxable->penalty;
-        $this->penalty_type = $taxable->penalty_type;
+        $this->tax_label_id = $tax_label->id;
+        //$this->saved_avatar = $tax_label->profile_photo_url;
+        $this->name = $tax_label->name;
+        $this->category = $tax_label->category;
+        $this->code = $tax_label->code;
+        // $this->modality = $tax_label->modality;
+        // $this->periodicity = $tax_label->periodicity;
+        // $this->penalty = $tax_label->penalty;
+        // $this->penalty_type = $tax_label->penalty_type;
         
-        //$this->tax_label = $taxable->tax_labels?->first()->name ?? '';
+        //$this->tax_label = $tax_label->tax_labels?->first()->name ?? '';
 
-        // $this->mobilephone = $taxable->mobilephone;
-        // $this->telephone = $taxable->telephone;
-        // $this->longitude = $taxable->longitude;
-        // $this->latitude = $taxable->latitude;
-        // $this->canton = $taxable->canton;
-        // $this->town = $taxable->town;
-        // $this->erea = $taxable->erea;
-        // $this->address = $taxable->address;
-        // $this->zone_id = $taxable->zone_id;
+        // $this->mobilephone = $tax_label->mobilephone;
+        // $this->telephone = $tax_label->telephone;
+        // $this->longitude = $tax_label->longitude;
+        // $this->latitude = $tax_label->latitude;
+        // $this->canton = $tax_label->canton;
+        // $this->town = $tax_label->town;
+        // $this->erea = $tax_label->erea;
+        // $this->address = $tax_label->address;
+        // $this->zone_id = $tax_label->zone_id;
     }
 
     public function hydrate()

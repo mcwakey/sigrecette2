@@ -15,11 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('tariff');
+            $table->string('tariff_type')->default('FIXED');
             $table->string('unit')->nullable();
             $table->string('modality')->nullable();
             $table->string('periodicity');
             $table->string('penalty')->nullable();
-            $table->string('penalty_type')->nullable();
+            $table->string('penalty_type')->nullable()->default('FIXED');;
             $table->string('status')->default('ACTIVE');
             $table->unsignedBigInteger('tax_label_id')->default(1);
             $table->foreign('tax_label_id')->references('id')->on('tax_labels');
