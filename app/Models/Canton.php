@@ -9,6 +9,16 @@ class Canton extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'status',
+    ];
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'cantons';
     // Assuming towns() is the relationship method in Canton model
     public function towns()
     {

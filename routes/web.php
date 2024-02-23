@@ -9,6 +9,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\TaxableController;
 use App\Http\Controllers\TaxpayerController;
 use App\Http\Controllers\TownsController;
+use App\Http\Controllers\CantonsController;
 use App\DataTables\TaxpayerInvoicesDataTable;
 use Illuminate\Support\Facades\Route;
 
@@ -37,10 +38,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::resource('/taxpayers', TaxpayerController::class);
         Route::resource('/invoices', InvoiceController::class);
+        Route::resource('/cantons', CantonsController::class);
 
     Route::name('settings.')->group(function () {
         Route::resource('/taxables', TaxableController::class);
         Route::resource('/towns', TownsController::class);
+        Route::resource('/cantons', CantonsController::class);
+
         //Route::resource('/user-management/permissions', PermissionManagementController::class);
     });
 

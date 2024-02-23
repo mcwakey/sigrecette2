@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Canton;
 use App\Models\User;
 use App\Models\Taxpayer;
 use Diglactic\Breadcrumbs\Breadcrumbs;
@@ -54,7 +55,7 @@ Breadcrumbs::for('user-management.permissions.index', function (BreadcrumbTrail 
 });
 
 
-// Home > Dashboard > Taxpayers 
+// Home > Dashboard > Taxpayers
 Breadcrumbs::for('taxpayers.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
     $trail->push(__('taxpayers'), route('taxpayers.index'));
@@ -64,4 +65,12 @@ Breadcrumbs::for('taxpayers.index', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('taxpayers.show', function (BreadcrumbTrail $trail, Taxpayer $taxpayer) {
     $trail->parent('taxpayers.index');
     $trail->push(ucwords($taxpayer->name), route('taxpayers.show', $taxpayer));
+});
+Breadcrumbs::for('cantons.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push(__('cantons'), route('settings.cantons.index'));
+});
+Breadcrumbs::for('cantons.show', function (BreadcrumbTrail $trail, Canton $canton) {
+    $trail->parent('cantons.index');
+    $trail->push(ucwords($canton->id), route(' cantons.show', $canton));
 });

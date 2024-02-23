@@ -1,5 +1,5 @@
 {
-    
+
     "total_month" : "Total des paiements ce mois-ci",
     "make_payment" : "Effectuer un paiement",
     "quick_guide" : "Guide rapide",
@@ -50,7 +50,7 @@
     "hello" : "Bonjour",
     "welcome" : "Bienvenue",
     "slogan": "N'importe où, n'importe quand",
-    
+
     "new taxpayer" : "Nouveau Contribuable",
     "home":"Acceil",
     "dashboard" : "Tableau de bord",
@@ -60,8 +60,8 @@
     "list" : "Liste",
     "control panel" : "Tableau de config.",
     "settings" : "Configurations",
-    "taxable materials" : "Matieres Taxable",
-    "cantons" : "Contons",
+    "taxable materials" : "Matières Taxable",
+    "cantons" : "Cantons",
     "towns" : "Villes/villages",
     "ereas" : "Quartiers",
     "user management" : "Gestion d'utilisateurs",
@@ -77,7 +77,7 @@
     "your social campaigns" : "Vos identifiants sur les réseaux sociaux",
     "sign in with google" : "Connectez-vous avec Google",
     "or with email" : "Ou avec une adresse e-mail",
-    
+
     "email": "E-mail",
     "no account" : "Pas encore de compte ? Contactez un administrateur",
 
@@ -104,7 +104,7 @@
     "joined date" : "Date d'inscription",
     "zone" : "Zone fiscale",
     "address" : "Adresse",
-    
+
 
     "actions" : "Actions",
     "view" : "Afficher",
@@ -147,7 +147,7 @@
     "nic" : "NIC",
     "asset name" : "Nom de la Taxation",
     "receipt date" : "Date de réception",
-    
+
     "create date" : "Date de création",
     "amount" : "Montant",
     "status" : "Statut",
@@ -168,7 +168,7 @@
     "select town" : "Sélectionner une Ville/village",
     "select erea" : "Sélectionner un Quartier",
     "select zone" : "Sélectionner une Zone",
-    
+
     "gps" : "GPS",
     "invoices" : "Avis",
     "reports et stats" : "Reports & Stats",
@@ -184,10 +184,10 @@
     "id" : "ID",
     "taxable" : "Matériel imposable",
     "seize" : "Dimension",
+    "create canton": "Ajouter un Canton",
 
 
 
-    
 
 
 
