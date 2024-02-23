@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\TaxLabelsDataTable;
 use App\Models\TaxLabel;
 use Illuminate\Http\Request;
 
-class TaxLabelsController extends Controller
+class TaxLabelController extends Controller
 
 {
     /**
@@ -13,7 +14,7 @@ class TaxLabelsController extends Controller
      */
     public function index(TaxLabelsDataTable $dataTable)
     {
-        return $dataTable->render('pages/taxpayers.list');
+        return $dataTable->render('pages/tax_labels.list');
     }
 
     /**
@@ -37,7 +38,7 @@ class TaxLabelsController extends Controller
      */
     public function show(TaxLabel $taxlabel)
     {
-        return view('pages/taxlabels.show', compact('taxlabel'));
+        return view('pages/tax_labels.show', compact('tax_label'));
     }
 
     /**

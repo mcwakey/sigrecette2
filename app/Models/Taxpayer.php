@@ -25,6 +25,16 @@ class Taxpayer extends Model
         'longitude',
         'latitude',
         'address',
+
+        'file_no',
+        'category_work',
+        'work',
+        'other_work',
+        'authorisation',
+        'auth_reference',
+        'nif',
+        'social_work',
+
         //'canton',
         'town_id',
         'erea_id',

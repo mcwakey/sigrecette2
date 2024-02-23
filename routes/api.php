@@ -4,6 +4,7 @@ use App\Actions\SamplePermissionApi;
 use App\Actions\SampleRoleApi;
 use App\Actions\SampleUserApi;
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\SearchTaxpayerController;
 use App\Http\Controllers\Api\TaxpayerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,8 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         'index',
         'store',
     ]);
+
+    Route::get('/search/taxpayers', [SearchTaxpayerController::class, 'search']);
 });
 
 

@@ -35,6 +35,14 @@ class StoreTaxpayerRequest extends FormRequest
                 'max:8',
                 new \App\Rules\ValidPhoneNumber,
             ],
+
+            'telephone' => [
+                'string',
+                'min:8',
+                'max:8',
+                new \App\Rules\ValidPhoneNumber,
+            ],
+
             'longitude' => 'nullable',
             'latitude' => 'nullable',
             'address' => 'required|string',

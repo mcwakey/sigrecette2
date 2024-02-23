@@ -1,7 +1,7 @@
 <x-default-layout>
 
     @section('title')
-    {{ __('taxables') }}
+    {{ __('taxlabels') }}
     @endsection
 
     @section('breadcrumbs')
@@ -25,18 +25,18 @@
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
                 <!--begin::Toolbar-->
-                <div class="d-flex justify-content-end" data-kt-taxable-table-toolbar="base">
+                <div class="d-flex justify-content-end" data-kt-tax_label-table-toolbar="base">
                     <!--begin::Add user-->
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxable">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_tax_label">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        {{ __('new taxable') }}
+                        {{ __('new taxlabel') }}
                     </button>
                     <!--end::Add user-->
                 </div>
                 <!--end::Toolbar-->
 
                 <!--begin::Modal-->
-                <livewire:taxable.add-taxable-modal></livewire:taxable.add-taxable-modal>
+                <livewire:tax_label.add-tax-label-modal/>
                 <!--end::Modal-->
             </div>
             <!--end::Card toolbar-->
@@ -58,12 +58,12 @@
         {{ $dataTable->scripts() }}
         <script>
             document.getElementById('mySearchInput').addEventListener('keyup', function () {
-                window.LaravelDataTables['taxables-table'].search(this.value).draw();
+                window.LaravelDataTables['tax_labels-table'].search(this.value).draw();
             });
             document.addEventListener('livewire:init', function () {
                 Livewire.on('success', function () {
-                    $('#kt_modal_add_taxable').modal('hide');
-                    window.LaravelDataTables['taxables-table'].ajax.reload();
+                    $('#kt_modal_add_tax_label').modal('hide');
+                    window.LaravelDataTables['tax_labels-table'].ajax.reload();
                 });
             });
         </script>
