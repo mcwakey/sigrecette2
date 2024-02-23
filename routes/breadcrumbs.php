@@ -61,7 +61,10 @@ Breadcrumbs::for('taxpayers.index', function (BreadcrumbTrail $trail) {
     $trail->push(__('taxpayers'), route('taxpayers.index'));
 });
 
-// Home > Dashboard > Taxpayers > Taxpayer > [Taxpayer]
+Breadcrumbs::for('towns.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push(__('towns'), route('settings.towns.index'));
+});
 Breadcrumbs::for('taxpayers.show', function (BreadcrumbTrail $trail, Taxpayer $taxpayer) {
     $trail->parent('taxpayers.index');
     $trail->push(ucwords($taxpayer->name), route('taxpayers.show', $taxpayer));

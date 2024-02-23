@@ -36,7 +36,7 @@ class TownsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Town $Town, TownsDataTable $dataTable)
+    public function show(Town $town, TownsDataTable $dataTable)
     {
         //return view('pages/invoices.show', compact('invoice'));
         //return $dataTable->render('pages/invoices.show');
@@ -46,14 +46,14 @@ class TownsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Town $Town)
+    public function edit(Town $town)
     {
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Town $Town)
+    public function update(Request $request, Town $town)
     {
         //
     }
@@ -61,7 +61,7 @@ class TownsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Town $Town)
+    public function destroy(Town $town)
     {
         //
     }

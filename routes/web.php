@@ -38,7 +38,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::resource('/taxpayers', TaxpayerController::class);
         Route::resource('/invoices', InvoiceController::class);
-        Route::resource('/cantons', CantonsController::class);
 
     Route::name('settings.')->group(function () {
         Route::resource('/taxables', TaxableController::class);
