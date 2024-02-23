@@ -6,11 +6,11 @@
             <!--begin::Avatar-->
             <div class="symbol symbol-50px me-5">
                 @if(Auth::user()->profile_photo_url)
-                    <img alt="Logo" src="{{ Auth::user()->profile_photo_url }}"/>
+                <img alt="Logo" src="{{ Auth::user()->profile_photo_url }}" />
                 @else
-                    <div class="symbol-label fs-3 {{ app(\App\Actions\GetThemeType::class)->handle('bg-light-? text-?', Auth::user()->name) }}">
-                        {{ substr(Auth::user()->name, 0, 1) }}
-                    </div>
+                <div class="symbol-label fs-3 {{ app(\App\Actions\GetThemeType::class)->handle('bg-light-? text-?', Auth::user()->name) }}">
+                    {{ substr(Auth::user()->name, 0, 1) }}
+                </div>
                 @endif
             </div>
             <!--end::Avatar-->
@@ -79,7 +79,7 @@
             <div class="menu-item px-3">
                 <div class="menu-content px-3">
                     <label class="form-check form-switch form-check-custom form-check-solid">
-						<input class="form-check-input w-30px h-20px" type="checkbox" value="1" checked="checked" name="notifications" />
+                        <input class="form-check-input w-30px h-20px" type="checkbox" value="1" checked="checked" name="notifications" />
                         <span class="form-check-label text-muted fs-7">Notifications</span>
                     </label>
                 </div>
@@ -100,65 +100,44 @@
     <!--begin::Menu item-->
     <div class="menu-item px-5" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="left-start" data-kt-menu-offset="-15px, 0">
         <a href="#" class="menu-link px-5">
-			<span class="menu-title position-relative">Mode 
-			<span class="ms-5 position-absolute translate-middle-y top-50 end-0">{!! getIcon('night-day', 'theme-light-show fs-2') !!} {!! getIcon('moon', 'theme-dark-show fs-2') !!}</span></span>
-		</a>
-		@include('partials/theme-mode/__menu')
-	</div>
-	<!--end::Menu item-->
-	<!--begin::Menu item-->
-	<div class="menu-item px-5" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="left-start" data-kt-menu-offset="-15px, 0">
-		<a href="#" class="menu-link px-5">
+            <span class="menu-title position-relative">Mode
+                <span class="ms-5 position-absolute translate-middle-y top-50 end-0">{!! getIcon('night-day', 'theme-light-show fs-2') !!} {!! getIcon('moon', 'theme-dark-show fs-2') !!}</span></span>
+        </a>
+        @include('partials/theme-mode/__menu')
+    </div>
+    <!--end::Menu item-->
+    <!--begin::Menu item-->
+    <div class="menu-item px-5" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="left-start" data-kt-menu-offset="-15px, 0">
+        <a href="#" class="menu-link px-5">
             <span class="menu-title position-relative">Language
-                <span class="fs-8 rounded bg-light px-3 py-2 position-absolute translate-middle-y top-50 end-0">English
-                    <img class="w-15px h-15px rounded-1 ms-2" src="{{ image('flags/united-states.svg') }}" alt="" /></span>
+                <span class="fs-8 rounded bg-light px-3 py-2 position-absolute translate-middle-y top-50 end-0">
+                    {{ App::getLocale() === 'fr' ? 'Français' : 'English' }}
+                    <img class="w-15px h-15px rounded-1 ms-2" src="{{ image('flags/united-states.svg') }}" alt="" />
+                </span>
             </span>
         </a>
+
         <!--begin::Menu sub-->
         <div class="menu-sub menu-sub-dropdown w-175px py-4">
             <!--begin::Menu item-->
             <div class="menu-item px-3">
-                <a href="#" class="menu-link d-flex px-5 active">
-                    <span class="symbol symbol-20px me-4">
-                        <img class="rounded-1" src="{{ image('flags/united-states.svg') }}" alt=""/>
+                <a href="{{ route('lang.setLocale', 'en') }}" class="menu-link d-flex px-5  {{ App::getLocale() === 'en' ? 'active' : '' }}"">
+                    <span class=" symbol symbol-20px me-4">
+                    <img class="rounded-1" src="{{ image('flags/united-states.svg') }}" alt="" />
                     </span>
-                    English</a>
+                    English
+                </a>
             </div>
             <!--end::Menu item-->
+
             <!--begin::Menu item-->
             <div class="menu-item px-3">
-                <a href="#" class="menu-link d-flex px-5">
-                    <span class="symbol symbol-20px me-4">
-                        <img class="rounded-1" src="{{ image('flags/spain.svg') }}" alt=""/>
+                <a href="{{ route('lang.setLocale', 'fr') }}" class="menu-link d-flex px-5  {{ App::getLocale() === 'fr' ? 'active' : '' }}"">
+                    <span class=" symbol symbol-20px me-4">
+                    <img class="rounded-1" src="{{ image('flags/france.svg') }}" alt="" />
                     </span>
-                    Spanish</a>
-            </div>
-            <!--end::Menu item-->
-            <!--begin::Menu item-->
-            <div class="menu-item px-3">
-                <a href="#" class="menu-link d-flex px-5">
-                    <span class="symbol symbol-20px me-4">
-                        <img class="rounded-1" src="{{ image('flags/germany.svg') }}" alt=""/>
-                    </span>
-                    German</a>
-            </div>
-            <!--end::Menu item-->
-            <!--begin::Menu item-->
-            <div class="menu-item px-3">
-                <a href="#" class="menu-link d-flex px-5">
-                    <span class="symbol symbol-20px me-4">
-                        <img class="rounded-1" src="{{ image('flags/japan.svg') }}" alt=""/>
-                    </span>
-                    Japanese</a>
-            </div>
-            <!--end::Menu item-->
-            <!--begin::Menu item-->
-            <div class="menu-item px-3">
-                <a href="#" class="menu-link d-flex px-5">
-                    <span class="symbol symbol-20px me-4">
-                        <img class="rounded-1" src="{{ image('flags/france.svg') }}" alt=""/>
-                    </span>
-                    French</a>
+                    {{ App::getLocale() === 'fr' ? 'Français' : 'French' }}
+                </a>
             </div>
             <!--end::Menu item-->
         </div>

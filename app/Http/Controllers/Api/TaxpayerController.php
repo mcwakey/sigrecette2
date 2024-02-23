@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\StoreTaxpayerRequest;
 use App\Models\Taxpayer;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Resources\TaxpayerShowResource;
+use App\Http\Resources\TaxpayerIndexResource;
+use App\Http\Resources\TaxpayerStoreResource;
+use App\Http\Requests\Api\StoreTaxpayerRequest;
 
 class TaxpayerController extends Controller
 {
@@ -14,8 +19,7 @@ class TaxpayerController extends Controller
      */
     public function index()
     {
-        $taxpayers = Taxpayer::all();
-        return response()->json($taxpayers, 200);
+        return TaxpayerIndexResource::collection(Taxpayer::paginate(10));
     }
 
     /**
@@ -31,8 +35,12 @@ class TaxpayerController extends Controller
      */
     public function store(StoreTaxpayerRequest $request)
     {
-        $taxpayer = Taxpayer::create($request->validated());
-        return response()->json($taxpayer, 201);
+        $validatedData = $request->validated();
+
+        $password = Str::random(8);
+        $validatedData['password'] = Hash::make($password);
+
+        return new TaxpayerStoreResource(Taxpayer::create($validatedData));
     }
 
     /**
@@ -40,7 +48,7 @@ class TaxpayerController extends Controller
      */
     public function show(Taxpayer $taxpayer)
     {
-        return response()->json($taxpayer, 200);
+        return new TaxpayerShowResource($taxpayer);
     }
 
     /**
