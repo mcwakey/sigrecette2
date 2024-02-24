@@ -1,7 +1,7 @@
 <x-default-layout>
 
     @section('title')
-    {{ __('Taxables') }}
+    {{ __('Towns') }}
     @endsection
 
     @section('breadcrumbs')
@@ -16,7 +16,7 @@
                 <!--begin::Search-->
                 <div class="d-flex align-items-center position-relative my-1">
                     {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
-                    <input type="text" data-kt-taxpayer-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search Taxpayer" id="mySearchInput"/>
+                    <input type="text" data-kt-taxpayer-table-filter="search" class="form-control  w-250px ps-13" placeholder="Search Tows" id="mySearchInput"/>
                 </div>
                 <!--end::Search-->
             </div>
@@ -27,13 +27,13 @@
                 <!--begin::Toolbar-->
                 <div class="d-flex justify-content-end" data-kt-town-table-toolbar="base">
                     <!--begin::Add user-->
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxable">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_town">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        {{ __('New Taxable') }}
+                        {{ __('New Town') }}
                     </button>
                     <!--end::Add user-->
                 </div>
-                <!--end::Toolbar-->
+                <livewire:town.add-town-modal></livewire:town.add-town-modal>
             </div>
             <!--end::Card toolbar-->
         </div>
@@ -56,12 +56,12 @@
 
         <script>
             document.getElementById('mySearchInput').addEventListener('keyup', function () {
-                window.LaravelDataTables['towns-table'].search(this.value).draw();
+                window.LaravelDataTables['towns'].search(this.value).draw();
             });
             document.addEventListener('livewire:init', function () {
                 Livewire.on('success', function () {
-                    $('#kt_modal_add_taxable').modal('hide');
-                    window.LaravelDataTables['towns-table'].ajax.reload();
+                    $('#kt_modal_add_town').modal('hide');
+                    window.LaravelDataTables['towns'].ajax.reload();
                 });
             });
         </script>

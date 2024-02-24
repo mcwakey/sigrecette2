@@ -1,11 +1,11 @@
 <x-default-layout>
 
     @section('title')
-    {{ __('Cantons') }}
+    {{ __('Erea') }}
     @endsection
 
     @section('breadcrumbs')
-        {{ Breadcrumbs::render('cantons.index') }}
+        {{ Breadcrumbs::render('ereas.index') }}
     @endsection
 
     <div class="card">
@@ -16,7 +16,7 @@
                 <!--begin::Search-->
                 <div class="d-flex align-items-center position-relative my-1">
                     {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
-                    <input type="text" data-kt-canton-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search Canton" id="mySearchInput"/>
+                    <input type="text" data-kt-erea-table-filter="search" class="form-control w-250px ps-13" placeholder="Search erea" id="mySearchInput"/>
                 </div>
                 <!--end::Search-->
             </div>
@@ -25,19 +25,15 @@
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
                 <!--begin::Toolbar-->
-                <div class="d-flex justify-content-end" data-kt-canton-table-toolbar="base">
+                <div class="d-flex justify-content-end" data-kt-erean-table-toolbar="base">
                     <!--begin::Add user-->
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_canton">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_erea">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        {{ __('New Canton') }}
+                        {{ __('New Erea') }}
                     </button>
                     <!--end::Add user-->
                 </div>
-                <!--end::Toolbar-->
-
-                <!--begin::Modal-->
-                <livewire:canton.add-canton-modal></livewire:canton.add-canton-modal>
-                <!--end::Modal-->
+                <livewire:erea.add-erea-modal></livewire:erea.add-erea-modal>
             </div>
             <!--end::Card toolbar-->
         </div>
@@ -47,8 +43,7 @@
         <div class="card-body py-4">
             <!--begin::Table-->
             <div class="table-responsive">
-
-                {{$dataTable->table() }}
+                {{ $dataTable->table() }}
             </div>
             <!--end::Table-->
         </div>
@@ -56,15 +51,17 @@
     </div>
 
     @push('scripts')
+
         {{ $dataTable->scripts() }}
+
         <script>
             document.getElementById('mySearchInput').addEventListener('keyup', function () {
-                window.LaravelDataTables['cantons'].search(this.value).draw();
+                window.LaravelDataTables['ereas'].search(this.value).draw();
             });
             document.addEventListener('livewire:init', function () {
                 Livewire.on('success', function () {
-                    $('#kt_modal_add_canton').modal('hide');
-                    window.LaravelDataTables['cantons'].ajax.reload();
+                    $('#kt_modal_add_erea').modal('hide');
+                    window.LaravelDataTables['ereas'].ajax.reload();
                 });
             });
         </script>

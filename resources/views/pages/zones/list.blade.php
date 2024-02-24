@@ -1,11 +1,11 @@
 <x-default-layout>
 
     @section('title')
-    {{ __('Cantons') }}
+    {{ __('Zones') }}
     @endsection
 
     @section('breadcrumbs')
-        {{ Breadcrumbs::render('cantons.index') }}
+        {{ Breadcrumbs::render('zones.index') }}
     @endsection
 
     <div class="card">
@@ -16,7 +16,7 @@
                 <!--begin::Search-->
                 <div class="d-flex align-items-center position-relative my-1">
                     {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
-                    <input type="text" data-kt-canton-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search Canton" id="mySearchInput"/>
+                    <input type="text" data-kt-zone-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search Canton" id="mySearchInput"/>
                 </div>
                 <!--end::Search-->
             </div>
@@ -25,9 +25,9 @@
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
                 <!--begin::Toolbar-->
-                <div class="d-flex justify-content-end" data-kt-canton-table-toolbar="base">
+                <div class="d-flex justify-content-end" data-kt-zone-table-toolbar="base">
                     <!--begin::Add user-->
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_canton">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_zone">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
                         {{ __('New Canton') }}
                     </button>
@@ -36,7 +36,7 @@
                 <!--end::Toolbar-->
 
                 <!--begin::Modal-->
-                <livewire:canton.add-canton-modal></livewire:canton.add-canton-modal>
+                <livewire:zone.add-zone-modal></livewire:zone.add-zone-modal>
                 <!--end::Modal-->
             </div>
             <!--end::Card toolbar-->
@@ -59,12 +59,12 @@
         {{ $dataTable->scripts() }}
         <script>
             document.getElementById('mySearchInput').addEventListener('keyup', function () {
-                window.LaravelDataTables['cantons'].search(this.value).draw();
+                window.LaravelDataTables['zones'].search(this.value).draw();
             });
             document.addEventListener('livewire:init', function () {
                 Livewire.on('success', function () {
-                    $('#kt_modal_add_canton').modal('hide');
-                    window.LaravelDataTables['cantons'].ajax.reload();
+                    $('#kt_modal_add_zone').modal('hide');
+                    window.LaravelDataTables['zones'].ajax.reload();
                 });
             });
         </script>

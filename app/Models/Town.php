@@ -9,6 +9,12 @@ class Town extends Model
 {
     use HasFactory;
 
+
+    protected $fillable = [
+        'name',
+        'canton_id',
+
+    ];
     // Assuming canton() is the inverse relationship method in Town model
     public function canton()
     {

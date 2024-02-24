@@ -12,6 +12,7 @@ class Canton extends Model
     protected $fillable = [
         'name',
         'status',
+
     ];
     /**
      * The table associated with the model.
@@ -27,6 +28,6 @@ class Canton extends Model
 
     public function ereas()
     {
-        return $this->hasMany(Erea::class);
+        return $this->hasMany(Erea::class,"town_id");
     }
 }

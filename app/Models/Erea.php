@@ -8,10 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Erea extends Model
 {
     use HasFactory;
-
+    protected $fillable = [
+        'name',
+        'status',
+        'town_id'
+    ];
     public function canton()
     {
-        return $this->belongsTo(Canton::class);
+        return $this->belongsTo(Canton::class,"id");
     }
 
     public function taxpayers()

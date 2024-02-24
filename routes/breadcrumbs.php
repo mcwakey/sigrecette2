@@ -73,6 +73,14 @@ Breadcrumbs::for('cantons.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
     $trail->push(__('cantons'), route('settings.cantons.index'));
 });
+Breadcrumbs::for('ereas.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push(__('ereas'), route('settings.ereas.index'));
+});
+Breadcrumbs::for('zones.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push(__('zones'), route('settings.zones.index'));
+});
 Breadcrumbs::for('cantons.show', function (BreadcrumbTrail $trail, Canton $canton) {
     $trail->parent('cantons.index');
     $trail->push(ucwords($canton->id), route(' cantons.show', $canton));

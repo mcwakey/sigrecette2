@@ -1,21 +1,22 @@
 <?php
 
-namespace App\Livewire\Canton;
+namespace App\Livewire\Erea;
 
 use App\Models\Canton;
+use App\Models\Erea;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
 
 
-class AddCantonModal extends Component
+class AddEreaModal extends Component
 {
     use WithFileUploads;
 
 
     public $name;
     public $status;
-
+    public $town_id;
 
 
 
@@ -23,7 +24,7 @@ class AddCantonModal extends Component
 
     protected $rules = [
         'name' => 'required|string',
-        'status' => 'nullable',
+        'town_id' => 'required',
 
 
         // 'longitude' => 'nullable',
@@ -43,18 +44,18 @@ class AddCantonModal extends Component
 
     public function render()
     {
-        //$cantons = Canton::all();
+        //$cantons = Erea::all();
         //$towns = Town::all();
         //$ereas = Erea::all();
         //$genders = Gender::all();
         //$id_types = IdType::all();
+        $erea = Erea::all();
         $cantons = Canton::all();
-
         // Assuming you have a public property $canton in your Livewire component
         //$towns = $this->canton ? Town::where('canton_id', $this->canton)->get() : collect();
         //$ereas = $this->town ? Erea::where('town_id', $this->town)->get() : collect();
 
-        return view('livewire.canton.add-canton-modal', compact('cantons'));
+        return view('livewire.erea.add-erea-modal', compact('erea','cantons'));
     }
 
     public function submit()
@@ -66,7 +67,7 @@ class AddCantonModal extends Component
             // Prepare the data for creating a new Taxable
             $data = [
                 'name' => $this->name,
-
+                'town_id' => $this->town_id
             ];
 
             // if ($this->avatar) {
@@ -81,13 +82,14 @@ class AddCantonModal extends Component
 
             // Update or Create a new Taxable record in the database
             //$data['email'] = $this->email;
-            $canton = Canton::find($this->id()) ?? Canton::create($data);
-
+            $erea = Erea::find($this->id()) ?? Erea::create($data);
+            //dd($data);
             if ($this->edit_mode) {
                 foreach ($data as $k => $v) {
-                    $canton->$k = $v;
+                    $erea->$k = $v;
+
                 }
-                $canton->save();
+                $erea->save();
             }
 
             if ($this->edit_mode) {
@@ -95,7 +97,7 @@ class AddCantonModal extends Component
                 //$taxable->syncRoles($this->tax_label);
 
                 // Emit a success event with a message
-                $this->dispatch('success', __('Canton updated'));
+                $this->dispatch('success', __('Erea updated'));
             } else {
                 // Assign selected role for user
                 //$taxable->assignRole($this->tax_label);
@@ -104,7 +106,7 @@ class AddCantonModal extends Component
                 //Password::sendResetLink($taxable->only('email'));
 
                 // Emit a success event with a message
-                $this->dispatch('success', __('New Caton created'));
+                $this->dispatch('success', __('New Erea created'));
             }
         });
 

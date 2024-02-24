@@ -1,7 +1,4 @@
 <?php
-
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TownsController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\TaxableController;
 use App\Http\Controllers\LanguageController;
@@ -9,14 +6,15 @@ use App\DataTables\TaxpayerInvoicesDataTable;
 use App\Http\Controllers\CantonsController;
 use App\Http\Controllers\TaxpayerController;
 use App\Http\Controllers\TaxLabelController;
+use App\Http\Controllers\ZonesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\Apps\RoleManagementController;
 use App\Http\Controllers\Apps\PermissionManagementController;
-
 use App\Http\Controllers\Apps\UserManagementController;
-
+use App\Http\Controllers\EreasController;
+use App\Http\Controllers\TownsController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -51,6 +49,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('/taxlabels', TaxLabelController::class);
         Route::resource('/towns', TownsController::class);
         Route::resource('/cantons', CantonsController::class);
+        Route::resource('/ereas', EreasController::class);
+        Route::resource('/zones', ZonesController::class);
 
         //Route::resource('/user-management/permissions', PermissionManagementController::class);
     });

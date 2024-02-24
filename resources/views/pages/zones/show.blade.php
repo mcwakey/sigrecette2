@@ -1,11 +1,11 @@
 <x-default-layout>
 
     @section('title')
-    {{ __('Town') }}
+    {{ __('Cantons') }}
     @endsection
 
     @section('breadcrumbs')
-        {{ Breadcrumbs::render('town.show', $town) }}
+        {{ Breadcrumbs::render('cantons.show', $canton) }}
     @endsection
 
     <!--begin::Layout-->
@@ -20,15 +20,24 @@
                     <!--begin::User Info-->
                     <div class="d-flex flex-center flex-column py-5">
                         <!--begin::Avatar-->
+                        <div class="symbol symbol-100px symbol-circle mb-7">
+                            @if($taxpayer->profile_photo_url)
+                                <img src="{{ $user->profile_photo_url }}" alt="image"/>
+                            @else
+                                <div class="symbol-label fs-3 {{ app(\App\Actions\GetThemeType::class)->handle('bg-light-? text-?', $taxpayer->name) }}">
+                                    {{ substr($taxpayer->name, 0, 1) }}
+                                </div>
+                            @endif
+                        </div>
                         <!--end::Avatar-->
                         <!--begin::Name-->
-                        <a href="#" class="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{{ $town->name }}</a>
+                        <a href="#" class="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{{ $taxpayer->name }}</a>
                         <!--end::Name-->
                         <!--begin::Position-->
                         <div class="mb-9">
                             {{-- @foreach($user->roles as $role) --}}
                                 <!--begin::Badge-->
-                                <div class="badge badge-lg badge-light-primary d-inline">{{ $town->status}}</div>
+                                <div class="badge badge-lg badge-light-primary d-inline">{{ $taxpayer->gender}}</div>
                                 <!--begin::Badge-->
                             {{-- @endforeach --}}
                         </div>
@@ -95,12 +104,12 @@
                             </span>
                         </div>
                         <span data-bs-toggle="tooltip" data-bs-trigger="hover" title="Edit Taxpayer's details">
-                            <a href="#" class="btn btn-sm btn-light-success" data-kt-user-id="{{ $town->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer" data-kt-action="update_row">Edit</a>
+                            <a href="#" class="btn btn-sm btn-light-success" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer" data-kt-action="update_row">Edit</a>
                         </span>
                     </div>
 
                     <!--begin::Modal-->
-                    <livewire:town.add-town-modal></livewire:town.add-town-modal>
+                    <livewire:taxpayer.add-taxpayer-modal></livewire:taxpayer.add-taxpayer-modal>
                     <!--end::Modal-->
 
 
@@ -111,37 +120,37 @@
                         <div class="pb-5 fs-6">
                             <!--begin::Details item-->
                             <div class="fw-bold mt-5">Account ID</div>
-                            <div class="text-gray-600">{{ $town->tnif }}</div>
+                            <div class="text-gray-600">{{ $taxpayer->tnif }}</div>
                             <!--begin::Details item-->
                             <!--begin::Details item-->
                             <div class="fw-bold mt-5">Mobile Phone</div>
-                            <div class="text-gray-600">{{ $town->mobilephone}}</div>
+                            <div class="text-gray-600">{{ $taxpayer->mobilephone}}</div>
                             <!--begin::Details item-->
                             <!--begin::Details item-->
                             <div class="fw-bold mt-5">Telephone</div>
-                            <div class="text-gray-600">{{ $town->telephone}}</div>
+                            <div class="text-gray-600">{{ $taxpayer->telephone}}</div>
                             <!--begin::Details item-->
                             <!--begin::Details item-->
                             <div class="fw-bold mt-5">Email</div>
                             <div class="text-gray-600">
-                                <a href="#" class="text-gray-600 text-hover-primary">{{ $town->email }}</a>
+                                <a href="#" class="text-gray-600 text-hover-primary">{{ $taxpayer->email }}</a>
                             </div>
                             <!--begin::Details item-->
                             <!--begin::Details item-->
                             <div class="fw-bold mt-5">Address</div>
-                            <div class="text-gray-600">{{ $town->address }}
-                                <br />{{ $town->erea }},
-                                <br />{{ $town->town }},
-                                <br />{{ $town->canton }}.
+                            <div class="text-gray-600">{{ $taxpayer->address }}
+                                <br />{{ $taxpayer->erea }},
+                                <br />{{ $taxpayer->town }},
+                                <br />{{ $taxpayer->canton }}.
                             </div>
                             <!--begin::Details item-->
                             <!--begin::Details item-->
                             <div class="fw-bold mt-5">Zone</div>
-                            <div class="text-gray-600">{{ $town->Zone_id }}</div>
+                            <div class="text-gray-600">{{ $taxpayer->Zone_id }}</div>
                             <!--begin::Details item-->
                             <!--begin::Details item-->
                             <div class="fw-bold mt-5">Date Joined</div>
-                            <div class="text-gray-600">{{ $town->created_at->format('d M Y') }}</div>
+                            <div class="text-gray-600">{{ $taxpayer->created_at->format('d M Y') }}</div>
                             <!--begin::Details item-->
                         </div>
                     </div>
@@ -399,7 +408,7 @@
                             <!--begin::Card title-->
                             <div class="card-title flex-column">
                                 <h2 class="mb-1">Taxpayer's geolocation</h2>
-                                <div class="fs-6 fw-semibold text-muted">Long: {{ $town->longitude}} Lat: {{ $town->latitude}}</div>
+                                <div class="fs-6 fw-semibold text-muted">Long: {{ $taxpayer->longitude}} Lat: {{ $taxpayer->latitude}}</div>
                             </div>
                             <!--end::Card title-->
                             <!--begin::Card toolbar-->
@@ -933,28 +942,28 @@
     <!--end::Layout-->
     <!--begin::Modals-->
     <!--begin::Modal - Update user details-->
-    {{-- @include('pages/town/modals/_update-details') --}}
+    {{-- @include('pages/taxpayers/modals/_update-details') --}}
     <!--end::Modal - Update user details-->
     <!--begin::Modal - Add schedule-->
-    {{-- @include('pages/town/modals/_add-schedule') --}}
+    {{-- @include('pages/taxpayers/modals/_add-schedule') --}}
     <!--end::Modal - Add schedule-->
     <!--begin::Modal - Add one time password-->
-    {{-- @include('pages/town/modals/_add-one-time-password') --}}
+    {{-- @include('pages/taxpayers/modals/_add-one-time-password') --}}
     <!--end::Modal - Add one time password-->
     <!--begin::Modal - Update email-->
-    {{-- @include('pages/town/modals/_update-email') --}}
+    {{-- @include('pages/taxpayers/modals/_update-email') --}}
     <!--end::Modal - Update email-->
     <!--begin::Modal - Update password-->
-    {{-- @include('pages/town/modals/_update-password') --}}
+    {{-- @include('pages/taxpayers/modals/_update-password') --}}
     <!--end::Modal - Update password-->
     <!--begin::Modal - Update role-->
-    {{-- @include('pages/town/modals/_update-role') --}}
+    {{-- @include('pages/taxpayers/modals/_update-role') --}}
     <!--end::Modal - Update role-->
     <!--begin::Modal - Add auth app-->
-    {{-- @include('pages/town/modals/_add-auth-app') --}}
+    {{-- @include('pages/taxpayers/modals/_add-auth-app') --}}
     <!--end::Modal - Add auth app-->
     <!--begin::Modal - Add task-->
-    {{-- @include('pages/town/modals/_add-task') --}}
+    {{-- @include('pages/taxpayers/modals/_add-task') --}}
     <!--end::Modal - Add task-->
     <!--end::Modals-->
 </x-default-layout>
