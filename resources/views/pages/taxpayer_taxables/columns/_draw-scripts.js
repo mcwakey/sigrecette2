@@ -61,10 +61,10 @@ document.querySelectorAll('[data-kt-action="load_invoice"]').forEach(function (e
 
 
 // Add click event listener to update buttons
-document.querySelectorAll('[data-kt-action="load_taxables"]').forEach(function (element) {
-    element.addEventListener('click', function () {
+document.querySelectorAll('[data-kt-action="load_drop"]').forEach(function (element) {
+    element.addEventListener('change', function () {
         //console.log('load_taxables');
-        Livewire.dispatch('load_taxables', [this.getAttribute('data-kt-user-id')]);
+        Livewire.dispatch('load_drop', [this.value]);
     });
 });
 

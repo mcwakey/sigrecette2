@@ -9,6 +9,13 @@ class Town extends Model
 {
     use HasFactory;
 
+
+    protected $fillable = [
+        'name',
+        'canton_id',
+
+    ];
+    
     // Assuming canton() is the inverse relationship method in Town model
     public function canton()
     {
@@ -20,8 +27,8 @@ class Town extends Model
         return $this->hasMany(Taxpayer::class);
     }
 
-    // public function ereas()
-    // {
-    //     return $this->hasMany(Erea::class);
-    // }
+    public function ereas()
+    {
+        return $this->hasMany(Erea::class);
+    }
 }

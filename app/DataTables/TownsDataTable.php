@@ -20,25 +20,15 @@ class TownsDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            // ->rawColumns(['last_login_at'])
-            // ->editColumn('taxable', function (Town $town) {
-            //     return view('pages/towns.columns._taxable', compact('town'));
-            // })
             ->editColumn('name', function (Town $town) {
                 return $town->name;
             })
             ->editColumn('canton_id', function (Town $town) {
                 return $town->canton->name;
             })
-            // ->editColumn('modality', function (Town $town) {
-            //     return $town->modality;
-            // })
-            // ->editColumn('periodicity', function (Town $town) {
-            //     return $town->periodicity;
-            // })
-            // ->editColumn('penalty', function (Town $town) {
-            //     return $town->penalty.$town->penalty_type;
-            // })
+            ->editColumn('status', function (Town $town) {
+                return view('pages/towns.columns._status', compact('town'));
+            })
             ->editColumn('created_at', function (Town $town) {
                 return $town->created_at->format('d M Y');
             })
@@ -62,13 +52,13 @@ class TownsDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('towns-table')
+            ->setTableId('towns')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
-            ->orderBy(1)
+            ->orderBy(3)
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/towns/columns/_draw-scripts.js')) . "}");
     }
 
@@ -80,12 +70,13 @@ class TownsDataTable extends DataTable
         return [
             // Column::make('taxable')->addClass('d-flex align-items-center')->name('name'),
             //Column::make('gender')->title('Tax Name'),
-            Column::make('name')->title('towns'),
-            Column::make('canton_id')->title('cantons'),
+            Column::make('name')->title(__('town')),
+            Column::make('canton_id')->title(__('canton'))->width(400),
             // Column::make('periodicity')->title('periodicity'),
             // Column::make('modality')->title('modality'),
             // Column::make('penalty')->title('penalty'),
-            Column::make('created_at')->title('created Date')->addClass('text-nowrap'),
+            Column::make('status')->title(__(__('status')))->width(150),
+            Column::make('created_at')->title(__('created at'))->addClass('text-nowrap')->width(150),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
                 ->exportable(true)

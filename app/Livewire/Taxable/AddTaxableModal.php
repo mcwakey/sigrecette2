@@ -24,6 +24,7 @@ class AddTaxableModal extends Component
     public $tariff;
     public $tariff_type;
     public $unit;
+    public $unit_type;
     public $modality;
     public $periodicity;
     public $penalty;
@@ -47,6 +48,7 @@ class AddTaxableModal extends Component
         'tariff' => 'required',
         'tariff_type' => 'required',
         'unit' => 'required',
+        'unit_type' => 'required',
         //'modality' => 'required',
         'periodicity' => 'required',
         //'penalty' => 'nullable',
@@ -97,6 +99,7 @@ class AddTaxableModal extends Component
                 'tariff' => $this->tariff,
                 'tariff_type' => $this->tariff_type,
                 'unit' => $this->unit,
+                'unit_type' => $this->unit_type,
                 'modality' => $this->modality,
                 'periodicity' => $this->periodicity,
                 'penalty' => $this->penalty,
@@ -182,6 +185,7 @@ class AddTaxableModal extends Component
         $this->tariff = $taxable->tariff;
         $this->tariff_type = $taxable->tariff_type;
         $this->unit = $taxable->unit;
+        $this->unit_type = $taxable->unit_type;
         $this->modality = $taxable->modality;
         $this->periodicity = $taxable->periodicity;
         $this->penalty = $taxable->penalty;

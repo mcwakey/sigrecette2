@@ -1,5 +1,4 @@
-{
-    
+{   
     "total_month" : "Total des paiements ce mois-ci",
     "make_payment" : "Effectuer un paiement",
     "quick_guide" : "Guide rapide",
@@ -50,7 +49,7 @@
     "hello" : "Bonjour",
     "welcome" : "Bienvenue",
     "slogan": "N'importe où, n'importe quand",
-    
+
     "new taxpayer" : "Nouveau Contribuable",
     "home":"Acceil",
     "dashboard" : "Tableau de bord",
@@ -60,9 +59,9 @@
     "list" : "Liste",
     "control panel" : "Tableau de config.",
     "settings" : "Configurations",
-    "taxable materials" : "Matieres Taxable",
-    "cantons" : "Contons",
-    "towns" : "Villes/villages",
+    "taxable materials" : "Matières Taxable",
+    "cantons" : "Cantons",
+    "towns" : "Villes/Villages",
     "ereas" : "Quartiers",
     "user management" : "Gestion d'utilisateurs",
     "users" : "Utilisateurs",
@@ -77,7 +76,7 @@
     "your social campaigns" : "Vos identifiants sur les réseaux sociaux",
     "sign in with google" : "Connectez-vous avec Google",
     "or with email" : "Ou avec une adresse e-mail",
-    
+
     "email": "E-mail",
     "no account" : "Pas encore de compte ? Contactez un administrateur",
 
@@ -97,14 +96,14 @@
     "please wait" : "Veuillez patienter...",
 
     "canton" : "Canton",
-    "town" : "Ville/village",
+    "town" : "Ville/Village",
     "erea" : "Quartier/Localité",
     "taxpayer" : "Contribuable",
     "mobilephone" : "Téléphone",
     "joined date" : "Date d'inscription",
     "zone" : "Zone fiscale",
     "address" : "Adresse",
-    
+
 
     "actions" : "Actions",
     "view" : "Afficher",
@@ -147,7 +146,7 @@
     "nic" : "NIC",
     "asset name" : "Nom de la Taxation",
     "receipt date" : "Date de réception",
-    
+
     "create date" : "Date de création",
     "amount" : "Montant",
     "status" : "Statut",
@@ -168,7 +167,7 @@
     "select town" : "Sélectionner une Ville/village",
     "select erea" : "Sélectionner un Quartier",
     "select zone" : "Sélectionner une Zone",
-    
+
     "gps" : "GPS",
     "invoices" : "Avis",
     "reports et stats" : "Reports & Stats",
@@ -177,13 +176,14 @@
 
     "more here" : "En savoir plus ici",
     "assets" : "Taxations",
-    "taxlabels" : "Libellés fiscaux",
+    "taxlabels" : "Libellés Fiscaux",
     "select an option" : "Sélectionner une option",
     "taxables" : "Matières Taxables",
     "empty" : " ",
     "id" : "ID",
     "taxable" : "Matière Taxable",
     "seize" : "Dimension",
+    "create canton": "Ajouter un Canton",
 
     "description" : "Description",
     "new taxlabel" : "Nouveau Libellé Fiscale",
@@ -217,6 +217,11 @@
     "auth reference": "Référence",
     "nif": "NIF",
 
+    "new canton": "Nouveau Canton",
+    "new town": "Nouvelle Ville",
+    "new erea": "Nouvelle Quartier",
+    "new zone": "Nouvelle Zone",
+    "zones": "Zones Fiscaux",
 
 
 
@@ -224,7 +229,8 @@
 
 
 
-    
+
+
 
 
 

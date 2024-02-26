@@ -21,15 +21,10 @@
             </div>
             <!--end::Search-->
         </div>
-
-        <button type="button" class="btn btn-light-success h-45px ms-auto" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer">
-        <i class="ki-duotone ki-add-files fs-3">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                        <span class="path3"></span>
-                                        <span class="path4"></span>
-                                        <span class="path5"></span>
-                                    </i>{{ __('new taxpayer') }}</button>
+        <button type="button" class="btn btn-light-success h-45px ms-auto"  data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer">
+                        {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                        {{ __('new taxpayer') }}
+                    </button>
 
 </div>
 

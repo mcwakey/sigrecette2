@@ -31,7 +31,7 @@
                         </div>
                         <!--end::Avatar-->
                         <!--begin::Name-->
-                        <a href="#" class="fs-3 text-gray-800 text-hover-success fw-bold mb-3">{{ $taxpayer->name }}</a>
+                        <a href="#" class="fs-3 text-gray-800 text-hover-success fw-bold mb-3 text-uppercase ">{{ $taxpayer->name }}</a>
                         <!--end::Name-->
                         <!--begin::Position-->
                         <div class="mb-9">
@@ -101,9 +101,25 @@
                                 <i class="ki-duotone ki-down fs-3"></i>
                             </span>
                         </div>
+
+                        @auth
+                            @role('administrator')
                         <span data-bs-toggle="tooltip" data-bs-trigger="hover" title="{{ __('edit Taxpayers details') }}">
                             <a href="#" class="btn btn-sm btn-light-success" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer" data-kt-action="update_taxpayer">{{ __('edit') }}</a>
                         </span>
+                            @endrole
+                        @endauth
+
+                        {{-- dd (auth()->user()->can('edit taxpayer')) --}}
+
+                        @auth
+                        @can('edit Taxpayers')
+                        {{ auth()->user()->name}}&nbsp;
+                        @endcan
+                            <div class="text-end">
+                            <a href="{{-- route('logout.perform') --}}" class="btn btn-outline-light me-2">Logout</a>
+                            </div>
+                        @endauth
                     </div>
 
                     <!--end::Details toggle-->
@@ -667,7 +683,7 @@
                             <!--begin::Card title-->
                             <div class="card-title flex-column">
                                 <h2 class="mb-1">{{ __('taxpayers payments') }}</h2>
-                                <div class="fs-6 fw-semibold text-muted">{{ __('most recents payments') }}</div>
+                                <!-- <div class="fs-6 fw-semibold text-muted">{{ __('most recents payments') }}</div> -->
                             </div>
                             <!--end::Card title-->
                             <!--begin::Card toolbar-->
@@ -713,21 +729,24 @@
                                             <th class="min-w-50px">{{ __('invoice no') }}</th>
                                             <th class="min-w-50px">{{ __('amount') }}</th>
                                             <th class="min-w-50px">{{ __('type') }}</th>
+                                            <th class="min-w-50px">{{ __('refrence') }}</th>
                                             <th class="min-w-50px">{{ __('description') }}</th>
                                             <th class="min-w-50px">{{ __('actions') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody class="fs-6 fw-semibold text-gray-600">
-                                        @foreach($taxpayer->invoices as $invoice)
+                                        @foreach($taxpayer->payments as $payment)
                                         <tr>
-                                            <td>{{ $invoice->created_at->format('Y-m-d') }}</td>
-                                            <td>{{ $invoice->order_no}}</td>
-                                            <td>{{ $invoice->invoice_no}}</td>
-                                            <td>1000.00</td>
+                                            <td>{{ $payment->created_at->format('Y-m-d') }}</td>
+                                            <td>{{ $payment->id}}</td>
+                                            <td>{{ $payment->invoice->id}}</td>
+                                            <td>{{ $payment->amount}}</td>
 
-                                            <td><span class="badge badge-light-secondary">CASH</span></td>
+                                            <td><span class="badge badge-light-secondary">{{ $payment->payment_type}}</span></td>
+                                            
+                                            <td>{{ $payment->reference}}</td>
 
-                                            <td>PAIMENT POUR MARS</td>
+                                            <td>{{ $payment->description}}</td>
                                             <td><a href="#" class="btn btn-light bnt-active-light-success btn-sm">{{ __('view') }}</a></td>
                                         </tr>
                                         @endforeach

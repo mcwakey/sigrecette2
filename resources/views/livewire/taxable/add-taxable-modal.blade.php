@@ -80,7 +80,7 @@
                             </div>
                         </div>
                         <div class="row mb-7">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('tariff') }}</label>
                                 <!--end::Label-->
@@ -90,7 +90,7 @@
                                 @error('tariff')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('tariff type') }}</label>
                                 <!--end::Label-->
@@ -104,7 +104,29 @@
                                 @error('periodicity')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <!--begin::Label-->
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('unit type') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <!-- <select aria-label="Select an ID Type" data-control="select2" data-placeholder="Select an ID Type..." class="form-select"
+                                    data-dropdown-parent="#kt_modal_add_taxable">
+                                    <option value="Homme">Homme</option>
+                                    <option value="Femme">Femme</option>
+                                </select> -->
+
+                                <select wire:model="unit_type" name="unit_type" class="form-select" data-dropdown-parent="#kt_modal_add_taxable">
+                                    <option>{{ __('select an option') }}</option>
+                                    <option value="Type">{{ __('type') }}</option>
+                                    <option value="Nombre">{{ __('number') }}</option>
+                                    <option value="Superficie">{{ __('surface') }}</option>
+                                    <option value="Volume">{{ __('volume') }}</option>
+                                </select>
+                                <!--end::Input-->
+                                @error('unit')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-3">
                                 <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('unit') }}</label>
                                 <!--end::Label-->
@@ -114,14 +136,7 @@
                                     <option value="Homme">Homme</option>
                                     <option value="Femme">Femme</option>
                                 </select> -->
-
-                                <select wire:model="unit" name="unit" class="form-select" name="task_status" data-kt-select2="false" data-placeholder="Select option" data-allow-clear="true" data-hide-search="true">
-                                    <option>{{ __('select an option') }}</option>
-                                    <option value="Type">{{ __('type') }}</option>
-                                    <option value="Nombre">{{ __('number') }}</option>
-                                    <option value="Superficie">{{ __('surface') }}</option>
-                                    <option value="Volume">{{ __('volume') }}</option>
-                                </select>
+                                <input type="text" wire:model="unit" name="unit" class="form-control mb-3 mb-lg-0" placeholder="{{ __('tariff') }}"/>
                                 <!--end::Input-->
                                 @error('unit')
                                 <span class="text-danger">{{ $message }}</span> @enderror
