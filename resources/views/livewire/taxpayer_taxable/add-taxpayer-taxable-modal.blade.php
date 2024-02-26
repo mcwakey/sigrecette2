@@ -36,7 +36,7 @@
                                 <select data-kt-action="load_drop" wire:model="taxlabel_id" name="taxlabel_id" class="form-select form-select-solid" data-dropdown-parent="#kt_modal_add_taxpayer_taxable">
                                     <option>{{ __('select an option') }}</option>
                                     @foreach($taxlabels as $taxlabel)
-                                    <option value="{{ $taxlabel->id}}">{{ $taxlabel->name }}</option>
+                                    <option value="{{ $taxlabel->id}}">{{ $taxlabel->code}} -- {{ $taxlabel->name }}</option>
                                     @endforeach
                                 </select>
                                 <!--end::Input-->

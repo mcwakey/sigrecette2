@@ -98,9 +98,9 @@ class AddTaxpayerModal extends Component
                 'max:8',
                 new \App\Rules\ValidPhoneNumber,
             ],
-            'longitude' => 'nullable',
-            'latitude' => 'nullable',
-            'address' => 'nullable',
+            'longitude' => 'nullable|sometimes|string',
+            'latitude' => 'nullable|sometimes|string',
+            'address' => 'nullable|sometimes|string',
 
             // 'file_no' => 'required',
             // 'category_work' => 'required',

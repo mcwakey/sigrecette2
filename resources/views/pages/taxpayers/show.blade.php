@@ -683,7 +683,7 @@
                             <!--begin::Card title-->
                             <div class="card-title flex-column">
                                 <h2 class="mb-1">{{ __('taxpayers payments') }}</h2>
-                                <div class="fs-6 fw-semibold text-muted">{{ __('most recents payments') }}</div>
+                                <!-- <div class="fs-6 fw-semibold text-muted">{{ __('most recents payments') }}</div> -->
                             </div>
                             <!--end::Card title-->
                             <!--begin::Card toolbar-->
@@ -729,21 +729,24 @@
                                             <th class="min-w-50px">{{ __('invoice no') }}</th>
                                             <th class="min-w-50px">{{ __('amount') }}</th>
                                             <th class="min-w-50px">{{ __('type') }}</th>
+                                            <th class="min-w-50px">{{ __('refrence') }}</th>
                                             <th class="min-w-50px">{{ __('description') }}</th>
                                             <th class="min-w-50px">{{ __('actions') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody class="fs-6 fw-semibold text-gray-600">
-                                        @foreach($taxpayer->invoices as $invoice)
+                                        @foreach($taxpayer->payments as $payment)
                                         <tr>
-                                            <td>{{ $invoice->created_at->format('Y-m-d') }}</td>
-                                            <td>{{ $invoice->order_no}}</td>
-                                            <td>{{ $invoice->invoice_no}}</td>
-                                            <td>1000.00</td>
+                                            <td>{{ $payment->created_at->format('Y-m-d') }}</td>
+                                            <td>{{ $payment->id}}</td>
+                                            <td>{{ $payment->invoice->id}}</td>
+                                            <td>{{ $payment->amount}}</td>
 
-                                            <td><span class="badge badge-light-secondary">CASH</span></td>
+                                            <td><span class="badge badge-light-secondary">{{ $payment->payment_type}}</span></td>
+                                            
+                                            <td>{{ $payment->reference}}</td>
 
-                                            <td>PAIMENT POUR MARS</td>
+                                            <td>{{ $payment->description}}</td>
                                             <td><a href="#" class="btn btn-light bnt-active-light-success btn-sm">{{ __('view') }}</a></td>
                                         </tr>
                                         @endforeach

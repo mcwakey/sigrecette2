@@ -143,12 +143,18 @@
                         </div>
                         <div class="row mb-7">
                             <div class="col-md-3">
+
                                 <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('mobilephone') }}</label>
                                 <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" wire:model="mobilephone" name="mobilephone" class="form-control  mb-3 mb-lg-0" placeholder="9123456789" />
-                                <!--end::Input-->
+
+                                <div class="input-group mb-5">
+                                    <span class="input-group-text" id="basic-addon1">+228</span>
+                                    <!--begin::Input-->
+                                    <input type="text" wire:model="mobilephone" name="mobilephone" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('mobilephone') }}" />
+                                    <!--end::Input-->
+                                </div>
+                                
                                 @error('mobilephone')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
@@ -157,7 +163,7 @@
                                 <label class="fw-semibold fs-6 mb-2">{{ __('telephone') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="telephone" name="telephone" class="form-control  mb-3 mb-lg-0" placeholder="9123456789" />
+                                <input type="text" wire:model="telephone" name="telephone" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('telephone') }}" />
                                 <!--end::Input-->
                                 @error('telephone')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -245,7 +251,7 @@
                             </div>
                             <div class="col-md-3">
                                 <!--begin::Label-->
-                                <label class="fw-semibold fs-6 mb-2">{{ __('authorisation') }}</label>
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('authorisation') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <select wire:model="authorisation" name="authorisation" class="form-select ">
@@ -282,7 +288,7 @@
                         <div class="row mb-7">
                             <div class="col-md-3">
                                 <!--begin::Label-->
-                                <label class="fw-semibold fs-6 mb-2">{{ __('canton') }}</label>
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('canton') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <!-- <select aria-label="" data-control="select2" data-placeholder="Select a District..." class="form-select "
@@ -302,7 +308,7 @@
                             </div>
                             <div class="col-md-3">
                                 <!--begin::Label-->
-                                <label class="fw-semibold fs-6 mb-2">{{ __('town') }}</label>
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('town') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <select data-kt-action="load_drop" wire:model="town_id" name="town_id" class="form-select">
@@ -312,12 +318,12 @@
                                     @endforeach
                                 </select>
                                 <!--end::Input-->
-                                @error('town')
+                                @error('town_id')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div class="col-md-3">
                                 <!--begin::Label-->
-                                <label class="fw-semibold fs-6 mb-2">{{ __('erea') }}</label>
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('erea') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <select wire:model="erea_id" name="erea_id" class="form-select " data-dropdown-parent="#kt_modal_add_taxpayer">
@@ -327,10 +333,12 @@
                                     @endforeach
                                 </select>
                                 <!--end::Input-->
+                                @error('erea_id')
+                                <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div class="col-md-3">
                                 <!--begin::Label-->
-                                <label class="fw-semibold fs-6 mb-2">{{ __('zone') }}</label>
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('zone') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <select wire:model="zone_id" name="zone_id" class="form-select " data-dropdown-parent="#kt_modal_add_taxpayer">

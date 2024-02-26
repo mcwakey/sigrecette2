@@ -28,8 +28,8 @@ class Invoice extends Model
         return $this->hasMany(TaxpayerTaxable::class);
     }
 
-    // public function taxpayertaxables()
-    // {
-    //     return $this->belongsTo(Taxpayertaxable::class);
-    // }
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

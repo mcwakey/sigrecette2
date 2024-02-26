@@ -15,10 +15,13 @@ return new class extends Migration
             $table->id()->from(100001);
             $table->double('amount')->default(0);
             $table->string('payment_type')->nullable();
+            $table->string('reference')->nullable();
             $table->string('description')->nullable();
             //$table->string('account_id')->nullable();
-            $table->unsignedBigInteger('invoice_id')->default(1);
+            $table->unsignedBigInteger('invoice_id')->nullable();
             $table->foreign('invoice_id')->references('id')->on('invoices');
+            $table->unsignedBigInteger('taxpayer_id')->nullable();
+            $table->foreign('taxpayer_id')->references('id')->on('taxpayers');
             $table->timestamps();
         });
     }
