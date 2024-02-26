@@ -14,6 +14,7 @@ class Taxable extends Model
         'tariff',
         'tariff_type',
         'unit',
+        'unit_type',
         'modality',
         'periodicity',
         'penalty',

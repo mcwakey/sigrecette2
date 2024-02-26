@@ -1,7 +1,7 @@
 <x-default-layout>
 
     @section('title')
-    {{ __('Towns') }}
+    {{ __('towns') }}
     @endsection
 
     @section('breadcrumbs')
@@ -16,7 +16,7 @@
                 <!--begin::Search-->
                 <div class="d-flex align-items-center position-relative my-1">
                     {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
-                    <input type="text" data-kt-taxpayer-table-filter="search" class="form-control  w-250px ps-13" placeholder="Search Tows" id="mySearchInput"/>
+                    <input type="text" data-kt-taxpayer-table-filter="search" class="form-control  w-250px ps-13" placeholder="{{ __('search') }}" id="mySearchInput"/>
                 </div>
                 <!--end::Search-->
             </div>
@@ -27,13 +27,12 @@
                 <!--begin::Toolbar-->
                 <div class="d-flex justify-content-end" data-kt-town-table-toolbar="base">
                     <!--begin::Add user-->
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_town">
+                    <button type="button" class="btn btn-light-success h-45px ms-auto" data-bs-toggle="modal" data-bs-target="#kt_modal_add_town">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        {{ __('New Town') }}
+                        {{ __('new town') }}
                     </button>
                     <!--end::Add user-->
                 </div>
-                <livewire:town.add-town-modal></livewire:town.add-town-modal>
             </div>
             <!--end::Card toolbar-->
         </div>
@@ -49,6 +48,8 @@
         </div>
         <!--end::Card body-->
     </div>
+
+                <livewire:town.add-town-modal></livewire:town.add-town-modal>
 
     @push('scripts')
 

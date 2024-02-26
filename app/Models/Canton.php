@@ -20,14 +20,15 @@ class Canton extends Model
      * @var string
      */
     protected $table = 'cantons';
+    
     // Assuming towns() is the relationship method in Canton model
     public function towns()
     {
         return $this->hasMany(Town::class);
     }
 
-    public function ereas()
-    {
-        return $this->hasMany(Erea::class,"town_id");
-    }
+    // public function ereas()
+    // {
+    //     return $this->hasMany(Erea::class,"town_id");
+    // }
 }

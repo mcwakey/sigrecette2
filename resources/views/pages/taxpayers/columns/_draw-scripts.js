@@ -44,10 +44,18 @@ document.querySelectorAll('[data-kt-action="update_invoice"]').forEach(function 
 //     });
 // });
 
+// // Add click event listener to update buttons
+// document.querySelectorAll('[data-kt-action="load_drop"]').forEach(function (element) {
+//     element.addEventListener('click', function () {
+//         Livewire.dispatch('load_drop', [this.getAttribute('data-kt-user-id')]);
+//     });
+// });
+
 // Add click event listener to update buttons
 document.querySelectorAll('[data-kt-action="load_drop"]').forEach(function (element) {
-    element.addEventListener('click', function () {
-        Livewire.dispatch('load_drop', [this.getAttribute('data-kt-user-id')]);
+    element.addEventListener('change', function () {
+        console.log(this.value)
+        Livewire.dispatch('load_drop', [this.value]);
     });
 });
 

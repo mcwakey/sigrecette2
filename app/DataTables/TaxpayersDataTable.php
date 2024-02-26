@@ -98,7 +98,7 @@ class TaxpayersDataTable extends DataTable
             ->dom("<'d-flex justify-content-end'B> ".'rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
-            ->orderBy(0)
+            ->orderBy(8)
             ->buttons([
                 'print',
                 'excel',
@@ -114,8 +114,8 @@ class TaxpayersDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('id')->title(__('id'))->visible(false),
-            Column::make('taxpayer')->title(__('taxpayer'))->addClass('d-flex align-items-center'),
+            //Column::make('id')->title(__('id'))->visible(false),
+            Column::make('taxpayer')->title(__('taxpayer'))->addClass('d-flex align-items-center text-uppercase ')->name("name"),
             Column::make('gender')->title(__('gender')),
             Column::make('mobilephone')->title(__('mobilephone'))->addClass('text-nowrap'),
             Column::make('canton_id')->title(__('canton')),
@@ -123,7 +123,7 @@ class TaxpayersDataTable extends DataTable
             Column::make('erea_id')->title(__('erea')),
             Column::make('address')->title(__('address')),
             Column::make('zone_id')->title(__('zone')),
-            //Column::make('created_at')->title(__('joined date'))->addClass('text-nowrap created_at')->visible(false),
+            Column::make('created_at')->title(__('created at'))->addClass('text-nowrap created_at')->visible(false),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
                 ->exportable(false)

@@ -1,7 +1,7 @@
 <x-default-layout>
 
     @section('title')
-    {{ __('Cantons') }}
+    {{ __('cantons') }}
     @endsection
 
     @section('breadcrumbs')
@@ -16,7 +16,7 @@
                 <!--begin::Search-->
                 <div class="d-flex align-items-center position-relative my-1">
                     {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
-                    <input type="text" data-kt-canton-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search Canton" id="mySearchInput"/>
+                    <input type="text" data-kt-canton-table-filter="search" class="form-control w-250px ps-13" placeholder="{{ __('search') }}" id="mySearchInput"/>
                 </div>
                 <!--end::Search-->
             </div>
@@ -27,17 +27,13 @@
                 <!--begin::Toolbar-->
                 <div class="d-flex justify-content-end" data-kt-canton-table-toolbar="base">
                     <!--begin::Add user-->
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_canton">
+                    <button type="button" class="btn btn-light-success h-45px ms-auto"  data-bs-toggle="modal" data-bs-target="#kt_modal_add_canton">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        {{ __('New Canton') }}
+                        {{ __('new canton') }}
                     </button>
                     <!--end::Add user-->
                 </div>
                 <!--end::Toolbar-->
-
-                <!--begin::Modal-->
-                <livewire:canton.add-canton-modal></livewire:canton.add-canton-modal>
-                <!--end::Modal-->
             </div>
             <!--end::Card toolbar-->
         </div>
@@ -54,6 +50,10 @@
         </div>
         <!--end::Card body-->
     </div>
+
+                <!--begin::Modal-->
+                <livewire:canton.add-canton-modal></livewire:canton.add-canton-modal>
+                <!--end::Modal-->
 
     @push('scripts')
         {{ $dataTable->scripts() }}

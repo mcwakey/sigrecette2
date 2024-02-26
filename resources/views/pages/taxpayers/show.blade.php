@@ -31,7 +31,7 @@
                         </div>
                         <!--end::Avatar-->
                         <!--begin::Name-->
-                        <a href="#" class="fs-3 text-gray-800 text-hover-success fw-bold mb-3">{{ $taxpayer->name }}</a>
+                        <a href="#" class="fs-3 text-gray-800 text-hover-success fw-bold mb-3 text-uppercase ">{{ $taxpayer->name }}</a>
                         <!--end::Name-->
                         <!--begin::Position-->
                         <div class="mb-9">
@@ -101,9 +101,25 @@
                                 <i class="ki-duotone ki-down fs-3"></i>
                             </span>
                         </div>
+
+                        @auth
+                            @role('administrator')
                         <span data-bs-toggle="tooltip" data-bs-trigger="hover" title="{{ __('edit Taxpayers details') }}">
                             <a href="#" class="btn btn-sm btn-light-success" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer" data-kt-action="update_taxpayer">{{ __('edit') }}</a>
                         </span>
+                            @endrole
+                        @endauth
+
+                        {{-- dd (auth()->user()->can('edit taxpayer')) --}}
+
+                        @auth
+                        @can('edit Taxpayers')
+                        {{ auth()->user()->name}}&nbsp;
+                        @endcan
+                            <div class="text-end">
+                            <a href="{{-- route('logout.perform') --}}" class="btn btn-outline-light me-2">Logout</a>
+                            </div>
+                        @endauth
                     </div>
 
                     <!--end::Details toggle-->

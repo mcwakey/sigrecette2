@@ -13,9 +13,9 @@ class Erea extends Model
         'status',
         'town_id'
     ];
-    public function canton()
+    public function town()
     {
-        return $this->belongsTo(Canton::class,"id");
+        return $this->belongsTo(Town::class);
     }
 
     public function taxpayers()

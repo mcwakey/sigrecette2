@@ -317,7 +317,24 @@ class AddInvoiceModal extends Component
         // }
         foreach ($taxpayer_taxables as $index => $taxable) {
             // Update the value in the component properties using the loop index as the key
-            $this->s_amount[$index] = $taxable->seize * $taxable->taxable->tariff * $value;
+            //dd($taxable->taxable);
+
+            if ($taxable->taxable->periodicity == "Mois"){
+                $period = 1;
+            } elseif ($taxable->taxable->periodicity == "Ans") {
+                $period = 0.083333;
+            }elseif ($taxable->taxable->periodicity == "Jours") {
+                $period = 30;
+            } else {
+                $period = 1;
+            }
+
+
+            if ($taxable->taxable->tariff_type == "FIXED"){
+                $this->s_amount[$index] = $taxable->seize * $taxable->taxable->tariff * $value * $period;
+            } else {
+                $this->s_amount[$index] = $taxable->seize * $taxable->taxable->tariff * $value * $period / 100;
+            }
             //$this->qty[$index] = $taxable->seize;
             $this->taxpayer_taxable_id[$index] = $taxable->id;
         }

@@ -23,13 +23,21 @@ class EreasDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
 
-
             ->editColumn('name', function (Erea $erea) {return $erea->name;})
-            ->editColumn('status', function (Erea $erea) {
-                return $erea->status;
+            // ->editColumn('status', function (Erea $erea) {
+            //     return $erea->status;
+            // })
+            ->editColumn('town_id', function (Erea $erea) {
+                //return Canton::find($erea->town_id)->name ;
+                return $erea->town->name;
             })
-            ->editColumn('town_id', function (Erea $erea) {return Canton::find($erea->town_id)->name ;})
-
+            ->editColumn('canton_id', function (Erea $erea) {
+                //return Canton::find($erea->town->canton_id)->name ;
+                return $erea->town->canton->name;
+            })
+            ->editColumn('status', function (Erea $erea) {
+                return view('pages/ereas.columns._status', compact('erea'));
+            })
             ->editColumn('created_at', function (Erea $erea) {
                 return $erea->created_at->format('d M Y');
             })
@@ -59,7 +67,7 @@ class EreasDataTable extends DataTable
             ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
-            ->orderBy(2)
+            ->orderBy(3)
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/ereas/columns/_draw-scripts.js')) . "}");
     }
 
@@ -69,11 +77,12 @@ class EreasDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-           Column::make('town_id')->title('canton')->name("town_id"),
-            Column::make('name'),
+            Column::make('name')->title(__('erea')),
+            Column::make('town_id')->title(__('town')),
+            Column::make('canton_id')->title(__('canton')),
             //Column::make('gender')->title('Tax Name'),
-            Column::make('status')->title('status'),
-            Column::make('created_at')->title('created Date')->addClass('text-nowrap'),
+            Column::make('status')->title(__('status'))->width(150),
+            Column::make('created_at')->title(__('created at'))->addClass('text-nowrap')->width(150),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
                 ->exportable(true)

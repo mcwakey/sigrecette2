@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('tariff');
             $table->string('tariff_type')->default('FIXED');
             $table->string('unit')->nullable();
+            $table->string('unit_type')->nullable();
             $table->string('modality')->nullable();
             $table->string('periodicity');
             $table->string('penalty')->nullable();

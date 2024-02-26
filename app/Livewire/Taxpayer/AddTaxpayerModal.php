@@ -106,15 +106,15 @@ class AddTaxpayerModal extends Component
             // 'category_work' => 'required',
             // 'work' => 'required',
             // 'other_work' => 'required',
-            // 'authorisation' => 'required',
+            'authorisation' => 'required|string',
             // 'auth_reference' => 'required',
             // 'nif' => 'required',
             // 'social_work' => 'required',
 
             //'canton' => 'required',
-            'town_id' => 'nullable',
-            'erea_id' => 'nullable',
-            'zone_id' => 'nullable',
+            'town_id' => 'required|int',
+            'erea_id' => 'required|int',
+            'zone_id' => 'required|int',
             'avatar' => 'nullable|sometimes|image|max:1024',
         ];
     }
@@ -223,30 +223,32 @@ class AddTaxpayerModal extends Component
         $this->reset();
     }
 
-    public function loadDrop($id)
-    {
-        //dd($id);
-    }
+    // public function loadDrop($id)
+    // {
+    //     //dd($id);
+    // }
 
     public function updatedCanton($value)
     {
-        //dd($value);
+        // dd($value);
         //$this->taxables = Taxable::where('tax_label_id', $value)->get(); // Load taxables based on tax label ID
         $this->towns = Town::where('canton_id', $value)->get(); // Load taxables based on tax label ID
 
-        $this->ereas = Erea::where('town_id', $value)->get(); // Load taxables based on tax label ID
-
         
 
-        $taxpayer = Taxpayer::find($value);
+        // $taxpayer = Taxpayer::find($value);
 
-        $this->town_id = $taxpayer->town_id;
-        $this->erea_id = $taxpayer->erea_id;
-        $this->zone_id = $taxpayer->zone_id;
+        // //dd( $taxpayer);
+
+        //$this->town_id = $taxpayer->town_id;
+        //$this->erea_id = $taxpayer->erea_id;
+        // //$this->zone_id = $taxpayer->zone_id;
     }
 
-    public function updatedTown($value)
+    public function updatedTownId($value)
     {
+        //dd($value);
+        $this->ereas = Erea::where('town_id', $value)->get(); // Load taxables based on tax label ID
         //dd($value);
         //$this->taxables = Taxable::where('tax_label_id', $value)->get(); // Load taxables based on tax label ID
         //$this->towns = Town::where('canton_id', $value)->get(); // Load taxables based on tax label ID

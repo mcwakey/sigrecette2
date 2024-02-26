@@ -4,6 +4,7 @@ namespace App\Livewire\Erea;
 
 use App\Models\Canton;
 use App\Models\Erea;
+use App\Models\Town;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
@@ -13,49 +14,44 @@ class AddEreaModal extends Component
 {
     use WithFileUploads;
 
+    public $canton_id;
+    public $town_id;
+    public $erea_id;
 
     public $name;
     public $status;
-    public $town_id;
 
-
+    
+    public $towns = [];
 
     public $edit_mode = false;
 
     protected $rules = [
+        'town_id' => 'required|int',
         'name' => 'required|string',
-        'town_id' => 'required',
-
-
-        // 'longitude' => 'nullable',
-        // 'latitude' => 'nullable',
-        // 'canton' => 'required',
-        // 'town' => 'required',
-        // 'erea' => 'required',
-        // 'address' => 'required|string',
-        // 'zone_id' => 'required',
-        // 'avatar' => 'nullable|sometimes|image|max:1024',
+        'status' => 'required|string',
     ];
 
     protected $listeners = [
         'delete_user' => 'deleteUser',
-        'update_user' => 'updateUser',
+        'update_user' => 'updateErea',
+        'load_drop' => 'loadDrop',
     ];
+
+    public function updatedCantonId($value)
+    {
+        $this->towns = Town::where('canton_id', $value)->get(); // Load taxables based on tax label ID
+        //$this->reset('taxables');
+        
+        //dd($this->taxables);
+        // $this->loadTaxables($value); // Call the loadTaxables method when tax label ID is updated
+    }
 
     public function render()
     {
-        //$cantons = Erea::all();
-        //$towns = Town::all();
-        //$ereas = Erea::all();
-        //$genders = Gender::all();
-        //$id_types = IdType::all();
-        $erea = Erea::all();
         $cantons = Canton::all();
-        // Assuming you have a public property $canton in your Livewire component
-        //$towns = $this->canton ? Town::where('canton_id', $this->canton)->get() : collect();
-        //$ereas = $this->town ? Erea::where('town_id', $this->town)->get() : collect();
-
-        return view('livewire.erea.add-erea-modal', compact('erea','cantons'));
+        
+        return view('livewire.erea.add-erea-modal', compact('cantons'));
     }
 
     public function submit()
@@ -66,45 +62,24 @@ class AddEreaModal extends Component
         DB::transaction(function () {
             // Prepare the data for creating a new Taxable
             $data = [
+                'town_id' => $this->town_id,
                 'name' => $this->name,
-                'town_id' => $this->town_id
+                'status' => $this->status,
             ];
 
-            // if ($this->avatar) {
-            //     $data['profile_photo_path'] = $this->avatar->store('avatars', 'public');
-            // } else {
-            //     $data['profile_photo_path'] = null;
-            // }
+            $erea = Erea::find($this->erea_id) ?? Erea::create($data);
 
-            // if (!$this->edit_mode) {
-            //     $data['password'] = Hash::make($this->email);
-            // }
-
-            // Update or Create a new Taxable record in the database
-            //$data['email'] = $this->email;
-            $erea = Erea::find($this->id()) ?? Erea::create($data);
-            //dd($data);
             if ($this->edit_mode) {
                 foreach ($data as $k => $v) {
                     $erea->$k = $v;
-
                 }
                 $erea->save();
             }
 
             if ($this->edit_mode) {
-                // Assign selected role for user
-                //$taxable->syncRoles($this->tax_label);
-
                 // Emit a success event with a message
                 $this->dispatch('success', __('Erea updated'));
             } else {
-                // Assign selected role for user
-                //$taxable->assignRole($this->tax_label);
-
-                // Send a password reset link to the user's email
-                //Password::sendResetLink($taxable->only('email'));
-
                 // Emit a success event with a message
                 $this->dispatch('success', __('New Erea created'));
             }
@@ -114,9 +89,28 @@ class AddEreaModal extends Component
         $this->reset();
     }
 
+    public function deleteUser($id)
+    {
+        // Delete the user record with the specified ID
+        Erea::destroy($id);
 
+        // Emit a success event with a message
+        $this->dispatch('success', 'Taxpayer successfully deleted');
+    }
 
+    public function updateErea($id)
+    {
+        $this->edit_mode = true;
 
+        $erea = Erea::find($id);
+
+        //$this->canton_id = $erea->town->canton_id;
+        $this->town_id = $erea->town_id;
+
+        $this->erea_id = $erea->id;
+        $this->name = $erea->name;
+        $this->status = $erea->status;
+    }
 
     public function hydrate()
     {

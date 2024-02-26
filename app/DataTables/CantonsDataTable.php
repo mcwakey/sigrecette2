@@ -22,12 +22,15 @@ class CantonsDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-
+            
+            ->rawColumns(['status'])
             ->editColumn('name', function (Canton $canton) {
                 return $canton->name;
             })
             ->editColumn('status', function (Canton $canton) {
-                return $canton->status;
+                // return $canton->status;
+                // return sprintf('<div class="badge badge-light fw-bold">%s</div>', $canton->status);
+                return view('pages/cantons.columns._status', compact('canton'));
             })
 
             ->editColumn('created_at', function (Canton $canton) {
@@ -59,7 +62,7 @@ class CantonsDataTable extends DataTable
             ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
-            ->orderBy(1)
+            ->orderBy(2)
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/cantons/columns/_draw-scripts.js')) . "}");
     }
 
@@ -69,14 +72,14 @@ class CantonsDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('name')->addClass('d-flex align-items-center')->name('name'),
+            Column::make('name')->title(__('canton')),
             //Column::make('gender')->title('Tax Name'),
-            Column::make('status')->title('status'),
-            Column::make('created_at')->title('created Date')->addClass('text-nowrap'),
+            Column::make('status')->title(__('status'))->width(150),
+            Column::make('created_at')->title(__('created at'))->addClass('text-nowrap')->width(150),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
-                ->exportable(true)
-                ->printable(true)
+                ->exportable(false)
+                ->printable(false)
                 ->width(60)
         ];
     }

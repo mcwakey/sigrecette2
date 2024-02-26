@@ -6,7 +6,7 @@
             <!--begin::Modal header-->
             <div class="modal-header" id="kt_modal_add_erea_header">
                 <!--begin::Modal title-->
-                <h2 class="fw-bold">{{ __('create new area') }}</h2>
+                <h2 class="fw-bold">{{ __('ereas') }}</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
@@ -20,41 +20,80 @@
                 <!--begin::Form-->
                 <form id="kt_modal_add_erea_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
                     <!--begin::Scroll-->
-
+                    <input type="hidden" wire:model="erea_id" name="erea_id" />
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_erea_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_erea_header" data-kt-scroll-wrappers="#kt_modal_add_erea_scroll" data-kt-scroll-offset="300px">
                         <!--begin::Input group-->
 
-                        <div class="col-md-4">
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-semibold mb-2">{{ __('label') }}</label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <select wire:model="town_id" name="town_id" class="form-select form-select-solid"
-                                    data-dropdown-parent="#kt_modal_add_erea">
-                                <option>{{ __('select canton') }}</option>
-                                @foreach($cantons as $canton)
-                                    <option value="{{ $canton->id}}">{{ $canton->name }}</option>
-                            @endforeach
-                            <!-- <option value="Homme">Homme</option>
-                                    <option value="Femme">Femme</option> -->
-                            </select>
-                            <!--end::Input-->
-                            @error('gender')
-                            <span class="text-danger">{{ $message }}</span> @enderror
-                             </div>
+                        <div class="row mb-7">
+                            <div class="col-md-12">
+                                <label class="fs-6 fw-semibold mb-2">{{ __('canton') }}</label>
+                                <select  data-kt-action="load_drop" wire:model="canton_id" name="canton_id" class="form-select form-select-solid"
+                                        data-dropdown-parent="#kt_modal_add_erea">
+                                    <option>{{ __('select an option') }}</option>
+                                    @foreach($cantons as $canton)
+                                    <option value="{{ $canton->id }}">{{ $canton->name }}</option>
+                                    @endforeach  
+                                </select>
+                                @error('gender')  
+                                <span class="text-danger">{{ $message }}</span>  @enderror  
+                            </div>
+                        </div>
 
-                            <div class="col-md-7">
+                        <div class="separator separator-dashed my-2"></div>
+
+                        <div class="row mb-7">
+                            <div class="col-md-12">
                                 <!--begin::Label-->
-                                <label class="required fw-semibold fs-6 mb-2">{{ __('name') }}</label>
+                                <label class="fs-6 fw-semibold mb-2">{{ __('town') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select wire:model="town_id" name="town_id" class="form-select form-select-solid"
+                                        data-dropdown-parent="#kt_modal_add_erea">
+                                    <option>{{ __('select an option') }}</option>
+                                    @foreach($towns as $town)
+                                    <option value="{{ $town->id}}">{{ $town->name }}</option>
+                                    @endforeach
+                                <!-- <option value="Homme">Homme</option>
+                                        <option value="Femme">Femme</option> -->
+                                </select>
+                                <!--end::Input-->
+                                @error('gender')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
+
+                        <div class="separator separator-dashed my-2"></div>
+                        
+                        <div class="row mb-7">
+                            <div class="col-md-8">
+                                <!--begin::Label-->
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('erea') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <!-- form-control-solid -->
 
-                                <input type="text" wire:model="name" name="name" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('name') }}"/>
+                                <input type="text" wire:model="name" name="name" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('erea') }}"/>
                                 <!--end::Input-->
                                 @error('name')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
+                            <div class="col-md-4">
+                                <!--begin::Label-->
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('status') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select wire:model="status" name="status" class="form-select " data-dropdown-parent="#kt_modal_add_taxpayer">
+                                    <option>{{ __('select an option') }}</option>
+                                    <option value="ACTIVE">{{ __('active') }}</option>
+                                    <option value="INACTIVE">{{ __('inactive') }}</option>
+                                    <!-- <option value="Homme">Homme</option>
+                                    <option value="Femme">Femme</option> -->
+                                </select>
+                                <!--end::Input-->
+                                @error('status')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
 
 
 

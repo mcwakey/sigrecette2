@@ -289,10 +289,10 @@
                                     data-dropdown-parent="#kt_modal_add_taxpayer">
                                 </select> -->
 
-                                <select wire:model="canton" name="canton" class="form-select ">
+                                <select data-kt-action="load_drop" wire:model="canton" name="canton" class="form-select">
                                     <option>{{ __('select an option') }}</option>
                                     @foreach($cantons as $canton)
-                                    <option data-kt-action="load_drop" value="{{ $canton->id }}">{{ $canton->name }}</option>
+                                    <option value="{{ $canton->id }}">{{ $canton->name }}</option>
                                     @endforeach
                                 </select>
 
@@ -305,7 +305,7 @@
                                 <label class="fw-semibold fs-6 mb-2">{{ __('town') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <select wire:model="town_id" name="town_id" class="form-select ">
+                                <select data-kt-action="load_drop" wire:model="town_id" name="town_id" class="form-select">
                                     <option>{{ __('select an option') }}</option>
                                     @foreach($towns as $town)
                                     <option value="{{ $town->id }}">{{ $town->name }}</option>

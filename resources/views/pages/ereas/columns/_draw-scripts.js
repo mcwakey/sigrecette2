@@ -30,6 +30,14 @@ document.querySelectorAll('[data-kt-action="update_row"]').forEach(function (ele
     });
 });
 
+// Add click event listener to update buttons
+document.querySelectorAll('[data-kt-action="load_drop"]').forEach(function (element) {
+    element.addEventListener('change', function () {
+        //console.log([this.value]);
+        Livewire.dispatch('load_drop', [this.value]);
+    });
+});
+
 // Listen for 'success' event emitted by Livewire
 Livewire.on('success', (message) => {
     // Reload the users-table datatable

@@ -39,7 +39,7 @@
                             </div>
                             <div class="col-md-4">
                                 <!--begin::Label-->
-                                <label class="required fw-semibold fs-6 mb-2">{{ __('tnif') }}</label>
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('account no') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="text" wire:model="tnif" name="tnif" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('tnif') }}"/>
@@ -121,10 +121,14 @@
                                             <input type="text" class="form-control form-control-solid" name="mesure" placeholder="m3" value="m3"/>
                                         </td> -->
                                         <td class="ps-0">
-                                            <input type="text" class="form-control form-control-solid text-end" name="taxation" value="{{ $taxpayer_taxable->seize.$taxpayer_taxable->taxable->unit  }}"  readonly/>
+                                            <input type="text" class="form-control form-control-solid text-end" name="taxation" value="{{ $taxpayer_taxable->seize.' '.$taxpayer_taxable->taxable->unit  }}"  readonly/>
                                         </td>
                                         <td>
+                                            @if ($taxpayer_taxable->taxable->tariff_type =="FIXED")
                                             <input type="text" class="form-control form-control-solid mb-2 text-end" name="price" placeholder="0.00" value="{{ $taxpayer_taxable->taxable->tariff }}"  readonly/>
+                                            @else
+                                            <input type="text" class="form-control form-control-solid mb-2 text-end" name="price" placeholder="0.00" value="{{ $taxpayer_taxable->taxable->tariff. ' %' }}"  readonly/>
+                                            @endif
                                         </td>
                                         <!-- <td>
                                             <input wire:model="qty" name="qty" class="form-control form-control-solid mb-2" type="number" min="1" placeholder="1" value=""  data-kt-action="load_invoice"/>

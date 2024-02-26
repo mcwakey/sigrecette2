@@ -30,6 +30,8 @@ class AddTaxpayerTaxableModal extends Component
     public $taxable_id;
     public $taxpayer_id;
 
+    public $unit;
+
     public $taxlabel_id;
 
     public $taxables=[];
@@ -48,6 +50,7 @@ class AddTaxpayerTaxableModal extends Component
 
 
     public $edit_mode = false;
+    public $option_calculus = 0;
 
     protected $rules = [
         'name' => 'required|string',
@@ -76,7 +79,7 @@ class AddTaxpayerTaxableModal extends Component
         'update_taxable' => 'updateTaxpayerTaxable',
         'add_taxable' => 'addTaxpayerTaxable',
         'update_checkbox' => 'updateCheckbox',
-        'load_taxables' => 'loadTaxables',
+        'load_drop' => 'load_drop',
         //'loadTaxable' => 'loadTaxable',
     ];
 
@@ -96,11 +99,6 @@ class AddTaxpayerTaxableModal extends Component
         return view('livewire.taxpayer_taxable.add-taxpayer-taxable-modal', compact('taxlabels'));
     }
 
-    public function loadTaxables($id)
-    {
-    
-    }
-
     public function updatedTaxlabelId($value)
     {
         $this->taxables = Taxable::where('tax_label_id', $value)->get(); // Load taxables based on tax label ID
@@ -108,6 +106,21 @@ class AddTaxpayerTaxableModal extends Component
         
         //dd($this->taxables);
         // $this->loadTaxables($value); // Call the loadTaxables method when tax label ID is updated
+    }
+
+    public function updatedTaxableId($value)
+    {
+        // Debugging to ensure $value is valid
+        //dd($value." TaxableId");
+    
+        // Assuming $value is valid, fetch taxables based on tax label ID
+        $taxables = Taxable::find($value);
+        //$this->ereas = Erea::where('town_id', $value)->get(); // Load taxables based on tax label ID
+        //dd($taxables);
+
+        $this->option_calculus = $taxables->unit_type;
+        $this->unit = $taxables->unit;
+
     }
 
     public function updateCheckbox($id)

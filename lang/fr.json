@@ -1,5 +1,4 @@
-{
-
+{   
     "total_month" : "Total des paiements ce mois-ci",
     "make_payment" : "Effectuer un paiement",
     "quick_guide" : "Guide rapide",
@@ -62,7 +61,7 @@
     "settings" : "Configurations",
     "taxable materials" : "Matières Taxable",
     "cantons" : "Cantons",
-    "towns" : "Villes/villages",
+    "towns" : "Villes/Villages",
     "ereas" : "Quartiers",
     "user management" : "Gestion d'utilisateurs",
     "users" : "Utilisateurs",
@@ -97,7 +96,7 @@
     "please wait" : "Veuillez patienter...",
 
     "canton" : "Canton",
-    "town" : "Ville/village",
+    "town" : "Ville/Village",
     "erea" : "Quartier/Localité",
     "taxpayer" : "Contribuable",
     "mobilephone" : "Téléphone",
@@ -177,7 +176,7 @@
 
     "more here" : "En savoir plus ici",
     "assets" : "Taxations",
-    "taxlabels" : "Libellés fiscaux",
+    "taxlabels" : "Libellés Fiscaux",
     "select an option" : "Sélectionner une option",
     "taxables" : "Matières Taxables",
     "empty" : " ",
@@ -217,6 +216,13 @@
     "authorisation": "Autorisation",
     "auth reference": "Référence",
     "nif": "NIF",
+
+    "new canton": "Nouveau Canton",
+    "new town": "Nouvelle Ville",
+    "new erea": "Nouvelle Quartier",
+    "new zone": "Nouvelle Zone",
+    "zones": "Zones Fiscaux",
+
 
 
 

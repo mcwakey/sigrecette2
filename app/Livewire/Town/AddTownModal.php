@@ -13,35 +13,30 @@ class AddTownModal extends Component
 {
     use WithFileUploads;
 
-
-    public $name;
-
     public $canton_id;
-
-
+    public $town_id;
+    
+    public $name;
+    public $status;
 
     public $edit_mode = false;
 
     protected $rules = [
-        'name' => 'required|string',
         'canton_id' => 'required|int',
-
-
+        'name' => 'required|string',
+        'status' => 'required|string',
     ];
 
     protected $listeners = [
         'delete_user' => 'deleteUser',
-        'update_user' => 'updateUser',
+        'update_user' => 'updateTown',
     ];
 
     public function render()
     {
-
-        $town = Town::all();
         $cantons = Canton::all();
 
-
-        return view('livewire.town.add-town-modal', compact('town','cantons'));
+        return view('livewire.town.add-town-modal', compact('cantons'));
     }
 
     public function submit()
@@ -52,12 +47,12 @@ class AddTownModal extends Component
         DB::transaction(function () {
             // Prepare the data for creating a new Taxable
             $data = [
+                'canton_id' => $this->canton_id,
                 'name' => $this->name,
-                'canton_id' => $this->canton_id
-
+                'status' => $this->status,
             ];
 
-            $town = Town::find($this->id()) ?? Town::create($data);
+            $town = Town::find($this->town_id) ?? Town::create($data);
 
             if ($this->edit_mode) {
                 foreach ($data as $k => $v) {
@@ -67,9 +62,11 @@ class AddTownModal extends Component
             }
 
             if ($this->edit_mode) {
-                $this->dispatch('success', __('Town updated'));
+                // Emit a success event with a message
+                $this->dispatch('success', __('Canton updated'));
             } else {
-                $this->dispatch('success', __('New Town created'));
+                // Emit a success event with a message
+                $this->dispatch('success', __('New Caton created'));
             }
         });
 
@@ -77,9 +74,28 @@ class AddTownModal extends Component
         $this->reset();
     }
 
+    public function deleteUser($id)
+    {
+        // Delete the user record with the specified ID
+        Town::destroy($id);
 
+        // Emit a success event with a message
+        $this->dispatch('success', 'Taxpayer successfully deleted');
+    }
 
+    public function updateTown($id)
+    {
+        $this->edit_mode = true;
 
+        $town = Town::find($id);
+
+        $this->canton_id = $town->canton_id;
+
+        $this->town_id = $town->id;
+        $this->name = $town->name;
+        $this->status = $town->status;
+
+    }
 
     public function hydrate()
     {

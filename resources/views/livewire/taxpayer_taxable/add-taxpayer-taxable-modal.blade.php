@@ -33,10 +33,10 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
        
-                                <select wire:model="taxlabel_id" name="taxlabel_id" class="form-select form-select-solid" data-dropdown-parent="#kt_modal_add_taxpayer_taxable">
+                                <select data-kt-action="load_drop" wire:model="taxlabel_id" name="taxlabel_id" class="form-select form-select-solid" data-dropdown-parent="#kt_modal_add_taxpayer_taxable">
                                     <option>{{ __('select an option') }}</option>
                                     @foreach($taxlabels as $taxlabel)
-                                    <option data-kt-action="load_taxables" value="{{ $taxlabel->id}}">{{ $taxlabel->name }}</option>
+                                    <option value="{{ $taxlabel->id}}">{{ $taxlabel->name }}</option>
                                     @endforeach
                                 </select>
                                 <!--end::Input-->
@@ -44,7 +44,7 @@
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>
-                        
+
                         <div class="separator saperator-dashed my-5"></div>
 
                         <div class="row mb-7">
@@ -53,7 +53,7 @@
                                 <label class="fs-6 fw-semibold mb-2">{{ __('taxables') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <select wire:model="taxable_id" name="taxable_id" class="form-select form-select-solid" data-dropdown-parent="#kt_modal_add_taxpayer_taxable">
+                                <select data-kt-action="load_drop" wire:model="taxable_id" name="taxable_id" class="form-select form-select-solid" data-dropdown-parent="#kt_modal_add_taxpayer_taxable">
                                     <option>{{ __('select an option') }}</option>
                                     @foreach($taxables as $taxable)
                                     <option value="{{ $taxable->id}}">{{ $taxable->name }}</option>
@@ -75,51 +75,111 @@
                                 <label class="fs-6 fw-semibold mb-2">{{ __('description') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="name" name="name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('name') }}"/>
+                                <input type="text" wire:model="name" name="name" class="form-control mb-3 mb-lg-0" placeholder="{{ __('description') }}"/>
                                 <!--end::Input-->
                                 @error('name')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>
+
+                        @if ($option_calculus == "Superficie")
+
+                        <div class="separator saperator-dashed my-5"></div>
+
                         <div class="row mb-7">
+                            <div class="col-md-3">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-semibold mb-2">{{ __('length') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control mb-3 mb-lg-0" placeholder="{{ __('length') }}"/>
+                                <!--end::Input-->
+                                @error('taxable_id')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-3">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-semibold mb-2">{{ __('width') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control mb-3 mb-lg-0" placeholder="{{ __('width') }}"/>
+                                <!--end::Input-->
+                                @error('taxable_id')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-3">
+                                <!--begin::Label-->
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('seize') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" wire:model="seize" name="seize" class="form-control mb-3 mb-lg-0" placeholder="{{ __('seize') }}"/>
+                                <!--end::Input-->
+                                @error('seize')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-3">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-semibold mb-2">{{ __('unit') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" wire:model="unit" name="unit" class="form-control mb-3 mb-lg-0" placeholder="{{ __('unit') }}" readonly/>
+                                <!--end::Input-->
+                                @error('taxable_id')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
+                        @else
+                        <div class="row col-md-12">
                             <div class="col-md-6">
                                 <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('seize') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="seize" name="seize" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('seize') }}"/>
+                                <input type="text" wire:model="seize" name="seize" class="form-control mb-3 mb-lg-0" placeholder="{{ __('seize') }}"/>
                                 <!--end::Input-->
                                 @error('seize')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div class="col-md-6">
                                 <!--begin::Label-->
+                                <label class="fs-6 fw-semibold mb-2">{{ __('unit') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" wire:model="unit" name="unit" class="form-control mb-3 mb-lg-0" placeholder="{{ __('unit') }}" readonly/>
+                                <!--end::Input-->
+                            </div>
+                        </div>
+                        @endif
+
+                        <div class="separator saperator-dashed my-5"></div>
+
+                        <div class="row mb-7">
+                            <div class="col-md-6">
+                                <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('address') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="location" name="location" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('location') }}"/>
+                                <textarea rows="1" wire:model="location" name="location" class="form-control  rounded-3" placeholder="{{ __('location') }}"></textarea>
                                 <!--end::Input-->
                                 @error('location')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                        </div>
-                        <div class="row mb-7">
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('longitude') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="longitude" name="longitude" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('longitude') }}"/>
+                                <input type="text" wire:model="longitude" name="longitude" class="form-control mb-3 mb-lg-0" placeholder="{{ __('longitude') }}"/>
                                 <!--end::Input-->
                                 @error('longitude')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('latitude') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="latitude" name="latitude" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('latitude') }}"/>
+                                <input type="text" wire:model="latitude" name="latitude" class="form-control mb-3 mb-lg-0" placeholder="{{ __('latitude') }}"/>
                                 <!--end::Input-->
                                 @error('latitude')
                                 <span class="text-danger">{{ $message }}</span> @enderror
