@@ -507,19 +507,21 @@
                                                     @endif
 
                                                 </td>
-                                                <td>{{ $invoice->taxpayer->id . $invoice->id}}</td>
-                                                <td>{{ $invoice->amount}}</td>
+                                                <td>{{ $invoice->taxpayer->id . $invoice->id }}</td>
+                                                <td>{{ $invoice->amount }}</td>
 
                                                 <td>
-                                                    @if($invoice->pay_status="OWING")
+                                                    @if($invoice->pay_status == "OWING")
                                                     <span class="badge badge-light-danger">{{ $invoice->pay_status}}</span>
+                                                    @elseif($invoice->pay_status == "PART PAID")
+                                                    <span class="badge badge-light-warning">{{ $invoice->pay_status}}</span>
                                                     @else
                                                     <span class="badge badge-light-success">{{ $invoice->pay_status}}</span>
                                                     @endif
                                                 </td>
 
                                                 <td>
-                                                    @if($invoice->pay_status="OWING")
+                                                    @if($invoice->delivery == "NOT DELIVERED")
                                                     <span class="badge badge-light-danger">NOT DELIVERED</span>
                                                     @else
                                                     <span class="badge badge-light-success">DELIVERED</span>
@@ -527,16 +529,16 @@
                                                 </td>
 
                                                 <td>
-                                                    @if($invoice->pay_status="OWING")
+                                                    @if($invoice->delivery == "NOT DELIVERED")
                                                     -
                                                     @else
-                                                    {{ $invoice->updated_at->format('Y-m-d') }}
+                                                    {{-- $invoice->delivery_date->format('Y-m-d') --}}
                                                     @endif
                                                 </td>
 
 
                                                 <td>
-                                                    @if($invoice->status=="PENDING")
+                                                    @if($invoice->status == "PENDING")
                                                     <span class="badge badge-light-primary">{{ $invoice->status}}</span>
                                                     <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-user-id="{{ $invoice->id }}" data-kt-menu-target="#kt_modal_add_status" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-action="update_status">
                                                         <i class="ki-duotone ki-setting-3 fs-3">
@@ -647,6 +649,7 @@
                                                         </div>
                                                         @elseif($invoice->status=="APROVED")
 
+
                                                             <div class="menu-item px-3">
                                                                 <a href="{{
     route('generateInvoice',
@@ -661,7 +664,21 @@
      $taxpayer->mobilephone,
      $taxpayer->town->canton->name,
      $taxpayer->town->name,
-     $taxpayer->address
+     $taxpayer->address,
+     $taxpayer->zone->name,
+     $taxpayer->longitude,
+     $taxpayer->latitude,
+     $invoice->invoiceitems->get(0)->taxpayer_taxable->taxable->tax_label->name,
+     $invoice->invoiceitems->get(0)->taxpayer_taxable->taxable->tax_label->code,
+     $invoice->invoiceitems->get(0)->taxpayer_taxable->taxable->name,
+     $invoice->invoiceitems->get(0)->taxpayer_taxable->taxable->unit_type,
+     $invoice->invoiceitems->get(0)->taxpayer_taxable->taxable->unit,
+     $invoice->invoiceitems->get(0)->taxpayer_taxable->taxable->tariff,
+     $taxpayer->zone->name,
+     $taxpayer->zone->name,
+     $taxpayer->zone->name
+
+
      ])
      ])
  }}" class="menu-link px-3"> {{ __('print') }}</a>
@@ -671,6 +688,18 @@
                                                                  -->
 
                                                             </div>
+
+                                                            <div class="menu-item px-3">
+                                                            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_payment" data-kt-action="update_payment">
+                                                                {{ __('add payment') }}
+                                                            </a>
+                                                        </div>
+                                                        <div class="menu-item px-3">
+                                                            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer" data-kt-action="update_taxpayer">
+                                                                {{ __('refund') }}
+                                                            </a>
+                                                        </div>
+
                                                         @endif
                                                         <!--end::Menu item-->
 
@@ -709,7 +738,6 @@
                             <!--begin::Card title-->
                             <div class="card-title flex-column">
                                 <h2 class="mb-1">{{ __('taxpayers payments') }}</h2>
-                                <!-- <div class="fs-6 fw-semibold text-muted">{{ __('most recents payments') }}</div> -->
                             </div>
                             <!--end::Card title-->
                             <!--begin::Card toolbar-->
@@ -1049,14 +1077,18 @@
         <!--end::Content-->
     </div>
 
-    <livewire:taxpayer_taxable.add-taxpayer-taxable-modal></livewire:taxpayer_taxable.add-taxpayer-taxable-modal>
+    <livewire:taxpayer_taxable.add-taxpayer-taxable-modal/>
 
     <!--begin::Modal-->
-    <livewire:taxpayer.add-taxpayer-modal></livewire:taxpayer.add-taxpayer-modal>
+    <livewire:taxpayer.add-taxpayer-modal/>
     <!--end::Modal-->
 
     <!--begin::Modal-->
-    <livewire:invoice.add-invoice-modal></livewire:invoice.add-invoice-modal>
+    <livewire:invoice.add-invoice-modal/>
+    <!--end::Modal-->
+
+    <!--begin::Modal-->
+    <livewire:payment.add-payment-modal/>
     <!--end::Modal-->
 
     <!--begin::Modal-->

@@ -142,26 +142,28 @@
         <p>Nom/Raison sociale :<span class="write">{{$data[4]}}</span></p>
         <p>Nic :<span class="write"> {{$data[2]}}</span></p>
         <p>Téléphone :<span class="write"> {{$data[5]}}</span></p>
-        <p>Zone fiscale :<span class="write"> ……………</span></p>
+        <p>Zone fiscale :<span class="write"> {{$data[9]}}</span></p>
         <p>Canton :<span class="write">{{$data[6]}}</span></p>
         <p>Quartier/Village :<span class="write"> {{$data[7]}}</span></p>
         <p>Adresse complète :<span class="write">{{$data[8]}}</span></p>
-        <p>Coordonnées GPS :<span class="write"> ……………</span></p>
+        <p>Coordonnées GPS :<span class="write"> {{$data[10]}} : {{$data[11]}}</span></p>
     </div>
     <div class="avis-content">
         <p>Madame, Mademoiselle, Monsieur,</p>
-        <p>Vous êtes priés de bien vouloir payer à la régie des recettes de la mairie de{{$data[6]}}
+        <p>Vous êtes priés de bien vouloir payer à la régie des recettes de la mairie de {{$data[6]}}
             le montant ci-dessous :</p>
         <p>N° d’ordre de recette :<span class="write"> {{$data[1]}}</span>/{{$data[0]}}</span></p>
-        <p>Libellé de la recette :<span class="write"> ……………</span></p>
-        <p>Imputation budgétaire :<span class="write"> ……………</span></p>
-        <p>Matière taxable :<span class="write"> ……………</span></p>
-        <p>Unité d’assiette :<span class="write"> ……………</span></p>
-        <p>Valeur d’assiette : (1):<span class="write"> ……………</span></p>
-        <p>Tarif (FCFA) : (2):<span class="write"> ……………</span></p>
+
+        <p>Libellé de la recette :<span class="write"> {{$data[12]}}</span></p>
+        <p>Imputation budgétaire :<span class="write"> {{$data[13]}}</span></p>
+        <p>Matière taxable :<span class="write"> {{$data[14]}}</span></p>
+        <p>Unité d’assiette :<span class="write"> {{$data[15]}}</span></p>
+        <p>Valeur d’assiette : (1):<span class="write"> {{$data[16]}}</span></p>
+        <p>Tarif (FCFA) : (2):<span class="write"> {{$data[17]}}</span></p>
         <p>Nombre de taxation par an : (3):<span class="write"> ……………</span></p>
         <p>Somme due :<span class="write">{{$data[3]}}</span></p>
-        <p>Arrêté le présent avis à la somme de :<span class="write">{{ number_to_words($data[3]) }} </span>. Francs CFA (Sauf erreur ou omission)</p>
+        
+        <p>Arrêté le présent avis à la somme de :<span class="write">{{number_to_words($data[3]) }} </span>. Francs CFA (Sauf erreur ou omission)</p>
         <p>A payer dans les 30 jours suivant la réception de l’avis, ou avant la fin de chaque mois pour les
             paiements mensualisés</p>
         <table>

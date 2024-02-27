@@ -32,8 +32,8 @@ class TaxpayerTaxable extends Model
         return $this->belongsTo(Taxable::class);
     }
     
-    public function invoice()
+    public function invoiceitem()
     {
-        return $this->belongsTo(Invoice::class);
+        return $this->belongsTo(InvoiceItem::class);
     }
 }

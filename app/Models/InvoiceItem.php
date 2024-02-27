@@ -15,4 +15,14 @@ class InvoiceItem extends Model
         'amount',
         'invoice_id',
     ];
+    
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
+    }
+    
+    public function taxpayer_taxable()
+    {
+        return $this->belongsTo(Taxpayertaxable::class);
+    }
 }

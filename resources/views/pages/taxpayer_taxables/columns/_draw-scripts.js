@@ -105,6 +105,14 @@ document.querySelectorAll('[data-kt-action="update_invoice"]').forEach(function 
 });
 
 // Add click event listener to update buttons
+document.querySelectorAll('[data-kt-action="update_payment"]').forEach(function (element) {
+    element.addEventListener('click', function () {
+        console.log([this.getAttribute('data-kt-user-id')])
+        Livewire.dispatch('update_payment', [this.getAttribute('data-kt-user-id')]);
+    });
+});
+
+// Add click event listener to update buttons
 document.querySelectorAll('[data-kt-action="update_status"]').forEach(function (element) {
     element.addEventListener('click', function () {
         Livewire.dispatch('update_status', [this.getAttribute('data-kt-user-id')]);
