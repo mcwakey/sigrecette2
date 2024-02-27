@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class GenerateInvoiceController extends Controller
 {
@@ -18,7 +19,8 @@ class GenerateInvoiceController extends Controller
         $data = json_decode($data, true);
 
 
-        $filename="Invoice-".$data[2].".pdf";
+
+        $filename="Invoice-".Str::random(8).".pdf";
 
             //dd($data);
                 $pdf= PDF::loadView('exports.invoices', ['data' => $data])

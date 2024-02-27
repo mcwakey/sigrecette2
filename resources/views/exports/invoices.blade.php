@@ -108,79 +108,81 @@
 </head>
 
 <body>
-<div class="container avis-container">
-    <table>
-        <tr class="text-start">
-            <td class="boder-div-blaw">
-                <img src="{{public_path('assets/media/images_exports/image1.png')}}" class="img-fluid" alt="...">
-                <div class="details">
-                    <h6>COMMUNE :<span class="write"> {{$data[6]}}</span></h6>
-                    <h6>TEL :<span class="write"> ……………</span></h6>
-                    <h6>Adresse :<span class="write"> ……………</span></h6>
-                </div>
-            </td>
-            <td class="center-image">
-                <img src="{{public_path('assets/media/images_exports/image3.jpg')}}" alt="..." class="img-thumbnail">
-            </td>
-            <td class="boder-div-red">
-                <img src="{{public_path('assets/media/images_exports/image2.png')}}" class="img-fluid" alt="...">
-                <div class="details">
-                    <h6>TRESORERIE DE : <span class="write"> {{$data[6]}}</span></h6>
-                    <h6>Adresse :<span class="write"> ……………</span></h6>
-                </div>
-            </td>
-        </tr>
-    </table>
-
-    <div class="avis-header">
-        <h2 class="text-center">AVIS DES SOMMES À PAYER</h2>
-        <h6>N°:<span class="write">{{$data[1]}}</span>/{{$data[0]}}</h6>
-        <h6>Destinataire:<span class="write"> </span></h6>
-
-    </div>
-    <div class="sub-header">
-        <p>Nom/Raison sociale :<span class="write">{{$data[4]}}</span></p>
-        <p>Nic :<span class="write"> {{$data[2]}}</span></p>
-        <p>Téléphone :<span class="write"> {{$data[5]}}</span></p>
-        <p>Zone fiscale :<span class="write"> {{$data[9]}}</span></p>
-        <p>Canton :<span class="write">{{$data[6]}}</span></p>
-        <p>Quartier/Village :<span class="write"> {{$data[7]}}</span></p>
-        <p>Adresse complète :<span class="write">{{$data[8]}}</span></p>
-        <p>Coordonnées GPS :<span class="write"> {{$data[10]}} : {{$data[11]}}</span></p>
-    </div>
-    <div class="avis-content">
-        <p>Madame, Mademoiselle, Monsieur,</p>
-        <p>Vous êtes priés de bien vouloir payer à la régie des recettes de la mairie de {{$data[6]}}
-            le montant ci-dessous :</p>
-        <p>N° d’ordre de recette :<span class="write"> {{$data[1]}}</span>/{{$data[0]}}</span></p>
-
-        <p>Libellé de la recette :<span class="write"> {{$data[12]}}</span></p>
-        <p>Imputation budgétaire :<span class="write"> {{$data[13]}}</span></p>
-        <p>Matière taxable :<span class="write"> {{$data[14]}}</span></p>
-        <p>Unité d’assiette :<span class="write"> {{$data[15]}}</span></p>
-        <p>Valeur d’assiette : (1):<span class="write"> {{$data[16]}}</span></p>
-        <p>Tarif (FCFA) : (2):<span class="write"> {{$data[17]}}</span></p>
-        <p>Nombre de taxation par an : (3):<span class="write"> ……………</span></p>
-        <p>Somme due :<span class="write">{{$data[3]}}</span></p>
-        
-        <p>Arrêté le présent avis à la somme de :<span class="write">{{number_to_words($data[3]) }} </span>. Francs CFA (Sauf erreur ou omission)</p>
-        <p>A payer dans les 30 jours suivant la réception de l’avis, ou avant la fin de chaque mois pour les
-            paiements mensualisés</p>
+@foreach($data[12] as $item)
+    <div class="container avis-container">
         <table>
             <tr class="text-start">
-                <td class="">
-                    <p>A ………, le<span class="write"> ……………</span></p>
+                <td class="boder-div-blaw">
+                    <img src="{{public_path('assets/media/images_exports/image1.png')}}" class="img-fluid" alt="...">
+                    <div class="details">
+                        <h6>COMMUNE :<span class="write"> {{$data[6]}}</span></h6>
+                        <h6>TEL :<span class="write"> ……………</span></h6>
+                        <h6>Adresse :<span class="write"> ……………</span></h6>
+                    </div>
                 </td>
-                <td class="">
-                    <p>Le Maire</p>
+                <td class="center-image">
+                    <img src="{{public_path('assets/media/images_exports/image3.jpg')}}" alt="..." class="img-thumbnail">
+                </td>
+                <td class="boder-div-red">
+                    <img src="{{public_path('assets/media/images_exports/image2.png')}}" class="img-fluid" alt="...">
+                    <div class="details">
+                        <h6>TRESORERIE DE : <span class="write"> {{$data[6]}}</span></h6>
+                        <h6>Adresse :<span class="write"> ……………</span></h6>
+                    </div>
                 </td>
             </tr>
         </table>
-        <p>N.B. Le paiement peut être effectué en numéraire, par chèque au nom du Receveur de la Commune de <span class="write"> ………………………………</span>. ou
-            par virement au compte trésor RIB<span class="write"> ………………………………</span>. La quittance est délivrée à la réception des espèces, du
-            chèque ou de l’ordre de virement par le Régisseur de recettes.</p>
+
+        <div class="avis-header">
+            <h2 class="text-center">AVIS DES SOMMES À PAYER</h2>
+            <h6>N°:<span class="write">{{$data[1]}}</span>/{{$data[0]}}</h6>
+            <h6>Destinataire:<span class="write"> </span></h6>
+
+        </div>
+        <div class="sub-header">
+            <p>Nom/Raison sociale :<span class="write">{{$data[4]}}</span></p>
+            <p>Nic :<span class="write"> {{$data[2]}}</span></p>
+            <p>Téléphone :<span class="write"> {{$data[5]}}</span></p>
+            <p>Zone fiscale :<span class="write"> {{$data[9]}}</span></p>
+            <p>Canton :<span class="write">{{$data[6]}}</span></p>
+            <p>Quartier/Village :<span class="write"> {{$data[7]}}</span></p>
+            <p>Adresse complète :<span class="write">{{$data[8]}}</span></p>
+            <p>Coordonnées GPS :<span class="write"> {{$data[10]}} : {{$data[11]}}</span></p>
+        </div>
+        <div class="avis-content">
+            <p>Madame, Mademoiselle, Monsieur,</p>
+            <p>Vous êtes priés de bien vouloir payer à la régie des recettes de la mairie de {{$data[6]}}
+                le montant ci-dessous :</p>
+            <p>N° d’ordre de recette :<span class="write"> {{$data[1]}}</span>/{{$data[0]}}</span></p>
+
+            <p>Libellé de la recette :<span class="write"> {{$item[0]}}</span></p>
+            <p>Imputation budgétaire :<span class="write"> {{$item[1]}}</span></p>
+            <p>Matière taxable :<span class="write"> {{$item[2]}}</span></p>
+            <p>Unité d’assiette :<span class="write"> {{$item[4]}}</span></p>
+            <p>Valeur d’assiette : (1):<span class="write"> {{$item[3]}}</span></p>
+            <p>Tarif (FCFA) : (2):<span class="write"> {{$item[5]}}</span></p>
+            <p>Nombre de taxation par an : (3):<span class="write"> {{$item[7]}}</span></p>
+            <p>Somme due :<span class="write">{{$item[6]}}</span></p>
+
+            <p>Arrêté le présent avis à la somme de :<span class="write">{{number_to_words($item[6]) }} </span>. Francs CFA (Sauf erreur ou omission)</p>
+            <p>A payer dans les 30 jours suivant la réception de l’avis, ou avant la fin de chaque mois pour les
+                paiements mensualisés</p>
+            <table>
+                <tr class="text-start">
+                    <td class="">
+                        <p>A ………, le<span class="write"> ……………</span></p>
+                    </td>
+                    <td class="">
+                        <p>Le Maire</p>
+                    </td>
+                </tr>
+            </table>
+            <p>N.B. Le paiement peut être effectué en numéraire, par chèque au nom du Receveur de la Commune de <span class="write"> ………………………………</span>. ou
+                par virement au compte trésor RIB<span class="write"> ………………………………</span>. La quittance est délivrée à la réception des espèces, du
+                chèque ou de l’ordre de virement par le Régisseur de recettes.</p>
+        </div>
     </div>
-</div>
+@endforeach
 
 </body>
 

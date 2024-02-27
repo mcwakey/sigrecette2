@@ -649,44 +649,41 @@
                                                         </div>
                                                         @elseif($invoice->status=="APROVED")
 
-
                                                             <div class="menu-item px-3">
-                                                                <a href="{{
-    route('generateInvoice',
- ['data' =>
-  json_encode(
- [
-     $invoice->created_at->format('y') ,
-     $invoice->id,
-     $taxpayer->id.$invoice->id,
-     $invoice->amount,
-     $taxpayer->name,
-     $taxpayer->mobilephone,
-     $taxpayer->town->canton->name,
-     $taxpayer->town->name,
-     $taxpayer->address,
-     $taxpayer->zone->name,
-     $taxpayer->longitude,
-     $taxpayer->latitude,
-     $invoice->invoiceitems->get(0)->taxpayer_taxable->taxable->tax_label->name,
-     $invoice->invoiceitems->get(0)->taxpayer_taxable->taxable->tax_label->code,
-     $invoice->invoiceitems->get(0)->taxpayer_taxable->taxable->name,
-     $invoice->invoiceitems->get(0)->taxpayer_taxable->taxable->unit_type,
-     $invoice->invoiceitems->get(0)->taxpayer_taxable->taxable->unit,
-     $invoice->invoiceitems->get(0)->taxpayer_taxable->taxable->tariff,
-     $taxpayer->zone->name,
-     $taxpayer->zone->name,
-     $taxpayer->zone->name
+                                                                @php
+                                                                    $invoiceItems = [];
+                                                                    foreach ($invoice->invoiceitems as $invoiceitem) {
+                                                                        $invoiceItems[] = [
+                                                                             $invoiceitem->taxpayer_taxable->taxable->tax_label->name,
+                                                                           $invoiceitem->taxpayer_taxable->taxable->tax_label->code,
+                                                                            $invoiceitem->taxpayer_taxable->taxable->name,
+                                                                            $invoiceitem->taxpayer_taxable->seize,
+                                                                            $invoiceitem->taxpayer_taxable->taxable->unit,
+                                                                             $invoiceitem->taxpayer_taxable->taxable->tariff,
+                                                                              $invoiceitem->amount,
+                                                                             $invoiceitem->qty,
+                                                                        ];
+                                                                    }
 
+                                                                    $data = [
+                                                                        $invoice->created_at,
+                                                                        $invoice->id,
+                                                                         $taxpayer->id . $invoice->id,
+                                                                         $invoice->amount,
+                                                                        $taxpayer->name,
+                                                                        $taxpayer->mobilephone,
+                                                                        $taxpayer->town->canton->name,
+                                                                        $taxpayer->town->name,
+                                                                        $taxpayer->address,
+                                                                         $taxpayer->zone->name,
+                                                                        $taxpayer->longitude,
+                                                                        $taxpayer->latitude,
 
-     ])
-     ])
- }}" class="menu-link px-3"> {{ __('print') }}</a>
+                                                                        $invoiceItems,
+                                                                    ];
+                                                                @endphp
 
-                                                                <!--
-                                                                , ,,$taxpayer->erea,$taxpayer->address,$taxpayer->longitude,$taxpayer->latitude
-                                                                 -->
-
+                                                                <a href="{{ route('generateInvoice', ['data' => json_encode($data)]) }}" class="menu-link px-3">{{ __('print') }}</a>
                                                             </div>
 
                                                             <div class="menu-item px-3">
