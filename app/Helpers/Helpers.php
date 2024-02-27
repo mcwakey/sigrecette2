@@ -431,3 +431,17 @@ if (!function_exists('getIcon')) {
         return theme()->getIcon($name, $class, $type, $tag);
     }
 }
+
+    if (!function_exists('number_to_words')) {
+        function number_to_words($number, $locale = 'fr_FR') {
+            if (!is_numeric($number)) {
+                return '';
+            }
+            $formatter = new NumberFormatter($locale, NumberFormatter::SPELLOUT);
+
+            // Retourner le résultat de la conversion
+            return ucfirst($formatter->format($number));
+        }
+    }
+
+

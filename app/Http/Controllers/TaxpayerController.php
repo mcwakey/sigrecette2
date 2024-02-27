@@ -25,18 +25,18 @@ class TaxpayerController extends Controller
     //     // Instantiate both data tables
     //     $taxpayersDataTable = app()->make(TaxpayersDataTable::class);
     //     $invoicesDataTable = app()->make(InvoicesDataTable::class);
-    
+
     //     // Render both data tables into variables
     //     $taxpayersDataTableHtml = $taxpayersDataTable->render('pages.taxpayers.list');
     //     //dd($taxpayersDataTableHtml);
 
     //     $invoicesDataTableHtml = $invoicesDataTable->render('pages.taxpayers.list');
     //     //dd($taxpayersDataTable);
-    
+
     //     // Pass both data tables HTML to the view
     //     return view('pages.taxpayers.list', compact('taxpayersDataTableHtml', 'invoicesDataTableHtml'));
     // }
-    
+
 
 
     /**
@@ -64,10 +64,9 @@ class TaxpayerController extends Controller
         // return view('pages.taxpayers.show', compact('taxpayer'))
         //     ->with('dataTable', $dataTable->html());
         //return $dataTable->render('pages/taxpayers.show')-> with ('taxpayer', $taxpayer);
-        
         return $taxablesDataTable->with('id', $taxpayer->id)
                 ->render('pages/taxpayers.show', compact('taxpayer'));
-    }   
+    }
 
     /**
      * Display the specified resource.
@@ -81,19 +80,19 @@ class TaxpayerController extends Controller
     //         // ->with('taxablesDataTable', $taxablesDataTable->with('id', $taxpayer->id)->html());
 
     //     //return $dataTable->render('pages/taxpayers.show')-> with ('taxpayer', $taxpayer);
-        
-    //     // return $dataTable->with('id', $taxpayer->id), 
-                
+
+    //     // return $dataTable->with('id', $taxpayer->id),
+
     //     $invoicesDataTable->with('id', $taxpayer->id)
     //             ->render('pages/taxpayers.show', compact('taxpayer'));
-    // }   
+    // }
 
     // public function show(Taxpayer $taxpayer, TaxpayerInvoicesDataTable $invoicesDataTable, TaxpayerTaxablesDataTable $taxablesDataTable)
     // {
     //     // Pass the $taxpayer object and its ID to both DataTables
     //     $invoicesDataTable->with('id', $taxpayer->id)->with('taxpayer', $taxpayer);
     //     $taxablesDataTable->with('id', $taxpayer->id)->with('taxpayer', $taxpayer);
-        
+
     //     // Render the show view with both DataTables
     //     return view('pages.taxpayers.show', compact('taxpayer'))->with([
     //         'invoicesDataTable' => $invoicesDataTable->render(),
@@ -106,11 +105,11 @@ class TaxpayerController extends Controller
     //     // Pass the $taxpayer object and its ID to both DataTables
     //     $invoicesDataTable->with('id', $taxpayer->id)->with('taxpayer', $taxpayer);
     //     $taxablesDataTable->with('id', $taxpayer->id)->with('taxpayer', $taxpayer);
-        
+
     //     // Get the HTML content of both DataTables
     //     //$invoicesDataTableHtml = $invoicesDataTable->render();
     //     //$taxablesDataTableHtml = $taxablesDataTable->render();
-        
+
     //     // Render the show view with both DataTables HTML content and the $taxpayer object
     //     return view('pages.taxpayers.show', compact('taxpayer', 'invoicesDataTableHtml', 'taxablesDataTableHtml'));
     // }

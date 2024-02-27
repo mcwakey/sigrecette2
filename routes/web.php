@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\GenerateInvoiceController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\TaxableController;
 use App\Http\Controllers\LanguageController;
@@ -68,5 +70,5 @@ Route::get('/error', function () {
 });
 
 Route::get('/auth/redirect/{provider}', [SocialiteController::class, 'redirect']);
-
+Route::get('/generate/{data}', [GenerateInvoiceController::class,'download'])->name("generateInvoice");
 require __DIR__ . '/auth.php';

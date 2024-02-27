@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lettre Stylisée</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .avis-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+        }
+
+        .avis-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .avis-content {
+            line-height: 1.6;
+        }
+
+        .sub-header {
+            margin-left: 100px;
+            line-height: 1;
+        }
+
+        .boder-div-red {
+            border-style: solid solid solid solid;
+            border-color: red;
+            position: relative;
+        }
+
+        .boder-div-blaw {
+            border-style: solid solid solid solid;
+            border-color: blue;
+            position: relative;
+        }
+
+        .boder-div-blaw .img-fluid {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: -10px;
+        }
+        .boder-div-red .img-fluid {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: -10px;
+        }
+
+        .boder-div-blaw .details{
+            margin-top: 30px;
+        }
+        .boder-div-red .details{
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container avis-container">
+
+    <div class="container text-center">
+        <div class="row">
+            <div class="col text-start  boder-div-blaw">
+                <img src="{{public_path('assets/media/images_exports/image1.png')}}" class="img-fluid" alt="...">
+                <div class="details">
+                    <h6>COMMUNE …………</h6>
+                    <h6>TEL …………</h6>
+                    <h6>Adresse …………</h6>
+                </div>
+
+            </div>
+            <div class="col ">
+                <img src="{{public_path('assets/media/images_exports/image3.jpg')}}" class="img-thumbnail" alt="..." style="width: 50%; height: 50%;">
+
+            </div>
+            <div class="col text-start boder-div-red">
+                <img src="{{public_path('assets/media/images_exports/image2.png')}}" class="img-fluid" alt="...">
+                <div class="details" style="background-color: red">
+                    <h6>TRESORERIE DE …..</h6>
+                    <h6>Adresse .....</h6>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="avis-header">
+        <h6 class="text-center">AVIS DES SOMMES À PAYER</h6>
+        <h6>N°____/Année</h6>
+        <h6>Destinataire</h6>
+
+    </div>
+    <div class="sub-header">
+        <p>Nom/Raison sociale :</p>
+        <p>Nic :</p>
+        <p>Téléphone :</p>
+        <p>Zone fiscale :</p>
+        <p>Canton :</p>
+        <p>Quartier/Village :</p>
+        <p>Adresse complète :</p>
+        <p>Coordonnées GPS :</p>
+    </div>
+    <div class="avis-content">
+        <p>Madame, Mademoiselle, Monsieur,</p>
+        <p>Vous êtes priés de bien vouloir payer à la régie des recettes de la mairie de [localités dans laquelle se
+            trouve la régie] le montant ci-dessous :</p>
+        <!-- Ajoutez le contenu de votre lettre ici -->
+        <p>N° d’ordre de recette :</p>
+        <p>Libellé de la recette :</p>
+        <p>Imputation budgétaire :</p>
+        <p>Matière taxable :</p>
+        <p>Unité d’assiette :</p>
+        <p>Valeur d’assiette : (1)</p>
+        <p>Tarif (FCFA) : (2)</p>
+        <p>Nombre de taxation par an : (3)</p>
+        <p>Somme due : (1) x (2) x (3)</p>
+        <p>Arrêté le présent avis à la somme de : ……………. Francs CFA (Sauf erreur ou omission)</p>
+        <p>A payer dans les 30 jours suivant la réception de l’avis, ou avant la fin de chaque mois pour les
+            paiements mensualisés</p>
+        <div class="grid gap-2">
+            <div class="g-col-6"> </div>
+            <div class="g-col-6">
+                <p></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p>A ………, le ………………</p>
+            </div>
+            <div class="col">
+                Le Maire
+            </div>
+        </div>
+        <p>N.B. Le paiement peut être effectué en numéraire, par chèque au nom du Receveur de la Commune de …. ou
+            par virement au compte trésor RIB ……………………………… La quittance est délivrée à la réception des espèces, du
+            chèque ou de l’ordre de virement par le Régisseur de recettes.</p>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

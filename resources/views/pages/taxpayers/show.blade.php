@@ -481,7 +481,7 @@
                                                     </button>
 
                                                     <!--begin::Task menu-->
-                                                    
+
                                                     <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" data-kt-menu-id="kt_modal_add_orderno" tabindex="-1" aria-hidden="true" wire:ignore.self>
                                                         <!--begin::Header-->
                                                         <div class="px-7 py-5">
@@ -492,12 +492,12 @@
                                                         <div class="separator border-gray-200"></div>
                                                         <!--end::Menu separator-->
                                                         <!--begin::Form-->
-                                                        
+
                                                         <livewire:invoice.add-orderno-form />
 
                                                         <!--end::Form-->
                                                     </div>
-    
+
                                                     <!--end::Task menu-->
 
                                                     @else
@@ -591,7 +591,7 @@
                                                         <!--end::Menu separator-->
                                                         <!--begin::Form-->
                                                         <livewire:invoice.add-status-form />
-                                                        
+
                                                         <!--end::Form-->
                                                     </div>
                                                     <!--end::Task menu-->
@@ -645,6 +645,32 @@
                                                                 {{ __('edit') }}
                                                             </a>
                                                         </div>
+                                                        @elseif($invoice->status=="APROVED")
+
+                                                            <div class="menu-item px-3">
+                                                                <a href="{{
+    route('generateInvoice',
+ ['data' =>
+  json_encode(
+ [
+     $invoice->created_at->format('y') ,
+     $invoice->id,
+     $taxpayer->id.$invoice->id,
+     $invoice->amount,
+     $taxpayer->name,
+     $taxpayer->mobilephone,
+     $taxpayer->town->canton->name,
+     $taxpayer->town->name,
+     $taxpayer->address
+     ])
+     ])
+ }}" class="menu-link px-3"> {{ __('print') }}</a>
+
+                                                                <!--
+                                                                , ,,$taxpayer->erea,$taxpayer->address,$taxpayer->longitude,$taxpayer->latitude
+                                                                 -->
+
+                                                            </div>
                                                         @endif
                                                         <!--end::Menu item-->
 
@@ -743,7 +769,7 @@
                                             <td>{{ $payment->amount}}</td>
 
                                             <td><span class="badge badge-light-secondary">{{ $payment->payment_type}}</span></td>
-                                            
+
                                             <td>{{ $payment->reference}}</td>
 
                                             <td>{{ $payment->description}}</td>
@@ -1190,7 +1216,7 @@
     </script>
 
     {{ $dataTable->scripts() }}
-    
+
     <script>
         document.getElementById('mySearchInput').addEventListener('keyup', function() {
             window.LaravelDataTables['taxpayer_taxables-table'].search(this.value).draw();

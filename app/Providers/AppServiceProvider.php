@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Core\KTBootstrap;
 use Illuminate\Database\Schema\Builder;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,7 +28,9 @@ class AppServiceProvider extends ServiceProvider
     {
         // Update defaultStringLength
         Builder::defaultStringLength(191);
-
+        Blade::directive('numberToWords', function ($number) {
+            return "";
+        });
         KTBootstrap::init();
     }
 }
