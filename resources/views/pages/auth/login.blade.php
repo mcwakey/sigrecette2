@@ -12,9 +12,9 @@
             <!--end::Title-->
 
             <!--begin::Subtitle-->
-            <div class="text-gray-500 fw-semibold fs-6">
+            <!-- <div class="text-gray-500 fw-semibold fs-6">
             {{ __('your social campaigns') }}
-            </div>
+            </div> -->
             <!--end::Subtitle--->
         </div>
         <!--begin::Heading-->
@@ -22,14 +22,14 @@
         <!--begin::Login options-->
         <div class="row g-3 mb-9">
             <!--begin::Col-->
-            <div class="col-md-12">
+            <!-- <div class="col-md-12"> -->
                 <!--begin::Google link--->
-                <a href="{{ url('/auth/redirect/google') }}?redirect_uri={{ url()->current() }}" class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
+                <!-- <a href="{{ url('/auth/redirect/google') }}?redirect_uri={{ url()->current() }}" class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
                     <img alt="Logo" src="{{ image('svg/brand-logos/google-icon.svg') }}" class="h-15px me-3"/>
                     {{ __('signin with google') }}
-                </a>
+                </a> -->
                 <!--end::Google link--->
-            </div>
+            <!-- </div> -->
             <!--end::Col-->
 
             <!--begin::Col
@@ -45,9 +45,9 @@
         <!--end::Login options-->
 
         <!--begin::Separator-->
-        <div class="separator separator-content my-14">
+        <!-- <div class="separator separator-content my-14">
             <span class="w-125px text-gray-500 fw-semibold fs-7">{{ __('or with email') }}</span>
-        </div>
+        </div> -->
         <!--end::Separator-->
 
         <!--begin::Input group--->

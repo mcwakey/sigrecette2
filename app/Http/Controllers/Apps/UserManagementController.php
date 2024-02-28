@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Apps;
 
+use App\Models\User;
+use App\Models\UserLogs;
+use Illuminate\Http\Request;
 use App\DataTables\UsersDataTable;
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Http\Request;
 
 class UserManagementController extends Controller
 {
@@ -38,7 +39,11 @@ class UserManagementController extends Controller
      */
     public function show(User $user)
     {
-        return view('pages/apps.user-management.users.show', compact('user'));
+        $taxpayerActionLog = UserLogs::where('user_id',$user->id)
+        ->orderBy('id', 'desc')
+        ->get();
+        
+        return view('pages/apps.user-management.users.show', compact('user','taxpayerActionLog'));
     }
 
     /**

@@ -38,6 +38,7 @@ class AddInvoiceModal extends Component
     //public $status;
 
     public $taxpayer_id;
+    public $amount_ph;
     public $amount;
 
     // public function reduce($index)
@@ -174,7 +175,7 @@ class AddInvoiceModal extends Component
     {
 
 
-       
+
 
         // Validate the form input data
         $this->validate();
@@ -191,7 +192,7 @@ class AddInvoiceModal extends Component
 
             // Create or update Invoice record
             $invoice = Invoice::find($this->invoice_id) ?? Invoice::create($invoiceData);
-            
+
 
             $taxpayerTaxableData = [
                 'invoice_id' => $invoice->id,
@@ -221,6 +222,7 @@ class AddInvoiceModal extends Component
                     'qty' => $this->qty,
                     'amount' => $this->s_amount[$index],
                 ]);
+
             }
 
             // Dispatch success message
@@ -339,6 +341,7 @@ class AddInvoiceModal extends Component
             $this->taxpayer_taxable_id[$index] = $taxable->id;
         }
         
+        $this->amount_ph = array_sum($this->s_amount)." FCFA";
         $this->amount = array_sum($this->s_amount);
     }
 

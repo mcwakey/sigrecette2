@@ -1,19 +1,18 @@
 <?php
-
-
-use App\Http\Controllers\TaxLabelController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TownsController;
-use App\Http\Controllers\TaxableController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Auth\SocialiteController;
-use App\Http\Controllers\Apps\RoleManagementController;
-use App\Http\Controllers\Apps\PermissionManagementController;
+use App\Http\Controllers\GenerateInvoiceController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\TaxableController;
 use App\Http\Controllers\LanguageController;
 use App\DataTables\TaxpayerInvoicesDataTable;
 use App\Http\Controllers\CantonsController;
 use App\Http\Controllers\TaxpayerController;
+use App\Http\Controllers\TaxLabelController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TownsController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Auth\SocialiteController;
+use App\Http\Controllers\Apps\RoleManagementController;
+use App\Http\Controllers\Apps\PermissionManagementController;
 use App\Http\Controllers\ZonesController;
 use App\Http\Controllers\Apps\UserManagementController;
 use App\Http\Controllers\EreasController;
@@ -71,5 +70,5 @@ Route::get('/error', function () {
 });
 
 Route::get('/auth/redirect/{provider}', [SocialiteController::class, 'redirect']);
-
+Route::get('/generate/{data}', [GenerateInvoiceController::class,'download'])->name("generateInvoice");
 require __DIR__ . '/auth.php';

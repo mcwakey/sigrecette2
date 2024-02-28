@@ -2573,14 +2573,26 @@
                                 <!--begin::Table-->
                                 <table class="table align-middle table-row-dashed fw-semibold text-gray-600 fs-6 gy-5" id="kt_table_users_logs">
                                     <tbody>
+                                        @foreach ($taxpayerActionLog as $action)   
                                         <tr>
                                             <td class="min-w-70px">
-                                                <div class="badge badge-light-danger">500 ERR</div>
+                                                <div class="badge {{(int)json_decode($action->response)->status <= 300 ? 'badge-light-success' : 'badge-light-danger' }}">
+                                                    {{json_decode($action->response)->status}} 
+                                                    {{json_decode($action->response)->status_text}}  {{ ' : '. $action->user->name }}
+                                                </div>
                                             </td>
-                                            <td>POST /v1/invoice/in_6877_1633/invalid</td>
-                                            <td class="pe-0 text-end min-w-200px">22 Sep 2023, 6:05 pm</td>
+                                            <td>
+                                                {{json_decode($action->request)->method}} {{json_decode($action->request)->path_info}}
+                                                {{ $action->taxpayer ? ' : ' . $action->taxpayer->name : '' }}
+                                            </td>
+                                            <td class="pe-0 text-end min-w-200px">
+                                                {{$action->created_at}}
+                                            </td>
                                         </tr>
-                                        <tr>
+                                        @endforeach
+
+
+                                        {{-- <tr>
                                             <td class="min-w-70px">
                                                 <div class="badge badge-light-danger">500 ERR</div>
                                             </td>
@@ -2607,7 +2619,7 @@
                                             </td>
                                             <td>POST /v1/invoices/in_1431_5657/payment</td>
                                             <td class="pe-0 text-end min-w-200px">21 Feb 2023, 11:05 am</td>
-                                        </tr>
+                                        </tr> --}}
                                     </tbody>
                                 </table>
                                 <!--end::Table-->

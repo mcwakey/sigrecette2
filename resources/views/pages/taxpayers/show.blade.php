@@ -481,7 +481,7 @@
                                                     </button>
 
                                                     <!--begin::Task menu-->
-                                                    
+
                                                     <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" data-kt-menu-id="kt_modal_add_orderno" tabindex="-1" aria-hidden="true" wire:ignore.self>
                                                         <!--begin::Header-->
                                                         <div class="px-7 py-5">
@@ -492,12 +492,12 @@
                                                         <div class="separator border-gray-200"></div>
                                                         <!--end::Menu separator-->
                                                         <!--begin::Form-->
-                                                        
+
                                                         <livewire:invoice.add-orderno-form />
 
                                                         <!--end::Form-->
                                                     </div>
-    
+
                                                     <!--end::Task menu-->
 
                                                     @else
@@ -507,37 +507,69 @@
                                                     @endif
 
                                                 </td>
-                                                <td>{{ $invoice->taxpayer->id . $invoice->id}}</td>
-                                                <td>{{ $invoice->amount}}</td>
+                                                <td>{{ $invoice->taxpayer->id . $invoice->id }}</td>
+                                                <td>{{ $invoice->amount }}</td>
 
                                                 <td>
-                                                    @if($invoice->pay_status="OWING")
-                                                    <span class="badge badge-light-danger">{{ $invoice->pay_status}}</span>
+                                                    @if($invoice->pay_status == "OWING")
+                                                    <span class="badge badge-light-danger">{{ __($invoice->pay_status) }}</span>
+                                                    @elseif($invoice->pay_status == "PART PAID")
+                                                    <span class="badge badge-light-warning">{{ __($invoice->pay_status) }}</span>
                                                     @else
-                                                    <span class="badge badge-light-success">{{ $invoice->pay_status}}</span>
+                                                    <span class="badge badge-light-success">{{ __($invoice->pay_status) }}</span>
                                                     @endif
                                                 </td>
 
                                                 <td>
-                                                    @if($invoice->pay_status="OWING")
-                                                    <span class="badge badge-light-danger">NOT DELIVERED</span>
+                                                    @if($invoice->delivery == "NOT DELIVERED")
+                                                    <span class="badge badge-light-danger">{{ __('NOT DELIVERED') }}</span>
+
                                                     @else
-                                                    <span class="badge badge-light-success">DELIVERED</span>
+                                                    <span class="badge badge-light-success">{{ __('DELIVERED') }}</span>
                                                     @endif
                                                 </td>
 
                                                 <td>
-                                                    @if($invoice->pay_status="OWING")
-                                                    -
+                                                    @if($invoice->delivery == "NOT DELIVERED")
+                                                    
+
+                                                    <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-user-id="{{ $invoice->id }}" data-kt-menu-target="#kt_modal_add_delivery" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-action="update_status">
+                                                        <i class="ki-duotone ki-setting-3 fs-3">
+                                                            <span class="path1"></span>
+                                                            <span class="path2"></span>
+                                                            <span class="path3"></span>
+                                                            <span class="path4"></span>
+                                                            <span class="path5"></span>
+                                                        </i>
+                                                    </button>
+
+
+                                                    <!--begin::Task menu-->
+                                                    <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" data-kt-menu-id="kt_modal_add_delivery">
+                                                        <!--begin::Header-->
+                                                        <div class="px-7 py-5">
+                                                            <div class="fs-5 text-gray-900 fw-bold">Metre a jour la livraison</div>
+                                                        </div>
+                                                        <!--end::Header-->
+                                                        <!--begin::Menu separator-->
+                                                        <div class="separator border-gray-200"></div>
+                                                        <!--end::Menu separator-->
+                                                        <!--begin::Form-->
+                                                        <livewire:invoice.add-delivery-form />
+
+                                                        <!--end::Form-->
+                                                    </div>
+                                                    <!--end::Task menu-->
                                                     @else
-                                                    {{ $invoice->updated_at->format('Y-m-d') }}
+                                                    {{ date('Y-m-d', strtotime($invoice->delivery_date)) }}
+
                                                     @endif
                                                 </td>
 
 
                                                 <td>
-                                                    @if($invoice->status=="PENDING")
-                                                    <span class="badge badge-light-primary">{{ $invoice->status}}</span>
+                                                    @if($invoice->status == "PENDING")
+                                                    <span class="badge badge-light-primary">{{ __($invoice->status) }}</span>
                                                     <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-user-id="{{ $invoice->id }}" data-kt-menu-target="#kt_modal_add_status" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-action="update_status">
                                                         <i class="ki-duotone ki-setting-3 fs-3">
                                                             <span class="path1"></span>
@@ -548,11 +580,11 @@
                                                         </i>
                                                     </button>
                                                     @elseif($invoice->status=="APROVED")
-                                                    <span class="badge badge-light-success">{{ $invoice->status}}</span>
+                                                    <span class="badge badge-light-success">{{ __('APROVED') }}</span>
                                                     @elseif($invoice->status=="REJECTED")
-                                                    <span class="badge badge-light-danger">{{ $invoice->status}}</span>
+                                                    <span class="badge badge-light-danger">{{ __('REJECTED') }}</span>
                                                     @elseif($invoice->status=="REJECTED-EDIT")
-                                                    <span class="badge badge-light-warning">{{ $invoice->status}}</span>
+                                                    <span class="badge badge-light-warning">{{ __('REJECTED-EDIT') }}</span>
                                                     <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-user-id="{{ $invoice->id }}" data-kt-menu-target="#kt_modal_add_status" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-action="update_status">
                                                         <i class="ki-duotone ki-setting-3 fs-3">
                                                             <span class="path1"></span>
@@ -563,7 +595,7 @@
                                                         </i>
                                                     </button>
                                                     @elseif($invoice->status=="DRAFT")
-                                                    <span class="badge badge-light-secondary">{{ $invoice->status}}</span>
+                                                    <span class="badge badge-light-secondary">{{ __('DRAFT')}}</span>
                                                     <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-user-id="{{ $invoice->id }}" data-kt-menu-target="#kt_modal_add_status" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-action="update_status">
                                                     <!-- <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-menu-target="#kt-users-tasks" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"> -->
                                                         <i class="ki-duotone ki-setting-3 fs-3">
@@ -575,7 +607,7 @@
                                                         </i>
                                                     </button>
                                                     @else
-                                                    <span class="badge badge-light-info">{{ $invoice->status}}</span>
+                                                    <span class="badge badge-light-info">{{ __($invoice->status)}}</span>
                                                     @endif
 
 
@@ -591,7 +623,7 @@
                                                         <!--end::Menu separator-->
                                                         <!--begin::Form-->
                                                         <livewire:invoice.add-status-form />
-                                                        
+
                                                         <!--end::Form-->
                                                     </div>
                                                     <!--end::Task menu-->
@@ -645,6 +677,57 @@
                                                                 {{ __('edit') }}
                                                             </a>
                                                         </div>
+                                                        @elseif($invoice->status=="APROVED")
+
+                                                            <div class="menu-item px-3">
+
+                                                                @php
+                                                                    $invoiceItems = [];
+                                                                    foreach ($invoice->invoiceitems as $invoiceitem) {
+                                                                        $invoiceItems[] = [
+                                                                             $invoiceitem->taxpayer_taxable->taxable->tax_label->name,
+                                                                           $invoiceitem->taxpayer_taxable->taxable->tax_label->code,
+                                                                            $invoiceitem->taxpayer_taxable->taxable->name,
+                                                                            $invoiceitem->taxpayer_taxable->seize,
+                                                                            $invoiceitem->taxpayer_taxable->taxable->unit,
+                                                                             $invoiceitem->taxpayer_taxable->taxable->tariff,
+                                                                              $invoiceitem->amount,
+                                                                             $invoiceitem->qty,
+                                                                        ];
+                                                                    }
+
+                                                                    $data = [
+                                                                        date("Y", strtotime( $invoice->created_at)),
+                                                                        $invoice->id,
+                                                                         $taxpayer->id . $invoice->id,
+                                                                         $invoice->amount,
+                                                                        $taxpayer->name,
+                                                                        $taxpayer->mobilephone,
+                                                                        $taxpayer->town->canton->name,
+                                                                        $taxpayer->town->name,
+                                                                        $taxpayer->address,
+                                                                         $taxpayer->zone->name,
+                                                                        $taxpayer->longitude,
+                                                                        $taxpayer->latitude,
+
+                                                                        $invoiceItems,
+                                                                    ];
+                                                                @endphp
+
+                                                                <a href="{{ route('generateInvoice', ['data' => json_encode($data)]) }}" class="menu-link px-3">{{ __('print') }}</a>
+                                                            </div>
+
+                                                            <div class="menu-item px-3">
+                                                            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_payment" data-kt-action="update_payment">
+                                                                {{ __('create payment') }}
+                                                            </a>
+                                                        </div>
+                                                        <div class="menu-item px-3">
+                                                            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer" data-kt-action="update_taxpayer">
+                                                                {{ __('refund') }}
+                                                            </a>
+                                                        </div>
+
                                                         @endif
                                                         <!--end::Menu item-->
 
@@ -683,20 +766,19 @@
                             <!--begin::Card title-->
                             <div class="card-title flex-column">
                                 <h2 class="mb-1">{{ __('taxpayers payments') }}</h2>
-                                <!-- <div class="fs-6 fw-semibold text-muted">{{ __('most recents payments') }}</div> -->
                             </div>
                             <!--end::Card title-->
                             <!--begin::Card toolbar-->
                             <div class="card-toolbar">
                                 <!--begin::Add-->
-                                <button type="button" class="btn btn-light-success btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                <!-- <button type="button" class="btn btn-light-success btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                                     <i class="ki-duotone ki-brush fs-3">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
                                         <span class="path3"></span>
                                         <span class="path4"></span>
                                         <span class="path5"></span>
-                                    </i>{{ __('create payment') }}</button>
+                                    </i>{{ __('create payment') }}</button> -->
                                 <!--begin::Menu-->
                                 <!-- <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-6 w-200px py-4" data-kt-menu="true"> -->
                                 <!--begin::Menu item-->
@@ -743,7 +825,7 @@
                                             <td>{{ $payment->amount}}</td>
 
                                             <td><span class="badge badge-light-secondary">{{ $payment->payment_type}}</span></td>
-                                            
+
                                             <td>{{ $payment->reference}}</td>
 
                                             <td>{{ $payment->description}}</td>
@@ -863,14 +945,25 @@
                                 <!--begin::Table-->
                                 <table class="table align-middle table-row-dashed fw-semibold text-gray-600 fs-6 gy-5" id="kt_table_users_logs">
                                     <tbody>
+                                        @foreach ($taxpayerActionLog as $action)       
                                         <tr>
                                             <td class="min-w-70px">
-                                                <div class="badge badge-light-danger">500 ERR</div>
+                                                <div class="badge {{(int)json_decode($action->response)->status <= 300 ? 'badge-light-success' : 'badge-light-danger' }}">
+                                                    {{json_decode($action->response)->status}} 
+                                                    {{json_decode($action->response)->status_text}} {{ ' : ' . $action->user->name }}
+                                                </div>
                                             </td>
-                                            <td>POST /v1/invoice/in_6877_1633/invalid</td>
-                                            <td class="pe-0 text-end min-w-200px">22 Sep 2023, 6:05 pm</td>
+                                            <td>
+                                                {{json_decode($action->request)->method}} {{json_decode($action->request)->path_info}}
+                                                {{ $action->taxpayer ? ' : ' . $action->taxpayer->name : '' }}
+                                            </td>
+                                            <td class="pe-0 text-end min-w-200px">
+                                                {{$action->created_at}}
+                                            </td>
                                         </tr>
-                                        <tr>
+                                        @endforeach
+                                        
+                                        {{-- <tr>
                                             <td class="min-w-70px">
                                                 <div class="badge badge-light-danger">500 ERR</div>
                                             </td>
@@ -897,7 +990,7 @@
                                             </td>
                                             <td>POST /v1/invoices/in_1431_5657/payment</td>
                                             <td class="pe-0 text-end min-w-200px">21 Feb 2023, 11:05 am</td>
-                                        </tr>
+                                        </tr> --}}
                                     </tbody>
                                 </table>
                                 <!--end::Table-->
@@ -1023,14 +1116,18 @@
         <!--end::Content-->
     </div>
 
-    <livewire:taxpayer_taxable.add-taxpayer-taxable-modal></livewire:taxpayer_taxable.add-taxpayer-taxable-modal>
+    <livewire:taxpayer_taxable.add-taxpayer-taxable-modal/>
 
     <!--begin::Modal-->
-    <livewire:taxpayer.add-taxpayer-modal></livewire:taxpayer.add-taxpayer-modal>
+    <livewire:payment.add-payment-modal/>
     <!--end::Modal-->
 
     <!--begin::Modal-->
-    <livewire:invoice.add-invoice-modal></livewire:invoice.add-invoice-modal>
+    <livewire:taxpayer.add-taxpayer-modal/>
+    <!--end::Modal-->
+
+    <!--begin::Modal-->
+    <livewire:invoice.add-invoice-modal/>
     <!--end::Modal-->
 
     <!--begin::Modal-->
@@ -1190,7 +1287,7 @@
     </script>
 
     {{ $dataTable->scripts() }}
-    
+
     <script>
         document.getElementById('mySearchInput').addEventListener('keyup', function() {
             window.LaravelDataTables['taxpayer_taxables-table'].search(this.value).draw();

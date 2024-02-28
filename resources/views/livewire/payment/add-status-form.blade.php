@@ -1,12 +1,12 @@
-<div class="modal fade" id="kt_modal_add_invoice" tabindex="-1" aria-hidden="true" wire:ignore.self>
+<div class="modal fade" id="kt_modal_add_payment" tabindex="-1" aria-hidden="true" wire:ignore.self>
     <!--begin::Modal dialog-->
     <div class="modal-dialog modal-dialog-centered mw-950px">
         <!--begin::Modal content-->
         <div class="modal-content">
             <!--begin::Modal header-->
-            <div class="modal-header" id="kt_modal_add_invoice_header">
+            <div class="modal-header" id="kt_modal_add_payment_header">
                 <!--begin::Modal title-->
-                <h2 class="fw-bold">{{ __('invoices') }}</h2>
+                <h2 class="fw-bold">{{ __('payments') }}</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
@@ -18,12 +18,13 @@
             <!--begin::Modal body-->
             <div class="modal-body px-5 my-7">
                 <!--begin::Form-->
-                <form id="kt_modal_add_invoice_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
-                    <input type="hidden" wire:model="invoice_id" name="invoice_id" value="{{ $invoice_id }}"/>
-                    <input type="hidden" wire:model="taxpayer_id" name="taxpayer_id" value="{{ $taxpayer_id }}"/>
+                <form id="kt_modal_add_payment_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
+                    <input type="text" wire:model="payment_id" name="payment_id" value="{{ $payment_id }}"/>
+                    <input type="text" wire:model="invoice_id" name="invoice_id" value="{{ $invoice_id }}"/>
+                    <input type="text" wire:model="taxpayer_id" name="taxpayer_id" value="{{ $taxpayer_id }}"/>
                     <!--begin::Scroll-->
 
-                    <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_invoice_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_invoice_header" data-kt-scroll-wrappers="#kt_modal_add_invoice_scroll" data-kt-scroll-offset="300px">
+                    <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_payment_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_payment_header" data-kt-scroll-wrappers="#kt_modal_add_payment_scroll" data-kt-scroll-offset="300px">
                         <!--begin::Input group-->
 
                         <div class="row mb-7">
@@ -68,13 +69,13 @@
                             <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('Duree du contrat') }}" readonly/>
                             </div>
                             <div class="col-md-3">
-                                <input wire:model="qty" name="qty" class="form-control form-control-solid mb-2" type="number" min="1" placeholder="1" data-kt-user-id="{{ $taxpayer_id }}" data-kt-action="load_invoice"/>
+                                <input wire:model="qty" name="qty" class="form-control form-control-solid mb-2" type="number" min="1" placeholder="1" data-kt-user-id="{{ $taxpayer_id }}" data-kt-action="load_payment"/>
                             </div>
                             <div class="col-md-3">
                             <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('A compter de') }}" readonly/>
                             </div>
                             <div class="col-md-3">
-                            <select wire:model="start_month" name="taxpayer_taxable_id" class="form-select form-select-solid" data-dropdown-parent="#kt_modal_add_invoice">
+                            <select wire:model="start_month" name="taxpayer_taxable_id" class="form-select form-select-solid" data-dropdown-parent="#kt_modal_add_payment">
                                             <option></option>
                                             <option value="1">Janvier</option>
                                             <option value="2">Fevrier</option>
@@ -109,29 +110,19 @@
                                 </thead>
                                 <tbody>
 
-                                @foreach($taxpayer_taxables as $taxpayer_taxable)
+                                @foreach($invoiceitems as $invoiceitem)
                                     <tr class="border-bottom border-bottom-dashed" data-kt-element="item">
                                         <td class="pe-7">
-                                        <input wire:model="taxpayer_taxable_id.{{ $loop->index }}" name="taxpayer_taxable_id[]" name="taxpayer_taxable_id" class="form-control form-control-solid mb-2" type="hidden" />
-                                        <input name="taxpayer_taxable" class="form-control form-control-solid mb-2" type="text" value="{{ $taxpayer_taxable->name}}"  readonly/>
-                            
+                                            <input type="text" name="taxpayer_taxable" class="form-control form-control-solid mb-2" value="{{ $invoiceitem->taxpayer_taxable->name}}" readonly/>
                                         </td>
-                                        <!-- <td class="pe-7">
-                                            <input type="number" class="form-control form-control-solid mb-2" name="quantity" placeholder="1" value="1" data-kt-element="quantity"/>
-                                            <input type="text" class="form-control form-control-solid" name="mesure" placeholder="m3" value="m3"/>
-                                        </td> -->
                                         <td class="ps-0">
-                                            <input type="text" class="form-control form-control-solid text-end" name="taxation" value="{{ $taxpayer_taxable->seize.' '.$taxpayer_taxable->taxable->unit  }}"  readonly/>
+                                            <input type="text" name="taxation" class="form-control form-control-solid text-end" value="{{ $invoiceitem->taxpayer_taxable->seize}}" readonly/>
                                         </td>
                                         <td>
-                                            @if ($taxpayer_taxable->taxable->tariff_type =="FIXED")
-                                            <input type="text" class="form-control form-control-solid mb-2 text-end" name="price" placeholder="0.00" value="{{ $taxpayer_taxable->taxable->tariff }}"  readonly/>
-                                            @else
-                                            <input type="text" class="form-control form-control-solid mb-2 text-end" name="price" placeholder="0.00" value="{{ $taxpayer_taxable->taxable->tariff. ' %' }}"  readonly/>
-                                            @endif
+                                            <input type="text" name="price"  class="form-control form-control-solid mb-2 text-end"value="{{ $invoiceitem->taxpayer_taxable->taxable->tariff}}{{ $invoiceitem->taxpayer_taxable->taxable->tariff}}" readonly/>
                                         </td>
                                         <!-- <td>
-                                            <input wire:model="qty" name="qty" class="form-control form-control-solid mb-2" type="number" min="1" placeholder="1" value=""  data-kt-action="load_invoice"/>
+                                            <input wire:model="qty" name="qty" class="form-control form-control-solid mb-2" type="number" min="1" placeholder="1" value=""  data-kt-action="load_payment"/>
                                         </td> -->
                                         <td>
                                             <input  wire:model="s_amount.{{ $loop->index }}" name="s_amount[]" type="text" class="form-control form-control-flush text-end" placeholder="0.00" readonly/>
@@ -223,7 +214,7 @@
                     <!--begin::Actions-->
                     <div class="text-center pt-15">
                         <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal" aria-label="Close" wire:loading.attr="disabled">{{ __('cancel') }}</button>
-                        <button type="submit" class="btn btn-success" data-kt-invoices-modal-action="submit">
+                        <button type="submit" class="btn btn-success" data-kt-payments-modal-action="submit">
                             <span class="indicator-label" wire:loading.remove>{{ __('submit') }}</span>
                             <span class="indicator-progress" wire:loading wire:target="submit">
                             {{ __('please wait') }}
