@@ -147,7 +147,7 @@
 
         <div class="avis-header">
             <h2 class="text-center">AVIS DES SOMMES À PAYER</h2>
-            <h6>N°:<span class="write">{{$data[1]}}/{{$data[0]}}</span></h6>
+            <h6>N°:<span class="write">{{$data[1]}}/</span>{{$data[0]}}</h6>
             <h6>Destinataire:<span class="write"> </span></h6>
 
         </div>
@@ -165,7 +165,7 @@
             <p>Madame, Mademoiselle, Monsieur,</p>
             <p>Vous êtes priés de bien vouloir payer à la régie des recettes de la mairie de {{$data[6]}}
                 le montant ci-dessous :</p>
-            <p>N° d’ordre de recette :<span class="write"> {{$data[1]}}/{{$data[0]}}</p>
+            <p>N° d’ordre de recette :{{$data[1]}}<span class="write">/{{$data[0]}}</p>
 
             <p>Libellé de la recette :<span class="write"> {{$item[0]}}</span></p>
             <p>Imputation budgétaire :<span class="write"> {{$item[1]}}</span></p>
