@@ -10,14 +10,14 @@
         <select class="form-select form-select-solid" wire:model="status" name="status" data-placeholder="Select option" data-allow-clear="true">
             <option></option>
             @if($status=="PENDING")
-            <option value="APROVED">APROVE</option>
-            <option value="REJECTED">REJECT</option>
-            <option value="REJECTED-EDIT">REJECT FOR EDIT</option>
+            <option value="APROVED">{{ __('APROVED') }}</option>
+            <option value="REJECTED">{{ __('REJECTED') }}</option>
+            <option value="REJECTED-EDIT">{{ __('REJECTED-EDIT') }}</option>
             @elseif($status=="DRAFT")
-            <option value="PENDING">APROVE</option>
-            <option value="CANCELED">CANCEL</option>
+            <option value="PENDING">{{ __('ACCEPTED') }}</option>
+            <option value="CANCELED">{{ __('CANCELED') }}</option>
             @elseif($status=="REJECTED-EDIT")
-            <option value="PENDING">APROVE</option>
+            <option value="PENDING">{{ __('APROVE') }}</option>
             @endif
         </select>
         <!--end::Input-->
@@ -26,8 +26,8 @@
     <!--begin::Actions-->
     <div class="d-flex justify-content-end">
         <button type="submit" class="btn btn-sm btn-success">
-            <span wire:loading.remove>Apply</span>
-            <span wire:loading>Loading...</span>
+            <span wire:loading.remove>{{ __('apply') }}</span>
+            <span wire:loading>{{ __('loading') }}</span>
         </button>
     </div>
     <!--end::Actions-->

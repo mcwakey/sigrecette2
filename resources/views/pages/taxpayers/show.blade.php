@@ -512,20 +512,20 @@
 
                                                 <td>
                                                     @if($invoice->pay_status == "OWING")
-                                                    <span class="badge badge-light-danger">{{ $invoice->pay_status}}</span>
+                                                    <span class="badge badge-light-danger">{{ __($invoice->pay_status) }}</span>
                                                     @elseif($invoice->pay_status == "PART PAID")
-                                                    <span class="badge badge-light-warning">{{ $invoice->pay_status}}</span>
+                                                    <span class="badge badge-light-warning">{{ __($invoice->pay_status) }}</span>
                                                     @else
-                                                    <span class="badge badge-light-success">{{ $invoice->pay_status}}</span>
+                                                    <span class="badge badge-light-success">{{ __($invoice->pay_status) }}</span>
                                                     @endif
                                                 </td>
 
                                                 <td>
                                                     @if($invoice->delivery == "NOT DELIVERED")
-                                                    <span class="badge badge-light-danger">NOT DELIVERED</span>
+                                                    <span class="badge badge-light-danger">{{ __('NOT DELIVERED') }}</span>
 
                                                     @else
-                                                    <span class="badge badge-light-success">DELIVERED</span>
+                                                    <span class="badge badge-light-success">{{ __('DELIVERED') }}</span>
                                                     @endif
                                                 </td>
 
@@ -569,7 +569,7 @@
 
                                                 <td>
                                                     @if($invoice->status == "PENDING")
-                                                    <span class="badge badge-light-primary">{{ $invoice->status}}</span>
+                                                    <span class="badge badge-light-primary">{{ __($invoice->status) }}</span>
                                                     <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-user-id="{{ $invoice->id }}" data-kt-menu-target="#kt_modal_add_status" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-action="update_status">
                                                         <i class="ki-duotone ki-setting-3 fs-3">
                                                             <span class="path1"></span>
@@ -580,11 +580,11 @@
                                                         </i>
                                                     </button>
                                                     @elseif($invoice->status=="APROVED")
-                                                    <span class="badge badge-light-success">{{ $invoice->status}}</span>
+                                                    <span class="badge badge-light-success">{{ __('APROVED') }}</span>
                                                     @elseif($invoice->status=="REJECTED")
-                                                    <span class="badge badge-light-danger">{{ $invoice->status}}</span>
+                                                    <span class="badge badge-light-danger">{{ __('REJECTED') }}</span>
                                                     @elseif($invoice->status=="REJECTED-EDIT")
-                                                    <span class="badge badge-light-warning">{{ $invoice->status}}</span>
+                                                    <span class="badge badge-light-warning">{{ __('REJECTED-EDIT') }}</span>
                                                     <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-user-id="{{ $invoice->id }}" data-kt-menu-target="#kt_modal_add_status" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-action="update_status">
                                                         <i class="ki-duotone ki-setting-3 fs-3">
                                                             <span class="path1"></span>
@@ -595,7 +595,7 @@
                                                         </i>
                                                     </button>
                                                     @elseif($invoice->status=="DRAFT")
-                                                    <span class="badge badge-light-secondary">{{ $invoice->status}}</span>
+                                                    <span class="badge badge-light-secondary">{{ __('DRAFT')}}</span>
                                                     <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-user-id="{{ $invoice->id }}" data-kt-menu-target="#kt_modal_add_status" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-action="update_status">
                                                     <!-- <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-menu-target="#kt-users-tasks" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"> -->
                                                         <i class="ki-duotone ki-setting-3 fs-3">
@@ -607,7 +607,7 @@
                                                         </i>
                                                     </button>
                                                     @else
-                                                    <span class="badge badge-light-info">{{ $invoice->status}}</span>
+                                                    <span class="badge badge-light-info">{{ __($invoice->status)}}</span>
                                                     @endif
 
 
@@ -696,8 +696,6 @@
                                                                         ];
                                                                     }
 
-                
-
                                                                     $data = [
                                                                         date("Y", strtotime( $invoice->created_at)),
                                                                         $invoice->id,
@@ -721,7 +719,7 @@
 
                                                             <div class="menu-item px-3">
                                                             <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_payment" data-kt-action="update_payment">
-                                                                {{ __('add payment') }}
+                                                                {{ __('create payment') }}
                                                             </a>
                                                         </div>
                                                         <div class="menu-item px-3">
