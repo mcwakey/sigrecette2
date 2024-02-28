@@ -2576,7 +2576,7 @@
                                         @foreach ($taxpayerActionLog as $action)   
                                         <tr>
                                             <td class="min-w-70px">
-                                                <div class="badge {{(int)json_decode($action->response)->status <= 200 ? 'badge-light-success' : 'badge-light-danger' }}">
+                                                <div class="badge {{(int)json_decode($action->response)->status <= 300 ? 'badge-light-success' : 'badge-light-danger' }}">
                                                     {{json_decode($action->response)->status}} 
                                                     {{json_decode($action->response)->status_text}}  {{ ' : '. $action->user->name }}
                                                 </div>
