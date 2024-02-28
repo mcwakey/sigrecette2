@@ -2,14 +2,16 @@
 
 namespace App\Livewire\Taxpayer;
 
-use App\Models\Canton;
+use App\Events\TaxpayerAction;
 use App\Models\Erea;
-use App\Models\Gender;
-use App\Models\IdType;
-use App\Models\Taxpayer;
 use App\Models\Town;
 use App\Models\Zone;
+use App\Models\Canton;
+use App\Models\Gender;
+use App\Models\IdType;
 use Livewire\Component;
+use App\Models\Taxpayer;
+use Illuminate\Http\Request;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -142,7 +144,7 @@ class AddTaxpayerModal extends Component
         return view('livewire.taxpayer.add-taxpayer-modal', compact('cantons', 'genders', 'id_types', 'zones'));
     }
 
-    public function submit()
+    public function submit(Request $request)
     {
 
         // dd($this->id_type);
@@ -194,6 +196,7 @@ class AddTaxpayerModal extends Component
             $data['email'] = $this->email;
             $taxpayer = Taxpayer::find($this->taxpayer_id) ?? Taxpayer::create($data);
 
+
             if ($this->edit_mode) {
                 foreach ($data as $k => $v) {
                     $taxpayer->$k = $v;
@@ -217,6 +220,14 @@ class AddTaxpayerModal extends Component
                 // Emit a success event with a message
                 $this->dispatch('success', __('New Taxpayer created'));
             }
+
+            $taxpayerActionData = [];
+            $taxpayerActionData['status'] = $this->edit_mode ? 204 : 201;
+            $taxpayerActionData['taxpayerId'] = $taxpayer->id;
+            $taxpayerActionData['statusText'] = $taxpayerActionData['status'] == 204 ? 'UPDATED' : 'CREATED' ;
+
+            event(new TaxpayerAction(request(),$taxpayerActionData));
+
         });
 
         // Reset the form fields after successful submission

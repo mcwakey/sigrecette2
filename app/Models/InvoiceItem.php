@@ -23,6 +23,6 @@ class InvoiceItem extends Model
     
     public function taxpayer_taxable()
     {
-        return $this->belongsTo(Taxpayertaxable::class);
+        return $this->belongsTo(TaxpayerTaxable::class);
     }
 }

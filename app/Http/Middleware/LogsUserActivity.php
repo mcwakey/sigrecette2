@@ -14,18 +14,30 @@ class LogsUserActivity
         $response = $next($request);
 
         if (auth()->check()) {
-            UserLogs::create([
+
+            $data = [
                 'user_id' => auth()->id(),
                 'ip_address' => $request->getClientIp(),
                 'request' => json_encode([
                     'path' => $request->url(),
+                    'path_info' => $request->getPathInfo(),
                     'method' => $request->method(),
                 ]),
                 'response' => json_encode([
                     'status' => $response->status(),
-                    //'content' => $response->getContent(),
+                    'status_text' => $response->statusText()
                 ]),
-            ]);
+            ];
+
+            if ($request->routeIs('taxpayers.show')) {
+                try {
+                    $data['taxpayer_id'] = $request->route('taxpayer')->id;
+                    UserLogs::create($data);
+                } catch (\Exception $e) {}
+                
+            } else if (!$request->routeIs('taxpayers.*') && !$response->status() != 404) {
+                UserLogs::create($data);
+            }
         }
 
         return $response;

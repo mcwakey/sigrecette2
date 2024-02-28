@@ -8,6 +8,7 @@ use App\DataTables\TaxpayersDataTable;
 use App\DataTables\TaxpayerInvoicesDataTable;
 use App\DataTables\TaxpayerTaxablesDataTable;
 use App\Http\Controllers\Controller;
+use App\Models\UserLogs;
 use Illuminate\Http\Request;
 
 class TaxpayerController extends Controller
@@ -50,10 +51,10 @@ class TaxpayerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-    }
+    // public function store(Request $request)
+    // {
+    //     //
+    // }
 
     /**
      * Display the specified resource.
@@ -64,9 +65,16 @@ class TaxpayerController extends Controller
         // return view('pages.taxpayers.show', compact('taxpayer'))
         //     ->with('dataTable', $dataTable->html());
         //return $dataTable->render('pages/taxpayers.show')-> with ('taxpayer', $taxpayer);
+
+
+        $taxpayerActionLog = UserLogs::where('taxpayer_id',$taxpayer->id)
+        ->orderBy('id', 'desc')
+        ->limit(10) 
+        ->get();
+        
         return $taxablesDataTable->with('id', $taxpayer->id)
-                ->render('pages/taxpayers.show', compact('taxpayer'));
-    }
+                ->render('pages/taxpayers.show', compact('taxpayer','taxpayerActionLog'));
+    }   
 
     /**
      * Display the specified resource.
