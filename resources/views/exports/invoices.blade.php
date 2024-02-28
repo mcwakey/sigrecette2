@@ -105,17 +105,22 @@
             color: #0070c0;
         }
         .count_page{
-            float: right;;
+            display: flex;
+            justify-content: end;
+            align-items: end;
+
 
         }
     </style>
 </head>
 
 <body>
+
 @foreach($data[12] as $index => $item)
+
     <div class="container avis-container">
         <div class="count_page">
-            <h6>page <span>{{$item}}/ {{ count($data[12]) }}</span></h6>
+            <h6>page <span>{{$index+1 .'/'.sizeof($data[12]) }} </span></h6>
         </div>
         <table>
             <tr class="text-start">
