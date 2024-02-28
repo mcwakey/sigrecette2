@@ -699,7 +699,7 @@
                 
 
                                                                     $data = [
-                                                                        $invoice->created_at,
+                                                                        date("Y", strtotime( $invoice->created_at)),
                                                                         $invoice->id,
                                                                          $taxpayer->id . $invoice->id,
                                                                          $invoice->amount,
