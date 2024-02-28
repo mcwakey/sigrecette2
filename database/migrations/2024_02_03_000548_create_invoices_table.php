@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('pay_status')->default('OWING');
             $table->string('delivery')->default('NOT DELIVERED');
             $table->dateTime('delivery_date')->nullable();
+            $table->dateTime('from_date')->nullable();
+            $table->double('qty')->nullable();
             $table->double('amount')->default(0);
             $table->unsignedBigInteger('taxpayer_id')->nullable();
             $table->foreign('taxpayer_id')->references('id')->on('taxpayers');

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('invoice_items', function (Blueprint $table) {
             $table->id();
-            $table->string('qty');
+            $table->double('qty');
             //$table->string('order_no');
             //$table->string('nic');
             //$table->string('status')->default('PENDING');

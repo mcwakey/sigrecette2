@@ -3,7 +3,7 @@
     @if($taxpayer_taxable->invoice_id == null)
         <div class="badge badge-lg badge-light-danger d-inline">{{ __('not billed') }}</div>
     @else
-        <div class="badge badge-lg badge-light-success d-inline">{{ __('billed') }} : {{ $taxpayer_taxable->invoice->id }}</div>
+        <div class="badge badge-lg badge-light-success d-inline">{{ __('billed') }} : {{ $taxpayer_taxable->invoice_id }}</div>
     @endif
 </div>
 <!--begin::User details-->
