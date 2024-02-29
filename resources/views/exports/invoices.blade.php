@@ -144,7 +144,7 @@
 
         <div class="avis-header">
             <h2 class="text-center">AVIS DES SOMMES À PAYER</h2>
-            <h6>N°:<span class="write">{{$data[1]}}/</span>{{$data[0]}}</h6>
+            <h6>N°:<span class="write">{{$data[1]}}/</span>{{date("Y", strtotime($data[0]))}}</h6>
             <h4>Destinataire:<span class="write"> </span></h4>
 
         </div>
@@ -162,7 +162,7 @@
             <p>Madame, Mademoiselle, Monsieur,</p>
             <p>Vous êtes priés de bien vouloir payer à la régie des recettes de la mairie de {{$data[6]}}
                 le montant ci-dessous :</p>
-            <p>N° d’ordre de recette :<span class="write">{{$data[1]}}/</span>{{$data[0]}}</p>
+            <p>N° d’ordre de recette :<span class="write">{{$data[1]}}/</span> {{date("Y", strtotime( $data[0]))}}</p>
 
             <p>Libellé de la recette :<span class="write"> {{$data[12][0][0]}}</span></p>
             <p>Imputation budgétaire :<span class="write"> {{$data[12][0][1]}}</span></p>
@@ -170,6 +170,7 @@
             <table border="1">
                 <thead>
                 <tr>
+                    <th>Nom de la Taxation</th>
                     <th>Matière taxable</th>
                     <th>Unité d’assiette</th>
                     <th>Valeur d’assiette</th>
@@ -181,6 +182,7 @@
                 <tbody>
                 @foreach($data[12] as $index => $item)
                 <tr>
+                    <td style="text-align: center">{{$item[8]}}</td>
                     <td style="text-align: center">{{$item[2]}}</td>
                     <td style="text-align: center"> {{$item[4]}}</td>
                     <td style="text-align: center">{{$item[3]}}</td>
@@ -190,7 +192,7 @@
                 </tr>
                 @endforeach
                 <tr>
-                    <td colspan="5" style="text-align: right;"><strong>Total :</strong></td>
+                    <td colspan="6" style="text-align: right;"><strong>Total :</strong></td>
                     <td>{{$data[3]}}</td>
                 </tr>
                 </tbody>
@@ -201,7 +203,7 @@
             <table>
                 <tr class="text-start">
                     <td class="">
-                        <p>A ………, le<span class="write"> ……………</span></p>
+                        <p>A ………, le<span class="write"> {{date("d/m/Y", strtotime( $data[0]))}}</span></p>
                     </td>
                     <td class="">
                         <p>Le Maire</p>

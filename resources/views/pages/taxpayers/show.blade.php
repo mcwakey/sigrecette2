@@ -531,7 +531,7 @@
 
                                                 <td>
                                                     @if($invoice->delivery == "NOT DELIVERED")
-                                                    
+
 
                                                     <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-user-id="{{ $invoice->id }}" data-kt-menu-target="#kt_modal_add_delivery" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-action="update_status">
                                                         <i class="ki-duotone ki-setting-3 fs-3">
@@ -693,11 +693,12 @@
                                                                              $invoiceitem->taxpayer_taxable->taxable->tariff,
                                                                               $invoiceitem->amount,
                                                                              $invoiceitem->qty,
+                                                                             $invoiceitem->taxpayer_taxable->name
+
                                                                         ];
                                                                     }
-
                                                                     $data = [
-                                                                        date("Y", strtotime( $invoice->created_at)),
+                                                                      $invoice->created_at,
                                                                         $invoice->id,
                                                                          $taxpayer->id . $invoice->id,
                                                                          $invoice->amount,
@@ -945,11 +946,11 @@
                                 <!--begin::Table-->
                                 <table class="table align-middle table-row-dashed fw-semibold text-gray-600 fs-6 gy-5" id="kt_table_users_logs">
                                     <tbody>
-                                        @foreach ($taxpayerActionLog as $action)       
+                                        @foreach ($taxpayerActionLog as $action)
                                         <tr>
                                             <td class="min-w-70px">
                                                 <div class="badge {{(int)json_decode($action->response)->status <= 300 ? 'badge-light-success' : 'badge-light-danger' }}">
-                                                    {{json_decode($action->response)->status}} 
+                                                    {{json_decode($action->response)->status}}
                                                     {{json_decode($action->response)->status_text}} {{ ' : ' . $action->user->name }}
                                                 </div>
                                             </td>
@@ -962,7 +963,7 @@
                                             </td>
                                         </tr>
                                         @endforeach
-                                        
+
                                         {{-- <tr>
                                             <td class="min-w-70px">
                                                 <div class="badge badge-light-danger">500 ERR</div>
