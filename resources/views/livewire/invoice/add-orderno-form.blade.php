@@ -5,15 +5,15 @@
     <label class="required fw-semibold fs-6 mb-2">{{ __('order no') }}</label>
         <!--begin::Input-->
         <input type="hidden" wire:model="invoice_id" name="invoice_id" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('invoice_id') }}" />
-        <input type="text" wire:model="orderno" name="orderno" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('orderno') }}" />
+        <input type="text" wire:model="orderno" name="orderno" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('order no') }}" />
         <!--end::Input-->
     </div>
     <!--end::Input group-->
     <!--begin::Actions-->
     <div class="d-flex justify-content-end">
         <button type="submit" class="btn btn-sm btn-success">
-            <span wire:loading.remove>Apply</span>
-            <span wire:loading>Loading...</span>
+            <span wire:loading.remove>{{ __('apply') }}</span>
+            <span wire:loading>{{ __('loading') }}</span>
         </button>
     </div>
 </form>

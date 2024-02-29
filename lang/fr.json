@@ -223,6 +223,36 @@
     "new zone": "Nouvelle Zone",
     "zones": "Zones Fiscaux",
 
+    "length": "Longueur",
+    "width": "Largeur",
+    "unit type": "Type d'unité",
+    "invoice date": "Date de l'Avis'",
+    "delivery": "Livraison",
+    "delivery date": "Date de livraison",
+    "approval": "Approbation",
+    "payment date": "Date de paiement",
+    "receipt no": "Numéro de récépissé",
+    "reference": "Référence",
+    "refund": "Remboursement",
+    "print": "Imprimer",
+    "apply": "Appliquer",
+    "loading": "Chargement...",
+
+    "PENDING": "EN ATTENTE",
+    "DRAFT": "BROUILLON",
+    "APROVED": "PRIS EN CHARGE",
+    "REJECTED": "REJETÉ",
+    "REJECTED-EDIT": "REJETÉ -> ÉDITION",
+    "OWING": "PAIEMENT EN ATTENTE",
+    "PART PAID": "PARTIELLEMENT PAYÉ",
+    "PAID": "PAYÉ",
+    "NOT DELIVERED": "NON LIVRÉ",
+    "DELIVERED": "LIVRÉ",
+    
+    "CANCELED" : "ANNULÉ",
+    "ACCEPTED" : "ACCEPTÉ",
+
+
 
 
 

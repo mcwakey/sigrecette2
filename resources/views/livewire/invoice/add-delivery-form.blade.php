@@ -26,8 +26,8 @@
     <!--begin::Actions-->
     <div class="d-flex justify-content-end">
         <button type="submit" class="btn btn-sm btn-success">
-            <span wire:loading.remove>Apply</span>
-            <span wire:loading>Loading...</span>
+            <span wire:loading.remove>{{ __('apply') }}</span>
+            <span wire:loading>{{ __('loading') }}</span>
         </button>
     </div>
     <!--end::Actions-->
