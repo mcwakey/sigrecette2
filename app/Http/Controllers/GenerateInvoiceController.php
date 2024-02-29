@@ -30,22 +30,32 @@ class GenerateInvoiceController extends Controller
 
         return back();
     }
-    public function checkIfDataUniformity( $data):bool
+    public function checkIfDataUniformity($data): bool
     {
+        $expectedDataSize = 13;
+        $expectedSubDataSize = 9;
 
-        $n_0_l ="";
-        if (count($data[12])>1){
-            foreach ($data[12] as $index => $item)
-            {
-                if($index==0) $n_0_l = $item[1];
-                if($n_0_l!==$item[1]){
+        $firstSubDataValue = "";
+
+        if (count($data) !== $expectedDataSize) {
+            return false;
+        }
+
+        if (isset($data[12]) && is_array($data[12])) {
+            foreach ($data[12] as $index => $item) {
+                if ($index === 0) {
+                    $firstSubDataValue = $item[1];
+                }
+
+                if (count($item) !== $expectedSubDataSize || $firstSubDataValue !== $item[1]) {
                     return false;
                 }
             }
         }
-        return true;
 
+        return true;
     }
+
     public function downloadMultiple( $data)
     {
         if (Storage::missing("exports")) {
