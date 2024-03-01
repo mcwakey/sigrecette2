@@ -55,7 +55,7 @@ class AddTaxpayerTaxableModal extends Component
     protected $rules = [
         'name' => 'required|string',
         'seize' => 'required',
-        'location' => 'nullable',
+        'location' => 'required',
         'taxable_id' => 'required',
         'taxpayer_id' => 'required',
 
@@ -93,7 +93,7 @@ class AddTaxpayerTaxableModal extends Component
         //$taxables = Taxable::all();
 
         // Assuming you have a public property $canton in your Livewire component
-       
+
         //$ereas = $this->town ? Erea::where('town_id', $this->town)->get() : collect();
 
         return view('livewire.taxpayer_taxable.add-taxpayer-taxable-modal', compact('taxlabels'));
@@ -103,7 +103,7 @@ class AddTaxpayerTaxableModal extends Component
     {
         $this->taxables = Taxable::where('tax_label_id', $value)->get(); // Load taxables based on tax label ID
         //$this->reset('taxables');
-        
+
         //dd($this->taxables);
         // $this->loadTaxables($value); // Call the loadTaxables method when tax label ID is updated
     }
@@ -112,7 +112,7 @@ class AddTaxpayerTaxableModal extends Component
     {
         // Debugging to ensure $value is valid
         //dd($value." TaxableId");
-    
+
         // Assuming $value is valid, fetch taxables based on tax label ID
         $taxables = Taxable::find($value);
         //$this->ereas = Erea::where('town_id', $value)->get(); // Load taxables based on tax label ID

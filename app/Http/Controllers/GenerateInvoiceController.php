@@ -11,14 +11,14 @@ use Illuminate\Support\Str;
 class GenerateInvoiceController extends Controller
 {
 
-    public function download( $data)
+    public function downloadInvoice( $data)
     {
         if (Storage::missing("exports")) {
             Storage::makeDirectory("exports");
         }
 
         $data = json_decode($data, true);
-       if ($this->checkIfDataUniformity($data)){
+       if ($this->checkInvoiceDataUniformity($data)){
            $filename="Invoice-".$data[2].'-'.Str::random(8).".pdf";
 
             //dd($data);
@@ -30,7 +30,7 @@ class GenerateInvoiceController extends Controller
 
         return back();
     }
-    public function checkIfDataUniformity($data): bool
+    public function checkInvoiceDataUniformity($data): bool
     {
         $expectedDataSize = 13;
         $expectedSubDataSize = 9;
@@ -74,6 +74,23 @@ class GenerateInvoiceController extends Controller
 
         }
         return back();
+    }
+    public function downloadReceipt( $data)
+    {
+        if (Storage::missing("exports")) {
+            Storage::makeDirectory("exports");
+        }
+
+        $data = json_decode($data, true);
+
+            $filename="receipt-".$data[2].'-'.Str::random(8).".pdf";
+
+            //dd($data);
+            $pdf= PDF::loadView('exports.payments', ['data' => $data])
+                // ->save(Storage::path('exports') . DIRECTORY_SEPARATOR . $filename)
+                ->stream($filename);
+            return $pdf;
+
     }
 
 }

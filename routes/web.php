@@ -74,5 +74,7 @@ Route::get('/error', function () {
 });
 
 Route::get('/auth/redirect/{provider}', [SocialiteController::class, 'redirect']);
-Route::get('/generate/{data}', [GenerateInvoiceController::class,'download'])->name("generateInvoice");
+Route::get('/generate-invoice/{data}', [GenerateInvoiceController::class,'downloadInvoice'])->name("generateInvoice");
+Route::get('/generate-receipt/{data}', [GenerateInvoiceController::class,'downloadReceipt'])->name("generateReceipt");
+
 require __DIR__ . '/auth.php';
