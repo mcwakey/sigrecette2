@@ -114,4 +114,8 @@ class Taxpayer extends Model
     {
         return $this->addresses?->first();
     }
+    public function activity()
+    {
+        return $this->hasOne(Activity::class);
+    }
 }

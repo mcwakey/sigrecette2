@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\GenerateInvoiceController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\TaxableController;
@@ -53,6 +54,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('/cantons', CantonsController::class);
         Route::resource('/ereas', EreasController::class);
         Route::resource('/zones', ZonesController::class);
+        Route::resource('/categories', CategoriesController::class);
 
         //Route::resource('/user-management/permissions', PermissionManagementController::class);
     });
