@@ -12,6 +12,7 @@ class Category extends Model
         'name',
         'status',
 
+
     ];
     public function activities()
     {

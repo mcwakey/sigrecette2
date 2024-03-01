@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Activity;
 use App\Models\Canton;
 use App\Models\Category;
 use App\Models\User;
@@ -95,4 +96,14 @@ Breadcrumbs::for('categories.show', function (BreadcrumbTrail $trail, Category $
 Breadcrumbs::for('categories.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
     $trail->push(__('categories'), route('settings.categories.index'));
+});
+
+
+Breadcrumbs::for('activities.show', function (BreadcrumbTrail $trail, Activity $activity) {
+    $trail->parent('activities.index');
+    $trail->push(ucwords($activity->id), route(' activities.show', $activity));
+});
+Breadcrumbs::for('activities.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push(__('activities'), route('settings.activities.index'));
 });

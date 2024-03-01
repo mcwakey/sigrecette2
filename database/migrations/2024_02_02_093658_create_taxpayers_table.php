@@ -57,6 +57,8 @@ return new class extends Migration
             $table->string('password');
             $table->string('avatar')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
+            $table->unsignedBigInteger('activity_id')->nullable();
+           // $table->foreign('activity_id')->references('id')->on('activities');
             $table->rememberToken();
             $table->timestamps();
         });

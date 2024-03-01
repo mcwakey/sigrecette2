@@ -11,6 +11,7 @@ class Activity extends Model
     protected $fillable = [
         'name',
         'status',
+        'category_id',
 
     ];
     public function category()
@@ -18,8 +19,5 @@ class Activity extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function taxpayer()
-    {
-        return $this->belongsTo(Taxpayer::class);
-    }
+    //public function taxpayer(){return $this->belongsTo(Taxpayer::class);}
 }
