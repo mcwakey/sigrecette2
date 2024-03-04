@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Models\Taxpayer;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Mail\TaxpayerCreationMail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Resources\TaxpayerShowResource;
 use App\Http\Resources\TaxpayerIndexResource;
 use App\Http\Resources\TaxpayerStoreResource;
@@ -37,10 +39,17 @@ class TaxpayerController extends Controller
     {
         $validatedData = $request->validated();
 
+        $email =  $validatedData['email'];
         $password = Str::random(8);
         $validatedData['password'] = Hash::make($password);
 
-        return new TaxpayerStoreResource(Taxpayer::create($validatedData));
+        $taxpayer = Taxpayer::create($validatedData);
+
+        if($email){
+            Mail::to($email)->send(new TaxpayerCreationMail(['data' => $taxpayer]));
+        }
+
+        return new TaxpayerStoreResource($taxpayer);
     }
 
     /**
