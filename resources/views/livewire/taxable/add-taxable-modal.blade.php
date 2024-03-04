@@ -82,30 +82,6 @@
                         <div class="row mb-7">
                             <div class="col-md-3">
                                 <!--begin::Label-->
-                                <label class="required fw-semibold fs-6 mb-2">{{ __('tariff') }}</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" wire:model="tariff" name="tariff" class="form-control mb-3 mb-lg-0" placeholder="{{ __('tariff') }}"/>
-                                <!--end::Input-->
-                                @error('tariff')
-                                <span class="text-danger">{{ $message }}</span> @enderror
-                            </div>
-                            <div class="col-md-3">
-                                <!--begin::Label-->
-                                <label class="required fw-semibold fs-6 mb-2">{{ __('tariff type') }}</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <select wire:model="tariff_type" name="tariff_type" class="form-select" data-dropdown-parent="#kt_modal_add_taxable">
-                                    <option>{{ __('select an option') }}</option>
-                                    <option value="FIXED">{{ __('fixed') }}</option>
-                                    <option value="PERCENT">{{ __('percent') }}</option>
-                                </select>
-                                <!--end::Input-->
-                                @error('periodicity')
-                                <span class="text-danger">{{ $message }}</span> @enderror
-                            </div>
-                            <div class="col-md-3">
-                                <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('unit type') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
@@ -139,6 +115,30 @@
                                 <input type="text" wire:model="unit" name="unit" class="form-control mb-3 mb-lg-0" placeholder="{{ __('tariff') }}"/>
                                 <!--end::Input-->
                                 @error('unit')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-3">
+                                <!--begin::Label-->
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('tariff type') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select wire:model="tariff_type" name="tariff_type" class="form-select" data-dropdown-parent="#kt_modal_add_taxable">
+                                    <option>{{ __('select an option') }}</option>
+                                    <option value="FIXED">{{ __('fixed') }}</option>
+                                    <option value="PERCENT">{{ __('percent') }}</option>
+                                </select>
+                                <!--end::Input-->
+                                @error('periodicity')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-3">
+                                <!--begin::Label-->
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('tariff') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" wire:model="tariff" name="tariff" class="form-control mb-3 mb-lg-0" placeholder="{{ __('tariff') }}"/>
+                                <!--end::Input-->
+                                @error('tariff')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>

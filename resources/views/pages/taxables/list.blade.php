@@ -34,10 +34,6 @@
                     <!--end::Add user-->
                 </div>
                 <!--end::Toolbar-->
-
-                <!--begin::Modal-->
-                <livewire:taxable.add-taxable-modal></livewire:taxable.add-taxable-modal>
-                <!--end::Modal-->
             </div>
             <!--end::Card toolbar-->
         </div>
@@ -53,6 +49,10 @@
         </div>
         <!--end::Card body-->
     </div>
+
+                <!--begin::Modal-->
+                <livewire:taxable.add-taxable-modal></livewire:taxable.add-taxable-modal>
+                <!--end::Modal-->
 
     @push('scripts')
         {{ $dataTable->scripts() }}

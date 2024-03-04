@@ -1,11 +1,11 @@
 <div class="d-flex flex-column">
     <div class="text-gray-800 mb-1">
-        @if ( $taxpayer->telephone )
-            {{ $taxpayer->mobilephone }} / {{ $taxpayer->telephone }}
+        @if ( $taxpayerinfo->telephone )
+            {{ $taxpayerinfo->mobilephone }} / {{ $taxpayerinfo->telephone }}
         @else
-            {{ $taxpayer->mobilephone }}
+            {{ $taxpayerinfo->mobilephone }}
         @endif
 </div>
-    <span>{{ $taxpayer->email }}</span>
+    <span>{{ $taxpayerinfo->email }}</span>
 </div>
 <!--begin::User details-->

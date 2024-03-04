@@ -747,6 +747,220 @@
                                     </table>
                                     <!--end::Table-->
                                 </div>
+
+                                <div class="table-responsive">
+												<!--begin::Table-->
+												<table class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
+													<!--begin::Table head-->
+													<thead>
+														<tr class="fw-bold text-muted">
+															<th class="w-25px">
+																<div class="form-check form-check-sm form-check-custom form-check-solid">
+																	<input class="form-check-input" type="checkbox" value="1" data-kt-check="true" data-kt-check-target=".widget-13-check" />
+																</div>
+															</th>
+															<th class="min-w-150px">Order Id</th>
+															<th class="min-w-140px">Country</th>
+															<th class="min-w-120px">Date</th>
+															<th class="min-w-120px">Company</th>
+															<th class="min-w-120px">Total</th>
+															<th class="min-w-120px">Status</th>
+															<th class="min-w-100px text-end">Actions</th>
+														</tr>
+													</thead>
+													<!--end::Table head-->
+													<!--begin::Table body-->
+													<tbody>
+														<tr>
+															<td>
+																<div class="form-check form-check-sm form-check-custom form-check-solid">
+																	<input class="form-check-input widget-13-check" type="checkbox" value="1" />
+																</div>
+															</td>
+															<td>
+																<a href="#" class="text-dark fw-bold text-hover-primary fs-6">56037-XDER</a>
+															</td>
+															<td>
+																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">Brasil</a>
+																<span class="text-muted fw-semibold text-muted d-block fs-7">Code: PH</span>
+															</td>
+															<td>
+																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">05/28/2020</a>
+																<span class="text-muted fw-semibold text-muted d-block fs-7">Code: Paid</span>
+															</td>
+															<td>
+																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">Intertico</a>
+																<span class="text-muted fw-semibold text-muted d-block fs-7">Web, UI/UX Design</span>
+															</td>
+															<td class="text-dark fw-bold text-hover-primary fs-6">$3560</td>
+															<td>
+																<span class="badge badge-light-success">Approved</span>
+															</td>
+															<td class="text-end">
+																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+																	<i class="ki-outline ki-switch fs-2"></i>
+																</a>
+																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+																	<i class="ki-outline ki-pencil fs-2"></i>
+																</a>
+																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+																	<i class="ki-outline ki-trash fs-2"></i>
+																</a>
+															</td>
+														</tr>
+														<tr>
+															<td>
+																<div class="form-check form-check-sm form-check-custom form-check-solid">
+																	<input class="form-check-input widget-13-check" type="checkbox" value="1" />
+																</div>
+															</td>
+															<td>
+																<a href="#" class="text-dark fw-bold text-hover-primary fs-6">05822-FXSP</a>
+															</td>
+															<td>
+																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">Belarus</a>
+																<span class="text-muted fw-semibold text-muted d-block fs-7">Code: BY</span>
+															</td>
+															<td>
+																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">04/18/2021</a>
+																<span class="text-muted fw-semibold text-muted d-block fs-7">Code: Paid</span>
+															</td>
+															<td>
+																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">Agoda</a>
+																<span class="text-muted fw-semibold text-muted d-block fs-7">Houses & Hotels</span>
+															</td>
+															<td class="text-dark fw-bold text-hover-primary fs-6">$4850</td>
+															<td>
+																<span class="badge badge-light-warning">In Progress</span>
+															</td>
+															<td class="text-end">
+																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+																	<i class="ki-outline ki-switch fs-2"></i>
+																</a>
+																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+																	<i class="ki-outline ki-pencil fs-2"></i>
+																</a>
+																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+																	<i class="ki-outline ki-trash fs-2"></i>
+																</a>
+															</td>
+														</tr>
+														<tr>
+															<td>
+																<div class="form-check form-check-sm form-check-custom form-check-solid">
+																	<input class="form-check-input widget-13-check" type="checkbox" value="1" />
+																</div>
+															</td>
+															<td>
+																<a href="#" class="text-dark fw-bold text-hover-primary fs-6">4472-QREX</a>
+															</td>
+															<td>
+																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">Phillipines</a>
+																<span class="text-muted fw-semibold text-muted d-block fs-7">Code: BH</span>
+															</td>
+															<td>
+																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">07/23/2019</a>
+																<span class="text-muted fw-semibold text-muted d-block fs-7">Code: Paid</span>
+															</td>
+															<td>
+																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">RoadGee</a>
+																<span class="text-muted fw-semibold text-muted d-block fs-7">Transportation</span>
+															</td>
+															<td class="text-dark fw-bold text-hover-primary fs-6">$8376</td>
+															<td>
+																<span class="badge badge-light-danger">Success</span>
+															</td>
+															<td class="text-end">
+																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+																	<i class="ki-outline ki-switch fs-2"></i>
+																</a>
+																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+																	<i class="ki-outline ki-pencil fs-2"></i>
+																</a>
+																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+																	<i class="ki-outline ki-trash fs-2"></i>
+																</a>
+															</td>
+														</tr>
+														<tr>
+															<td>
+																<div class="form-check form-check-sm form-check-custom form-check-solid">
+																	<input class="form-check-input widget-13-check" type="checkbox" value="1" />
+																</div>
+															</td>
+															<td>
+																<a href="#" class="text-dark fw-bold text-hover-primary fs-6">00347-BCLQ</a>
+															</td>
+															<td>
+																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">Argentina</a>
+																<span class="text-muted fw-semibold text-muted d-block fs-7">Code: BR</span>
+															</td>
+															<td>
+																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">12/21/2021</a>
+																<span class="text-muted fw-semibold text-muted d-block fs-7">Code: Paid</span>
+															</td>
+															<td>
+																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">The Hill</a>
+																<span class="text-muted fw-semibold text-muted d-block fs-7">Insurance</span>
+															</td>
+															<td class="text-dark fw-bold text-hover-primary fs-6">$9486</td>
+															<td>
+																<span class="badge badge-light-info">Rejected</span>
+															</td>
+															<td class="text-end">
+																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+																	<i class="ki-outline ki-switch fs-2"></i>
+																</a>
+																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+																	<i class="ki-outline ki-pencil fs-2"></i>
+																</a>
+																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+																	<i class="ki-outline ki-trash fs-2"></i>
+																</a>
+															</td>
+														</tr>
+														<tr>
+															<td>
+																<div class="form-check form-check-sm form-check-custom form-check-solid">
+																	<input class="form-check-input widget-13-check" type="checkbox" value="1" />
+																</div>
+															</td>
+															<td>
+																<a href="#" class="text-dark fw-bold text-hover-primary fs-6">59486-XDER</a>
+															</td>
+															<td>
+																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">Agoda</a>
+																<span class="text-muted fw-semibold text-muted d-block fs-7">Code: BT</span>
+															</td>
+															<td>
+																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">05/28/2020</a>
+																<span class="text-muted fw-semibold text-muted d-block fs-7">Code: Paid</span>
+															</td>
+															<td>
+																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">Phillipines</a>
+																<span class="text-muted fw-semibold text-muted d-block fs-7">Transportation</span>
+															</td>
+															<td class="text-dark fw-bold text-hover-primary fs-6">$8476</td>
+															<td>
+																<span class="badge badge-light-primary">Approved</span>
+															</td>
+															<td class="text-end">
+																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+																	<i class="ki-outline ki-switch fs-2"></i>
+																</a>
+																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+																	<i class="ki-outline ki-pencil fs-2"></i>
+																</a>
+																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+																	<i class="ki-outline ki-trash fs-2"></i>
+																</a>
+															</td>
+														</tr>
+													</tbody>
+													<!--end::Table body-->
+												</table>
+												<!--end::Table-->
+											</div>
                                 <!--end::Table wrapper-->
                             </div>
                             <!--end::Card body-->
