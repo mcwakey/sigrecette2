@@ -68,7 +68,24 @@
                             <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('Duree du contrat') }}" readonly/>
                             </div>
                             <div class="col-md-3">
-                                <input wire:model="qty" name="qty" class="form-control form-control-solid mb-2" type="number" min="1" placeholder="1" data-kt-user-id="{{ $taxpayer_id }}" data-kt-action="load_invoice"/>
+                            <div class="position-relative" data-kt-dialer="true" data-kt-dialer-min="1" data-kt-dialer-max="12" data-kt-dialer-step="1">
+                                        <!--begin::Decrease control-->
+                                        <button type="button" class="btn btn-icon btn-active-color-gray-700 position-absolute translate-middle-y top-50 start-0" data-kt-dialer-control="decrease">
+                                            <i class="ki-outline ki-minus-circle fs-1"></i>
+                                        </button>
+                                        <!--end::Decrease control-->
+                                        <!--begin::Input control-->
+                                        <input wire:model="qty" name="qty" type="text" class="form-control form-control-solid border-0 ps-12" data-kt-dialer-control="input" placeholder="1" readonly="readonly" data-kt-action="load_invoice"/>
+                                        <!--end::Input control-->
+                                        @error('qty')
+                                        <span class="text-danger">{{ $message }}</span> @enderror
+                                        <!--begin::Increase control-->
+                                        <button type="button" class="btn btn-icon btn-active-color-gray-700 position-absolute translate-middle-y top-50 end-0" data-kt-dialer-control="increase">
+                                            <i class="ki-outline ki-plus-circle fs-1"></i>
+                                        </button>
+                                        <!--end::Increase control-->
+                                    </div>
+
                             </div>
                             <div class="col-md-3">
                             <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('A compter de') }}" readonly/>
@@ -91,7 +108,8 @@
                                         </select> </div>
                         
                         <div class="separator separator-dashed my-2"></div>
-
+                        
+@if ($taxpayer_taxables->count() > 0)
 
                         <div class="table-responsive mb-10">
                             <!--begin::Table-->
@@ -205,17 +223,19 @@
                                         </span>
                                     </button>
                                 </td>
-                            </tr>
-                        </table>
-                            <table class="table g-5 gs-0 mb-0 fw-bolder text-gray-700" data-kt-element="items">
-                            <tr data-kt-element="empty">
-                                <th colspan="5" class="text-muted text-center py-10">No items</th>
-                            </tr>
-                        </table> -->
+                            </tr> -->
                         <div class="mb-0">
                             <label class="form-label fs-6 fw-bolder text-gray-700">Notes</label>
                             <textarea name="notes" class="form-control form-control-solid" rows="3" placeholder="Thanks for your business"></textarea>
                         </div>
+@else
+                        </table>
+                            <table class="table g-5 gs-0 mb-0 fw-bolder text-gray-700" data-kt-element="items">
+                            <tr data-kt-element="empty">
+                                <th colspan="5" class="text-muted text-center py-10">No taxables selected</th>
+                            </tr>
+                        </table>
+@endif
 
                         <!--end::Input group-->
                     </div>
@@ -223,6 +243,7 @@
                     <!--begin::Actions-->
                     <div class="text-center pt-15">
                         <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal" aria-label="Close" wire:loading.attr="disabled">{{ __('cancel') }}</button>
+                        @if ($taxpayer_taxables->count() > 0)
                         <button type="submit" class="btn btn-success" data-kt-invoices-modal-action="submit">
                             <span class="indicator-label" wire:loading.remove>{{ __('submit') }}</span>
                             <span class="indicator-progress" wire:loading wire:target="submit">
@@ -230,6 +251,7 @@
                                 <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                             </span>
                         </button>
+                        @endif
                     </div>
                     <!--end::Actions-->
                 </form>

@@ -9,9 +9,14 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Illuminate\Support\Facades\Log;
+
+
 
 class TaxablesDataTable extends DataTable
 {
+public $query = false;
+
     /**
      * Build the DataTable class.
      *
@@ -19,19 +24,49 @@ class TaxablesDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
+        
+        //dump($query);
+
         return (new EloquentDataTable($query))
+            ->filter(function ($query) {
+                if (request()->filled('search.value')) {
+                    $query->where('tax_labels.name', 'like', '%' . request('search.value') . '%')
+                    ->orWhere('taxables.name', 'like', '%' . request('search.value') . '%')
+                    ->orWhere('tax_labels.code', 'like', '%' . request('search.value') . '%');
+                    // Add additional search conditions as needed for other columns
+                }
+            })
             ->rawColumns(['taxable', 'last_login_at'])
-            // ->editColumn('name', function (Taxable $taxable) {
+
+            ->editColumn('tax_label.name', function (Taxable $taxable) {
+                return view('pages/taxables.columns._taxable', compact('taxable'));
+            })
+
+            // ->editColumn('tax_label_name', function (Taxable $taxable) {
+            //     return $taxable->tax_label->name;
+            // })
+            // ->editColumn('taxable_name', function (Taxable $taxable) {
             //     return $taxable->name;
             // })
-            ->editColumn('taxable', function (Taxable $taxable) {
-                return view('pages/taxables.columns._taxable', compact('taxable'));
+
+
+            // ->editColumn('tax_label_name', function (Taxable $taxable) {
+            //     return $taxable->tax_label->name;
+            // })
+            ->editColumn('tax_label_code', function (Taxable $taxable) {
+                return $taxable->tax_label->code;
+            })
+            // ->editColumn('taxable_name', function (Taxable $taxable) {
+            //     return $taxable->name;
+            // })
+            ->editColumn('tariff_type', function (Taxable $taxable) {
+                return $taxable->tariff_type;
             })
             ->editColumn('tariff', function (Taxable $taxable) {
                 return $taxable->tariff;
             })
-            ->editColumn('tariff_type', function (Taxable $taxable) {
-                return $taxable->tariff_type;
+            ->editColumn('unit_type', function (Taxable $taxable) {
+                return $taxable->unit_type;
             })
             ->editColumn('unit', function (Taxable $taxable) {
                 return $taxable->unit;
@@ -51,6 +86,15 @@ class TaxablesDataTable extends DataTable
             ->addColumn('action', function (Taxable $taxable) {
                 return view('pages/taxables.columns._actions', compact('taxable'));
             })
+            ->orderColumn('tax_label_name', function ($query, $order) {
+                $query->orderBy('tax_labels.name', $order);
+            })
+            ->orderColumn('taxable_name', function ($query, $order) {
+                $query->orderBy('taxables.name', $order);
+            })
+            // ->orderColumn('taxable_name', function ($query, $order) {
+            //     $query->orderBy('taxable.name', $order);
+            // })
             ->setRowId('id');
     }
 
@@ -59,7 +103,11 @@ class TaxablesDataTable extends DataTable
      */
     public function query(Taxable $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->with('tax_label')
+                    ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
+                    ->select('taxables.*')
+                    //->orderBy('tax_labels.name')
+                    ->newQuery();
     }
 
     /**
@@ -67,6 +115,9 @@ class TaxablesDataTable extends DataTable
      */
     public function html(): HtmlBuilder
     {
+        //dd();
+        //var_dump($this->query);
+
         return $this->builder()
             ->setTableId('taxables-table')
             ->columns($this->getColumns())
@@ -74,7 +125,7 @@ class TaxablesDataTable extends DataTable
             ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
-            ->orderBy(5)
+            ->orderBy(1)
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/taxables/columns/_draw-scripts.js')) . "}");
     }
 
@@ -84,11 +135,15 @@ class TaxablesDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('taxable')->addClass('d-flex align-items-center')->name('name')->title(__('taxable')),
-            //Column::make('name')->title(__('taxable')),
+            Column::make('tax_label.name')->addClass('d-flex align-items-center')->title(__('taxlabel')),
+        //     Column::make('tax_label_name')->title(__('Tax Label Name'))->name('tax_label_name'),
+        // Column::make('taxable_name')->title(__('Taxable Name'))->name('taxable_name'),
+
+            Column::make('tax_label_code')->title(__('code'))->name('tax_label.code'),
             //Column::make('gender')->title('Tax Name'),
-            Column::make('tariff')->title(__('tariff')),
             Column::make('tariff_type')->title(__('tariff type')),
+            Column::make('tariff')->title(__('tariff')),
+            Column::make('unit_type')->title(__('unit type')),
             Column::make('unit')->title(__('unit')),
             Column::make('periodicity')->title(__('periodicity')),
             // Column::make('modality')->title(__('modality')),

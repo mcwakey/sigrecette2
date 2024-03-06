@@ -10,9 +10,10 @@ class Zone extends Model
     use HasFactory;
     protected $fillable = [
         'name',
-       
-
+        'longitude',
+        'latitude'
     ];
+
     public function taxpayers()
     {
         return $this->hasMany(Taxpayer::class);

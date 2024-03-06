@@ -15,9 +15,11 @@ return new class extends Migration
             $table->id()->from(10001);
             $table->string('name');
             $table->string('seize');
-            $table->string('location');
-            $table->string('longitude');
-            $table->string('latitude');
+            $table->string('location')->nullable();
+            $table->string('longitude')->nullable();
+            $table->string('latitude')->nullable();
+            $table->string('authorisation')->default("NO");
+            $table->string('auth_reference')->nullable();
             $table->string('status')->default('ACTIVE');
             $table->tinyInteger('billable')->default('0');
             $table->unsignedBigInteger('taxpayer_id')->default(1);

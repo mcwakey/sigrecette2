@@ -178,6 +178,53 @@
 				<!--end:Menu sub-->
 			</div>
 			<!--end:Menu item-->
+
+			<!--begin:Menu item-->
+			<div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('geolocation.*') ? 'here show' : '' }}">
+							<!--begin:Menu link-->
+							<span class="menu-link">
+								<span class="menu-icon">{!! getIcon('user', 'fs-2') !!}</span>
+								<span class="menu-title">{{ __('Geolocation') }}</span>
+								<span class="menu-arrow"></span>
+							</span>
+							<!--end:Menu link-->
+							<!--begin:Menu sub-->
+							<div class="menu-sub menu-sub-accordion">
+								<div class="menu-item">
+									<!--begin:Menu link-->
+									<a class="menu-link {{ request()->routeIs('geolocation.zones') ? 'active' : '' }}" href="{{ route('geolocation.zones') }}">
+										<span class="menu-bullet">
+											<span class="bullet bullet-dot"></span>
+										</span>
+										<span class="menu-title">{{ __('zones') }}</span>
+									</a>
+
+									<a class="menu-link {{ request()->routeIs('geolocation.users') ? 'active' : '' }}" href="{{ route('geolocation.users') }}">
+										<span class="menu-bullet">
+											<span class="bullet bullet-dot"></span>
+										</span>
+										<span class="menu-title">{{ __('users') }}</span>
+									</a>
+									<!--end:Menu link-->
+								</div>
+								<!--end:Menu item-->
+								<!--begin:Menu item-->
+								<!-- <div class="menu-item"> -->
+									<!--begin:Menu link-->
+									<!-- <a class="menu-link {{ request()->routeIs('user-management.permissions.*') ? 'active' : '' }}" href="{{ route('user-management.permissions.index') }}">
+										<span class="menu-bullet">
+											<span class="bullet bullet-dot"></span>
+										</span>
+										<span class="menu-title">Permissions</span>
+									</a> -->
+									<!--end:Menu link-->
+								<!-- </div> -->
+								<!--end:Menu item-->
+							</div>
+							<!--end:Menu sub-->
+						</div>
+			<!--end:Menu item-->
+
 			<!--begin:Menu item-->
 			<div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('user-management.*') ? 'here show' : '' }}">
 				<!--begin:Menu link-->
@@ -315,6 +362,26 @@
 								<span class="bullet bullet-dot"></span>
 							</span>
                             <span class="menu-title">{{ __('zones') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('settings.categories.*') ? 'active' : '' }}" href="{{ route('settings.categories.index') }}">
+							<span class="menu-bullet">
+								<span class="bullet bullet-dot"></span>
+							</span>
+                            <span class="menu-title">{{ __('categories') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('settings.activities.*') ? 'active' : '' }}" href="{{ route('settings.activities.index') }}">
+							<span class="menu-bullet">
+								<span class="bullet bullet-dot"></span>
+							</span>
+                            <span class="menu-title">{{ __('activities') }}</span>
                         </a>
                         <!--end:Menu link-->
                     </div>

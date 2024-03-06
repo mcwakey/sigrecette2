@@ -20,51 +20,60 @@ class TaxpayersDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->rawColumns(['taxpayer', 'last_login_at'])
-            ->editColumn('id', function (Taxpayer $taxpayer) {
+            // ->filter(function ($query) {
+            //     if (request()->filled('search.value')) {
+            //         $query->where('taxpayers.name', 'like', '%' . request('search.value') . '%')
+            //         ->orWhere('taxables.name', 'like', '%' . request('search.value') . '%')
+            //         ->orWhere('tax_labels.code', 'like', '%' . request('search.value') . '%');
+            //         // Add additional search conditions as needed for other columns
+            //     }
+            // })
+            ->rawColumns(['name', 'last_login_at'])
+            ->editColumn('taxpayers.id', function (Taxpayer $taxpayer) {
                 return $taxpayer->id;
             })
-            ->editColumn('taxpayer', function (Taxpayer $taxpayer) {
-                return view('pages/taxpayers.columns._taxpayer', compact('taxpayer'));
+            ->editColumn('taxpayer.name', function (Taxpayer $taxpayerinfo) {
+                return view('pages/taxpayers.columns._taxpayer', compact('taxpayerinfo'));
+                //return $taxpayerinfo->name;
             })
             ->editColumn('gender', function (Taxpayer $taxpayer) {
                 return $taxpayer->gender;
             })
-            ->editColumn('mobilephone', function (Taxpayer $taxpayer) {
-                return view('pages/taxpayers.columns._phone', compact('taxpayer'));
+            ->editColumn('mobilephone', function (Taxpayer $taxpayerinfo) {
+                return view('pages/taxpayers.columns._phone', compact('taxpayerinfo'));
             })
-            ->editColumn('canton_id', function (Taxpayer $taxpayer) {
-                if ($taxpayer->town) {
+            ->editColumn('town.canton.name', function (Taxpayer $taxpayer) {
+                // if ($taxpayer->town) {
                     return $taxpayer->town->canton->name;
-                } else {
-                    return '';
-                }
+                // } else {
+                //     return '';
+                // }
                 //return $taxpayer->town->canton->name;
             })
-            ->editColumn('town_id', function (Taxpayer $taxpayer) {
-                if ($taxpayer->town){
+            ->editColumn('town.name', function (Taxpayer $taxpayer) {
+                // if ($taxpayer->town){
                     return $taxpayer->town->name;
-                } else {
-                    return ''; 
-                }
+                // } else {
+                //     return ''; 
+                // }
             })
-            ->editColumn('erea_id', function (Taxpayer $taxpayer) {
-                if ($taxpayer->erea){
-                    return $taxpayer->town->name;
-                } else {
-                    return ''; 
-                } 
+            ->editColumn('erea.name', function (Taxpayer $taxpayer) {
+                // if ($taxpayer->erea){
+                    return $taxpayer->erea->name;
+                // } else {
+                //     return ''; 
+                // } 
                 //return $taxpayer->erea->name;
             })
             ->editColumn('address', function (Taxpayer $taxpayer) {
                 return $taxpayer->address;
             })
-            ->editColumn('zone_id', function (Taxpayer $taxpayer) {
-                if ($taxpayer->zone){
+            ->editColumn('zone.name', function (Taxpayer $taxpayer) {
+                // if ($taxpayer->zone){
                     return $taxpayer->zone->name;
-                } else {
-                    return ''; 
-                } 
+                // } else {
+                //     return ''; 
+                // } 
                 //return $taxpayer->zone->name;
             })
             ->editColumn('created_at', function (Taxpayer $taxpayer) {
@@ -79,10 +88,27 @@ class TaxpayersDataTable extends DataTable
     /**
      * Get the query source of dataTable.
      */
+    // public function query(Taxpayer $model): QueryBuilder
+    // {
+    //     //return $model->newQuery();
+    //     return $model->newQuery()
+    //     ->with('town.canton', 'town', 'erea','zone');
+    // }
+
     public function query(Taxpayer $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->with('town')
+                    ->join('towns', 'taxpayers.town_id', '=', 'towns.id')
+                    ->with('town.canton')
+                    ->join('cantons', 'towns.canton_id', '=', 'cantons.id')
+                    ->with('erea')
+                    ->join('ereas', 'taxpayers.erea_id', '=', 'ereas.id')
+                    ->with('zone')
+                    ->join('zones', 'taxpayers.zone_id', '=', 'zones.id')
+                    ->select('taxpayers.*') // Select columns from taxpayers table
+                    ->newQuery();
     }
+
 
     /**
      * Optional method if you want to use the html builder.
@@ -98,7 +124,7 @@ class TaxpayersDataTable extends DataTable
             ->dom("<'d-flex justify-content-end'B> ".'rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
-            ->orderBy(8)
+            ->orderBy(0)
             ->buttons([
                 'print',
                 'excel',
@@ -114,16 +140,16 @@ class TaxpayersDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            //Column::make('id')->title(__('id'))->visible(false),
-            Column::make('taxpayer')->title(__('taxpayer'))->addClass('d-flex align-items-center text-uppercase ')->name("name"),
+            Column::make('taxpayers.id')->title(__('id'))->visible(false),
+            Column::make('taxpayer.name')->title(__('taxpayer'))->addClass('d-flex align-items-center text-uppercase ')->name("taxpayers.name"),
             Column::make('gender')->title(__('gender')),
-            Column::make('mobilephone')->title(__('mobilephone'))->addClass('text-nowrap'),
-            Column::make('canton_id')->title(__('canton')),
-            Column::make('town_id')->title(__('town')),
-            Column::make('erea_id')->title(__('erea')),
+            Column::make('mobilephone')->title(__('mobilephone'))->name("taxpayers.mobilephone"),
+            Column::make('town.canton.name')->title(__('canton')),
+            Column::make('town.name')->title(__('town')),
+            Column::make('erea.name')->title(__('erea')),
             Column::make('address')->title(__('address')),
-            Column::make('zone_id')->title(__('zone')),
-            Column::make('created_at')->title(__('created at'))->addClass('text-nowrap created_at')->visible(false),
+            Column::make('zone.name')->title(__('zone'))->name("zone.name"),
+            //Column::make('created_at')->title(__('created at'))->addClass('text-nowrap created_at')->visible(false),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
                 ->exportable(false)

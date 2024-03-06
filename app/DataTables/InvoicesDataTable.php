@@ -23,7 +23,7 @@ class InvoicesDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->rawColumns(['invoice', 'status'])
-            ->editColumn('taxpayer', function (Invoice $invoice) {
+            ->editColumn('taxpayer_id', function (Invoice $invoice) {
                 return view('pages/invoices.columns._invoice', compact('invoice'));
             })
             ->editColumn('id', function (Invoice $invoice) {
@@ -32,14 +32,14 @@ class InvoicesDataTable extends DataTable
             ->editColumn('order_no', function (Invoice $invoice) {
                 return $invoice->order_no;
             })
-            ->editColumn('id', function (Invoice $invoice) {
+            ->editColumn('invoices.id', function (Invoice $invoice) {
                 return $invoice->id.$invoice->taxpayer->id;
             })
 
             ->editColumn('zone', function (Invoice $invoice) {
                 return $invoice->taxpayer->zone->name;
             })
-            ->editColumn('address', function (Invoice $invoice) {
+            ->editColumn('taxpayer.address', function (Invoice $invoice) {
                 return $invoice->taxpayer->address;
             })
             ->editColumn('gps', function (Invoice $invoice) {
@@ -68,10 +68,19 @@ class InvoicesDataTable extends DataTable
     }
 
 
+    // public function query(Invoice $model): QueryBuilder
+    // {
+    //     return $query = $model->newQuery();
+    // }
+
+    // use Illuminate\Database\Eloquent\Builder;
+
     public function query(Invoice $model): QueryBuilder
     {
-        return $query = $model->newQuery();
+        return $model->newQuery()
+            ->with('taxpayer', 'taxpayer.zone');
     }
+
 
     /**
      * Optional method if you want to use the html builder.
@@ -95,15 +104,15 @@ class InvoicesDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('taxpayer')->title(__('taxpayer'))->addClass('d-flex align-items-center')->name('taxpayer'),
-            Column::make('id')->title(__('invoice no')),
+            Column::make('taxpayer_id')->title(__('taxpayer'))->addClass('d-flex align-items-center')->name('taxpayer'),
+            Column::make('invoices.id')->title(__('invoice no')),
             Column::make('order_no')->title(__('order no')),
             Column::make('id')->title(__('nic')),
 
             Column::make('zone')->title(__('zone')),
-            Column::make('address')->title(__('address')),
+            Column::make('taxpayer.address')->title(__('address')),
             Column::make('gps')->title(__('gps')),
-            Column::make('total')->title(__('amount')),
+            Column::make('total')->title(__('amount'))->name('amount'),
             Column::make('status')->title(__('status')),
 
             Column::make('created_at')->title( __('created Date'))->addClass('text-nowrap'),

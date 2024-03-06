@@ -12,12 +12,9 @@
             @if($status=="PENDING")
             <option value="APROVED">{{ __('APROVED') }}</option>
             <option value="REJECTED">{{ __('REJECTED') }}</option>
-            <option value="REJECTED-EDIT">{{ __('REJECTED-EDIT') }}</option>
             @elseif($status=="DRAFT")
             <option value="PENDING">{{ __('ACCEPTED') }}</option>
             <option value="CANCELED">{{ __('CANCELED') }}</option>
-            @elseif($status=="REJECTED-EDIT")
-            <option value="PENDING">{{ __('APROVE') }}</option>
             @endif
         </select>
         <!--end::Input-->

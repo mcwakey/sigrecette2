@@ -200,12 +200,14 @@
                                 <label class="fw-semibold fs-6 mb-2">{{ __('work category') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <select wire:model="category_work" name="category_work" class="form-select " data-dropdown-parent="#kt_modal_add_taxpayer">
+                                <select data-kt-action="load_drop" wire:model="category_id" name="category_id" class="form-select" data-dropdown-parent="#kt_modal_add_taxpayer">
                                     <option>{{ __('select an option') }}</option>
-                                    <option value="1">marchant</option>
+                                    @foreach($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
                                 </select>
                                 <!--end::Input-->
-                                @error('category_work')
+                                @error('category_id')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div class="col-md-3">
@@ -213,12 +215,14 @@
                                 <label class="fw-semibold fs-6 mb-2">{{ __('work') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <select wire:model="work" name="work" class="form-select " data-dropdown-parent="#kt_modal_add_taxpayer">
+                                <select wire:model="activity_id" name="activity_id" class="form-select " data-dropdown-parent="#kt_modal_add_taxpayer">
                                     <option>{{ __('select an option') }}</option>
-                                    <option value="1">comercant</option>
+                                    @foreach($activities as $activity)
+                                    <option value="{{ $activity->id }}">{{ $activity->name }}</option>
+                                    @endforeach
                                 </select>
                                 <!--end::Input-->
-                                @error('work')
+                                @error('activity_id')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div class="col-md-3">

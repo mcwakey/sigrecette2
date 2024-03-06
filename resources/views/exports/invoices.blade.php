@@ -116,13 +116,9 @@
 
 <body>
 
-@foreach($data[12] as $index => $item)
+
 
     <div class="container avis-container">
-        <div class="count_page">
-
-            <h6>@if(sizeof($data[12]) >1)  pages   @endif <span>{{$index+1 .'/'.sizeof($data[12]) }} </span></h6>
-        </div>
         <table>
             <tr class="text-start">
                 <td class="boder-div-blaw">
@@ -148,8 +144,8 @@
 
         <div class="avis-header">
             <h2 class="text-center">AVIS DES SOMMES À PAYER</h2>
-            <h6>N°:<span class="write">{{$data[1]}}/</span>{{$data[0]}}</h6>
-            <h6>Destinataire:<span class="write"> </span></h6>
+            <h6>N°:<span class="write">{{$data[1]}}/</span>{{date("Y", strtotime($data[0]))}}</h6>
+            <h4>Destinataire:<span class="write"> </span></h4>
 
         </div>
         <div class="sub-header">
@@ -160,30 +156,54 @@
             <p>Canton :<span class="write">{{$data[6]}}</span></p>
             <p>Quartier/Village :<span class="write"> {{$data[7]}}</span></p>
             <p>Adresse complète :<span class="write">{{$data[8]}}</span></p>
-            <p>Coordonnées GPS :<span class="write"> {{$data[10]}} : {{$data[11]}}</span></p>
+            <p>Coordonnées GPS :<span class="write"> {{$data[10]}} , {{$data[11]}}</span></p>
         </div>
         <div class="avis-content">
             <p>Madame, Mademoiselle, Monsieur,</p>
             <p>Vous êtes priés de bien vouloir payer à la régie des recettes de la mairie de {{$data[6]}}
                 le montant ci-dessous :</p>
-            <p>N° d’ordre de recette :<span class="write">{{$data[1]}}/</span>{{$data[0]}}</p>
+            <p>N° d’ordre de recette :<span class="write">{{$data[1]}}/</span> {{date("Y", strtotime( $data[0]))}}</p>
 
-            <p>Libellé de la recette :<span class="write"> {{$item[0]}}</span></p>
-            <p>Imputation budgétaire :<span class="write"> {{$item[1]}}</span></p>
-            <p>Matière taxable :<span class="write"> {{$item[2]}}</span></p>
-            <p>Unité d’assiette :<span class="write"> {{$item[4]}}</span></p>
-            <p>Valeur d’assiette : (1):<span class="write"> {{$item[3]}}</span></p>
-            <p>Tarif (FCFA) : (2):<span class="write"> {{$item[5]}}</span></p>
-            <p>Nombre de taxation par an : (3):<span class="write"> {{$item[7]}}</span></p>
-            <p>Somme due :<span class="write">{{$item[6]}}</span></p>
+            <p>Libellé de la recette :<span class="write"> {{$data[12][0][0]}}</span></p>
+            <p>Imputation budgétaire :<span class="write"> {{$data[12][0][1]}}</span></p>
 
-            <p>Arrêté le présent avis à la somme de :<span class="write">{{number_to_words($item[6]) }} </span>. Francs CFA (Sauf erreur ou omission)</p>
+            <table border="1">
+                <thead>
+                <tr>
+                    <th>Nom de la Taxation</th>
+                    <th>Matière taxable</th>
+                    <th>Unité d’assiette</th>
+                    <th>Valeur d’assiette</th>
+                    <th>Tarif (FCFA)</th>
+                    <th>Nombre de taxation par an</th>
+                    <th>Somme due</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($data[12] as $index => $item)
+                <tr>
+                    <td style="text-align: center">{{$item[8]}}</td>
+                    <td style="text-align: center">{{$item[2]}}</td>
+                    <td style="text-align: center"> {{$item[4]}}</td>
+                    <td style="text-align: center">{{$item[3]}}</td>
+                    <td style="text-align: center">{{$item[5]}}</td>
+                    <td style="text-align: center">{{$item[7]}}</td>
+                    <td style="text-align: center">{{$item[6]}}</td>
+                </tr>
+                @endforeach
+                <tr>
+                    <td colspan="6" style="text-align: right;"><strong>Total :</strong></td>
+                    <td>{{$data[3]}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <p>Arrêté le présent avis à la somme de :<span class="write">{{number_to_words($data[3]) }} </span> Francs CFA (Sauf erreur ou omission).</p>
             <p>A payer dans les 30 jours suivant la réception de l’avis, ou avant la fin de chaque mois pour les
-                paiements mensualisés</p>
+                paiements mensualisés.</p>
             <table>
                 <tr class="text-start">
                     <td class="">
-                        <p>A ………, le<span class="write"> ……………</span></p>
+                        <p>A ………, le<span class="write"> {{date("d/m/Y", strtotime( $data[0]))}}</span></p>
                     </td>
                     <td class="">
                         <p>Le Maire</p>
@@ -195,7 +215,7 @@
                 chèque ou de l’ordre de virement par le Régisseur de recettes.</p>
         </div>
     </div>
-@endforeach
+
 
 </body>
 

@@ -44,6 +44,7 @@ class Taxpayer extends Model
         'last_login_at',
         'last_login_ip',
         'profile_photo_path',
+        'activity_id'
     ];
 
     /**
@@ -113,5 +114,9 @@ class Taxpayer extends Model
     public function getDefaultAddressAttribute()
     {
         return $this->addresses?->first();
+    }
+    public function activity()
+    {
+        return $this->hasOne(Activity::class);
     }
 }

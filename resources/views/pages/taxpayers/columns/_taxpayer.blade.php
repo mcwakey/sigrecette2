@@ -1,13 +1,13 @@
 <!--begin:: Avatar -->
 <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
-    <a href="{{ route('taxpayers.show', $taxpayer) }}">
-        @if($taxpayer->profile_photo_url)
+    <a href="{{ route('taxpayers.show', $taxpayerinfo) }}">
+        @if($taxpayerinfo->profile_photo_url)
             <div class="symbol-label">
-                <img src="{{ $taxpayer->profile_photo_url }}" class="w-100"/>
+                <img src="{{ $taxpayerinfo->profile_photo_url }}" class="w-100"/>
             </div>
         @else
-            <div class="symbol-label fs-3 {{ app(\App\Actions\GetThemeType::class)->handle('bg-light-? text-?', $taxpayer->name) }}">
-                {{ substr($taxpayer->name, 0, 1) }}
+            <div class="symbol-label fs-3 {{ app(\App\Actions\GetThemeType::class)->handle('bg-light-? text-?', $taxpayerinfo->name) }}">
+                {{ substr($taxpayerinfo->name, 0, 1) }}
             </div>
         @endif
     </a>
@@ -15,9 +15,9 @@
 <!--end::Avatar-->
 <!--begin::User details-->
 <div class="d-flex flex-column">
-    <a href="{{ route('taxpayers.show', $taxpayer) }}" class="text-gray-800 text-hover-primary mb-1">
-        {{ $taxpayer->name }}
+    <a href="{{ route('taxpayers.show', $taxpayerinfo) }}" class="text-gray-800 text-hover-primary mb-1">
+        {{ $taxpayerinfo->name }}
     </a>
-    <span>{{ $taxpayer->id }}</span>
+    <span>{{ $taxpayerinfo->id }}</span>
 </div>
 <!--begin::User details-->

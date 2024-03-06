@@ -1,4 +1,6 @@
 <?php
+use App\Http\Controllers\ActivitiesController;
+use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\GenerateInvoiceController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\TaxableController;
@@ -16,6 +18,7 @@ use App\Http\Controllers\Apps\PermissionManagementController;
 use App\Http\Controllers\ZonesController;
 use App\Http\Controllers\Apps\UserManagementController;
 use App\Http\Controllers\EreasController;
+use App\Http\Controllers\Geolocation;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +49,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('/taxpayers', TaxpayerController::class);
     Route::resource('/invoices', InvoiceController::class);
 
+    Route::name('geolocation.')->group(function () {
+        Route::get('/geolocation/zones', [Geolocation::class, 'zones'])->name('zones');
+        Route::get('/geolocation/{zone}/taxpayers', [Geolocation::class, 'zoneWithTaxpayers'])->name('zoneWithTaxpayers');
+        Route::get('/geolocation/users', [Geolocation::class, 'users'])->name('users');
+        Route::post('/geolocation/user', [Geolocation::class, 'setUserGeolocation'])->name('user');
+        Route::post('/geolocation/zone', [Geolocation::class, 'setZoneGeolocation'])->name('zone');
+    });
+
     Route::name('settings.')->group(function () {
         Route::resource('/taxables', TaxableController::class);
         Route::resource('/taxlabels', TaxLabelController::class);
@@ -53,6 +64,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('/cantons', CantonsController::class);
         Route::resource('/ereas', EreasController::class);
         Route::resource('/zones', ZonesController::class);
+        Route::resource('/categories', CategoriesController::class);
+        Route::resource('/activities', ActivitiesController::class);
 
         //Route::resource('/user-management/permissions', PermissionManagementController::class);
     });
@@ -70,5 +83,7 @@ Route::get('/error', function () {
 });
 
 Route::get('/auth/redirect/{provider}', [SocialiteController::class, 'redirect']);
-Route::get('/generate/{data}', [GenerateInvoiceController::class,'download'])->name("generateInvoice");
+Route::get('/generate-invoice/{data}', [GenerateInvoiceController::class,'downloadInvoice'])->name("generateInvoice");
+Route::get('/generate-receipt/{data}', [GenerateInvoiceController::class,'downloadReceipt'])->name("generateReceipt");
+
 require __DIR__ . '/auth.php';

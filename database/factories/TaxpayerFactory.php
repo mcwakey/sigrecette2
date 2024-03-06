@@ -33,7 +33,7 @@ class TaxpayerFactory extends Factory
             //'canton' => fake()->city(),
             'town_id' => random_int(1, 6),
             'erea_id' => random_int(1, 2),
-            'zone_id' => random_int(1, 10),
+            'zone_id' => random_int(1, 3),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
         ];

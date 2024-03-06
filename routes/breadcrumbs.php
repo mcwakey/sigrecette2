@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Activity;
 use App\Models\Canton;
+use App\Models\Category;
 use App\Models\User;
 use App\Models\Taxpayer;
 use Diglactic\Breadcrumbs\Breadcrumbs;
@@ -84,4 +86,24 @@ Breadcrumbs::for('zones.index', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('cantons.show', function (BreadcrumbTrail $trail, Canton $canton) {
     $trail->parent('cantons.index');
     $trail->push(ucwords($canton->id), route(' cantons.show', $canton));
+});
+
+
+Breadcrumbs::for('categories.show', function (BreadcrumbTrail $trail, Category $category) {
+    $trail->parent('categories.index');
+    $trail->push(ucwords($category->id), route(' categories.show', $category));
+});
+Breadcrumbs::for('categories.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push(__('categories'), route('settings.categories.index'));
+});
+
+
+Breadcrumbs::for('activities.show', function (BreadcrumbTrail $trail, Activity $activity) {
+    $trail->parent('activities.index');
+    $trail->push(ucwords($activity->id), route(' activities.show', $activity));
+});
+Breadcrumbs::for('activities.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push(__('activities'), route('settings.activities.index'));
 });

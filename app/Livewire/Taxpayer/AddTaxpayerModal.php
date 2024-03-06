@@ -3,10 +3,12 @@
 namespace App\Livewire\Taxpayer;
 
 use App\Events\TaxpayerAction;
+use App\Models\Activity;
 use App\Models\Erea;
 use App\Models\Town;
 use App\Models\Zone;
 use App\Models\Canton;
+use App\Models\Category;
 use App\Models\Gender;
 use App\Models\IdType;
 use Livewire\Component;
@@ -39,8 +41,8 @@ class AddTaxpayerModal extends Component
     public $zone_id;
 
     public $file_no;
-    public $category_work;
-    public $work;
+    public $category_id;
+    public $activity_id;
     public $other_work;
     public $authorisation;
     public $auth_reference;
@@ -54,6 +56,7 @@ class AddTaxpayerModal extends Component
 
     public $towns = [];
     public $ereas = [];
+    public $activities = [];
 
     public $edit_mode = false;
 
@@ -105,8 +108,8 @@ class AddTaxpayerModal extends Component
             'address' => 'nullable|sometimes|string',
 
             // 'file_no' => 'required',
-            // 'category_work' => 'required',
-            // 'work' => 'required',
+            'category_id' => 'required|int',
+            'activity_id' => 'required|int',
             // 'other_work' => 'required',
             'authorisation' => 'required|string',
             // 'auth_reference' => 'required',
@@ -136,12 +139,17 @@ class AddTaxpayerModal extends Component
         $genders = Gender::all();
         $id_types = IdType::all();
         $zones = Zone::all();
+        
+        //$activity = Activity::all();
+        $categories = Category::all();
+
+        //dd($categories);
 
         // Assuming you have a public property $canton in your Livewire component
         //$towns = $this->canton ? Town::where('canton_id', $this->canton)->get() : [];
         //$ereas = $this->town ? Erea::where('town_id', $this->town)->get() :  [];
 
-        return view('livewire.taxpayer.add-taxpayer-modal', compact('cantons', 'genders', 'id_types', 'zones'));
+        return view('livewire.taxpayer.add-taxpayer-modal', compact('cantons', 'genders', 'id_types', 'zones', 'categories'));
     }
 
     public function submit(Request $request)
@@ -166,13 +174,13 @@ class AddTaxpayerModal extends Component
                 'address' => $this->address,
 
                 'file_no' => $this->file_no,
-                'category_work' => $this->category_work,
-                'work' => $this->work,
+                'category_id' => $this->category_id,
+                'activity_id' => $this->activity_id,
                 'other_work' => $this->other_work,
                 'authorisation' => $this->authorisation,
                 'auth_reference' => $this->auth_reference,
                 'nif' => $this->nif,
-                'social_work' => $this->social_work,
+                //'social_work' => $this->social_work,
 
                 //'canton' => $this->canton,
                 'town_id' => $this->town_id,
@@ -266,6 +274,16 @@ class AddTaxpayerModal extends Component
 
     }
 
+    public function updatedCategoryWork($value)
+    {
+        //dd($value);
+        $this->activities = Activity::where('category_id', $value)->get(); // Load taxables based on tax label ID
+        //dd($value);
+        //$this->taxables = Taxable::where('tax_label_id', $value)->get(); // Load taxables based on tax label ID
+        //$this->towns = Town::where('canton_id', $value)->get(); // Load taxables based on tax label ID
+
+    }
+
     public function deleteUser($id)
     {
         // Prevent deletion of current Taxpayer
@@ -303,8 +321,8 @@ class AddTaxpayerModal extends Component
         $this->address = $taxpayer->address;
 
         $this->file_no = $taxpayer->file_no;
-        $this->category_work = $taxpayer->category_work;
-        $this->work = $taxpayer->work;
+        $this->category_id = $taxpayer->category_id;
+        $this->activity_id = $taxpayer->activity_id;
         $this->other_work = $taxpayer->other_work;
         $this->authorisation = $taxpayer->authorisation;
         $this->auth_reference = $taxpayer->auth_reference;

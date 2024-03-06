@@ -11,25 +11,111 @@
     <div class="card">
 
 
-    <div class="card-header d-flex justify-content-between border-0 mb-2 pt-6 w-100">
-        <!--begin::Card title-->
-        <div class="card-title">
-            <!--begin::Search-->
-            <div class="d-flex align-items-center position-relative my-1">
-                {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
-                <input type="text" data-kt-taxpayer-table-filter="search" class="form-control w-250px ps-13" placeholder="{{ __('search') }}" id="mySearchInput" />
-            </div>
-            <!--end::Search-->
-        </div>
-        <button type="button" class="btn btn-light-success h-45px ms-auto"  data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer">
-                        {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        {{ __('new taxpayer') }}
-                    </button>
+        <div class="card-header d-flex justify-content-between border-0 mb-2 pt-6 w-100">
+            <!--begin::Card title-->
+            <div class="card-title">
 
-</div>
+                <div class="d-flex align-items-center">
+                    <!--begin::Input group-->
+                    <div class="d-flex align-items-center position-relative my-1">
+                        {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
+                        <input type="text" data-kt-taxpayer-table-filter="search" class="form-control w-250px ps-13" placeholder="{{ __('search') }}" id="mySearchInput" />
+                    </div>
+                    <!--end::Input group-->
+                    <!--begin:Action-->
+                    <div class="d-flex align-items-center ms-5">
+                        <a href="#" id="kt_horizontal_search_advanced_link" data-kt-rotate="true" class="btn btn-outline btn-outline-dashed btn-outline-secondary btn-active-light-secondary me-5 rotate" data-bs-toggle="collapse" data-bs-target="#kt_advanced_search_form">
+                        Advanced Search <i class="ki-duotone ki-black-right-line fs-2 rotate-270 ms-3"><span class="path1"></span><span class="path2"></span></i></a>
+                    </div>
+
+                    <!--end:Action-->
+
+
+                </div>
+            </div>
+            <button type="button" class="btn btn-light-success h-45px ms-auto" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer">
+                {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                {{ __('new taxpayer') }}
+            </button>
+
+        </div>
 
         <!--begin::Card body-->
         <div class="card-body py-4">
+
+            <form action="#">
+                <div class="collapse" id="kt_advanced_search_form">
+                    <!--begin::Separator-->
+                    <div class="separator separator-dashed mt-5 mb-5"></div>
+                    <!--end::Separator-->
+                    <!--begin::Row-->
+                    <div class="row mb-8">
+                        <!--begin::Col-->
+                        <!-- <div class="col-xxl-6"> -->
+                            <!--begin::Col-->
+                            <div class="col-xxl-1">
+                                <label class="fs-6 form-label fw-bold text-dark">{{ __('id')}}</label>
+                                <input type="text" class="form-control" name="tags" id="mySearchZero" />
+                            </div>
+                            <div class="col-xxl-2">
+                                <label class="fs-6 form-label fw-bold text-dark">{{ __('taxpayer')}}</label>
+                                <input type="text" class="form-control" name="tags" id="mySearchOne" />
+                            </div>
+                            <!--begin::Col-->
+                            <div class="col-xxl-2">
+                                <label class="fs-6 form-label fw-bold text-dark">{{ __('mobilephone')}}</label>
+                                <input type="text" class="form-control" name="tags" id="mySearchThree" />
+                            </div>
+                            <!--begin::Col-->
+                            <div class="col-xxl-2">
+                                <label class="fs-6 form-label fw-bold text-dark">{{ __('canton')}}</label>
+                                <input type="text" class="form-control" name="tags" id="mySearchFour" />
+                            </div>
+                            <div class="col-xxl-2">
+                                <label class="fs-6 form-label fw-bold text-dark">{{ __('town')}}</label>
+                                <input type="text" class="form-control" name="tags" id="mySearchFive" />
+                            </div>
+                            <div class="col-xxl-2">
+                                <label class="fs-6 form-label fw-bold text-dark">{{ __('erea')}}</label>
+                                <input type="text" class="form-control" name="tags" id="mySearchSix" />
+                            </div>
+                        <!-- </div> -->
+                        <!--begin::Col-->
+                        <!-- <div class="col-xxl-6"> -->
+                            <!-- <div class="col-xxl-2">
+                                <label class="fs-6 form-label fw-bold text-dark">{{ __('erea')}}</label>
+                                <input type="text" class="form-control" name="tags" value="products, users, events" id="mySearchTwo" />
+                            </div> -->
+                            <!--end::Col-->
+                            <!--begin::Col-->
+                            <!-- <div class="col-xxl-2">
+                                <label class="fs-6 form-label fw-bold text-dark">{{ __('address')}}</label>
+                                <input type="text" class="form-control" name="tags" value="products, users, events" id="mySearchTwo" />
+                            </div> -->
+                            <!--end::Col-->
+                            <!--begin::Col-->
+                            <div class="col-xxl-1">
+                                <label class="fs-6 form-label fw-bold text-dark">{{ __('zone')}}</label>
+                                <!-- <input type="text" class="form-control" name="tags" /> -->
+                                
+                                <!--begin::Select-->
+                                <select class="form-select" id="mySearchEight" >
+                                    <option value=""></option>
+                                    <option value="Zone 1">Zone 1</option>
+                                    <option value="Zone 2">Zone 2</option>
+                                    <option value="Zone 3">Zone 3</option>
+                                </select>
+                                <!--end::Select-->
+                            </div>
+                        <!-- </div> -->
+                        <!--end::Col-->
+                    </div>
+                    <!--end::Row-->
+
+                    <div class="separator separator-dashed mt-5 mb-5"></div>
+                </div>
+
+            </form>
             <!--begin::Table-->
             <div class="table-responsive">
                 {{ $dataTable->table() }}
@@ -40,16 +126,84 @@
     </div>
 
 
-        <livewire:taxpayer.add-taxpayer-modal></livewire:taxpayer.add-taxpayer-modal>
+    <livewire:taxpayer.add-taxpayer-modal></livewire:taxpayer.add-taxpayer-modal>
 
     @push('scripts')
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css">
     <script src="https://cdn.datatables.net/buttons/1.0.3/js/dataTables.buttons.min.js"></script>
     <script src="/vendor/datatables/buttons.server-side.js"></script>
+
     {{ $dataTable->scripts() }}
     <script>
         document.getElementById('mySearchInput').addEventListener('keyup', function() {
             window.LaravelDataTables['taxpayers-table'].search(this.value).draw();
+        });
+
+        document.getElementById('mySearchZero').addEventListener('keyup', function() {
+            window.LaravelDataTables['taxpayers-table'].column(0).search(this.value).draw();
+        });
+
+        document.getElementById('mySearchOne').addEventListener('keyup', function() {
+            window.LaravelDataTables['taxpayers-table'].column(1).search(this.value).draw();
+        });
+
+        // document.getElementById('mySearchTwo').addEventListener('keyup', function() {
+        //     window.LaravelDataTables['taxpayers-table'].column(2).search(this.value).draw();
+        // });
+
+        document.getElementById('mySearchThree').addEventListener('keyup', function() {
+            window.LaravelDataTables['taxpayers-table'].column(3).search(this.value).draw();
+        });
+
+        document.getElementById('mySearchFour').addEventListener('keyup', function () {
+            window.LaravelDataTables['taxpayers-table'].column(4).search(this.value).draw();
+        });
+
+        // document.getElementById('mySearchFour').addEventListener('keyup', function () {
+        //     var query = this.value.toLowerCase(); // Convert search query to lowercase
+        //     var table = window.LaravelDataTables['taxpayers-table'];
+
+        //     // Construct search query with logical OR between conditions for each column
+        //     var columns = [4,5,6]; // Columns to search
+        //     var columnQueries = columns.map(function (index) {
+        //         return { search: query, column: index, regex: false };
+        //     });
+
+        //     table.search(columnQueries).draw();
+        // });
+
+        // document.getElementById('mySearchFour').addEventListener('keyup', function () {
+        //     var query = this.value.toLowerCase(); // Convert search query to lowercase
+        //     var table = window.LaravelDataTables['taxpayers-table'];
+
+        //     // Construct search query with logical OR between conditions for each column
+        //     table.search(function (data, index, rowData) {
+        //         var searchData = [
+        //             data[4], // Column 1 (name)
+        //             data[5], // Column 2 (gender)
+        //             data[6]  // Column 3 (mobilephone)
+        //             // Add additional columns as needed
+        //         ];
+
+        //         // Perform a search in each column and return true if any match is found
+        //         return searchData.some(function (columnData) {
+        //             return columnData.toLowerCase().includes(query);
+        //         });
+        //     }).draw();
+        // });
+
+
+
+        document.getElementById('mySearchFive').addEventListener('keyup', function() {
+            window.LaravelDataTables['taxpayers-table'].column(5).search(this.value).draw();
+        });
+
+        document.getElementById('mySearchSix').addEventListener('keyup', function() {
+            window.LaravelDataTables['taxpayers-table'].column(6).search(this.value).draw();
+        });
+
+        document.getElementById('mySearchEight').addEventListener('change', function() {
+            window.LaravelDataTables['taxpayers-table'].column(8).search(this.value).draw();
         });
 
         document.addEventListener('livewire:init', function() {

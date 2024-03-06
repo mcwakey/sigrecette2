@@ -28,10 +28,19 @@ return new class extends Migration
             $table->string('address')->nullable();
 
             $table->string('file_no')->nullable();
-            $table->string('social_work')->nullable();
-            $table->string('category_work')->nullable();
-            $table->string('work')->nullable();
+
+            //$table->string('social_work')->nullable();
+
+            //$table->string('category_work')->nullable();
+            $table->unsignedBigInteger('category_id')->nullable();
+            //$table->foreign('category_id')->references('id')->on('categories');
+
+            //$table->string('activity_id')->nullable();
+            $table->unsignedBigInteger('activity_id')->nullable();
+            //$table->foreign('activity_id')->references('id')->on('activities');
+
             $table->string('other_work')->nullable();
+
             $table->string('authorisation')->default("NO");
             $table->string('auth_reference')->nullable();
             $table->string('nif')->nullable();
@@ -57,6 +66,8 @@ return new class extends Migration
             $table->string('password');
             $table->string('avatar')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
+            //$table->unsignedBigInteger('activity_id')->nullable();
+            // $table->foreign('activity_id')->references('id')->on('activities');
             $table->rememberToken();
             $table->timestamps();
         });
