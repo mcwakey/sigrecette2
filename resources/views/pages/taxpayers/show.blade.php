@@ -388,6 +388,7 @@
                         </div>
                         <!--end::Card header-->
                         <!--begin::Card body-->
+
                         <div class="card-body d-flex flex-column">
                             <!--begin::Item-->
                             <div class="card-body">
@@ -397,6 +398,7 @@
                         </div>
                         <!--end::Card body-->
                     </div>
+                    
                     <!--end::Tasks-->
                 </div>
 

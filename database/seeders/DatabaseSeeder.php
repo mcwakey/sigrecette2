@@ -45,7 +45,7 @@ class DatabaseSeeder extends Seeder
 
         User::factory(20)->create();
         //Address::factory(20)->create();
-        Taxpayer::factory(5000)->create();
+        Taxpayer::factory(50)->create();
         //Canton::factory(10)->create();
         //Town::factory(30)->create();
         //Erea::factory(100)->create();

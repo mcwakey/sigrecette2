@@ -18,6 +18,7 @@ use App\Http\Controllers\Apps\RoleManagementController;
 use App\Http\Controllers\Apps\PermissionManagementController;
 use App\Http\Controllers\Apps\UserManagementController;
 use App\Http\Controllers\EreasController;
+use App\Http\Controllers\Geolocation;
 use App\Http\Controllers\TownsController;
 /*
 |--------------------------------------------------------------------------
@@ -45,8 +46,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('/user-management/permissions', PermissionManagementController::class);
     });
 
-        Route::resource('/taxpayers', TaxpayerController::class);
-        Route::resource('/invoices', InvoiceController::class);
+    Route::resource('/taxpayers', TaxpayerController::class);
+    Route::resource('/invoices', InvoiceController::class);
+
+    Route::name('geolocation.')->group(function () {
+        Route::get('/geolocation/zones', [Geolocation::class, 'zones'])->name('zones');
+        Route::get('/geolocation/{zone}/taxpayers', [Geolocation::class, 'zoneWithTaxpayers'])->name('zoneWithTaxpayers');
+        Route::get('/geolocation/users', [Geolocation::class, 'users'])->name('users');
+        Route::post('/geolocation/user', [Geolocation::class, 'setUserGeolocation'])->name('user');
+        Route::post('/geolocation/zone', [Geolocation::class, 'setZoneGeolocation'])->name('zone');
+    });
+
 
     Route::name('settings.')->group(function () {
         Route::resource('/taxables', TaxableController::class);
