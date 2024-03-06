@@ -80,7 +80,7 @@ class AddInvoiceModal extends Component
 
         "s_amount" => "required",
         "taxpayer_taxable_id" => "required",
-        "qty" => "required",
+        //"qty" => "required",
 
         'taxpayer_id' => 'required',
         'amount' => 'required',
@@ -181,6 +181,8 @@ class AddInvoiceModal extends Component
         $this->validate();
 
         DB::transaction(function () {
+
+            //dd($this->qty);
 
             // Prepare data for Invoice
             $invoiceData = [
@@ -302,11 +304,12 @@ class AddInvoiceModal extends Component
         $this->zone = $taxpayer->zone_id;
     }
 
-    public function loadInvoice($id, $value)
+    public function loadInvoice($value)
     {
-        //dd($id, $value);
+        $this->qty = $value;
+        //dd( $value, $this->qty, "loadInvoice");
         //$taxpayer = Taxpayer::find($id);
-        $taxpayer_taxables = $this->taxpayer_id ? TaxpayerTaxable::where('taxpayer_id', $id)->where('billable', 1)->get() : collect();
+        $taxpayer_taxables = TaxpayerTaxable::where('taxpayer_id', $this->taxpayer_id)->where('billable', 1)->get();
 
         //$this->s_amount[$id] = 10;
         // $this->name = $taxpayer->name;

@@ -530,6 +530,7 @@
                                                 </td>
 
                                                 <td>
+                                                    @if($invoice->status=="APROVED")
                                                     @if($invoice->delivery == "NOT DELIVERED")
 
 
@@ -562,7 +563,9 @@
                                                     <!--end::Task menu-->
                                                     @else
                                                     {{ date('Y-m-d', strtotime($invoice->delivery_date)) }}
-
+                                                    @endif
+                                                    @else
+                                                     -
                                                     @endif
                                                 </td>
 

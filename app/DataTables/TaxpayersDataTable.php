@@ -20,6 +20,14 @@ class TaxpayersDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+            // ->filter(function ($query) {
+            //     if (request()->filled('search.value')) {
+            //         $query->where('taxpayers.name', 'like', '%' . request('search.value') . '%')
+            //         ->orWhere('taxables.name', 'like', '%' . request('search.value') . '%')
+            //         ->orWhere('tax_labels.code', 'like', '%' . request('search.value') . '%');
+            //         // Add additional search conditions as needed for other columns
+            //     }
+            // })
             ->rawColumns(['name', 'last_login_at'])
             ->editColumn('taxpayers.id', function (Taxpayer $taxpayer) {
                 return $taxpayer->id;
@@ -80,12 +88,27 @@ class TaxpayersDataTable extends DataTable
     /**
      * Get the query source of dataTable.
      */
+    // public function query(Taxpayer $model): QueryBuilder
+    // {
+    //     //return $model->newQuery();
+    //     return $model->newQuery()
+    //     ->with('town.canton', 'town', 'erea','zone');
+    // }
+
     public function query(Taxpayer $model): QueryBuilder
     {
-        //return $model->newQuery();
-        return $model->newQuery()
-        ->with('town.canton', 'town', 'erea','zone');
+        return $model->with('town')
+                    ->join('towns', 'taxpayers.town_id', '=', 'towns.id')
+                    ->with('town.canton')
+                    ->join('cantons', 'towns.canton_id', '=', 'cantons.id')
+                    ->with('erea')
+                    ->join('ereas', 'taxpayers.erea_id', '=', 'ereas.id')
+                    ->with('zone')
+                    ->join('zones', 'taxpayers.zone_id', '=', 'zones.id')
+                    ->select('taxpayers.*') // Select columns from taxpayers table
+                    ->newQuery();
     }
+
 
     /**
      * Optional method if you want to use the html builder.

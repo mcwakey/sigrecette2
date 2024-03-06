@@ -29,8 +29,14 @@ class AddTaxpayerTaxableModal extends Component
     public $latitude;
     public $taxable_id;
     public $taxpayer_id;
+    
+    public $authorisation;
+    public $auth_reference;
 
     public $unit;
+    
+    public $length;
+    public $width;
 
     public $taxlabel_id;
 
@@ -50,12 +56,12 @@ class AddTaxpayerTaxableModal extends Component
 
 
     public $edit_mode = false;
-    public $option_calculus = 0;
+    public $option_calculus;
 
     protected $rules = [
         'name' => 'required|string',
         'seize' => 'required',
-        'location' => 'required',
+        //'location' => 'required',
         'taxable_id' => 'required',
         'taxpayer_id' => 'required',
 
@@ -64,8 +70,8 @@ class AddTaxpayerTaxableModal extends Component
         //'tax_label' => 'required',
         // 'tax_label_id' => 'required',
 
-        'longitude' => 'required',
-        'latitude' => 'required',
+        //'longitude' => 'required',
+        //'latitude' => 'required',
         // 'canton' => 'required',
         // 'town' => 'required',
         // 'erea' => 'required',
@@ -123,6 +129,16 @@ class AddTaxpayerTaxableModal extends Component
 
     }
 
+    public function updatedLength($value)
+    {
+        $this->seize = $this->length * $this->width;
+    }
+
+    public function updatedWidth($value)
+    {
+        $this->seize = $this->length * $this->width;
+    }
+
     public function updateCheckbox($id)
     {
         // Find the taxpayer by ID
@@ -161,6 +177,8 @@ class AddTaxpayerTaxableModal extends Component
                 'location' => $this->location,
                 'taxpayer_id' => $this->taxpayer_id,
                 'taxable_id' => $this->taxable_id,
+                'authorisation' => $this->authorisation,
+                'auth_reference' => $this->auth_reference,
                 // 'penalty' => $this->penalty,
                 // 'penalty_type' => $this->penalty_type,
                 // 'tax_label_id' => $this->tax_label_id,
@@ -247,6 +265,9 @@ class AddTaxpayerTaxableModal extends Component
         $this->taxable_id = $taxpayer_taxable->taxable_id;
         $this->taxpayer_id = $taxpayer_taxable->taxpayer_id;
         $this->taxlabel_id = $taxpayer_taxable->taxlabel_id;
+
+        $this->authorisation = $taxpayer_taxable->authorisation;
+        $this->auth_reference = $taxpayer_taxable->auth_reference;
     }
 
     public function addTaxpayerTaxable($id)

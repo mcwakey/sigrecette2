@@ -112,7 +112,7 @@
                                     <option value="Homme">Homme</option>
                                     <option value="Femme">Femme</option>
                                 </select> -->
-                                <input type="text" wire:model="unit" name="unit" class="form-control mb-3 mb-lg-0" placeholder="{{ __('tariff') }}"/>
+                                <input type="text" wire:model="unit" name="unit" class="form-control mb-3 mb-lg-0" placeholder="{{ __('unit') }}"/>
                                 <!--end::Input-->
                                 @error('unit')
                                 <span class="text-danger">{{ $message }}</span> @enderror

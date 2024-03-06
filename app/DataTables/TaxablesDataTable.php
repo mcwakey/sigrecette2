@@ -28,14 +28,14 @@ public $query = false;
         //dump($query);
 
         return (new EloquentDataTable($query))
-        ->filter(function ($query) {
-            if (request()->filled('search.value')) {
-                $query->where('tax_labels.name', 'like', '%' . request('search.value') . '%')
-                ->orWhere('taxables.name', 'like', '%' . request('search.value') . '%')
-                ->orWhere('tax_labels.code', 'like', '%' . request('search.value') . '%');
-                // Add additional search conditions as needed for other columns
-            }
-        })
+            ->filter(function ($query) {
+                if (request()->filled('search.value')) {
+                    $query->where('tax_labels.name', 'like', '%' . request('search.value') . '%')
+                    ->orWhere('taxables.name', 'like', '%' . request('search.value') . '%')
+                    ->orWhere('tax_labels.code', 'like', '%' . request('search.value') . '%');
+                    // Add additional search conditions as needed for other columns
+                }
+            })
             ->rawColumns(['taxable', 'last_login_at'])
 
             ->editColumn('tax_label.name', function (Taxable $taxable) {
@@ -59,11 +59,14 @@ public $query = false;
             // ->editColumn('taxable_name', function (Taxable $taxable) {
             //     return $taxable->name;
             // })
+            ->editColumn('tariff_type', function (Taxable $taxable) {
+                return $taxable->tariff_type;
+            })
             ->editColumn('tariff', function (Taxable $taxable) {
                 return $taxable->tariff;
             })
-            ->editColumn('tariff_type', function (Taxable $taxable) {
-                return $taxable->tariff_type;
+            ->editColumn('unit_type', function (Taxable $taxable) {
+                return $taxable->unit_type;
             })
             ->editColumn('unit', function (Taxable $taxable) {
                 return $taxable->unit;
@@ -99,20 +102,13 @@ public $query = false;
      * Get the query source of dataTable.
      */
     public function query(Taxable $model): QueryBuilder
-{
-    return $model->with('tax_label')
-                 ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
-                 ->select('taxables.*')
-                 //->orderBy('tax_labels.name')
-                 ->newQuery();
-}
-
-    
-    
-
-
-
-
+    {
+        return $model->with('tax_label')
+                    ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
+                    ->select('taxables.*')
+                    //->orderBy('tax_labels.name')
+                    ->newQuery();
+    }
 
     /**
      * Optional method if you want to use the html builder.
@@ -129,7 +125,7 @@ public $query = false;
             ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
-            ->orderBy(3)
+            ->orderBy(1)
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/taxables/columns/_draw-scripts.js')) . "}");
     }
 
@@ -139,14 +135,15 @@ public $query = false;
     public function getColumns(): array
     {
         return [
-            Column::make('tax_label.name')->addClass('d-flex align-items-center')->title(__('tax_label'))->name('tax_label_name'),
+            Column::make('tax_label.name')->addClass('d-flex align-items-center')->title(__('taxlabel')),
         //     Column::make('tax_label_name')->title(__('Tax Label Name'))->name('tax_label_name'),
         // Column::make('taxable_name')->title(__('Taxable Name'))->name('taxable_name'),
 
             Column::make('tax_label_code')->title(__('code'))->name('tax_label.code'),
             //Column::make('gender')->title('Tax Name'),
-            Column::make('tariff')->title(__('tariff')),
             Column::make('tariff_type')->title(__('tariff type')),
+            Column::make('tariff')->title(__('tariff')),
+            Column::make('unit_type')->title(__('unit type')),
             Column::make('unit')->title(__('unit')),
             Column::make('periodicity')->title(__('periodicity')),
             // Column::make('modality')->title(__('modality')),

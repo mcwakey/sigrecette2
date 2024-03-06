@@ -53,136 +53,61 @@
                         <!--begin::Col-->
                         <!-- <div class="col-xxl-6"> -->
                             <!--begin::Col-->
-                            <div class="col-xxl-3">
+                            <div class="col-xxl-1">
                                 <label class="fs-6 form-label fw-bold text-dark">{{ __('id')}}</label>
-                                <input type="text" class="form-control form-control form-control-solid" name="tags" id="mySearchThree" />
+                                <input type="text" class="form-control" name="tags" id="mySearchZero" />
                             </div>
-                            <div class="col-xxl-3">
+                            <div class="col-xxl-2">
                                 <label class="fs-6 form-label fw-bold text-dark">{{ __('taxpayer')}}</label>
-                                <input type="text" class="form-control form-control form-control-solid" name="tags" id="mySearchOne" />
+                                <input type="text" class="form-control" name="tags" id="mySearchOne" />
                             </div>
                             <!--begin::Col-->
-                            <div class="col-xxl-3">
+                            <div class="col-xxl-2">
                                 <label class="fs-6 form-label fw-bold text-dark">{{ __('mobilephone')}}</label>
-                                <input type="text" class="form-control form-control form-control-solid" name="tags" id="mySearchTwo" />
+                                <input type="text" class="form-control" name="tags" id="mySearchThree" />
                             </div>
                             <!--begin::Col-->
-                            <div class="col-xxl-3">
-                                <label class="fs-6 form-label fw-bold text-dark">{{ __('canton-town')}}</label>
-                                <input type="text" class="form-control form-control form-control-solid" name="tags" id="mySearchThree" />
+                            <div class="col-xxl-2">
+                                <label class="fs-6 form-label fw-bold text-dark">{{ __('canton')}}</label>
+                                <input type="text" class="form-control" name="tags" id="mySearchFour" />
+                            </div>
+                            <div class="col-xxl-2">
+                                <label class="fs-6 form-label fw-bold text-dark">{{ __('town')}}</label>
+                                <input type="text" class="form-control" name="tags" id="mySearchFive" />
+                            </div>
+                            <div class="col-xxl-2">
+                                <label class="fs-6 form-label fw-bold text-dark">{{ __('erea')}}</label>
+                                <input type="text" class="form-control" name="tags" id="mySearchSix" />
                             </div>
                         <!-- </div> -->
                         <!--begin::Col-->
                         <!-- <div class="col-xxl-6"> -->
-                            <div class="col-xxl-2">
+                            <!-- <div class="col-xxl-2">
                                 <label class="fs-6 form-label fw-bold text-dark">{{ __('erea')}}</label>
-                                <input type="text" class="form-control form-control form-control-solid" name="tags" value="products, users, events" id="mySearchTwo" />
-                            </div>
+                                <input type="text" class="form-control" name="tags" value="products, users, events" id="mySearchTwo" />
+                            </div> -->
                             <!--end::Col-->
                             <!--begin::Col-->
-                            <div class="col-xxl-2">
+                            <!-- <div class="col-xxl-2">
                                 <label class="fs-6 form-label fw-bold text-dark">{{ __('address')}}</label>
-                                <input type="text" class="form-control form-control form-control-solid" name="tags" value="products, users, events" id="mySearchTwo" />
-                            </div>
+                                <input type="text" class="form-control" name="tags" value="products, users, events" id="mySearchTwo" />
+                            </div> -->
                             <!--end::Col-->
                             <!--begin::Col-->
-                            <div class="col-xxl-2">
+                            <div class="col-xxl-1">
                                 <label class="fs-6 form-label fw-bold text-dark">{{ __('zone')}}</label>
-                                <input type="text" class="form-control form-control form-control-solid" name="tags" value="products, users, events" id="mySearchTwo" />
+                                <!-- <input type="text" class="form-control" name="tags" /> -->
+                                
+                                <!--begin::Select-->
+                                <select class="form-select" id="mySearchEight" >
+                                    <option value=""></option>
+                                    <option value="Zone 1">Zone 1</option>
+                                    <option value="Zone 2">Zone 2</option>
+                                    <option value="Zone 3">Zone 3</option>
+                                </select>
+                                <!--end::Select-->
                             </div>
                         <!-- </div> -->
-                        <!--end::Col-->
-                    </div>
-                    <!--end::Row-->
-                    <!--begin::Row-->
-                    <div class="row g-8">
-                        <!--begin::Col-->
-                        <div class="col-xxl-7">
-                            <!--begin::Row-->
-                            <div class="row g-8">
-                                <!--begin::Col-->
-                                <div class="col-lg-4">
-                                    <label class="fs-6 form-label fw-bold text-dark">Min. Amount</label>
-                                    <!--begin::Dialer-->
-                                    <div class="position-relative" data-kt-dialer="true" data-kt-dialer-min="1000" data-kt-dialer-max="50000" data-kt-dialer-step="1000" data-kt-dialer-prefix="$" data-kt-dialer-decimals="2">
-                                        <!--begin::Decrease control-->
-                                        <button type="button" class="btn btn-icon btn-active-color-gray-700 position-absolute translate-middle-y top-50 start-0" data-kt-dialer-control="decrease">
-                                            <i class="ki-outline ki-minus-circle fs-1"></i>
-                                        </button>
-                                        <!--end::Decrease control-->
-                                        <!--begin::Input control-->
-                                        <input type="text" class="form-control form-control-solid border-0 ps-12" data-kt-dialer-control="input" placeholder="Amount" name="manageBudget" readonly="readonly" value="$50" />
-                                        <!--end::Input control-->
-                                        <!--begin::Increase control-->
-                                        <button type="button" class="btn btn-icon btn-active-color-gray-700 position-absolute translate-middle-y top-50 end-0" data-kt-dialer-control="increase">
-                                            <i class="ki-outline ki-plus-circle fs-1"></i>
-                                        </button>
-                                        <!--end::Increase control-->
-                                    </div>
-                                    <!--end::Dialer-->
-                                </div>
-                                <!--end::Col-->
-                                <!--begin::Col-->
-                                <div class="col-lg-4">
-                                    <label class="fs-6 form-label fw-bold text-dark">Max. Amount</label>
-                                    <!--begin::Dialer-->
-                                    <div class="position-relative" data-kt-dialer="true" data-kt-dialer-min="1000" data-kt-dialer-max="50000" data-kt-dialer-step="1000" data-kt-dialer-prefix="$" data-kt-dialer-decimals="2">
-                                        <!--begin::Decrease control-->
-                                        <button type="button" class="btn btn-icon btn-active-color-gray-700 position-absolute translate-middle-y top-50 start-0" data-kt-dialer-control="decrease">
-                                            <i class="ki-outline ki-minus-circle fs-1"></i>
-                                        </button>
-                                        <!--end::Decrease control-->
-                                        <!--begin::Input control-->
-                                        <input type="text" class="form-control form-control-solid border-0 ps-12" data-kt-dialer-control="input" placeholder="Amount" name="manageBudget" readonly="readonly" value="$100" />
-                                        <!--end::Input control-->
-                                        <!--begin::Increase control-->
-                                        <button type="button" class="btn btn-icon btn-active-color-gray-700 position-absolute translate-middle-y top-50 end-0" data-kt-dialer-control="increase">
-                                            <i class="ki-outline ki-plus-circle fs-1"></i>
-                                        </button>
-                                        <!--end::Increase control-->
-                                    </div>
-                                    <!--end::Dialer-->
-                                </div>
-                                <!--end::Col-->
-                                <!--begin::Col-->
-                                <div class="col-lg-4">
-                                    <label class="fs-6 form-label fw-bold text-dark">Team Size</label>
-                                    <input type="text" class="form-control form-control form-control-solid" name="city" />
-                                </div>
-                                <!--end::Col-->
-                            </div>
-                            <!--end::Row-->
-                        </div>
-                        <!--end::Col-->
-                        <!--begin::Col-->
-                        <div class="col-xxl-5">
-                            <!--begin::Row-->
-                            <div class="row g-8">
-                                <!--begin::Col-->
-                                <div class="col-lg-6">
-                                    <label class="fs-6 form-label fw-bold text-dark">Category</label>
-                                    <!--begin::Select-->
-                                    <select class="form-select form-select-solid" data-control="select2" data-placeholder="In Progress" data-hide-search="true">
-                                        <option value=""></option>
-                                        <option value="1">Not started</option>
-                                        <option value="2" selected="selected">Select</option>
-                                        <option value="3">Done</option>
-                                    </select>
-                                    <!--end::Select-->
-                                </div>
-                                <!--end::Col-->
-                                <!--begin::Col-->
-                                <div class="col-lg-6">
-                                    <label class="fs-6 form-label fw-bold text-dark">Status</label>
-                                    <div class="form-check form-switch form-check-custom form-check-solid mt-1">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexSwitchChecked" checked="checked" />
-                                        <label class="form-check-label" for="flexSwitchChecked">Active</label>
-                                    </div>
-                                </div>
-                                <!--end::Col-->
-                            </div>
-                            <!--end::Row-->
-                        </div>
                         <!--end::Col-->
                     </div>
                     <!--end::Row-->
@@ -207,56 +132,79 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css">
     <script src="https://cdn.datatables.net/buttons/1.0.3/js/dataTables.buttons.min.js"></script>
     <script src="/vendor/datatables/buttons.server-side.js"></script>
+
     {{ $dataTable->scripts() }}
     <script>
         document.getElementById('mySearchInput').addEventListener('keyup', function() {
             window.LaravelDataTables['taxpayers-table'].search(this.value).draw();
         });
 
+        document.getElementById('mySearchZero').addEventListener('keyup', function() {
+            window.LaravelDataTables['taxpayers-table'].column(0).search(this.value).draw();
+        });
+
         document.getElementById('mySearchOne').addEventListener('keyup', function() {
-            var query = this.value;
-            var table = window.LaravelDataTables['taxpayers-table'];
-
-            // Perform a specific search query for column 1
-            table.column(1).search(query).draw();
+            window.LaravelDataTables['taxpayers-table'].column(1).search(this.value).draw();
         });
 
-        document.getElementById('mySearchTwo').addEventListener('keyup', function() {
-            var query = this.value;
-            var table = window.LaravelDataTables['taxpayers-table'];
-
-            // Perform a specific search query for column 2
-            table.column(3).search(query).draw();
-        });
-
-        // document.getElementById('mySearchThree').addEventListener('keyup', function() {
-        //     var query = this.value;
-        //     var table = window.LaravelDataTables['taxpayers-table'];
-
-        //     // Perform a specific search query for column 2
-        //     table.column(3).search(query).draw();
+        // document.getElementById('mySearchTwo').addEventListener('keyup', function() {
+        //     window.LaravelDataTables['taxpayers-table'].column(2).search(this.value).draw();
         // });
 
-//         document.getElementById('mySearchThree').addEventListener('keyup', function () {
-//     var query = this.value;
-//     var table = window.LaravelDataTables['taxpayers-table'];
+        document.getElementById('mySearchThree').addEventListener('keyup', function() {
+            window.LaravelDataTables['taxpayers-table'].column(3).search(this.value).draw();
+        });
 
-//     // Perform a search query for column 1 OR column 2
-//     table.columns([3, 4]).search(query, true, false).draw();
-// });
+        document.getElementById('mySearchFour').addEventListener('keyup', function () {
+            window.LaravelDataTables['taxpayers-table'].column(4).search(this.value).draw();
+        });
 
-document.getElementById('mySearchThree').addEventListener('keyup', function () {
-    var query = this.value;
-    var table = window.LaravelDataTables['taxpayers-table'];
+        // document.getElementById('mySearchFour').addEventListener('keyup', function () {
+        //     var query = this.value.toLowerCase(); // Convert search query to lowercase
+        //     var table = window.LaravelDataTables['taxpayers-table'];
 
-    // Perform a specific search query for column 1
-    //table.column(3).search(query).draw();
+        //     // Construct search query with logical OR between conditions for each column
+        //     var columns = [4,5,6]; // Columns to search
+        //     var columnQueries = columns.map(function (index) {
+        //         return { search: query, column: index, regex: false };
+        //     });
 
-    // Perform a specific search query for column 2
-    table.columns([4,5,6]).search(query).draw();
-});
+        //     table.search(columnQueries).draw();
+        // });
+
+        // document.getElementById('mySearchFour').addEventListener('keyup', function () {
+        //     var query = this.value.toLowerCase(); // Convert search query to lowercase
+        //     var table = window.LaravelDataTables['taxpayers-table'];
+
+        //     // Construct search query with logical OR between conditions for each column
+        //     table.search(function (data, index, rowData) {
+        //         var searchData = [
+        //             data[4], // Column 1 (name)
+        //             data[5], // Column 2 (gender)
+        //             data[6]  // Column 3 (mobilephone)
+        //             // Add additional columns as needed
+        //         ];
+
+        //         // Perform a search in each column and return true if any match is found
+        //         return searchData.some(function (columnData) {
+        //             return columnData.toLowerCase().includes(query);
+        //         });
+        //     }).draw();
+        // });
 
 
+
+        document.getElementById('mySearchFive').addEventListener('keyup', function() {
+            window.LaravelDataTables['taxpayers-table'].column(5).search(this.value).draw();
+        });
+
+        document.getElementById('mySearchSix').addEventListener('keyup', function() {
+            window.LaravelDataTables['taxpayers-table'].column(6).search(this.value).draw();
+        });
+
+        document.getElementById('mySearchEight').addEventListener('change', function() {
+            window.LaravelDataTables['taxpayers-table'].column(8).search(this.value).draw();
+        });
 
         document.addEventListener('livewire:init', function() {
             Livewire.on('success', function() {
