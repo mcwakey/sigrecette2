@@ -121,9 +121,11 @@ class PrintController extends Controller
 
     private function downloadInvoicesList($data, $type)
     {
+       // dd($data);
         $templateName = $this->getTemplateByType($type);
         $filename="Invoice-".Str::random(8).".pdf";
-        $pdf= PDF::loadView("exports.".$templateName, ['data' => $data])
+
+        $pdf= PDF::loadView("exports.".$templateName, ['data' => $data])->setPaper('a4', 'landscape')
             // ->save(Storage::path('exports') . DIRECTORY_SEPARATOR . $filename)
             ->stream($filename);
         return $pdf;

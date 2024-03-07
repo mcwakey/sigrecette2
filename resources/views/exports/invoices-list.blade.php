@@ -10,6 +10,7 @@
             margin: 0;
             font-size: 0.75em;
             padding: 5px;
+            align-items: center;
         }
 
         table {
@@ -51,7 +52,7 @@
             <td>Travail-Liberté-Patrie</td>
         </tr>
         <tr>
-            <td>Bordereau journal des avis de réduction ou d’annulation</td>
+            <td>Bordereau journal des avis </td>
         </tr>
         <tr>
             <td>Exercice : 2023</td>
@@ -59,7 +60,7 @@
     </table>
 
     <table>
-        <caption>N° Avis de réduction ou d’annulation - Date: 23/01</caption>
+
         <thead>
             <tr>
                 <th>N° Avis de réduction ou d’annulation</th>
@@ -76,30 +77,45 @@
             </tr>
         </thead>
         <tbody>
+        @foreach($data as $index => $item)
             <tr>
-                <td>001/2023</td>
-                <td>23/01</td>
-                <td>001/2023</td>
-                <td>001/2023</td>
-                <td>00011</td>
-                <td>Société Mont Agou</td>
-                <td>91..</td>
-                <td>XXYYZZ</td>
-                <td>XY</td>
+                <td>{{$item[3]}}</td>
+                <td>{{$item[9]}}</td>
+                <td>{{$item[3]}}</td>
+                <td>{{$item[1]}}</td>
+                <td>{{$item[1]}}</td>
+                <td>{{$item[3]}}</td>
+
+                @php
+                    $contribuable = $item[0];
+                    $lines = explode("\n", $contribuable);
+                    $derniereLigne = end($lines);
+                    $numeroTelephone = trim($derniereLigne);
+                @endphp
+
+                <td>{{$numeroTelephone}}</td>
+                <td>{{$item[0]}}</td>
+                <td>{{$item[6]}}</td>
+                <td>{{$item[7]}}</td>
+                <td></td>
+            </tr>
+        @endforeach
+
+
+        <tr>
+                <td colspan="9" style="text-align: right;">TOTAL DU PRÉSENT BORDEREAU D’ANNULATION</td>
                 <td>12 000</td>
                 <td></td>
             </tr>
             <tr>
-                <td colspan="9" style="text-align: right;">TOTAL DU PRÉSENT BORDEREAU D’ANNULATION</td>
-                <td>12 000</td>
-            </tr>
-            <tr>
                 <td colspan="9" style="text-align: right;">TOTAL GÉNÉRAL DU PRÉCÉDENT BORDEREAU D’ANNULATION</td>
+                <td></td>
                 <td></td>
             </tr>
             <tr>
                 <td colspan="9" style="text-align: right;">TOTAL GÉNÉRAL DU PRÉSENT BORDEREAU D’ANNULATION (À reporter)</td>
                 <td>12 000</td>
+                <td></td>
             </tr>
             <tr>
                 <td colspan="5" style="text-align: right;">Arrêté le présent bordereau journal de réduction ou d’annulation à la somme de : douze mille francs CFA</td>
