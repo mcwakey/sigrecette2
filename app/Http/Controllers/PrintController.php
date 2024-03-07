@@ -2,14 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\PdfGenerator;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class PrintController extends Controller
 {
+    public function __construct(private PdfGenerator $pdfGenerator)
+    {
+    }
+
+
+    /**
+     * @param $type
+     * @return string
+     */
     protected function getTemplateByType($type)
     {
         switch ($type) {
@@ -22,6 +31,11 @@ class PrintController extends Controller
         }
     }
 
+    /**
+     * @param $type
+     * @param $data
+     * @return \Illuminate\Http\RedirectResponse|Response|mixed
+     */
     protected function processType($type, $data)
     {
         switch ($type) {
@@ -34,6 +48,11 @@ class PrintController extends Controller
         }
     }
 
+    /**
+     * @param $data
+     * @param null $type
+     * @return \Illuminate\Http\RedirectResponse|Response|mixed
+     */
     public function download( $data,$type=null)
     {
         if (Storage::missing("exports")) {
@@ -46,45 +65,22 @@ class PrintController extends Controller
 
     }
 
+    /**
+     * @param $data
+     * @param $type
+     * @param PdfGenerator $pdfGenerator
+     * @return \Illuminate\Http\RedirectResponse|mixed
+     */
     public function downloadInvoice($data,$type){
         $templateName = $this->getTemplateByType($type);
-
-        if ($this->checkInvoiceDataUniformity($data) && $templateName !== null){
-            $filename="Invoice-".$data[2].'-'.Str::random(8).".pdf";
-
-            //dd($data);
-            $pdf= PDF::loadView("exports.".$templateName, ['data' => $data])
-                // ->save(Storage::path('exports') . DIRECTORY_SEPARATOR . $filename)
-                ->stream($filename);
-            return $pdf;
+        $result = $this->pdfGenerator->generateInvoicePdf($data,$templateName);
+        if ($result['success']) {
+            return $result['pdf'];
         }
-        return back();
+
+        return back()->with('error', $result['message']);
     }
-    public function checkInvoiceDataUniformity($data): bool
-    {
-        $expectedDataSize = 13;
-        $expectedSubDataSize = 9;
 
-        $firstSubDataValue = "";
-
-        if (count($data) !== $expectedDataSize) {
-            return false;
-        }
-
-        if (isset($data[12]) && is_array($data[12])) {
-            foreach ($data[12] as $index => $item) {
-                if ($index === 0) {
-                    $firstSubDataValue = $item[1];
-                }
-
-                if (count($item) !== $expectedSubDataSize || $firstSubDataValue !== $item[1]) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
 
     public function downloadMultiple( $data)
     {
@@ -119,17 +115,22 @@ class PrintController extends Controller
 
     }
 
-    private function downloadInvoicesList($data, $type)
+
+    /**
+     * @param $data
+     * @param $type
+     * @return \Illuminate\Http\RedirectResponse|mixed
+     */
+    public function downloadInvoicesList($data,$type)
     {
-       // dd($data);
         $templateName = $this->getTemplateByType($type);
-        $filename="Invoice-".Str::random(8).".pdf";
+        $result = $this->pdfGenerator->generateInvoiceListPdf($data,$templateName);
+        //dd($data);
+        if ($result['success']) {
+            return $result['pdf'];
+        }
 
-        $pdf= PDF::loadView("exports.".$templateName, ['data' => $data])->setPaper('a4', 'landscape')
-            // ->save(Storage::path('exports') . DIRECTORY_SEPARATOR . $filename)
-            ->stream($filename);
-        return $pdf;
-
+        return back()->with('error', $result['message']);
     }
 
 
