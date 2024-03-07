@@ -42,7 +42,7 @@
             margin-top: 10px;
         }
     </style>
-    <title>Bordereau journal des avis de réduction ou d’annulation</title>
+    <title>Bordereau journal des avis des sommes à payer</title>
 </head>
 <body>
 
@@ -52,7 +52,7 @@
             <td>Travail-Liberté-Patrie</td>
         </tr>
         <tr>
-            <td>Bordereau journal des avis </td>
+            <td>Bordereau journal des avis des sommes à payer</td>
         </tr>
         <tr>
             <td>Exercice : 2023</td>
