@@ -720,7 +720,7 @@
                                                                     ];
                                                                 @endphp
 
-                                                                <a href="{{ route('generateInvoice', ['data' => json_encode($data)]) }}" class="menu-link px-3">{{ __('print') }}</a>
+                                                                <a href="{{ route('generatePdf', ['data' => json_encode($data)]) }}" class="menu-link px-3">{{ __('print') }}</a>
                                                             </div>
 
                                                             <div class="menu-item px-3">

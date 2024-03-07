@@ -33,6 +33,11 @@
 
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
+                <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
+                    <button type="button" class="btn btn-outline-secondary" >
+                        <a href="#" id="imprimerTableau">  {{ __('print') }}</a>
+                    </button>
+                </div>
                 <!--begin::Toolbar-->
                 <div class="d-flex justify-content-end" data-kt-invoice-table-toolbar="base">
                     <!--begin::Add user-->
@@ -259,6 +264,30 @@
                 window.LaravelDataTables['invoices-table'].ajax.reload();
             });
         });
+        $(document).ready(function () {
+            $('#imprimerTableau').on('click', function () {
+                var table = document.getElementById("invoices-table");
+                var dataArray = [];
+
+                for (var i = 1; i < table.rows.length; i++) {
+                    var row = table.rows[i];
+                    var rowData = [];
+                    for (var j = 0; j < row.cells.length; j++) {
+                        var cellValue = row.cells[j].innerText.trim();
+                        rowData.push(cellValue) ;
+                    }
+                    dataArray.push(rowData);
+                }
+                var jsonData = JSON.stringify(dataArray);
+                var url = "{{ route('generatePdf', ['data' => ':jsonData', 'type' => 2]) }}";
+                url = url.replace(':jsonData', encodeURIComponent(jsonData));
+                window.location.href = url;
+            });
+        });
+
+
+
+
     </script>
     @endpush
 

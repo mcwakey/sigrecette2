@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\ActivitiesController;
 use App\Http\Controllers\CategoriesController;
-use App\Http\Controllers\GenerateInvoiceController;
+use App\Http\Controllers\PrintController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\TaxableController;
 use App\Http\Controllers\LanguageController;
@@ -84,7 +84,5 @@ Route::get('/error', function () {
 });
 
 Route::get('/auth/redirect/{provider}', [SocialiteController::class, 'redirect']);
-Route::get('/generate-invoice/{data}', [GenerateInvoiceController::class,'downloadInvoice'])->name("generateInvoice");
-Route::get('/generate-receipt/{data}', [GenerateInvoiceController::class,'downloadReceipt'])->name("generateReceipt");
-
+Route::get('/generate-pdf/{data}/{type?}', [PrintController::class,'download'])->name("generatePdf");
 require __DIR__ . '/auth.php';
