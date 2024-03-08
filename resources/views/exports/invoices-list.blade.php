@@ -7,16 +7,15 @@
         body {
             font-family: Arial, sans-serif;
             max-width: 800px;
-            margin: 0;
             font-size: 0.75em;
             padding: 5px;
-            align-items: center;
+            margin: 0 auto;
+            line-height: 1.2;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
         }
 
         table, th, td {
@@ -24,8 +23,7 @@
         }
 
         th, td {
-            padding: 10px;
-            text-align: left;
+            text-align: center;
         }
 
         th {
@@ -37,92 +35,135 @@
             margin-bottom: 10px;
             font-weight: bold;
         }
-
-        p {
-            margin-top: 10px;
-        }
     </style>
+
     <title>Bordereau journal des avis des sommes à payer</title>
 </head>
 <body>
 
-    <table>
-        <caption>REGION PLATEAUX - Commune de Agou - REPUBLIQUE TOGOLAISE</caption>
+<table>
+
+
+    <tr>
+        <td colspan="5"  style="border: none; margin: 0">
+            REGION PLATEAUX
+
+        </td>
+        <td colspan="6"  style="border: none; margin: 0">
+            REPUBLIQUE TOGOLAISE
+
+        </td>
+    </tr>
+    <tr>
+        <td colspan="5" style="border: none; margin: 0">
+
+            Commune de Agou
+        </td>
+        <td colspan="6"  style="border: none; margin: 0">
+
+            Travail-Liberté-Patrie
+        </td>
+    </tr>
+
+
+
+    <tr>
+        <th colspan="11" style="border: none; margin: 0;">
+
+            Bordereau Journal des avis des sommes à payer
+
+
+        </th>
+
+
+    </tr>
+    <tr>
+        <td colspan="11" style="border: none; margin: 0">
+
+            N°
+
+
+        </td>
+
+
+    </tr>
+    <tr>
+        <td colspan="11" style="margin-left: 2px;text-align:left;padding:4px ">
+            Exercice : 2023
+
+        </td>
+    </tr>
+
+
+    <tr>
+        <th>N° Avis des sommes à payer</th>
+        <th>Date d’émission</th>
+        <th>N° OR </th>
+        <th>NIC</th>
+        <th>Nom ou raison sociale du contribuable</th>
+        <th>N° de Téléphone</th>
+        <th>Zone fiscale</th>
+        <th>Canton- Quartier - ville - Adresse complète</th>
+        <th>Coordonnées GPS</th>
+        <th>Somme réduite ou annulée</th>
+        <th>PC/ Rejeté</th>
+    </tr>
+    <tbody>
+    @foreach($data as $index => $item)
         <tr>
-            <td>Travail-Liberté-Patrie</td>
+            <td>{{$item[3]}}</td>
+            <td>{{$item[9]}}</td>
+            <td>{{$item[3]}}</td>
+            <td>{{$item[1]}}</td>
+            <td>{{$item[1]}}</td>
+
+
+            @php
+                $contribuable = $item[0];
+                $lines = explode("\n", $contribuable);
+                $derniereLigne = end($lines);
+                $numeroTelephone = trim($derniereLigne);
+            @endphp
+
+            <td>{{$numeroTelephone}}</td>
+            <td>zone f</td>
+            <td>{{$item[0]}}</td>
+            <td>{{$item[6]}}</td>
+            <td>{{$item[7]}}</td>
+            <td></td>
         </tr>
-        <tr>
-            <td>Bordereau journal des avis des sommes à payer</td>
-        </tr>
-        <tr>
-            <td>Exercice : 2023</td>
-        </tr>
-    </table>
-
-    <table>
-
-        <thead>
-            <tr>
-                <th>N° Avis de réduction ou d’annulation</th>
-                <th>Date d’émission</th>
-                <th>N° Avis réduit ou annulé</th>
-                <th>N° OR d’annulation ou réduction</th>
-                <th>NIC</th>
-                <th>Nom ou raison sociale</th>
-                <th>N° de Téléphone</th>
-                <th>Adresse complète</th>
-                <th>Coordonnées GPS</th>
-                <th>Somme réduite ou annulée</th>
-                <th>PC/ Rejeté</th>
-            </tr>
-        </thead>
-        <tbody>
-        @foreach($data as $index => $item)
-            <tr>
-                <td>{{$item[3]}}</td>
-                <td>{{$item[9]}}</td>
-                <td>{{$item[3]}}</td>
-                <td>{{$item[1]}}</td>
-                <td>{{$item[1]}}</td>
-                <td>{{$item[3]}}</td>
-
-                @php
-                    $contribuable = $item[0];
-                    $lines = explode("\n", $contribuable);
-                    $derniereLigne = end($lines);
-                    $numeroTelephone = trim($derniereLigne);
-                @endphp
-
-                <td>{{$numeroTelephone}}</td>
-                <td>{{$item[0]}}</td>
-                <td>{{$item[6]}}</td>
-                <td>{{$item[7]}}</td>
-                <td></td>
-            </tr>
-        @endforeach
+    @endforeach
 
 
-        <tr>
-                <td colspan="9" style="text-align: right;">TOTAL DU PRÉSENT BORDEREAU D’ANNULATION</td>
-                <td>12 000</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td colspan="9" style="text-align: right;">TOTAL GÉNÉRAL DU PRÉCÉDENT BORDEREAU D’ANNULATION</td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td colspan="9" style="text-align: right;">TOTAL GÉNÉRAL DU PRÉSENT BORDEREAU D’ANNULATION (À reporter)</td>
-                <td>12 000</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td colspan="5" style="text-align: right;">Arrêté le présent bordereau journal de réduction ou d’annulation à la somme de : douze mille francs CFA</td>
-                <td colspan="6" style="text-align: right;">A Agou le 23 janvier 2023 Le Maire, [Cachet, signature, Nom et prénoms]</td>
-            </tr>
-        </tbody>
-    </table>
+    <tr>
+        <td colspan="9" >TOTAL DU PRÉSENT BORDEREAU </td>
+        <td>12 000</td>
+        <td rowspan="3"></td>
+    </tr>
+    <tr>
+        <td colspan="9" >TOTAL GÉNÉRAL DU PRÉCÉDENT BORDEREAU </td>
+        <td></td>
+
+    </tr>
+    <tr>
+        <td colspan="9">TOTAL GÉNÉRAL DU PRÉSENT BORDEREAU (À reporter)</td>
+        <td>12 000</td>
+
+    </tr>
+    <tr>
+        <td colspan="4" ></td>
+        <td colspan="7">Arrêté le présent bordereau journal de réduction ou d’annulation à la somme de : <span>douze mille francs CFA</span> </td>
+    </tr>
+    <tr>
+        <td colspan="5" style="border: none; margin: 0;padding: 5px;"> A <span> Agou</span> le <span>23 janvier 2023</span> </td>
+        <td colspan="6" style="border: none; margin: 0;padding: 0;">Le Maire</td>
+    </tr>
+    <tr>
+        <td colspan="5" style="border: none; margin: 0;padding: 0;"></td>
+        <td colspan="6" style="border: none; margin: 0;padding: 0;">[Cachet, signature, Nom et prénoms]</td>
+    </tr>
+    </tbody>
+</table>
 
 </body>
 </html>

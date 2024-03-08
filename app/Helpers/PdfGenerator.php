@@ -17,7 +17,8 @@ class PdfGenerator
     {
         if ($this->checkInvoiceListDataUniformity($data)) {
             $filename = "Invoice-list" . Str::random(8) . ".pdf";
-            $pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
+            //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
+            $pdf = PDF::loadView("exports.".$template, ['data' => $data])->stream($filename);
 
             return ['success' => true, 'pdf' => $pdf];
         }
