@@ -1,7 +1,7 @@
 ```markdown
 # sigrecette Starter
 
-Welcome to your new Laravel sigrecette! Follow the steps below to get started.
+Welcome to your new Laravel sigrecette! Follow the steps below to get started.  
 
 ## Prerequisites
 
