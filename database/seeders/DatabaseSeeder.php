@@ -29,7 +29,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UsersSeeder::class,
             RolesPermissionsSeeder::class,
-            TaxpayersSeeder::class,
             CantonsSeeder::class,
             TownsSeeder::class,
             EreasSeeder::class,
@@ -40,12 +39,13 @@ class DatabaseSeeder extends Seeder
             // TaxpayerTaxablesSeeder::class,
             GendersSeeder::class,
             IdTypesSeeder::class,
+            // TaxpayersSeeder::class,
         ]);
 
 
         User::factory(20)->create();
         //Address::factory(20)->create();
-        Taxpayer::factory(50)->create();
+        // Taxpayer::factory(50)->create();
         //Canton::factory(10)->create();
         //Town::factory(30)->create();
         //Erea::factory(100)->create();

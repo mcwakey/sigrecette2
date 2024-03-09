@@ -11,7 +11,7 @@ use Illuminate\Contracts\View\View;
 class Geolocation extends Controller
 {
     public function zones(){
-        $zones = Zone::all();
+        $zones = Zone::with(['taxpayers','taxpayers.town','taxpayers.town.canton','taxpayers.erea'])->get();
         return View('pages/geolocation.zones',compact('zones'));
     }
 

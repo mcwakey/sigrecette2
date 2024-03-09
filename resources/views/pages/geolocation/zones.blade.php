@@ -20,51 +20,75 @@
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
             }).addTo(map_render);
+
+            let markerCluster = new L.markerClusterGroup();
         </script>
 
         <script type="text/javascript">
-            const colors = [
-                'blue',
-                'red',
-                'orange',
-                'yellow',
-                'green',
-                'crimson',
-                'purple',
-                'cyan',
-                'magenta',
-                'lime',
-                'pink',
-                'teal',
-                'indigo',
-                'coral',
-                'lavender'
-            ];
+            // const colors = [
+            //     'blue',
+            //     'red',
+            //     'orange',
+            //     'yellow',
+            //     'green',
+            //     'crimson',
+            //     'purple',
+            //     'cyan',
+            //     'magenta',
+            //     'lime',
+            //     'pink',
+            //     'teal',
+            //     'indigo',
+            //     'coral',
+            //     'lavender'
+            // ];
                         
             // Convert Laravel object to JSON object
             let zones = @json($zones);
 
 
-            const createZonePolygonCoordinates = (zone) => {
-                let {longitude,latitude} = zone;
-                longitude = JSON.parse(longitude);
-                latitude = JSON.parse(latitude);
+            // const createZonePolygonCoordinates = (zone) => {
+            //     let {longitude,latitude} = zone;
+            //     longitude = JSON.parse(longitude);
+            //     latitude = JSON.parse(latitude);
 
-                const size = longitude.length;
-                let coordinates = [];
+            //     const size = longitude.length;
+            //     let coordinates = [];
 
-                for (let i = 0; i < size; i++) {
-                    coordinates.push([longitude[i],latitude[i]]);
-                }
+            //     for (let i = 0; i < size; i++) {
+            //         coordinates.push([longitude[i],latitude[i]]);
+            //     }
 
-                return coordinates;
-            }
+            //     return coordinates;
+            // }
 
             zones.forEach((zone,index) => {
-                let coordinates = createZonePolygonCoordinates(zone);
-                L.polygon(coordinates, {color: colors[index]}).addTo(map_render);
-                map_render.fitBounds(coordinates);
+                const taxpayers = zone.taxpayers;
+                taxpayers.forEach((taxpayer) => {
+                    if(parseFloat(taxpayer.latitude) && parseFloat(taxpayer.longitude)) {
+                        let marker = L.marker([taxpayer.latitude,taxpayer.longitude]);
+        
+                        marker.bindPopup(`
+                            Contribuable : ${taxpayer.name} <br>
+                            Ville : ${taxpayer.town.name} <br>
+                            Canton : ${taxpayer.town.canton.name} <br>
+                            Zone : ${taxpayer.erea.name} <br>
+                        `);
+
+                        markerCluster.addLayer(marker);
+                    }
+                });
             });
+
+            map_render.addLayer(markerCluster);
+
+            // zones.forEach((zone,index) => {
+            //     let coordinates = createZonePolygonCoordinates(zone);
+            //     L.polygon(coordinates, {color: colors[index]}).addTo(map_render);
+            //     map_render.fitBounds(coordinates);
+            // });
+
+            // console.log(zones);
         </script>
     @endpush
 </x-default-layout>

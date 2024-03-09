@@ -1261,9 +1261,9 @@
             var popupContent = `
                     <strong>${taxpayer.name}</strong><br>
                     Mobile Phone: ${taxpayer.mobilephone}<br>
-                    Canton: ${taxpayer.canton}<br>
-                    Town: ${taxpayer.town}<br>
-                    Erea: ${taxpayer.erea}<br>
+                    Canton: ${taxpayer.town.canton.name}<br>
+                    Town: ${taxpayer.town.name}<br>
+                    Erea: ${taxpayer.erea.name}<br>
                     Address: ${taxpayer.address}
                 `;
 
