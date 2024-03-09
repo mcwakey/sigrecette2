@@ -1,0 +1,20 @@
+name: Update Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-server:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Update Server
+        run: |
+          ssh -p 65002 u882585955@145.14.146.70 "cd /home/u882585955/domains/sigrecette.com && git pull origin main"
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
