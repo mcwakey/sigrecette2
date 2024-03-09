@@ -15,6 +15,5 @@ jobs:
 
       - name: Update Server
         run: |
-          ssh -o StrictHostKeyChecking=no -p 65002 u882585955@145.14.146.70 "cd /home/u882585955/domains/sigrecette.com && git pull origin main"
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
