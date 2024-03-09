@@ -1,19 +1,1 @@
-name: Update Server
 
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  update-server:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Update Server
-        run: |
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
