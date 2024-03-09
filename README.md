@@ -5,7 +5,7 @@ Welcome to your new Laravel sigrecette! Follow the steps below to get started.
 
 ## Prerequisites
 
-Before you begin, ensure you have the following installed:
+Before you begin, ensure you have the following installed :
 
 
 - [Git](https://git-scm.com/downloads)
