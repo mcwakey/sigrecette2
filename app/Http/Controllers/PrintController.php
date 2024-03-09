@@ -31,20 +31,21 @@ class PrintController extends Controller
         }
     }
 
+
     /**
      * @param $type
      * @param $data
      * @return \Illuminate\Http\RedirectResponse|Response|mixed
      */
-    protected function processType($type, $data)
+    protected function processType($type, $data,$action)
     {
         switch ($type) {
             case 1:
                 return $this->downloadReceipt($data,$type);
             case 2:
-                return $this->downloadInvoicesList($data,$type);
+                return $this->downloadInvoicesList($data,$type,$action);
             default:
-                return $this->downloadInvoice($data,$type);
+                return $this->downloadInvoice($data,$type,$action);
         }
     }
 
@@ -53,13 +54,13 @@ class PrintController extends Controller
      * @param null $type
      * @return \Illuminate\Http\RedirectResponse|Response|mixed
      */
-    public function download( $data,$type=null)
+    public function download( $data,$type=null,$action=null)
     {
         if (Storage::missing("exports")) {
             Storage::makeDirectory("exports");
         }
         $data = json_decode($data, true);
-        return $this->processType($type,$data);
+        return $this->processType($type,$data,$action);
 
 
 
@@ -71,9 +72,9 @@ class PrintController extends Controller
      * @param PdfGenerator $pdfGenerator
      * @return \Illuminate\Http\RedirectResponse|mixed
      */
-    public function downloadInvoice($data,$type){
+    public function downloadInvoice($data,$type,$action){
         $templateName = $this->getTemplateByType($type);
-        $result = $this->pdfGenerator->generateInvoicePdf($data,$templateName);
+        $result = $this->pdfGenerator->generateInvoicePdf($data,$templateName,$action);
         if ($result['success']) {
             return $result['pdf'];
         }
@@ -121,10 +122,10 @@ class PrintController extends Controller
      * @param $type
      * @return \Illuminate\Http\RedirectResponse|mixed
      */
-    public function downloadInvoicesList($data,$type)
+    public function downloadInvoicesList($data,$type,$action)
     {
         $templateName = $this->getTemplateByType($type);
-        $result = $this->pdfGenerator->generateInvoiceListPdf($data,$templateName);
+        $result = $this->pdfGenerator->generateInvoiceListPdf($data,$templateName,$action);
         //dd($data);
         if ($result['success']) {
             return $result['pdf'];

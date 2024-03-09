@@ -102,7 +102,7 @@
             text-align: center;
         }
         .write{
-            color: #0070c0;
+
         }
         .count_page{
             display: flex;

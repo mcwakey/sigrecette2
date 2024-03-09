@@ -84,5 +84,6 @@ Route::get('/error', function () {
 });
 
 Route::get('/auth/redirect/{provider}', [SocialiteController::class, 'redirect']);
-Route::get('/generate-pdf/{data}/{type?}', [PrintController::class,'download'])->name("generatePdf");
+Route::get('/generate-pdf/{data}/{type?}/{action?}', [PrintController::class,'download'])->name("generatePdf");
+Route::get('/import/taxpayer', [TaxpayerController::class, 'import']);
 require __DIR__ . '/auth.php';

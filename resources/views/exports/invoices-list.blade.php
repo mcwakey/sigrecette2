@@ -37,7 +37,7 @@
         }
     </style>
 
-    <title>Bordereau journal des avis des sommes à payer</title>
+    <title>{{$titles[15]}}</title>
 </head>
 <body>
 
@@ -70,7 +70,7 @@
     <tr>
         <th colspan="11" style="border: none; margin: 0;">
 
-            Bordereau Journal des avis des sommes à payer
+            {{$titles[15]}}
 
 
         </th>
@@ -96,38 +96,38 @@
 
 
     <tr>
-        <th>N° Avis des sommes à payer</th>
-        <th>Date d’émission</th>
-        <th>N° OR </th>
-        <th>NIC</th>
-        <th>Nom ou raison sociale du contribuable</th>
-        <th>N° de Téléphone</th>
-        <th>Zone fiscale</th>
-        <th>Canton- Quartier - ville - Adresse complète</th>
-        <th>Coordonnées GPS</th>
-        <th>Somme réduite ou annulée</th>
-        <th>PC/ Rejeté</th>
+        @foreach($titles as $index => $item)
+            @if($index <11)
+            <th>{{$item}}</th>
+            @endif
+        @endforeach
     </tr>
     <tbody>
+    @php
+        $total_somme = 0;
+    @endphp
+
     @foreach($data as $index => $item)
+        @php
+            $contribuable = $item[0];
+            $lines = explode("\n", $contribuable);
+            $name=$lines[1];
+            $derniereLigne = end($lines);
+            $numeroTelephone = trim($derniereLigne);
+            $total_somme +=intval($item[7]);
+            $explose_year = explode(" ", $item[9]);
+            $year = end($explose_year) ;
+
+        @endphp
         <tr>
             <td>{{$item[3]}}</td>
-            <td>{{$item[9]}}</td>
+            <td>{{$year}}</td>
+            <td>{{$item[1]}}</td>
             <td>{{$item[3]}}</td>
-            <td>{{$item[1]}}</td>
-            <td>{{$item[1]}}</td>
-
-
-            @php
-                $contribuable = $item[0];
-                $lines = explode("\n", $contribuable);
-                $derniereLigne = end($lines);
-                $numeroTelephone = trim($derniereLigne);
-            @endphp
-
+            <td>{{$name}}</td>
             <td>{{$numeroTelephone}}</td>
-            <td>zone f</td>
-            <td>{{$item[0]}}</td>
+            <td>{{$item[4]}}</td>
+            <td>{{$item[5]}}</td>
             <td>{{$item[6]}}</td>
             <td>{{$item[7]}}</td>
             <td></td>
@@ -136,23 +136,23 @@
 
 
     <tr>
-        <td colspan="9" >TOTAL DU PRÉSENT BORDEREAU </td>
-        <td>12 000</td>
+        <td colspan="9" >{{$titles[11]}} </td>
+        <td>{{ $total_somme}}</td>
         <td rowspan="3"></td>
     </tr>
     <tr>
-        <td colspan="9" >TOTAL GÉNÉRAL DU PRÉCÉDENT BORDEREAU </td>
+        <td colspan="9" >{{$titles[12]}} </td>
         <td></td>
 
     </tr>
     <tr>
-        <td colspan="9">TOTAL GÉNÉRAL DU PRÉSENT BORDEREAU (À reporter)</td>
-        <td>12 000</td>
+        <td colspan="9">{{$titles[13]}}</td>
+        <td>{{ $total_somme}} </td>
 
     </tr>
     <tr>
-        <td colspan="4" ></td>
-        <td colspan="7">Arrêté le présent bordereau journal de réduction ou d’annulation à la somme de : <span>douze mille francs CFA</span> </td>
+        <td colspan="11">{{$titles[14]}} : <span>{{number_to_words($total_somme) }}</span> </td>
+
     </tr>
     <tr>
         <td colspan="5" style="border: none; margin: 0;padding: 5px;"> A <span> Agou</span> le <span>23 janvier 2023</span> </td>
