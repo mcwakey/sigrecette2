@@ -346,10 +346,68 @@
                                     <!--begin::Search-->
                                     <div class="d-flex align-items-center position-relative my-1">
                                         {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
-                                        <input type="text" data-kt-taxpayer_invoices-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search Invoice" id="mySearchInput" />
+                                        <input type="text" data-kt-taxpayer_invoices-table-filter="search" class="form-control w-250px ps-13" placeholder="{{ __('search') }}" id="mySearchInput" />
+                                    </div>
+                                    <div class="d-flex align-items-center ms-5">
+                                        <a href="#" id="kt_horizontal_search_advanced_link" data-kt-rotate="true" class="btn btn-outline btn-outline-dashed btn-outline-secondary btn-active-light-secondary me-5 rotate" data-bs-toggle="collapse" data-bs-target="#kt_advanced_search_form">
+                                        {{ __('advanced search') }} <i class="ki-duotone ki-black-right-line fs-2 rotate-270 ms-3"><span class="path1"></span><span class="path2"></span></i></a>
                                     </div>
                                     <!--end::Search-->
                                 </div>
+
+                                
+        <div class="card-body py-4">
+
+        <form action="#">
+                                        <div class="collapse" id="kt_advanced_search_form">
+                                            <!--begin::Separator-->
+                                            <!-- <div class="separator separator-dashed mt-5 mb-5"></div> -->
+                                            <!--end::Separator-->
+                                            <!--begin::Row-->
+                                            <div class="row mb-8">
+                                                <!--begin::Col-->
+                                                <!-- <div class="col-xxl-6"> -->
+                                                <!--begin::Col-->
+                                                <div class="col-xxl-3">
+                                                    <label class="fs-6 form-label fw-bold text-dark">{{ __('asset name')}}</label>
+                                                    <input type="text" class="form-control" name="tags" id="mySearchOne" />
+                                                </div>
+                                                <!--begin::Col-->
+                                                <div class="col-xxl-3">
+                                                    <label class="fs-6 form-label fw-bold text-dark">{{ __('taxlabel')}}</label>
+                                                    <input type="text" class="form-control" name="tags" id="mySearchTwo" />
+                                                </div>
+                                                <!--begin::Col-->
+                                                <div class="col-xxl-3">
+                                                    <label class="fs-6 form-label fw-bold text-dark">{{ __('taxable')}}</label>
+                                                    <input type="text" class="form-control" name="tags" id="mySearchThree" />
+                                                </div>
+                                                
+                                                
+                                                <!--end::Col-->
+                                                <!--begin::Col-->
+                                                <div class="col-xxl-3">
+                                                    <label class="fs-6 form-label fw-bold text-dark">{{ __('status')}}</label>
+                                                    <!-- <input type="text" class="form-control" name="tags" /> -->
+                                                    <!--begin::Select-->
+                                                    <select class="form-select" id="mySearchFour">
+                                                        <option value=""></option>
+                                                        <option value="Zone 1">facture</option>
+                                                        <option value="Zone 2">non facture</option>
+                                                    </select>
+                                                    <!--end::Select-->
+                                                </div>
+                                                <!-- </div> -->
+                                                <!--end::Col-->
+                                            </div>
+                                            <!--end::Row-->
+
+                                            <div class="separator separator-dashed mt-5 mb-5"></div>
+                                        </div>
+
+                                    </form>
+
+</div>
                                 <!--begin::Card title-->
                             </div>
 
@@ -468,9 +526,9 @@
                                         </thead>
                                         <tbody class="fs-6 fw-semibold text-gray-600">
                                             @foreach($taxpayer->invoices as $invoice)
-                                            <tr>
+                                            <tr @if($invoice->status=="CANCELED") style="text-decoration: line-through;" @endif>
                                                 <td>{{ $invoice->created_at->format('Y-m-d') }}</td>
-                                                <td>{{ $invoice->id}}</td>
+                                                <td>{{ $invoice->invoice_no}}</td>
                                                 <td>
                                                     @if($invoice->order_no == NULL)
 
@@ -509,7 +567,7 @@
                                                     @endif
 
                                                 </td>
-                                                <td>{{ $invoice->taxpayer->id . $invoice->id }}</td>
+                                                <td>{{ $invoice->nic }}</td>
                                                 <td>{{ $invoice->amount }}</td>
 
                                                 <td>
@@ -588,17 +646,6 @@
                                                     <span class="badge badge-light-success">{{ __('APROVED') }}</span>
                                                     @elseif($invoice->status=="REJECTED")
                                                     <span class="badge badge-light-danger">{{ __('REJECTED') }}</span>
-                                                    @elseif($invoice->status=="REJECTED-EDIT")
-                                                    <span class="badge badge-light-warning">{{ __('REJECTED-EDIT') }}</span>
-                                                    <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-user-id="{{ $invoice->id }}" data-kt-menu-target="#kt_modal_add_status" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-action="update_status">
-                                                        <i class="ki-duotone ki-setting-3 fs-3">
-                                                            <span class="path1"></span>
-                                                            <span class="path2"></span>
-                                                            <span class="path3"></span>
-                                                            <span class="path4"></span>
-                                                            <span class="path5"></span>
-                                                        </i>
-                                                    </button>
                                                     @elseif($invoice->status=="DRAFT")
                                                     <span class="badge badge-light-secondary">{{ __('DRAFT')}}</span>
                                                     <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-user-id="{{ $invoice->id }}" data-kt-menu-target="#kt_modal_add_status" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-action="update_status">
@@ -648,22 +695,47 @@
                                                         <!--begin::Menu item-->
 
                                                         <div class="menu-item px-3">
-                                                            <a href="{{ route('taxpayers.show', $taxpayer) }}" class="menu-link px-3">
-                                                                {{ __('view') }}
+                                                            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice" data-kt-action="view_invoice">
+                                                               {{ __('view') }}
                                                             </a>
                                                         </div>
+                                                        
+                                                        @if($invoice->status=="CANCELED")
+                                                        <div class="menu-item px-3">
+                                                            @php
+                                                                $invoiceItems = [];
+                                                                foreach ($invoice->invoiceitems as $invoiceitem) {
+                                                                    $invoiceItems[] = [
+                                                                            $invoiceitem->taxpayer_taxable->taxable->tax_label->name,
+                                                                        $invoiceitem->taxpayer_taxable->taxable->tax_label->code,
+                                                                        $invoiceitem->taxpayer_taxable->taxable->name,
+                                                                        $invoiceitem->taxpayer_taxable->seize,
+                                                                        $invoiceitem->taxpayer_taxable->taxable->unit,
+                                                                            $invoiceitem->taxpayer_taxable->taxable->tariff,
+                                                                            $invoiceitem->amount,
+                                                                            $invoiceitem->qty,
+                                                                            $invoiceitem->taxpayer_taxable->name
 
-                                                        @if($invoice->status=="PENDING")
-                                                        <div class="menu-item px-3">
-                                                            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer" data-kt-action="update_taxpayer">
-                                                                {{ __('edit') }}
-                                                            </a>
-                                                        </div>
-                                                        @elseif($invoice->status=="CANCELED")
-                                                        <div class="menu-item px-3">
-                                                            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer->id }}" data-kt-action="delete_taxpayer">
-                                                                {{ __('delete') }}
-                                                            </a>
+                                                                    ];
+                                                                }
+                                                                $data = [
+                                                                    $invoice->created_at,
+                                                                    $invoice->invoice_no,
+                                                                        $taxpayer->nic,
+                                                                        $invoice->amount,
+                                                                    $taxpayer->name,
+                                                                    $taxpayer->mobilephone,
+                                                                    $taxpayer->town->canton->name,
+                                                                    $taxpayer->town->name,
+                                                                    $taxpayer->address,
+                                                                        $taxpayer->zone->name,
+                                                                    $taxpayer->longitude,
+                                                                    $taxpayer->latitude,
+
+                                                                    $invoiceItems,
+                                                                ];
+                                                            @endphp
+                                                            <a href="{{ route('generatePdf', ['data' => json_encode($data)]) }}" class="menu-link px-3" target="_blank">{{ __('print') }}</a>
                                                         </div>
                                                         @elseif($invoice->status=="DRAFT")
                                                         <div class="menu-item px-3">
@@ -676,16 +748,9 @@
                                                                 {{ __('delete') }}
                                                             </a>
                                                         </div>
-                                                        @elseif($invoice->status=="REJECTED-EDIT")
-                                                        <div class="menu-item px-3">
-                                                            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer" data-kt-action="update_taxpayer">
-                                                                {{ __('edit') }}
-                                                            </a>
-                                                        </div>
                                                         @elseif($invoice->status=="APROVED")
 
                                                             <div class="menu-item px-3">
-
                                                                 @php
                                                                     $invoiceItems = [];
                                                                     foreach ($invoice->invoiceitems as $invoiceitem) {
@@ -704,8 +769,8 @@
                                                                     }
                                                                     $data = [
                                                                       $invoice->created_at,
-                                                                        $invoice->id,
-                                                                         $taxpayer->id . $invoice->id,
+                                                                        $invoice->invoice_no,
+                                                                         $taxpayer->nic,
                                                                          $invoice->amount,
                                                                         $taxpayer->name,
                                                                         $taxpayer->mobilephone,
@@ -720,7 +785,7 @@
                                                                     ];
                                                                 @endphp
 
-                                                                <a href="{{ route('generatePdf', ['data' => json_encode($data)]) }}" class="menu-link px-3">{{ __('print') }}</a>
+                                                                <a href="{{ route('generatePdf', ['data' => json_encode($data)]) }}" class="menu-link px-3" target="_blank">{{ __('print') }}</a>
                                                             </div>
 
                                                             <div class="menu-item px-3">
@@ -729,8 +794,8 @@
                                                             </a>
                                                         </div>
                                                         <div class="menu-item px-3">
-                                                            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer" data-kt-action="update_taxpayer">
-                                                                {{ __('refund') }}
+                                                            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice" data-kt-action="update_invoice">
+                                                                {{ __('cancelation') }}
                                                             </a>
                                                         </div>
 
@@ -753,220 +818,6 @@
                                     <!--end::Table-->
                                 </div>
 
-                                <div class="table-responsive">
-												<!--begin::Table-->
-												<table class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
-													<!--begin::Table head-->
-													<thead>
-														<tr class="fw-bold text-muted">
-															<th class="w-25px">
-																<div class="form-check form-check-sm form-check-custom form-check-solid">
-																	<input class="form-check-input" type="checkbox" value="1" data-kt-check="true" data-kt-check-target=".widget-13-check" />
-																</div>
-															</th>
-															<th class="min-w-150px">Order Id</th>
-															<th class="min-w-140px">Country</th>
-															<th class="min-w-120px">Date</th>
-															<th class="min-w-120px">Company</th>
-															<th class="min-w-120px">Total</th>
-															<th class="min-w-120px">Status</th>
-															<th class="min-w-100px text-end">Actions</th>
-														</tr>
-													</thead>
-													<!--end::Table head-->
-													<!--begin::Table body-->
-													<tbody>
-														<tr>
-															<td>
-																<div class="form-check form-check-sm form-check-custom form-check-solid">
-																	<input class="form-check-input widget-13-check" type="checkbox" value="1" />
-																</div>
-															</td>
-															<td>
-																<a href="#" class="text-dark fw-bold text-hover-primary fs-6">56037-XDER</a>
-															</td>
-															<td>
-																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">Brasil</a>
-																<span class="text-muted fw-semibold text-muted d-block fs-7">Code: PH</span>
-															</td>
-															<td>
-																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">05/28/2020</a>
-																<span class="text-muted fw-semibold text-muted d-block fs-7">Code: Paid</span>
-															</td>
-															<td>
-																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">Intertico</a>
-																<span class="text-muted fw-semibold text-muted d-block fs-7">Web, UI/UX Design</span>
-															</td>
-															<td class="text-dark fw-bold text-hover-primary fs-6">$3560</td>
-															<td>
-																<span class="badge badge-light-success">Approved</span>
-															</td>
-															<td class="text-end">
-																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-																	<i class="ki-outline ki-switch fs-2"></i>
-																</a>
-																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-																	<i class="ki-outline ki-pencil fs-2"></i>
-																</a>
-																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
-																	<i class="ki-outline ki-trash fs-2"></i>
-																</a>
-															</td>
-														</tr>
-														<tr>
-															<td>
-																<div class="form-check form-check-sm form-check-custom form-check-solid">
-																	<input class="form-check-input widget-13-check" type="checkbox" value="1" />
-																</div>
-															</td>
-															<td>
-																<a href="#" class="text-dark fw-bold text-hover-primary fs-6">05822-FXSP</a>
-															</td>
-															<td>
-																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">Belarus</a>
-																<span class="text-muted fw-semibold text-muted d-block fs-7">Code: BY</span>
-															</td>
-															<td>
-																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">04/18/2021</a>
-																<span class="text-muted fw-semibold text-muted d-block fs-7">Code: Paid</span>
-															</td>
-															<td>
-																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">Agoda</a>
-																<span class="text-muted fw-semibold text-muted d-block fs-7">Houses & Hotels</span>
-															</td>
-															<td class="text-dark fw-bold text-hover-primary fs-6">$4850</td>
-															<td>
-																<span class="badge badge-light-warning">In Progress</span>
-															</td>
-															<td class="text-end">
-																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-																	<i class="ki-outline ki-switch fs-2"></i>
-																</a>
-																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-																	<i class="ki-outline ki-pencil fs-2"></i>
-																</a>
-																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
-																	<i class="ki-outline ki-trash fs-2"></i>
-																</a>
-															</td>
-														</tr>
-														<tr>
-															<td>
-																<div class="form-check form-check-sm form-check-custom form-check-solid">
-																	<input class="form-check-input widget-13-check" type="checkbox" value="1" />
-																</div>
-															</td>
-															<td>
-																<a href="#" class="text-dark fw-bold text-hover-primary fs-6">4472-QREX</a>
-															</td>
-															<td>
-																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">Phillipines</a>
-																<span class="text-muted fw-semibold text-muted d-block fs-7">Code: BH</span>
-															</td>
-															<td>
-																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">07/23/2019</a>
-																<span class="text-muted fw-semibold text-muted d-block fs-7">Code: Paid</span>
-															</td>
-															<td>
-																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">RoadGee</a>
-																<span class="text-muted fw-semibold text-muted d-block fs-7">Transportation</span>
-															</td>
-															<td class="text-dark fw-bold text-hover-primary fs-6">$8376</td>
-															<td>
-																<span class="badge badge-light-danger">Success</span>
-															</td>
-															<td class="text-end">
-																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-																	<i class="ki-outline ki-switch fs-2"></i>
-																</a>
-																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-																	<i class="ki-outline ki-pencil fs-2"></i>
-																</a>
-																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
-																	<i class="ki-outline ki-trash fs-2"></i>
-																</a>
-															</td>
-														</tr>
-														<tr>
-															<td>
-																<div class="form-check form-check-sm form-check-custom form-check-solid">
-																	<input class="form-check-input widget-13-check" type="checkbox" value="1" />
-																</div>
-															</td>
-															<td>
-																<a href="#" class="text-dark fw-bold text-hover-primary fs-6">00347-BCLQ</a>
-															</td>
-															<td>
-																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">Argentina</a>
-																<span class="text-muted fw-semibold text-muted d-block fs-7">Code: BR</span>
-															</td>
-															<td>
-																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">12/21/2021</a>
-																<span class="text-muted fw-semibold text-muted d-block fs-7">Code: Paid</span>
-															</td>
-															<td>
-																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">The Hill</a>
-																<span class="text-muted fw-semibold text-muted d-block fs-7">Insurance</span>
-															</td>
-															<td class="text-dark fw-bold text-hover-primary fs-6">$9486</td>
-															<td>
-																<span class="badge badge-light-info">Rejected</span>
-															</td>
-															<td class="text-end">
-																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-																	<i class="ki-outline ki-switch fs-2"></i>
-																</a>
-																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-																	<i class="ki-outline ki-pencil fs-2"></i>
-																</a>
-																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
-																	<i class="ki-outline ki-trash fs-2"></i>
-																</a>
-															</td>
-														</tr>
-														<tr>
-															<td>
-																<div class="form-check form-check-sm form-check-custom form-check-solid">
-																	<input class="form-check-input widget-13-check" type="checkbox" value="1" />
-																</div>
-															</td>
-															<td>
-																<a href="#" class="text-dark fw-bold text-hover-primary fs-6">59486-XDER</a>
-															</td>
-															<td>
-																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">Agoda</a>
-																<span class="text-muted fw-semibold text-muted d-block fs-7">Code: BT</span>
-															</td>
-															<td>
-																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">05/28/2020</a>
-																<span class="text-muted fw-semibold text-muted d-block fs-7">Code: Paid</span>
-															</td>
-															<td>
-																<a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">Phillipines</a>
-																<span class="text-muted fw-semibold text-muted d-block fs-7">Transportation</span>
-															</td>
-															<td class="text-dark fw-bold text-hover-primary fs-6">$8476</td>
-															<td>
-																<span class="badge badge-light-primary">Approved</span>
-															</td>
-															<td class="text-end">
-																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-																	<i class="ki-outline ki-switch fs-2"></i>
-																</a>
-																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-																	<i class="ki-outline ki-pencil fs-2"></i>
-																</a>
-																<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
-																	<i class="ki-outline ki-trash fs-2"></i>
-																</a>
-															</td>
-														</tr>
-													</tbody>
-													<!--end::Table body-->
-												</table>
-												<!--end::Table-->
-											</div>
-                                <!--end::Table wrapper-->
                             </div>
                             <!--end::Card body-->
                         </div>
@@ -1512,6 +1363,28 @@
         document.getElementById('mySearchInput').addEventListener('keyup', function() {
             window.LaravelDataTables['taxpayer_taxables-table'].search(this.value).draw();
         });
+
+        // document.getElementById('mySearchZero').addEventListener('keyup', function() {
+        //     window.LaravelDataTables['taxpayer_taxables-table'].column(0).search(this.value).draw();
+        // });
+
+        document.getElementById('mySearchOne').addEventListener('keyup', function() {
+            window.LaravelDataTables['taxpayer_taxables-table'].column(1).search(this.value).draw();
+        });
+
+        document.getElementById('mySearchTwo').addEventListener('keyup', function() {
+            window.LaravelDataTables['taxpayer_taxables-table'].column(2).search(this.value).draw();
+        });
+
+        document.getElementById('mySearchThree').addEventListener('keyup', function() {
+            window.LaravelDataTables['taxpayer_taxables-table'].column(3).search(this.value).draw();
+        });
+
+        document.getElementById('mySearchFour').addEventListener('change', function () {
+            window.LaravelDataTables['taxpayer_taxables-table'].column(4).search(this.value).draw();
+        });
+
+
         document.addEventListener('livewire:init', function() {
             Livewire.on('success', function() {
                 $('#kt_modal_add_invoice').modal('hide');

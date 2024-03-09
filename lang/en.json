@@ -251,11 +251,12 @@
 
     "CANCELED" : "CANCELED",
     "ACCEPTED" : "ACCEPTED",
-    "" : "",
-    "" : "",
-    "" : "",
-    "" : "",
-    "" : "",
+    
+    "advanced search" : "Advanced Search",
+    "cancelation" : "Cancelation",
+    "amount paid" : "",
+    "reference no" : "",
+    "Reduction / Annulation" : "",
     "" : "",
     "" : "",
     "" : "",

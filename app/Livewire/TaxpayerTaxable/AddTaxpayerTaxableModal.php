@@ -262,9 +262,10 @@ class AddTaxpayerTaxableModal extends Component
         $this->location = $taxpayer_taxable->location;
         $this->longitude = $taxpayer_taxable->longitude;
         $this->latitude = $taxpayer_taxable->latitude;
-        $this->taxable_id = $taxpayer_taxable->taxable_id;
         $this->taxpayer_id = $taxpayer_taxable->taxpayer_id;
-        $this->taxlabel_id = $taxpayer_taxable->taxlabel_id;
+        
+        $this->taxlabel_id = $taxpayer_taxable->taxable->taxlabel_id;
+        $this->taxable_id = $taxpayer_taxable->taxable_id;
 
         $this->authorisation = $taxpayer_taxable->authorisation;
         $this->auth_reference = $taxpayer_taxable->auth_reference;

@@ -12,8 +12,9 @@ class Invoice extends Model
     protected $fillable = [
         'taxpayer_id',
         'amount',
-        // 'password',
-        // 'last_login_at',
+        'qty',
+        'from_date',
+        'to_date',
         // 'last_login_ip',
         // 'profile_photo_path',
     ];
@@ -23,7 +24,7 @@ class Invoice extends Model
         return $this->belongsTo(Taxpayer::class);
     }
 
-    public function taxpayertaxables()
+    public function taxpayer_taxables()
     {
         return $this->hasMany(TaxpayerTaxable::class);
     }

@@ -25,7 +25,7 @@
                     <!--begin:Action-->
                     <div class="d-flex align-items-center ms-5">
                         <a href="#" id="kt_horizontal_search_advanced_link" data-kt-rotate="true" class="btn btn-outline btn-outline-dashed btn-outline-secondary btn-active-light-secondary me-5 rotate" data-bs-toggle="collapse" data-bs-target="#kt_advanced_search_form">
-                        Advanced Search <i class="ki-duotone ki-black-right-line fs-2 rotate-270 ms-3"><span class="path1"></span><span class="path2"></span></i></a>
+                        {{ __('advanced search') }} <i class="ki-duotone ki-black-right-line fs-2 rotate-270 ms-3"><span class="path1"></span><span class="path2"></span></i></a>
                     </div>
 
                     <!--end:Action-->
@@ -46,7 +46,7 @@
             <form action="#">
                 <div class="collapse" id="kt_advanced_search_form">
                     <!--begin::Separator-->
-                    <div class="separator separator-dashed mt-5 mb-5"></div>
+                    <!-- <div class="separator separator-dashed mt-5 mb-5"></div> -->
                     <!--end::Separator-->
                     <!--begin::Row-->
                     <div class="row mb-8">
@@ -129,9 +129,9 @@
     <livewire:taxpayer.add-taxpayer-modal></livewire:taxpayer.add-taxpayer-modal>
 
     @push('scripts')
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css">
+    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css">
     <script src="https://cdn.datatables.net/buttons/1.0.3/js/dataTables.buttons.min.js"></script>
-    <script src="/vendor/datatables/buttons.server-side.js"></script>
+    <script src="/vendor/datatables/buttons.server-side.js"></script> -->
 
     {{ $dataTable->scripts() }}
     <script>

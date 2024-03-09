@@ -13,11 +13,9 @@ return new class extends Migration
     {
         Schema::create('invoice_items', function (Blueprint $table) {
             $table->id();
+            $table->double('ii_seize');
+            $table->double('ii_tariff');
             $table->double('qty');
-            //$table->string('order_no');
-            //$table->string('nic');
-            //$table->string('status')->default('PENDING');
-            //$table->string('pay_status')->default('OWING');
             $table->double('amount');
             $table->unsignedBigInteger('invoice_id')->default(1);
             $table->foreign('invoice_id')->references('id')->on('invoices');

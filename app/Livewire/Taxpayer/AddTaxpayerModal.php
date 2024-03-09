@@ -264,7 +264,7 @@ class AddTaxpayerModal extends Component
         // //$this->zone_id = $taxpayer->zone_id;
     }
 
-    public function updatedTownId($value)
+    public function updatedTownId($value) 
     {
         //dd($value);
         $this->ereas = Erea::where('town_id', $value)->get(); // Load taxables based on tax label ID
