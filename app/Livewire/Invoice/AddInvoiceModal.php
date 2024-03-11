@@ -329,13 +329,7 @@ class AddInvoiceModal extends Component
     {
         $this->view_mode = true;
         $this->edit_mode = true;
-<<<<<<< Updated upstream
         $this->button_mode = true;
-        
-=======
-
->>>>>>> Stashed changes
-
         $invoice = Invoice::find($id);
 
         $this->taxpayer_id = $invoice->taxpayer->id;
