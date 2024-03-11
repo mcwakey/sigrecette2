@@ -179,9 +179,12 @@ class TaxpayerController extends Controller
     {
 
         //dd($request->file('file')->store('files'));
-        Excel::import(new TaxpayerImport,
-            $request->file('file')->store('files'));
-        return redirect()->back();
+        if($request->file('file')){
+            Excel::import(new TaxpayerImport,
+                $request->file('file')->store('files'));
+            return redirect()->back();
+        }
+
         $filename= "data.xlsx";
 
         if (!Storage::missing("imports")) {

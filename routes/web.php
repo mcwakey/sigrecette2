@@ -69,6 +69,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('/categories', CategoriesController::class);
         Route::resource('/activities', ActivitiesController::class);
         Route::resource('/communes', CommunesController::class);
+        Route::get('/import/taxpayers',[TaxpayerController::class, 'showImportPage'])->name('import-view');
+
 
         //Route::resource('/user-management/permissions', PermissionManagementController::class);
     });

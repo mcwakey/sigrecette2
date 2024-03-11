@@ -25,7 +25,7 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
             'name' => $row[10]." ".$row[11],
             'email' => fake()->unique()->safeEmail().uniqid("unique"),
             'email_verified_at' => now(),
-            'gender' => $row[12],
+            'gender' => $row[12]?:fake()->randomElement(['Homme', 'Femme']),
             'id_type' => fake()->randomElement(['CNI', 'PASSPORT', 'PERMIS DE CONDUIRE', 'CARTE D\'ELECTEUR', 'CARTE DE SEJOUR']),
            //'social_work'=>$row[12],
             'id_number' => random_int(1000000, 6000000),
