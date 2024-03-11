@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ActivitiesController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\CommunesController;
 use App\Http\Controllers\PrintController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\TaxableController;
@@ -67,6 +68,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('/zones', ZonesController::class);
         Route::resource('/categories', CategoriesController::class);
         Route::resource('/activities', ActivitiesController::class);
+        Route::resource('/communes', CommunesController::class);
 
         //Route::resource('/user-management/permissions', PermissionManagementController::class);
     });
@@ -85,5 +87,6 @@ Route::get('/error', function () {
 
 Route::get('/auth/redirect/{provider}', [SocialiteController::class, 'redirect']);
 Route::get('/generate-pdf/{data}/{type?}/{action?}', [PrintController::class,'download'])->name("generatePdf");
-Route::get('/import/taxpayer', [TaxpayerController::class, 'import']);
+Route::Post('/import/taxpayer', [TaxpayerController::class, 'import'])->name('import.process');
+Route::get('/import/taxpayer',[TaxpayerController::class, 'showImportPage'])->name('import-view');
 require __DIR__ . '/auth.php';

@@ -224,7 +224,7 @@ class AddInvoiceModal extends Component
                 'from_date' => date('Y-').$this->start_month."-01",
                 'to_date' => date('Y-').$this->start_month + $this->qty."-01",
             ];
-            
+
             if ($this->edit_mode) {
                 $invoiceData['amount'] = $this->amount_e;
                 //$invoiceData['qty'] = $this->amount;
@@ -329,8 +329,12 @@ class AddInvoiceModal extends Component
     {
         $this->view_mode = true;
         $this->edit_mode = true;
+<<<<<<< Updated upstream
         $this->button_mode = true;
         
+=======
+
+>>>>>>> Stashed changes
 
         $invoice = Invoice::find($id);
 
@@ -344,7 +348,7 @@ class AddInvoiceModal extends Component
         $this->zone = $invoice->taxpayer->zone->name;
 
         //$this->taxpayer_taxables = TaxpayerTaxable::where('taxpayer_id', $id)->where('billable', 1)->get();
-        
+
         $this->taxpayer_taxables = $taxpayer_taxables = InvoiceItem::where('invoice_id', $id)->get();
 
         // $this->taxpayer_taxables = $taxpayer_taxables = InvoiceItem::join('taxpayer_taxables', 'taxpayer_taxables.id', '=', 'invoice_items.taxpayer_taxable_id')
@@ -400,13 +404,13 @@ class AddInvoiceModal extends Component
             //$this->qty[$index] = $taxable->seize;
             //$this->taxpayer_taxable_id[$index] = $taxable->id;
         }
-        
+
         $this->amount_ph = array_sum($this->s_amount)." FCFA";
         $this->amount_ph_e = array_sum($this->s_amount_e)." FCFA";
-        
+
         $this->amount = array_sum($this->s_amount);
         $this->amount_e = array_sum($this->s_amount_e);
-        
+
         $this->amount_red_e = $this->amount - $this->amount_e;
     }
 
@@ -435,12 +439,12 @@ class AddInvoiceModal extends Component
             $this->s_amount[$index] = '';
         }
 
-        
+
         $this->amount_ph = " FCFA";
         $this->amount = '';
 
         //dd($this->taxpayer_taxables);
-        
+
         $taxpayer = Taxpayer::find($id);
 
         $this->taxpayer_id = $taxpayer->id;
@@ -497,7 +501,7 @@ class AddInvoiceModal extends Component
             //$this->qty[$index] = $taxable->seize;
             $this->taxpayer_taxable_id[$index] = $taxable->id;
         }
-        
+
         $this->amount_ph = array_sum($this->s_amount)." FCFA";
         $this->amount = array_sum($this->s_amount);
     }

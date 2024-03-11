@@ -3,6 +3,7 @@
 use App\Models\Activity;
 use App\Models\Canton;
 use App\Models\Category;
+use App\Models\Commune;
 use App\Models\User;
 use App\Models\Taxpayer;
 use Diglactic\Breadcrumbs\Breadcrumbs;
@@ -106,4 +107,13 @@ Breadcrumbs::for('activities.show', function (BreadcrumbTrail $trail, Activity $
 Breadcrumbs::for('activities.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
     $trail->push(__('activities'), route('settings.activities.index'));
+});
+
+Breadcrumbs::for('communes.show', function (BreadcrumbTrail $trail,Commune $commune) {
+    $trail->parent('communes.index');
+    $trail->push(ucwords($commune->id), route(' communes.show', $commune));
+});
+Breadcrumbs::for('communes.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push(__('communes'), route('settings.communes.index'));
 });

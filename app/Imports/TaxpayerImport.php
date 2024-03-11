@@ -22,7 +22,7 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
     {
         $user= new Taxpayer([
             'tnif' => fake()->randomNumber(3, 1, 10) . Str::random(5) . fake()->randomNumber(3, 0, 9),
-            'name' => $row[10].$row[11],
+            'name' => $row[10]." ".$row[11],
             'email' => fake()->unique()->safeEmail().uniqid("unique"),
             'email_verified_at' => now(),
             'gender' => $row[12],

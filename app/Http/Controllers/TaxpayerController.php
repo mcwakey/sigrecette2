@@ -171,9 +171,17 @@ class TaxpayerController extends Controller
     {
         //
     }
-
-    public function import()
+    public function showImportPage()
     {
+        return view('pages/taxpayers/import.show');
+    }
+    public function import(Request $request)
+    {
+
+        //dd($request->file('file')->store('files'));
+        Excel::import(new TaxpayerImport,
+            $request->file('file')->store('files'));
+        return redirect()->back();
         $filename= "data.xlsx";
 
         if (!Storage::missing("imports")) {
