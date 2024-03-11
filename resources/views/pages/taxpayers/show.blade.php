@@ -392,8 +392,8 @@
                                                     <!--begin::Select-->
                                                     <select class="form-select" id="mySearchFour">
                                                         <option value=""></option>
-                                                        <option value="Zone 1">facture</option>
-                                                        <option value="Zone 2">non facture</option>
+                                                        <option value="BILLED">{{ __('BILLED')}}</option>
+                                                        <option value="NOT BILLED">{{ __('NOT BILLED')}}</option>
                                                     </select>
                                                     <!--end::Select-->
                                                 </div>
@@ -787,17 +787,18 @@
 
                                                                 <a href="{{ route('generatePdf', ['data' => json_encode($data)]) }}" class="menu-link px-3" target="_blank">{{ __('print') }}</a>
                                                             </div>
-
+                                                            @if($invoice->pay_status != "PAID")
                                                             <div class="menu-item px-3">
-                                                            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_payment" data-kt-action="update_payment">
-                                                                {{ __('create payment') }}
-                                                            </a>
-                                                        </div>
-                                                        <div class="menu-item px-3">
-                                                            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice" data-kt-action="update_invoice">
-                                                                {{ __('cancelation') }}
-                                                            </a>
-                                                        </div>
+                                                                <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_payment" data-kt-action="update_payment">
+                                                                    {{ __('create payment') }}
+                                                                </a>
+                                                            </div>
+                                                            @endif
+                                                            <div class="menu-item px-3">
+                                                                <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice" data-kt-action="update_invoice">
+                                                                    {{ __('reduction cancelation') }}
+                                                                </a>
+                                                            </div>
 
                                                         @endif
                                                         <!--end::Menu item-->
@@ -874,16 +875,16 @@
                             <!--begin::Table wrapper-->
                             <div class="table-responsive">
                                 <!--begin::Table-->
-                                <table class="table align-middle table-row-dashed gy-5" id="kt_table_users_login_session">
+                                <table class="table align-middle table-row-dashed gy-5" id="payment-table">
                                     <thead class="border-bottom border-gray-200 fs-7 fw-bold">
                                         <tr class="text-start text-muted text-uppercase gs-0">
                                             <th class="min-w-50px">{{ __('payment date') }}</th>
-                                            <th class="min-w-50px">{{ __('receipt no') }}</th>
                                             <th class="min-w-50px">{{ __('invoice no') }}</th>
+                                            <th class="min-w-50px">{{ __('reference no') }}</th>
                                             <th class="min-w-50px">{{ __('amount') }}</th>
                                             <th class="min-w-50px">{{ __('type') }}</th>
-                                            <th class="min-w-50px">{{ __('refrence') }}</th>
                                             <th class="min-w-50px">{{ __('description') }}</th>
+                                            <th class="min-w-50px">{{ __('aproval') }}</th>
                                             <th class="min-w-50px">{{ __('actions') }}</th>
                                         </tr>
                                     </thead>
@@ -891,14 +892,14 @@
                                         @foreach($taxpayer->payments as $payment)
                                         <tr>
                                             <td>{{ $payment->created_at->format('Y-m-d') }}</td>
-                                            <td>{{ $payment->id}}</td>
-                                            <td>{{ $payment->invoice->id}}</td>
+                                            <td>{{ $payment->invoice->invoice_no}}</td>
+                                            <td>{{ $payment->reference}}</td>
                                             <td>{{ $payment->amount}}</td>
 
                                             <td><span class="badge badge-light-secondary">{{ $payment->payment_type}}</span></td>
 
-                                            <td>{{ $payment->reference}}</td>
 
+                                            <td>{{ $payment->description}}</td>
                                             <td>{{ $payment->description}}</td>
                                             <td><a href="#" class="btn btn-light bnt-active-light-success btn-sm">{{ __('view') }}</a></td>
                                         </tr>
@@ -1381,22 +1382,24 @@
         });
 
         document.getElementById('mySearchFour').addEventListener('change', function () {
-            window.LaravelDataTables['taxpayer_taxables-table'].column(4).search(this.value).draw();
+            window.LaravelDataTables['taxpayer_taxables-table'].column(5).search(this.value).draw();
         });
 
 
         document.addEventListener('livewire:init', function() {
             Livewire.on('success', function() {
                 $('#kt_modal_add_invoice').modal('hide');
-                window.LaravelDataTables['taxpayer_taxables-table'].ajax.reload();
-            });
-        });
-        document.addEventListener('livewire:init', function() {
-            Livewire.on('success', function() {
                 $('#kt_modal_add_taxpayer_taxable').modal('hide');
+                $('#kt_modal_add_payment').modal('hide');
                 window.LaravelDataTables['taxpayer_taxables-table'].ajax.reload();
+                window.getElementById('#payment-table').ajax.reload();
             });
         });
+        // document.addEventListener('livewire:init', function() {
+        //     Livewire.on('success', function() {
+        //         window.LaravelDataTables['taxpayer_taxables-table'].ajax.reload();
+        //     });
+        // });
     </script>
     <!-- <script>
             document.getElementById('mySearchInput').addEventListener('keyup', function () {

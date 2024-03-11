@@ -91,8 +91,11 @@ class AddInvoiceModal extends Component
     //     dd($this->selectedTaxpayerId);
     // }
 
+    public $cancel_reduct;
+
     public $edit_mode = false;
     public $view_mode = false;
+    public $button_mode = false;
 
     protected $rules = [
         // 'invoice_id' => 'required|string',
@@ -108,6 +111,7 @@ class AddInvoiceModal extends Component
 
         'taxpayer_id' => 'required',
         'amount' => 'required',
+        //'cancel_reduct' => 'required',
 
         // 'telephone' => 'required|string|min:10|max:10',
         // 'longitude' => 'nullable',
@@ -208,6 +212,9 @@ class AddInvoiceModal extends Component
         DB::transaction(function () {
 
             //dd($this->qty,$this->start_month);
+            if (!$this->edit_mode){
+                $this->invoice_id = null;
+            }
 
             // Prepare data for Invoice
             $invoiceData = [
@@ -229,14 +236,20 @@ class AddInvoiceModal extends Component
             $invoice = Invoice::create($invoiceData);
 
             // Save the invoice ID into the invoice_no column
+            
             $invoice->invoice_no = $this->invoice_id ?? $invoice->id;
             $invoice->nic = $this->taxpayer_id.($this->invoice_id ?? $invoice->id);
-            $invoice->order_no = $this->order_no;
+            //$invoice->order_no = $this->order_no;
             $invoice->save();
 
+            //$a = $this->invoice_id ?? $invoice->id;
+            //$a = ($this->invoice_id ?? $invoice->id);
+
+            //dd($a);
 
             $taxpayerTaxableData = [
                 'invoice_id' => $this->invoice_id ?? $invoice->id,
+                'bill_status' => 'BILLED',
                 'billable' => '0',
             ];
 
@@ -268,12 +281,14 @@ class AddInvoiceModal extends Component
 
                 InvoiceItem::create($invoiceItemsData);
             }
+            if ($this->edit_mode) {
+                $invoice = Invoice::find($this->invoice_id);
 
-            $invoice = Invoice::find($this->invoice_id);
-
-            // Save the invoice ID into the invoice_no column
-            $invoice->status = "CANCELED";
-            $invoice->save();
+                // Save the invoice ID into the invoice_no column
+                $invoice->status = "CANCELED";
+                $invoice->validity = "INVALID";
+                $invoice->save();
+            }
 
             // Dispatch success message
             if ($this->edit_mode) {
@@ -307,12 +322,14 @@ class AddInvoiceModal extends Component
     {
         $this->updateInvoice($id);
         $this->view_mode = false;
+        $this->button_mode = false;
     }
 
     public function updateInvoice($id)
     {
         $this->view_mode = true;
         $this->edit_mode = true;
+        $this->button_mode = true;
         
 
         $invoice = Invoice::find($id);
@@ -324,7 +341,7 @@ class AddInvoiceModal extends Component
 
         $this->name = $invoice->taxpayer->name;
         $this->tnif = $invoice->taxpayer->id;
-        $this->zone = $invoice->taxpayer->zone_id;
+        $this->zone = $invoice->taxpayer->zone->name;
 
         //$this->taxpayer_taxables = TaxpayerTaxable::where('taxpayer_id', $id)->where('billable', 1)->get();
         
@@ -397,6 +414,7 @@ class AddInvoiceModal extends Component
     {
         $this->edit_mode = false;
         $this->view_mode = false;
+        $this->button_mode = true;
 
         $this->invoice_id = '';
 
@@ -428,11 +446,12 @@ class AddInvoiceModal extends Component
         $this->taxpayer_id = $taxpayer->id;
         $this->name = $taxpayer->name;
         $this->tnif = $taxpayer->id;
-        $this->zone = $taxpayer->zone_id;
+        $this->zone = $taxpayer->zone->name;
     }
 
     public function loadInvoice($value)
     {
+        //$this->view_mode = true;
 
         $this->qty = $value;
         //dd( $value, $this->qty, "loadInvoice");
@@ -466,9 +485,9 @@ class AddInvoiceModal extends Component
 
             $this->taxpayer_taxable_id[$index] = $taxable->id;
             $this->taxpayer_taxable[$index] = $taxable->name;
-            $this->s_seize[$index] = $taxable->seize.' '.$taxable->taxable->unit;
 
-                $this->s_tariff[$index] = $taxable->taxable->tariff;
+            $this->s_seize[$index] = $taxable->seize;
+            $this->s_tariff[$index] = $taxable->taxable->tariff;
 
             if ($taxable->taxable->tariff_type == "FIXED"){
                 $this->s_amount[$index] = $taxable->seize * $taxable->taxable->tariff * $this->qty * $period;

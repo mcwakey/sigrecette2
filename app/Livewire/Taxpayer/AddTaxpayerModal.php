@@ -108,8 +108,8 @@ class AddTaxpayerModal extends Component
             'address' => 'nullable|sometimes|string',
 
             // 'file_no' => 'required',
-            'category_id' => 'required|int',
-            'activity_id' => 'required|int',
+            //'category_id' => 'required|int',
+            //'activity_id' => 'required|int',
             // 'other_work' => 'required',
             'authorisation' => 'required|string',
             // 'auth_reference' => 'required',
@@ -117,8 +117,8 @@ class AddTaxpayerModal extends Component
             // 'social_work' => 'required',
 
             //'canton' => 'required',
-            'town_id' => 'required|int',
-            'erea_id' => 'required|int',
+            //'town_id' => 'required|int',
+            //'erea_id' => 'required|int',
             'zone_id' => 'required|int',
             'avatar' => 'nullable|sometimes|image|max:1024',
         ];

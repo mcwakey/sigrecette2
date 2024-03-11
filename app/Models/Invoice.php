@@ -29,6 +29,11 @@ class Invoice extends Model
         return $this->hasMany(TaxpayerTaxable::class);
     }
 
+    public function getDefaulttaxpayer_taxableAttribute()
+    {
+        return $this->taxpayer_taxables()->first();
+    }
+
     public function payments()
     {
         return $this->hasMany(Payment::class);

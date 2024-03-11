@@ -226,10 +226,10 @@
     "length": "Longueur",
     "width": "Largeur",
     "unit type": "Type d'unité",
-    "invoice date": "Date de l'Avis'",
+    "invoice date": "Date de l'Avis",
     "delivery": "Livraison",
     "delivery date": "Date de livraison",
-    "approval": "Approbation",
+    "aproval": "Approbation",
     "payment date": "Date de paiement",
     "receipt no": "Numéro de récépissé",
     "reference": "Référence",
@@ -252,11 +252,20 @@
     "CANCELED" : "ANNULÉ",
     "ACCEPTED" : "ACCEPTÉ",
 
-    "advanced search" : "Recherche Advancee",
-    "cancelation" : "Reduction / Annulation",
-    
-    "amount paid" : "Montant paye",
-    "reference no" : "No. de Quittance",
+    "advanced search": "Recherche avancée",
+    "cancelation": "Annulation",
+    "amount paid": "Montant payé",
+    "reference no": "Numéro de quittance",
+    "reduction cancelation": "Réduction / Annulation",
+    "exercise duration": "Durée de l'exercice",
+    "balance": "Solde",
+    "payment type": "Type de paiement",
+
+    "payment info": "Informations du paiement",
+    "payment history": "Historique de l'avis",
+    "currency": "FCFA",
+
+
 
 
 

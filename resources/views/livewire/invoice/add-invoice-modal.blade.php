@@ -157,7 +157,7 @@
                                             
                                             <div class="form-floating">
                                                 <input type="text" wire:model="taxpayer_taxable.{{ $loop->index }}" name="taxpayer_taxable[]" id="taxpayer_taxable" class="form-control form-control-solid" readonly />
-                                                <label for="taxpayer_taxable">{{ $taxable_taxlabel }}</label>
+                                                <label for="taxpayer_taxable">{{ $taxpayer_taxable->taxable->tax_label->name ?? '' }} {{ $taxpayer_taxable->taxpayer_taxable->taxable->tax_label->name ?? '' }}</label>
                                             </div>
                                             
                                         </td>
@@ -252,7 +252,7 @@
                             </table>
                             <div>
                                 <label class="form-label fs-6 fw-bolder text-gray-700">Notes</label>
-                                <textarea name="notes" class="form-control form-control-solid" rows="2" placeholder="Thanks for your business"></textarea>
+                                <textarea name="notes" class="form-control" rows="2" placeholder="Thanks for your business"></textarea>
                             </div>
                         </div>
                         <!-- <table class="table g-5 gs-0 mb-0 fw-bolder text-gray-700" data-kt-element="items">
@@ -295,19 +295,24 @@
                                 <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('Choisir une option') }}" readonly />
                             </div>
                             <div class="col-md-3">
-                                <select wire:model="start_month" name="start_month" class="form-select form-control-select" data-dropdown-parent="#kt_modal_add_invoice">
+                                <select wire:model="cancel_reduct" name="cancel_reduct" class="form-select form-control-select" data-dropdown-parent="#kt_modal_add_invoice">
                                     <option></option>
+                                    @if ($amount_red_e > 0)
                                     <option value="2">Reduction</option>
+                                    @endif
                                     <option value="1">Annulation</option>
                                 </select>
+                                @error('cancel_reduct')
+                                <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
+                            @if ($amount_red_e > 0)
                             <div class="col-md-3">
                                 <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('Montant de la reduction') }}" readonly />
                             </div>
                             <div class="col-md-3">
                                 <!--end::Decrease control-->
                                 <!--begin::Input control-->
-                                <input wire:model="amount_red_e" name="amount_red_e" type="text" class="form-control text-end" />
+                                <input wire:model="amount_red_e" name="amount_red_e" type="text" class="form-control text-end" readonly/>
                                 <!--end::Input control-->
                                 @error('qty')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -315,6 +320,7 @@
 
 
                             </div>
+                            @endif
                         </div>
                             
                         </div>
@@ -333,6 +339,7 @@
                             <!--end::Input group-->
                         <!--end::Scroll-->
                         <!--begin::Actions-->
+                        @if ($button_mode)
                         <div class="text-center pt-5">
                             <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal" aria-label="Close" wire:loading.attr="disabled">{{ __('cancel') }}</button>
                             @if ($taxpayer_taxables instanceof \Illuminate\Support\Collection && $taxpayer_taxables->count() > 0)
@@ -345,6 +352,7 @@
                             </button>
                             @endif
                         </div>
+                        @endif
                         <!--end::Actions-->
                         </div>
                 </form>

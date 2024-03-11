@@ -26,40 +26,42 @@ class InvoicesDataTable extends DataTable
             ->editColumn('taxpayer_id', function (Invoice $invoice) {
                 return view('pages/invoices.columns._invoice', compact('invoice'));
             })
-            ->editColumn('id', function (Invoice $invoice) {
-                return $invoice->id;
+            ->editColumn('invoice_no', function (Invoice $invoice) {
+                return $invoice->invoice_no;
             })
             ->editColumn('order_no', function (Invoice $invoice) {
                 return $invoice->order_no;
             })
-            ->editColumn('invoices.id', function (Invoice $invoice) {
-                return $invoice->id.$invoice->taxpayer->id;
+            ->editColumn('nic', function (Invoice $invoice) {
+                return $invoice->nic;
             })
-
             ->editColumn('zone', function (Invoice $invoice) {
                 return $invoice->taxpayer->zone->name;
             })
-            ->editColumn('taxpayer.address', function (Invoice $invoice) {
+            ->editColumn('address', function (Invoice $invoice) {
                 return $invoice->taxpayer->address;
             })
             ->editColumn('gps', function (Invoice $invoice) {
-                return $invoice->taxpayer->latitude . ' ,' . $invoice->taxpayer->longitude;
+                return $invoice->taxpayer->latitude.' : '.$invoice->taxpayer->longitude;
+            })
+            ->editColumn('tax_label', function (Invoice $invoice) {
+                return $invoice->invoiceitems()->first()->taxpayer_taxable->taxable->tax_label->name ?? '';
             })
             ->editColumn('total', function (Invoice $invoice) {
                 return $invoice->amount;
             })
-            ->editColumn('statuss', function (Invoice $invoice) {
-                return sprintf('<div class="badge badge-light fw-bold">%s</div>', $invoice->status);
+
+            ->editColumn('validity', function (Invoice $invoice) {
+                return view('pages/invoices.columns._validity', compact('invoice'));
+                //return ''; // Return empty string
             })
 
-
-            ->editColumn('status', function (Invoice $invoice) {
-                return view('pages/invoices.columns._status', compact('invoice'));
+            ->editColumn('aproval', function (Invoice $invoice) {
+                return view('pages/invoices.columns._aproval', compact('invoice'));
             })
 
-
-            ->editColumn('created_at', function (Invoice $invoice) {
-                return $invoice->created_at->format('d M Y');
+            ->editColumn('to_date', function (Invoice $invoice) {
+                return $invoice->to_date;
             })
             ->addColumn('action', function (Invoice $invoice) {
                 return view('pages/invoices.columns._actions', compact('invoice'));
@@ -105,17 +107,19 @@ class InvoicesDataTable extends DataTable
     {
         return [
             Column::make('taxpayer_id')->title(__('taxpayer'))->addClass('d-flex align-items-center')->name('taxpayer'),
-            Column::make('invoices.id')->title(__('invoice no')),
+            Column::make('invoice_no')->title(__('invoice no')),
             Column::make('order_no')->title(__('order no')),
-            Column::make('id')->title(__('nic')),
+            Column::make('nic')->title(__('nic')),
 
             Column::make('zone')->title(__('zone')),
-            Column::make('taxpayer.address')->title(__('address')),
+            Column::make('address')->title(__('address')),
             Column::make('gps')->title(__('gps')),
+            Column::make('tax_label')->title(__('taxlabel'))->name('tax_label'),
             Column::make('total')->title(__('amount'))->name('amount'),
-            Column::make('status')->title(__('status')),
+            Column::make('aproval')->title(__('aproval')),
+            Column::make('validity')->title(__('status')),
 
-            Column::make('created_at')->title( __('created Date'))->addClass('text-nowrap'),
+            Column::make('to_date')->title( __('expiry date'))->addClass('text-nowrap'),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
                 ->exportable(true)

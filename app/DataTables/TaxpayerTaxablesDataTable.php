@@ -24,7 +24,8 @@ class TaxpayerTaxablesDataTable extends DataTable
                 if (request()->filled('search.value')) {
                     $query->where('tax_labels.name', 'like', '%' . request('search.value') . '%')
                     ->orWhere('taxables.name', 'like', '%' . request('search.value') . '%')
-                    ->orWhere('tax_labels.code', 'like', '%' . request('search.value') . '%');
+                    ->orWhere('tax_labels.code', 'like', '%' . request('search.value') . '%')
+                    ->orWhere('bill_status', 'like', '%' . request('search.value') . '%');
                     // Add additional search conditions as needed for other columns
                 }
             })
@@ -48,7 +49,7 @@ class TaxpayerTaxablesDataTable extends DataTable
                 return $taxpayer_taxable->seize. " ". $taxpayer_taxable->taxable->unit;
                 // return view('pages.taxpayer_taxables.columns._seize', compact('taxpayer_taxable'));
             })
-            ->editColumn('status', function (TaxpayerTaxable $taxpayer_taxable) {
+            ->editColumn('bill_status', function (TaxpayerTaxable $taxpayer_taxable) {
                 return view('pages.taxpayer_taxables.columns._status', compact('taxpayer_taxable'));
             })
             // ->editColumn('location', function (TaxpayerTaxable $taxpayer_taxable) {
@@ -113,7 +114,7 @@ class TaxpayerTaxablesDataTable extends DataTable
             //Column::make('tax_type')->title(__('tax_type')),
             //Column::make('seize')->title(__('amount')),
             Column::make('seize')->title(__('seize'))->addClass('text-nowrap'),
-            Column::make('status')->title(__('status')),
+            Column::make('bill_status')->title(__('status')),
             //Column::make('location')->title(__('location'))->addClass('text-nowrap'),
             Column::make('created_at')->title(__('created at'))->addClass('text-nowrap')->width(150),
             Column::computed('action')->title(__('action'))

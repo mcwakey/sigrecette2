@@ -15,7 +15,9 @@ class CreateStoredProcedures extends Migration
 
                 UPDATE taxpayer_taxables
                 INNER JOIN invoices ON taxpayer_taxables.invoice_id = invoices.id
-                SET taxpayer_taxables.invoice_id = NULL
+                SET taxpayer_taxables.invoice_id = NULL,
+                taxpayer_taxables.bill_status = "NOT BILLED",
+                invoices.validity = "EXPIRED"
                 WHERE invoices.to_date = today;
             END
         ');
