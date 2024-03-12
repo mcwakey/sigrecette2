@@ -124,6 +124,7 @@ class PrintController extends Controller
      */
     public function downloadInvoicesList($data,$type,$action)
     {
+        //dd($data,$type,$action);
         $templateName = $this->getTemplateByType($type);
         $result = $this->pdfGenerator->generateInvoiceListPdf($data,$templateName,$action);
         //dd($data);

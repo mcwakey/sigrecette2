@@ -75,7 +75,7 @@ class PdfGenerator
      */
     private function checkInvoiceListDataUniformity($data): bool
     {
-        $expectedDataSize = 11;
+        $expectedDataSize = 13;
 
         foreach ($data as $item) {
             if (count($item) !== $expectedDataSize) {
