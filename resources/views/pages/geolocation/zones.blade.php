@@ -25,7 +25,7 @@
 
 
             let taxpayerGreen = L.icon({
-                iconUrl: 'http://127.0.0.1:2000/storage/icons/taxpayer-green.svg',
+                iconUrl: 'http://127.0.0.1:8000/assets/media/icons/taxpayer-green.svg',
                 iconSize: [25, 41],
                 iconAnchor: [12, 41],
                 popupAnchor: [1, -34],
@@ -33,7 +33,7 @@
             });
 
             let taxpayerOrange = L.icon({
-                iconUrl: 'http://127.0.0.1:2000/storage/icons/taxpayer-orange.svg',
+                iconUrl: 'http://127.0.0.1:8000/assets/media/icons/taxpayer-orange.svg',
                 iconSize: [25, 41],
                 iconAnchor: [12, 41],
                 popupAnchor: [1, -34],
@@ -41,7 +41,7 @@
             });
 
             let taxpayerBlue = L.icon({
-                iconUrl: 'http://127.0.0.1:2000/storage/icons/taxpayer-blue.svg',
+                iconUrl: 'http://127.0.0.1:8000/assets/media/icons/taxpayer-blue.svg',
                 iconSize: [25, 41],
                 iconAnchor: [12, 41],
                 popupAnchor: [1, -34],
@@ -49,7 +49,7 @@
             });
 
             let taxpayerRed = L.icon({
-                iconUrl: 'http://127.0.0.1:2000/storage/icons/taxpayer-red.svg',
+                iconUrl: 'http://127.0.0.1:8000/assets/media/icons/taxpayer-red.svg',
                 iconSize: [25, 41],
                 iconAnchor: [12, 41],
                 popupAnchor: [1, -34],
