@@ -44,7 +44,7 @@ class InvoicesDataTable extends DataTable
             ->editColumn('taxpayers.latitude', function (Invoice $invoice) {
                 return ($invoice->taxpayer->latitude ?? '-').' : '.($invoice->taxpayer->longitude ?? '-');
             })
-            ->editColumn('tax_labels.name', function (Invoice $invoice) {
+            ->editColumn('tax_labels.id', function (Invoice $invoice) {
                 return $invoice->invoiceitems()->first()->taxpayer_taxable->taxable->tax_label->name ?? '';
             })
             ->editColumn('total', function (Invoice $invoice) {
@@ -125,7 +125,7 @@ class InvoicesDataTable extends DataTable
             Column::make('zones.name')->title(__('zone')),
             Column::make('taxpayers.address')->title(__('address')),
             Column::make('taxpayers.latitude')->title(__('gps')),
-            Column::make('tax_labels.name')->title(__('taxlabel')),
+            Column::make('tax_labels.id')->title(__('taxlabel')),
             Column::make('total')->title(__('amount'))->name('amount'),
             Column::make('status')->title(__('aproval')),
             Column::make('validity')->title(__('status')),
