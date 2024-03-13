@@ -1240,8 +1240,41 @@
             maxZoom: 19,
         }).addTo(map_render);
     </script>
+
     <script type="text/javascript">
-        var taxpayer = @json($taxpayer); // Convert Laravel object to JSON
+        let taxpayerGreen = L.icon({
+            iconUrl: 'http://127.0.0.1:2000/storage/icons/taxpayer-green.svg',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        let taxpayerOrange = L.icon({
+            iconUrl: 'http://127.0.0.1:2000/storage/icons/taxpayer-orange.svg',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        let taxpayerBlue = L.icon({
+            iconUrl: 'http://127.0.0.1:2000/storage/icons/taxpayer-blue.svg',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        let taxpayerRed = L.icon({
+            iconUrl: 'http://127.0.0.1:2000/storage/icons/taxpayer-red.svg',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        let taxpayer = @json($taxpayer); // Convert Laravel object to JSON
 
         // Log the taxpayer data to the console
         console.log('Taxpayer data:', taxpayer);
@@ -1268,13 +1301,30 @@
                     Address: ${taxpayer.address}
                 `;
 
-            // Log a message when adding the marker
-            console.log('Adding marker for taxpayer:', taxpayer.name);
 
-            // Add the marker to the map with a custom popup
-            L.marker([latitude, longitude]).addTo(map_render)
-                .bindPopup(popupContent);
-            // Display custom popup on click
+            if (taxpayer.invoices.length) {
+                let {invoices} = taxpayer;
+                let icon = null;
+
+                invoices.forEach(invoice => {
+                    if(invoice.pay_status == 'OWING'){
+                        icon = taxpayerRed;
+                        return;
+                    }
+                    else if(invoice.pay_status == 'PART PAID'){
+                        icon = taxpayerOrange;
+                    }else{
+                        icon = taxpayerGreen;
+                    }
+                    
+                });
+
+                L.marker([latitude, longitude], { icon: icon }).addTo(map_render)
+                    .bindPopup(popupContent);
+            } else {
+                L.marker([latitude, longitude], { icon: taxpayerBlue }).addTo(map_render)
+                    .bindPopup(popupContent);
+            }
 
             // Animate the map to the marker's position with a specific zoom level
             map_render.flyTo([latitude, longitude], 13, {
@@ -1288,26 +1338,6 @@
     </script>
     <script type="text/javascript">
     var taxpayer_taxables = @json($taxpayer->taxpayer_taxables); // Convert Laravel collection to JSON
-
-    // Log the taxpayer_taxables data to the console
-    console.log('Taxpayer Taxables data:', taxpayer_taxables);
-
-    // Custom red icon for the marker
-    var greenIcon = L.icon({
-        iconUrl: 'http://leafletjs.com/examples/custom-icons/leaf-green.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-    });
-    var redIcon = L.icon({
-        iconUrl: 'http://leafletjs.com/examples/custom-icons/leaf-red.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-    });
-
     // Check if taxpayer_taxables is not empty
     if (taxpayer_taxables.length > 0) {
         // Loop through each taxpayer_taxable item
