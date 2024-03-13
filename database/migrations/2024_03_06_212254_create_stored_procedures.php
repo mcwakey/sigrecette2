@@ -14,11 +14,14 @@ class CreateStoredProcedures extends Migration
                 SET today = CURDATE();
 
                 UPDATE taxpayer_taxables
-                INNER JOIN invoices ON taxpayer_taxables.invoice_id = invoices.id
+                INNER JOIN invoices ON taxpayer_taxables.invoice_id = invoices.invoice_no
+                AND validity = "VALID"
                 SET taxpayer_taxables.invoice_id = NULL,
                 taxpayer_taxables.bill_status = "NOT BILLED",
-                invoices.validity = "EXPIRED"
-                WHERE invoices.to_date = today;
+                invoices.validity = "EXPIRED",
+                invoices.status = "APROVED"
+                WHERE invoices.to_date = today AND
+                invoices.taxpayer_id <> NULL;
             END
         ');
     }

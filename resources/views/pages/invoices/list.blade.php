@@ -23,7 +23,7 @@
                     <!--begin:Action-->
                     <div class="d-flex align-items-center ms-5">
                         <a href="#" id="kt_horizontal_search_advanced_link" data-kt-rotate="true" class="btn btn-outline btn-outline-dashed btn-outline-secondary btn-active-light-secondary me-5 rotate" data-bs-toggle="collapse" data-bs-target="#kt_advanced_search_form">
-                        {{ __('advanced search') }} <i class="ki-duotone ki-black-right-line fs-2 rotate-270 ms-3"><span class="path1"></span><span class="path2"></span></i></a>
+                            {{ __('advanced search') }} <i class="ki-duotone ki-black-right-line fs-2 rotate-270 ms-3"><span class="path1"></span><span class="path2"></span></i></a>
                     </div>
 
                     <!--end:Action-->
@@ -35,16 +35,24 @@
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
                 <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
-                    <button type="button" class="btn btn-outline-secondary" >
-                        <a href="#" id="imprimerTableau">  {{ __('print') }}</a>
+                    <button type="button" class="btn btn-outline-secondary">
+                        <a href="#" id="imprimerTableau"> {{ __('print') }}</a>
                     </button>
                 </div>
                 <!--begin::Toolbar-->
-                <div class="d-flex justify-content-end" data-kt-invoice-table-toolbar="base">
+                <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
                     <!--begin::Add user-->
                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
                         {{ __('create invoice') }}
+                    </button>
+                    <!--end::Add user-->
+                </div>
+                <div class="d-flex justify-content-end" data-kt-invoice-table-toolbar="base">
+                    <!--begin::Add user-->
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#kt_modal_auto_invoice">
+                        {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                        {{ __('create invoice automaticaly') }}
                     </button>
                     <!--end::Add user-->
                 </div>
@@ -67,80 +75,71 @@
                         <!--begin::Col-->
                         <div class="col-xxl-2">
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('taxpayer') }}</label>
-                            <input type="text" class="form-control form-control form-control-solid" name="tags" value="products, users, events" id="mySearchOne" />
+                            <input type="text" class="form-control" name="tags" id="mySearchOne" />
                         </div>
                         <!--begin::Col-->
                         <div class="col-xxl-2">
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('invoice no') }}</label>
-                            <input type="text" class="form-control form-control form-control-solid" name="tags" value="products, users, events" id="mySearchTwo" />
+                            <input type="text" class="form-control" name="tags" id="mySearchTwo" />
                         </div>
                         <!--end::Col-->
                         <!--begin::Col-->
                         <div class="col-xxl-2">
-                            <!--begin::Row-->
-                            <div class="row g-8">
-                                <!--begin::Col-->
-                                    <label class="fs-6 form-label fw-bold text-dark">{{ __('zone') }}</label>
-                                    <!--begin::Select-->
-                                    <select class="form-select form-select-solid" data-control="select2" data-placeholder="In Progress" data-hide-search="true">
-                                        <option value=""></option>
-                                        <option value="1">Not started</option>
-                                        <option value="2" selected="selected">In Progress</option>
-                                        <option value="3">Done</option>
-                                    </select>
-                                    <!--end::Select-->
-                            </div>
-                            <!--end::Row-->
+                            <label class="fs-6 form-label fw-bold text-dark">{{ __('zone') }}</label>
+                            <!--begin::Select-->
+                            <select class="form-select" id="mySearchFive">
+                                <option value=""></option>
+                                @foreach($zones as $zone)
+                                    <option value="{{ $zone->id}}">{{ $zone->name }}</option>
+                                @endforeach
+                            </select>
+                            <!--end::Select-->
                         </div>
                         <!--end::Col-->
                         <div class="col-xxl-2">
                             <!--begin::Row-->
-                            <div class="row g-8">
-                                <!--begin::Col-->
-                                    <label class="fs-6 form-label fw-bold text-dark">{{ __('taxlabel') }}</label>
-                                    <!--begin::Select-->
-                                    <select class="form-select form-select-solid" data-control="select2" data-placeholder="In Progress" data-hide-search="true">
-                                        <option value=""></option>
-                                        <option value="1">Not started</option>
-                                        <option value="2" selected="selected">In Progress</option>
-                                        <option value="3">Done</option>
-                                    </select>
-                                    <!--end::Select-->
-                            </div>
+                            <!--begin::Col-->
+                            <label class="fs-6 form-label fw-bold text-dark">{{ __('taxlabel') }}</label>
+                            <!--begin::Select-->
+                            <select class="form-select" id="mySearchEight">
+                                <option value=""></option>
+                                @foreach($tax_labels as $tax_label)
+                                    <option value="{{ $tax_label->id}}">{{ $tax_label->code }} -- {{ $tax_label->name }}</option>
+                                @endforeach
+                            </select>
+                            <!--end::Select-->
                             <!--end::Row-->
                         </div>
 
                         <div class="col-xxl-2">
-                            <!--begin::Row-->
-                            <div class="row g-8">
-                                <!--begin::Col-->
-                                    <label class="fs-6 form-label fw-bold text-dark">{{ __('aproval') }}</label>
-                                    <!--begin::Select-->
-                                    <select class="form-select form-select-solid" data-control="select2" data-placeholder="In Progress" data-hide-search="true">
-                                        <option value=""></option>
-                                        <option value="1">Not started</option>
-                                        <option value="2" selected="selected">In Progress</option>
-                                        <option value="3">Done</option>
-                                    </select>
-                                    <!--end::Select-->
-                            </div>
+                            <!--begin::Col-->
+                            <label class="fs-6 form-label fw-bold text-dark">{{ __('aproval') }}</label>
+                            <!--begin::Select-->
+                            <select class="form-select" id="mySearchTen">
+                                <option value=""></option>
+                                <option value="APROVED">{{ __('APROVED') }}</option>
+                                <option value="REJECTED">{{ __('REJECTED') }}</option>
+                                <option value="CANCELED">{{ __('CANCELED') }}</option>
+                                <option value="PENDING">{{ __('PENDING') }}</option>
+                            </select>
+                            <!--end::Select-->
                             <!--end::Row-->
                         </div>
                         <!--end::Col-->
                         <div class="col-xxl-2">
                             <!--begin::Row-->
-                            <div class="row g-8">
-                                <!--begin::Col-->
-                                    <label class="fs-6 form-label fw-bold text-dark">{{ __('status') }}</label>
-                                    <!--begin::Select-->
-                                    <select class="form-select form-select-solid" data-control="select2" data-placeholder="In Progress" data-hide-search="true">
-                                        <option value=""></option>
-                                        <option value="1">Not started</option>
-                                        <option value="2" selected="selected">In Progress</option>
-                                        <option value="3">Done</option>
-                                    </select>
-                                    <!--end::Select-->
-                            </div>
+                            <!--begin::Col-->
+                            <label class="fs-6 form-label fw-bold text-dark">{{ __('status') }}</label>
+                            <!--begin::Select-->
+                            <select class="form-select" id="mySearchEleven">
+                                <option value=""></option>
+                                <option value="VALID">{{ __('VALID') }}</option>
+                                <option value="EXPIRED">{{ __('EXPIRED') }}</option>
+                                <option value="CANCELED">{{ __('CANCELED') }}</option>
+                                <option value="ARCHIVED">{{ __('ARCHIVED') }}</option>
+                            </select>
+
+                            <!--end::Select-->
                             <!--end::Row-->
                         </div>
                     </div>
@@ -158,9 +157,17 @@
         </div>
         <!--end::Card body-->
     </div>
+    
+    <!--begin::Modal-->
+    <livewire:payment.add-payment-modal/>
+    <!--end::Modal-->
 
     <!--begin::Modal-->
-    <livewire:invoice.add-invoice-modal></livewire:invoice.add-invoice-modal>
+    <livewire:invoice.auto-invoice-modal/>
+    <!--end::Modal-->
+
+    <!--begin::Modal-->
+    <livewire:invoice.add-invoice-modal/>
     <!--end::Modal-->
 
     @push('scripts')
@@ -171,30 +178,39 @@
         });
 
         document.getElementById('mySearchOne').addEventListener('keyup', function() {
-            var query = this.value;
-            var table = window.LaravelDataTables['invoices-table'];
-
-            // Perform a specific search query for column 1
-            table.column(1).search(query).draw();
+            window.LaravelDataTables['invoices-table'].column(0).search(this.value).draw();
         });
 
         document.getElementById('mySearchTwo').addEventListener('keyup', function() {
-            var query = this.value;
-            var table = window.LaravelDataTables['invoices-table'];
-
-            // Perform a specific search query for column 2
-            table.column(5).search(query).draw();
+            window.LaravelDataTables['invoices-table'].column(1).search(this.value).draw();
         });
 
+        document.getElementById('mySearchFive').addEventListener('change', function() {
+            window.LaravelDataTables['invoices-table'].column(4).search(this.value).draw();
+        });
+
+        document.getElementById('mySearchEight').addEventListener('change', function() {
+            window.LaravelDataTables['invoices-table'].column(7).search(this.value).draw();
+        });
+
+        document.getElementById('mySearchTen').addEventListener('change', function() {
+            window.LaravelDataTables['invoices-table'].column(9).search(this.value).draw();
+        });
+
+        document.getElementById('mySearchEleven').addEventListener('change', function() {
+            window.LaravelDataTables['invoices-table'].column(10).search(this.value).draw();
+        });
 
         document.addEventListener('livewire:init', function() {
             Livewire.on('success', function() {
                 $('#kt_modal_add_invoice').modal('hide');
+                $('#kt_modal_auto_invoice').modal('hide');
                 window.LaravelDataTables['invoices-table'].ajax.reload();
             });
         });
-        $(document).ready(function () {
-            $('#imprimerTableau').on('click', function () {
+
+        $(document).ready(function() {
+            $('#imprimerTableau').on('click', function() {
                 var table = document.getElementById("invoices-table");
                 var dataArray = [];
 
@@ -203,7 +219,7 @@
                     var rowData = [];
                     for (var j = 0; j < row.cells.length; j++) {
                         var cellValue = row.cells[j].innerText.trim();
-                        rowData.push(cellValue) ;
+                        rowData.push(cellValue);
                     }
                     dataArray.push(rowData);
                 }
@@ -213,10 +229,6 @@
                 window.location.href = url;
             });
         });
-
-
-
-
     </script>
     @endpush
 

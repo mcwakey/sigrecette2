@@ -241,7 +241,12 @@ class AddPaymentModal extends Component
 
         $this->edit_mode = true;
 
-        $invoice = Invoice::find($id);
+        $invoice = Invoice::where('invoice_no', $id)
+                    ->where('validity', 'VALID')
+                    ->first();
+
+
+                            //dd($invoice);
 
         $this->invoice_id = $invoice->id;
         $this->taxpayer_id = $invoice->taxpayer->id;

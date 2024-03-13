@@ -19,7 +19,7 @@ class TaxpayerTaxable extends Model
         'taxable_id',
         'billable',
         'invoice_id',
-        // 'tax_label_id',
+        'bill_status',
     ];
 
     public function taxpayer()

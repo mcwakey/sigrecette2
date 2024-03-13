@@ -22,9 +22,9 @@ return new class extends Migration
             $table->string('auth_reference')->nullable();
             $table->string('status')->default('ACTIVE');
             $table->tinyInteger('billable')->default('0');
-            $table->unsignedBigInteger('taxpayer_id')->default(1);
+            $table->unsignedBigInteger('taxpayer_id')->nullable();
             $table->foreign('taxpayer_id')->references('id')->on('taxpayers');
-            $table->unsignedBigInteger('taxable_id')->default(1);
+            $table->unsignedBigInteger('taxable_id')->nullable();
             $table->foreign('taxable_id')->references('id')->on('taxables');
             $table->unsignedBigInteger('invoice_id')->nullable();
             $table->foreign('invoice_id')->references('id')->on('invoices');

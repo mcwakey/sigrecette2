@@ -274,7 +274,7 @@ class AddTaxpayerModal extends Component
 
     }
 
-    public function updatedCategoryWork($value)
+    public function updatedCategoryId($value)
     {
         //dd($value);
         $this->activities = Activity::where('category_id', $value)->get(); // Load taxables based on tax label ID

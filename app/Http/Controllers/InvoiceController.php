@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\DataTables\InvoicesDataTable;
 use App\Models\Taxpayer;
 use App\Models\Invoice;
+use App\Models\TaxLabel;
+use App\Models\Zone;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
@@ -15,7 +17,11 @@ class InvoiceController extends Controller
     public function index(InvoicesDataTable $dataTable)
     {
         //return view('pages/invoices.list');
-        return $dataTable->render('pages/invoices.list');
+
+        $zones = Zone::all();
+        $tax_labels = TaxLabel::all();
+
+        return $dataTable->render('pages/invoices.list', compact('zones', 'tax_labels'));
     }
 
     /**

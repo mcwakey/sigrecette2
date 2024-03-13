@@ -789,7 +789,7 @@
                                                             </div>
                                                             @if($invoice->pay_status != "PAID")
                                                             <div class="menu-item px-3">
-                                                                <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_payment" data-kt-action="update_payment">
+                                                                <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->invoice_no }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_payment" data-kt-action="update_payment">
                                                                     {{ __('create payment') }}
                                                                 </a>
                                                             </div>
@@ -1421,8 +1421,13 @@
                 $('#kt_modal_add_invoice').modal('hide');
                 $('#kt_modal_add_taxpayer_taxable').modal('hide');
                 $('#kt_modal_add_payment').modal('hide');
+                // $('#kt_modal_add_delivery').menu('hide');
+                // $('#kt_modal_add_orderno').menu('hide');
+
+
                 window.LaravelDataTables['taxpayer_taxables-table'].ajax.reload();
-                window.getElementById('#payment-table').ajax.reload();
+                // window.getElementById('#payment-table').ajax.reload();
+                window.location.reload();
             });
         });
         // document.addEventListener('livewire:init', function() {

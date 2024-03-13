@@ -19,13 +19,13 @@
             <div class="modal-body px-5 my-7">
                 <!--begin::Form-->
                 <form id="kt_modal_add_invoice_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
-                    <input type="hidden" wire:model="invoice_id" name="invoice_id" />
-                    <input type="hidden" wire:model="taxpayer_id" name="taxpayer_id" />
+                    <input type="text" wire:model="invoice_id" name="invoice_id" />
+                    <input type="text" wire:model="taxpayer_id" name="taxpayer_id" />
                     <!--begin::Scroll-->
 
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_invoice_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_invoice_header" data-kt-scroll-wrappers="#kt_modal_add_invoice_scroll" data-kt-scroll-offset="300px">
-                        <!--begin::Input group-->
-
+                        <!--(begin::Input group-->
+                        @if ($taxpayer_id)
                         <div class="row mb-7">
                             <div class="col-md-4">
                                 <!--begin::Label-->
@@ -62,13 +62,14 @@
                         </div>
 
                         <div class="separator separator-dashed my-2"></div>
+                        @endif
 
                         <div class="row mb-2">
                             <div class="col-md-3">
                                 <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('Duree du contrat') }}" readonly />
                             </div>
                             <div class="col-md-2">
-                                <div class="position-relative" data-kt-dialer="true" data-kt-dialer-min="1" data-kt-dialer-max="12" data-kt-dialer-step="1">
+                                <div class="position-relative" data-kt-dialer="true" data-kt-dialer-min="0" data-kt-dialer-max="12" data-kt-dialer-step="1">
                                     <!--begin::Decrease control-->
                                     <button type="button" class="btn btn-icon btn-active-color-gray-700 position-absolute translate-middle-y top-50 start-0" data-kt-dialer-control="decrease">
                                     @if ($edit_mode==false)
@@ -77,7 +78,7 @@
                                     </button>
                                     <!--end::Decrease control-->
                                     <!--begin::Input control-->
-                                    <input wire:model="qty" name="qty" type="text" class="form-control border-0 ps-12" data-kt-dialer-control="input" placeholder="1" readonly="readonly" data-kt-action="load_invoice" />
+                                    <input wire:model="qty" name="qty" type="text" class="form-control border-0 ps-12" data-kt-dialer-control="input" placeholder="0" readonly="readonly" data-kt-action="load_invoice" />
                                     <!--end::Input control-->
                                     @error('qty')
                                     <span class="text-danger">{{ $message }}</span> @enderror
@@ -92,7 +93,7 @@
 
                             </div>
                             <div class="col-md-2">
-                                <input type="text" wire:model="periodicity" name="periodicity" class="required form-control form-control-flush" readonly />
+                                <input type="text" value="Mois" class="required form-control form-control-flush" readonly />
                             </div>
                             <div class="col-md-2">
                                 <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('A compter de') }}" readonly />

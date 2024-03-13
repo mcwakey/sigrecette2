@@ -69,7 +69,7 @@
                                 <select wire:model="periodicity" name="periodicity" class="form-select"
                                     data-dropdown-parent="#kt_modal_add_taxable">
                                     <option>{{ __('select an option') }}</option>
-                                    <option value="Jours">Jours</option>
+                                    <!-- <option value="Jours">Jours</option> -->
                                     <option value="Mois">Mois</option>
                                     <option value="Ans">Ans</option>
                                     <option value="Forfait">Forfait</option>

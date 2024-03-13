@@ -120,7 +120,7 @@
 
     "events logs" : "Événements & Journaux",
     "invoices payments" : "Avis & Paiements",
-    "overview" : "Aperçu",
+    "overview" : "Taxations",
     "create payment" : "Ajouter un Paiement",
     "create invoice" : "Ajouter une Avis",
     "create asset" : "Ajouter une Taxation",
@@ -264,6 +264,20 @@
     "payment info": "Informations du paiement",
     "payment history": "Historique de l'avis",
     "currency": "FCFA",
+
+    "BILLED": "FACTURÉ",
+    "NOT BILLED": "NON FACTURÉ",
+    "expiry date": "Date d'expiration",
+    "EXPIRED": "EXPIRÉ",
+    "VALID": "VALIDE",
+    "ARCHIVED": "ARCHIVÉ",
+    "create invoice automaticaly": "Auto-générer les avis",
+    "automatic invoice genaration": "Génération automatique d'avis",
+    "generate": "Générer",
+    "are you sure": "Ceci ne peut pas être annulé. Êtes-vous sûr de vouloir procéder à l' auto-génération des factures ?",
+
+
+
 
 
 
