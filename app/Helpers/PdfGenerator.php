@@ -8,6 +8,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class PdfGenerator
 {
+
     /**
      * @param array $data
      * @param string $template
@@ -20,7 +21,7 @@ class PdfGenerator
 
             $filename = "Invoice-list-" . Str::random(8) . ".pdf";
             //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
-            $pdf = PDF::loadView("exports.".$template, ['data' => $data,'titles'=>$this->generateTitleWithAction($action)])->stream($filename);
+            $pdf = PDF::loadView("exports.".$template, ['data' => $data,'titles'=>$this->generateTitleWithAction($action)])->setPaper('a4', 'landscape')->stream($filename);
 
             return ['success' => true, 'pdf' => $pdf];
         }
@@ -49,6 +50,14 @@ class PdfGenerator
         ];
         switch ($action) {
             case 1:
+
+                break;
+            case 2:
+                break;
+            case 3:
+                $base_array[15]= "Journal des avis des sommes à payer confiés par le receveur";
+                break;
+            default:
                 $base_array[0] = "N° Avis de réduction ou d’annulation";
                 $base_array[2] = "N° Avis réduit ou annulé";
                 $base_array[3] = "N° OR d’annulation ou réduction";
@@ -58,10 +67,6 @@ class PdfGenerator
                 $base_array[13]= "TOTAL GENERAL DU PRESENT BORDEREAU   D’ANNULATION";
                 $base_array[14]= "Arrêté le présent bordereau journal de réduction ou d’annulation à la somme de";
                 $base_array[15]= "Bordereau journal des avis de réduction ou d’annulation";
-                break;
-            case 2:
-                break;
-            default:
                 break;
         }
 
@@ -75,7 +80,7 @@ class PdfGenerator
      */
     private function checkInvoiceListDataUniformity($data): bool
     {
-        $expectedDataSize = 13;
+        $expectedDataSize = 14;
 
         foreach ($data as $item) {
             if (count($item) !== $expectedDataSize) {

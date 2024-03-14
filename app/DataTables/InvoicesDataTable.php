@@ -59,10 +59,12 @@ class InvoicesDataTable extends DataTable
             ->editColumn('status', function (Invoice $invoice) {
                 return view('pages/invoices.columns._aproval', compact('invoice'));
             })
+            ->editColumn('from_date', function (Invoice $invoice) {
+                return $invoice->from_date;
+            })
 
             ->editColumn('to_date', function (Invoice $invoice) {
-                return $invoice->to_date;
-            })
+                return $invoice->to_date;})
             ->addColumn('action', function (Invoice $invoice) {
                 return view('pages/invoices.columns._actions', compact('invoice'));
             })
@@ -129,6 +131,7 @@ class InvoicesDataTable extends DataTable
             Column::make('total')->title(__('amount'))->name('amount'),
             Column::make('status')->title(__('aproval')),
             Column::make('validity')->title(__('status')),
+            Column::make('from_date')->title( __('from_date'))->addClass('text-nowrap'),
             Column::make('to_date')->title( __('expiry date'))->addClass('text-nowrap'),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')

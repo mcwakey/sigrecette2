@@ -57,12 +57,12 @@
 
         <script>
             document.getElementById('mySearchInput').addEventListener('keyup', function () {
-                window.LaravelDataTables['commune'].search(this.value).draw();
+                window.LaravelDataTables['communes'].search(this.value).draw();
             });
             document.addEventListener('livewire:init', function () {
                 Livewire.on('success', function () {
                     $('#kt_modal_add_commune').modal('hide');
-                    window.LaravelDataTables['commune'].ajax.reload();
+                    window.LaravelDataTables['communes'].ajax.reload();
                 });
             });
         </script>

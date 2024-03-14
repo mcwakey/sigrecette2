@@ -8,7 +8,7 @@
             font-family: Arial, sans-serif;
             max-width: 800px;
             font-size: 0.75em;
-            padding: 5px;
+            padding: 2px;
             margin: 0 auto;
             line-height: 1.2;
         }
@@ -117,12 +117,22 @@
             $total_somme +=intval($item[8]);
             $explose_year = explode(" ", $item[9]);
             $year = end($explose_year) ;
-
+            switch ($item[9]) {
+                case "PRIS EN CHARGE":
+                    $item[9] = "PC";
+                    break;
+                case "REJETÉ":
+                    $item[9] = "RJ";
+                    break;
+                default:
+                    $item[9] = "";
+                    break;
+            }
         @endphp
         <tr>
-            <td>{{$item[3]}}</td>
-            <td>{{$year}}</td>
             <td>{{$item[1]}}</td>
+            <td>{{date("d-m-Y", strtotime( $item[11]))}}</td>
+            <td></td>
             <td>{{$item[3]}}</td>
             <td>{{$name}}</td>
             <td>{{$numeroTelephone}}</td>
@@ -130,7 +140,7 @@
             <td>{{$item[5]}}</td>
             <td>{{$item[6]}}</td>
             <td>{{$item[8]}}</td>
-            <td></td>
+            <td>{{$item[9]}}</td>
         </tr>
     @endforeach
 
@@ -155,8 +165,20 @@
 
     </tr>
     <tr>
-        <td colspan="5" style="border: none; margin: 0;padding: 5px;"> A <span> Agou</span> le <span>23 janvier 2023</span> </td>
+        <td colspan="5" style="border: none; margin: 0; padding: 5px;">
+            A <span>Agou</span> le <span>{{ now()->locale('fr')->format('d-m-Y') }}</span>
+        </td>
+
+
         <td colspan="6" style="border: none; margin: 0;padding: 0;">Le Maire</td>
+    </tr>
+    <tr>
+        <td colspan="5" style="border: none; margin: 5;padding: 5;"> </td>
+        <td colspan="6" style="border: none; margin: 5;padding: 5;"></td>
+    </tr>
+    <tr>
+        <td colspan="5" style="border: none; margin: 5;padding: 5;"> </td>
+        <td colspan="6" style="border: none; margin: 5;padding: 5;"></td>
     </tr>
     <tr>
         <td colspan="5" style="border: none; margin: 0;padding: 0;"></td>

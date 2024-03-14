@@ -435,7 +435,7 @@ if (!function_exists('getIcon')) {
     }
 }
 
-    if (!function_exists('number_to_words')) {
+if (!function_exists('number_to_words')) {
         function number_to_words($number, $locale = 'fr_FR') {
             if (!is_numeric($number)) {
                 return '';
@@ -445,6 +445,6 @@ if (!function_exists('getIcon')) {
             // Retourner le résultat de la conversion
             return ucfirst($formatter->format($number));
         }
-    }
+}
 
 

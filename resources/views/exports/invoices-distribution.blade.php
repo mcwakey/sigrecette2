@@ -6,7 +6,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 800px;
+            max-width: 900px;
             font-size: 0.75em;
             padding: 2px;
             margin: 0 auto;
@@ -22,15 +22,13 @@
             border: 1px solid black;
         }
 
-        th, td {
-            text-align: center;
-        }
+
 
         th {
             background-color: #f2f2f2;
         }
 
-        caption {
+        .caption {
             font-size: 1.2em;
             margin-bottom: 10px;
             font-weight: bold;
@@ -42,27 +40,27 @@
 
 <table>
     <tr>
-        <td colspan="6"  style="border: none; margin: 0">
+        <td colspan="6"  style="border: none; padding: 2px;">
             REGION PLATEAUX
 
         </td>
-        <td colspan="6"  style="border: none; margin: 0  ;text-align: right;">
+        <td colspan="6"  style="border: none; padding:2px ;text-align: right;">
             REPUBLIQUE TOGOLAISE
 
         </td>
     </tr>
     <tr>
-        <td colspan="6" style="border: none; margin: 0">
+        <td colspan="6" style="border: none; margin: 0; padding:2px ;">
 
             Commune de Agou
         </td>
-        <td colspan="6"  style="border: none; margin: 0  ;text-align: right;">
+        <td colspan="6"  style="border: none; margin: 0 ; padding:2px ; ;text-align: right;">
 
             Travail-Liberté-Patrie
         </td>
     </tr>
     <tr>
-        <th colspan="12" style="border: none; margin: 0; text-align: center;" >Fiche de distribution des avis</th>
+        <th colspan="12" style="border: none; margin: 0; text-align: center;" class="caption">Fiche de distribution des avis</th>
     </tr>
     <tr>
         <td colspan="12" style="border: none; margin: 0; text-align: center;">N°01</td>

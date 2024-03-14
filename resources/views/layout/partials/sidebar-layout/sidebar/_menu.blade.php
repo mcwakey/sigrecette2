@@ -50,13 +50,19 @@
 					<!--end:Menu item-->
 					<!--begin:Menu item-->
 					<div class="menu-item">
-						<!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('taxpayers.*') ? 'active' : '' }}" href="{{ route('taxpayers.index') }}">
+							<span class="menu-bullet">
+								<span class="bullet bullet-dot"></span>
+							</span>
+                            <span class="menu-title">{{ __('new taxpayer') }}</span>
+                        </a>
 						<a class="menu-link {{ request()->routeIs('taxpayers.*') ? 'active' : '' }}" href="{{ route('taxpayers.index') }}">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
 							</span>
 							<span class="menu-title">{{ __('list') }}</span>
 						</a>
+
 						<!--end:Menu link-->
 					</div>
 					<!--end:Menu item-->
@@ -389,28 +395,29 @@
 					<!--begin:Menu item-->
 					<!--end:Menu item-->
 					<!--begin:Menu item-->
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('import-view') ? 'active' : '' }}" href="{{ route('import-view') }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
-							</span>
-							<span class="menu-title">{{ __('import-taxpayers') }}</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
+
 					<!--end:Menu item-->
 					<!--begin:Menu item-->
 					<div class="menu-item">
 						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('user-management.permissions.*') ? 'active' : '' }}" href="{{ route('user-management.permissions.index') }}">
+						<a class="menu-link {{ request()->routeIs('settings.communes.*') ? 'active' : '' }}" href="{{ route('settings.communes.index') }}">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
 							</span>
-							<span class="menu-title">{{ __('ereas') }}</span>
+							<span class="menu-title">{{ __('Commune') }}</span>
 						</a>
 						<!--end:Menu link-->
 					</div>
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('import-view') ? 'active' : '' }}" href="{{ route('import-view') }}">
+							<span class="menu-bullet">
+								<span class="bullet bullet-dot"></span>
+							</span>
+                            <span class="menu-title">{{ __('import-taxpayers') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
 					<!--end:Menu item-->
 				</div>
 				<!--end:Menu sub-->

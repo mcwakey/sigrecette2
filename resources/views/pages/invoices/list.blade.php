@@ -35,9 +35,39 @@
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
                 <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
-                    <button type="button" class="btn btn-outline-secondary">
-                        <a href="#" id="imprimerTableau"> {{ __('print') }}</a>
-                    </button>
+                    <div href="#" class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm me-2"
+                         data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                        {{ __('print') }}
+                        <i class="ki-duotone ki-down fs-5 ms-1"></i>
+                    </div>
+                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4" data-kt-menu="true" id="print-modal">
+                        <div class="menu-item px-3">
+                            <a href="#" class="menu-link px-3 print-link" data-type="1" target="_blank">
+                                {{ __('Bordereau journal des avis des sommes à payer') }}
+                            </a>
+                        </div>
+                        <div class="menu-item px-3">
+                            <a href="#" class="menu-link px-3 print-link" data-type="3" target="_blank">
+                                {{ __('Journal des avis des sommes à payer') }}
+                            </a>
+                        </div>
+                        <div class="menu-item px-3">
+                            <a href="#" class="menu-link px-3 print-link" data-type="4" target="_blank">
+                                {{ __('Fiche de distribution des avis') }}
+                            </a>
+                        </div>
+                        <div class="menu-item px-3">
+                            <a href="#" class="menu-link px-3 print-link" data-type="5" target="_blank">
+                                {{ __('Fiche de recouvrement des avis distribués') }}
+                            </a>
+                        </div>
+                        <div class="menu-item px-3">
+                            <a href="#" class="menu-link px-3 print-link" data-type="6" target="_blank">
+                                {{ __('Fiche de recouvrement des avis distribués') }}
+                            </a>
+                        </div>
+                    </div>
+
                 </div>
                 <!--begin::Toolbar-->
                 <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
@@ -157,7 +187,7 @@
         </div>
         <!--end::Card body-->
     </div>
-    
+
     <!--begin::Modal-->
     <livewire:payment.add-payment-modal/>
     <!--end::Modal-->
@@ -209,10 +239,13 @@
             });
         });
 
-        $(document).ready(function() {
-            $('#imprimerTableau').on('click', function() {
+        document.querySelectorAll('.print-link').forEach(function(link) {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                var selectedValue = link.getAttribute('data-type');
                 var table = document.getElementById("invoices-table");
                 var dataArray = [];
+
 
                 for (var i = 1; i < table.rows.length; i++) {
                     var row = table.rows[i];
@@ -223,12 +256,31 @@
                     }
                     dataArray.push(rowData);
                 }
+
+                var r_type = 2;
+                if (selectedValue === '3') {
+                    r_type = 3;
+                }
+                else if (selectedValue === '4') {
+                    r_type = 4;
+                }
+                else if (selectedValue === '5') {
+                    r_type = selectedValue;
+                }
+                else if (selectedValue === '6') {
+                    r_type = selectedValue;
+                }
                 var jsonData = JSON.stringify(dataArray);
-                var url = "{{ route('generatePdf', ['data' => ':jsonData', 'type' => 2]) }}";
+                var url = "{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type','action'=> ':selectedValue']) }}";
                 url = url.replace(':jsonData', encodeURIComponent(jsonData));
+                url = url.replace(':r_type', encodeURIComponent(r_type));
+                url = url.replace(':selectedValue', encodeURIComponent(selectedValue));
+
+                console.log(url);
                 window.location.href = url;
             });
         });
+
     </script>
     @endpush
 

@@ -2,10 +2,8 @@
     Actions
     <i class="ki-duotone ki-down fs-5 ms-1"></i>
 </a>
-<!--begin::Menu-->
 
-    <!--begin::Menu-->
-    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4" data-kt-menu="true" data-kt-menu-id="#kt-users-actions">
+<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4" data-kt-menu="true" data-kt-menu-id="#kt-users-actions">
         <!--begin::Menu item-->
 
         <div class="menu-item px-3">
@@ -13,7 +11,7 @@
                 {{ __('view') }}
             </a>
         </div>
-        
+
         @if($invoice->status=="CANCELED")
         <div class="menu-item px-3">
             <a href="{{-- route('generatePdf', ['data' => json_encode($data)]) --}}" class="menu-link px-3" target="_blank">{{ __('print') }}</a>

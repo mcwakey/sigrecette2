@@ -26,6 +26,15 @@ class PrintController extends Controller
                 return 'payments';
             case 2:
                 return 'invoices-list';
+            case 3:
+                return 'journal-invoices';
+            case 4:
+                return 'invoices-distribution';
+            case 5:
+                return 'invoices-recouvrement';
+            case 6:
+                return 'invoices-registre';
+
             default:
                 return 'invoices';
         }
@@ -42,7 +51,12 @@ class PrintController extends Controller
         switch ($type) {
             case 1:
                 return $this->downloadReceipt($data,$type);
+            case 6:
+            case 5:
+            case 4:
+            case 3:
             case 2:
+                //dd($data,$type,$action);
                 return $this->downloadInvoicesList($data,$type,$action);
             default:
                 return $this->downloadInvoice($data,$type,$action);
@@ -126,6 +140,8 @@ class PrintController extends Controller
     {
         //dd($data,$type,$action);
         $templateName = $this->getTemplateByType($type);
+
+       // dd($templateName,$data,$type);
         $result = $this->pdfGenerator->generateInvoiceListPdf($data,$templateName,$action);
         //dd($data);
         if ($result['success']) {
@@ -134,6 +150,7 @@ class PrintController extends Controller
 
         return back()->with('error', $result['message']);
     }
+
 
 
 }

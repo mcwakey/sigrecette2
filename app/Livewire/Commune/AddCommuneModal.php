@@ -23,7 +23,6 @@ class AddCommuneModal extends Component
     public $edit_mode = false;
 
     protected $rules = [
-        'commune_id' => 'required|int',
         'mayor_name'=> 'required|string',
         'phone_number'=> 'required|string',
         'address'=> 'required|string',
@@ -34,7 +33,7 @@ class AddCommuneModal extends Component
 
     protected $listeners = [
         'delete_user' => 'deleteUser',
-        'update_user' => 'updateTown',
+        'update_user' => 'updateCommune',
     ];
 
     public function render()
@@ -52,7 +51,6 @@ class AddCommuneModal extends Component
         DB::transaction(function () {
             // Prepare the data for creating a new Taxable
             $data = [
-                'commune_id' => $this->commune_id,
                  'mayor_name' => $this->mayor_name,
                 'phone_number'=> $this->phone_number,
                 'address'=> $this->address,
@@ -75,7 +73,7 @@ class AddCommuneModal extends Component
                 $this->dispatch('success', __('Commune updated'));
             } else {
                 // Emit a success event with a message
-                $this->dispatch('success', __('New Caton created'));
+                $this->dispatch('success', __('New Commune created'));
             }
         });
 
@@ -96,9 +94,10 @@ class AddCommuneModal extends Component
     {
         $this->edit_mode = true;
 
+
         $commune = Commune::find($id);
 
-        $this->commune_id = $commune->commune_id;
+        $this->commune_id = $commune->id;
 
         $this->mayor_name = $commune->mayor_name;
         $this->phone_number = $commune->phone_number;

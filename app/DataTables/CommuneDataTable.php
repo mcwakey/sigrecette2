@@ -57,7 +57,7 @@ class CommuneDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('commune')
+            ->setTableId('communes')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
@@ -94,6 +94,6 @@ class CommuneDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'commune_' . date('YmdHis');
+        return 'Communes_' . date('YmdHis');
     }
 }
