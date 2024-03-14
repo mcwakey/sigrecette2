@@ -143,7 +143,8 @@
         </table>
 
         <div class="avis-header">
-            <h2 class="text-center">AVIS DES SOMMES À PAYER</h2>
+            <h2 class="text-center"> @if($action==1)AVIS DES SOMMES À PAYER @else AVIS DE REDUCTION OU D’ANNULATION
+                @endif</h2>
             <h6>N°:<span class="write">{{$data[1]}}/</span>{{date("Y", strtotime($data[0]))}}</h6>
             <h4>Destinataire:<span class="write"> </span></h4>
 
@@ -160,9 +161,16 @@
         </div>
         <div class="avis-content">
             <p>Madame, Mademoiselle, Monsieur,</p>
-            <p>Vous êtes priés de bien vouloir payer à la régie des recettes de la mairie de {{$data[6]}}
-                le montant ci-dessous :</p>
-            <p>N° d’ordre de recette :<span class="write">{{$data[1]}}/</span> {{date("Y", strtotime( $data[0]))}}</p>
+            @if($action==1)
+                <p>Vous êtes priés de bien vouloir payer à la régie des recettes de la mairie de {{$data[6]}}
+                    le montant ci-dessous :</p>
+                <p>N° d’ordre de recette :<span class="write">{{$data[1]}}/</span> {{date("Y", strtotime( $data[0]))}}</p>
+            @else
+                Votre avis des sommes à payer N° 001/2023 du 3 janvier 2023 est réduit suivant les détails ci-après :
+                <p>N° de l’ordre de recette de réduction ou d'annulation :<span class="write">{{$data[1]}}/</span> {{date("Y", strtotime( $data[0]))}}</p>
+            @endif
+
+
 
             <p>Libellé de la recette :<span class="write"> {{$data[12][0][0]}}</span></p>
             <p>Imputation budgétaire :<span class="write"> {{$data[12][0][1]}}</span></p>
@@ -191,13 +199,32 @@
                     <td style="text-align: center">{{$item[6]}}</td>
                 </tr>
                 @endforeach
+                @if($action==2)
+                    @foreach($newitems as $index => $item)
+                        <tr>
+                            <td style="text-align: center">{{$item[8]}}</td>
+                            <td style="text-align: center">{{$item[2]}}</td>
+                            <td style="text-align: center"> {{$item[4]}}</td>
+                            <td style="text-align: center">{{$item[3]}}</td>
+                            <td style="text-align: center">{{$item[5]}}</td>
+                            <td style="text-align: center">{{$item[7]}}</td>
+                            <td style="text-align: center">{{'-'.$item[6]}}</td>
+                        </tr>
+                    @endforeach
+                @endif
+
                 <tr>
                     <td colspan="6" style="text-align: right;"><strong>Total :</strong></td>
-                    <td>{{$data[3]}}</td>
+                    @if($action==1)
+                        <td>{{$data[3]}}</td>
+                    @else
+                        <td>{{$data[3]-$new_amount}}</td>
+                    @endif</h2>
+
                 </tr>
                 </tbody>
             </table>
-            <p>Arrêté le présent avis à la somme de :<span class="write">{{number_to_words($data[3]) }} </span> Francs CFA (Sauf erreur ou omission).</p>
+            <p>Arrêté le présent avis à la somme de :<span class="write">@if($action==1){{number_to_words($data[3]) }}@else {{number_to_words($data[3]-$new_amount) }}  @endif</span> Francs CFA (Sauf erreur ou omission).</p>
             <p>A payer dans les 30 jours suivant la réception de l’avis, ou avant la fin de chaque mois pour les
                 paiements mensualisés.</p>
             <table>

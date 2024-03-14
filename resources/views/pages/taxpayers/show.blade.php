@@ -355,7 +355,7 @@
                                     <!--end::Search-->
                                 </div>
 
-                                
+
         <div class="card-body py-4">
 
         <form action="#">
@@ -382,8 +382,8 @@
                                                     <label class="fs-6 form-label fw-bold text-dark">{{ __('taxable')}}</label>
                                                     <input type="text" class="form-control" name="tags" id="mySearchThree" />
                                                 </div>
-                                                
-                                                
+
+
                                                 <!--end::Col-->
                                                 <!--begin::Col-->
                                                 <div class="col-xxl-3">
@@ -456,7 +456,7 @@
                         </div>
                         <!--end::Card body-->
                     </div>
-                    
+
                     <!--end::Tasks-->
                 </div>
 
@@ -699,7 +699,7 @@
                                                                {{ __('view') }}
                                                             </a>
                                                         </div>
-                                                        
+
                                                         @if($invoice->status=="CANCELED")
                                                         <div class="menu-item px-3">
                                                             @php
@@ -721,7 +721,7 @@
                                                                 $data = [
                                                                     $invoice->created_at,
                                                                     $invoice->invoice_no,
-                                                                        $taxpayer->nic,
+                                                                        $invoice->nic,
                                                                         $invoice->amount,
                                                                     $taxpayer->name,
                                                                     $taxpayer->mobilephone,
@@ -735,7 +735,7 @@
                                                                     $invoiceItems,
                                                                 ];
                                                             @endphp
-                                                            <a href="{{ route('generatePdf', ['data' => json_encode($data)]) }}" class="menu-link px-3" target="_blank">{{ __('print') }}</a>
+                                                            <a href="{{ route('generatePdf', ['data' => json_encode($data),'type'=>'900','action'=>2]) }}" class="menu-link px-3" target="_blank">{{ __('print') }}</a>
                                                         </div>
                                                         @elseif($invoice->status=="DRAFT")
                                                         <div class="menu-item px-3">
@@ -770,7 +770,7 @@
                                                                     $data = [
                                                                       $invoice->created_at,
                                                                         $invoice->invoice_no,
-                                                                         $taxpayer->nic,
+                                                                         $invoice->nic,
                                                                          $invoice->amount,
                                                                         $taxpayer->name,
                                                                         $taxpayer->mobilephone,
@@ -1316,7 +1316,7 @@
                     }else{
                         icon = taxpayerGreen;
                     }
-                    
+
                 });
 
                 L.marker([latitude, longitude], { icon: icon }).addTo(map_render)

@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\Invoice;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -133,7 +134,31 @@ class PdfGenerator
             $filename="Invoice-".$data[2].'-'.Str::random(8).".pdf";
 
             //dd($data);
-            $pdf= PDF::loadView("exports.".$templateName, ['data' => $data])
+            $invoiceItems = [];
+            $new_amount=0;
+            if($action==2){
+
+                $invoice = Invoice::where('invoice_no', $data[1])
+                    ->where('status', '!=', 'CANCELED')
+                    ->first();
+                $new_amount = $invoice->amount;
+                foreach ($invoice->invoiceitems as $invoiceitem) {
+                    $invoiceItems[] = [
+                        $invoiceitem->taxpayer_taxable->taxable->tax_label->name,
+                        $invoiceitem->taxpayer_taxable->taxable->tax_label->code,
+                        $invoiceitem->taxpayer_taxable->taxable->name,
+                        $invoiceitem->taxpayer_taxable->seize,
+                        $invoiceitem->taxpayer_taxable->taxable->unit,
+                        $invoiceitem->taxpayer_taxable->taxable->tariff,
+                        $invoiceitem->amount,
+                        $invoiceitem->qty,
+                        $invoiceitem->taxpayer_taxable->name
+
+                    ];
+                }
+            }
+
+            $pdf= PDF::loadView("exports.".$templateName, ['data' => $data,'action'=>$action,'newitems'=> $invoiceItems,'new_amount'=>$new_amount])
                 // ->save(Storage::path('exports') . DIRECTORY_SEPARATOR . $filename)
                 ->stream($filename);
             return ['success' => true, 'pdf' => $pdf];
