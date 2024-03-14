@@ -28,6 +28,10 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
 
         //todo update logic to create taxpayers taxables
         $taxpayer= null;
+        $canton= null;
+        $town= null;
+        $erea= null;
+        $zone= null;
         if (
             ($cantonName = $row['canton'] ?? null) !== null &&
             ($townName = $row['ville_village'] ?? null) !== null &&
