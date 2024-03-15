@@ -50,12 +50,12 @@
 					<!--end:Menu item-->
 					<!--begin:Menu item-->
 					<div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('taxpayers.*') ? 'active' : '' }}" href="{{ route('taxpayers.index') }}">
+                        <span class="menu-link ">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
 							</span>
-                            <span class="menu-title">{{ __('new taxpayer') }}</span>
-                        </a>
+                            <span class="menu-title" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer">{{ __('new taxpayer') }}</span>
+                        </span>
 						<a class="menu-link {{ request()->routeIs('taxpayers.*') ? 'active' : '' }}" href="{{ route('taxpayers.index') }}">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
