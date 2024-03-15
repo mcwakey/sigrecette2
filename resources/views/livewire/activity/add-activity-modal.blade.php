@@ -6,7 +6,7 @@
             <!--begin::Modal header-->
             <div class="modal-header" id="kt_modal_add_activity_header">
                 <!--begin::Modal title-->
-                <h2 class="fw-bold">{{ __('create activity') }}</h2>
+                <h2 class="fw-bold">{{ __('create_activity') }}</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
@@ -27,12 +27,12 @@
                         <div class="row mb-7">
                             <div class="col-md-12">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-semibold mb-2">{{ __('category') }}</label>
+                                <label class="fs-6 fw-semibold mb-2">{{ __('activity_category') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <select wire:model="category_id" name="category_id" class="form-select "
                                         data-dropdown-parent="#kt_modal_add_activity">
-                                    <option>{{ __('select an option') }}</option>
+                                    <option>{{ __('select an option activity_category') }}</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id}}">{{ $category->name }}</option>
                                 @endforeach

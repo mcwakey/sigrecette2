@@ -6,7 +6,7 @@
             <!--begin::Modal header-->
             <div class="modal-header" id="kt_modal_add_canton_header">
                 <!--begin::Modal title-->
-                <h2 class="fw-bold">{{ __('cantons') }}</h2>
+                <h2 class="fw-bold">{{ __('create_canton') }}</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
@@ -27,12 +27,12 @@
                         <div class="row mb-7">
                             <div class="col-md-8">
                                 <!--begin::Label-->
-                                <label class="required fw-semibold fs-6 mb-2">{{ __('canton') }}</label>
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('canton_name') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <!-- form-control-solid -->
 
-                                <input type="text" wire:model="name" name="name" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('canton') }}"/>
+                                <input type="text" wire:model="name" name="name" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('name') }}"/>
                                 <!--end::Input-->
                                 @error('name')
                                 <span class="text-danger">{{ $message }}</span> @enderror

@@ -29,13 +29,13 @@
                                 <label class="fs-6 fw-semibold mb-2">{{ __('canton') }}</label>
                                 <select  data-kt-action="load_drop" wire:model="canton_id" name="canton_id" class="form-select form-select-solid"
                                         data-dropdown-parent="#kt_modal_add_erea">
-                                    <option>{{ __('select an option') }}</option>
+                                    <option>{{ __('select an canton') }}</option>
                                     @foreach($cantons as $canton)
                                     <option value="{{ $canton->id }}">{{ $canton->name }}</option>
-                                    @endforeach  
+                                    @endforeach
                                 </select>
-                                @error('gender')  
-                                <span class="text-danger">{{ $message }}</span>  @enderror  
+                                @error('gender')
+                                <span class="text-danger">{{ $message }}</span>  @enderror
                             </div>
                         </div>
 
@@ -49,7 +49,7 @@
                                 <!--begin::Input-->
                                 <select wire:model="town_id" name="town_id" class="form-select form-select-solid"
                                         data-dropdown-parent="#kt_modal_add_erea">
-                                    <option>{{ __('select an option') }}</option>
+                                    <option>{{ __('select an town') }}</option>
                                     @foreach($towns as $town)
                                     <option value="{{ $town->id}}">{{ $town->name }}</option>
                                     @endforeach
@@ -63,7 +63,7 @@
                         </div>
 
                         <div class="separator separator-dashed my-2"></div>
-                        
+
                         <div class="row mb-7">
                             <div class="col-md-8">
                                 <!--begin::Label-->

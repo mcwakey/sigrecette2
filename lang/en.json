@@ -74,7 +74,7 @@
     "your social campaigns" : "Your Social handles",
     "sign in with google" : "Sign in with Google",
     "or with email" : "Or with Email",
-    
+
     "email": "email",
     "password": "Password",
     "forgetpass" : "Forgot Password",
@@ -251,7 +251,7 @@
 
     "CANCELED" : "CANCELED",
     "ACCEPTED" : "ACCEPTED",
-    
+
     "advanced search" : "Advanced Search",
     "cancelation" : "Cancelation",
     "amount paid" : "Amount Paid",
@@ -307,5 +307,6 @@
     "" : "",
     "" : "",
     "" : "",
-    "" : ""
+    "canton_name" : "Canton name",
+    "create_canton": "Create canton"
 }

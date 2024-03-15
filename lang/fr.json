@@ -1,4 +1,4 @@
-{   
+{
     "total_month" : "Total des paiements ce mois-ci",
     "make_payment" : "Effectuer un paiement",
     "quick_guide" : "Guide rapide",
@@ -51,7 +51,7 @@
     "slogan": "N'importe où, n'importe quand",
 
     "new taxpayer" : "Nouveau Contribuable",
-    "home":"Acceil",
+    "home":"Accueil",
     "dashboard" : "Tableau de bord",
     "invoice" : "Emmission d'avis",
     "revenue" : "Recouvrement",
@@ -205,7 +205,7 @@
     "number" : "Nombre",
     "surface" : "Superficie",
     "volume" : "Volume",
-    
+
     "tariff type" : "Type de Tarif ",
 
     "social work": "Raison Sociale",
@@ -248,7 +248,7 @@
     "PAID": "PAYÉ",
     "NOT DELIVERED": "NON LIVRÉ",
     "DELIVERED": "LIVRÉ",
-    
+
     "CANCELED" : "ANNULÉ",
     "ACCEPTED" : "ACCEPTÉ",
 
@@ -296,5 +296,22 @@
 
 
 
-    "" : ""
+    "" : "",
+    "canton_name" : "Nom du canton",
+    "create_canton": "Nouveau canton",
+    "create_town_or_village": "Nouveau  Ville/Village",
+    "select an canton": "Sélectionner un canton",
+    "select an town": "Sélectionner Ville/Village ",
+    "activity_category": "Catégorie d'activité",
+    "create_activity_category": "Nouvelle Catégorie d'activité",
+    "name_activity_category": "Nom de la Catégorie d'activité",
+    "create_activity": "Nouvelle activité",
+    "activity": "Nom de l'activité",
+    "select an option activity_category": "Sélectionner une catégorie d'activité",
+    "mayor_name": "Nom du Maire",
+    "phone_number": "Numéro de téléphone",
+    "treasury_name": "Nom de la Trésorerie",
+    "treasury_address": "Addresse de la Trésorerie",
+    "treasury_rib":"RIB",
+    "create commune": "Configurer les informations d'une commune"
 }
