@@ -7,7 +7,10 @@ use App\Models\Erea;
 use App\Models\Taxpayer;
 use App\Models\Town;
 use App\Models\Zone;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Concerns\RemembersChunkOffset;
+use Maatwebsite\Excel\Concerns\RemembersRowNumber;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
@@ -15,16 +18,23 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithProgressBar;
 
-class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithChunkReading, WithHeadingRow
+class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithChunkReading, WithHeadingRow, ShouldQueue
 {
     use Importable;
+    use RemembersRowNumber;
+    use RemembersChunkOffset;
     /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
+     * @param array $row
+     *
+     * @return \Illuminate\Database\Eloquent\Model|null
+     * @throws \Exception
+     */
     public function model(array $row)
     {
+
+        $currentRowNumber = $this->getRowNumber();
+        $chunkOffset = $this->getChunkOffset();
+        dump($currentRowNumber);
 
         //todo update logic to create taxpayers taxables
         $taxpayer= null;

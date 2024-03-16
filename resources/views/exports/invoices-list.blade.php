@@ -45,21 +45,22 @@
 
 
     <tr>
-        <td colspan="5"  style="border: none; margin: 0">
-            REGION PLATEAUX
+        <td colspan="5"  style="border: none; margin: 0;text-align: left">
+
+            {{$commune->region_name}}
 
         </td>
-        <td colspan="6"  style="border: none; margin: 0">
+        <td colspan="6"  style="border: none; margin: 0;text-align: right">
             REPUBLIQUE TOGOLAISE
 
         </td>
     </tr>
     <tr>
-        <td colspan="5" style="border: none; margin: 0">
+        <td colspan="5"  style="border: none; margin: 0;text-align: left">
 
-            Commune de Agou
+            {{$commune->title}}
         </td>
-        <td colspan="6"  style="border: none; margin: 0">
+        <td colspan="6"  style="border: none; margin: 0;text-align: right">
 
             Travail-Liberté-Patrie
         </td>
@@ -107,40 +108,40 @@
         $total_somme = 0;
     @endphp
 
+
     @foreach($data as $index => $item)
         @php
-            $contribuable = $item[0];
+            $contribuable = $item[__('taxpayer')];
             $lines = explode("\n", $contribuable);
             $name=$lines[1];
             $derniereLigne = end($lines);
             $numeroTelephone = trim($derniereLigne);
-            $total_somme +=intval($item[8]);
-            $explose_year = explode(" ", $item[9]);
-            $year = end($explose_year) ;
-            switch ($item[9]) {
+            $total_somme +=intval($item[__('amount')]);
+            $year = date("Y", strtotime( $item[ __('from_date')])) ;
+            switch ($item[__('aproval')]) {
                 case "PRIS EN CHARGE":
-                    $item[9] = "PC";
+                    $item[__('aproval')] = "PC";
                     break;
                 case "REJETÉ":
-                    $item[9] = "RJ";
+                    $item[__('aproval')] = "RJ";
                     break;
                 default:
-                    $item[9] = "";
+                    $item[__('aproval')] = "";
                     break;
             }
         @endphp
         <tr>
-            <td>{{$item[1]}}</td>
-            <td>{{date("d-m-Y", strtotime( $item[11]))}}</td>
-            <td></td>
-            <td>{{$item[3]}}</td>
+            <td>{{$item[__('invoice no')]}}</td>
+            <td>{{date("d-m-Y", strtotime( $item[ __('from_date')]))}}</td>
+            <td>{{$item[__('order no')]}}</td>
+            <td>{{$item[__('nic')]}}</td>
             <td>{{$name}}</td>
             <td>{{$numeroTelephone}}</td>
-            <td>{{$item[4]}}</td>
-            <td>{{$item[5]}}</td>
-            <td>{{$item[6]}}</td>
-            <td>{{$item[8]}}</td>
-            <td>{{$item[9]}}</td>
+            <td>{{$item[__('zone')]}}</td>
+            <td>{{$item[__('address')]}}</td>
+            <td>{{$item[__('gps')]}}</td>
+            <td>{{$item[__('amount')]}}</td>
+            <td>{{$item[__('aproval')]}}</td>
         </tr>
     @endforeach
 
@@ -166,7 +167,7 @@
     </tr>
     <tr>
         <td colspan="5" style="border: none; margin: 0; padding: 5px;">
-            A <span>Agou</span> le <span>{{ now()->locale('fr')->format('d-m-Y') }}</span>
+            A <span> {{$commune->title}}</span> le <span>{{ now()->locale('fr')->format('d-m-Y') }}</span>
         </td>
 
 
@@ -174,7 +175,7 @@
     </tr>
     <tr>
         <td colspan="5" style="border: none; margin: 5;padding: 5;"> </td>
-        <td colspan="6" style="border: none; margin: 5;padding: 5;"></td>
+        <td colspan="6" style="border: none; margin: 5;padding: 5;"> {{$commune->mayor_name}} </td>
     </tr>
     <tr>
         <td colspan="5" style="border: none; margin: 5;padding: 5;"> </td>

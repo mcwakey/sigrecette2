@@ -25,6 +25,44 @@
                         <!--begin::Input group-->
 
                         <div class="row mb-7">
+                            <div class="col-md-4">
+                                <!--begin::Label-->
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('commune_name') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" wire:model="name" name="name" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('commune_name') }}"/>
+                                <!--end::Input-->
+                                @error('name')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-4">
+                                <!--begin::Label-->
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('commune_title') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" wire:model="title" name="title" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('commune_title') }}"/>
+                                <!--end::Input-->
+                                @error('title')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-4">
+                                <!--begin::Label-->
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('region_name') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select wire:model="region_name" name="region_name" class="form-select" data-dropdown-parent="#kt_modal_add_taxpayer">
+                                    <option>{{ __('select an région') }}</option>
+                                    <option value="REGION MARITIME">{{ __('Région Maritime') }}</option>
+                                    <option value="REGION DES PLATEAUX">{{ __('Région des Plateaux') }}</option>
+                                    <option value="REGION CENTRALE">{{ __('Région Centrale') }}</option>
+                                    <option value="REGION DE KARA">{{ __('Région de Kara') }}</option>
+                                    <option value="REGION DES SAVANES">{{ __('Région des Savanes') }}</option>
+                                </select>
+
+                                <!--end::Input-->
+                                @error('region_name')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
                             <div class="col-md-12">
                                 <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('mayor_name') }}</label>

@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\Commune;
 use App\Models\Invoice;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -9,6 +10,11 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class PdfGenerator
 {
+    public function __construct( public Commune|null $commune = null)
+    {
+        $this->commune = Commune::first();
+    }
+
 
     /**
      * @param array $data
@@ -18,11 +24,13 @@ class PdfGenerator
      */
     public function generateInvoiceListPdf(array $data,string $template,int $action=null):array
     {
-        if ($this->checkInvoiceListDataUniformity($data)) {
+
+        //dd($data);
+        if ($this->checkInvoiceListDataUniformity($data)&& $this->checkIfCommuneIsNotNull()) {
 
             $filename = "Invoice-list-" . Str::random(8) . ".pdf";
             //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
-            $pdf = PDF::loadView("exports.".$template, ['data' => $data,'titles'=>$this->generateTitleWithAction($action)])->setPaper('a4', 'landscape')->stream($filename);
+            $pdf = PDF::loadView("exports.".$template, ['data' => $data,'titles'=>$this->generateTitleWithAction($action),"commune"=> $this->commune])->setPaper('a4', 'landscape')->stream($filename);
 
             return ['success' => true, 'pdf' => $pdf];
         }
@@ -81,6 +89,8 @@ class PdfGenerator
      */
     private function checkInvoiceListDataUniformity($data): bool
     {
+
+
         $expectedDataSize = 14;
 
         foreach ($data as $item) {
@@ -94,19 +104,29 @@ class PdfGenerator
 
 
     /**
+     * @return bool
+     */
+    private function checkIfCommuneIsNotNull():bool{
+        if ($this->commune==null) {return false;}
+        return true;
+    }
+    /**
      * @param $data
      * @return bool
      */
     public function checkInvoiceDataUniformity($data): bool
     {
+
         $expectedDataSize = 13;
         $expectedSubDataSize = 9;
 
         $firstSubDataValue = "";
 
+
         if (count($data) !== $expectedDataSize) {
             return false;
         }
+
 
         if (isset($data[12]) && is_array($data[12])) {
             foreach ($data[12] as $index => $item) {
@@ -117,6 +137,7 @@ class PdfGenerator
                 if (count($item) !== $expectedSubDataSize || $firstSubDataValue !== $item[1]) {
                     return false;
                 }
+                //dd(isset($data[12]) && is_array($data[12]));
             }
         }
 
@@ -130,7 +151,9 @@ class PdfGenerator
      */
     public function generateInvoicePdf(array $data,string $templateName,int $action=null ):array
     {
-        if ($this->checkInvoiceDataUniformity($data)) {
+
+
+        if ($this->checkInvoiceDataUniformity($data) && $this->checkIfCommuneIsNotNull()) {
             $filename="Invoice-".$data[2].'-'.Str::random(8).".pdf";
 
             //dd($data);
@@ -138,9 +161,11 @@ class PdfGenerator
             $new_amount=0;
             if($action==2){
 
+
                 $invoice = Invoice::where('invoice_no', $data[1])
                     ->where('status', '!=', 'CANCELED')
                     ->first();
+                //dd($action,$data,$invoice,$data[1]);
                 $new_amount = $invoice->amount;
                 foreach ($invoice->invoiceitems as $invoiceitem) {
                     $invoiceItems[] = [
@@ -158,7 +183,7 @@ class PdfGenerator
                 }
             }
 
-            $pdf= PDF::loadView("exports.".$templateName, ['data' => $data,'action'=>$action,'newitems'=> $invoiceItems,'new_amount'=>$new_amount])
+            $pdf= PDF::loadView("exports.".$templateName, ['data' => $data,'action'=>$action,'newitems'=> $invoiceItems,'new_amount'=>$new_amount,"commune"=> $this->commune])
                 // ->save(Storage::path('exports') . DIRECTORY_SEPARATOR . $filename)
                 ->stream($filename);
             return ['success' => true, 'pdf' => $pdf];

@@ -20,6 +20,15 @@ class CommuneDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+            ->editColumn('title', function (Commune $commune) {
+                return $commune->title;
+            })
+            ->editColumn('name', function (Commune $commune) {
+                return $commune->name;
+            })
+            ->editColumn('region_name', function (Commune $commune) {
+                return $commune->region_name;
+            })
             ->editColumn('mayor_name', function (Commune $commune) {
                 return $commune->mayor_name;
             })
@@ -73,6 +82,9 @@ class CommuneDataTable extends DataTable
     public function getColumns(): array
     {
         return [
+            Column::make('name')->title(__('commune_name')),
+            Column::make('title')->title(__('commune_title')),
+            Column::make('region_name')->title(__('region_name')),
             Column::make('mayor_name')->title(__('mayor_name')),
             Column::make('phone_number')->title(__('phone_number')),
             Column::make('address')->title(__(__('address'))),

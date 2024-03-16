@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Commune extends Model
 {
     protected $fillable = [
+        'name',
+        'title',
+        'region_name',
         'mayor_name',
         'phone_number',
         'address',
@@ -15,10 +18,5 @@ class Commune extends Model
         'treasury_rib',
     ];
 
-    public static function getOrCreate(array|null $info=null)
-    {
-        return self::firstOr(function () use ($info) {
-            return self::create($info);
-        });
-    }
+
 }

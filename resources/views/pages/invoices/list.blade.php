@@ -240,24 +240,45 @@
         });
 
         document.querySelectorAll('.print-link').forEach(function(link) {
+            function capitalizeFirstLetter(str) {
+                let array = ["NIC", "GPS"];
+
+                if (array.includes(str.toUpperCase())) {
+                    return str;
+                } else {
+                    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+                }
+            }
             link.addEventListener('click', function(event) {
                 event.preventDefault();
-                var selectedValue = link.getAttribute('data-type');
-                var table = document.getElementById("invoices-table");
-                var dataArray = [];
+                let selectedValue = link.getAttribute('data-type');
+                let table = document.getElementById("invoices-table");
+                let dataArray = [];
+                let headers = [];
 
 
-                for (var i = 1; i < table.rows.length; i++) {
-                    var row = table.rows[i];
-                    var rowData = [];
-                    for (var j = 0; j < row.cells.length; j++) {
-                        var cellValue = row.cells[j].innerText.trim();
-                        rowData.push(cellValue);
+               // for (let i = 1; i < table.rows.length; i++) {let row = table.rows[i];let rowData = [];for (let j = 0; j < row.cells.length; j++) {let cellValue = row.cells[j].innerText.trim();rowData.push(cellValue);}dataArray.push(rowData);}
+
+                let headerRow = table.getElementsByTagName("thead")[0].getElementsByTagName("tr")[0];
+                for (let i = 0; i < headerRow.cells.length; i++) {
+                    headers.push(headerRow.cells[i].innerText.trim());
+                }
+
+                for (let i = 1; i < table.rows.length; i++) {
+                    let row = table.rows[i];
+                    let rowData = {};
+                    for (let j = 0; j < row.cells.length; j++) {
+                        let cellValue = row.cells[j].innerText.trim();
+                        let header = headers[j];
+                        rowData[capitalizeFirstLetter(header)] = cellValue;
                     }
+
                     dataArray.push(rowData);
                 }
 
-                var r_type = 2;
+               // console.log(dataArray);
+
+                let r_type = 2;
                 if (selectedValue === '3') {
                     r_type = 3;
                 }
@@ -270,8 +291,8 @@
                 else if (selectedValue === '6') {
                     r_type = selectedValue;
                 }
-                var jsonData = JSON.stringify(dataArray);
-                var url = "{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type','action'=> ':selectedValue']) }}";
+                let jsonData = JSON.stringify(dataArray);
+                let url = "{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type','action'=> ':selectedValue']) }}";
                 url = url.replace(':jsonData', encodeURIComponent(jsonData));
                 url = url.replace(':r_type', encodeURIComponent(r_type));
                 url = url.replace(':selectedValue', encodeURIComponent(selectedValue));

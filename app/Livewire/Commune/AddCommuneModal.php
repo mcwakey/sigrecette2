@@ -19,10 +19,17 @@ class AddCommuneModal extends Component
     public $treasury_name;
     public $treasury_address;
     public $treasury_rib;
+    public $title;
+    public $name;
+    public $region_name;
 
     public $edit_mode = false;
 
+
     protected $rules = [
+        "title"=> 'required|string',
+        'name'=> 'required|string',
+        'region_name'=> 'required|string',
         'mayor_name'=> 'required|string',
         'phone_number'=> 'required|string',
         'address'=> 'required|string',
@@ -51,6 +58,9 @@ class AddCommuneModal extends Component
         DB::transaction(function () {
             // Prepare the data for creating a new Taxable
             $data = [
+                "title"=> $this->title,
+                'name'=> $this->name,
+                'region_name'=> $this->region_name,
                  'mayor_name' => $this->mayor_name,
                 'phone_number'=> $this->phone_number,
                 'address'=> $this->address,
@@ -98,6 +108,9 @@ class AddCommuneModal extends Component
         $commune = Commune::find($id);
 
         $this->commune_id = $commune->id;
+        $this->name = $commune->name;
+        $this->region_name =$commune->region_name ;
+        $this->title = $commune->title;
 
         $this->mayor_name = $commune->mayor_name;
         $this->phone_number = $commune->phone_number;
