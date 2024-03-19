@@ -25,7 +25,7 @@ class AddPaymentModal extends Component
 
     public $payment_id;
     public $invoice_id;
-    public $taxpayer_id; 
+    public $taxpayer_id;
 
     public $name;
     public $tnif;
@@ -37,7 +37,7 @@ class AddPaymentModal extends Component
 
     public $qty;
     public $bill;
-    
+
     public $paid;
     public $balance;
     public $s_amount =[];
@@ -45,7 +45,7 @@ class AddPaymentModal extends Component
     public $amount;
     public $payment_type;
     public $reference;
-
+    public $remaining_amount;
     public $edit_mode = false;
 
     protected $rules = [
@@ -72,6 +72,7 @@ class AddPaymentModal extends Component
     // {
     //     $this->taxpayer_id = $taxpayer_id;
     // }
+
 
     public function render()
     {
@@ -148,13 +149,15 @@ class AddPaymentModal extends Component
                 'amount' => $this->amount,
                 'payment_type' => $this->payment_type,
                 'reference' => $this->reference,
+                'remaining_amount' =>$this->bill-($this->amount + $this->paid)
+
             ];
 
             //dd($paymentData);
 
             // Create or update Payment record
             $payment = Payment::find($this->payment_id) ?? Payment::create($paymentData);
-            
+
 
             // $taxpayerTaxableData = [
             //     'pay_status' => $payment->id,
@@ -162,12 +165,12 @@ class AddPaymentModal extends Component
 
             // $invoice = Invoice::find($this->invoice_id);
             //dd($this->bill,$this->amount);
+
             if ($this->amount + $this->paid >= $this->bill){
                 $paystatus = "PAID";
             }else{
                 $paystatus = "PART PAID";
             }
-
             $data = [
                 'pay_status' => $paystatus,
             ];
@@ -176,7 +179,7 @@ class AddPaymentModal extends Component
 
             // Create or update Invoice record
             $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
-            
+
             $this->invoice_id = $invoice->id;
 
             foreach ($data as $k => $v) {
@@ -250,7 +253,7 @@ class AddPaymentModal extends Component
 
         $this->invoice_id = $invoice->id;
         $this->taxpayer_id = $invoice->taxpayer->id;
-        
+
         $this->name = $invoice->taxpayer->name;
         $this->tnif = $invoice->taxpayer->id;
         $this->zone = $invoice->taxpayer->zone->name;
@@ -258,12 +261,11 @@ class AddPaymentModal extends Component
         $this->invoice_no = $invoice->invoice_no;
         $this->order_no = $invoice->order_no;
         $this->nic = $invoice->nic;
-        
+
         $this->qty = $invoice->qty;
         $this->bill = $invoice->amount;
-        
 
-        $payments = Payment::where('invoice_id', $id)->get();
+        $payments = Payment::where('invoice_id', $invoice->id)->get();
         $this->s_amount = []; // Initialize as an empty array
 
         foreach ($payments as $index => $payment) {
@@ -281,11 +283,11 @@ class AddPaymentModal extends Component
         $this->balance = $this->bill - $this->paid;
 
         //dd($this->invoice_id);
-        
+
         // $invoiceitems = $this->invoiceitems = $this->invoice_id ? InvoiceItem::where('invoice_id', $id)->get() : collect();
 
         // //dd(($invoiceitems));
-        
+
         // foreach ($invoiceitems as $index => $invoiceitem) {
         //     $this->taxpayer_taxable[$index] = $invoiceitem->name;
 

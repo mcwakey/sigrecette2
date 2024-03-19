@@ -526,7 +526,7 @@
                                         </thead>
                                         <tbody class="fs-6 fw-semibold text-gray-600">
                                             @foreach($taxpayer->invoices as $invoice)
-                                            <tr @if($invoice->status=="CANCELED") style="text-decoration: line-through;" @endif>
+                                            <tr >
                                                 <td>{{ $invoice->created_at->format('Y-m-d') }}</td>
                                                 <td>{{ $invoice->invoice_no}}</td>
                                                 <td>
@@ -539,37 +539,26 @@
                                                             <span class="path2"></span>
                                                         </i>
                                                     </button>
-
-                                                    <!--begin::Task menu-->
-
                                                     <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" data-kt-menu-id="kt_modal_add_orderno" tabindex="-1" aria-hidden="true" wire:ignore.self>
-                                                        <!--begin::Header-->
                                                         <div class="px-7 py-5">
                                                             <div class="fs-5 text-gray-900 fw-bold">Metre a jour le No d'ordre</div>
                                                         </div>
-                                                        <!--end::Header-->
-                                                        <!--begin::Menu separator-->
                                                         <div class="separator border-gray-200"></div>
-                                                        <!--end::Menu separator-->
-                                                        <!--begin::Form-->
-
                                                         <livewire:invoice.add-orderno-form />
-
-                                                        <!--end::Form-->
                                                     </div>
-
-                                                    <!--end::Task menu-->
-
                                                     @else
-
                                                     {{ $invoice->order_no}}
-
                                                     @endif
 
                                                 </td>
                                                 <td>{{ $invoice->nic }}</td>
-                                                <td>{{ $invoice->amount }}</td>
-
+                                                <td>
+                                                    @if($invoice->reduce_amount  !='')
+                                                         {{ "-".$invoice->reduce_amount }}
+                                                    @else
+                                                        {{ $invoice->amount }}
+                                                    @endif
+                                                </td>
                                                 <td>
                                                     @if($invoice->pay_status == "OWING")
                                                     <span class="badge badge-light-danger">{{ __($invoice->pay_status) }}</span>
@@ -579,7 +568,6 @@
                                                     <span class="badge badge-light-success">{{ __($invoice->pay_status) }}</span>
                                                     @endif
                                                 </td>
-
                                                 <td>
                                                     @if($invoice->delivery == "NOT DELIVERED")
                                                     <span class="badge badge-light-danger">{{ __('NOT DELIVERED') }}</span>
@@ -593,7 +581,6 @@
                                                     @if($invoice->status=="APROVED")
                                                     @if($invoice->delivery == "NOT DELIVERED")
 
-
                                                     <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-user-id="{{ $invoice->id }}" data-kt-menu-target="#kt_modal_add_delivery" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-action="update_status">
                                                         <i class="ki-duotone ki-setting-3 fs-3">
                                                             <span class="path1"></span>
@@ -603,9 +590,6 @@
                                                             <span class="path5"></span>
                                                         </i>
                                                     </button>
-
-
-                                                    <!--begin::Task menu-->
                                                     <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" data-kt-menu-id="kt_modal_add_delivery">
                                                         <!--begin::Header-->
                                                         <div class="px-7 py-5">
@@ -700,44 +684,9 @@
                                                             </a>
                                                         </div>
 
-                                                        @if($invoice->status=="CANCELED")
-                                                        <div class="menu-item px-3">
-                                                            @php
-                                                                $invoiceItems = [];
-                                                                foreach ($invoice->invoiceitems as $invoiceitem) {
-                                                                    $invoiceItems[] = [
-                                                                            $invoiceitem->taxpayer_taxable->taxable->tax_label->name,
-                                                                        $invoiceitem->taxpayer_taxable->taxable->tax_label->code,
-                                                                        $invoiceitem->taxpayer_taxable->taxable->name,
-                                                                        $invoiceitem->taxpayer_taxable->seize,
-                                                                        $invoiceitem->taxpayer_taxable->taxable->unit,
-                                                                            $invoiceitem->taxpayer_taxable->taxable->tariff,
-                                                                            $invoiceitem->amount,
-                                                                            $invoiceitem->qty,
-                                                                            $invoiceitem->taxpayer_taxable->name
 
-                                                                    ];
-                                                                }
-                                                                $data = [
-                                                                    $invoice->created_at,
-                                                                    $invoice->invoice_no,
-                                                                        $invoice->nic,
-                                                                        $invoice->amount,
-                                                                    $taxpayer->name,
-                                                                    $taxpayer->mobilephone,
-                                                                    $taxpayer->town->canton->name,
-                                                                    $taxpayer->town->name,
-                                                                    $taxpayer->address,
-                                                                        $taxpayer->zone->name,
-                                                                    $taxpayer->longitude,
-                                                                    $taxpayer->latitude,
 
-                                                                    $invoiceItems,
-                                                                ];
-                                                            @endphp
-                                                            <a href="{{ route('generatePdf', ['data' => json_encode($data),'type'=>'900','action'=>2]) }}" class="menu-link px-3" target="_blank">{{ __('print') }}</a>
-                                                        </div>
-                                                        @elseif($invoice->status=="DRAFT")
+                                                        @if($invoice->status=="DRAFT")
                                                         <div class="menu-item px-3">
                                                             <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer" data-kt-action="update_taxpayer">
                                                                 {{ __('edit') }}
@@ -748,19 +697,20 @@
                                                                 {{ __('delete') }}
                                                             </a>
                                                         </div>
-                                                        @elseif($invoice->status=="APROVED")
+                                                        @elseif($invoice->status=="APROVED"  || $invoice->status=="CANCELED")
 
                                                             <div class="menu-item px-3">
                                                                 @php
+
                                                                     $invoiceItems = [];
                                                                     foreach ($invoice->invoiceitems as $invoiceitem) {
                                                                         $invoiceItems[] = [
                                                                              $invoiceitem->taxpayer_taxable->taxable->tax_label->name,
                                                                            $invoiceitem->taxpayer_taxable->taxable->tax_label->code,
                                                                             $invoiceitem->taxpayer_taxable->taxable->name,
-                                                                            $invoiceitem->taxpayer_taxable->seize,
+                                                                            $invoiceitem->ii_seize,
                                                                             $invoiceitem->taxpayer_taxable->taxable->unit,
-                                                                             $invoiceitem->taxpayer_taxable->taxable->tariff,
+                                                                             $invoiceitem->ii_tariff,
                                                                               $invoiceitem->amount,
                                                                              $invoiceitem->qty,
                                                                              $invoiceitem->taxpayer_taxable->name
@@ -782,25 +732,30 @@
                                                                         $taxpayer->latitude,
 
                                                                         $invoiceItems,
+                                                                       $invoice->id
                                                                     ];
                                                                 @endphp
 
                                                                 <a href="{{ route('generatePdf', ['data' => json_encode($data)]) }}" class="menu-link px-3" target="_blank">{{ __('print') }}</a>
                                                             </div>
-                                                            @if($invoice->pay_status != "PAID")
-                                                            <div class="menu-item px-3">
-                                                                <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->invoice_no }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_payment" data-kt-action="update_payment">
-                                                                    {{ __('create payment') }}
-                                                                </a>
-                                                            </div>
-                                                            @endif
-                                                            <div class="menu-item px-3">
-                                                                <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice" data-kt-action="update_invoice">
-                                                                    {{ __('reduction cancelation') }}
-                                                                </a>
-                                                            </div>
+                                                            @if($invoice->status!=="CANCELED")
+                                                                @if($invoice->pay_status != "PAID")
+                                                                <div class="menu-item px-3">
+                                                                    <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->invoice_no }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_payment" data-kt-action="update_payment">
+                                                                        {{ __('create payment') }}
+                                                                    </a>
+                                                                </div>
+                                                                @endif
+                                                            <!--end::Menu item cancle option-->
 
-                                                        @endif
+                                                                <!--begin::Menu item-->
+                                                                <div class="menu-item px-3">
+                                                                    <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice" data-kt-action="update_invoice">
+                                                                        {{ __('reduction cancelation') }}
+                                                                    </a>
+                                                                </div>
+                                                                 @endif
+                                                            @endif
                                                         <!--end::Menu item-->
 
                                                         <!--begin::Menu item-->
@@ -894,7 +849,11 @@
                                             <td>{{ $payment->created_at->format('Y-m-d') }}</td>
                                             <td>{{ $payment->invoice->invoice_no}}</td>
                                             <td>{{ $payment->reference}}</td>
-                                            <td>{{ $payment->amount}}</td>
+                                            <td>
+
+
+                                                {{ $payment->amount}}
+                                            </td>
 
                                             <td><span class="badge badge-light-secondary">{{ $payment->payment_type}}</span></td>
 

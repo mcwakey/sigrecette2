@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\InvoicesDataTable;
+use App\DataTables\RecoveriesDataTable;
 use App\Models\Commune;
 use App\Models\Taxpayer;
 use App\DataTables\CommuneDataTable;

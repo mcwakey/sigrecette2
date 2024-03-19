@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\CommunesController;
 use App\Http\Controllers\PrintController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\RecoveryController;
 use App\Http\Controllers\TaxableController;
 use App\Http\Controllers\LanguageController;
 use App\DataTables\TaxpayerInvoicesDataTable;
@@ -49,6 +50,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('/taxpayers', TaxpayerController::class);
     Route::resource('/invoices', InvoiceController::class);
+    Route::resource('/recoveries', RecoveryController::class);
 
     Route::name('geolocation.')->group(function () {
         Route::get('/geolocation/zones', [Geolocation::class, 'zones'])->name('zones');

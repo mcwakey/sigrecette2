@@ -117,13 +117,13 @@
                                 </select>
                                 <span class="input-group-text" id="basic-addon1">2024</span>
                                         </div>
-                                
+
                             </div>
 
                         </div>
                         <div class="row mb-2">
                             <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed mb-1 p-2">
-                            
+
                             <div class="col-md-2">
                                 <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('4 exercices') }}" readonly />
                             </div>
@@ -155,12 +155,12 @@
                                     <tr class="border-bottom border-bottom-dashed" data-kt-element="item">
                                         <td class="pe-7">
                                             <input type="hidden" wire:model="taxpayer_taxable_id.{{ $loop->index }}" name="taxpayer_taxable_id[]" name="taxpayer_taxable_id" class="form-control form-control-solid mb-2" />
-                                            
+
                                             <div class="form-floating">
                                                 <input type="text" wire:model="taxpayer_taxable.{{ $loop->index }}" name="taxpayer_taxable[]" id="taxpayer_taxable" class="form-control form-control-solid" readonly />
                                                 <label for="taxpayer_taxable">{{ $taxpayer_taxable->taxable->tax_label->name ?? '' }} {{ $taxpayer_taxable->taxpayer_taxable->taxable->tax_label->name ?? '' }}</label>
                                             </div>
-                                            
+
                                         </td>
                                         <!-- <td class="pe-7">
                                             <input type="number" class="form-control form-control-solid mb-2" name="quantity" placeholder="1" value="1" data-kt-element="quantity"/>
@@ -290,7 +290,7 @@
                         </div>
 
                         <div class="row mb-2">
-                            
+
                         <div class="notice d-flex bg-light-danger rounded border-danger border border-dashed mb-1 p-2">
                             <div class="col-md-3">
                                 <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('Choisir une option') }}" readonly />
@@ -298,7 +298,7 @@
                             <div class="col-md-3">
                                 <select wire:model="cancel_reduct" name="cancel_reduct" class="form-select form-control-select" data-dropdown-parent="#kt_modal_add_invoice">
                                     <option></option>
-                                    @if ($amount_red_e > 0)
+                                    @if ($reduce_amount > 0)
                                     <option value="2">Reduction</option>
                                     @endif
                                     <option value="1">Annulation</option>
@@ -306,14 +306,14 @@
                                 @error('cancel_reduct')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                            @if ($amount_red_e > 0)
+                            @if ($reduce_amount > 0)
                             <div class="col-md-3">
                                 <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('Montant de la reduction') }}" readonly />
                             </div>
                             <div class="col-md-3">
                                 <!--end::Decrease control-->
                                 <!--begin::Input control-->
-                                <input wire:model="amount_red_e" name="amount_red_e" type="text" class="form-control text-end" readonly/>
+                                <input wire:model="reduce_amount" name="reduce_amount" type="text" class="form-control text-end" readonly/>
                                 <!--end::Input control-->
                                 @error('qty')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -323,7 +323,7 @@
                             </div>
                             @endif
                         </div>
-                            
+
                         </div>
                             @endif
 

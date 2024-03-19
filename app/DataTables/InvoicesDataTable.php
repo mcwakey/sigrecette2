@@ -98,6 +98,8 @@ class InvoicesDataTable extends DataTable
     }
 
 
+
+
     /**
      * Optional method if you want to use the html builder.
      */

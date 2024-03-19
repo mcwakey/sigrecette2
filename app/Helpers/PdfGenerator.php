@@ -39,6 +39,7 @@ class PdfGenerator
     }
     public function generateTitleWithAction($action=null): array
     {
+
         $base_array = [
             "N° Avis des sommes à payer",
             "Date d’émission",
@@ -62,6 +63,15 @@ class PdfGenerator
 
                 break;
             case 2:
+                $base_array[0] = "N° Avis de réduction ou d’annulation";
+                $base_array[2] = "N° Avis réduit ou annulé";
+                $base_array[3] = "N° OR d’annulation ou réduction";
+                $base_array[9]= "Somme réduite ou annulée";
+                $base_array[11]= "TOTAL DU PRESENT BORDEREAU D’ANNULATION";
+                $base_array[12]= "TOTAL GENERAL DU PRECEDENT BORDEREAU D’ANNULATION";
+                $base_array[13]= "TOTAL GENERAL DU PRESENT BORDEREAU   D’ANNULATION";
+                $base_array[14]= "Arrêté le présent bordereau journal de réduction ou d’annulation à la somme de";
+                $base_array[15]= "Bordereau journal des avis de réduction ou d’annulation";
                 break;
             case 3:
                 $base_array[15]= "Journal des avis des sommes à payer confiés par le receveur";
@@ -117,7 +127,8 @@ class PdfGenerator
     public function checkInvoiceDataUniformity($data): bool
     {
 
-        $expectedDataSize = 13;
+
+        $expectedDataSize = 14;
         $expectedSubDataSize = 9;
 
         $firstSubDataValue = "";
@@ -129,12 +140,17 @@ class PdfGenerator
 
 
         if (isset($data[12]) && is_array($data[12])) {
+
+
             foreach ($data[12] as $index => $item) {
+
+
                 if ($index === 0) {
                     $firstSubDataValue = $item[1];
                 }
 
                 if (count($item) !== $expectedSubDataSize || $firstSubDataValue !== $item[1]) {
+                    //dd($item , $expectedSubDataSize ,$firstSubDataValue, $item[1]);
                     return false;
                 }
                 //dd(isset($data[12]) && is_array($data[12]));
@@ -153,39 +169,33 @@ class PdfGenerator
     {
 
 
+
         if ($this->checkInvoiceDataUniformity($data) && $this->checkIfCommuneIsNotNull()) {
+
             $filename="Invoice-".$data[2].'-'.Str::random(8).".pdf";
 
             //dd($data);
-            $invoiceItems = [];
             $new_amount=0;
-            if($action==2){
 
 
-                $invoice = Invoice::where('invoice_no', $data[1])
-                    ->where('status', '!=', 'CANCELED')
-                    ->first();
-                //dd($action,$data,$invoice,$data[1]);
-                $new_amount = $invoice->amount;
-                foreach ($invoice->invoiceitems as $invoiceitem) {
-                    $invoiceItems[] = [
-                        $invoiceitem->taxpayer_taxable->taxable->tax_label->name,
-                        $invoiceitem->taxpayer_taxable->taxable->tax_label->code,
-                        $invoiceitem->taxpayer_taxable->taxable->name,
-                        $invoiceitem->taxpayer_taxable->seize,
-                        $invoiceitem->taxpayer_taxable->taxable->unit,
-                        $invoiceitem->taxpayer_taxable->taxable->tariff,
-                        $invoiceitem->amount,
-                        $invoiceitem->qty,
-                        $invoiceitem->taxpayer_taxable->name
-
-                    ];
-                }
+            if($action==2 || ( intval($data[1]) !==end($data))){
+                $action=2;
+                $invoice = Invoice::find( $data[1]);
             }
 
-            $pdf= PDF::loadView("exports.".$templateName, ['data' => $data,'action'=>$action,'newitems'=> $invoiceItems,'new_amount'=>$new_amount,"commune"=> $this->commune])
-                // ->save(Storage::path('exports') . DIRECTORY_SEPARATOR . $filename)
-                ->stream($filename);
+            if($action ==null){
+
+                $action=1;
+                $pdf= PDF::loadView("exports.".$templateName, ['data' => $data,'action'=>$action,"commune"=> $this->commune])
+                    // ->save(Storage::path('exports') . DIRECTORY_SEPARATOR . $filename)
+                    ->stream($filename);
+            }else{
+                $pdf= PDF::loadView("exports.".$templateName, ['data' => $data,'action'=>$action,'invoice'=> $invoice,"commune"=> $this->commune])
+                    // ->save(Storage::path('exports') . DIRECTORY_SEPARATOR . $filename)
+                    ->stream($filename);
+            }
+
+
             return ['success' => true, 'pdf' => $pdf];
         }
 

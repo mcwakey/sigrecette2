@@ -34,7 +34,7 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
 
         $currentRowNumber = $this->getRowNumber();
         $chunkOffset = $this->getChunkOffset();
-        dump($currentRowNumber);
+       // dump($currentRowNumber);
 
         //todo update logic to create taxpayers taxables
         $taxpayer= null;

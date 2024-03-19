@@ -13,7 +13,7 @@ class Payment extends Model
         'amount',
         'payment_type',
         'reference',
-
+        'remaining_amount',
         'taxpayer_id',
         'invoice_id',
     ];
@@ -22,7 +22,7 @@ class Payment extends Model
     {
         return $this->belongsTo(Invoice::class);
     }
-    
+
     public function taxpayer()
     {
         return $this->belongsTo(Taxpayer::class);

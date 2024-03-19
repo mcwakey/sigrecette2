@@ -12,7 +12,10 @@ class Invoice extends Model
     protected $fillable = [
         'invoice_id',
         'taxpayer_id',
+        'invoice_no',
+        'order_no',
         'amount',
+        'reduce_amount',
         'qty',
         'from_date',
         'to_date',
@@ -20,7 +23,7 @@ class Invoice extends Model
         'status',
         // 'profile_photo_path',
     ];
-    
+
     public function taxpayer()
     {
         return $this->belongsTo(Taxpayer::class);

@@ -58,7 +58,7 @@ class AddInvoiceModal extends Component
     public $amount;
     public $amount_e;
 
-    public $amount_red_e;
+    public $reduce_amount;
 
 
     public $taxable_taxlabel;
@@ -209,6 +209,7 @@ class AddInvoiceModal extends Component
         // Validate the form input data
         $this->validate();
 
+        //dd($this);
         DB::transaction(function () {
 
             //dd($this->qty,$this->start_month);
@@ -228,16 +229,18 @@ class AddInvoiceModal extends Component
 
             if ($this->edit_mode) {
                 $invoiceData['amount'] = $this->amount_e;
+               $invoiceData['reduce_amount'] = $this->reduce_amount;
                 $invoiceData['status'] = 'PENDING';
             }
 
             //dd($invoiceData);
 
             // Create or update Invoice record
+            //dd($invoiceData,$this);
             $invoice = Invoice::create($invoiceData);
 
             // Save the invoice ID into the invoice_no column
-            
+
             $invoice->invoice_no = $this->invoice_id ?? $invoice->id;
             $invoice->nic = $this->taxpayer_id.($this->invoice_id ?? $invoice->id);
             //$invoice->order_no = $this->order_no;
@@ -281,6 +284,7 @@ class AddInvoiceModal extends Component
                 ];
 
                 if ($this->edit_mode) {
+
                     $invoiceItemsData['amount'] = $this->s_amount_e[$index];
                     $invoiceItemsData['ii_tariff'] = $this->s_tariff_e[$index];
                     $invoiceItemsData['ii_seize'] = $this->s_seize_e[$index];
@@ -420,7 +424,8 @@ class AddInvoiceModal extends Component
         $this->amount = array_sum($this->s_amount);
         $this->amount_e = array_sum($this->s_amount_e);
 
-        $this->amount_red_e = $this->amount - $this->amount_e;
+        $this->reduce_amount = $this->amount - $this->amount_e;
+        //$this->reduce_amount = - $this->amount_e;
     }
 
     public function addInvoice($id)

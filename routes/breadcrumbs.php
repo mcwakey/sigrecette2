@@ -121,3 +121,7 @@ Breadcrumbs::for('communes.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
     $trail->push(__('communes'), route('settings.communes.index'));
 });
+Breadcrumbs::for('recoveries.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push(__('recoveries'), route('recoveries.index'));
+});

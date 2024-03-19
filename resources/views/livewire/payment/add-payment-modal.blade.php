@@ -89,7 +89,7 @@
                             <!--begin::Icon-->
                             <!--end::Icon-->
                             <!--begin::Wrapper-->
-                            
+
                             <!--end::Wrapper-->
 
                         <div class="row">
@@ -110,7 +110,7 @@
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <input wire:model="bill" name="bill" class="form-control form-control-flush text-end" type="text" readonly />
-                                    <span class="input-group-text" id="basic-addon1">{{ __('currency') }}</span>    
+                                    <span class="input-group-text" id="basic-addon1">{{ __('currency') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -125,11 +125,11 @@
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <input wire:model="paid" name="paid" class="form-control form-control-flush" type="text" readonly />
-                                    <span class="input-group-text" id="basic-addon1">{{ __('currency') }}</span>    
+                                    <span class="input-group-text" id="basic-addon1">{{ __('currency') }}</span>
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                
+
                             </div>
                             <div class="col-md-3">
                                 <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('balance') }} :" readonly />
@@ -137,7 +137,7 @@
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                 <input wire:model="balance" name="balance" class="form-control form-control-flush text-end" type="text" readonly />
-                                    <span class="input-group-text" id="basic-addon1">{{ __('currency') }}</span>    
+                                    <span class="input-group-text" id="basic-addon1">{{ __('currency') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -161,6 +161,7 @@
                                 <select wire:model="payment_type" name="payment_type" class="form-select" data-dropdown-parent="#kt_modal_add_payment">
                                     <option></option>
                                     <option value="CASH">CASH</option>
+                                    <option value="CASH">CHEQUE</option>
                                     <option value="DIGI">DIGI</option>
                                 </select>
                             </div>
