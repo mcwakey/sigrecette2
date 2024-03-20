@@ -34,7 +34,7 @@ class AutoInvoiceModal extends Component
 
     public $zone;
     public $taxlabel;
-    public $qty;
+    public $qty=12;
     public $start_month;
 
     //public $s_amount = [];
@@ -251,7 +251,7 @@ class AutoInvoiceModal extends Component
                         'amount' => $invoiceitem->taxpayer_taxable->taxable->tariff * $this->qty * $invoiceitem->taxpayer_taxable->seize,
                         $this->amount = $this->amount + ($invoiceitem->taxpayer_taxable->taxable->tariff * $this->qty * $invoiceitem->taxpayer_taxable->seize),
                     ];
-    
+
                     InvoiceItem::create($invoiceItemsData);
 
                     // $taxpayer_taxableData = [
@@ -271,7 +271,7 @@ class AutoInvoiceModal extends Component
                     // }
 
                 }
-            
+
                 $created_invoice->invoice_no = $created_invoice->id;
                 //$created_invoice->pay_status = $invoice->pay_status;
                 $created_invoice->nic = $created_invoice->taxpayer_id. $created_invoice->id;

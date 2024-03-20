@@ -36,7 +36,7 @@
                                     <option value=""></option>
                                     @foreach($tax_labels as $tax_label)
                                     <option value="{{ $tax_label->id}}">{{ $tax_label->code }} -- {{ $tax_label->name }}</option>
-                                    @endforeach 
+                                    @endforeach
                                 </select>
                                 <!--end::Input-->
                                 @error('taxlabel')
@@ -66,7 +66,7 @@
                                 <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('Duree du contrat') }}" readonly />
                             </div>
                             <div class="col-md-2">
-                                <div class="position-relative" data-kt-dialer="true" data-kt-dialer-min="1" data-kt-dialer-max="12" data-kt-dialer-step="1">
+                                <div class="position-relative" data-kt-dialer="true" data-kt-dialer-default="12" data-kt-dialer-min="1" data-kt-dialer-max="12" data-kt-dialer-step="1">
                                     <!--begin::Decrease control-->
                                     <button type="button" class="btn btn-icon btn-active-color-gray-700 position-absolute translate-middle-y top-50 start-0" data-kt-dialer-control="decrease">
                                         <i class="ki-outline ki-minus-circle fs-1"></i>
@@ -94,7 +94,6 @@
                             <div class="col-md-3">
                             <div class="input-group mb-2">
                                 <select wire:model="start_month" name="start_month" class="form-select form-control-select" data-dropdown-parent="#kt_modal_auto_invoice">
-                                    <option></option>
                                     <option value="01">Janvier</option>
                                     <option value="02">Fevrier</option>
                                     <option value="03">Mars</option>
@@ -110,13 +109,13 @@
                                 </select>
                                 <span class="input-group-text" id="basic-addon1">2024</span>
                                         </div>
-                                
+
                             </div>
 
                         </div>
                         <div class="row">
                             <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed mb-1 p-2">
-                            
+
                             <div class="col-md-2">
                                 <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('4 exercices') }}" readonly />
                             </div>
@@ -129,14 +128,14 @@
                         <div class="row mb-2">
                             <div class="notice d-flex align-items-center rounded py-5 px-5 bg-light-danger border-danger border border-dashed">
                                 <i class="ki-duotone ki-information-5 fs-3x text-danger me-5"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
-                                <!--begin::Description-->    
+                                <!--begin::Description-->
                                 <div class="text-gray-700 fw-bold fs-6">
                                 {{ __('are you sure') }}
-                                </div>    
+                                </div>
                                 <!--end::Description-->
                             </div>
                         </div>
-                        
+
 
                         <div class="separator separator-dashed my-2"></div>
 
