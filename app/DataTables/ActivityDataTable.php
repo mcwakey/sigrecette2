@@ -71,7 +71,7 @@ class ActivityDataTable extends DataTable
             // Column::make('taxable')->addClass('d-flex align-items-center')->name('name'),
             //Column::make('gender')->title('Tax Name'),
             Column::make('name')->title(__('activity')),
-            Column::make('category_id')->title(__('category'))->width(400),
+            Column::make('category_id')->title(__('activity_category'))->width(400),
             // Column::make('periodicity')->title('periodicity'),
             // Column::make('modality')->title('modality'),
             // Column::make('penalty')->title('penalty'),

@@ -120,17 +120,13 @@ class TaxpayersDataTable extends DataTable
             ->setTableId('taxpayers-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            //->dom("") // Add pagination ('p') and other controls ('i') at the bottom
-            ->dom("<'d-flex justify-content-end'B> ".'rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            // ->dom("") // Add pagination ('p') and other controls ('i') at the bottom
+            // ->dom("<'d-flex justify-content-end'B> ".'rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0)
-            ->buttons([
-                'print',
-                'excel',
-                'csv',
-                'pdf',
-            ])
+            // ->buttons(['print','excel','csv','pdf',])
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/taxpayers/columns/_draw-scripts.js')) . "}");
     }
 

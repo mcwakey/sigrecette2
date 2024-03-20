@@ -1,4 +1,4 @@
-{   
+{
     "total_month" : "Total des paiements ce mois-ci",
     "make_payment" : "Effectuer un paiement",
     "quick_guide" : "Guide rapide",
@@ -51,7 +51,7 @@
     "slogan": "N'importe où, n'importe quand",
 
     "new taxpayer" : "Nouveau Contribuable",
-    "home":"Acceil",
+    "home":"Accueil",
     "dashboard" : "Tableau de bord",
     "invoice" : "Emmission d'avis",
     "revenue" : "Recouvrement",
@@ -120,7 +120,7 @@
 
     "events logs" : "Événements & Journaux",
     "invoices payments" : "Avis & Paiements",
-    "overview" : "Aperçu",
+    "overview" : "Taxations",
     "create payment" : "Ajouter un Paiement",
     "create invoice" : "Ajouter une Avis",
     "create asset" : "Ajouter une Taxation",
@@ -205,7 +205,7 @@
     "number" : "Nombre",
     "surface" : "Superficie",
     "volume" : "Volume",
-    
+
     "tariff type" : "Type de Tarif ",
 
     "social work": "Raison Sociale",
@@ -226,10 +226,10 @@
     "length": "Longueur",
     "width": "Largeur",
     "unit type": "Type d'unité",
-    "invoice date": "Date de l'Avis'",
+    "invoice date": "Date de l'Avis",
     "delivery": "Livraison",
     "delivery date": "Date de livraison",
-    "approval": "Approbation",
+    "aproval": "Approbation",
     "payment date": "Date de paiement",
     "receipt no": "Numéro de récépissé",
     "reference": "Référence",
@@ -248,10 +248,33 @@
     "PAID": "PAYÉ",
     "NOT DELIVERED": "NON LIVRÉ",
     "DELIVERED": "LIVRÉ",
-    
+
     "CANCELED" : "ANNULÉ",
     "ACCEPTED" : "ACCEPTÉ",
 
+    "advanced search": "Recherche avancée",
+    "cancelation": "Annulation",
+    "amount paid": "Montant payé",
+    "reference no": "Numéro de quittance",
+    "reduction cancelation": "Réduction / Annulation",
+    "exercise duration": "Durée de l'exercice",
+    "balance": "Solde",
+    "payment type": "Type de paiement",
+
+    "payment info": "Informations du paiement",
+    "payment history": "Historique de l'avis",
+    "currency": "FCFA",
+
+    "BILLED": "FACTURÉ",
+    "NOT BILLED": "NON FACTURÉ",
+    "expiry date": "Date d'expiration",
+    "EXPIRED": "EXPIRÉ",
+    "VALID": "VALIDE",
+    "ARCHIVED": "ARCHIVÉ",
+    "create invoice automaticaly": "Auto-générer les avis",
+    "automatic invoice genaration": "Génération automatique d'avis",
+    "generate": "Générer",
+    "are you sure": "Ceci ne peut pas être annulé. Êtes-vous sûr de vouloir procéder à l' auto-génération des factures ?",
 
 
 
@@ -267,5 +290,33 @@
 
 
 
-    "" : ""
+
+
+
+
+
+
+    "" : "",
+    "canton_name" : "Nom du canton",
+    "create_canton": "Nouveau canton",
+    "create_town_or_village": "Nouveau  Ville/Village",
+    "select an canton": "Sélectionner un canton",
+    "select an town": "Sélectionner Ville/Village ",
+    "activity_category": "Catégorie d'activité",
+    "create_activity_category": "Nouvelle Catégorie d'activité",
+    "name_activity_category": "Nom de la Catégorie d'activité",
+    "create_activity": "Nouvelle activité",
+    "activity": "Nom de l'activité",
+    "select an option activity_category": "Sélectionner une catégorie d'activité",
+    "mayor_name": "Nom du Maire",
+    "phone_number": "Numéro de téléphone",
+    "treasury_name": "Nom de la Trésorerie",
+    "treasury_address": "Addresse de la Trésorerie",
+    "treasury_rib":"RIB",
+    "create commune": "Configurer les informations d'une commune",
+    "from_date": "Date d'émmission",
+    "commune_name": "Nom",
+    "commune_title": "Titre",
+    "region_name":"Nom de la région",
+    "select an région": "Sélectionner une région"
 }

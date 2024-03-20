@@ -20,6 +20,15 @@ class TaxpayerTaxablesDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+            ->filter(function ($query) {
+                if (request()->filled('search.value')) {
+                    $query->where('tax_labels.name', 'like', '%' . request('search.value') . '%')
+                    ->orWhere('taxables.name', 'like', '%' . request('search.value') . '%')
+                    ->orWhere('tax_labels.code', 'like', '%' . request('search.value') . '%')
+                    ->orWhere('bill_status', 'like', '%' . request('search.value') . '%');
+                    // Add additional search conditions as needed for other columns
+                }
+            })
             ->rawColumns(['status'])
             ->editColumn('id', function (TaxpayerTaxable $taxpayer_taxable) {
                 return $taxpayer_taxable->id;
@@ -37,14 +46,15 @@ class TaxpayerTaxablesDataTable extends DataTable
             //     return $taxpayer_taxable->;
             // })
             ->editColumn('seize', function (TaxpayerTaxable $taxpayer_taxable) {
-                return view('pages.taxpayer_taxables.columns._seize', compact('taxpayer_taxable'));
+                return $taxpayer_taxable->seize. " ". $taxpayer_taxable->taxable->unit;
+                // return view('pages.taxpayer_taxables.columns._seize', compact('taxpayer_taxable'));
             })
-            ->editColumn('status', function (TaxpayerTaxable $taxpayer_taxable) {
+            ->editColumn('bill_status', function (TaxpayerTaxable $taxpayer_taxable) {
                 return view('pages.taxpayer_taxables.columns._status', compact('taxpayer_taxable'));
             })
-            ->editColumn('location', function (TaxpayerTaxable $taxpayer_taxable) {
-                return view('pages.taxpayer_taxables.columns._location', compact('taxpayer_taxable'));
-            })
+            // ->editColumn('location', function (TaxpayerTaxable $taxpayer_taxable) {
+            //     return view('pages.taxpayer_taxables.columns._location', compact('taxpayer_taxable'));
+            // })
             ->editColumn('created_at', function (TaxpayerTaxable $taxpayer_taxable) {
                 return $taxpayer_taxable->created_at->format('d M Y');
             })
@@ -57,9 +67,19 @@ class TaxpayerTaxablesDataTable extends DataTable
     /**
      * Get the query source of dataTable.
      */
-    public function query(): QueryBuilder // Remove $request parameter
+    // public function query(): QueryBuilder // Remove $request parameter
+    public function query(TaxpayerTaxable $model): QueryBuilder
     {
-        return TaxpayerTaxable::where('taxpayer_id', $this->id); // Filter taxpayer_taxables by taxpayer_id
+        return $model->with('taxable')
+                    ->join('taxables', 'taxpayer_taxables.taxable_id', '=', 'taxables.id')
+                    ->with('taxable.tax_label')
+                    ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
+                    ->where('taxpayer_taxables.taxpayer_id', $this->id) // Filter taxpayer_taxables by taxpayer_id
+                    ->select('taxpayer_taxables.*')
+                    //->orderBy('tax_labels.name')
+                    ->newQuery();
+
+        // return TaxpayerTaxable::where('taxpayer_id', $this->id); // Filter taxpayer_taxables by taxpayer_id
     }
 
     /**
@@ -87,14 +107,14 @@ class TaxpayerTaxablesDataTable extends DataTable
     {
         return [
             //Column::make('id')->title(__('id'))->exportable(false)->printable(false)->visible(false), 
-            Column::make('billable')->title(__('empty'))->addClass('text-nowrap')->exportable(false)->printable(false),
+            Column::make('billable')->title(__('empty'))->addClass('text-nowrap'),
             Column::make('name')->title(__('asset name'))->width(600),
-            Column::make('taxpayer_taxable')->title(__('taxable'))->addClass('text-nowrap')->name('name'),
-            //Column::make('taxpayer_taxable_no')->title(__('taxpayer_taxable no')),
+            Column::make('taxpayer_taxable')->title(__('taxable'))->addClass('text-nowrap')->name('tax_labels.name'),
+            Column::make('taxable.name')->title(__('empty'))->visible(false),
             //Column::make('tax_type')->title(__('tax_type')),
             //Column::make('seize')->title(__('amount')),
             Column::make('seize')->title(__('seize'))->addClass('text-nowrap'),
-            Column::make('status')->title(__('status')),
+            Column::make('bill_status')->title(__('status')),
             //Column::make('location')->title(__('location'))->addClass('text-nowrap'),
             Column::make('created_at')->title(__('created at'))->addClass('text-nowrap')->width(150),
             Column::computed('action')->title(__('action'))

@@ -72,7 +72,7 @@ class CategoryDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('name')->title(__('category')),
+            Column::make('name')->title(__('activity_category')),
             //Column::make('gender')->title('Tax Name'),
             Column::make('status')->title(__('status'))->width(150),
             Column::make('created_at')->title(__('created at'))->addClass('text-nowrap')->width(150),

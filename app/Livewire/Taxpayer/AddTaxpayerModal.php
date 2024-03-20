@@ -108,8 +108,8 @@ class AddTaxpayerModal extends Component
             'address' => 'nullable|sometimes|string',
 
             // 'file_no' => 'required',
-            'category_id' => 'required|int',
-            'activity_id' => 'required|int',
+            //'category_id' => 'required|int',
+            //'activity_id' => 'required|int',
             // 'other_work' => 'required',
             'authorisation' => 'required|string',
             // 'auth_reference' => 'required',
@@ -117,8 +117,8 @@ class AddTaxpayerModal extends Component
             // 'social_work' => 'required',
 
             //'canton' => 'required',
-            'town_id' => 'required|int',
-            'erea_id' => 'required|int',
+            //'town_id' => 'required|int',
+            //'erea_id' => 'required|int',
             'zone_id' => 'required|int',
             'avatar' => 'nullable|sometimes|image|max:1024',
         ];
@@ -264,7 +264,7 @@ class AddTaxpayerModal extends Component
         // //$this->zone_id = $taxpayer->zone_id;
     }
 
-    public function updatedTownId($value)
+    public function updatedTownId($value) 
     {
         //dd($value);
         $this->ereas = Erea::where('town_id', $value)->get(); // Load taxables based on tax label ID
@@ -274,7 +274,7 @@ class AddTaxpayerModal extends Component
 
     }
 
-    public function updatedCategoryWork($value)
+    public function updatedCategoryId($value)
     {
         //dd($value);
         $this->activities = Activity::where('category_id', $value)->get(); // Load taxables based on tax label ID

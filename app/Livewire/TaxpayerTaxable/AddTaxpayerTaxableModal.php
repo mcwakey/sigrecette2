@@ -109,6 +109,8 @@ class AddTaxpayerTaxableModal extends Component
     {
         $this->taxables = Taxable::where('tax_label_id', $value)->get(); // Load taxables based on tax label ID
         //$this->reset('taxables');
+        
+        //$this->taxable_id = $taxpayer_taxable->taxable_id;
 
         //dd($this->taxables);
         // $this->loadTaxables($value); // Call the loadTaxables method when tax label ID is updated
@@ -262,9 +264,13 @@ class AddTaxpayerTaxableModal extends Component
         $this->location = $taxpayer_taxable->location;
         $this->longitude = $taxpayer_taxable->longitude;
         $this->latitude = $taxpayer_taxable->latitude;
-        $this->taxable_id = $taxpayer_taxable->taxable_id;
         $this->taxpayer_id = $taxpayer_taxable->taxpayer_id;
-        $this->taxlabel_id = $taxpayer_taxable->taxlabel_id;
+        
+        $this->taxlabel_id = $taxpayer_taxable->taxable->tax_label_id;
+        $this->taxables = Taxable::where('tax_label_id', $taxpayer_taxable->taxable->tax_label_id)->get();
+
+        $this->taxable_id = $taxpayer_taxable->taxable_id;
+        //dd($this->taxable_id);
 
         $this->authorisation = $taxpayer_taxable->authorisation;
         $this->auth_reference = $taxpayer_taxable->auth_reference;

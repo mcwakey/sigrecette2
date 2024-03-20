@@ -1,8 +1,10 @@
 <?php
 use App\Http\Controllers\ActivitiesController;
 use App\Http\Controllers\CategoriesController;
-use App\Http\Controllers\GenerateInvoiceController;
+use App\Http\Controllers\CommunesController;
+use App\Http\Controllers\PrintController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\RecoveryController;
 use App\Http\Controllers\TaxableController;
 use App\Http\Controllers\LanguageController;
 use App\DataTables\TaxpayerInvoicesDataTable;
@@ -48,6 +50,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('/taxpayers', TaxpayerController::class);
     Route::resource('/invoices', InvoiceController::class);
+    Route::resource('/recoveries', RecoveryController::class);
 
     Route::name('geolocation.')->group(function () {
         Route::get('/geolocation/zones', [Geolocation::class, 'zones'])->name('zones');
@@ -66,6 +69,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('/zones', ZonesController::class);
         Route::resource('/categories', CategoriesController::class);
         Route::resource('/activities', ActivitiesController::class);
+        Route::resource('/communes', CommunesController::class);
+        Route::get('/import/taxpayers',[TaxpayerController::class, 'showImportPage'])->name('import-view');
+
 
         //Route::resource('/user-management/permissions', PermissionManagementController::class);
     });
@@ -83,7 +89,7 @@ Route::get('/error', function () {
 });
 
 Route::get('/auth/redirect/{provider}', [SocialiteController::class, 'redirect']);
-Route::get('/generate-invoice/{data}', [GenerateInvoiceController::class,'downloadInvoice'])->name("generateInvoice");
-Route::get('/generate-receipt/{data}', [GenerateInvoiceController::class,'downloadReceipt'])->name("generateReceipt");
-
+Route::get('/generate-pdf/{data}/{type?}/{action?}', [PrintController::class,'download'])->name("generatePdf");
+Route::Post('/import/taxpayer', [TaxpayerController::class, 'import'])->name('import.process');
+Route::get('/import/taxpayer',[TaxpayerController::class, 'showImportPage'])->name('import-view');
 require __DIR__ . '/auth.php';

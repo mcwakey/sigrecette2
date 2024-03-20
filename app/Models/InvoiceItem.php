@@ -13,6 +13,8 @@ class InvoiceItem extends Model
         'taxpayer_taxable_id',
         'qty',	 	 	
         'amount',
+        'ii_tariff',
+        'ii_seize',
         'invoice_id',
     ];
     

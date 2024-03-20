@@ -33,17 +33,17 @@
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('fullname') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="name" name="name" class="form-control mb-3 mb-lg-0" placeholder="{{ __('fullname') }}" readonly/>
+                                <input type="text" wire:model="name" name="name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('fullname') }}" readonly/>
                                 <!--end::Input-->
                                 @error('name')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div class="col-md-4">
                                 <!--begin::Label-->
-                                <label class="required fw-semibold fs-6 mb-2">{{ __('account no') }}</label>
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('account id') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="tnif" name="tnif" class="form-control mb-3 mb-lg-0" placeholder="{{ __('tnif') }}" readonly/>
+                                <input type="text" wire:model="tnif" name="tnif" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('tnif') }}" />
 
                                 <!--end::Input-->
                                 @error('zone_id')
@@ -54,7 +54,7 @@
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('zone') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="zone" name="zone" class="form-control mb-3 mb-lg-0" placeholder="{{ __('zone') }}" readonly/>
+                                <input type="text" wire:model="zone" name="zone" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('zone') }}" />
 
                                 <!--end::Input-->
                                 @error('zone_id')
@@ -62,7 +62,9 @@
                             </div>
                         </div>
 
-                        <div class="separator separator-dashed my-2"></div>
+                        <div class="separator separator-content mb-5">
+                            <span class="w-200px text-gray-500 fw-semibold fs-7">{{ __('payment history') }}</span>
+                        </div>
 
                         <div class="row">
                             <div class="col-md-2">
@@ -87,56 +89,62 @@
                             <!--begin::Icon-->
                             <!--end::Icon-->
                             <!--begin::Wrapper-->
-                            
+
                             <!--end::Wrapper-->
 
                         <div class="row">
                         <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed mb-1 p-2">
 
                             <div class="col-md-3">
-                                <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('duree du contrat') }} :" readonly />
+                                <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('exercise duration') }} :" readonly />
                             </div>
                             <div class="col-md-2">
                                 <input wire:model="qty" name="qty" class="form-control form-control-flush mb-2" type="text" readonly />
                             </div>
+                            <div class="col-md-2">
+                                <input type="text" wire:model="periodicity" name="periodicity" class="required form-control form-control-flush" placeholder="{{ __('amount') }}" readonly />
+                            </div>
                             <div class="col-md-3">
-                                <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('montant a payer') }} :" readonly />
+                                <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('amount') }}" readonly />
                             </div>
                             <div class="col-md-2">
-                                <input wire:model="bill" name="bill" class="form-control form-control-flush mb-2 text-end" type="text" readonly />
-                            </div>
-                            <div class="col-md-2">
-                                <input class="form-control form-control-flush mb-2" type="text" placeholder="FCFA" readonly />
+                                <div class="input-group mb-2">
+                                    <input wire:model="bill" name="bill" class="form-control form-control-flush text-end" type="text" readonly />
+                                    <span class="input-group-text" id="basic-addon1">{{ __('currency') }}</span>
+                                </div>
                             </div>
                         </div>
                         </div>
 
                         <div class="row">
-                        <div class="notice d-flex bg-light-warning rounded border-warning border border-dashed mb-5 p-5">
+                        <div class="notice d-flex bg-light-warning rounded border-warning border border-dashed mb-5 p-2 py-3">
 
                             <div class="col-md-3">
-                                <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('total montant paye') }} :" readonly />
+                                <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('amount paid') }} :" readonly />
                             </div>
                             <div class="col-md-2">
-                                <input wire:model="paid" name="paid" class="form-control form-control-flush mb-2" type="text" readonly />
+                                <div class="input-group mb-2">
+                                    <input wire:model="paid" name="paid" class="form-control form-control-flush" type="text" readonly />
+                                    <span class="input-group-text" id="basic-addon1">{{ __('currency') }}</span>
+                                </div>
                             </div>
-                            <div class="col-md-1">
-                                <input class="form-control form-control-flush mb-2" type="text" placeholder="FCFA" readonly />
+                            <div class="col-md-2">
+
                             </div>
                             <div class="col-md-3">
-                                <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('total montant restant') }} :" readonly />
+                                <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('balance') }} :" readonly />
                             </div>
                             <div class="col-md-2">
-                                <input wire:model="balance" name="balance" class="form-control form-control-flush mb-2 text-end" type="text" readonly />
-                            </div>
-                            <div class="col-md-1">
-                                <input class="form-control form-control-flush mb-2" type="text" placeholder="FCFA" readonly />
+                                <div class="input-group mb-2">
+                                <input wire:model="balance" name="balance" class="form-control form-control-flush text-end" type="text" readonly />
+                                    <span class="input-group-text" id="basic-addon1">{{ __('currency') }}</span>
+                                </div>
                             </div>
                         </div>
                         </div>
 
                         <div class="separator separator-content mb-5">
-                            <span class="w-125px text-gray-500 fw-semibold fs-7">{{ __('payment info') }}</span>
+                            <span class="w-200px text-gray-500 fw-semibold fs-7">{{ __('payment info') }}</span>
                         </div>
 
                         <div class="row">
@@ -153,6 +161,7 @@
                                 <select wire:model="payment_type" name="payment_type" class="form-select" data-dropdown-parent="#kt_modal_add_payment">
                                     <option></option>
                                     <option value="CASH">CASH</option>
+                                    <option value="CASH">CHEQUE</option>
                                     <option value="DIGI">DIGI</option>
                                 </select>
                             </div>

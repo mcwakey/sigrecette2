@@ -10,22 +10,33 @@ class Invoice extends Model
     use HasFactory;
 
     protected $fillable = [
+        'invoice_id',
         'taxpayer_id',
+        'invoice_no',
+        'order_no',
         'amount',
-        // 'password',
-        // 'last_login_at',
-        // 'last_login_ip',
+        'reduce_amount',
+        'qty',
+        'from_date',
+        'to_date',
+        'bill_status',
+        'status',
         // 'profile_photo_path',
     ];
-    
+
     public function taxpayer()
     {
         return $this->belongsTo(Taxpayer::class);
     }
 
-    public function taxpayertaxables()
+    public function taxpayer_taxables()
     {
         return $this->hasMany(TaxpayerTaxable::class);
+    }
+
+    public function getDefaulttaxpayer_taxableAttribute()
+    {
+        return $this->taxpayer_taxables()->first();
     }
 
     public function payments()

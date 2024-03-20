@@ -102,7 +102,7 @@
             text-align: center;
         }
         .write{
-            color: #0070c0;
+
         }
         .count_page{
             display: flex;
@@ -124,9 +124,9 @@
                 <td class="boder-div-blaw">
                     <img src="{{public_path('assets/media/images_exports/image1.png')}}" class="img-fluid" alt="...">
                     <div class="details">
-                        <h6>COMMUNE :<span class="write"> {{$data[6]}}</span></h6>
-                        <h6>TEL :<span class="write"> ……………</span></h6>
-                        <h6>Adresse :<span class="write"> ……………</span></h6>
+                        <h6><span class="write"> {{$commune->title}}</span></h6>
+                        <h6>TEL :<span class="write"> {{$commune->phone_number}}</span></h6>
+                        <h6>Adresse :<span class="write">{{$commune->address}}</span></h6>
                     </div>
                 </td>
                 <td class="center-image">
@@ -135,15 +135,22 @@
                 <td class="boder-div-red">
                     <img src="{{public_path('assets/media/images_exports/image2.png')}}" class="img-fluid" alt="...">
                     <div class="details">
-                        <h6>TRESORERIE DE : <span class="write"> {{$data[6]}}</span></h6>
-                        <h6>Adresse :<span class="write"> ……………</span></h6>
+                        <h6>TRESORERIE DE : <span class="write"> {{$commune->address}}</span></h6>
+                        <h6>Adresse :<span class="write"> {{$commune->name}}</span></h6>
                     </div>
                 </td>
             </tr>
         </table>
 
         <div class="avis-header">
-            <h2 class="text-center">AVIS DES SOMMES À PAYER</h2>
+            <h2 class="text-center">
+                @if($action===1)
+                   <span> AVIS DES SOMMES À PAYER </span>
+                @else
+                    <span>AVIS DE REDUCTION OU D’ANNULATION </span>
+
+                @endif
+            </h2>
             <h6>N°:<span class="write">{{$data[1]}}/</span>{{date("Y", strtotime($data[0]))}}</h6>
             <h4>Destinataire:<span class="write"> </span></h4>
 
@@ -160,44 +167,79 @@
         </div>
         <div class="avis-content">
             <p>Madame, Mademoiselle, Monsieur,</p>
-            <p>Vous êtes priés de bien vouloir payer à la régie des recettes de la mairie de {{$data[6]}}
-                le montant ci-dessous :</p>
-            <p>N° d’ordre de recette :<span class="write">{{$data[1]}}/</span> {{date("Y", strtotime( $data[0]))}}</p>
+            @if($action==1)
+                <p>Vous êtes priés de bien vouloir payer à la régie des recettes de la mairie de {{$data[6]}}
+                    le montant ci-dessous :</p>
+                <p>N° d’ordre de recette :<span class="write">{{$data[1]}}/</span> {{date("Y", strtotime( $data[0]))}}</p>
+            @else
+                Votre avis des sommes à payer N° 001/2023 du 3 janvier 2023 est réduit suivant les détails ci-après :
+                <p>N° de l’ordre de recette de réduction ou d'annulation :<span class="write">{{$data[1]}}/</span> {{date("Y", strtotime( $data[0]))}}</p>
+            @endif
+
+
 
             <p>Libellé de la recette :<span class="write"> {{$data[12][0][0]}}</span></p>
             <p>Imputation budgétaire :<span class="write"> {{$data[12][0][1]}}</span></p>
 
             <table border="1">
-                <thead>
+
                 <tr>
-                    <th>Nom de la Taxation</th>
                     <th>Matière taxable</th>
+                    <th>Nom de la Taxation</th>
+
                     <th>Unité d’assiette</th>
                     <th>Valeur d’assiette</th>
                     <th>Tarif (FCFA)</th>
                     <th>Nombre de taxation par an</th>
                     <th>Somme due</th>
                 </tr>
-                </thead>
-                <tbody>
+
+
+
+                @if($action==2)
+                    <tr>
+                        <th colspan="7">Tableau de l’ancien décompte </th>
+                    </tr>
+                    @foreach($invoice->invoiceitems as  $item)
+                        <tr>
+                            <td style="text-align: center">{{$item->taxpayer_taxable->taxable->tax_label->name}}</td>
+                            <td style="text-align: center">{{$item->taxpayer_taxable->name}}</td>
+                            <td style="text-align: center"> {{$item->taxpayer_taxable->taxable->unit}}</td>
+                            <td style="text-align: center">{{$item->ii_seize}}</td>
+                            <td style="text-align: center">{{$item->ii_tariff}}</td>
+                            <td style="text-align: center">{{$item->qty}}</td>
+                            <td style="text-align: center">{{$item->amount}}</td>
+                        </tr>
+                    @endforeach
+                    <tr>
+                        <th colspan="6" style="text-align: right;">Total:</th>
+                        <td >{{$invoice->amount}}</td>
+                    </tr>
+                    <tr>
+                        <th colspan="7">Tableau du nouveau décompte </th>
+                    </tr>
+                @endif
                 @foreach($data[12] as $index => $item)
-                <tr>
-                    <td style="text-align: center">{{$item[8]}}</td>
-                    <td style="text-align: center">{{$item[2]}}</td>
-                    <td style="text-align: center"> {{$item[4]}}</td>
-                    <td style="text-align: center">{{$item[3]}}</td>
-                    <td style="text-align: center">{{$item[5]}}</td>
-                    <td style="text-align: center">{{$item[7]}}</td>
-                    <td style="text-align: center">{{$item[6]}}</td>
-                </tr>
+                    <tr>
+                        <td style="text-align: center">{{$item[2]}}</td>
+                        <td style="text-align: center">{{$item[8]}}</td>
+                        <td style="text-align: center"> {{$item[4]}}</td>
+                        <td style="text-align: center">{{$item[3]}}</td>
+                        <td style="text-align: center">{{$item[5]}}</td>
+                        <td style="text-align: center">{{$item[7]}}</td>
+                        <td style="text-align: center">{{$item[6]}}</td>
+                    </tr>
                 @endforeach
                 <tr>
                     <td colspan="6" style="text-align: right;"><strong>Total :</strong></td>
-                    <td>{{$data[3]}}</td>
+
+                        <td>{{$data[3]}}</td>
+
+
                 </tr>
-                </tbody>
+
             </table>
-            <p>Arrêté le présent avis à la somme de :<span class="write">{{number_to_words($data[3]) }} </span> Francs CFA (Sauf erreur ou omission).</p>
+            <p>Arrêté le présent avis à la somme de :<span class="write">@if($action==1){{number_to_words($data[3]) }}@else {{number_to_words($invoice->amount) }}  @endif</span> Francs CFA (Sauf erreur ou omission).</p>
             <p>A payer dans les 30 jours suivant la réception de l’avis, ou avant la fin de chaque mois pour les
                 paiements mensualisés.</p>
             <table>
@@ -206,12 +248,12 @@
                         <p>A ………, le<span class="write"> {{date("d/m/Y", strtotime( $data[0]))}}</span></p>
                     </td>
                     <td class="">
-                        <p>Le Maire</p>
+                        <p>Le Maire <span>{{ " ".$commune->mayor_name}}</span></p>
                     </td>
                 </tr>
             </table>
             <p>N.B. Le paiement peut être effectué en numéraire, par chèque au nom du Receveur de la Commune de <span class="write"> ………………………………</span>. ou
-                par virement au compte trésor RIB<span class="write"> ………………………………</span>. La quittance est délivrée à la réception des espèces, du
+                par virement au compte trésor RIB<span class="write">{{$commune->treasury_rib}}</span>. La quittance est délivrée à la réception des espèces, du
                 chèque ou de l’ordre de virement par le Régisseur de recettes.</p>
         </div>
     </div>

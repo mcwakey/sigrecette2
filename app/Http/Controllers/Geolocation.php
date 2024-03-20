@@ -11,7 +11,7 @@ use Illuminate\Contracts\View\View;
 class Geolocation extends Controller
 {
     public function zones(){
-        $zones = Zone::all();
+        $zones = Zone::with(['taxpayers','taxpayers.town','taxpayers.town.canton','taxpayers.erea','taxpayers.invoices'])->get();
         return View('pages/geolocation.zones',compact('zones'));
     }
 
@@ -23,13 +23,5 @@ class Geolocation extends Controller
     public function users(){
         $users = User::all();
         return View('pages/geolocation.users',compact('users'));
-    }
-
-    public function setUserGeolocation(){
-
-    }
-
-    public function setZoneGeolocation(){
-
     }
 }

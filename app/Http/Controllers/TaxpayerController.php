@@ -10,6 +10,9 @@ use App\DataTables\TaxpayerTaxablesDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\UserLogs;
 use Illuminate\Http\Request;
+use App\Imports\TaxpayerImport;
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TaxpayerController extends Controller
 {
@@ -69,12 +72,12 @@ class TaxpayerController extends Controller
 
         $taxpayerActionLog = UserLogs::where('taxpayer_id',$taxpayer->id)
         ->orderBy('id', 'desc')
-        ->limit(10) 
+        ->limit(10)
         ->get();
-        
+
         return $taxablesDataTable->with('id', $taxpayer->id)
                 ->render('pages/taxpayers.show', compact('taxpayer','taxpayerActionLog'));
-    }   
+    }
 
     /**
      * Display the specified resource.
@@ -167,5 +170,28 @@ class TaxpayerController extends Controller
     public function destroy(Taxpayer $taxpayer)
     {
         //
+    }
+    public function showImportPage()
+    {
+        return view('pages/taxpayers/import.show');
+    }
+    public function import(Request $request)
+    {
+
+        //dd($request->file('file')->store('files'));
+        if($request->file('file')){
+            Excel::import(new TaxpayerImport,
+                $request->file('file')->store('files'));
+            return redirect()->back();
+        }
+
+        $filename= "data.xlsx";
+
+        if (!Storage::missing("imports")) {
+            $filePath = Storage::path('imports') . DIRECTORY_SEPARATOR . $filename;
+            Excel::import(new TaxpayerImport, $filePath);
+        }
+
+        return redirect('/')->with('success', 'All good!');
     }
 }

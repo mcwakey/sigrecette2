@@ -6,7 +6,7 @@
             <!--begin::Modal header-->
             <div class="modal-header" id="kt_modal_add_zone_header">
                 <!--begin::Modal title-->
-                <h2 class="fw-bold">{{ __('zones') }}</h2>
+                <h2 class="fw-bold">{{ __('zone') }}</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">

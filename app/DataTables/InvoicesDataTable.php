@@ -23,44 +23,48 @@ class InvoicesDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->rawColumns(['invoice', 'status'])
-            ->editColumn('taxpayer_id', function (Invoice $invoice) {
+            ->editColumn('taxpayers.name', function (Invoice $invoice) {
                 return view('pages/invoices.columns._invoice', compact('invoice'));
             })
-            ->editColumn('id', function (Invoice $invoice) {
-                return $invoice->id;
+            ->editColumn('invoice_no', function (Invoice $invoice) {
+                return $invoice->invoice_no;
             })
             ->editColumn('order_no', function (Invoice $invoice) {
                 return $invoice->order_no;
             })
-            ->editColumn('invoices.id', function (Invoice $invoice) {
-                return $invoice->id.$invoice->taxpayer->id;
+            ->editColumn('nic', function (Invoice $invoice) {
+                return $invoice->nic;
             })
-
-            ->editColumn('zone', function (Invoice $invoice) {
-                return $invoice->taxpayer->zone->name;
+            ->editColumn('zones.name', function (Invoice $invoice) {
+                return $invoice->taxpayer->zone->name ?? '-';
             })
-            ->editColumn('taxpayer.address', function (Invoice $invoice) {
-                return $invoice->taxpayer->address;
+            ->editColumn('taxpayers.address', function (Invoice $invoice) {
+                return $invoice->taxpayer->address ?? '-';
             })
-            ->editColumn('gps', function (Invoice $invoice) {
-                return $invoice->taxpayer->latitude . ' ,' . $invoice->taxpayer->longitude;
+            ->editColumn('taxpayers.latitude', function (Invoice $invoice) {
+                return ($invoice->taxpayer->latitude ?? '-').' : '.($invoice->taxpayer->longitude ?? '-');
+            })
+            ->editColumn('tax_labels.id', function (Invoice $invoice) {
+                return $invoice->invoiceitems()->first()->taxpayer_taxable->taxable->tax_label->name ?? '';
             })
             ->editColumn('total', function (Invoice $invoice) {
                 return $invoice->amount;
             })
-            ->editColumn('statuss', function (Invoice $invoice) {
-                return sprintf('<div class="badge badge-light fw-bold">%s</div>', $invoice->status);
-            })
 
+            ->editColumn('validity', function (Invoice $invoice) {
+                return view('pages/invoices.columns._validity', compact('invoice'));
+                //return ''; // Return empty string
+            })
 
             ->editColumn('status', function (Invoice $invoice) {
-                return view('pages/invoices.columns._status', compact('invoice'));
+                return view('pages/invoices.columns._aproval', compact('invoice'));
+            })
+            ->editColumn('from_date', function (Invoice $invoice) {
+                return $invoice->from_date;
             })
 
-
-            ->editColumn('created_at', function (Invoice $invoice) {
-                return $invoice->created_at->format('d M Y');
-            })
+            ->editColumn('to_date', function (Invoice $invoice) {
+                return $invoice->to_date;})
             ->addColumn('action', function (Invoice $invoice) {
                 return view('pages/invoices.columns._actions', compact('invoice'));
             })
@@ -77,9 +81,23 @@ class InvoicesDataTable extends DataTable
 
     public function query(Invoice $model): QueryBuilder
     {
-        return $model->newQuery()
-            ->with('taxpayer', 'taxpayer.zone');
+        // return $model->newQuery()
+        //     ->with('taxpayer', 'taxpayer.zone');
+
+            return $model->join('invoice_items', 'invoice_items.invoice_id', '=', 'invoices.id')
+                        ->leftjoin('taxpayers', 'taxpayers.id', '=', 'invoices.taxpayer_id')
+                        ->join('taxpayer_taxables', 'taxpayer_taxables.id', '=', 'invoice_items.taxpayer_taxable_id')
+                        ->join('taxables', 'taxables.id', '=', 'taxpayer_taxables.taxable_id')
+                        ->join('tax_labels', 'tax_labels.id', '=', 'taxables.tax_label_id')
+                        ->leftjoin('zones', 'zones.id', '=', 'taxpayers.zone_id')
+                        // ->where('taxpayers.zone_id', 'LIKE', '%' . ($this->zone ?? '') . '%')
+                        // ->where('taxables.tax_label_id', 'LIKE', '%' . ($this->taxlabel ?? '') . '%')
+                        // ->where('invoices.validity', 'EXPIRED')
+                        ->select('invoices.*')
+                        ->newQuery();
     }
+
+
 
 
     /**
@@ -94,8 +112,8 @@ class InvoicesDataTable extends DataTable
             ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
-            ->orderBy(1)
-            ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/invoices/columns/_draw-scripts.js')) . "}");
+            ->orderBy(3)
+            ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/taxpayer_taxables/columns/_draw-scripts.js')) . "}");
     }
 
     /**
@@ -104,18 +122,19 @@ class InvoicesDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('taxpayer_id')->title(__('taxpayer'))->addClass('d-flex align-items-center')->name('taxpayer'),
-            Column::make('invoices.id')->title(__('invoice no')),
+            Column::make('taxpayers.name')->title(__('taxpayer'))->addClass('d-flex align-items-center'),
+            Column::make('invoice_no')->title(__('invoice no')),
             Column::make('order_no')->title(__('order no')),
-            Column::make('id')->title(__('nic')),
-
-            Column::make('zone')->title(__('zone')),
-            Column::make('taxpayer.address')->title(__('address')),
-            Column::make('gps')->title(__('gps')),
+            Column::make('nic')->title(__('nic')),
+            Column::make('zones.name')->title(__('zone')),
+            Column::make('taxpayers.address')->title(__('address')),
+            Column::make('taxpayers.latitude')->title(__('gps')),
+            Column::make('tax_labels.id')->title(__('taxlabel')),
             Column::make('total')->title(__('amount'))->name('amount'),
-            Column::make('status')->title(__('status')),
-
-            Column::make('created_at')->title( __('created Date'))->addClass('text-nowrap'),
+            Column::make('status')->title(__('aproval')),
+            Column::make('validity')->title(__('status')),
+            Column::make('from_date')->title( __('from_date'))->addClass('text-nowrap'),
+            Column::make('to_date')->title( __('expiry date'))->addClass('text-nowrap'),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
                 ->exportable(true)

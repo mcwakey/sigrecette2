@@ -19,7 +19,7 @@ class TaxpayerTaxable extends Model
         'taxable_id',
         'billable',
         'invoice_id',
-        // 'tax_label_id',
+        'bill_status',
     ];
 
     public function taxpayer()
@@ -32,8 +32,13 @@ class TaxpayerTaxable extends Model
         return $this->belongsTo(Taxable::class);
     }
     
-    public function invoiceitem()
+    public function invoice_item()
     {
         return $this->belongsTo(InvoiceItem::class);
+    }
+    
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
     }
 }

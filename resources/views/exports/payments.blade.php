@@ -6,6 +6,19 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Invoice</title>
     <style>
+        @page {
+            size: A5 landscape;
+            margin: 0;
+        }
+
+        body{
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 5px;
+            background-color: #ffffff;
+            margin-bottom: 20px;
+
+        }
         h4 {
             margin: 0;
         }
@@ -54,10 +67,21 @@
 <table class="w-full">
     <tr>
         <td class="w-half">
-            <img src="{{ asset('laraveldaily.png') }}" alt="laravel daily" width="200" />
+            <img src="../images/image3.jpg" alt="laravel daily" width="50" />
         </td>
         <td class="w-half">
-            <h2>Invoice ID: 834847473</h2>
+            <div>
+                <div>
+                    <h6>
+                        Invoice ID: 834847473
+                    </h6>
+                    <h6>
+                        N° d'avis: 834847473
+                    </h6>
+                </div>
+
+            </div>
+
         </td>
     </tr>
 </table>
@@ -82,14 +106,23 @@
 <div class="margin-top">
     <table class="products">
         <tr>
-            <th>Qty</th>
-            <th>Description</th>
-            <th>Price</th>
+            <th>Reference N°</th>
+            <th>Amount paid</th>
+            <th>Payment Type</th>
+            <th>Payment restant</th>
+            <th>Total pament</th>
         </tr>
         <tr class="items">
+
             @foreach($data as $item)
                 <td>
+                    {{ $item['name'] }}
+                </td>
+                <td>
                     {{ $item['quantity'] }}
+                </td>
+                <td>
+                    {{ $item['description'] }}
                 </td>
                 <td>
                     {{ $item['description'] }}
@@ -105,7 +138,9 @@
 <div class="total">
     Total: $129.00 USD
 </div>
-
+<p>N.B. Le paiement peut être effectué en numéraire, par chèque au nom du Receveur de la Commune de <span class="write"> ………………………………</span>. ou
+    par virement au compte trésor RIB<span class="write"> ………………………………</span>. La quittance est délivrée à la réception des espèces, du
+    chèque ou de l’ordre de virement par le Régisseur de recettes.</p>
 <div class="footer margin-top">
     <div>Thank you</div>
     <div>&copy; Laravel Daily</div>

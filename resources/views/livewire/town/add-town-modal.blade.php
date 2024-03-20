@@ -6,7 +6,7 @@
             <!--begin::Modal header-->
             <div class="modal-header" id="kt_modal_add_town_header">
                 <!--begin::Modal title-->
-                <h2 class="fw-bold">{{ __('create town') }}</h2>
+                <h2 class="fw-bold">{{ __('create_town_or_village') }}</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
@@ -32,7 +32,7 @@
                                 <!--begin::Input-->
                                 <select wire:model="canton_id" name="canton_id" class="form-select "
                                         data-dropdown-parent="#kt_modal_add_town">
-                                    <option>{{ __('select an option') }}</option>
+                                    <option>{{ __('select an canton') }}</option>
                                     @foreach($cantons as $canton)
                                         <option value="{{ $canton->id}}">{{ $canton->name }}</option>
                                 @endforeach

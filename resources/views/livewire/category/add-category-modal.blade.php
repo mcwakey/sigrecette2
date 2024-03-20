@@ -6,7 +6,7 @@
             <!--begin::Modal header-->
             <div class="modal-header" id="kt_modal_add_category_header">
                 <!--begin::Modal title-->
-                <h2 class="fw-bold">{{ __('categorys') }}</h2>
+                <h2 class="fw-bold">{{ __('create_activity_category') }}</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
@@ -27,12 +27,12 @@
                         <div class="row mb-7">
                             <div class="col-md-8">
                                 <!--begin::Label-->
-                                <label class="required fw-semibold fs-6 mb-2">{{ __('category') }}</label>
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('activity_category') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <!-- form-control-solid -->
 
-                                <input type="text" wire:model="name" name="name" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('category') }}"/>
+                                <input type="text" wire:model="name" name="name" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('name_activity_category') }}"/>
                                 <!--end::Input-->
                                 @error('name')
                                 <span class="text-danger">{{ $message }}</span> @enderror

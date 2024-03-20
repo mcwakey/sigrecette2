@@ -27,9 +27,22 @@ class AddInvoiceModal extends Component
     public $tnif;
     public $zone;
 
+    public $invoice_no;
+    public $periodicity;
+    public $seize;
+    public $tariff;
     public $qty;
+    public $start_month;
     public $s_amount = [];
+    public $s_tariff = [];
+    public $s_seize = [];
+
+    public $s_amount_e = [];
+    public $s_tariff_e = [];
+    public $s_seize_e = [];
+
     public $taxpayer_taxable_id = [];
+    public $taxpayer_taxables = [];
 
     // public $qty=[];
     // public $s_amount=[];
@@ -38,8 +51,17 @@ class AddInvoiceModal extends Component
     //public $status;
 
     public $taxpayer_id;
+    public $taxpayer_taxable;
+
     public $amount_ph;
+    public $amount_ph_e;
     public $amount;
+    public $amount_e;
+
+    public $reduce_amount;
+
+
+    public $taxable_taxlabel;
 
     // public function reduce($index)
     // {
@@ -69,7 +91,11 @@ class AddInvoiceModal extends Component
     //     dd($this->selectedTaxpayerId);
     // }
 
+    public $cancel_reduct;
+
     public $edit_mode = false;
+    public $view_mode = false;
+    public $button_mode = false;
 
     protected $rules = [
         // 'invoice_id' => 'required|string',
@@ -80,10 +106,12 @@ class AddInvoiceModal extends Component
 
         "s_amount" => "required",
         "taxpayer_taxable_id" => "required",
-        //"qty" => "required",
+        "qty" => "required",
+        "start_month" => "required",
 
         'taxpayer_id' => 'required',
         'amount' => 'required',
+        //'cancel_reduct' => 'required',
 
         // 'telephone' => 'required|string|min:10|max:10',
         // 'longitude' => 'nullable',
@@ -100,6 +128,7 @@ class AddInvoiceModal extends Component
         'delete_user' => 'deleteUser',
         'update_invoice' => 'updateInvoice',
         'add_invoice' => 'addInvoice',
+        'view_invoice' => 'viewInvoice',
         'load_invoice' => 'loadInvoice',
     ];
 
@@ -121,7 +150,7 @@ class AddInvoiceModal extends Component
         $taxpayers = Taxpayer::all();
         //$taxpayer_taxables = TaxpayerTaxable::all();
 
-        $taxpayer_taxables = $this->taxpayer_id ? TaxpayerTaxable::where('taxpayer_id', $this->taxpayer_id)->where('billable', 1)->get() : collect();
+        //$taxpayer_taxables = $this->taxpayer_id ? TaxpayerTaxable::where('taxpayer_id', $this->taxpayer_id)->where('billable', 1)->get() : collect();
         //$taxpayer_id = $this->taxpayer_id;
 
         // Assuming you have a public property $canton in your Livewire component
@@ -130,7 +159,7 @@ class AddInvoiceModal extends Component
 
         //return view('livewire.invoice.add-invoice-modal', ['taxpayer_id' => $this->taxpayer_id]);
 
-        return view('livewire.invoice.add-invoice-modal', compact('taxpayers', 'taxpayer_taxables'));
+        return view('livewire.invoice.add-invoice-modal', compact('taxpayers'));
     }
 
     // public function submit()
@@ -180,24 +209,51 @@ class AddInvoiceModal extends Component
         // Validate the form input data
         $this->validate();
 
+        //dd($this);
         DB::transaction(function () {
 
-            //dd($this->qty);
+            //dd($this->qty,$this->start_month);
+            if (!$this->edit_mode){
+                $this->invoice_id = null;
+            }
 
             // Prepare data for Invoice
             $invoiceData = [
                 'taxpayer_id' => $this->taxpayer_id,
                 'amount' => $this->amount,
+                'qty' => $this->qty,
+                'from_date' => date('Y-').$this->start_month."-01",
+                'to_date' => date('Y-').$this->start_month + $this->qty."-01",
+                // 'pay_status' => 'DRAFT',
             ];
+
+            if ($this->edit_mode) {
+                $invoiceData['amount'] = $this->amount_e;
+               $invoiceData['reduce_amount'] = $this->reduce_amount;
+                $invoiceData['status'] = 'PENDING';
+            }
 
             //dd($invoiceData);
 
             // Create or update Invoice record
-            $invoice = Invoice::find($this->invoice_id) ?? Invoice::create($invoiceData);
+            //dd($invoiceData,$this);
+            $invoice = Invoice::create($invoiceData);
 
+            // Save the invoice ID into the invoice_no column
+
+            $invoice->invoice_no = $this->invoice_id ?? $invoice->id;
+            $invoice->nic = $this->taxpayer_id.($this->invoice_id ?? $invoice->id);
+            //$invoice->order_no = $this->order_no;
+            $invoice->save();
+
+            //$a = $this->invoice_id ?? $invoice->id;
+            //$a = ($this->invoice_id ?? $invoice->id);
+
+            //dd($a);
 
             $taxpayerTaxableData = [
-                'invoice_id' => $invoice->id,
+                'invoice_id' => $this->invoice_id ?? $invoice->id,
+                'bill_status' => 'BILLED',
                 'billable' => '0',
             ];
 
@@ -208,24 +264,50 @@ class AddInvoiceModal extends Component
             }
 
             // Prepare data for Invoice_items
-            $invoiceItemsData = [
-                'invoice_id' => $invoice->id,
-                'taxpayer_taxable_id' => $this->taxpayer_taxable_id,
-                'qty' => $this->qty,
-                'amount' => $this->s_amount,
-            ];
+            // $invoiceItemsData = [
+            //     'invoice_id' => $invoice->id,
+            //     'taxpayer_taxable_id' => $this->taxpayer_taxable_id,
+            //     'qty' => $this->qty,
+            //     'amount' => $this->s_amount,
+            // ];
 
             //dd($invoiceItemsData);
 
             foreach ($this->taxpayer_taxable_id as $index => $taxpayer_taxable_id) {
-                InvoiceItem::create([
+                $invoiceItemsData = [
                     'invoice_id' => $invoice->id,
                     'taxpayer_taxable_id' => $taxpayer_taxable_id,
                     'qty' => $this->qty,
                     'amount' => $this->s_amount[$index],
-                ]);
+                    'ii_tariff' => $this->s_tariff[$index],
+                    'ii_seize' => $this->s_seize[$index],
+                ];
 
+                if ($this->edit_mode) {
+
+                    $invoiceItemsData['amount'] = $this->s_amount_e[$index];
+                    $invoiceItemsData['ii_tariff'] = $this->s_tariff_e[$index];
+                    $invoiceItemsData['ii_seize'] = $this->s_seize_e[$index];
+                }
+
+                //dd($this->s_amount_e);
+
+                InvoiceItem::create($invoiceItemsData);
             }
+
+            $invoice_old = Invoice::find($this->invoice_id ?? $invoice->id);
+
+            if ($this->edit_mode) {
+
+                // Save the invoice ID into the invoice_no column
+                $invoice_old->status = "CANCELED";
+                $invoice_old->validity = "CANCELED";
+                $invoice_old->save();
+            }
+
+            $invoice->order_no = $invoice_old->order_no;
+            $invoice->pay_status = $invoice_old->pay_status;
+            $invoice->save();
 
             // Dispatch success message
             if ($this->edit_mode) {
@@ -255,57 +337,140 @@ class AddInvoiceModal extends Component
         $this->dispatch('success', 'Invoice successfully deleted');
     }
 
+    public function viewInvoice($id)
+    {
+        $this->updateInvoice($id);
+        $this->view_mode = false;
+        $this->button_mode = false;
+    }
+
     public function updateInvoice($id)
     {
+        $this->view_mode = true;
         $this->edit_mode = true;
-
+        $this->button_mode = true;
         $invoice = Invoice::find($id);
 
-        //dd($invoice, $id);
-
-        //if (!$invoice) {
-        //$this->dispatch('error', 'Invoice not found');
-        //    return;
-        //}
-        //$taxpayer_taxables = TaxpayerTaxable::where('invoice_id', $id)->get();
-        //$taxpayer = Taxpayer::where('name', 'John Doe')->first();
-
-
-        //$this->taxpayer_id = $id;
+        $this->taxpayer_id = $invoice->taxpayer->id ?? '';
         $this->invoice_id = $invoice->id;
-        //$this->saved_avatar = $invoice->profile_photo_url;
-        //$this->invoice_no = $invoice->invoice_no;
-        //$this->order_no = $invoice->order_no;
-        //$this->nic = $invoice->nic;
-        //$this->status = $invoice->status;
-        //$this->created_at = $invoice->created_at->format('Y-m-d');
-        //$this->name = $invoice->taxpayer->name;
-        //$this->email = $invoice->taxpayer->email;
 
-        //$this->mobilephone = $invoice->taxpayer->mobilephone;
+        $this->qty = $invoice->qty;
 
-        // $this->telephone = $taxpayer->telephone;
-        //$this->longitude = $invoice->taxpayer->longitude;
-        $this->tnif = $invoice->taxpayer->tnif;
-        //$this->canton = $invoice->taxpayer->canton;
-        //$this->town = $invoice->taxpayer->town;
-        //$this->erea = $invoice->taxpayer->erea;
-        //$this->address = $invoice->taxpayer->address;
-        $this->zone = $invoice->taxpayer->zone_id;
+        $this->name = $invoice->taxpayer->name ?? '';
+        $this->tnif = $invoice->taxpayer->id ?? '';
+        $this->zone = $invoice->taxpayer->zone->name ?? '';
+
+        //$this->taxpayer_taxables = TaxpayerTaxable::where('taxpayer_id', $id)->where('billable', 1)->get();
+
+        $this->taxpayer_taxables = $taxpayer_taxables = InvoiceItem::where('invoice_id', $id)->get();
+
+        // $this->taxpayer_taxables = $taxpayer_taxables = InvoiceItem::join('taxpayer_taxables', 'taxpayer_taxables.id', '=', 'invoice_items.taxpayer_taxable_id')
+        //                                     ->join('taxables', 'taxables.id', '=', 'taxpayer_taxables.taxable_id')
+        //                                     ->select('*','taxpayer_taxables.name AS taxpayer_taxable_name','taxpayer_taxables.id AS taxpayer_taxable_id')
+        //                                     ->where('invoice_items.invoice_id', $id)
+        //                                     ->get();
+
+
+        //dd($taxpayer_taxables->taxpayer_taxable);
+
+        foreach ($taxpayer_taxables as $index => $invoice_item) {
+            // Update the value in the component properties using the loop index as the key
+            //dd($taxable->taxable);
+
+            if ($invoice_item->taxpayer_taxable->taxable->periodicity == "Mois"){
+                $period = 1;
+            } elseif ($invoice_item->taxpayer_taxable->taxable->periodicity == "Ans") {
+                $period = 0.083333;
+            // }elseif ($taxable->taxable->periodicity == "Jours") {
+            //     $period = 30;
+            } else {
+                $period = 1;
+            }
+
+            //dd($taxable->taxpayer_taxable->taxable->tax_label->name);
+                $this->periodicity = $invoice_item->taxpayer_taxable->taxable->periodicity;
+
+                $this->taxable_taxlabel = $invoice_item->taxpayer_taxable->taxable->tax_label->code.' : '.$invoice_item->taxpayer_taxable->taxable->name;
+
+                $this->taxpayer_taxable_id[$index] = $invoice_item->taxpayer_taxable->id;
+                $this->taxpayer_taxable[$index] = $invoice_item->taxpayer_taxable->name;
+
+                $this->s_seize[$index] = $invoice_item->ii_seize;
+                $this->s_seize_e[$index] = $invoice_item->taxpayer_taxable->seize;
+
+                    //$this->s_tariff[$index] = $invoice_item->ii_tariff. ' %';
+                    $this->s_tariff[$index] = $invoice_item->ii_tariff;
+                    //$this->s_tariff_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff. ' %';
+                    $this->s_tariff_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff;
+
+                if ($invoice_item->taxpayer_taxable->taxable->tariff_type == "FIXED"){
+                    $this->s_amount[$index] = $invoice_item->amount;
+                    $this->s_amount_e[$index] =$invoice_item->taxpayer_taxable->taxable->tariff * $invoice_item->taxpayer_taxable->seize * $this->qty * $period;
+                } else {
+                    $this->s_amount[$index] = $invoice_item->amount / 100;
+                    $this->s_amount_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff * $invoice_item->taxpayer_taxable->seize * $this->qty * $period / 100;
+                }
+
+            // } else {
+            //     $this->s_amount[$index] = $taxable->seize * $taxable->taxable->tariff * $value * $period / 100;
+            // }
+            //$this->qty[$index] = $taxable->seize;
+            //$this->taxpayer_taxable_id[$index] = $taxable->id;
+        }
+
+        $this->amount_ph = array_sum($this->s_amount)." FCFA";
+        $this->amount_ph_e = array_sum($this->s_amount_e)." FCFA";
+
+        $this->amount = array_sum($this->s_amount);
+        $this->amount_e = array_sum($this->s_amount_e);
+
+        $this->reduce_amount = $this->amount - $this->amount_e;
+        //$this->reduce_amount = - $this->amount_e;
     }
 
     public function addInvoice($id)
     {
+        $this->edit_mode = false;
+        $this->view_mode = false;
+        $this->button_mode = true;
+
+        $this->invoice_id = '';
+
+        $this->qty = '';
+
+        // dd($this->edit_mode, 'loadInvoice');
+
+        //$taxpayer_taxables = $id ? TaxpayerTaxable::where('taxpayer_id', $id)->where('billable', 1)->get() : collect();
+        $this->taxpayer_taxables = $taxpayer_taxables = TaxpayerTaxable::where('taxpayer_id', $id)->where('billable', 1)->get();
+
+        //dd($taxpayer_taxables);
+
+        foreach ($taxpayer_taxables as $index => $taxable) {
+            $this->taxpayer_taxable_id[$index] = $taxable->id;
+            $this->taxpayer_taxable[$index] = $taxable->name;
+            $this->s_seize[$index] = $taxable->seize;
+            $this->s_tariff[$index] = $taxable->taxable->tariff;
+            $this->s_amount[$index] = '';
+        }
+
+
+        $this->amount_ph = " FCFA";
+        $this->amount = '';
+
+        //dd($this->taxpayer_taxables);
+
         $taxpayer = Taxpayer::find($id);
 
         $this->taxpayer_id = $taxpayer->id;
         $this->name = $taxpayer->name;
-        $this->tnif = $taxpayer->tnif;
-        $this->zone = $taxpayer->zone_id;
+        $this->tnif = $taxpayer->id;
+        $this->zone = $taxpayer->zone->name;
     }
 
     public function loadInvoice($value)
     {
+        //$this->view_mode = true;
+
         $this->qty = $value;
         //dd( $value, $this->qty, "loadInvoice");
         //$taxpayer = Taxpayer::find($id);
@@ -322,28 +487,35 @@ class AddInvoiceModal extends Component
         // }
         foreach ($taxpayer_taxables as $index => $taxable) {
             // Update the value in the component properties using the loop index as the key
-            //dd($taxable->taxable);
+            // dd($taxable->taxable);
 
             if ($taxable->taxable->periodicity == "Mois"){
                 $period = 1;
             } elseif ($taxable->taxable->periodicity == "Ans") {
                 $period = 0.083333;
-            }elseif ($taxable->taxable->periodicity == "Jours") {
-                $period = 30;
+            // }elseif ($taxable->taxable->periodicity == "Jours") {
+            //     $period = 30;
             } else {
                 $period = 1;
             }
 
+            $this->periodicity = $taxable->taxable->periodicity;
+
+            $this->taxpayer_taxable_id[$index] = $taxable->id;
+            $this->taxpayer_taxable[$index] = $taxable->name;
+
+            $this->s_seize[$index] = $taxable->seize;
+            $this->s_tariff[$index] = $taxable->taxable->tariff;
 
             if ($taxable->taxable->tariff_type == "FIXED"){
-                $this->s_amount[$index] = $taxable->seize * $taxable->taxable->tariff * $value * $period;
+                $this->s_amount[$index] = $taxable->seize * $taxable->taxable->tariff * $this->qty * $period;
             } else {
-                $this->s_amount[$index] = $taxable->seize * $taxable->taxable->tariff * $value * $period / 100;
+                $this->s_amount[$index] = $taxable->seize * $taxable->taxable->tariff * $this->qty* $period / 100;
             }
             //$this->qty[$index] = $taxable->seize;
             $this->taxpayer_taxable_id[$index] = $taxable->id;
         }
-        
+
         $this->amount_ph = array_sum($this->s_amount)." FCFA";
         $this->amount = array_sum($this->s_amount);
     }

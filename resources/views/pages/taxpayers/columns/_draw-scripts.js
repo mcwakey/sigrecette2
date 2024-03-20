@@ -46,13 +46,13 @@ document.querySelectorAll('[data-kt-action="update_invoice"]').forEach(function 
 // });
 
 
-// // Add click event listener to update buttons
-// document.querySelectorAll('[data-kt-action="load_drop"]').forEach(function (element) {
-//     element.addEventListener('change', function () {
-//         console.log(this.value)
-//         Livewire.dispatch('load_drop', [this.value]);
-//     });
-// });
+// Add click event listener to update buttons
+document.querySelectorAll('[data-kt-action="load_drop"]').forEach(function (element) {
+    element.addEventListener('change', function () {
+        console.log(this.value)
+        Livewire.dispatch('load_drop', [this.value]);
+    });
+});
 
 // Listen for 'success' event emitted by Livewire
 Livewire.on('success', (message) => {
