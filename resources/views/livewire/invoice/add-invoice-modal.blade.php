@@ -121,15 +121,7 @@
                             </div>
 
                         </div>
-                        <div class="row mb-2">
-                            <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed mb-1 p-2">
-
-                            <div class="col-md-2">
-                                <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('4 exercices') }}" readonly />
-                            </div>
-
-                            </div>
-                        </div>
+                     
 
                         <div class="separator separator-dashed my-2"></div>
 
