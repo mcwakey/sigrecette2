@@ -9,7 +9,7 @@
 		<div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item here show menu-here-bg menu-lg-down-accordion me-0 me-lg-2">
 			<!--begin:Menu link-->
 			<span class="menu-link">
-				<span class="menu-title">Annee d'exerce:{{" ".$year->name}}</span>
+				<span class="menu-title">Annee d'exercice:{{" ".$year->name}}</span>
 				<span class="menu-arrow d-lg-none"></span>
 			</span>
 			<!--end:Menu link-->
@@ -18,7 +18,7 @@
 			</div>
 			<!--end:Menu sub-->
 		</div>
-        
+
         <!--end::Menu item-->
 
         <!--begin::Menu item-->
