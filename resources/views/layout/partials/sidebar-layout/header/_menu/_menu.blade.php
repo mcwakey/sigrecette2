@@ -18,43 +18,7 @@
 			</div>
 			<!--end:Menu sub-->
 		</div>
-
-
-
-
-        <div class="menu-item" data-kt-menu-trigger="hover" data-kt-menu-placement="right-start">
-            <!--begin::Menu link-->
-            <a href="#" class="menu-link py-3">
-            <span class="menu-icon">
-                <i class="ki-duotone ki-chart-simple-2 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></i>
-            </span>
-                <span class="menu-title">Annee d'exerce:{{" ".$year->name}}</span>
-                <span class="menu-arrow"></span>
-            </a>
-            <!--end::Menu link-->
-
-            <!--begin::Menu sub-->
-
-                <!--end::Menu item-->
-
-                <!--begin::Menu item-->
-                <!--end::Menu item-->
-
-                <!--
-                <div class="menu-item">
-                    <a href="#" class="menu-link px-1 py-3">
-                    <span class="menu-bullet me-0">
-                        <span class="bullet bullet-dot"></span>
-                    </span>
-                        <span class="menu-title">Annee d'exerce 2024</span>
-                    </a>
-                </div>
-                -->
-
-                <!--end::Menu item-->
-            </div>
-            <!--end::Menu sub-->
-        </div>
+        
         <!--end::Menu item-->
 
         <!--begin::Menu item-->
