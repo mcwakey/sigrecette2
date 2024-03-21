@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Commune;
 use App\Models\User;
 use App\Models\Taxpayer;
+use App\Models\Year;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 use Spatie\Permission\Models\Role;
@@ -98,7 +99,14 @@ Breadcrumbs::for('categories.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
     $trail->push(__('categories'), route('settings.categories.index'));
 });
-
+Breadcrumbs::for('years.show', function (BreadcrumbTrail $trail, Year $year) {
+    $trail->parent('years.index');
+    $trail->push(ucwords($year->id), route(' years.show', $year));
+});
+Breadcrumbs::for('years.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push(__('years'), route('settings.years.index'));
+});
 
 Breadcrumbs::for('activities.show', function (BreadcrumbTrail $trail, Activity $activity) {
     $trail->parent('activities.index');

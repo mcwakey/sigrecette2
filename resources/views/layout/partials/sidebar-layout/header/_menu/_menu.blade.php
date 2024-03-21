@@ -1,3 +1,6 @@
+@php
+    $year= \App\Models\Year::getActiveYear();
+@endphp
 <!--begin::Menu wrapper-->
 <div class="app-header-menu app-header-mobile-drawer align-items-stretch" data-kt-drawer="true" data-kt-drawer-name="app-header-menu" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="250px" data-kt-drawer-direction="end" data-kt-drawer-toggle="#kt_app_header_menu_toggle" data-kt-swapper="true" data-kt-swapper-mode="{default: 'append', lg: 'prepend'}" data-kt-swapper-parent="{default: '#kt_app_body', lg: '#kt_app_header_wrapper'}">
 	<!--begin::Menu-->
@@ -6,7 +9,7 @@
 		<div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item here show menu-here-bg menu-lg-down-accordion me-0 me-lg-2">
 			<!--begin:Menu link-->
 			<span class="menu-link">
-				<span class="menu-title">Dashboards</span>
+				<span class="menu-title">Annee d'exerce:{{" ".$year->name}}</span>
 				<span class="menu-arrow d-lg-none"></span>
 			</span>
 			<!--end:Menu link-->
@@ -15,7 +18,58 @@
 			</div>
 			<!--end:Menu sub-->
 		</div>
-	</div>
+
+
+
+
+        <div class="menu-item" data-kt-menu-trigger="hover" data-kt-menu-placement="right-start">
+            <!--begin::Menu link-->
+            <a href="#" class="menu-link py-3">
+            <span class="menu-icon">
+                <i class="ki-duotone ki-chart-simple-2 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></i>
+            </span>
+                <span class="menu-title">Annee d'exerce:{{" ".$year->name}}</span>
+                <span class="menu-arrow"></span>
+            </a>
+            <!--end::Menu link-->
+
+            <!--begin::Menu sub-->
+
+                <!--end::Menu item-->
+
+                <!--begin::Menu item-->
+                <!--end::Menu item-->
+
+                <!--
+                <div class="menu-item">
+                    <a href="#" class="menu-link px-1 py-3">
+                    <span class="menu-bullet me-0">
+                        <span class="bullet bullet-dot"></span>
+                    </span>
+                        <span class="menu-title">Annee d'exerce 2024</span>
+                    </a>
+                </div>
+                -->
+
+                <!--end::Menu item-->
+            </div>
+            <!--end::Menu sub-->
+        </div>
+        <!--end::Menu item-->
+
+        <!--begin::Menu item-->
+
+        <!--end::Menu item-->
+
+        <!--begin::Menu item-->
+
+        <!--end::Menu item-->
+
+        <!--begin::Menu item-->
+    </div>
 	<!--end::Menu-->
 </div>
 <!--end::Menu wrapper-->
+<!--begin::Menu-->
+<!--end::Menu-->
+

@@ -12,6 +12,7 @@ use App\DataTables\TaxpayerInvoicesDataTable;
 use App\Http\Controllers\CantonsController;
 use App\Http\Controllers\TaxpayerController;
 use App\Http\Controllers\TaxLabelController;
+use App\Http\Controllers\YearsController;
 use App\Http\Controllers\ZonesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
@@ -69,6 +70,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('/ereas', EreasController::class);
         Route::resource('/zones', ZonesController::class);
         Route::resource('/categories', CategoriesController::class);
+        Route::resource('/years', YearsController::class);
         Route::resource('/activities', ActivitiesController::class);
         Route::resource('/communes', CommunesController::class);
         Route::get('/import/taxpayers',[TaxpayerController::class, 'showImportPage'])->name('import-view');
