@@ -14,7 +14,7 @@ class AnneeServiceTest extends TestCase
     public function it_can_create_an_annee_service()
     {
         $anneeServiceData = [
-            'annee' => 2023,
+            'year' => 2023,
         ];
 
         $anneeService = AnneeService::create($anneeServiceData);

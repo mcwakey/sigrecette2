@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\CategoryDataTable;
-use App\Models\Canton;
-use App\Models\Category;
+use App\DataTables\YearDataTable;
+use App\Models\Year;
 use Illuminate\Http\Request;
 
-class CategoriesController extends Controller
+class YearsController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */
-    public function index(CategoryDataTable $dataTable)
+    public function index(YearDataTable $dataTable)
     {
-        //return view('pages/categories.list');
-        return $dataTable->render('pages/categories.list');
+        //return view('pages/years.list');
+        return $dataTable->render('pages/years.list');
     }
     /**
      * Show the form for creating a new resource.
@@ -36,22 +36,22 @@ class CategoriesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Category $category ,CategoryDataTable $categoriesDataTable)
+    public function show(Year $year,YearDataTable $yearsDataTable)
     {
-        return $categoriesDataTable->with('id',$category ->id)->render('pages/categories.show', compact('category'));
+        return $yearsDataTable->with('id',$year->id)->render('pages/years.show', compact('year'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Category $category )
+    public function edit(Year $year)
     {
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category )
+    public function update(Request $request, Year $year)
     {
         //
     }
@@ -59,9 +59,10 @@ class CategoriesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category )
+    public function destroy(Year $year)
     {
         //
     }
 }
+
 

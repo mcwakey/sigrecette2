@@ -415,6 +415,16 @@
 					</div>
                     <div class="menu-item">
                         <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('settings.years.*') ? 'active' : '' }}" href="{{ route('settings.years.index') }}">
+							<span class="menu-bullet">
+								<span class="bullet bullet-dot"></span>
+							</span>
+                            <span class="menu-title">{{ __('Years') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
                         <a class="menu-link {{ request()->routeIs('import-view') ? 'active' : '' }}" href="{{ route('import-view') }}">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
