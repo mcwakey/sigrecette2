@@ -10,8 +10,8 @@
         <select class="form-select form-select-solid" wire:model="status" name="status" data-placeholder="Select option" data-allow-clear="true">
             <option></option>
             @if($status=="PENDING")
-            <option value="APROVED">{{ __('APROVED') }}</option>
-            <option value="REJECTED">{{ __('REJECTED') }}</option>
+                <option value="APROVED">{{ __('APROVED') }}</option>
+                <option value="REJECTED">{{ __('REJECTED') }}</option>
             @elseif($status=="DRAFT")
             <option value="PENDING">{{ __('ACCEPTED') }}</option>
             <option value="CANCELED">{{ __('CANCELED') }}</option>

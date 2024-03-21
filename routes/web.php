@@ -36,7 +36,7 @@ use App\Http\Controllers\TownsController;
 
 Route::get('/lang/{locale}', [LanguageController::class, 'setLocale'])->name('lang.setLocale');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
 
     Route::get('/', [DashboardController::class, 'index']);
 

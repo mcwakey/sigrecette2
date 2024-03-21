@@ -112,19 +112,37 @@
                                 <div class="d-flex fv-row">
                                     <!--begin::Radio-->
                                     <div class="form-check form-check-custom form-check-solid">
-                                        <!--begin::Input-->
-                                        <input class="form-check-input me-3" id="kt_modal_update_role_option_{{ $role->id }}" wire:model="role" name="role" type="radio" value="{{ $role->name }}" checked="checked"/>
-                                        <!--end::Input-->
-                                        <!--begin::Label-->
-                                        <label class="form-check-label" for="kt_modal_update_role_option_{{ $role->id }}">
-                                            <div class="fw-bold text-gray-800">
-                                                {{ ucwords($role->name) }}
-                                            </div>
-                                            <div class="text-gray-600">
-                                                {{ $role->description }}
-                                            </div>
-                                        </label>
-                                        <!--end::Label-->
+                                        @if($role->name == 'system_administrator')
+                                            @hasanyrole(['system_administrator'])
+                                                <!--begin::Input-->
+                                                <input class="form-check-input me-3" id="kt_modal_update_role_option_{{ $role->id }}" wire:model="role" name="role" type="radio" value="{{ $role->name }}" checked="checked"/>
+                                                <!--end::Input-->
+                                                <!--begin::Label-->
+                                                <label class="form-check-label" for="kt_modal_update_role_option_{{ $role->id }}">
+                                                    <div class="fw-bold text-gray-800">
+                                                        {{ ucwords($role->name) }}
+                                                    </div>
+                                                </label>
+                                                <!--end::Label-->
+                                            
+                                            @endhasanyrole
+
+                                        @else
+
+                                            <!--begin::Input-->
+                                            <input class="form-check-input me-3" id="kt_modal_update_role_option_{{ $role->id }}" wire:model="role" name="role" type="radio" value="{{ $role->name }}" checked="checked"/>
+                                            <!--end::Input-->
+                                            <!--begin::Label-->
+                                            <label class="form-check-label" for="kt_modal_update_role_option_{{ $role->id }}">
+                                                <div class="fw-bold text-gray-800">
+                                                    {{ ucwords($role->name) }}
+                                                </div>
+                                            </label>
+                                            <!--end::Label-->
+                                        
+                                        @endif
+
+                                        
                                     </div>
                                     <!--end::Radio-->
                                 </div>

@@ -26,10 +26,11 @@ class AddUserModal extends Component
 
     protected $rules = [
         'name' => 'required|string',
-        'email' => 'required|email',
+        'email' => 'required|email|unique:users,email',
         'role' => 'required|string',
         'avatar' => 'nullable|sometimes|image|max:1024',
     ];
+
 
     protected $listeners = [
         'delete_user' => 'deleteUser',
@@ -57,6 +58,10 @@ class AddUserModal extends Component
 
     public function submit()
     {
+        if ($this->edit_mode) {
+            $this->rules['email'] = 'required|email|unique:users,email,' . $this->user_id;
+        }
+
         // Validate the form input data
         $this->validate();
 

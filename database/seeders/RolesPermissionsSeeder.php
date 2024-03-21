@@ -22,49 +22,28 @@ class RolesPermissionsSeeder extends Seeder
         ];
 
         $permissions_by_role = [
-            'super_administrator' => [
+            'system_administrator' => [
                 'taxpayer',
-                'user management',
-                'content management',
-                'financial management',
-                'reporting',
-                'payroll',
-                'disputes management',
-                'api controls',
-                'database management',
-                'repository management',
+                'user',
+                'invoive',
+
             ],
             'administrator' => [
                 'taxpayer',
-                'user management',
-                'content management',
-                'financial management',
-                'reporting',
-                'payroll',
-                'disputes management',
-                'api controls',
-                'database management',
-                'repository management',
+                'user',
+                'invoive',
+
             ],
             'agent_assiette' => [
-                'api controls',
-                'database management',
-                'repository management',
+                'taxpayer',
+                'invoive',
             ],
-            'agent_regisseur' => [
-                'content management',
-                'financial management',
-                'reporting',
-                'payroll',
-            ],
-            'agent_recouvrement' => [
-                'reporting',
-            ],
-            'agent_collecteur' => [
-            ],
+            'agent_regisseur' => [],
+            'agent_recouvrement' => [],
+            'agent_collecteur' => [],
         ];
 
-        foreach ($permissions_by_role['super_administrator'] as $permission) {
+        foreach ($permissions_by_role['system_administrator'] as $permission) {
             foreach ($abilities as $ability) {
                 Permission::create(['name' => $ability . ' ' . $permission]);
             }
@@ -80,7 +59,6 @@ class RolesPermissionsSeeder extends Seeder
             Role::create(['name' => $role])->syncPermissions($full_permissions_list);
         }
 
-        User::find(1)->assignRole('super_administrator');
-        //User::find(2)->assignRole('developer');
+        User::find(1)->assignRole('system_administrator');
     }
 }

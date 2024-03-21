@@ -232,7 +232,7 @@
 			<!--end:Menu item-->
 
 			<!--begin:Menu item-->
-			<div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('user-management.*') ? 'here show' : '' }}">
+			{{-- <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('user-management.*') ? 'here show' : '' }}">
 				<!--begin:Menu link-->
 				<span class="menu-link">
 					<span class="menu-icon">{!! getIcon('abstract-28', 'fs-2') !!}</span>
@@ -280,8 +280,13 @@
 					<!--end:Menu item-->
 				</div>
 				<!--end:Menu sub-->
-			</div>
+			</div> --}}
+
+
 			<!--end:Menu item-->
+
+			@hasanyrole(['administrator','system_administrator'])
+
 			<!--begin:Menu item-->
 			<div class="menu-item pt-5">
 				<!--begin:Menu content-->
@@ -423,6 +428,7 @@
 				<!--end:Menu sub-->
 			</div>
 			<!--end:Menu item-->
+		
 			<!--begin:Menu item-->
 			<div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('user-management.*') ? 'here show' : '' }}">
 				<!--begin:Menu link-->
@@ -474,6 +480,9 @@
 				<!--end:Menu sub-->
 			</div>
 			<!--end:Menu item-->
+
+			@endhasanyrole
+
 		</div>
 		<!--end::Menu-->
 	</div>

@@ -104,9 +104,9 @@
 
                         @auth
                             @role('administrator')
-                        <span data-bs-toggle="tooltip" data-bs-trigger="hover" title="{{ __('edit Taxpayers details') }}">
-                            <a href="#" class="btn btn-sm btn-light-success" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer" data-kt-action="update_taxpayer">{{ __('edit') }}</a>
-                        </span>
+                                <span data-bs-toggle="tooltip" data-bs-trigger="hover" title="{{ __('edit Taxpayers details') }}">
+                                    <a href="#" class="btn btn-sm btn-light-success" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer" data-kt-action="update_taxpayer">{{ __('edit') }}</a>
+                                </span>
                             @endrole
                         @endauth
 
@@ -200,15 +200,18 @@
                     <a class="nav-link text-active-success pb-4 active" data-bs-toggle="tab" href="#kt_user_view_overview_tab">{{ __('overview') }}</a>
                 </li>
                 <!--end:::Tab item-->
-                <!--begin:::Tab item-->
-                <li class="nav-item">
-                    <a class="nav-link text-active-success pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab" href="#kt_user_view_overview_security">{{ __('invoices payments') }}</a>
-                </li>
+
+                 <li class="nav-item">
+                     <a class="nav-link text-active-success pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab" href="#kt_user_view_overview_security">{{ __('invoices payments') }}</a>
+                 </li>
+
                 <!--end:::Tab item-->
                 <!--begin:::Tab item-->
-                <li class="nav-item">
-                    <a class="nav-link text-active-success pb-4" data-bs-toggle="tab" href="#kt_user_view_overview_events_and_logs_tab">{{ __('events logs') }}</a>
-                </li>
+                @hasanyrole(['administrator','system_administrator'])
+                    <li class="nav-item">
+                        <a class="nav-link text-active-success pb-4" data-bs-toggle="tab" href="#kt_user_view_overview_events_and_logs_tab">{{ __('events logs') }}</a>
+                    </li>
+                @endhasanyrole
                 <!--end:::Tab item-->
                 <!--begin:::Tab item-->
                 <li class="nav-item ms-auto">
@@ -304,23 +307,29 @@
                             <!--begin::Card toolbar-->
 
                             <div class="card-toolbar">
-                                <button type="button" class="btn btn-light-success ms-auto me-5" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer_taxable" data-kt-action="add_taxable">
-                                    <i class="ki-duotone ki-add-files fs-3">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                        <span class="path3"></span>
-                                        <span class="path4"></span>
-                                        <span class="path5"></span>
-                                    </i>{{ __('create asset') }}</button>
+                                @hasanyrole(['agent_assiette','system_administrator'])
+                                    <button type="button" class="btn btn-light-success ms-auto me-5" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer_taxable" data-kt-action="add_taxable">
+                                        <i class="ki-duotone ki-add-files fs-3">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                            <span class="path3"></span>
+                                            <span class="path4"></span>
+                                            <span class="path5"></span>
+                                        </i>{{ __('create asset') }}
+                                    </button>
+                                @endhasanyrole
 
-                                <button type="button" class="btn btn-light-danger ms-auto" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice" data-kt-action="add_invoice">
-                                    <i class="ki-duotone ki-add-files fs-3">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                        <span class="path3"></span>
-                                        <span class="path4"></span>
-                                        <span class="path5"></span>
-                                    </i>{{ __('create invoice') }}</button>
+                                @hasanyrole(['agent_assiette','system_administrator'])
+                                    <button type="button" class="btn btn-light-danger ms-auto" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice" data-kt-action="add_invoice">
+                                        <i class="ki-duotone ki-add-files fs-3">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                            <span class="path3"></span>
+                                            <span class="path4"></span>
+                                            <span class="path5"></span>
+                                        </i>{{ __('create invoice') }}
+                                    </button>
+                                @endhasanyrole
                             </div>
 
 
