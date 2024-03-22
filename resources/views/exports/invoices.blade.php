@@ -143,15 +143,21 @@
         </table>
 
         <div class="avis-header">
-            <h2 class="text-center">
-                @if($action===1)
-                   <span> AVIS DES SOMMES À PAYER </span>
-                @else
-                    <span>AVIS DE REDUCTION OU D’ANNULATION </span>
 
+                @if($action===1)
+                <h2 class="text-center">
+                   <span> AVIS DES SOMMES À PAYER </span>
+                </h2>
+                <h6>N°:<span class="write">{{$data[1]}}/</span>{{date("Y", strtotime($data[0]))}}</h6>
+                @else
+                <h2 class="text-center">
+                    <span>AVIS DE REDUCTION OU D’ANNULATION </span>
+                </h2>
+                <h6>N°:<span class="write">{{$data[1]}}/</span>{{date("Y", strtotime($data[0]))}}</h6>
                 @endif
-            </h2>
-            <h6>N°:<span class="write">{{$data[1]}}/</span>{{date("Y", strtotime($data[0]))}}</h6>
+
+
+
             <h4>Destinataire:<span class="write"> </span></h4>
 
         </div>
@@ -172,7 +178,7 @@
                     le montant ci-dessous :</p>
                 <p>N° d’ordre de recette :<span class="write">{{$data[1]}}/</span> {{date("Y", strtotime( $data[0]))}}</p>
             @else
-                Votre avis des sommes à payer N° 001/2023 du 3 janvier 2023 est réduit suivant les détails ci-après :
+                Votre avis des sommes à payer {{$data[1]}}/{{date("Y", strtotime($data[0]))}} du  {{date("d/m/Y", strtotime( $data[0]))}} est réduit suivant les détails ci-après :
                 <p>N° de l’ordre de recette de réduction ou d'annulation :<span class="write">{{$data[1]}}/</span> {{date("Y", strtotime( $data[0]))}}</p>
             @endif
 
@@ -230,16 +236,21 @@
                         <td style="text-align: center">{{$item[6]}}</td>
                     </tr>
                 @endforeach
+
                 <tr>
                     <td colspan="6" style="text-align: right;"><strong>Total :</strong></td>
-
+                    @if($action==1)
                         <td>{{$data[3]}}</td>
+                    @else
+                        <td>{{  $invoice->amount -$data[3]  }}</td>
+                    @endif
 
 
                 </tr>
 
+
             </table>
-            <p>Arrêté le présent avis à la somme de :<span class="write">@if($action==1){{number_to_words($data[3]) }}@else {{number_to_words($invoice->amount) }}  @endif</span> Francs CFA (Sauf erreur ou omission).</p>
+            <p>Arrêté le présent avis à la somme de :<span class="write">@if($action==1){{number_to_words($data[3]) }}@else {{number_to_words($invoice->amount -$data[3]) }}  @endif</span> Francs CFA (Sauf erreur ou omission).</p>
             <p>A payer dans les 30 jours suivant la réception de l’avis, ou avant la fin de chaque mois pour les
                 paiements mensualisés.</p>
             <table>
