@@ -38,6 +38,7 @@ class RolesPermissionsSeeder extends Seeder
                 'taxpayer',
                 'invoive',
             ],
+            'municipal_advisor' => [],
             'agent_regisseur' => [],
             'agent_recouvrement' => [],
             'agent_collecteur' => [],

@@ -103,11 +103,11 @@
                         </div>
 
                         @auth
-                            @role('administrator')
+                            @hasanyrole(['administrator','system_administrator'])
                                 <span data-bs-toggle="tooltip" data-bs-trigger="hover" title="{{ __('edit Taxpayers details') }}">
                                     <a href="#" class="btn btn-sm btn-light-success" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer" data-kt-action="update_taxpayer">{{ __('edit') }}</a>
                                 </span>
-                            @endrole
+                            @endhasanyrole
                         @endauth
 
                         {{-- dd (auth()->user()->can('edit taxpayer')) --}}
@@ -626,6 +626,7 @@
                                                 <td>
                                                     @if($invoice->status == "PENDING")
                                                     <span class="badge badge-light-primary">{{ __($invoice->status) }}</span>
+                                                    @hasanyrole(['municipal_advisor','system_administrator'])
                                                     <button type="button" class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto" data-kt-user-id="{{ $invoice->id }}" data-kt-menu-target="#kt_modal_add_status" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-action="update_status">
                                                         <i class="ki-duotone ki-setting-3 fs-3">
                                                             <span class="path1"></span>
@@ -635,6 +636,7 @@
                                                             <span class="path5"></span>
                                                         </i>
                                                     </button>
+                                                    @endhasanyrole
                                                     @elseif($invoice->status=="APROVED")
                                                     <span class="badge badge-light-success">{{ __('APROVED') }}</span>
                                                     @elseif($invoice->status=="REJECTED")
@@ -696,16 +698,19 @@
 
 
                                                         @if($invoice->status=="DRAFT")
-                                                        <div class="menu-item px-3">
-                                                            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer" data-kt-action="update_taxpayer">
-                                                                {{ __('edit') }}
-                                                            </a>
-                                                        </div>
-                                                        <div class="menu-item px-3">
-                                                            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer->id }}" data-kt-action="delete_taxpayer">
-                                                                {{ __('delete') }}
-                                                            </a>
-                                                        </div>
+                                                        @hasanyrole(['agent_assiette','system_administrator'])
+                                                            <div class="menu-item px-3">
+                                                                <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer" data-kt-action="update_taxpayer">
+                                                                    {{ __('edit') }}
+                                                                </a>
+                                                            </div>
+
+                                                            <div class="menu-item px-3">
+                                                                <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer->id }}" data-kt-action="delete_taxpayer">
+                                                                    {{ __('delete') }}
+                                                                </a>
+                                                            </div>
+                                                        @endhasanyrole
                                                         @elseif($invoice->status=="APROVED"  || $invoice->status=="CANCELED")
 
                                                             <div class="menu-item px-3">
@@ -746,23 +751,31 @@
                                                                 @endphp
 
                                                                 <a href="{{ route('generatePdf', ['data' => json_encode($data)]) }}" class="menu-link px-3" target="_blank">{{ __('print') }}</a>
+
+
+
                                                             </div>
                                                             @if($invoice->status!=="CANCELED")
                                                                 @if($invoice->pay_status != "PAID")
-                                                                <div class="menu-item px-3">
-                                                                    <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->invoice_no }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_payment" data-kt-action="update_payment">
-                                                                        {{ __('create payment') }}
-                                                                    </a>
-                                                                </div>
-                                                                @endif
-                                                            <!--end::Menu item cancle option-->
+                                                                @hasanyrole(['agent_assiette','system_administrator'])
+                                                                    <div class="menu-item px-3">
+                                                                        <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->invoice_no }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_payment" data-kt-action="update_payment">
+                                                                            {{ __('create payment') }}
+                                                                        </a>
+                                                                    </div>
+                                                                    @endif
+                                                                    @endhasanyrole
+                                                                    <!--end::Menu item cancle option-->
+                                                                    
+                                                                @hasanyrole(['agent_assiette','system_administrator'])
 
-                                                                <!--begin::Menu item-->
-                                                                <div class="menu-item px-3">
-                                                                    <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice" data-kt-action="update_invoice">
-                                                                        {{ __('reduction cancelation') }}
-                                                                    </a>
-                                                                </div>
+                                                                    <!--begin::Menu item-->
+                                                                    <div class="menu-item px-3">
+                                                                        <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice" data-kt-action="update_invoice">
+                                                                            {{ __('reduction cancelation') }}
+                                                                        </a>
+                                                                    </div>
+                                                                @endhasanyrole
                                                                  @endif
                                                             @endif
                                                         <!--end::Menu item-->
