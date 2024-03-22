@@ -12,7 +12,7 @@
         @if ($status == 'PENDING')
             <select class="form-select form-select-solid" wire:model="status" name="status"
                 data-placeholder="Select option" data-allow-clear="true">
-                @hasanyrole(['municipal_advisor'])
+                @hasanyrole(['municipal_advisor','system_administrator'])
                     <option></option>
                     <option value="APROVED">{{ __('APROVED') }}</option>
                     <option value="REJECTED">{{ __('REJECTED') }}</option>
