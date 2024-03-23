@@ -4,6 +4,8 @@ namespace App\DataTables;
 
 use App\Models\Invoice;
 use App\Models\Payment;
+use App\Models\Year;
+use Carbon\Carbon;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
@@ -66,10 +68,11 @@ class RecoveriesDataTable extends DataTable
 
     public function query(Payment $model): QueryBuilder
     {
-        // return $model->newQuery()
-        //     ->with('taxpayer', 'taxpayer.zone');
+        $activeYear = Year::getActiveYear();
+        $startOfYear = Carbon::parse("{$activeYear->name}-01-01 00:00:00");
+        $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
 
-        return $model->newQuery();
+        return $model->newQuery()->whereBetween('created_at', [$startOfYear, $endOfYear]);
     }
 
     /**
