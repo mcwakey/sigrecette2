@@ -19,7 +19,7 @@ class Invoice extends Model
         'qty',
         'from_date',
         'to_date',
-        'bill_status',
+        'pay_status',
         'status',
         // 'profile_photo_path',
     ];

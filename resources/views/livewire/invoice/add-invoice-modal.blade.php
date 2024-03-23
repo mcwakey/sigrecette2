@@ -19,8 +19,8 @@
             <div class="modal-body px-5 my-7">
                 <!--begin::Form-->
                 <form id="kt_modal_add_invoice_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
-                    <input type="text" wire:model="invoice_id" name="invoice_id" />
-                    <input type="text" wire:model="taxpayer_id" name="taxpayer_id" />
+                    <input type="hidden" wire:model="invoice_id" name="invoice_id" />
+                    <input type="hidden" wire:model="taxpayer_id" name="taxpayer_id" />
                     <!--begin::Scroll-->
 
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_invoice_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_invoice_header" data-kt-scroll-wrappers="#kt_modal_add_invoice_scroll" data-kt-scroll-offset="300px">
@@ -62,6 +62,7 @@
                         </div>
 
                         <div class="separator separator-dashed my-2"></div>
+
                         @endif
 
                         <div class="row mb-2">
@@ -72,9 +73,9 @@
                                 <div class="position-relative" data-kt-dialer="true" data-kt-dialer-min="0" data-kt-dialer-max="12" data-kt-dialer-step="1">
                                     <!--begin::Decrease control-->
                                     <button type="button" class="btn btn-icon btn-active-color-gray-700 position-absolute translate-middle-y top-50 start-0" data-kt-dialer-control="decrease">
-                                    @if ($edit_mode==false)
+                                        @if ($edit_mode==false)
                                         <i class="ki-outline ki-minus-circle fs-1"></i>
-                                    @endif
+                                        @endif
                                     </button>
                                     <!--end::Decrease control-->
                                     <!--begin::Input control-->
@@ -84,9 +85,9 @@
                                     <span class="text-danger">{{ $message }}</span> @enderror
                                     <!--begin::Increase control-->
                                     <button type="button" class="btn btn-icon btn-active-color-gray-700 position-absolute translate-middle-y top-50 end-0" data-kt-dialer-control="increase">
-                                    @if ($edit_mode==false)
+                                        @if ($edit_mode==false)
                                         <i class="ki-outline ki-plus-circle fs-1"></i>
-                                    @endif
+                                        @endif
                                     </button>
                                     <!--end::Increase control-->
                                 </div>
@@ -160,27 +161,27 @@
                                         </td> -->
                                         <td class="ps-0">
 
-                                        <div class="input-group mb-2">
-                                            <input wire:model="s_seize.{{ $loop->index }}" name="s_seize[]" type="text" class="form-control form-control-solid text-end" readonly />
-                                            <span class="input-group-text" id="basic-addon1">{{ $taxpayer_taxable->taxable->unit ?? '' }} {{ $taxpayer_taxable->taxpayer_taxable->taxable->unit ?? '' }}</span>
-                                        </div>
+                                            <div class="input-group mb-2">
+                                                <input wire:model="s_seize.{{ $loop->index }}" name="s_seize[]" type="text" class="form-control form-control-solid text-end" readonly />
+                                                <span class="input-group-text" id="basic-addon1">{{ $taxpayer_taxable->taxable->unit ?? '' }} {{ $taxpayer_taxable->taxpayer_taxable->taxable->unit ?? '' }}</span>
+                                            </div>
                                             @if ($view_mode)
-                                        <div class="input-group mb-2">
-                                            <input wire:model="s_seize_e.{{ $loop->index }}" name="s_seize_e[]" type="text" class="form-control text-end" readonly />
-                                            <span class="input-group-text" id="basic-addon1">{{ $taxpayer_taxable->taxable->unit ?? '' }} {{ $taxpayer_taxable->taxpayer_taxable->taxable->unit ?? '' }}</span>
-                                        </div>
+                                            <div class="input-group mb-2">
+                                                <input wire:model="s_seize_e.{{ $loop->index }}" name="s_seize_e[]" type="text" class="form-control text-end" readonly />
+                                                <span class="input-group-text" id="basic-addon1">{{ $taxpayer_taxable->taxable->unit ?? '' }} {{ $taxpayer_taxable->taxpayer_taxable->taxable->unit ?? '' }}</span>
+                                            </div>
                                             @endif
                                         </td>
                                         <td>
-                                        <div class="input-group mb-2">
-                                            <input wire:model="s_tariff.{{ $loop->index }}" name="s_tariff[]" type="text" class="form-control form-control-solid text-end" placeholder="0.00" readonly />
-                                            <span class="input-group-text" id="basic-addon1">{{ (isset($taxpayer_taxable->taxable->tariff_type) ? ($taxpayer_taxable->taxable->tariff_type == "FIXED" ? "" : "%") : "") ?? '' }} {{ (isset($taxpayer_taxable->taxpayer_taxable->taxable->tariff_type) ? ($taxpayer_taxable->taxpayer_taxable->taxable->tariff_type == "FIXED" ? "" : "%") : "") ?? '' }}</span>
-                                        </div>
+                                            <div class="input-group mb-2">
+                                                <input wire:model="s_tariff.{{ $loop->index }}" name="s_tariff[]" type="text" class="form-control form-control-solid text-end" placeholder="0.00" readonly />
+                                                <span class="input-group-text" id="basic-addon1">{{ (isset($taxpayer_taxable->taxable->tariff_type) ? ($taxpayer_taxable->taxable->tariff_type == "FIXED" ? "" : "%") : "") ?? '' }} {{ (isset($taxpayer_taxable->taxpayer_taxable->taxable->tariff_type) ? ($taxpayer_taxable->taxpayer_taxable->taxable->tariff_type == "FIXED" ? "" : "%") : "") ?? '' }}</span>
+                                            </div>
                                             @if ($view_mode)
-                                        <div class="input-group mb-2">
-                                            <input wire:model="s_tariff_e.{{ $loop->index }}" name="s_tariff_e[]" type="text" class="form-control text-end" placeholder="0.00" readonly />
-                                            <span class="input-group-text" id="basic-addon1">{{ (isset($taxpayer_taxable->taxable->tariff_type) ? ($taxpayer_taxable->taxable->tariff_type == "FIXED" ? "" : "%") : "") ?? '' }} {{ (isset($taxpayer_taxable->taxpayer_taxable->taxable->tariff_type) ? ($taxpayer_taxable->taxpayer_taxable->taxable->tariff_type == "FIXED" ? "" : "%") : "") ?? '' }}</span>
-                                        </div>
+                                            <div class="input-group mb-2">
+                                                <input wire:model="s_tariff_e.{{ $loop->index }}" name="s_tariff_e[]" type="text" class="form-control text-end" placeholder="0.00" readonly />
+                                                <span class="input-group-text" id="basic-addon1">{{ (isset($taxpayer_taxable->taxable->tariff_type) ? ($taxpayer_taxable->taxable->tariff_type == "FIXED" ? "" : "%") : "") ?? '' }} {{ (isset($taxpayer_taxable->taxpayer_taxable->taxable->tariff_type) ? ($taxpayer_taxable->taxpayer_taxable->taxable->tariff_type == "FIXED" ? "" : "%") : "") ?? '' }}</span>
+                                            </div>
                                             @endif
                                         </td>
                                         <!-- <td>
@@ -192,19 +193,6 @@
                                             <input wire:model="s_amount_e.{{ $loop->index }}" name="s_amount_e[]" type="text" class="form-control text-end" placeholder="0.00" readonly />
                                             @endif
                                         </td>
-
-
-                                        <!-- <td class="pt-5">FCFA -->
-                                        <!-- <button type="button" class="btn btn-sm btn-icon btn-active-color-primary" data-kt-element="remove-item">
-                                                <span class="svg-icon svg-icon-3">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                        <path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="black" />
-                                                        <path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="black" />
-                                                        <path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="black" />
-                                                    </svg>
-                                                </span>
-                                            </button> -->
-                                        <!-- </td> -->
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -248,33 +236,6 @@
                                 <textarea name="notes" class="form-control" rows="2" placeholder="Thanks for your business"></textarea>
                             </div>
                         </div>
-                        <!-- <table class="table g-5 gs-0 mb-0 fw-bolder text-gray-700" data-kt-element="items">
-                            <tr class="border-bottom border-bottom-dashed" data-kt-element="item">
-                                <td class="pe-7">
-                                    <input type="text" class="form-control form-control-solid mb-2" name="name[]" placeholder="Item name" />
-                                    <input type="text" class="form-control form-control-solid" name="description[]" placeholder="Description" />
-                                </td>
-                                <td class="ps-0">
-                                    <input class="form-control form-control-solid" type="number" min="1" name="quantity[]" placeholder="1" data-kt-element="quantity" />
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control form-control-solid text-end" name="price[]" placeholder="0.00" data-kt-element="price" />
-                                </td>
-                                <td class="pt-8 text-end">FCFA
-                                <span data-kt-element="total">0.00</span></td>
-                                <td class="pt-5 text-end">
-                                    <button type="button" class="btn btn-sm btn-icon btn-active-color-primary" data-kt-element="remove-item">
-                                        <span class="svg-icon svg-icon-3">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                <path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="black" />
-                                                <path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="black" />
-                                                <path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="black" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                </td>
-                            </tr>
-                            </table> -->
 
                         @if ($view_mode)
                         <div class="separator separator-content separator-dashed my-3">
@@ -283,53 +244,75 @@
 
                         <div class="row mb-2">
 
-                        <div class="notice d-flex bg-light-danger rounded border-danger border border-dashed mb-1 p-2">
-                            <div class="col-md-3">
-                                <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('Choisir une option') }}" readonly />
-                            </div>
-                            <div class="col-md-3">
-                                <select wire:model="cancel_reduct" name="cancel_reduct" class="form-select form-control-select" data-dropdown-parent="#kt_modal_add_invoice">
-                                    <option></option>
-                                    @if ($reduce_amount > 0)
-                                    <option value="2">Reduction</option>
-                                    @endif
-                                    <option value="1">Annulation</option>
-                                </select>
-                                @error('cancel_reduct')
-                                <span class="text-danger">{{ $message }}</span> @enderror
-                            </div>
-                            @if ($reduce_amount > 0)
-                            <div class="col-md-3">
-                                <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('Montant de la reduction') }}" readonly />
-                            </div>
-                            <div class="col-md-3">
-                                <!--end::Decrease control-->
-                                <!--begin::Input control-->
-                                <input wire:model="reduce_amount" name="reduce_amount" type="text" class="form-control text-end" readonly/>
-                                <!--end::Input control-->
-                                @error('qty')
-                                <span class="text-danger">{{ $message }}</span> @enderror
-                                <!--begin::Increase control-->
+                            <div class="notice d-flex bg-light-danger rounded border-danger border border-dashed mb-1 p-2">
+                                <div class="col-md-3">
+                                    <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('Choisir une option') }}" readonly />
+                                </div>
+                                <div class="col-md-3">
+                                    <select wire:model="cancel_reduct" name="cancel_reduct" class="form-select form-control-select" data-dropdown-parent="#kt_modal_add_invoice">
+                                        <option></option>
+                                        @if ($reduce_amount > 0)
+                                        <option value="REDUCED">Reduction</option>
+                                        @endif
+                                        <option value="CANCELED">Annulation</option>
+                                    </select>
+                                    @error('cancel_reduct')
+                                    <span class="text-danger">{{ $message }}</span> @enderror
+                                </div>
+                                @if ($reduce_amount > 0)
+                                <div class="col-md-3">
+                                    <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('Montant de la reduction') }}" readonly />
+                                </div>
+                                <div class="col-md-3">
+                                    <!--end::Decrease control-->
+                                    <!--begin::Input control-->
+                                    <input wire:model="reduce_amount" name="reduce_amount" type="text" class="form-control text-end" readonly />
+                                    <!--end::Input control-->
+                                    @error('qty')
+                                    <span class="text-danger">{{ $message }}</span> @enderror
+                                    <!--begin::Increase control-->
 
 
+                                </div>
+                                @endif
                             </div>
-                            @endif
+
+                        </div>
+                        @else
+                        <div class="separator separator-content separator-dashed mt-3">
+                            <span class="w-250px text-gray-500 fw-semibold fs-7">{{ __('payment history') }}</span>
                         </div>
 
-                        </div>
-                            @endif
-
-
-
-                            @else
-                            <table class="table g-5 gs-0 mb-0 fw-bolder text-gray-700" data-kt-element="items">
-                                <tr data-kt-element="empty">
-                                    <th colspan="5" class="text-muted text-center py-10">No taxables selected</th>
-                                </tr>
+                        <table class="table g-5 gs-0 mb-0 fw-bolder text-gray-700" data-kt-element="items">
+                            <tr class="border-bottom border-bottom-dashed" data-kt-element="item">
+                                <td class="pe-5">
+                                    <input type="text" class="form-control form-control-flush mb-2" name="" placeholder="date" />
+                                    <!-- <input type="text" class="form-control form-control-solid" name="description" placeholder="Description" /> -->
+                                </td>
+                                <td class="ps-0">
+                                    <input type="text"  class="form-control form-control-flush" name="" placeholder="Montant" />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-flush text-end" name="" placeholder="Type de payment" />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-flush text-end" name="" placeholder="No de quittance" data-kt-element="price" />
+                                </td>
+                            </tr>
                             </table>
-                            @endif
+                        @endif
 
-                            <!--end::Input group-->
+
+
+                        @else
+                        <table class="table g-5 gs-0 mb-0 fw-bolder text-gray-700" data-kt-element="items">
+                            <tr data-kt-element="empty">
+                                <th colspan="5" class="text-muted text-center py-10">No taxables selected</th>
+                            </tr>
+                        </table>
+                        @endif
+
+                        <!--end::Input group-->
                         <!--end::Scroll-->
                         <!--begin::Actions-->
                         @if ($button_mode)
@@ -347,7 +330,7 @@
                         </div>
                         @endif
                         <!--end::Actions-->
-                        </div>
+                    </div>
                 </form>
                 <!--end::Form-->
             </div>

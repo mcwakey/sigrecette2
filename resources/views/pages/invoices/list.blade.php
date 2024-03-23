@@ -72,10 +72,18 @@
                 <!--begin::Toolbar-->
                 <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
                     <!--begin::Add user-->
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice">
+                    <!-- <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice_no_taxpayer">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
                         {{ __('create invoice') }}
-                    </button>
+                    </button> -->
+                    <button type="button" class="btn btn-light-success ms-auto me-5" data-kt-user-id="1" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice_no_taxpayer" data-kt-action="add_no_invoice">
+                                    <i class="ki-duotone ki-add-files fs-3">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                        <span class="path3"></span>
+                                        <span class="path4"></span>
+                                        <span class="path5"></span>
+                                    </i> {{ __('create invoice') }}</button>
                     <!--end::Add user-->
                 </div>
                 <div class="d-flex justify-content-end" data-kt-invoice-table-toolbar="base">
@@ -188,6 +196,10 @@
         <!--end::Card body-->
     </div>
 
+    <!--begin::Modal-->
+    <livewire:invoice.add-invoice-no-taxpayer-modal/>
+    <!--end::Modal-->
+    
     <!--begin::Modal-->
     <livewire:payment.add-payment-modal/>
     <!--end::Modal-->

@@ -94,6 +94,7 @@ class InvoicesDataTable extends DataTable
                         // ->where('taxables.tax_label_id', 'LIKE', '%' . ($this->taxlabel ?? '') . '%')
                         // ->where('invoices.validity', 'EXPIRED')
                         ->select('invoices.*')
+                        ->distinct()
                         ->newQuery();
     }
 
@@ -131,8 +132,8 @@ class InvoicesDataTable extends DataTable
             Column::make('taxpayers.latitude')->title(__('gps')),
             Column::make('tax_labels.id')->title(__('taxlabel')),
             Column::make('total')->title(__('amount'))->name('amount'),
-            Column::make('status')->title(__('aproval')),
             Column::make('validity')->title(__('status')),
+            Column::make('status')->title(__('aproval')),
             Column::make('from_date')->title( __('from_date'))->addClass('text-nowrap'),
             Column::make('to_date')->title( __('expiry date'))->addClass('text-nowrap'),
             Column::computed('action')

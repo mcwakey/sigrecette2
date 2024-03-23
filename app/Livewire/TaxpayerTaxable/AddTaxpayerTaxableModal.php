@@ -63,7 +63,7 @@ class AddTaxpayerTaxableModal extends Component
         'seize' => 'required',
         //'location' => 'required',
         'taxable_id' => 'required',
-        'taxpayer_id' => 'required',
+        // 'taxpayer_id' => 'required',
 
         // 'penalty' => 'nullable',
         // 'penalty_type' => 'nullable',
