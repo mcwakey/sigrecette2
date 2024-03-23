@@ -3,6 +3,8 @@
 namespace App\DataTables;
 
 use App\Models\Invoice;
+use App\Models\Year;
+use Carbon\Carbon;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
@@ -81,20 +83,21 @@ class InvoicesDataTable extends DataTable
 
     public function query(Invoice $model): QueryBuilder
     {
-        // return $model->newQuery()
-        //     ->with('taxpayer', 'taxpayer.zone');
+        $activeYear = Year::getActiveYear();
+        $startOfYear = Carbon::parse("{$activeYear->name}-01-01 00:00:00");
+        $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
 
-            return $model->join('invoice_items', 'invoice_items.invoice_id', '=', 'invoices.id')
-                        ->leftjoin('taxpayers', 'taxpayers.id', '=', 'invoices.taxpayer_id')
-                        ->join('taxpayer_taxables', 'taxpayer_taxables.id', '=', 'invoice_items.taxpayer_taxable_id')
-                        ->join('taxables', 'taxables.id', '=', 'taxpayer_taxables.taxable_id')
-                        ->join('tax_labels', 'tax_labels.id', '=', 'taxables.tax_label_id')
-                        ->leftjoin('zones', 'zones.id', '=', 'taxpayers.zone_id')
-                        // ->where('taxpayers.zone_id', 'LIKE', '%' . ($this->zone ?? '') . '%')
-                        // ->where('taxables.tax_label_id', 'LIKE', '%' . ($this->taxlabel ?? '') . '%')
-                        // ->where('invoices.validity', 'EXPIRED')
-                        ->select('invoices.*')
-                        ->newQuery();
+        return $model->join('invoice_items', 'invoice_items.invoice_id', '=', 'invoices.id')
+            ->leftjoin('taxpayers', 'taxpayers.id', '=', 'invoices.taxpayer_id')
+            ->join('taxpayer_taxables', 'taxpayer_taxables.id', '=', 'invoice_items.taxpayer_taxable_id')
+            ->join('taxables', 'taxables.id', '=', 'taxpayer_taxables.taxable_id')
+            ->join('tax_labels', 'tax_labels.id', '=', 'taxables.tax_label_id')
+            ->leftjoin('zones', 'zones.id', '=', 'taxpayers.zone_id')
+            // ->where('taxpayers.zone_id', 'LIKE', '%' . ($this->zone ?? '') . '%')
+            // ->where('taxables.tax_label_id', 'LIKE', '%' . ($this->taxlabel ?? '') . '%')
+            // ->where('invoices.validity', 'EXPIRED')
+            ->select('invoices.*')
+            ->newQuery()->whereBetween('invoices.created_at', [$startOfYear, $endOfYear]);;
     }
 
 
@@ -122,17 +125,17 @@ class InvoicesDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('taxpayers.name')->title(__('taxpayer'))->addClass('d-flex align-items-center'),
-            Column::make('invoice_no')->title(__('invoice no')),
-            Column::make('order_no')->title(__('order no')),
-            Column::make('nic')->title(__('nic')),
-            Column::make('zones.name')->title(__('zone')),
-            Column::make('taxpayers.address')->title(__('address')),
-            Column::make('taxpayers.latitude')->title(__('gps')),
-            Column::make('tax_labels.id')->title(__('taxlabel')),
-            Column::make('total')->title(__('amount'))->name('amount'),
-            Column::make('status')->title(__('aproval')),
-            Column::make('validity')->title(__('status')),
+            Column::make('taxpayers.name')->title(('taxpayer'))->addClass('d-flex align-items-center'),
+            Column::make('invoice_no')->title(('invoice no')),
+            Column::make('order_no')->title(('order no')),
+            Column::make('nic')->title(('nic')),
+            Column::make('zones.name')->title(('zone')),
+            Column::make('taxpayers.address')->title(('address')),
+            Column::make('taxpayers.latitude')->title(('gps')),
+            Column::make('tax_labels.id')->title(('taxlabel')),
+            Column::make('total')->title(('amount'))->name('amount'),
+            Column::make('status')->title(('aproval')),
+            Column::make('validity')->title(('status')),
             Column::make('from_date')->title( __('from_date'))->addClass('text-nowrap'),
             Column::make('to_date')->title( __('expiry date'))->addClass('text-nowrap'),
             Column::computed('action')
