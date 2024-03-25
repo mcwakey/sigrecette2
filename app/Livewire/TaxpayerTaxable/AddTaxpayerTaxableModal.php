@@ -83,7 +83,7 @@ class AddTaxpayerTaxableModal extends Component
     protected $listeners = [
         'delete_taxpayer' => 'deleteUser',
         'update_taxable' => 'updateTaxpayerTaxable',
-        'add_taxable' => 'addTaxpayerTaxable',
+        'add_taxpayer_taxable' => 'addTaxpayerTaxable',
         'update_checkbox' => 'updateCheckbox',
         'load_drop' => 'load_drop',
         //'loadTaxable' => 'loadTaxable',
@@ -278,6 +278,7 @@ class AddTaxpayerTaxableModal extends Component
 
     public function addTaxpayerTaxable($id)
     {
+        //dd($id);
         $taxpayer = Taxpayer::find($id);
 
         $this->taxpayer_id = $taxpayer->id;

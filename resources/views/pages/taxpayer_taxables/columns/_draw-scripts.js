@@ -49,6 +49,14 @@ document.querySelectorAll('[data-kt-action="add_taxable"]').forEach(function (el
     });
 });
 
+// Add click event listener to update buttons
+document.querySelectorAll('[data-kt-action="add_taxpayer_taxable"]').forEach(function (element) {
+    element.addEventListener('click', function () {
+        console.log('add_taxpayer_taxable');
+        Livewire.dispatch('add_taxpayer_taxable', [this.getAttribute('data-kt-user-id')]);
+    });
+});
+
 
 // // Add click event listener to update buttons
 // document.querySelectorAll('[data-kt-action="load_invoice"]').forEach(function (element) {

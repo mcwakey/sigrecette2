@@ -308,7 +308,7 @@
 
                             <div class="card-toolbar">
                                 @hasanyrole(['agent_assiette','system_administrator'])
-                                    <button type="button" class="btn btn-light-success ms-auto me-5" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer_taxable" data-kt-action="add_taxable">
+                                    <button type="button" class="btn btn-light-success ms-auto me-5" data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer_taxable" data-kt-action="add_taxpayer_taxable">
                                         <i class="ki-duotone ki-add-files fs-3">
                                             <span class="path1"></span>
                                             <span class="path2"></span>
