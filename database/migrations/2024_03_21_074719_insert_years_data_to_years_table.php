@@ -15,7 +15,7 @@ return new class extends Migration
     {
         $now = Carbon::now();
 
-        for ($i = date('Y'); $i <= date('Y') + 30; $i++) {
+        for ($i = date('Y'); $i <= date('Y') + 40; $i++) {
             DB::table('years')->insert([
                 'name' => $i,
                 'status' => 'INACTIVE',

@@ -20,7 +20,7 @@ class AddYearModal extends Component
     public $edit_mode = false;
 
     protected $rules = [
-        'name' => 'required|string',
+        'name' => 'required|int',
         'status' => 'required|string',
     ];
 
@@ -36,6 +36,7 @@ class AddYearModal extends Component
 
     public function submit()
     {
+
         $this->validate();
 
         DB::transaction(function () {
@@ -45,11 +46,7 @@ class AddYearModal extends Component
                 'status' => $this->status,
             ];
             if($this->status=="ACTIVE"){
-                $activeYears = Year::where('status', "ACTIVE")->get();
-                foreach ($activeYears as $year){
-                    $year->status = "INACTIVE";
-                    $year->save();
-                }
+               Year::makeAllYearsInative();
             }
             $year = Year::find($this->year_id) ?? Year::create($data);
 
