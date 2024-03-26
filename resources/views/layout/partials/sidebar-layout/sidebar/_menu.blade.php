@@ -50,12 +50,18 @@
 					<!--end:Menu item-->
 					<!--begin:Menu item-->
 					<div class="menu-item">
+
+						@hasanyrole(['administrateur','agent_assiette','administrateur_system'])
+
                         <span class="menu-link ">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
 							</span>
                             <span class="menu-title" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer">{{ __('new taxpayer') }}</span>
                         </span>
+
+						@endhasanyrole
+
 						<a class="menu-link {{ request()->routeIs('taxpayers.*') ? 'active' : '' }}" href="{{ route('taxpayers.index') }}">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
@@ -133,8 +139,12 @@
 				<!--end:Menu sub-->
 			</div>
 			<!--end:Menu item-->
+
+
+			@hasanyrole(['administrateur','administrateur_system'])
+
 			<!--begin:Menu item-->
-			<div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('user-management.*') ? 'here show' : '' }}">
+			<div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('revenue.*') ? 'here show' : '' }}">
 				<!--begin:Menu link-->
 				<span class="menu-link">
 					<span class="menu-icon">{!! getIcon('abstract-28', 'fs-2') !!}</span>
@@ -235,6 +245,8 @@
 			</div>
 			<!--end:Menu item-->
 
+			@endhasanyrole
+
 			<!--begin:Menu item-->
 			<div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('geolocation.*') ? 'here show' : '' }}">
 							<!--begin:Menu link-->
@@ -255,12 +267,16 @@
 										<span class="menu-title">{{ __('zones') }}</span>
 									</a>
 
+									@hasanyrole(['administrateur','administrateur_system'])
+
 									<a class="menu-link {{ request()->routeIs('geolocation.users') ? 'active' : '' }}" href="{{ route('geolocation.users') }}">
 										<span class="menu-bullet">
 											<span class="bullet bullet-dot"></span>
 										</span>
 										<span class="menu-title">{{ __('users') }}</span>
 									</a>
+
+									@endhasanyrole
 									<!--end:Menu link-->
 								</div>
 								<!--end:Menu item-->
@@ -335,7 +351,7 @@
 
 			<!--end:Menu item-->
 
-			@hasanyrole(['administrator','system_administrator'])
+			@hasanyrole(['administrateur','administrateur_system',])
 
 			<!--begin:Menu item-->
 			<div class="menu-item pt-5">

@@ -33,10 +33,13 @@
 
                 </div>
             </div>
-            <button type="button" class="btn btn-light-success h-45px ms-auto" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer">
-                {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                {{ __('new taxpayer') }}
-            </button>
+
+            @hasanyrole(['administrateur','agent_assiette','administrateur_system'])
+                <button type="button" class="btn btn-light-success h-45px ms-auto" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer">
+                    {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                    {{ __('new taxpayer') }}
+                </button>
+            @endhasanyrole
 
         </div>
 

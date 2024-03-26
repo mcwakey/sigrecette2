@@ -22,29 +22,24 @@ class RolesPermissionsSeeder extends Seeder
         ];
 
         $permissions_by_role = [
-            'system_administrator' => [
-                'taxpayer',
-                'user',
-                'invoive',
+            'administrateur_system' => [],
 
-            ],
-            'administrator' => [
-                'taxpayer',
-                'user',
-                'invoive',
+            'administrateur' => [],
 
-            ],
-            'agent_assiette' => [
-                'taxpayer',
-                'invoive',
-            ],
-            'municipal_advisor' => [],
-            'agent_regisseur' => [],
+            'maire' => [],
+
+            'agent_assiette' => [],
+
+            'agent_delegation' => [],
+
+            'regisseur' => [],
+
             'agent_recouvrement' => [],
-            'agent_collecteur' => [],
+
+            'collecteur' => [],
         ];
 
-        foreach ($permissions_by_role['system_administrator'] as $permission) {
+        foreach ($permissions_by_role['administrateur_system'] as $permission) {
             foreach ($abilities as $ability) {
                 Permission::create(['name' => $ability . ' ' . $permission]);
             }
@@ -60,6 +55,13 @@ class RolesPermissionsSeeder extends Seeder
             Role::create(['name' => $role])->syncPermissions($full_permissions_list);
         }
 
-        User::find(1)->assignRole('system_administrator');
+        User::find(1)->assignRole('administrateur_system');
+        User::find(2)->assignRole('administrateur');
+        User::find(3)->assignRole(['maire']);
+        User::find(4)->assignRole('agent_delegation');
+        User::find(5)->assignRole('agent_assiette');
+        User::find(6)->assignRole('regisseur');
+        User::find(7)->assignRole('agent_recouvrement');
+        User::find(8)->assignRole('collecteur');
     }
 }
