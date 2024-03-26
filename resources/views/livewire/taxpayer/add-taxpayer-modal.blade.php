@@ -1,7 +1,9 @@
 <div class="modal fade" id="kt_modal_add_taxpayer" tabindex="-1" aria-hidden="true" wire:ignore.self>
     <!--begin::Modal dialog-->
-    <div class="modal-dialog modal-dialog-centered mw-1000px">
-        <!--begin::Modal content-->
+    <!--<div class="modal-dialog modal-dialog-centered mw-1000px">-->
+   <div class="modal-dialog modal-fullscreen ">
+
+       <!--begin::Modal content-->
         <div class="modal-content">
             <!--begin::Modal header-->
             <div class="modal-header" id="kt_modal_add_taxpayer_header">
@@ -154,7 +156,7 @@
                                     <input type="text" wire:model="mobilephone" name="mobilephone" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('mobilephone') }}" />
                                     <!--end::Input-->
                                 </div>
-                                
+
                                 @error('mobilephone')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
@@ -182,9 +184,9 @@
                         <!--begin::Input group-->
 
                         <div class="separator saperator-dashed my-5"></div>
-                        
+
                         <div class="row mb-7">
-                            
+
                             <div class="col-md-3">
                                 <!--begin::Label-->
                                 <label class="fw-semibold fs-6 mb-2">{{ __('social work') }}</label>
@@ -357,7 +359,7 @@
                             </div>
                         </div>
                         <div class="row mb-7">
-                            
+
                             <div class="col-md-6">
                                 <!--begin::Label-->
                                 <label class="fw-semibold fs-6 mb-2">{{ __('address') }}</label>
@@ -389,7 +391,7 @@
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>
-                        
+
                         <!--end::Input group-->
                     </div>
                     <!--end::Scroll-->
