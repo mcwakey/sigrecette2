@@ -230,6 +230,7 @@ class AddInvoiceModal extends Component
             if ($this->edit_mode) {
                 $invoiceData['amount'] = $this->amount_e;
                 $invoiceData['reduce_amount'] = $this->reduce_amount;
+                //FIX CANCEL INVOICE BUG
                 if (intval($this->reduce_amount)===0){
                     $invoiceData['reduce_amount']=$this->amount_e;
                 }
