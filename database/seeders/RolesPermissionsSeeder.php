@@ -22,7 +22,29 @@ class RolesPermissionsSeeder extends Seeder
         ];
 
         $permissions_by_role = [
-            'administrateur_system' => [],
+            'administrateur_system' => [
+                'invoive',
+                'taxpayer',
+                'taxpayer_taxable',
+                'town',
+                'canton',
+                'taxlabel',
+                'taxable',
+                'year',
+                'gender',
+                'erea',
+                'taxable',
+                'payment',
+                'user',
+                'user_log',
+                'year',
+                'zone',
+                'commune',
+                'address',
+                'activity',
+                'account',
+                'category'
+            ],
 
             'administrateur' => [],
 

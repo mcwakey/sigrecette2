@@ -6,7 +6,7 @@
             <!--begin::Modal header-->
             <div class="modal-header" id="kt_modal_add_user_header">
                 <!--begin::Modal title-->
-                <h2 class="fw-bold">Add User</h2>
+                <h2 class="fw-bold">{{ __('add_user') }}</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
@@ -78,7 +78,7 @@
                         <!--begin::Input group-->
                         <div class="fv-row mb-7">
                             <!--begin::Label-->
-                            <label class="required fw-semibold fs-6 mb-2">Full Name</label>
+                            <label class="required fw-semibold fs-6 mb-2">{{ __('fullname') }}</label>
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="text" wire:model="name" name="name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Full name"/>
@@ -90,7 +90,7 @@
                         <!--begin::Input group-->
                         <div class="fv-row mb-7">
                             <!--begin::Label-->
-                            <label class="required fw-semibold fs-6 mb-2">Email</label>
+                            <label class="required fw-semibold fs-6 mb-2">{{ __('email') }}</label>
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="email" wire:model="email" name="email" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="example@domain.com"/>
@@ -102,7 +102,7 @@
                         <!--begin::Input group-->
                         <div class="mb-7">
                             <!--begin::Label-->
-                            <label class="required fw-semibold fs-6 mb-5">Role</label>
+                            <label class="required fw-semibold fs-6 mb-5">{{__('Role')}}</label>
                             <!--end::Label-->
                             @error('role')
                             <span class="text-danger">{{ $message }}</span> @enderror
@@ -112,19 +112,18 @@
                                 <div class="d-flex fv-row">
                                     <!--begin::Radio-->
                                     <div class="form-check form-check-custom form-check-solid">
-                                        @if($role->name == 'system_administrator')
-                                            @hasanyrole(['system_administrator'])
+                                        @if($role->name == 'administrateur_system')
+                                            @hasanyrole(['administrateur_system'])
                                                 <!--begin::Input-->
                                                 <input class="form-check-input me-3" id="kt_modal_update_role_option_{{ $role->id }}" wire:model="role" name="role" type="radio" value="{{ $role->name }}" checked="checked"/>
                                                 <!--end::Input-->
                                                 <!--begin::Label-->
                                                 <label class="form-check-label" for="kt_modal_update_role_option_{{ $role->id }}">
                                                     <div class="fw-bold text-gray-800">
-                                                        {{ ucwords($role->name) }}
+                                                        {{ ucwords(__($role->name)) }}
                                                     </div>
                                                 </label>
                                                 <!--end::Label-->
-                                            
                                             @endhasanyrole
 
                                         @else
@@ -135,7 +134,7 @@
                                             <!--begin::Label-->
                                             <label class="form-check-label" for="kt_modal_update_role_option_{{ $role->id }}">
                                                 <div class="fw-bold text-gray-800">
-                                                    {{ ucwords($role->name) }}
+                                                    {{ ucwords(__($role->name)) }}
                                                 </div>
                                             </label>
                                             <!--end::Label-->
@@ -158,11 +157,11 @@
                     <!--end::Scroll-->
                     <!--begin::Actions-->
                     <div class="text-center pt-15">
-                        <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal" aria-label="Close" wire:loading.attr="disabled">Discard</button>
+                        <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal" aria-label="Close" wire:loading.attr="disabled">{{ __('cancel') }}</button>
                         <button type="submit" class="btn btn-primary" data-kt-users-modal-action="submit">
-                            <span class="indicator-label" wire:loading.remove>Submit</span>
+                            <span class="indicator-label" wire:loading.remove>{{ __('submit') }}</span>
                             <span class="indicator-progress" wire:loading wire:target="submit">
-                                Please wait...
+                                {{ __('please wait...') }}
                                 <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                             </span>
                         </button>

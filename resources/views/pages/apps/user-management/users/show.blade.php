@@ -113,15 +113,15 @@
                     <div id="kt_user_view_details" class="collapse show">
                         <div class="pb-5 fs-6">
                             <!--begin::Details item-->
-                            <div class="fw-bold mt-5">Account ID</div>
-                            <div class="text-gray-600">ID-45453423</div>
+                            <div class="fw-bold mt-5">{{ __('account id') }}</div>
+                            <div class="text-gray-600">{{ $user->id }}</div>
                             <!--begin::Details item-->
                             <!--begin::Details item-->
-                            <div class="fw-bold mt-5">Email</div>
+                            <div class="fw-bold mt-5">{{ __('email') }}</div>
                             <div class="text-gray-600">
-                                <a href="#" class="text-gray-600 text-hover-primary">info@keenthemes.com</a>
+                                <a href="#" class="text-gray-600 text-hover-primary">{{ $user->email }}</a>
                             </div>
-                            <!--begin::Details item-->
+                            {{-- <!--begin::Details item-->
                             <!--begin::Details item-->
                             <div class="fw-bold mt-5">Address</div>
                             <div class="text-gray-600">101 Collin Street,
@@ -136,7 +136,7 @@
                             <!--begin::Details item-->
                             <div class="fw-bold mt-5">Last Login</div>
                             <div class="text-gray-600">05 May 2023, 9:23 pm</div>
-                            <!--begin::Details item-->
+                            <!--begin::Details item--> --}}
                         </div>
                     </div>
                     <!--end::Details content-->
@@ -144,7 +144,9 @@
                 <!--end::Card body-->
             </div>
             <!--end::Card-->
-            <!--begin::Connected Accounts-->
+
+
+            {{-- <!--begin::Connected Accounts-->
             <div class="card mb-5 mb-xl-8">
                 <!--begin::Card header-->
                 <div class="card-header border-0">
@@ -257,7 +259,8 @@
                 </div>
                 <!--end::Card footer-->
             </div>
-            <!--end::Connected Accounts-->
+            <!--end::Connected Accounts--> --}}
+
         </div>
         <!--end::Sidebar-->
         <!--begin::Content-->

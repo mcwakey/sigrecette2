@@ -20,7 +20,7 @@
                     <div class="card-header">
                         <!--begin::Card title-->
                         <div class="card-title">
-                            <h2 class="mb-0">{{ ucwords($role->name) }}</h2>
+                            <h2 class="mb-0">{{ ucwords(__($role->name)) }}</h2>
                         </div>
                         <!--end::Card title-->
                     </div>
@@ -44,7 +44,7 @@
                             @if($role->permissions->count() ===0)
                                 <div class="d-flex align-items-center py-2">
                                     <span class='bullet bg-primary me-3'></span>
-                                    <em>No permissions given...</em>
+                                    <em>{{__('no permissions given')}}...</em>
                                 </div>
                             @endif
                         </div>
@@ -52,9 +52,9 @@
                     </div>
                     <!--end::Card body-->
                     <!--begin::Card footer-->
-                    <div class="card-footer pt-0">
+                    {{-- <div class="card-footer pt-0">
                         <button type="button" class="btn btn-light btn-active-primary" data-role-id="{{ $role->name }}" data-bs-toggle="modal" data-bs-target="#kt_modal_update_role">Edit Role</button>
-                    </div>
+                    </div> --}}
                     <!--end::Card footer-->
                 </div>
                 <!--end::Card-->
@@ -68,7 +68,8 @@
                     <div class="card-header pt-5">
                         <!--begin::Card title-->
                         <div class="card-title">
-                            <h2 class="d-flex align-items-center">Users Assigned
+                            <h2 class="d-flex align-items-center">
+                               {{ __('users assigned')}}
                                 <span class="text-gray-600 fs-6 ms-1">({{ $role->users->count() }})</span>
                             </h2>
                         </div>

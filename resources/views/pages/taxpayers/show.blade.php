@@ -855,7 +855,7 @@
                                                                 </div>
                                                                 @if ($invoice->status !== 'CANCELED')
                                                                     @if ($invoice->pay_status != 'PAID')
-                                                                        @hasanyrole(['agent_assiette',
+                                                                        @hasanyrole(['agent_recouvrement',
                                                                             'administrateur_system'])
                                                                             <div class="menu-item px-3">
                                                                                 <a href="#" class="menu-link px-3"

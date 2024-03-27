@@ -10,12 +10,15 @@
     "all":"Tous",
     "active":"Active",
     "inactive": "Désactivé",
-    "add_payer" :"Ajouter un Contribuable",
+    "users assigned" : "Utilisateurs assignés",
+    "add_payer" :"Ajouter un contribuable",
+    "add_user" :"Ajouter un utilisateur",
     "delete_selected": "Supprimer la selection",
     "selected" : "sélectionné",
     "name" : "Nom",
     "gender" : "Genre",
     "search_payer" : "Rechercher un Contribuable",
+    "search_user" : "Rechercher un Utilisateur",
     "action" : "Action",
     "created_date" : "Date de Création",
     "telephone" : "Autre téléphone",
@@ -65,6 +68,8 @@
     "ereas" : "Quartiers",
     "user management" : "Gestion d'utilisateurs",
     "users" : "Utilisateurs",
+    "user" : "Utilisateur",
+    "total users with this role" : "Nombre total d'utilisateurs avec ce rôle",
     "permissions" : "Permissions",
     "roles" : "Roles",
     "show header menu" : "Montrer l'entete",
@@ -107,6 +112,7 @@
 
     "actions" : "Actions",
     "view" : "Afficher",
+    "view role" : "Afficher le role",
     "delete" : "Supprimer",
     "edit" : "Modifier",
 
@@ -318,5 +324,20 @@
     "commune_name": "Nom",
     "commune_title": "Préfixe de la commune",
     "region_name":"Nom de la région",
-    "select an région": "Sélectionner une région"
+    "select an région": "Sélectionner une région",
+
+    "last_login" : "Dernière Connexion",
+    "joined_date" : "Date d'inscription",
+
+    "administrateur_system" : "Administrateur Système",
+    "administrateur" : "Administrateur",
+    "maire" : "Maire",
+    "agent_assiette" : "agent d'assiette",
+    "agent_delegation" : "Agent par délégation",
+    "agent_recouvrement" : "Agent de recouvrement",
+    "regisseur" : "regisseur",
+    "collecteur" : "collecteur",
+
+    "no permissions given" : "Aucune autorisation donnée"
+
 }

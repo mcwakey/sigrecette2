@@ -51,7 +51,7 @@
 					<!--begin:Menu item-->
 					<div class="menu-item">
 
-						@hasanyrole(['administrateur','agent_assiette','administrateur_system'])
+						@hasanyrole(['agent_assiette','agent_recouvrement','administrateur_system'])
 
                         <span class="menu-link ">
 							<span class="menu-bullet">
@@ -89,7 +89,7 @@
 			</div>
 			<!--end:Menu item-->
 
-			@hasanyrole(['regisseur','maire','administrateur_system'])
+			@hasanyrole(['regisseur','maire','administrateur_system','agent_assiette'])
 
 			<!--begin:Menu item-->
 			<div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('invoices.*') ? 'here show' : '' }}">
@@ -199,6 +199,12 @@
 				<!--end:Menu sub-->
 			</div>
 			<!--end:Menu item-->
+
+			@endhasanyrole
+
+
+			@hasanyrole(['regisseur','maire','administrateur_system'])
+
 			<div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('user-management.*') ? 'here show' : '' }}">
 				<!--begin:Menu link-->
 				<span class="menu-link">
@@ -545,6 +551,8 @@
 						<!--end:Menu link-->
 					</div>
 					<!--end:Menu item-->
+
+{{-- 					
 					<!--begin:Menu item-->
 					<div class="menu-item">
 						<!--begin:Menu link-->
@@ -556,7 +564,9 @@
 						</a>
 						<!--end:Menu link-->
 					</div>
-					<!--end:Menu item-->
+					<!--end:Menu item--> --}}
+
+
 				</div>
 				<!--end:Menu sub-->
 			</div>

@@ -24,7 +24,7 @@ class UsersDataTable extends DataTable
                 return view('pages/apps.user-management.users.columns._user', compact('user'));
             })
             ->editColumn('role', function (User $user) {
-                return ucwords($user->roles->first()?->name);
+                return ucwords(__($user->roles->first()?->name));
             })
             ->editColumn('last_login_at', function (User $user) {
                 return sprintf('<div class="badge badge-light fw-bold">%s</div>', $user->last_login_at ? $user->last_login_at->diffForHumans() : $user->updated_at->diffForHumans());
@@ -69,10 +69,10 @@ class UsersDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('user')->addClass('d-flex align-items-center')->name('name'),
+            Column::make('user')->addClass('d-flex align-items-center')->name('name')->title(__('user')),
             Column::make('role')->searchable(false),
-            Column::make('last_login_at')->title('Last Login'),
-            Column::make('created_at')->title('Joined Date')->addClass('text-nowrap'),
+            Column::make('last_login_at')->title(__('last_login')),
+            Column::make('created_at')->title(__('joined_date'))->addClass('text-nowrap'),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
                 ->exportable(false)
