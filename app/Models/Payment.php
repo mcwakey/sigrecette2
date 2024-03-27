@@ -16,6 +16,7 @@ class Payment extends Model
         'remaining_amount',
         'taxpayer_id',
         'invoice_id',
+        'user_id',
     ];
 
     public function invoice()
@@ -26,5 +27,9 @@ class Payment extends Model
     public function taxpayer()
     {
         return $this->belongsTo(Taxpayer::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
