@@ -18,5 +18,13 @@ class Commune extends Model
         'treasury_rib',
     ];
 
-
+    /**
+     * Get the first commune.
+     *
+     * @return Commune|null
+     */
+    public static function getFirstCommune(): ?Commune
+    {
+        return Commune::orderBy('id')->first();
+    }
 }

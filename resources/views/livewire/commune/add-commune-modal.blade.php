@@ -25,6 +25,22 @@
                         <!--begin::Input group-->
 
                         <div class="row mb-7">
+
+                            <div class="col-md-4">
+                                <!--begin::Label-->
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('commune_title') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select wire:model="title" name="title" class="form-select mb-3 mb-lg-0" data-dropdown-parent="#kt_modal_add_commune">
+                                    <option>Sélectionnez le préfixe :</option>
+                                    <option value="de" selected >{{ __('Commune de') }}</option>
+                                    <option value="d'">{{ __("Commune d'") }}</option>
+                                </select>
+
+                                <!--end::Input-->
+                                @error('title')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
                             <div class="col-md-4">
                                 <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('commune_name') }}</label>
@@ -37,20 +53,10 @@
                             </div>
                             <div class="col-md-4">
                                 <!--begin::Label-->
-                                <label class="required fw-semibold fs-6 mb-2">{{ __('commune_title') }}</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" wire:model="title" name="title" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('commune_title') }}"/>
-                                <!--end::Input-->
-                                @error('title')
-                                <span class="text-danger">{{ $message }}</span> @enderror
-                            </div>
-                            <div class="col-md-4">
-                                <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('region_name') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <select wire:model="region_name" name="region_name" class="form-select" data-dropdown-parent="#kt_modal_add_taxpayer">
+                                <select wire:model="region_name" name="region_name" class="form-select" data-dropdown-parent="#kt_modal_add_commune">
                                     <option>{{ __('select an région') }}</option>
                                     <option value="REGION MARITIME">{{ __('Région Maritime') }}</option>
                                     <option value="REGION DES PLATEAUX">{{ __('Région des Plateaux') }}</option>

@@ -309,5 +309,6 @@
     "" : "",
     "" : "",
     "canton_name" : "Canton name",
-    "create_canton": "Create canton"
+    "create_canton": "Create canton",
+    "create commune": "create commune"
 }

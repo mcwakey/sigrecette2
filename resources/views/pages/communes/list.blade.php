@@ -14,25 +14,28 @@
             <!--begin::Card title-->
             <div class="card-title">
                 <!--begin::Search-->
-                <div class="d-flex align-items-center position-relative my-1">
-                    {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
-                    <input type="text" data-kt-taxpayer-table-filter="search" class="form-control  w-250px ps-13" placeholder="{{ __('search') }}" id="mySearchInput"/>
-                </div>
+
                 <!--end::Search-->
             </div>
             <!--begin::Card title-->
 
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
-                <!--begin::Toolbar-->
-                <div class="d-flex justify-content-end" data-kt-commune-table-toolbar="base">
-                    <!--begin::Add user-->
-                    <button type="button" class="btn btn-light-success h-45px ms-auto" data-bs-toggle="modal" data-bs-target="#kt_modal_add_commune">
-                        {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        {{ __('new commune') }}
-                    </button>
-                    <!--end::Add user-->
-                </div>
+               @php
+               $commune= \App\Models\Commune::getFirstCommune();
+               @endphp
+
+                @if(!$commune)
+                    <div class="d-flex justify-content-end" data-kt-commune-table-toolbar="base">
+                        <!--begin::Add user-->
+                        <button type="button" class="btn btn-light-success h-45px ms-auto" data-bs-toggle="modal" data-bs-target="#kt_modal_add_commune">
+                            {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                            {{ __('create commune') }}
+                        </button>
+                        <!--end::Add user-->
+                    </div>
+                @endif
+
             </div>
             <!--end::Card toolbar-->
         </div>

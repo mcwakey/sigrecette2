@@ -5,16 +5,28 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Date;
+use Throwable;
 
 class Year extends Model
 {
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'name',
         'status',
             ];
     use HasFactory;
 
+    /**
+     * Get the active year.
+     *
+     * @return Year|null
+     * @throws \Throwable
+     */
     public static function  getActiveYear():Year {
         $currentYear = date('Y');
         $activeYear = Year::where('status', "ACTIVE")->first();
@@ -27,12 +39,19 @@ class Year extends Model
                 $activeYear->save();
             });
         }
-        if ($activeYear->name != $currentYear) {
+        //&&  !(Date::today())->isSameAs('12-31')
+        if (intval($activeYear->name) < intval($currentYear)) {
             return Year::AutoUpdateActiveYear();
         }
 
         return $activeYear;
     }
+    /**
+     * Automatically updates the active year.
+     *
+     * @return Year|null
+     * @throws Throwable
+     */
     public static function AutoUpdateActiveYear(): ?Year{
         $active_year=  Year::where('status', "ACTIVE")->first();
         if (!$active_year) {
@@ -54,6 +73,11 @@ class Year extends Model
        return null;
 
     }
+    /**
+     * Makes all years inactive.
+     *
+     * @throws Throwable
+     */
     public static function makeAllYearsInative(){
         DB::transaction(function ()  {
             $activeYears = Year::where('status', "ACTIVE")->get();

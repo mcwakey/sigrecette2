@@ -313,10 +313,10 @@
     "treasury_name": "Nom de la Trésorerie",
     "treasury_address": "Addresse de la Trésorerie",
     "treasury_rib":"RIB",
-    "create commune": "Configurer les informations d'une commune",
+    "create commune": "Configurer les informations de la commune",
     "from_date": "Date d'émmission",
     "commune_name": "Nom",
-    "commune_title": "Titre",
+    "commune_title": "Préfixe de la commune",
     "region_name":"Nom de la région",
     "select an région": "Sélectionner une région"
 }
