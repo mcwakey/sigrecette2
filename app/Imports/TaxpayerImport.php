@@ -32,6 +32,9 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
     public function model(array $row)
     {
 
+        if (!isset($row['nom'])) {
+            return null;
+        }
         $currentRowNumber = $this->getRowNumber();
         $chunkOffset = $this->getChunkOffset();
        // dump($currentRowNumber);
@@ -74,9 +77,9 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
                 'longitude' =>  $row["longitude"],
                 'latitude' => $row["latitude"],
                 'address' => $row["adresse"],
-                'town_id' => $town->id?:random_int(1, 6),
-                'erea_id' => $erea->id?: random_int(1, 2),
-                'zone_id' => $zone->id ?: random_int(1, 3),
+                'town_id' =>$town ? $town->id : random_int(1, 6),
+                'erea_id' => $erea? $erea->id: random_int(1, 2),
+                'zone_id' => $zone ?$zone->id : random_int(1, 3),
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
                 'remember_token' => Str::random(10),
 
@@ -99,9 +102,9 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
                 'longitude' =>  $row["longitude"],
                 'latitude' => $row["latitude"],
                 'address' => $row["adresse"],
-                'town_id' => $town->id?:random_int(1, 6),
-                'erea_id' => $erea->id?: random_int(1, 2),
-                'zone_id' => $zone->id ?: random_int(1, 3),
+                'town_id' =>  $town ? $town->id : random_int(1, 6),
+                'erea_id' => $erea? $erea->id: random_int(1, 2),
+                'zone_id' => $zone ?$zone->id : random_int(1, 3),
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
                 'remember_token' => Str::random(10),
 
