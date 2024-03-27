@@ -88,6 +88,9 @@
 				<!--end:Menu sub-->
 			</div>
 			<!--end:Menu item-->
+
+			@hasanyrole(['regisseur','maire','administrateur_system'])
+
 			<!--begin:Menu item-->
 			<div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('invoices.*') ? 'here show' : '' }}">
 				<!--begin:Menu link-->
@@ -140,8 +143,10 @@
 			</div>
 			<!--end:Menu item-->
 
+			@endhasanyrole
 
-			@hasanyrole(['administrateur','administrateur_system'])
+
+			@hasanyrole(['regisseur','maire','administrateur_system'])
 
 			<!--begin:Menu item-->
 			<div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('revenue.*') ? 'here show' : '' }}">
@@ -251,7 +256,7 @@
 			<div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('geolocation.*') ? 'here show' : '' }}">
 							<!--begin:Menu link-->
 							<span class="menu-link">
-								<span class="menu-icon">{!! getIcon('user', 'fs-2') !!}</span>
+								<span class="menu-icon">{!! getIcon('map', 'fs-2') !!}</span>
 								<span class="menu-title">{{ __('Geolocation') }}</span>
 								<span class="menu-arrow"></span>
 							</span>

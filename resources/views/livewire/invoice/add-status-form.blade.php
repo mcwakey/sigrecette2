@@ -10,7 +10,7 @@
             placeholder="{{ __('invoice_id') }}" />
 
         @if ($status == 'PENDING')
-            @hasanyrole(['regisseur', 'system_administrator'])
+            @hasanyrole(['regisseur', 'administrateur_system'])
                 <select class="form-select form-select-solid" wire:model="status" name="status"
                     data-placeholder="Select option" data-allow-clear="true">
                     <option></option>
@@ -20,7 +20,7 @@
             @endhasanyrole
         @elseif($status == 'DRAFT')
             <select class="form-select form-select-solid" wire:model="status" name="status"
-                @hasanyrole(['agent_delegation', 'system_administrator'])
+                @hasanyrole(['agent_delegation', 'administrateur_system'])
                 data-placeholder="Select option" data-allow-clear="true">
                 <option></option>
                 <option value="PENDING">{{ __('ACCEPTED') }}</option>

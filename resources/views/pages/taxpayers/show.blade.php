@@ -118,15 +118,6 @@
                         @endauth
 
                         {{-- dd (auth()->user()->can('edit taxpayer')) --}}
-
-                        @auth
-                            @can('edit Taxpayers')
-                                {{ auth()->user()->name }}&nbsp;
-                            @endcan
-                            <div class="text-end">
-                                <a href="{{-- route('logout.perform') --}}" class="btn btn-outline-light me-2">Logout</a>
-                            </div>
-                        @endauth
                     </div>
 
                     <!--end::Details toggle-->
@@ -639,7 +630,7 @@
                                                     <td>
                                                         @if ($invoice->status == 'APROVED')
                                                         @if ($invoice->delivery == 'NOT DELIVERED')
-                                                            @hasanyrole(['agent_assiette','administrateur_system'])
+                                                            @hasanyrole(['agent_recouvrement','administrateur_system'])
                                                                 <button type="button"
                                                                     class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
                                                                     data-kt-user-id="{{ $invoice->id }}"
@@ -680,7 +671,7 @@
                                                                 {{ date('Y-m-d', strtotime($invoice->delivery_date)) }}
                                                             @endif
                                                         @else
-                                                            Pas encore livré    
+                                                            Pas encore livrée  
                                                         @endif
                                                     </td>
 
