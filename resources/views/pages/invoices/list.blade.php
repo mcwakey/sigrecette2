@@ -55,30 +55,31 @@
                                 {{ __('Bordereau journal des avis des sommes à payer') }}
                             </a>
                         </div>
+                        <!--
 
-                        <div class="menu-item px-3">
+                         <div class="menu-item px-3">
                             <a href="#" class="menu-link px-3 print-link" data-type="3" target="_blank">
                                 {{ __('Journal des avis des sommes à payer') }}
-                            </a>
-                        </div>
-
-                        <div class="menu-item px-3">
+                        </a>
+                    </div>
+                     <div class="menu-item px-3">
                             <a href="#" class="menu-link px-3 print-link" data-type="4" target="_blank">
                                 {{ __('Fiche de distribution des avis') }}
-                            </a>
-                        </div>
-
-                        <div class="menu-item px-3">
+                        </a>
+                    </div>
+                      <div class="menu-item px-3">
                             <a href="#" class="menu-link px-3 print-link" data-type="5" target="_blank">
                                 {{ __('Fiche de recouvrement des avis distribués') }}
-                            </a>
-                        </div>
+                        </a>
+                    </div>
+-->
 
-                        <div class="menu-item px-3">
-                            <a href="#" class="menu-link px-3 print-link" data-type="6" target="_blank">
-                                {{ __('Fiche de recouvrement des avis distribués') }}
-                            </a>
-                        </div>
+
+
+
+
+
+
                     </div>
 
                 </div>
@@ -106,7 +107,7 @@
 
                     @endhasanyrole
 
-                    
+
                     <!--end::Add user-->
                 </div>
                 <div class="d-flex justify-content-end" data-kt-invoice-table-toolbar="base">

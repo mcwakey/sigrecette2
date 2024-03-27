@@ -67,7 +67,7 @@
 
                         <div class="row mb-2">
                             <div class="col-md-3">
-                                <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('Duree du contrat') }}" readonly />
+                                <label class="required form-control form-control-flush text-end"> {{ __('Duree du contrat') }}</label>
                             </div>
                             <div class="col-md-2">
                                 <div class="position-relative" data-kt-dialer="true" data-kt-dialer-min="0" data-kt-dialer-max="12" data-kt-dialer-step="1">
@@ -94,10 +94,10 @@
 
                             </div>
                             <div class="col-md-2">
-                                <input type="text" value="Mois" class="required form-control form-control-flush" readonly />
+                                <label class="form-control form-control-flush"  > Mois</label>
                             </div>
                             <div class="col-md-2">
-                                <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('A compter de') }}" readonly />
+                                <label  class="required form-control form-control-flush text-end">{{ __('A compter de') }} </label>
                             </div>
                             <div class="col-md-3">
                             <div class="input-group mb-2">
@@ -122,7 +122,7 @@
                             </div>
 
                         </div>
-                     
+
 
                         <div class="separator separator-dashed my-2"></div>
 
