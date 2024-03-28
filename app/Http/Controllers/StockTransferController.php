@@ -9,6 +9,6 @@ class StockTransferController extends Controller
 {
     public function index(StockTransfersDataTable $dataTable)
     {
-        return $dataTable->render('pages/stock_Transfers.list');
+        return $dataTable->render('pages/stock_transfers.list');
     }
 }
