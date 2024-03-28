@@ -126,7 +126,7 @@
                     $item[__('aproval')] = "PC";
                     break;
                 case "REJETÉ":
-                    $item[__('aproval')] = "RJ";
+                    $item[__('aproval')] = "REJETÉ";
                     break;
                 default:
                     $item[__('aproval')] = "";
