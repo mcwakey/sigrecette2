@@ -22,7 +22,10 @@ use App\Http\Controllers\Apps\PermissionManagementController;
 use App\Http\Controllers\Apps\UserManagementController;
 use App\Http\Controllers\EreasController;
 use App\Http\Controllers\Geolocation;
+use App\Http\Controllers\StockRequestController;
+use App\Http\Controllers\StockTransferController;
 use App\Http\Controllers\TownsController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -61,6 +64,10 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/geolocation/zone', [Geolocation::class, 'setZoneGeolocation'])->name('zone');
     });
 
+    Route::name('accounts.')->group(function () {
+        Route::resource('/accounts/stock-requests', StockRequestController::class);
+        Route::resource('/accounts/stock-transfers', StockTransferController::class);
+    });
 
     Route::name('settings.')->group(function () {
         Route::resource('/taxables', TaxableController::class);

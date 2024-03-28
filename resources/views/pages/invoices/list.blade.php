@@ -247,6 +247,7 @@
     <!--end::Modal-->
 
     @push('scripts')
+<<<<<<< Updated upstream
         {{ $dataTable->scripts() }}
         <script>
             document.getElementById('mySearchInput').addEventListener('keyup', function() {

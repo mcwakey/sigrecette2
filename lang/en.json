@@ -318,6 +318,7 @@
     "last_login": "Last Login",
     "joined_date": "Joined Date",
 
+
     "administrateur_system": "Administrateur Système",
     "administrateur": "Administrateur",
     "maire": "Mayor",
@@ -327,5 +328,39 @@
     "collecteur": "collector",
 
     "no permissions given": "No permissions given",
-    "You have to change your password to login." : "You have to change your password to login."
+    "You have to change your password to login." : "You have to change your password to login.",
+
+
+    "new stock request" : "New Stock Request",
+    "account state" : "Account State",
+    "print account state" : "Print Account State",
+    "valeur inactif" : "Taxable",
+    "request summary" : "Request Summary",
+    "qty" : "Quantity",
+    "req no" : "Request No",
+    "start no" : "Start No",
+    "end no" : "End No",
+    "stock request": "Stock requests",
+
+    "comptabilite des valeurs inactives" : "",
+    "comptabilite des valeurs inactives du collecteur" : "",
+
+    "close" : "Close",
+    "new deposit" : "New Deposit",
+    "new supply" : "New Supply",
+    "" : "",
+    "" : "",
+    "" : "",
+    "" : "",
+    "" : "",
+    "" : "",
+    "" : "",
+    "" : "",
+    "" : "",
+    "" : "",
+    "" : "",
+    "" : "",
+    "" : "",
+    "" : "",
+    "" : ""
 }
