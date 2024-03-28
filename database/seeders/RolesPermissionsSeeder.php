@@ -22,49 +22,66 @@ class RolesPermissionsSeeder extends Seeder
         ];
 
         $permissions_by_role = [
-            'super_administrator' => [
+            'administrateur_system' => [
+                'invoive',
                 'taxpayer',
-                'user management',
-                'content management',
-                'financial management',
-                'reporting',
-                'payroll',
-                'disputes management',
-                'api controls',
-                'database management',
-                'repository management',
+                'taxpayer_taxable',
+                'town',
+                'canton',
+                'taxlabel',
+                'gender',
+                'erea',
+                'taxable',
+                'payment',
+                'user',
+                'user_log',
+                'year',
+                'zone',
+                'commune',
+                'address',
+                'activity',
+                'account',
+                'category'
             ],
-            'administrator' => [
-                'taxpayer',
-                'user management',
-                'content management',
-                'financial management',
-                'reporting',
-                'payroll',
-                'disputes management',
-                'api controls',
-                'database management',
-                'repository management',
+
+            'administrateur' => [],
+
+            'maire' => [
+                'user',
+                'year',
+                'zone',
+                'commune',
+                'town',
+                'canton',
+                'taxpayer_taxable',
             ],
+
             'agent_assiette' => [
-                'api controls',
-                'database management',
-                'repository management',
+                'invoive',
+                'taxpayer',
             ],
-            'agent_regisseur' => [
-                'content management',
-                'financial management',
-                'reporting',
-                'payroll',
+
+            'agent_delegation' => [
+                'invoive',
+                'taxpayer',
             ],
+
+            'regisseur' => [
+                'invoive',
+                'taxpayer',
+                'payment',
+            ],
+
             'agent_recouvrement' => [
-                'reporting',
+                'payment',
             ],
-            'agent_collecteur' => [
+
+            'collecteur' => [
+                'payment',
             ],
         ];
 
-        foreach ($permissions_by_role['super_administrator'] as $permission) {
+        foreach ($permissions_by_role['administrateur_system'] as $permission) {
             foreach ($abilities as $ability) {
                 Permission::create(['name' => $ability . ' ' . $permission]);
             }
@@ -80,7 +97,13 @@ class RolesPermissionsSeeder extends Seeder
             Role::create(['name' => $role])->syncPermissions($full_permissions_list);
         }
 
-        User::find(1)->assignRole('super_administrator');
-        //User::find(2)->assignRole('developer');
+        User::find(1)->assignRole('administrateur_system');
+        User::find(2)->assignRole('administrateur');
+        User::find(3)->assignRole(['maire']);
+        User::find(4)->assignRole('agent_delegation');
+        User::find(5)->assignRole('agent_assiette');
+        User::find(6)->assignRole('regisseur');
+        User::find(7)->assignRole('agent_recouvrement');
+        User::find(8)->assignRole('collecteur');
     }
 }

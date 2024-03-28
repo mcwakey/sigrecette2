@@ -43,9 +43,17 @@ document.querySelectorAll('[data-kt-action="update_taxpayer"]').forEach(function
 
 // Add click event listener to update buttons
 document.querySelectorAll('[data-kt-action="add_taxable"]').forEach(function (element) {
+    element.addEventListener('change', function () {
+        console.log('add_taxable');
+        Livewire.dispatch('add_taxable', [this.value]);
+    });
+});
+
+// Add click event listener to update buttons
+document.querySelectorAll('[data-kt-action="add_taxpayer_taxable"]').forEach(function (element) {
     element.addEventListener('click', function () {
-        //console.log('add_taxable');
-        Livewire.dispatch('add_taxable', [this.getAttribute('data-kt-user-id')]);
+        console.log('add_taxpayer_taxable');
+        Livewire.dispatch('add_taxpayer_taxable', [this.getAttribute('data-kt-user-id')]);
     });
 });
 
@@ -63,9 +71,9 @@ document.querySelectorAll('[data-kt-action="add_taxable"]').forEach(function (el
 // Add click event listener to update buttons
 document.querySelectorAll('[data-kt-action="load_invoice"]').forEach(function (element) {
     element.addEventListener('change', function () {
-        console.log(this.value);
-        var value = this.value;
-        Livewire.dispatch('load_invoice', [value]);
+        //console.log(this.value);
+        //var value = value;
+        Livewire.dispatch('load_invoice', [this.value]);
     });
 });
 
@@ -73,11 +81,20 @@ document.querySelectorAll('[data-kt-action="load_invoice"]').forEach(function (e
 // Add click event listener to update buttons
 document.querySelectorAll('[data-kt-action="load_drop"]').forEach(function (element) {
     element.addEventListener('change', function () {
-        console.log('load_taxables');
+        console.log('load_taxables', this.value);
         Livewire.dispatch('load_drop', [this.value]);
     });
 });
 
+
+
+// Add click event listener to update buttons
+document.querySelectorAll('[data-kt-action="change_tarrif"]').forEach(function (element) {
+    element.addEventListener('change', function () {
+        console.log('change_tarrif', this.value);
+        Livewire.dispatch('change_tarrif', [this.value]);
+    });
+});
 
 // // Add click event listener to update buttons
 // document.querySelectorAll('[data-kt-action="load_dropa"]').forEach(function (element) {
@@ -112,7 +129,16 @@ document.querySelectorAll('[data-kt-action="update_taxable"]').forEach(function 
 // Add click event listener to update buttons
 document.querySelectorAll('[data-kt-action="add_invoice"]').forEach(function (element) {
     element.addEventListener('click', function () {
+        console.log(this.value);
         Livewire.dispatch('add_invoice', [this.getAttribute('data-kt-user-id')]);
+    });
+});
+
+// Add click event listener to update buttons
+document.querySelectorAll('[data-kt-action="add_no_invoice"]').forEach(function (element) {
+    element.addEventListener('click', function () {
+        // console.log(this.value);
+        Livewire.dispatch('add_no_invoice', [this.getAttribute('data-kt-user-id')]);
     });
 });
 

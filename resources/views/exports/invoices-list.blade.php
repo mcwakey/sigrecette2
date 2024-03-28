@@ -90,7 +90,10 @@
     </tr>
     <tr>
         <td colspan="11" style="margin-left: 2px;text-align:left;padding:4px ">
-            Exercice : 2023
+            @php
+            $year = \App\Models\Year::getActiveYear()
+            @endphp
+            Exercice : {{$year->name}}
 
         </td>
     </tr>
@@ -123,7 +126,7 @@
                     $item[__('aproval')] = "PC";
                     break;
                 case "REJETÉ":
-                    $item[__('aproval')] = "RJ";
+                    $item[__('aproval')] = "REJETÉ";
                     break;
                 default:
                     $item[__('aproval')] = "";

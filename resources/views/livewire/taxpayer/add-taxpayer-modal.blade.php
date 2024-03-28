@@ -1,7 +1,9 @@
 <div class="modal fade" id="kt_modal_add_taxpayer" tabindex="-1" aria-hidden="true" wire:ignore.self>
     <!--begin::Modal dialog-->
-    <div class="modal-dialog modal-dialog-centered mw-1000px">
-        <!--begin::Modal content-->
+    <!--<div class="modal-dialog modal-dialog-centered mw-1000px">-->
+   <div class="modal-dialog modal-fullscreen ">
+
+       <!--begin::Modal content-->
         <div class="modal-content">
             <!--begin::Modal header-->
             <div class="modal-header" id="kt_modal_add_taxpayer_header">
@@ -19,7 +21,7 @@
             <div class="modal-body px-5 my-7">
                 <!--begin::Form-->
                 <form id="kt_modal_add_taxpayer_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
-                    <input type="hidden" wire:model="taxpayer_id" name="taxpayer_id" />
+                    <input type="hidden" type="text" wire:model="taxpayer_id" name="taxpayer_id" />
                     <!--begin::Scroll-->
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_taxpayer_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_taxpayer_header" data-kt-scroll-wrappers="#kt_modal_add_taxpayer_scroll" data-kt-scroll-offset="300px">
                         <!--begin::Input group-->
@@ -154,7 +156,7 @@
                                     <input type="text" wire:model="mobilephone" name="mobilephone" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('mobilephone') }}" />
                                     <!--end::Input-->
                                 </div>
-                                
+
                                 @error('mobilephone')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
@@ -182,9 +184,9 @@
                         <!--begin::Input group-->
 
                         <div class="separator saperator-dashed my-5"></div>
-                        
+
                         <div class="row mb-7">
-                            
+
                             <div class="col-md-3">
                                 <!--begin::Label-->
                                 <label class="fw-semibold fs-6 mb-2">{{ __('social work') }}</label>
@@ -357,7 +359,7 @@
                             </div>
                         </div>
                         <div class="row mb-7">
-                            
+
                             <div class="col-md-6">
                                 <!--begin::Label-->
                                 <label class="fw-semibold fs-6 mb-2">{{ __('address') }}</label>
@@ -389,7 +391,7 @@
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>
-                        
+
                         <!--end::Input group-->
                     </div>
                     <!--end::Scroll-->

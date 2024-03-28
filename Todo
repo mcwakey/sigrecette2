@@ -1,9 +1,7 @@
-Pour créer un rectangle qui encadre une zone nous devons déterminer les coordonnées des coins 
-supérieur gauche (nord-ouest) et inférieur droit (sud-est) du rectangle qui couvre la zone. 
-Voici une estimation approximative des coordonnées pour le coin supérieur gauche et le coin inférieur droit :
+Emission des avis, create invoice by any role??
 
-Coin supérieur gauche (Nord-Ouest) : Latitude 51.1242, Longitude -5.0981 (extrémité nord-ouest de la France)
-Coin inférieur droit (Sud-Est) : Latitude 41.3712, Longitude 9.6627 (extrémité sud-est de la France)
+Breadcrumbs render traduction ??
 
-Ainsi, nous pouvons définir latlngs comme suit : let latlngs = [[51.1242, -5.0981], [41.3712, 9.6627]]; 
-<< rectangle couvrant la France >>
+http://127.0.0.1:8000/user-management/roles/1 , protéger cette page c'est très important !
+
+Mettre en place les middleware pour le management des utilisateurs et les configuration !

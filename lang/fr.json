@@ -10,12 +10,15 @@
     "all":"Tous",
     "active":"Active",
     "inactive": "Désactivé",
-    "add_payer" :"Ajouter un Contribuable",
+    "users assigned" : "Utilisateurs assignés",
+    "add_payer" :"Ajouter un contribuable",
+    "add_user" :"Ajouter un utilisateur",
     "delete_selected": "Supprimer la selection",
     "selected" : "sélectionné",
     "name" : "Nom",
     "gender" : "Genre",
     "search_payer" : "Rechercher un Contribuable",
+    "search_user" : "Rechercher un Utilisateur",
     "action" : "Action",
     "created_date" : "Date de Création",
     "telephone" : "Autre téléphone",
@@ -65,6 +68,8 @@
     "ereas" : "Quartiers",
     "user management" : "Gestion d'utilisateurs",
     "users" : "Utilisateurs",
+    "user" : "Utilisateur",
+    "total users with this role" : "Nombre total d'utilisateurs avec ce rôle",
     "permissions" : "Permissions",
     "roles" : "Roles",
     "show header menu" : "Montrer l'entete",
@@ -73,6 +78,7 @@
     "return home" : "Returner a l'accueil",
     "we cant find that page" : "Nous ne trouvons pas cette page.",
     "signin": "Se Connecter",
+    "signout": "Se déconnecter",
     "your social campaigns" : "Vos identifiants sur les réseaux sociaux",
     "sign in with google" : "Connectez-vous avec Google",
     "or with email" : "Ou avec une adresse e-mail",
@@ -107,6 +113,7 @@
 
     "actions" : "Actions",
     "view" : "Afficher",
+    "view role" : "Afficher le role",
     "delete" : "Supprimer",
     "edit" : "Modifier",
 
@@ -276,6 +283,24 @@
     "generate": "Générer",
     "are you sure": "Ceci ne peut pas être annulé. Êtes-vous sûr de vouloir procéder à l' auto-génération des factures ?",
 
+    "add taxpayer infos": "Ajouter les informations du contribuable",
+    "taxable info": "Informations de la matiere taxable",
+    "accounts": "Comptabilité",
+    "new stock request": "Nouvelle demande d'approvisionement",
+    "account state": "État du compte",
+    "print account state": "Imprimer l'état du compte",
+    "valeur inactif": "Imposable",
+    "request summary": "Résumé de la demande",
+    "qty": "Quantité",
+    "req no": "No de demande",
+    "start no": "No de début",
+    "end no": "No de fin",
+    "stock requests": "Demandes d'approvisionement",
+    
+    "comptabilite des valeurs inactives" : "Etat de comptabilite des VI du Regisseur",
+    "comptabilite des valeurs inactives du collecteur" : "Etat de comptabilite des VI du Collecteur",
+
+
 
 
 
@@ -313,10 +338,26 @@
     "treasury_name": "Nom de la Trésorerie",
     "treasury_address": "Addresse de la Trésorerie",
     "treasury_rib":"RIB",
-    "create commune": "Configurer les informations d'une commune",
+    "create commune": "Configurer les informations de la commune",
     "from_date": "Date d'émmission",
     "commune_name": "Nom",
-    "commune_title": "Titre",
+    "commune_title": "Préfixe de la commune",
     "region_name":"Nom de la région",
-    "select an région": "Sélectionner une région"
+    "select an région": "Sélectionner une région",
+
+    "last_login" : "Dernière Connexion",
+    "joined_date" : "Date d'inscription",
+
+    "administrateur_system" : "Administrateur Système",
+    "administrateur" : "Administrateur",
+    "maire" : "Maire",
+    "agent_assiette" : "agent d'assiette",
+    "agent_delegation" : "Agent par délégation",
+    "agent_recouvrement" : "Agent de recouvrement",
+    "regisseur" : "regisseur",
+    "collecteur" : "collecteur",
+
+    "no permissions given" : "Aucune autorisation donnée",
+    "You have to change your password to login." : "Vous devez changer votre mot de passe pour vous connecter."
+
 }

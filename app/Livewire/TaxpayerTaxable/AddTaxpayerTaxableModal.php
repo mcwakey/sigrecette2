@@ -29,12 +29,12 @@ class AddTaxpayerTaxableModal extends Component
     public $latitude;
     public $taxable_id;
     public $taxpayer_id;
-    
+
     public $authorisation;
     public $auth_reference;
 
     public $unit;
-    
+
     public $length;
     public $width;
 
@@ -60,10 +60,10 @@ class AddTaxpayerTaxableModal extends Component
 
     protected $rules = [
         'name' => 'required|string',
-        'seize' => 'required',
+        'seize' => 'required|int',
         //'location' => 'required',
         'taxable_id' => 'required',
-        'taxpayer_id' => 'required',
+        // 'taxpayer_id' => 'required',
 
         // 'penalty' => 'nullable',
         // 'penalty_type' => 'nullable',
@@ -83,7 +83,7 @@ class AddTaxpayerTaxableModal extends Component
     protected $listeners = [
         'delete_taxpayer' => 'deleteUser',
         'update_taxable' => 'updateTaxpayerTaxable',
-        'add_taxable' => 'addTaxpayerTaxable',
+        'add_taxpayer_taxable' => 'addTaxpayerTaxable',
         'update_checkbox' => 'updateCheckbox',
         'load_drop' => 'load_drop',
         //'loadTaxable' => 'loadTaxable',
@@ -109,7 +109,7 @@ class AddTaxpayerTaxableModal extends Component
     {
         $this->taxables = Taxable::where('tax_label_id', $value)->get(); // Load taxables based on tax label ID
         //$this->reset('taxables');
-        
+
         //$this->taxable_id = $taxpayer_taxable->taxable_id;
 
         //dd($this->taxables);
@@ -265,7 +265,7 @@ class AddTaxpayerTaxableModal extends Component
         $this->longitude = $taxpayer_taxable->longitude;
         $this->latitude = $taxpayer_taxable->latitude;
         $this->taxpayer_id = $taxpayer_taxable->taxpayer_id;
-        
+
         $this->taxlabel_id = $taxpayer_taxable->taxable->tax_label_id;
         $this->taxables = Taxable::where('tax_label_id', $taxpayer_taxable->taxable->tax_label_id)->get();
 
@@ -278,6 +278,7 @@ class AddTaxpayerTaxableModal extends Component
 
     public function addTaxpayerTaxable($id)
     {
+        //dd($id);
         $taxpayer = Taxpayer::find($id);
 
         $this->taxpayer_id = $taxpayer->id;

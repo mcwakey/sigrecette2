@@ -54,7 +54,7 @@ class AddCommuneModal extends Component
     {
         // Validate the form input data
         $this->validate();
-
+        $this->title = "Commune ".$this->title.$this->name;
         DB::transaction(function () {
             // Prepare the data for creating a new Taxable
             $data = [
@@ -69,7 +69,7 @@ class AddCommuneModal extends Component
                 'treasury_rib'=> $this->treasury_rib,
             ];
 
-            $commune = Commune::find($this->commune_id) ?? Commune::create($data);
+            $commune = Commune::find($this->commune_id) ?? Commune::getFirstCommune()?? Commune::create($data);
 
             if ($this->edit_mode) {
                 foreach ($data as $k => $v) {

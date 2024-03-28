@@ -7,7 +7,8 @@ class CreateStoredProcedures extends Migration
 {
     public function up()
     {
-        DB::unprepared('
+        if (config('database.default') !== 'sqlite') {
+            DB::unprepared('
             CREATE PROCEDURE updateTaxpayerTaxables()
             BEGIN
                 DECLARE today DATE;
@@ -24,11 +25,14 @@ class CreateStoredProcedures extends Migration
                 invoices.taxpayer_id <> NULL;
             END
         ');
+        }
     }
 
     public function down()
     {
-        DB::unprepared('DROP PROCEDURE IF EXISTS updateTaxpayerTaxables');
+        if (config('database.default') !== 'sqlite') {
+            DB::unprepared('DROP PROCEDURE IF EXISTS updateTaxpayerTaxables');
+        }
     }
 }
 

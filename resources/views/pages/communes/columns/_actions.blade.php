@@ -21,11 +21,7 @@
     <!--end::Menu item-->
 
     <!--begin::Menu item-->
-    <div class="menu-item px-3">
-        <a href="#" class="menu-link px-3" data-kt-user-id="{{ $commune->id }}" data-kt-action="delete_row">
-        {{ __('delete') }}
-        </a>
-    </div>
+
     <!--end::Menu item-->
 </div>
 <!--end::Menu-->

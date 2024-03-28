@@ -4,6 +4,8 @@ namespace App\DataTables;
 
 use App\Models\Invoice;
 use App\Models\Payment;
+use App\Models\Year;
+use Carbon\Carbon;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
@@ -27,8 +29,8 @@ class RecoveriesDataTable extends DataTable
             ->editColumn('no_avis', function (Payment $payment) {
                 return $payment->invoice->invoice_no;
             })
-            ->editColumn('order_no', function (Payment $payment) {
-                return $payment->invoice->order_no;
+            ->editColumn('reference', function (Payment $payment) {
+                return $payment->reference;
             })
             ->editColumn('tax_labels.id', function (Payment $payment) {
                 return $payment->invoice->invoiceitems()->first()->taxpayer_taxable->taxable->tax_label->code ?? '';
@@ -56,9 +58,14 @@ class RecoveriesDataTable extends DataTable
                 return $payment->remaining_amount;
             })
 
-
             ->addColumn('action', function (Payment $payment) {
                 return view('pages/recoveries.columns._actions', compact('payment'));
+            })
+
+            ->editColumn('user.name', function (Payment $payment) {
+                $user = $payment->user;
+                return view('pages/apps.user-management.users.columns._user', compact('user'));
+
             })
             ->setRowId('id');
     }
@@ -66,10 +73,11 @@ class RecoveriesDataTable extends DataTable
 
     public function query(Payment $model): QueryBuilder
     {
-        // return $model->newQuery()
-        //     ->with('taxpayer', 'taxpayer.zone');
+        $activeYear = Year::getActiveYear();
+        $startOfYear = Carbon::parse("{$activeYear->name}-01-01 00:00:00");
+        $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
 
-        return $model->newQuery();
+        return $model->newQuery()->whereBetween('created_at', [$startOfYear, $endOfYear]);
     }
 
     /**
@@ -84,7 +92,7 @@ class RecoveriesDataTable extends DataTable
             ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
-            ->orderBy(7)
+            ->orderBy(8)
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/recoveries/columns/_draw-scripts.js')) . "}");
     }
 
@@ -94,10 +102,9 @@ class RecoveriesDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('taxpayers.name')->title(__('taxpayer'))->addClass('d-flex align-items-center'),
-
+            Column::make('user.name')->title(__('user'))->addClass('d-flex align-items-center'),
             Column::make('no_avis')->title(__('no_avis'))->name('no_avis'),
-            Column::make('order_no')->title(__('order_no'))->name('order_no'),
+            Column::make('reference')->title(__("reference"))->name("reference"),
             Column::make('tax_labels.id')->title(__('taxlabel')),
             Column::make('nic')->title(__('nic')),
 
@@ -105,6 +112,9 @@ class RecoveriesDataTable extends DataTable
             Column::make('taxpayers.address')->title(__('address')),
             Column::make('amount')->title(__('Somme due '))->name('amount'),
             Column::make('remaining_amount')->title(__('Reste à recouvrer '))->name('remaining_amount'),
+
+            Column::make('taxpayers.name')->title(__('taxpayer'))->addClass('d-flex align-items-center'),
+
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
                 ->exportable(true)

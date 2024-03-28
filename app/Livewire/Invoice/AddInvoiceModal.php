@@ -229,8 +229,12 @@ class AddInvoiceModal extends Component
 
             if ($this->edit_mode) {
                 $invoiceData['amount'] = $this->amount_e;
-               $invoiceData['reduce_amount'] = $this->reduce_amount;
-                $invoiceData['status'] = 'PENDING';
+                $invoiceData['reduce_amount'] = $this->reduce_amount;
+                //FIX CANCEL INVOICE BUG
+                if (intval($this->reduce_amount)===0){
+                    $invoiceData['reduce_amount']=$this->amount_e;
+                }
+                $invoiceData['status'] = 'DRAFT';
             }
 
             //dd($invoiceData);
@@ -298,9 +302,9 @@ class AddInvoiceModal extends Component
             $invoice_old = Invoice::find($this->invoice_id ?? $invoice->id);
 
             if ($this->edit_mode) {
-
                 // Save the invoice ID into the invoice_no column
-                $invoice_old->status = "CANCELED";
+                $invoice_old->status = $this->cancel_reduct;
+                //$invoice_old->status = "CANCELED";
                 $invoice_old->validity = "CANCELED";
                 $invoice_old->save();
             }

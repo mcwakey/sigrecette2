@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\ActivitiesController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\CommunesController;
@@ -7,20 +8,22 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\RecoveryController;
 use App\Http\Controllers\TaxableController;
 use App\Http\Controllers\LanguageController;
-use App\DataTables\TaxpayerInvoicesDataTable;
 use App\Http\Controllers\CantonsController;
 use App\Http\Controllers\TaxpayerController;
 use App\Http\Controllers\TaxLabelController;
+use App\Http\Controllers\YearsController;
+use App\Http\Controllers\ZonesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TownsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\Apps\RoleManagementController;
 use App\Http\Controllers\Apps\PermissionManagementController;
-use App\Http\Controllers\ZonesController;
 use App\Http\Controllers\Apps\UserManagementController;
 use App\Http\Controllers\EreasController;
 use App\Http\Controllers\Geolocation;
+use App\Http\Controllers\StockRequestController;
+use App\Http\Controllers\StockTransferController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,7 +39,7 @@ use App\Http\Controllers\Geolocation;
 
 Route::get('/lang/{locale}', [LanguageController::class, 'setLocale'])->name('lang.setLocale');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
 
     Route::get('/', [DashboardController::class, 'index']);
 
@@ -60,6 +63,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/geolocation/zone', [Geolocation::class, 'setZoneGeolocation'])->name('zone');
     });
 
+
+    Route::name('accounts.')->group(function () {
+        Route::resource('/accounts/stock-requests', StockRequestController::class);
+        Route::resource('/accounts/stock-transfers', StockTransferController::class);
+    });
+
+
     Route::name('settings.')->group(function () {
         Route::resource('/taxables', TaxableController::class);
         Route::resource('/taxlabels', TaxLabelController::class);
@@ -68,9 +78,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('/ereas', EreasController::class);
         Route::resource('/zones', ZonesController::class);
         Route::resource('/categories', CategoriesController::class);
+        Route::resource('/years', YearsController::class);
         Route::resource('/activities', ActivitiesController::class);
         Route::resource('/communes', CommunesController::class);
-        Route::get('/import/taxpayers',[TaxpayerController::class, 'showImportPage'])->name('import-view');
+        Route::get('/import/taxpayers', [TaxpayerController::class, 'showImportPage'])->name('import-view');
 
 
         //Route::resource('/user-management/permissions', PermissionManagementController::class);
@@ -89,7 +100,7 @@ Route::get('/error', function () {
 });
 
 Route::get('/auth/redirect/{provider}', [SocialiteController::class, 'redirect']);
-Route::get('/generate-pdf/{data}/{type?}/{action?}', [PrintController::class,'download'])->name("generatePdf");
+Route::get('/generate-pdf/{data}/{type?}/{action?}', [PrintController::class, 'download'])->name("generatePdf");
 Route::Post('/import/taxpayer', [TaxpayerController::class, 'import'])->name('import.process');
-Route::get('/import/taxpayer',[TaxpayerController::class, 'showImportPage'])->name('import-view');
+Route::get('/import/taxpayer', [TaxpayerController::class, 'showImportPage'])->name('import-view');
 require __DIR__ . '/auth.php';

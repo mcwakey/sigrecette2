@@ -3,6 +3,8 @@
 namespace App\DataTables;
 
 use App\Models\Invoice;
+use App\Models\Year;
+use Carbon\Carbon;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
@@ -81,8 +83,9 @@ class InvoicesDataTable extends DataTable
 
     public function query(Invoice $model): QueryBuilder
     {
-        // return $model->newQuery()
-        //     ->with('taxpayer', 'taxpayer.zone');
+        $activeYear = Year::getActiveYear();
+        $startOfYear = Carbon::parse("{$activeYear->name}-01-01 00:00:00");
+        $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
 
             return $model->join('invoice_items', 'invoice_items.invoice_id', '=', 'invoices.id')
                         ->leftjoin('taxpayers', 'taxpayers.id', '=', 'invoices.taxpayer_id')
@@ -94,6 +97,7 @@ class InvoicesDataTable extends DataTable
                         // ->where('taxables.tax_label_id', 'LIKE', '%' . ($this->taxlabel ?? '') . '%')
                         // ->where('invoices.validity', 'EXPIRED')
                         ->select('invoices.*')
+                        ->distinct()
                         ->newQuery();
     }
 
@@ -131,8 +135,8 @@ class InvoicesDataTable extends DataTable
             Column::make('taxpayers.latitude')->title(__('gps')),
             Column::make('tax_labels.id')->title(__('taxlabel')),
             Column::make('total')->title(__('amount'))->name('amount'),
-            Column::make('status')->title(__('aproval')),
             Column::make('validity')->title(__('status')),
+            Column::make('status')->title(__('aproval')),
             Column::make('from_date')->title( __('from_date'))->addClass('text-nowrap'),
             Column::make('to_date')->title( __('expiry date'))->addClass('text-nowrap'),
             Column::computed('action')

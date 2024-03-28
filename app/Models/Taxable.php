@@ -31,4 +31,9 @@ class Taxable extends Model
     {
         return $this->hasMany(TaxpayerTaxable::class);
     }
+
+    public function stock_requests()
+    {
+        return $this->hasMany(StockRequest::class);
+    }
 }

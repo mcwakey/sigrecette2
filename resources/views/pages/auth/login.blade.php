@@ -53,7 +53,7 @@
         <!--begin::Input group--->
         <div class="fv-row mb-8">
             <!--begin::Email-->
-            <input type="text" placeholder="{{ __('email') }}" name="email" autocomplete="off" class="form-control bg-transparent" value="demo@demo.com"/>
+            <input type="text" placeholder="{{ __('email') }}" name="email" autocomplete="off" class="form-control bg-transparent" value="AdministrateurSystem@demo.com"/>
             <!--end::Email-->
         </div>
 

@@ -13,6 +13,7 @@ use App\Models\PaymentItem;
 use App\Models\Taxpayer;
 use App\Models\TaxpayerTaxable;
 use App\Models\Town;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
@@ -149,7 +150,8 @@ class AddPaymentModal extends Component
                 'amount' => $this->amount,
                 'payment_type' => $this->payment_type,
                 'reference' => $this->reference,
-                'remaining_amount' =>$this->bill-($this->amount + $this->paid)
+                'remaining_amount' =>$this->bill-($this->amount + $this->paid),
+                'user_id'=>  Auth::id()
 
             ];
 

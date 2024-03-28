@@ -2,22 +2,33 @@
     <!--begin::Input group-->
     <div class="fv-row mb-5">
         <!--begin::Label-->
-        
+
         <label class="required fw-semibold fs-6 mb-2">{{ __('status') }}</label>
         <!--end::Label-->
         <!--begin::Input-->
-        <input type="hidden" wire:model="invoice_id" name="invoice_id" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('invoice_id') }}" />
-        <select class="form-select form-select-solid" wire:model="status" name="status" data-placeholder="Select option" data-allow-clear="true">
-            <option></option>
-            @if($status=="PENDING")
-            <option value="APROVED">{{ __('APROVED') }}</option>
-            <option value="REJECTED">{{ __('REJECTED') }}</option>
-            @elseif($status=="DRAFT")
-            <option value="PENDING">{{ __('ACCEPTED') }}</option>
-            <option value="CANCELED">{{ __('CANCELED') }}</option>
-            @endif
-        </select>
-        <!--end::Input-->
+        <input type="hidden" wire:model="invoice_id" name="invoice_id" class="form-control form-control-solid mb-3 mb-lg-0"
+            placeholder="{{ __('invoice_id') }}" />
+
+        @if ($status == 'PENDING')
+            @hasanyrole(['regisseur', 'administrateur_system'])
+                <select class="form-select form-select-solid" wire:model="status" name="status"
+                    data-placeholder="Select option" data-allow-clear="true">
+                    <option></option>
+                    <option value="APROVED">{{ __('APROVED') }}</option>
+                    <option value="REJECTED">{{ __('REJECTED') }}</option>
+                </select>
+            @endhasanyrole
+        @elseif($status == 'DRAFT')
+            <select class="form-select form-select-solid" wire:model="status" name="status"
+                @hasanyrole(['agent_delegation', 'administrateur_system'])
+                data-placeholder="Select option" data-allow-clear="true">
+                <option></option>
+                <option value="PENDING">{{ __('ACCEPTED') }}</option>
+                <option value="CANCELED">{{ __('CANCELED') }}</option>
+            </select>
+            @endhasanyrole
+                @endif
+                <!--end::Input-->
     </div>
     <!--end::Input group-->
     <!--begin::Actions-->
