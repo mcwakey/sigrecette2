@@ -239,11 +239,9 @@
 
                 <tr>
                     <td colspan="6" style="text-align: right;"><strong>Total :</strong></td>
-                    @if($action==1)
-                        <td>{{$data[3]}}</td>
-                    @else
-                        <td>{{  $invoice->amount -$data[3]  }}</td>
-                    @endif
+
+                    <td>{{$data[3]}}</td>
+
 
 
                 </tr>
@@ -251,8 +249,10 @@
 
             </table>
             <p>Arrêté le présent avis à la somme de :<span class="write">@if($action==1){{number_to_words($data[3]) }}@else {{number_to_words($invoice->amount -$data[3]) }}  @endif</span> Francs CFA (Sauf erreur ou omission).</p>
+            @if($action==1)
             <p>A payer dans les 30 jours suivant la réception de l’avis, ou avant la fin de chaque mois pour les
                 paiements mensualisés.</p>
+            @endif
             <table>
                 <tr class="text-start">
                     <td class="">
@@ -263,9 +263,11 @@
                     </td>
                 </tr>
             </table>
+            @if($action==1)
             <p>N.B. Le paiement peut être effectué en numéraire, par chèque au nom du Receveur de la Commune de <span class="write"> ………………………………</span>. ou
                 par virement au compte trésor RIB<span class="write">{{$commune->treasury_rib}}</span>. La quittance est délivrée à la réception des espèces, du
                 chèque ou de l’ordre de virement par le Régisseur de recettes.</p>
+            @endif
         </div>
     </div>
 

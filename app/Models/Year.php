@@ -41,7 +41,7 @@ class Year extends Model
         }
         //&&  !(Date::today())->isSameAs('12-31')
         if (intval($activeYear->name) < intval($currentYear)) {
-            return Year::AutoUpdateActiveYear();
+            return Year::autoUpdateActiveYear();
         }
 
         return $activeYear;
@@ -52,26 +52,40 @@ class Year extends Model
      * @return Year|null
      * @throws Throwable
      */
-    public static function AutoUpdateActiveYear(): ?Year{
+    public static function autoUpdateActiveYear(): Year{
         $active_year=  Year::where('status', "ACTIVE")->first();
         if (!$active_year) {
-            $active_year->status="INACTIVE";
-            $next_year =intval( $active_year->name)+1;
-            $data = [
-                'name' => $next_year,
-                'status' => "INACTIVE",
-            ];
-            Year::makeAllYearsInative();
-            $year = Year::where('name',$next_year)->first() ?? Year::create($data);
-            $year->status="ACTIVE";
-            DB::transaction(function () use ($active_year, $year) {
-                $year->save();
-                $active_year->save();
+            $currentYear = date('Y');
+            $activeYear = Year::where('name', $currentYear)->first();
+            $activeYear->status = "ACTIVE";
+            DB::transaction(function () use ($activeYear) {
+                $activeYear->save();
             });
-            return $year;
         }
-       return null;
+        $active_year->status="INACTIVE";
+        $next_year =intval( $active_year->name)+1;
+        $data = [
+            'name' => $next_year,
+            'status' => "INACTIVE",
+        ];
+        Year::makeAllYearsInative();
+        $year = Year::where('name',$next_year)->first() ?? Year::create($data);
+        $year->status="ACTIVE";
+        DB::transaction(function () use ($active_year, $year) {
+            $year->save();
+            $active_year->save();
+        });
+        return $year;
 
+    }
+    public static function activeCurrentYear():Year{
+        $currentYear = date('Y');
+        $activeYear = Year::where('name', $currentYear)->first();
+        $activeYear->status = "ACTIVE";
+        DB::transaction(function () use ($activeYear) {
+            $activeYear->save();
+        });
+        return $activeYear;
     }
     /**
      * Makes all years inactive.
