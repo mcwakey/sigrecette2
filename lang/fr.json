@@ -78,6 +78,7 @@
     "return home" : "Returner a l'accueil",
     "we cant find that page" : "Nous ne trouvons pas cette page.",
     "signin": "Se Connecter",
+    "signout": "Se déconnecter",
     "your social campaigns" : "Vos identifiants sur les réseaux sociaux",
     "sign in with google" : "Connectez-vous avec Google",
     "or with email" : "Ou avec une adresse e-mail",
@@ -338,6 +339,7 @@
     "regisseur" : "regisseur",
     "collecteur" : "collecteur",
 
-    "no permissions given" : "Aucune autorisation donnée"
+    "no permissions given" : "Aucune autorisation donnée",
+    "You have to change your password to login." : "Vous devez changer votre mot de passe pour vous connecter."
 
 }

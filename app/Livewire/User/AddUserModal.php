@@ -3,6 +3,7 @@
 namespace App\Livewire\User;
 
 use App\Models\User;
+use App\Models\Zone;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +20,7 @@ class AddUserModal extends Component
     public $name;
     public $email;
     public $role;
+    public $zone_id;
     public $avatar;
     public $saved_avatar;
 
@@ -40,6 +42,7 @@ class AddUserModal extends Component
     public function render()
     {
         $roles = Role::all();
+        $zones = Zone::all();
 
         $roles_description = [
             'administrator' => 'Best for business owners and company administrators',
@@ -53,13 +56,21 @@ class AddUserModal extends Component
             $roles[$i]->description = $roles_description[$role->name] ?? '';
         }
 
-        return view('livewire.user.add-user-modal', compact('roles'));
+        return view('livewire.user.add-user-modal', compact('roles', 'zones'));
     }
 
     public function submit()
     {
         if ($this->edit_mode) {
             $this->rules['email'] = 'required|email|unique:users,email,' . $this->user_id;
+        }
+
+        $roleNeedZone = ['agent_recouvrement', 'collecteur'];
+
+        if (in_array($this->role, $roleNeedZone)) {
+            $this->rules['zone_id'] = 'required|integer';
+        } else if ($this->zone_id) {
+            $this->zone_id =  null;
         }
 
         // Validate the form input data
@@ -81,9 +92,10 @@ class AddUserModal extends Component
                 $data['password'] = Hash::make($this->email);
             }
 
-            // Update or Create a new user record in the database
             $data['email'] = $this->email;
-            //dd($data);
+            $data['zone_id'] = $this->zone_id;
+
+            // Update or Create a new user record in the database
             $user = User::find($this->user_id) ?? User::create($data);
 
             if ($this->edit_mode) {
@@ -104,7 +116,7 @@ class AddUserModal extends Component
                 $user->assignRole($this->role);
 
                 // Send a password reset link to the user's email
-                Password::sendResetLink($user->only('email'));
+                // Password::sendResetLink($user->only('email'));
 
                 // Emit a success event with a message
                 $this->dispatch('success', __('New user created'));

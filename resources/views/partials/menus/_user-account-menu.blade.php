@@ -16,10 +16,12 @@
             <!--end::Avatar-->
             <!--begin::Username-->
             <div class="d-flex flex-column">
-                <div class="fw-bold d-flex align-items-center fs-5">{{ Auth::user()->name}}
-                    <span class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2">Pro</span>
+                <div class="fw-bold d-flex align-items-center fs-5">
+                    <span class="text-break">
+                        {{ Auth::user()->name}}
+                    </span>
                 </div>
-                <a href="#" class="fw-semibold text-muted text-hover-primary fs-7">{{ Auth::user()->email }}</a>
+                <a href="#" class="fw-semibold text-muted text-hover-primary fs-7 text-break">{{ Auth::user()->email }}</a>
             </div>
             <!--end::Username-->
         </div>
@@ -29,22 +31,22 @@
     <div class="separator my-2"></div>
     <!--end::Menu separator-->
     <!--begin::Menu item-->
-    <div class="menu-item px-5">
+    {{-- <div class="menu-item px-5">
         <a href="#" class="menu-link px-5">My Profile</a>
-    </div>
+    </div> --}}
     <!--end::Menu item-->
     <!--begin::Menu item-->
-    <div class="menu-item px-5">
+    {{-- <div class="menu-item px-5">
         <a href="#" class="menu-link px-5">
             <span class="menu-text">My Projects</span>
             <span class="menu-badge">
                 <span class="badge badge-light-danger badge-circle fw-bold fs-7">3</span>
             </span>
         </a>
-    </div>
+    </div> --}}
     <!--end::Menu item-->
     <!--begin::Menu item-->
-    <div class="menu-item px-5" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="left-start" data-kt-menu-offset="-15px, 0">
+    {{-- <div class="menu-item px-5" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="left-start" data-kt-menu-offset="-15px, 0">
         <a href="#" class="menu-link px-5">
             <span class="menu-title">My Subscription</span>
             <span class="menu-arrow"></span>
@@ -87,15 +89,15 @@
             <!--end::Menu item-->
         </div>
         <!--end::Menu sub-->
-    </div>
+    </div> --}}
     <!--end::Menu item-->
     <!--begin::Menu item-->
-    <div class="menu-item px-5">
+    {{-- <div class="menu-item px-5">
         <a href="#" class="menu-link px-5">My Statements</a>
-    </div>
+    </div> --}}
     <!--end::Menu item-->
     <!--begin::Menu separator-->
-    <div class="separator my-2"></div>
+    {{-- <div class="separator my-2"></div> --}}
     <!--end::Menu separator-->
     <!--begin::Menu item-->
     <div class="menu-item px-5" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="left-start" data-kt-menu-offset="-15px, 0">
@@ -145,14 +147,14 @@
     </div>
     <!--end::Menu item-->
     <!--begin::Menu item-->
-    <div class="menu-item px-5 my-1">
+    {{-- <div class="menu-item px-5 my-1">
         <a href="#" class="menu-link px-5">Account Settings</a>
-    </div>
+    </div> --}}
     <!--end::Menu item-->
     <!--begin::Menu item-->
     <div class="menu-item px-5">
         <a class="button-ajax menu-link px-5" href="#" data-action="{{ route('logout') }}" data-method="post" data-csrf="{{ csrf_token() }}" data-reload="true">
-            Sign Out
+           {{  __('signout') }}
         </a>
     </div>
     <!--end::Menu item-->

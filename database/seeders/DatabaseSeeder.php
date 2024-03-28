@@ -43,7 +43,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        User::factory(20)->create();
+        // User::factory(20)->create();
         //Address::factory(20)->create();
         // Taxpayer::factory(50)->create();
         //Canton::factory(10)->create();

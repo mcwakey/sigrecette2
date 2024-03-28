@@ -74,6 +74,7 @@
     "return home": "Return Home",
     "we cant find that page": "We can't find that page.",
     "signin": "Sign In",
+    "signout": "Sign Out",
     "your social campaigns": "Your Social handles",
     "sign in with google": "Sign in with Google",
     "or with email": "Or with Email",
@@ -325,5 +326,6 @@
     "regisseur": "manager",
     "collecteur": "collector",
 
-    "no permissions given": "No permissions given"
+    "no permissions given": "No permissions given",
+    "You have to change your password to login." : "You have to change your password to login."
 }

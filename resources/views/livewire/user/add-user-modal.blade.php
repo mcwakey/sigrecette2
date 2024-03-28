@@ -81,7 +81,7 @@
                             <label class="required fw-semibold fs-6 mb-2">{{ __('fullname') }}</label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="text" wire:model="name" name="name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Full name"/>
+                            <input type="text" wire:model="name" name="name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('fullname') }}"/>
                             <!--end::Input-->
                             @error('name')
                             <span class="text-danger">{{ $message }}</span> @enderror
@@ -151,6 +151,24 @@
                                 @endif
                             @endforeach
                             <!--end::Roles-->
+
+                            <div class="fv-row mt-7">
+                                <!--begin::Label-->
+                                <label class="fw-semibold fs-6 mb-2">{{ __('Zone') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select data-kt-action="load_drop" wire:model="zone_id" name="zone_id" class="form-select">
+                                    <option>{{ __('select an option') }}</option>
+                                    @foreach($zones as $zone)
+                                    <option value="{{ $zone->id }}">{{ $zone->name }}</option>
+                                    @endforeach
+                                </select>
+                                <!--end::Input-->
+                                @error('zone_id')
+                                <span class="text-danger">{{ $message }}</span> 
+                                @enderror
+                            </div>
+
                         </div>
                         <!--end::Input group-->
                     </div>

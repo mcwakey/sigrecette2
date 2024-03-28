@@ -29,8 +29,6 @@ class RolesPermissionsSeeder extends Seeder
                 'town',
                 'canton',
                 'taxlabel',
-                'taxable',
-                'year',
                 'gender',
                 'erea',
                 'taxable',
@@ -48,17 +46,39 @@ class RolesPermissionsSeeder extends Seeder
 
             'administrateur' => [],
 
-            'maire' => [],
+            'maire' => [
+                'user',
+                'year',
+                'zone',
+                'commune',
+                'town',
+                'canton',
+                'taxpayer_taxable',
+            ],
 
-            'agent_assiette' => [],
+            'agent_assiette' => [
+                'invoive',
+                'taxpayer',
+            ],
 
-            'agent_delegation' => [],
+            'agent_delegation' => [
+                'invoive',
+                'taxpayer',
+            ],
 
-            'regisseur' => [],
+            'regisseur' => [
+                'invoive',
+                'taxpayer',
+                'payment',
+            ],
 
-            'agent_recouvrement' => [],
+            'agent_recouvrement' => [
+                'payment',
+            ],
 
-            'collecteur' => [],
+            'collecteur' => [
+                'payment',
+            ],
         ];
 
         foreach ($permissions_by_role['administrateur_system'] as $permission) {
