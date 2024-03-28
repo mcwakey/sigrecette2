@@ -247,7 +247,6 @@
     <!--end::Modal-->
 
     @push('scripts')
-<<<<<<< Updated upstream
         {{ $dataTable->scripts() }}
         <script>
             document.getElementById('mySearchInput').addEventListener('keyup', function() {
@@ -271,11 +270,11 @@
             });
 
             document.getElementById('mySearchTen').addEventListener('change', function() {
-                window.LaravelDataTables['invoices-table'].column(9).search(this.value).draw();
+                window.LaravelDataTables['invoices-table'].column(10).search(this.value).draw();
             });
 
             document.getElementById('mySearchEleven').addEventListener('change', function() {
-                window.LaravelDataTables['invoices-table'].column(10).search(this.value).draw();
+                window.LaravelDataTables['invoices-table'].column(9).search(this.value).draw();
             });
 
             document.addEventListener('livewire:init', function() {

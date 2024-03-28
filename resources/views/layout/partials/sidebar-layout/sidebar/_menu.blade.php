@@ -56,6 +56,7 @@
                     <!--end:Menu item-->
                     <!--begin:Menu item-->
                     <div class="menu-item">
+
                         @hasanyrole(['agent_assiette', 'maire', 'agent_recouvrement', 'administrateur_system'])
                             <span class="menu-link ">
                                 <span class="menu-bullet">
@@ -65,188 +66,6 @@
                                     data-bs-target="#kt_modal_add_taxpayer">{{ __('new taxpayer') }}</span>
                             </span>
                         @endhasanyrole
-
-						<!--end:Menu link-->
-					</div>
-					<!--end:Menu item-->
-					<!--begin:Menu item-->
-					<!-- <div class="menu-item"> -->
-						<!--begin:Menu link-->
-						<!-- <a class="menu-link {{ request()->routeIs('user-management.permissions.*') ? 'active' : '' }}" href="{{ route('user-management.permissions.index') }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
-							</span>
-							<span class="menu-title">Permissions</span>
-						</a> -->
-						<!--end:Menu link-->
-					<!-- </div> -->
-					<!--end:Menu item-->
-				</div>
-				<!--end:Menu sub-->
-			</div>
-			<!--end:Menu item-->
-			<!--begin:Menu item-->
-			<div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('invoices.*') ? 'here show' : '' }}">
-				<!--begin:Menu link-->
-				<span class="menu-link">
-					<span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
-					<span class="menu-title">{{ __('invoice') }}</span>
-					<span class="menu-arrow"></span>
-				</span>
-				<!--end:Menu link-->
-				<!--begin:Menu sub-->
-				<div class="menu-sub menu-sub-accordion">
-					<!--begin:Menu item-->
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('invoices.*') ? 'active' : '' }}" href="{{ route('invoices.index') }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
-							</span>
-							<span class="menu-title">{{ __('list') }}</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
-					<!--end:Menu item-->
-					<!--begin:Menu item-->
-					<!-- <div class="menu-item"> -->
-						<!--begin:Menu link-->
-						<!-- <a class="menu-link {{ request()->routeIs('user-management.roles.*') ? 'active' : '' }}" href="{{ route('user-management.roles.index') }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
-							</span>
-							<span class="menu-title">Roles</span>
-						</a> -->
-						<!--end:Menu link-->
-					<!-- </div> -->
-					<!--end:Menu item-->
-					<!--begin:Menu item-->
-					<!-- <div class="menu-item"> -->
-						<!--begin:Menu link-->
-						<!-- <a class="menu-link {{ request()->routeIs('user-management.permissions.*') ? 'active' : '' }}" href="{{ route('user-management.permissions.index') }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
-							</span>
-							<span class="menu-title">Permissions</span>
-						</a> -->
-						<!--end:Menu link-->
-					<!-- </div> -->
-					<!--end:Menu item-->
-				</div>
-				<!--end:Menu sub-->
-			</div>
-			<!--end:Menu item-->
-			<!--begin:Menu item-->
-			<div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('user-management.*') ? 'here show' : '' }}">
-				<!--begin:Menu link-->
-				<span class="menu-link">
-					<span class="menu-icon">{!! getIcon('abstract-28', 'fs-2') !!}</span>
-					<span class="menu-title">{{ __('revenue') }}</span>
-					<span class="menu-arrow"></span>
-				</span>
-				<!--end:Menu link-->
-				<!--begin:Menu sub-->
-				<div class="menu-sub menu-sub-accordion">
-					<!--begin:Menu item-->
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('recoveries.*') ? 'active' : '' }}" href="{{ route('recoveries.index') }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
-							</span>
-							<span class="menu-title">{{ __('list') }}</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
-					<!--end:Menu item-->
-					<!--begin:Menu item-->
-					<!-- <div class="menu-item"> -->
-						<!--begin:Menu link-->
-						<!-- <a class="menu-link {{ request()->routeIs('user-management.roles.*') ? 'active' : '' }}" href="{{ route('user-management.roles.index') }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
-							</span>
-							<span class="menu-title">Roles</span>
-						</a> -->
-						<!--end:Menu link-->
-					<!-- </div> -->
-					<!--end:Menu item-->
-					<!--begin:Menu item-->
-					<!-- <div class="menu-item"> -->
-						<!--begin:Menu link-->
-						<!-- <a class="menu-link {{ request()->routeIs('user-management.permissions.*') ? 'active' : '' }}" href="{{ route('user-management.permissions.index') }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
-							</span>
-							<span class="menu-title">Permissions</span>
-						</a> -->
-						<!--end:Menu link-->
-					<!-- </div> -->
-					<!--end:Menu item-->
-				</div>
-				<!--end:Menu sub-->
-			</div>
-			<!--end:Menu item-->
-			<div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('accounts.*') ? 'here show' : '' }}">
-				<!--begin:Menu link-->
-				<span class="menu-link">
-					<span class="menu-icon">{!! getIcon('abstract-27', 'fs-2') !!}</span>
-					<span class="menu-title">{{ __('accounts') }}</span>
-					<span class="menu-arrow"></span>
-				</span>
-				<!--end:Menu link-->
-				<!--begin:Menu sub-->
-				<div class="menu-sub menu-sub-accordion">
-					<!--begin:Menu item-->
-					<div class="menu-item">
-						<a class="menu-link {{ request()->routeIs('accounts.stock-requests.*') ? 'active' : '' }}" href="{{ route('accounts.stock-requests.index') }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
-							</span>
-							<span class="menu-title">{{ __('comptabilite des valeurs inactives') }} </span>
-						</a>
-					</div>
-					<!--end:Menu item-->
-					
-					<!--begin:Menu item-->
-					<div class="menu-item">
-						<a class="menu-link {{ request()->routeIs('accounts.stock-transfers.*') ? 'active' : '' }}" href="{{ route('accounts.stock-transfers.index') }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
-							</span>
-							<span class="menu-title">{{ __('comptabilite des valeurs inactives du collecteur') }} </span>
-						</a>
-					</div>
-					<!--end:Menu item-->
-					<!--begin:Menu item-->
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('recoveries.*') ? 'active' : '' }}" href="{{ route('recoveries.index') }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
-							</span>
-							<span class="menu-title">{{ __('livre journal de la regie') }}</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
-					<!--end:Menu item-->
-					<!--begin:Menu item-->
-					<!-- <div class="menu-item"> -->
-						<!--begin:Menu link-->
-						<!-- <a class="menu-link {{ request()->routeIs('user-management.permissions.*') ? 'active' : '' }}" href="{{ route('user-management.permissions.index') }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
-							</span>
-							<span class="menu-title">Permissions</span>
-						</a> -->
-						<!--end:Menu link-->
-					<!-- </div> -->
-					<!--end:Menu item-->
-				</div>
-				<!--end:Menu sub-->
-			</div>
-			<!--end:Menu item-->
->>>>>>> Stashed changes
 
                         <a class="menu-link {{ request()->routeIs('taxpayers.*') ? 'active' : '' }}"
                             href="{{ route('taxpayers.index') }}">
@@ -391,58 +210,67 @@
 
 
             @hasanyrole(['regisseur', 'maire', 'administrateur_system'])
-                <div data-kt-menu-trigger="click"
-                    class="menu-item menu-accordion {{ request()->routeIs('user-management.*') ? 'here show' : '' }}">
-                    <!--begin:Menu link-->
-                    <span class="menu-link">
-                        <span class="menu-icon">{!! getIcon('abstract-28', 'fs-2') !!}</span>
-                        <span class="menu-title">{{ __('accounts') }}</span>
-                        <span class="menu-arrow"></span>
-                    </span>
-                    <!--end:Menu link-->
-                    <!--begin:Menu sub-->
-                    <div class="menu-sub menu-sub-accordion">
-                        <!--begin:Menu item-->
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('recoveries.*') ? 'active' : '' }}"
-                                href="{{ route('recoveries.index') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">{{ __('list') }}</span>
-                            </a>
-                            <!--end:Menu link-->
-                        </div>
-                        <!--end:Menu item-->
-                        <!--begin:Menu item-->
-                        <!-- <div class="menu-item"> -->
-                        <!--begin:Menu link-->
-                        <!-- <a class="menu-link {{ request()->routeIs('user-management.roles.*') ? 'active' : '' }}" href="{{ route('user-management.roles.index') }}">
-           <span class="menu-bullet">
-            <span class="bullet bullet-dot"></span>
-           </span>
-           <span class="menu-title">Roles</span>
-          </a> -->
-                        <!--end:Menu link-->
-                        <!-- </div> -->
-                        <!--end:Menu item-->
-                        <!--begin:Menu item-->
-                        <!-- <div class="menu-item"> -->
-                        <!--begin:Menu link-->
-                        <!-- <a class="menu-link {{ request()->routeIs('user-management.permissions.*') ? 'active' : '' }}" href="{{ route('user-management.permissions.index') }}">
-           <span class="menu-bullet">
-            <span class="bullet bullet-dot"></span>
-           </span>
-           <span class="menu-title">Permissions</span>
-          </a> -->
-                        <!--end:Menu link-->
-                        <!-- </div> -->
-                        <!--end:Menu item-->
-                    </div>
-                    <!--end:Menu sub-->
-                </div>
-                <!--end:Menu item-->
+                
+			<!--end:Menu item-->
+			<div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('accounts.*') ? 'here show' : '' }}">
+				<!--begin:Menu link-->
+				<span class="menu-link">
+					<span class="menu-icon">{!! getIcon('abstract-27', 'fs-2') !!}</span>
+					<span class="menu-title">{{ __('accounts') }}</span>
+					<span class="menu-arrow"></span>
+				</span>
+				<!--end:Menu link-->
+				<!--begin:Menu sub-->
+				<div class="menu-sub menu-sub-accordion">
+					<!--begin:Menu item-->
+					<div class="menu-item">
+						<a class="menu-link {{ request()->routeIs('accounts.stock-requests.*') ? 'active' : '' }}" href="{{ route('accounts.stock-requests.index') }}">
+							<span class="menu-bullet">
+								<span class="bullet bullet-dot"></span>
+							</span>
+							<span class="menu-title">{{ __('comptabilite des valeurs inactives') }} </span>
+						</a>
+					</div>
+					<!--end:Menu item-->
+					
+					<!--begin:Menu item-->
+					<div class="menu-item">
+						<a class="menu-link {{ request()->routeIs('accounts.stock-transfers.*') ? 'active' : '' }}" href="{{ route('accounts.stock-transfers.index') }}">
+							<span class="menu-bullet">
+								<span class="bullet bullet-dot"></span>
+							</span>
+							<span class="menu-title">{{ __('comptabilite des valeurs inactives du collecteur') }} </span>
+						</a>
+					</div>
+					<!--end:Menu item-->
+					<!--begin:Menu item-->
+					<div class="menu-item">
+						<!--begin:Menu link-->
+						<a class="menu-link {{ request()->routeIs('recoveries.*') ? 'active' : '' }}" href="{{ route('recoveries.index') }}">
+							<span class="menu-bullet">
+								<span class="bullet bullet-dot"></span>
+							</span>
+							<span class="menu-title">{{ __('livre journal de la regie') }}</span>
+						</a>
+						<!--end:Menu link-->
+					</div>
+					<!--end:Menu item-->
+					<!--begin:Menu item-->
+					<!-- <div class="menu-item"> -->
+						<!--begin:Menu link-->
+						<!-- <a class="menu-link {{ request()->routeIs('user-management.permissions.*') ? 'active' : '' }}" href="{{ route('user-management.permissions.index') }}">
+							<span class="menu-bullet">
+								<span class="bullet bullet-dot"></span>
+							</span>
+							<span class="menu-title">Permissions</span>
+						</a> -->
+						<!--end:Menu link-->
+					<!-- </div> -->
+					<!--end:Menu item-->
+				</div>
+				<!--end:Menu sub-->
+			</div>
+			<!--end:Menu item-->
             @endhasanyrole
 
             <!--begin:Menu item-->
