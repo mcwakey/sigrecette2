@@ -25,7 +25,7 @@
                         <!--begin::Input group-->
 
                         <div class="row mb-7">
-                            <div class="col-md-8">
+                            <div class="col-md-4">
                                 <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('year') }}</label>
                                 <!--end::Label-->
@@ -39,10 +39,24 @@
                             </div>
                             <div class="col-md-4">
                                 <!--begin::Label-->
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('auto_switch') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select wire:model="auto_switch" name="auto_switch" class="form-select " data-dropdown-parent="#kt_modal_add_year">
+                                    <option>{{ __('select an option') }}</option>
+                                    <option value={{1}}>{{ __('active') }}</option>
+                                    <option value={{0}}>{{ __('inactive') }}</option>
+                                </select>
+                                <!--end::Input-->
+                                @error('auto_switch')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-4">
+                                <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('status') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <select wire:model="status" name="status" class="form-select " data-dropdown-parent="#kt_modal_add_taxpayer">
+                                <select wire:model="status" name="status" class="form-select " data-dropdown-parent="#kt_modal_add_year">
                                     <option>{{ __('select an option') }}</option>
                                     <option value="ACTIVE">{{ __('active') }}</option>
                                     <option value="INACTIVE">{{ __('inactive') }}</option>

@@ -16,12 +16,13 @@ class AddYearModal extends Component
 
     public $name;
     public $status;
-
+    public $auto_switch;
     public $edit_mode = false;
 
     protected $rules = [
         'name' => 'required|int',
         'status' => 'required|string',
+        'auto_switch'=>'required|boolean'
     ];
 
     protected $listeners = [
@@ -44,6 +45,7 @@ class AddYearModal extends Component
             $data = [
                 'name' => $this->name,
                 'status' => $this->status,
+                'auto_switch'=> $this->auto_switch
             ];
             if($this->status=="ACTIVE"){
                Year::makeAllYearsInative();
@@ -76,7 +78,7 @@ class AddYearModal extends Component
         Year::destroy($id);
 
         // Emit a success event with a message
-        $this->dispatch('success', 'Taxpayer successfully deleted');
+        $this->dispatch('success', 'Year successfully deleted');
     }
 
     public function updateYear($id)
@@ -88,6 +90,7 @@ class AddYearModal extends Component
         $this->year_id = $year->id;
         $this->name = $year->name;
         $this->status = $year->status;
+        $this->auto_switch = $year->auto_switch;
     }
 
 
