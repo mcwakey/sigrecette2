@@ -20,6 +20,7 @@ use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\Apps\RoleManagementController;
 use App\Http\Controllers\Apps\PermissionManagementController;
 use App\Http\Controllers\Apps\UserManagementController;
+use App\Http\Controllers\CollectorDepositController;
 use App\Http\Controllers\EreasController;
 use App\Http\Controllers\Geolocation;
 use App\Http\Controllers\StockRequestController;
@@ -67,6 +68,7 @@ Route::middleware(['auth'])->group(function () {
     Route::name('accounts.')->group(function () {
         Route::resource('/accounts/stock-requests', StockRequestController::class);
         Route::resource('/accounts/stock-transfers', StockTransferController::class);
+        Route::resource('/accounts/collector_deposits', CollectorDepositController::class);
     });
 
     Route::name('settings.')->group(function () {

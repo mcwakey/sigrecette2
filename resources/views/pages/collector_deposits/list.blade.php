@@ -1,7 +1,7 @@
 <x-default-layout>
 
     @section('title')
-    {{ __('comptabilite des valeurs inactives du regisseur') }}
+    {{ __('etat de versement du collecteur') }}
     @endsection
 
     @section('breadcrumbs')
@@ -22,28 +22,7 @@
             </div>
             <!--begin::Card title-->
 
-            <!--begin::Card toolbar-->
-            <div class="card-toolbar">
-
-                <!--begin::Toolbar-->
-                <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
-                    <span class="ms-2 mt-3 mx-5" data-bs-toggle="tooltip" title="Specify a target name for future usage and referenceSpecify a target name for future usage and referenceSpecify a target name for future usage and referenceSpecify a target name for future usage and referenceSpecify a target name for future usage and reference">
-															<i class="ki-outline ki-information fs-1"></i>
-														</span></a>
-                    <!--begin::Add user-->
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_stock_request"  data-kt-action="add_request">
-                        {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        {{ __('new stock request') }}
-                    </button>
-                    <!--end::Add user-->
-                </div>
-                <!--end::Toolbar-->
-
-                <!--begin::Modal-->
-                <livewire:stock_request.add-stock-request-modal/>
-                <!--end::Modal-->
-            </div>
-            <!--end::Card toolbar-->
+            
         </div>
         <!--end::Card header-->
 
@@ -57,6 +36,8 @@
         </div>
         <!--end::Card body-->
     </div>
+                <livewire:stock_transfer.add-stock-transfer-modal/>
+                <livewire:stock_request.add-stock-request-modal/>
 
     @push('scripts')
         {{ $dataTable->scripts() }}

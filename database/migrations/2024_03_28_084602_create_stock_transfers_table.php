@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('start_no')->nullable();
             $table->integer('end_no')->nullable();
             $table->string('trans_type')->default('DEMANDE');
-            $table->string('type')->default('ACTIVE'); // 'ARCHIVE' FOR DONE ONES
+            $table->string('type')->default('INACTIVE'); // 'ARCHIVE' FOR DONE ONES
             $table->unsignedBigInteger('by_user_id');
             $table->foreign('by_user_id')->references('id')->on('users');
             $table->unsignedBigInteger('to_user_id');

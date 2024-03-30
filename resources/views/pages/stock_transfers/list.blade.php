@@ -25,9 +25,9 @@
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
                 <!--begin::Toolbar-->
-                <div class="d-flex justify-content-end mx-5" data-kt-stock_request-table-toolbar="base">
+                <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                     <!--begin::Add user-->
-                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#kt_modal_add_stock_request"  data-kt-action="add_request">
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#kt_modal_add_stock_transfer"  data-kt-action="add_deposit">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
                         {{ __('new deposit') }}
                     </button>
@@ -35,9 +35,19 @@
                 </div>
 
                 <!--begin::Toolbar-->
-                <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
+                <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                     <!--begin::Add user-->
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_stock_request"  data-kt-action="add_request">
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#kt_modal_add_stock_transfer"  data-kt-action="update_transfer">
+                        {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                        {{ __('account state') }}
+                    </button>
+                    <!--end::Add user-->
+                </div>
+
+                <!--begin::Toolbar-->
+                <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
+                    <!--begin::Add user-->
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_stock_transfer"  data-kt-action="add_transfer">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
                         {{ __('new supply') }}
                     </button>
@@ -46,7 +56,6 @@
                 <!--end::Toolbar-->
 
                 <!--begin::Modal-->
-                <livewire:stock_request.add-stock-request-modal/>
                 <!--end::Modal-->
             </div>
             <!--end::Card toolbar-->
@@ -63,6 +72,8 @@
         </div>
         <!--end::Card body-->
     </div>
+                <livewire:stock_transfer.add-stock-transfer-modal/>
+                <livewire:stock_request.add-stock-request-modal/>
 
     @push('scripts')
         {{ $dataTable->scripts() }}

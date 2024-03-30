@@ -13,6 +13,7 @@ class Payment extends Model
         'amount',
         'payment_type',
         'reference',
+        'description',
         'remaining_amount',
         'taxpayer_id',
         'invoice_id',

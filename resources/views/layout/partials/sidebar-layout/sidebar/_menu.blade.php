@@ -228,7 +228,17 @@
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
 							</span>
-							<span class="menu-title">{{ __('comptabilite des valeurs inactives') }} </span>
+							<span class="menu-title">{{ __('comptabilite des valeurs inactives du regisseur') }} </span>
+						</a>
+					</div>
+					<!--end:Menu item-->
+					<!--begin:Menu item-->
+					<div class="menu-item">
+						<a class="menu-link {{ request()->routeIs('accounts.stock-requests.*') ? 'active' : '' }}" href="{{ route('accounts.stock-requests.index') }}">
+							<span class="menu-bullet">
+								<span class="bullet bullet-dot"></span>
+							</span>
+							<span class="menu-title">{{ __('etat de versement du regisseur') }} </span>
 						</a>
 					</div>
 					<!--end:Menu item-->
@@ -240,6 +250,16 @@
 								<span class="bullet bullet-dot"></span>
 							</span>
 							<span class="menu-title">{{ __('comptabilite des valeurs inactives du collecteur') }} </span>
+						</a>
+					</div>
+					<!--end:Menu item-->
+					<!--begin:Menu item-->
+					<div class="menu-item">
+						<a class="menu-link {{ request()->routeIs('accounts.collector_deposits.*') ? 'active' : '' }}" href="{{ route('accounts.collector_deposits.index') }}">
+							<span class="menu-bullet">
+								<span class="bullet bullet-dot"></span>
+							</span>
+							<span class="menu-title">{{ __('etat de versement du collecteur') }} </span>
 						</a>
 					</div>
 					<!--end:Menu item-->
