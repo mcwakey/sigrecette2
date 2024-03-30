@@ -119,4 +119,11 @@ class Taxpayer extends Model
     {
         return $this->hasOne(Activity::class);
     }
+    public static function countTaxpayers(){
+        return Taxpayer::selectRaw('gender, count(*) as count')
+            ->groupBy('gender')
+            ->pluck('count', 'gender')
+            ->merge(['Total' =>Taxpayer::count()])
+            ->toArray();
+    }
 }

@@ -671,7 +671,7 @@
                                                                 {{ date('Y-m-d', strtotime($invoice->delivery_date)) }}
                                                             @endif
                                                         @else
-                                                            Pas encore livrée  
+                                                            Pas encore livrée
                                                         @endif
                                                     </td>
 
@@ -802,7 +802,7 @@
                                                                     </div> --}}
                                                                 @endhasanyrole
 
-                                                            @elseif($invoice->status == 'APROVED' ||  $invoice->status == 'PENDING' || $invoice->status == 'CANCELED')
+                                                            @elseif($invoice->status == 'APROVED' ||  $invoice->status == 'PENDING'||  $invoice->status == 'REDUCED' || $invoice->status == 'CANCELED')
                                                                 <div class="menu-item px-3">
                                                                     @php
 
@@ -853,37 +853,40 @@
 
 
                                                                 </div>
-                                                                @if ($invoice->status !== 'CANCELED')
-                                                                    @if ($invoice->pay_status != 'PAID')
-                                                                        @hasanyrole(['agent_recouvrement',
+                                                                @if ($invoice->status !=  'REDUCED')
+                                                                    @if ($invoice->status !== 'CANCELED')
+                                                                        @if ($invoice->pay_status != 'PAID')
+                                                                            @hasanyrole(['agent_recouvrement',
                                                                             'administrateur_system'])
                                                                             <div class="menu-item px-3">
                                                                                 <a href="#" class="menu-link px-3"
-                                                                                    data-kt-user-id="{{ $invoice->invoice_no }}"
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_modal_add_payment"
-                                                                                    data-kt-action="update_payment">
+                                                                                   data-kt-user-id="{{ $invoice->invoice_no }}"
+                                                                                   data-bs-toggle="modal"
+                                                                                   data-bs-target="#kt_modal_add_payment"
+                                                                                   data-kt-action="update_payment">
                                                                                     {{ __('create payment') }}
                                                                                 </a>
                                                                             </div>
                                                                         @endif
-                                                                    @endhasanyrole
-                                                                    <!--end::Menu item cancle option-->
+                                                                        @endhasanyrole
+                                                                        <!--end::Menu item cancle option-->
 
-                                                                    @hasanyrole(['agent_assiette',
+                                                                        @hasanyrole(['agent_assiette',
                                                                         'administrateur_system'])
                                                                         <!--begin::Menu item-->
                                                                         <div class="menu-item px-3">
                                                                             <a href="#" class="menu-link px-3"
-                                                                                data-kt-user-id="{{ $invoice->id }}"
-                                                                                data-bs-toggle="modal"
-                                                                                data-bs-target="#kt_modal_add_invoice"
-                                                                                data-kt-action="update_invoice">
+                                                                               data-kt-user-id="{{ $invoice->id }}"
+                                                                               data-bs-toggle="modal"
+                                                                               data-bs-target="#kt_modal_add_invoice"
+                                                                               data-kt-action="update_invoice">
                                                                                 {{ __('reduction cancelation') }}
                                                                             </a>
                                                                         </div>
-                                                                    @endhasanyrole
+                                                                        @endhasanyrole
                                                                 @endif
+                                                                @endif
+
                                                             @endif
                                                             <!--end::Menu item-->
 

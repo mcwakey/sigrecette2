@@ -219,7 +219,7 @@
                     @endforeach
                     <tr>
                         <th colspan="6" style="text-align: right;">Total:</th>
-                        <td >{{$invoice->amount}}</td>
+                        <td  style="text-align: center;">{{$invoice->amount}}</td>
                     </tr>
                     <tr>
                         <th colspan="7">Tableau du nouveau décompte </th>
@@ -240,7 +240,7 @@
                 <tr>
                     <td colspan="6" style="text-align: right;"><strong>Total :</strong></td>
 
-                    <td>{{$data[3]}}</td>
+                    <td style="text-align: center;">{{$data[3]}}</td>
 
 
 

@@ -48,4 +48,23 @@ class Invoice extends Model
     {
         return $this->hasMany(InvoiceItem::class);
     }
+    public static function countInvoices(Year $year){
+        return Invoice::whereYear('created_at', $year->name)
+            ->selectRaw('status, count(*) as count')
+            ->groupBy('status')
+            ->pluck('count', 'status')
+            ->merge(['NOEXPIRED' => Invoice::whereYear('created_at', $year->name)
+                ->where('status', '!=', 'EXPIRED')
+                ->count()])
+            ->merge(['Pending' => Invoice::whereYear('created_at', $year->name)
+                ->where('status', '!=', 'EXPIRED')
+                ->where('delivery', '=', 'NOT DELIVERED')
+                ->count()])
+            ->merge(['Total' => Invoice::count()])
+            ->toArray();
+    }
+
+//id 	invoice_no 	order_no 	nic 	status 	pay_status 	delivery 	delivery_date
+
+
 }

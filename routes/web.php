@@ -91,6 +91,9 @@ Route::middleware(['auth'])->group(function () {
     //     Route::resource('/user-management/roles', RoleManagementController::class);
     //     Route::resource('/user-management/permissions', PermissionManagementController::class);
     // });
+    Route::get('/generate-pdf/{data}/{type?}/{action?}', [PrintController::class,'download'])->name("generatePdf");
+    Route::Post('/import/taxpayer', [TaxpayerController::class, 'import'])->name('import.process');
+    Route::get('/import/taxpayer',[TaxpayerController::class, 'showImportPage'])->name('import-view');
 
 });
 
@@ -99,7 +102,5 @@ Route::get('/error', function () {
 });
 
 Route::get('/auth/redirect/{provider}', [SocialiteController::class, 'redirect']);
-Route::get('/generate-pdf/{data}/{type?}/{action?}', [PrintController::class,'download'])->name("generatePdf");
-Route::Post('/import/taxpayer', [TaxpayerController::class, 'import'])->name('import.process');
-Route::get('/import/taxpayer',[TaxpayerController::class, 'showImportPage'])->name('import-view');
+
 require __DIR__ . '/auth.php';

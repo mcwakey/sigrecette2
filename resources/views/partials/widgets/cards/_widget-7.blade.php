@@ -1,50 +1,87 @@
-<!--begin::Card widget 7-->
+@php
+$count_tapyers_with_gender = \App\Models\Taxpayer::countTaxpayers();
+@endphp
 <div class="card card-flush h-md-50 mb-5 mb-xl-10">
 	<!--begin::Header-->
 	<div class="card-header pt-5">
 		<!--begin::Title-->
 		<div class="card-title d-flex flex-column">
 			<!--begin::Amount-->
-			<span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">357</span>
+			<span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">{{$count_tapyers_with_gender["Total"]}}</span>
 			<!--end::Amount-->
 			<!--begin::Subtitle-->
-			<span class="text-gray-500 pt-1 fw-semibold fs-6">Professionals</span>
+			<span class="text-gray-500 pt-1 fw-semibold fs-6">Contribuables</span>
 			<!--end::Subtitle-->
 		</div>
 		<!--end::Title-->
 	</div>
+    <div class="card-body d-flex align-items-end pt-6">
+        <!--begin::Row-->
+        <div class="row align-items-center mx-0 w-100">
+            <!--begin::Col-->
+            <div class="col-7 px-0">
+                <!--begin::Labels-->
+                <div class="d-flex flex-column content-justify-center">
+                    <!--begin::Label-->
+                    <div class="d-flex fs-6 fw-semibold align-items-center">
+                        <!--begin::Bullet-->
+                        <div class="bullet bg-success me-3" style="border-radius: 3px;width: 12px;height: 12px"></div>
+                        <!--end::Bullet-->
+
+                        <!--begin::Label-->
+                        <div class="fs-5 fw-bold text-gray-600 me-5">Femme</div>
+                        <!--end::Label-->
+
+                        <!--begin::Stats-->
+                        <div class="ms-auto fw-bolder text-gray-700 text-end">{{$count_tapyers_with_gender["Femme"]}}</div>
+                        <!--end::Stats-->
+                    </div>
+                    <!--end::Label-->
+
+                    <!--begin::Label-->
+                    <div class="d-flex fs-6 fw-semibold align-items-center my-4">
+                        <!--begin::Bullet-->
+                        <div class="bullet bg-primary me-3" style="border-radius: 3px;width: 12px;height: 12px"></div>
+                        <!--end::Bullet-->
+
+                        <!--begin::Label-->
+                        <div class="fs-5 fw-bold text-gray-600 me-5">Homme</div>
+                        <!--end::Label-->
+
+                        <!--begin::Stats-->
+                        <div class="ms-auto fw-bolder text-gray-700 text-end"> {{$count_tapyers_with_gender["Homme"]}}</div>
+                        <!--end::Stats-->
+                    </div>
+                    <!--end::Label-->
+
+                    <!--begin::Label-->
+                    <div class="d-flex fs-6 fw-semibold align-items-center">
+                        <!--begin::Bullet-->
+                        <div class="bullet me-3" style="border-radius: 3px;background-color: #E4E6EF;width: 12px;height: 12px"></div>
+                        <!--end::Bullet-->
+
+                        <!--begin::Label-->
+                        <div class="fs-5 fw-bold text-gray-600 me-5">Ratio F/H</div>
+                        <!--end::Label-->
+
+                        <!--begin::Stats-->
+                        <div class="ms-auto fw-bolder text-gray-700 text-end">{{"~ ". round(  ($count_tapyers_with_gender["Femme"]/$count_tapyers_with_gender["Homme"]) ,2)}}</div>
+                        <!--end::Stats-->
+                    </div>
+                    <!--end::Label-->
+                </div>
+                <!--end::Labels-->
+            </div>
+            <!--end::Col-->
+
+            <!--begin::Col-->
+
+            <!--end::Col-->
+        </div>
+        <!--end::Row-->
+    </div>
 	<!--end::Header-->
 	<!--begin::Card body-->
-	<div class="card-body d-flex flex-column justify-content-end pe-0">
-		<!--begin::Title-->
-		<span class="fs-6 fw-bolder text-gray-800 d-block mb-2">Today’s Heroes</span>
-		<!--end::Title-->
-		<!--begin::Users group-->
-		<div class="symbol-group symbol-hover flex-nowrap">
-			<div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip" title="Alan Warden">
-				<span class="symbol-label bg-warning text-inverse-warning fw-bold">A</span>
-			</div>
-			<div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip" title="Michael Eberon">
-				<img alt="Pic" src="{{ image('avatars/300-11.jpg') }}" />
-			</div>
-			<div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip" title="Susan Redwood">
-				<span class="symbol-label bg-primary text-inverse-primary fw-bold">S</span>
-			</div>
-			<div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip" title="Melody Macy">
-				<img alt="Pic" src="{{ image('avatars/300-2.jpg') }}" />
-			</div>
-			<div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip" title="Perry Matthew">
-				<span class="symbol-label bg-danger text-inverse-danger fw-bold">P</span>
-			</div>
-			<div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip" title="Barry Walter">
-				<img alt="Pic" src="{{ image('avatars/300-12.jpg') }}" />
-			</div>
-			<a href="#" class="symbol symbol-35px symbol-circle" data-bs-toggle="modal" data-bs-target="#kt_modal_view_users">
-				<span class="symbol-label bg-dark text-gray-300 fs-8 fw-bold">+42</span>
-			</a>
-		</div>
-		<!--end::Users group-->
-	</div>
 	<!--end::Card body-->
 </div>
 <!--end::Card widget 7-->

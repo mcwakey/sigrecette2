@@ -116,7 +116,7 @@
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">{{ __('list') }}</span>
+                                <span class="menu-title">{{ __('list_invoice') }}</span>
                             </a>
                             <!--end:Menu link-->
                         </div>
@@ -173,7 +173,7 @@
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">{{ __('list') }}</span>
+                                <span class="menu-title">{{ __('list_recoveries') }}</span>
                             </a>
                             <!--end:Menu link-->
                         </div>
@@ -210,7 +210,7 @@
 
 
             @hasanyrole(['regisseur', 'maire', 'administrateur_system'])
-                
+
 			<!--end:Menu item-->
 			<div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('accounts.*') ? 'here show' : '' }}">
 				<!--begin:Menu link-->
@@ -232,7 +232,7 @@
 						</a>
 					</div>
 					<!--end:Menu item-->
-					
+
 					<!--begin:Menu item-->
 					<div class="menu-item">
 						<a class="menu-link {{ request()->routeIs('accounts.stock-transfers.*') ? 'active' : '' }}" href="{{ route('accounts.stock-transfers.index') }}">
@@ -400,103 +400,138 @@
                     <!--end:Menu link-->
                     <!--begin:Menu sub-->
                     <div class="menu-sub menu-sub-accordion">
-                        <!--begin:Menu item-->
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('settings.taxlabels.*') ? 'active' : '' }}"
-                                href="{{ route('settings.taxlabels.index') }}">
+                        <div class="menu-item menu-accordion" data-kt-menu-trigger="click">
+                            <a href="#" class="menu-link py-3">
+                                <span class="menu-bullet">
+                                 <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">{{ __('taxations') }}</span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="menu-sub menu-sub-accordion pt-3">
+                                <div class="menu-item">
+                                    <!--begin:Menu link-->
+                                    <a class="menu-link {{ request()->routeIs('settings.taxlabels.*') ? 'active' : '' }}"
+                                       href="{{ route('settings.taxlabels.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">{{ __('taxlabels') }}</span>
-                            </a>
-                            <!--end:Menu link-->
+                                        <span class="menu-title">{{ __('taxlabels') }}</span>
+                                    </a>
+                                    <!--end:Menu link-->
+                                </div>
+                                <!--end:Menu item-->
+                                <!--begin:Menu item-->
+                                <div class="menu-item">
+                                    <!--begin:Menu link-->
+                                    <a class="menu-link {{ request()->routeIs('settings.taxables.*') ? 'active' : '' }}"
+                                       href="{{ route('settings.taxables.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                        <span class="menu-title">{{ __('taxables') }}</span>
+                                    </a>
+                                    <!--end:Menu link-->
+                                </div>
+                            </div>
                         </div>
+
                         <!--end:Menu item-->
                         <!--begin:Menu item-->
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('settings.taxables.*') ? 'active' : '' }}"
-                                href="{{ route('settings.taxables.index') }}">
+                        <div class="menu-item menu-accordion" data-kt-menu-trigger="click">
+                            <a href="#" class="menu-link py-3">
+                                <span class="menu-bullet">
+                                 <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">{{ __('administrative_division') }}</span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="menu-sub menu-sub-accordion pt-3">
+                                <div class="menu-item">
+                                    <!--begin:Menu link-->
+                                    <a class="menu-link  {{ request()->routeIs('settings.cantons.*') ? 'active' : '' }}"
+                                       href="{{ route('settings.cantons.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">{{ __('taxables') }}</span>
-                            </a>
-                            <!--end:Menu link-->
-                        </div>
-                        <!--end:Menu item-->
-                        <!--begin:Menu item-->
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link  {{ request()->routeIs('settings.cantons.*') ? 'active' : '' }}"
-                                href="{{ route('settings.cantons.index') }}">
+                                        <span class="menu-title">{{ __('cantons') }}</span>
+                                    </a>
+                                    <!--end:Menu link-->
+                                </div>
+                                <!--end:Menu item-->
+                                <!--begin:Menu item-->
+                                <div class="menu-item">
+                                    <!--begin:Menu link-->
+                                    <a class="menu-link {{ request()->routeIs('settings.towns.*') ? 'active' : '' }}"
+                                       href="{{ route('settings.towns.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">{{ __('cantons') }}</span>
-                            </a>
-                            <!--end:Menu link-->
-                        </div>
-                        <!--end:Menu item-->
-                        <!--begin:Menu item-->
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('settings.towns.*') ? 'active' : '' }}"
-                                href="{{ route('settings.towns.index') }}">
+                                        <span class="menu-title">{{ __('towns') }}</span>
+                                    </a>
+                                    <!--end:Menu link-->
+                                </div>
+                                <!--end:Menu item-->
+                                <!--begin:Menu item-->
+                                <div class="menu-item">
+                                    <!--begin:Menu link-->
+                                    <a class="menu-link {{ request()->routeIs('settings.ereas.*') ? 'active' : '' }}"
+                                       href="{{ route('settings.ereas.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">{{ __('towns') }}</span>
-                            </a>
-                            <!--end:Menu link-->
-                        </div>
-                        <!--end:Menu item-->
-                        <!--begin:Menu item-->
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('settings.ereas.*') ? 'active' : '' }}"
-                                href="{{ route('settings.ereas.index') }}">
+                                        <span class="menu-title">{{ __('ereas') }}</span>
+                                    </a>
+                                    <!--end:Menu link-->
+                                </div>
+                                <div class="menu-item">
+                                    <!--begin:Menu link-->
+                                    <a class="menu-link {{ request()->routeIs('settings.zones.*') ? 'active' : '' }}"
+                                       href="{{ route('settings.zones.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">{{ __('ereas') }}</span>
-                            </a>
-                            <!--end:Menu link-->
+                                        <span class="menu-title">{{ __('zones') }}</span>
+                                    </a>
+                                    <!--end:Menu link-->
+                                </div>
+                            </div>
                         </div>
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('settings.zones.*') ? 'active' : '' }}"
-                                href="{{ route('settings.zones.index') }}">
+
+                        <div class="menu-item menu-accordion" data-kt-menu-trigger="click">
+                            <a href="#" class="menu-link py-3">
+                                <span class="menu-bullet">
+                                 <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">{{ __('economics_activities') }}</span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="menu-sub menu-sub-accordion pt-3">
+                                <div class="menu-item">
+                                    <!--begin:Menu link-->
+                                    <a class="menu-link {{ request()->routeIs('settings.categories.*') ? 'active' : '' }}"
+                                       href="{{ route('settings.categories.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">{{ __('zones') }}</span>
-                            </a>
-                            <!--end:Menu link-->
-                        </div>
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('settings.categories.*') ? 'active' : '' }}"
-                                href="{{ route('settings.categories.index') }}">
+                                        <span class="menu-title">{{ __('categories') }}</span>
+                                    </a>
+                                    <!--end:Menu link-->
+                                </div>
+                                <div class="menu-item">
+                                    <!--begin:Menu link-->
+                                    <a class="menu-link {{ request()->routeIs('settings.activities.*') ? 'active' : '' }}"
+                                       href="{{ route('settings.activities.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">{{ __('categories') }}</span>
-                            </a>
-                            <!--end:Menu link-->
+                                        <span class="menu-title">{{ __('activities') }}</span>
+                                    </a>
+                                    <!--end:Menu link-->
+                                </div>
+                            </div>
                         </div>
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('settings.activities.*') ? 'active' : '' }}"
-                                href="{{ route('settings.activities.index') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">{{ __('activities') }}</span>
-                            </a>
-                            <!--end:Menu link-->
-                        </div>
+
                         <!--end:Menu item-->
                         <!--begin:Menu item-->
                         <!--end:Menu item-->
@@ -511,21 +546,11 @@
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">{{ __('Commune') }}</span>
+                                <span class="menu-title">{{ __('commune_information') }}</span>
                             </a>
                             <!--end:Menu link-->
                         </div>
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('settings.years.*') ? 'active' : '' }}"
-                                href="{{ route('settings.years.index') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">{{ __('Years') }}</span>
-                            </a>
-                            <!--end:Menu link-->
-                        </div>
+
                         <div class="menu-item">
                             <!--begin:Menu link-->
                             <a class="menu-link {{ request()->routeIs('import-view') ? 'active' : '' }}"
@@ -582,7 +607,7 @@
                         </div>
                         <!--end:Menu item-->
 
-                        {{-- 					
+                        {{--
 					<!--begin:Menu item-->
 					<div class="menu-item">
 						<!--begin:Menu link-->

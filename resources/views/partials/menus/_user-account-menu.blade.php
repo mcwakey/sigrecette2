@@ -5,24 +5,32 @@
         <div class="menu-content d-flex align-items-center px-3">
             <!--begin::Avatar-->
             <div class="symbol symbol-50px me-5">
-                @if(Auth::user()->profile_photo_url)
-                <img alt="Logo" src="{{ Auth::user()->profile_photo_url }}" />
-                @else
-                <div class="symbol-label fs-3 {{ app(\App\Actions\GetThemeType::class)->handle('bg-light-? text-?', Auth::user()->name) }}">
-                    {{ substr(Auth::user()->name, 0, 1) }}
-                </div>
+                @if(Auth::user())
+                    @if(Auth::user()->profile_photo_url)
+                        <img alt="Logo" src="{{ Auth::user()->profile_photo_url }}" />
+                    @else
+                        <div class="symbol-label fs-3 {{ app(\App\Actions\GetThemeType::class)->handle('bg-light-? text-?', Auth::user()->name) }}">
+                            {{ substr(Auth::user()->name, 0, 1) }}
+                        </div>
+                    @endif
                 @endif
+
             </div>
             <!--end::Avatar-->
             <!--begin::Username-->
+            @if(Auth::user())
             <div class="d-flex flex-column">
                 <div class="fw-bold d-flex align-items-center fs-5">
                     <span class="text-break">
-                        {{ Auth::user()->name}}
+
+                            {{ Auth::user()->name}}
+
+
                     </span>
                 </div>
                 <a href="#" class="fw-semibold text-muted text-hover-primary fs-7 text-break">{{ Auth::user()->email }}</a>
             </div>
+        @endif
             <!--end::Username-->
         </div>
     </div>
