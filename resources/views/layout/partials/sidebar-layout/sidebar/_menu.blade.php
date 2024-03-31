@@ -232,6 +232,7 @@
 						</a>
 					</div>
 					<!--end:Menu item-->
+					<!--end:Menu item-->
 					<!--begin:Menu item-->
 					<div class="menu-item">
 						<a class="menu-link {{ request()->routeIs('accounts.stock-requests.*') ? 'active' : '' }}" href="{{ route('accounts.stock-requests.index') }}">
