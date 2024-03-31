@@ -33,7 +33,7 @@ $count_tapyers_with_gender = \App\Models\Taxpayer::countTaxpayers();
                         <!--end::Label-->
 
                         <!--begin::Stats-->
-                        <div class="ms-auto fw-bolder text-gray-700 text-end">{{$count_tapyers_with_gender["Femme"]}}</div>
+                        <div class="ms-auto fw-bolder text-gray-700 text-end">{{$count_tapyers_with_gender["Femme"] ?? ''}}</div>
                         <!--end::Stats-->
                     </div>
                     <!--end::Label-->
@@ -49,7 +49,7 @@ $count_tapyers_with_gender = \App\Models\Taxpayer::countTaxpayers();
                         <!--end::Label-->
 
                         <!--begin::Stats-->
-                        <div class="ms-auto fw-bolder text-gray-700 text-end"> {{$count_tapyers_with_gender["Homme"]}}</div>
+                        <div class="ms-auto fw-bolder text-gray-700 text-end"> {{$count_tapyers_with_gender["Homme"] ?? ''}}</div>
                         <!--end::Stats-->
                     </div>
                     <!--end::Label-->
@@ -65,7 +65,8 @@ $count_tapyers_with_gender = \App\Models\Taxpayer::countTaxpayers();
                         <!--end::Label-->
 
                         <!--begin::Stats-->
-                        <div class="ms-auto fw-bolder text-gray-700 text-end">{{"~ ". round(  ($count_tapyers_with_gender["Femme"]/$count_tapyers_with_gender["Homme"]) ,2)}}</div>
+                        <div class="ms-auto fw-bolder text-gray-700 text-end">
+                        </div>
                         <!--end::Stats-->
                     </div>
                     <!--end::Label-->
