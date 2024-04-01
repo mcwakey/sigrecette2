@@ -7,7 +7,7 @@ $count_tapyers_with_gender = \App\Models\Taxpayer::countTaxpayers();
 		<!--begin::Title-->
 		<div class="card-title d-flex flex-column">
 			<!--begin::Amount-->
-			<span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">{{$count_tapyers_with_gender["Total"]}}</span>
+			{{-- <span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">{{$count_tapyers_with_gender["Total"]}}</span> --}}
 			<!--end::Amount-->
 			<!--begin::Subtitle-->
 			<span class="text-gray-500 pt-1 fw-semibold fs-6">Contribuables</span>
@@ -34,6 +34,7 @@ $count_tapyers_with_gender = \App\Models\Taxpayer::countTaxpayers();
 
                         <!--begin::Stats-->
                         <div class="ms-auto fw-bolder text-gray-700 text-end">{{$count_tapyers_with_gender["Femme"] ?? ''}}</div>
+
                         <!--end::Stats-->
                     </div>
                     <!--end::Label-->
@@ -50,7 +51,7 @@ $count_tapyers_with_gender = \App\Models\Taxpayer::countTaxpayers();
 
                         <!--begin::Stats-->
                         <div class="ms-auto fw-bolder text-gray-700 text-end"> {{$count_tapyers_with_gender["Homme"] ?? ''}}</div>
-                        <!--end::Stats-->
+
                     </div>
                     <!--end::Label-->
 
@@ -67,6 +68,7 @@ $count_tapyers_with_gender = \App\Models\Taxpayer::countTaxpayers();
                         <!--begin::Stats-->
                         <div class="ms-auto fw-bolder text-gray-700 text-end">
                         </div>
+
                         <!--end::Stats-->
                     </div>
                     <!--end::Label-->

@@ -40,53 +40,46 @@
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
                 <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
-                    @hasanyrole(['regisseur', 'administrateur_system'])
+                    @can('print invoice')
                         <div href="#" class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm me-2"
                             data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                             {{ __('print') }}
                             <i class="ki-duotone ki-down fs-5 ms-1"></i>
                         </div>
-                    @endhasanyrole
+                    @endcan
 
-                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4"
-                        data-kt-menu="true" id="print-modal">
-                        <div class="menu-item px-3">
-                            <a href="#" class="menu-link px-3 print-link" data-type="1" target="_blank">
-                                {{ __('Bordereau journal des avis des sommes à payer') }}
-                            </a>
+                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4"
+                            data-kt-menu="true" id="print-modal">
+                            <div class="menu-item px-3">
+                                <a href="#" class="menu-link px-3 print-link" data-type="1" target="_blank">
+                                    {{ __('Bordereau journal des avis des sommes à payer') }}
+                                </a>
+                            </div>
+
+
+                            <div class="menu-item px-3">
+                                <a href="#" class="menu-link px-3 print-link" data-type="3" target="_blank">
+                                    {{ __('Journal des avis des sommes à payer confiés par le receveur') }}
+                                </a>
+                            </div>
+
+                            <div class="menu-item px-3">
+                                <a href="#" class="menu-link px-3 print-link" data-type="4" target="_blank">
+                                    {{ __('Fiche de distribution des avis') }}
+                                </a>
+                            </div>
+                            <div class="menu-item px-3">
+                                <a href="#" class="menu-link px-3 print-link" data-type="4" target="_blank">
+                                    {{ __('Registre journal des avis distribués') }}
+                                </a>
+                            </div>
+
+                            <div class="menu-item px-3">
+                                <a href="#" class="menu-link px-3 print-link" data-type="5" target="_blank">
+                                    {{ __('Fiche de recouvrement des avis distribués') }}
+                                </a>
+                            </div>
                         </div>
-
-
-                         <div class="menu-item px-3">
-                            <a href="#" class="menu-link px-3 print-link" data-type="3" target="_blank">
-                                {{ __('Journal des avis des sommes à payer confiés par le receveur') }}
-                        </a>
-                    </div>
-
-                     <div class="menu-item px-3">
-                            <a href="#" class="menu-link px-3 print-link" data-type="4" target="_blank">
-                                {{ __('Fiche de distribution des avis') }}
-                        </a>
-                    </div>
-                        <div class="menu-item px-3">
-                            <a href="#" class="menu-link px-3 print-link" data-type="4" target="_blank">
-                                {{ __('Registre journal des avis distribués') }}
-                            </a>
-                        </div>
-
-                      <div class="menu-item px-3">
-                            <a href="#" class="menu-link px-3 print-link" data-type="5" target="_blank">
-                                {{ __('Fiche de recouvrement des avis distribués') }}
-                        </a>
-                    </div>
-
-
-
-
-
-
-
-                    </div>
 
                 </div>
                 <!--begin::Toolbar-->
@@ -97,21 +90,19 @@
                         {{ __('create invoice') }}
                     </button> -->
 
-                    @hasanyrole(['agent_assiette','administrateur_system'])
-
-                    <button type="button" class="btn btn-light-success ms-auto me-5" data-kt-user-id="1"
-                        data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice_no_taxpayer"
-                        data-kt-action="add_no_invoice">
-                        <i class="ki-duotone ki-add-files fs-3">
-                            <span class="path1"></span>
-                            <span class="path2"></span>
-                            <span class="path3"></span>
-                            <span class="path4"></span>
-                            <span class="path5"></span>
-                        </i> {{ __('create invoice') }}
-                    </button>
-
-                    @endhasanyrole
+                    @can('create invoice payment')
+                        <button type="button" class="btn btn-light-success ms-auto me-5" data-kt-user-id="1"
+                                data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice_no_taxpayer"
+                                data-kt-action="add_no_invoice">
+                            <i class="ki-duotone ki-add-files fs-3">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                    <span class="path3"></span>
+                                    <span class="path4"></span>
+                                    <span class="path5"></span>
+                            </i> {{ __('create invoice') }}
+                        </button>
+                    @endcan
 
 
                     <!--end::Add user-->
@@ -119,15 +110,13 @@
                 <div class="d-flex justify-content-end" data-kt-invoice-table-toolbar="base">
                     <!--begin::Add user-->
 
-                    @hasanyrole(['regisseur','administrateur_system'])
-
-                    <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                        data-bs-target="#kt_modal_auto_invoice">
-                        {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        {{ __('create invoice automaticaly') }}
-                    </button>
-
-                    @endhasanyrole
+                    @can('create invoice automaticaly')
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                            data-bs-target="#kt_modal_auto_invoice">
+                            {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                            {{ __('create invoice automaticaly') }}
+                        </button>
+                    @endcan
 
                     <!--end::Add user-->
                 </div>

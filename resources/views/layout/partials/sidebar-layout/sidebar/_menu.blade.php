@@ -42,22 +42,9 @@
                 <!--end:Menu link-->
                 <!--begin:Menu sub-->
                 <div class="menu-sub menu-sub-accordion">
-                    <!--begin:Menu item-->
-                    <!-- <div class="menu-item"> -->
-                    <!--begin:Menu link-->
-                    <!-- <a class="menu-link {{ request()->routeIs('user-management.users.*') ? 'active' : '' }}" href="{{ route('user-management.users.index') }}">
-       <span class="menu-bullet">
-        <span class="bullet bullet-dot"></span>
-       </span>
-       <span class="menu-title">Create</span>
-      </a> -->
-                    <!--end:Menu link-->
-                    <!-- </div> -->
-                    <!--end:Menu item-->
-                    <!--begin:Menu item-->
                     <div class="menu-item">
 
-                        @hasanyrole(['agent_assiette', 'maire', 'agent_recouvrement', 'administrateur_system'])
+                        @can('create taxpayer')
                             <span class="menu-link ">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
@@ -65,7 +52,7 @@
                                 <span class="menu-title" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_add_taxpayer">{{ __('new taxpayer') }}</span>
                             </span>
-                        @endhasanyrole
+                        @endcan
 
                         <a class="menu-link {{ request()->routeIs('taxpayers.*') ? 'active' : '' }}"
                             href="{{ route('taxpayers.index') }}">
@@ -74,225 +61,149 @@
                             </span>
                             <span class="menu-title">Liste des contribuables</span>
                         </a>
-
                         <!--end:Menu link-->
                     </div>
-                    <!--end:Menu item-->
-                    <!--begin:Menu item-->
-                    <!-- <div class="menu-item"> -->
-                    <!--begin:Menu link-->
-                    <!-- <a class="menu-link {{ request()->routeIs('user-management.permissions.*') ? 'active' : '' }}" href="{{ route('user-management.permissions.index') }}">
-       <span class="menu-bullet">
-        <span class="bullet bullet-dot"></span>
-       </span>
-       <span class="menu-title">Permissions</span>
-      </a> -->
-                    <!--end:Menu link-->
-                    <!-- </div> -->
                     <!--end:Menu item-->
                 </div>
                 <!--end:Menu sub-->
             </div>
             <!--end:Menu item-->
 
-            @hasanyrole(['regisseur', 'maire', 'administrateur_system', 'agent_assiette'])
-                <!--begin:Menu item-->
-                <div data-kt-menu-trigger="click"
-                    class="menu-item menu-accordion {{ request()->routeIs('invoices.*') ? 'here show' : '' }}">
-                    <!--begin:Menu link-->
-                    <span class="menu-link">
-                        <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
-                        <span class="menu-title">{{ __('invoice') }}</span>
-                        <span class="menu-arrow"></span>
-                    </span>
-                    <!--end:Menu link-->
-                    <!--begin:Menu sub-->
-                    <div class="menu-sub menu-sub-accordion">
-                        <!--begin:Menu item-->
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('invoices.*') ? 'active' : '' }}"
-                                href="{{ route('invoices.index') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">Liste des avis</span>
-                            </a>
-                            <!--end:Menu link-->
-                        </div>
-                        <!--end:Menu item-->
-                        <!--begin:Menu item-->
-                        <!-- <div class="menu-item"> -->
+            <!--begin:Menu item-->
+            <div data-kt-menu-trigger="click"
+                class="menu-item menu-accordion {{ request()->routeIs('invoices.*') ? 'here show' : '' }}">
+                <!--begin:Menu link-->
+                <span class="menu-link">
+                    <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
+                    <span class="menu-title">{{ __('invoice') }}</span>
+                    <span class="menu-arrow"></span>
+                </span>
+                <!--end:Menu link-->
+                <!--begin:Menu sub-->
+                <div class="menu-sub menu-sub-accordion">
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
                         <!--begin:Menu link-->
-                        <!-- <a class="menu-link {{ request()->routeIs('user-management.roles.*') ? 'active' : '' }}" href="{{ route('user-management.roles.index') }}">
-           <span class="menu-bullet">
-            <span class="bullet bullet-dot"></span>
-           </span>
-           <span class="menu-title">Roles</span>
-          </a> -->
+                        <a class="menu-link {{ request()->routeIs('invoices.*') ? 'active' : '' }}"
+                            href="{{ route('invoices.index') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Liste des avis</span>
+                        </a>
                         <!--end:Menu link-->
-                        <!-- </div> -->
-                        <!--end:Menu item-->
-                        <!--begin:Menu item-->
-                        <!-- <div class="menu-item"> -->
-                        <!--begin:Menu link-->
-                        <!-- <a class="menu-link {{ request()->routeIs('user-management.permissions.*') ? 'active' : '' }}" href="{{ route('user-management.permissions.index') }}">
-           <span class="menu-bullet">
-            <span class="bullet bullet-dot"></span>
-           </span>
-           <span class="menu-title">Permissions</span>
-          </a> -->
-                        <!--end:Menu link-->
-                        <!-- </div> -->
-                        <!--end:Menu item-->
                     </div>
-                    <!--end:Menu sub-->
                 </div>
-                <!--end:Menu item-->
-            @endhasanyrole
+                <!--end:Menu sub-->
+            </div>
+            <!--end:Menu item-->
 
-
-            @hasanyrole(['regisseur', 'maire', 'administrateur_system'])
-                <!--begin:Menu item-->
-                <div data-kt-menu-trigger="click"
-                    class="menu-item menu-accordion {{ request()->routeIs('revenue.*') ? 'here show' : '' }}">
-                    <!--begin:Menu link-->
-                    <span class="menu-link">
-                        <span class="menu-icon">{!! getIcon('abstract-28', 'fs-2') !!}</span>
-                        <span class="menu-title">{{ __('revenue') }}</span>
-                        <span class="menu-arrow"></span>
-                    </span>
-                    <!--end:Menu link-->
-                    <!--begin:Menu sub-->
-                    <div class="menu-sub menu-sub-accordion">
-                        <!--begin:Menu item-->
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('recoveries.*') ? 'active' : '' }}"
-                                href="{{ route('recoveries.index') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">Liste des recoverements</span>
-                            </a>
-                            <!--end:Menu link-->
-                        </div>
-                        <!--end:Menu item-->
-                        <!--begin:Menu item-->
-                        <!-- <div class="menu-item"> -->
+            <!--begin:Menu item-->
+            <div data-kt-menu-trigger="click"
+                class="menu-item menu-accordion {{ request()->routeIs('recoveries.*') ? 'here show' : '' }}">
+                <!--begin:Menu link-->
+                <span class="menu-link">
+                    <span class="menu-icon">{!! getIcon('abstract-28', 'fs-2') !!}</span>
+                    <span class="menu-title">{{ __('revenue') }}</span>
+                    <span class="menu-arrow"></span>
+                </span>
+                <!--end:Menu link-->
+                <!--begin:Menu sub-->
+                <div class="menu-sub menu-sub-accordion">
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
                         <!--begin:Menu link-->
-                        <!-- <a class="menu-link {{ request()->routeIs('user-management.roles.*') ? 'active' : '' }}" href="{{ route('user-management.roles.index') }}">
-           <span class="menu-bullet">
-            <span class="bullet bullet-dot"></span>
-           </span>
-           <span class="menu-title">Roles</span>
-          </a> -->
+                        <a class="menu-link {{ request()->routeIs('recoveries.*') ? 'active' : '' }}"
+                            href="{{ route('recoveries.index') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Liste des recouvrements</span>
+                        </a>
                         <!--end:Menu link-->
-                        <!-- </div> -->
-                        <!--end:Menu item-->
-                        <!--begin:Menu item-->
-                        <!-- <div class="menu-item"> -->
-                        <!--begin:Menu link-->
-                        <!-- <a class="menu-link {{ request()->routeIs('user-management.permissions.*') ? 'active' : '' }}" href="{{ route('user-management.permissions.index') }}">
-           <span class="menu-bullet">
-            <span class="bullet bullet-dot"></span>
-           </span>
-           <span class="menu-title">Permissions</span>
-          </a> -->
-                        <!--end:Menu link-->
-                        <!-- </div> -->
-                        <!--end:Menu item-->
                     </div>
-                    <!--end:Menu sub-->
                 </div>
-                <!--end:Menu item-->
-            @endhasanyrole
+                <!--end:Menu sub-->
+            </div>
+            <!--end:Menu item-->
 
 
-            @hasanyrole(['regisseur', 'maire', 'administrateur_system'])
+            <!--end:Menu item-->
+            <div data-kt-menu-trigger="click"
+                class="menu-item menu-accordion {{ request()->routeIs('accounts.*') ? 'here show' : '' }}">
+                <!--begin:Menu link-->
+                <span class="menu-link">
+                    <span class="menu-icon">{!! getIcon('abstract-27', 'fs-2') !!}</span>
+                    <span class="menu-title">{{ __('accounts') }}</span>
+                    <span class="menu-arrow"></span>
+                </span>
+                <!--end:Menu link-->
+                <!--begin:Menu sub-->
+                <div class="menu-sub menu-sub-accordion">
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('accounts.stock-requests.*') ? 'active' : '' }}"
+                            href="{{ route('accounts.stock-requests.index') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">{{ __('comptabilite des valeurs inactives du regisseur') }}
+                            </span>
+                        </a>
+                    </div>
+                    <!--end:Menu item-->
+                    <!--end:Menu item-->
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('accounts.stock-requests.*') ? 'active' : '' }}"
+                            href="{{ route('accounts.stock-requests.index') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">{{ __('etat de versement du regisseur') }} </span>
+                        </a>
+                    </div>
+                    <!--end:Menu item-->
 
-			<!--end:Menu item-->
-			<div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('accounts.*') ? 'here show' : '' }}">
-				<!--begin:Menu link-->
-				<span class="menu-link">
-					<span class="menu-icon">{!! getIcon('abstract-27', 'fs-2') !!}</span>
-					<span class="menu-title">{{ __('accounts') }}</span>
-					<span class="menu-arrow"></span>
-				</span>
-				<!--end:Menu link-->
-				<!--begin:Menu sub-->
-				<div class="menu-sub menu-sub-accordion">
-					<!--begin:Menu item-->
-					<div class="menu-item">
-						<a class="menu-link {{ request()->routeIs('accounts.stock-requests.*') ? 'active' : '' }}" href="{{ route('accounts.stock-requests.index') }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
-							</span>
-							<span class="menu-title">{{ __('comptabilite des valeurs inactives du regisseur') }} </span>
-						</a>
-					</div>
-					<!--end:Menu item-->
-					<!--end:Menu item-->
-					<!--begin:Menu item-->
-					<div class="menu-item">
-						<a class="menu-link {{ request()->routeIs('accounts.stock-requests.*') ? 'active' : '' }}" href="{{ route('accounts.stock-requests.index') }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
-							</span>
-							<span class="menu-title">{{ __('etat de versement du regisseur') }} </span>
-						</a>
-					</div>
-					<!--end:Menu item-->
-
-					<!--begin:Menu item-->
-					<div class="menu-item">
-						<a class="menu-link {{ request()->routeIs('accounts.stock-transfers.*') ? 'active' : '' }}" href="{{ route('accounts.stock-transfers.index') }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
-							</span>
-							<span class="menu-title">{{ __('comptabilite des valeurs inactives du collecteur') }} </span>
-						</a>
-					</div>
-					<!--end:Menu item-->
-					<!--begin:Menu item-->
-					<div class="menu-item">
-						<a class="menu-link {{ request()->routeIs('accounts.collector_deposits.*') ? 'active' : '' }}" href="{{ route('accounts.collector_deposits.index') }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
-							</span>
-							<span class="menu-title">{{ __('etat de versement du collecteur') }} </span>
-						</a>
-					</div>
-					<!--end:Menu item-->
-					<!--begin:Menu item-->
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('recoveries.*') ? 'active' : '' }}" href="{{ route('recoveries.index') }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
-							</span>
-							<span class="menu-title">{{ __('livre journal de la regie') }}</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
-					<!--end:Menu item-->
-					<!--begin:Menu item-->
-					<!-- <div class="menu-item"> -->
-						<!--begin:Menu link-->
-						<!-- <a class="menu-link {{ request()->routeIs('user-management.permissions.*') ? 'active' : '' }}" href="{{ route('user-management.permissions.index') }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
-							</span>
-							<span class="menu-title">Permissions</span>
-						</a> -->
-						<!--end:Menu link-->
-					<!-- </div> -->
-					<!--end:Menu item-->
-				</div>
-				<!--end:Menu sub-->
-			</div>
-			<!--end:Menu item-->
-            @endhasanyrole
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('accounts.stock-transfers.*') ? 'active' : '' }}"
+                            href="{{ route('accounts.stock-transfers.index') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">{{ __('comptabilite des valeurs inactives du collecteur') }}
+                            </span>
+                        </a>
+                    </div>
+                    <!--end:Menu item-->
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('accounts.collector_deposits.*') ? 'active' : '' }}"
+                            href="{{ route('accounts.collector_deposits.index') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">{{ __('etat de versement du collecteur') }} </span>
+                        </a>
+                    </div>
+                    <!--end:Menu item-->
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('recoveries.*') ? 'active' : '' }}"
+                            href="{{ route('recoveries.index') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">{{ __('livre journal de la regie') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                </div>
+                <!--end:Menu sub-->
+            </div>
+            <!--end:Menu item-->
 
             <!--begin:Menu item-->
             <div data-kt-menu-trigger="click"
@@ -300,7 +211,7 @@
                 <!--begin:Menu link-->
                 <span class="menu-link">
                     <span class="menu-icon">{!! getIcon('map', 'fs-2') !!}</span>
-                    <span class="menu-title">{{ __('Geolocation') }}</span>
+                    <span class="menu-title">{{ __('Géolocalisation') }}</span>
                     <span class="menu-arrow"></span>
                 </span>
                 <!--end:Menu link-->
@@ -316,7 +227,7 @@
                             <span class="menu-title">{{ __('zones') }}</span>
                         </a>
 
-                        @hasanyrole(['administrateur', 'maire', 'administrateur_system'])
+                        @can('view user geolocation')
                             <a class="menu-link {{ request()->routeIs('geolocation.users') ? 'active' : '' }}"
                                 href="{{ route('geolocation.users') }}">
                                 <span class="menu-bullet">
@@ -324,82 +235,16 @@
                                 </span>
                                 <span class="menu-title">{{ __('users') }}</span>
                             </a>
-                        @endhasanyrole
+                        @endcan
                         <!--end:Menu link-->
                     </div>
-                    <!--end:Menu item-->
-                    <!--begin:Menu item-->
-                    <!-- <div class="menu-item"> -->
-                    <!--begin:Menu link-->
-                    <!-- <a class="menu-link {{ request()->routeIs('user-management.permissions.*') ? 'active' : '' }}" href="{{ route('user-management.permissions.index') }}">
-          <span class="menu-bullet">
-           <span class="bullet bullet-dot"></span>
-          </span>
-          <span class="menu-title">Permissions</span>
-         </a> -->
-                    <!--end:Menu link-->
-                    <!-- </div> -->
                     <!--end:Menu item-->
                 </div>
                 <!--end:Menu sub-->
             </div>
             <!--end:Menu item-->
 
-            <!--begin:Menu item-->
-            {{-- <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('user-management.*') ? 'here show' : '' }}">
-				<!--begin:Menu link-->
-				<span class="menu-link">
-					<span class="menu-icon">{!! getIcon('abstract-28', 'fs-2') !!}</span>
-					<span class="menu-title">{{ __('report') }}</span>
-					<span class="menu-arrow"></span>
-				</span>
-				<!--end:Menu link-->
-				<!--begin:Menu sub-->
-				<div class="menu-sub menu-sub-accordion">
-					<!--begin:Menu item-->
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('user-management.users.*') ? 'active' : '' }}" href="{{ route('user-management.users.index') }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
-							</span>
-							<span class="menu-title">Users</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
-					<!--end:Menu item-->
-					<!--begin:Menu item-->
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('user-management.roles.*') ? 'active' : '' }}" href="{{ route('user-management.roles.index') }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
-							</span>
-							<span class="menu-title">Roles</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
-					<!--end:Menu item-->
-					<!--begin:Menu item-->
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('user-management.permissions.*') ? 'active' : '' }}" href="{{ route('user-management.permissions.index') }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
-							</span>
-							<span class="menu-title">Permissions</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
-					<!--end:Menu item-->
-				</div>
-				<!--end:Menu sub-->
-			</div> --}}
-
-
-            <!--end:Menu item-->
-
-            @hasanyrole(['administrateur', 'maire', 'administrateur_system'])
+            @can('view config')
                 <!--begin:Menu item-->
                 <!--end:Menu item-->
                 <!--begin:Menu item-->
@@ -413,162 +258,161 @@
                 <div class="menu-item menu-accordion" data-kt-menu-trigger="click">
 
                     <span class="menu-link">
-                                <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
-                                <span class="menu-title">{{ __('Taxations')  }}</span>
-                                <span class="menu-arrow"></span>
-                            </span>
-                            <div class="menu-sub menu-sub-accordion pt-3">
-                                <div class="menu-item">
-                                    <!--begin:Menu link-->
-                                    <a class="menu-link {{ request()->routeIs('settings.taxlabels.*') ? 'active' : '' }}"
-                                       href="{{ route('settings.taxlabels.index') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                        <span class="menu-title">{{ __('taxlabels') }}</span>
-                                    </a>
-                                    <!--end:Menu link-->
-                                </div>
-                                <!--end:Menu item-->
-                                <!--begin:Menu item-->
-                                <div class="menu-item">
-                                    <!--begin:Menu link-->
-                                    <a class="menu-link {{ request()->routeIs('settings.taxables.*') ? 'active' : '' }}"
-                                       href="{{ route('settings.taxables.index') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                        <span class="menu-title">{{ __('taxables') }}</span>
-                                    </a>
-                                    <!--end:Menu link-->
-                                </div>
-                            </div>
-                        </div>
-
-                        <!--end:Menu item-->
-                        <!--begin:Menu item-->
-                        <div class="menu-item menu-accordion" data-kt-menu-trigger="click">
-
-                            <span class="menu-link">
-                                <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
-                                <span class="menu-title">{{ __('Découpage administrictif')  }}</span>
-                                <span class="menu-arrow"></span>
-                            </span>
-                            <div class="menu-sub menu-sub-accordion pt-3">
-                                <div class="menu-item">
-                                    <!--begin:Menu link-->
-                                    <a class="menu-link  {{ request()->routeIs('settings.cantons.*') ? 'active' : '' }}"
-                                       href="{{ route('settings.cantons.index') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                        <span class="menu-title">{{ __('cantons') }}</span>
-                                    </a>
-                                    <!--end:Menu link-->
-                                </div>
-                                <!--end:Menu item-->
-                                <!--begin:Menu item-->
-                                <div class="menu-item">
-                                    <!--begin:Menu link-->
-                                    <a class="menu-link {{ request()->routeIs('settings.towns.*') ? 'active' : '' }}"
-                                       href="{{ route('settings.towns.index') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                        <span class="menu-title">{{ __('towns') }}</span>
-                                    </a>
-                                    <!--end:Menu link-->
-                                </div>
-                                <!--end:Menu item-->
-                                <!--begin:Menu item-->
-                                <div class="menu-item">
-                                    <!--begin:Menu link-->
-                                    <a class="menu-link {{ request()->routeIs('settings.ereas.*') ? 'active' : '' }}"
-                                       href="{{ route('settings.ereas.index') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                        <span class="menu-title">{{ __('ereas') }}</span>
-                                    </a>
-                                    <!--end:Menu link-->
-                                </div>
-                                <div class="menu-item">
-                                    <!--begin:Menu link-->
-                                    <a class="menu-link {{ request()->routeIs('settings.zones.*') ? 'active' : '' }}"
-                                       href="{{ route('settings.zones.index') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                        <span class="menu-title">{{ __('zones') }}</span>
-                                    </a>
-                                    <!--end:Menu link-->
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="menu-item menu-accordion" data-kt-menu-trigger="click">
-                            <span class="menu-link">
-                                <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
-                                <span class="menu-title">{{ __('Activities économiques') }}</span>
-                                <span class="menu-arrow"></span>
-                            </span>
-                            <div class="menu-sub menu-sub-accordion pt-3">
-                                <div class="menu-item">
-                                    <!--begin:Menu link-->
-                                    <a class="menu-link {{ request()->routeIs('settings.categories.*') ? 'active' : '' }}"
-                                       href="{{ route('settings.categories.index') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                        <span class="menu-title">{{ __("Categories") }}</span>
-                                    </a>
-                                    <!--end:Menu link-->
-                                </div>
-                                <div class="menu-item">
-                                    <!--begin:Menu link-->
-                                    <a class="menu-link {{ request()->routeIs('settings.activities.*') ? 'active' : '' }}"
-                                       href="{{ route('settings.activities.index') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                        <span class="menu-title">{{ __('Activitiés') }}</span>
-                                    </a>
-                                    <!--end:Menu link-->
-                                </div>
-                            </div>
-                        </div>
-            <div class="menu-item menu-accordion" data-kt-menu-trigger="click">
-                <span class="menu-link">
-                                <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
-                                <span class="menu-title">{{ __('Infos communes') }}</span>
-                                <span class="menu-arrow"></span>
-                            </span>
-                <div class="menu-sub menu-sub-accordion pt-3">
-                    <div class="menu-item">
-                        <!--begin:Menu link-->
-                        <a class="menu-link {{ request()->routeIs('settings.communes.*') ? 'active' : '' }}"
-                           href="{{ route('settings.communes.index') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                            <span class="menu-title">{{ __("Voir les infos communes") }}</span>
-                        </a>
-                        <!--end:Menu link-->
-                    </div>
-                </div>
-            </div>
+                        <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
+                        <span class="menu-title">{{ __('Taxations') }}</span>
+                        <span class="menu-arrow"></span>
+                    </span>
+                    <div class="menu-sub menu-sub-accordion pt-3">
                         <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('import-view') ? 'active' : '' }}"
-                                href="{{ route('import-view') }}">
+                            <a class="menu-link {{ request()->routeIs('settings.taxlabels.*') ? 'active' : '' }}"
+                                href="{{ route('settings.taxlabels.index') }}">
                                 <span class="menu-bullet">
-                                <span class="menu-icon">{!! getIcon('abstract-22', 'fs-2') !!}</span>
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">{{ __('importer des contribuables') }}</span>
+                                <span class="menu-title">{{ __('taxlabels') }}</span>
                             </a>
                             <!--end:Menu link-->
                         </div>
+                        <!--end:Menu item-->
+                        <!--begin:Menu item-->
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->routeIs('settings.taxables.*') ? 'active' : '' }}"
+                                href="{{ route('settings.taxables.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">{{ __('taxables') }}</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+                    </div>
+                </div>
+
+                <!--end:Menu item-->
+                <!--begin:Menu item-->
+                <div class="menu-item menu-accordion" data-kt-menu-trigger="click">
+
+                    <span class="menu-link">
+                        <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
+                        <span class="menu-title">{{ __('Découpage administratif') }}</span>
+                        <span class="menu-arrow"></span>
+                    </span>
+                    <div class="menu-sub menu-sub-accordion pt-3">
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link  {{ request()->routeIs('settings.cantons.*') ? 'active' : '' }}"
+                                href="{{ route('settings.cantons.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">{{ __('cantons') }}</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+                        <!--end:Menu item-->
+                        <!--begin:Menu item-->
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->routeIs('settings.towns.*') ? 'active' : '' }}"
+                                href="{{ route('settings.towns.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">{{ __('towns') }}</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+                        <!--end:Menu item-->
+                        <!--begin:Menu item-->
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->routeIs('settings.ereas.*') ? 'active' : '' }}"
+                                href="{{ route('settings.ereas.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">{{ __('ereas') }}</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->routeIs('settings.zones.*') ? 'active' : '' }}"
+                                href="{{ route('settings.zones.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">{{ __('zones') }}</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item menu-accordion" data-kt-menu-trigger="click">
+                    <span class="menu-link">
+                        <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
+                        <span class="menu-title">{{ __('Activités économiques') }}</span>
+                        <span class="menu-arrow"></span>
+                    </span>
+                    <div class="menu-sub menu-sub-accordion pt-3">
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->routeIs('settings.categories.*') ? 'active' : '' }}"
+                                href="{{ route('settings.categories.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">{{ __('Catégories') }}</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->routeIs('settings.activities.*') ? 'active' : '' }}"
+                                href="{{ route('settings.activities.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">{{ __('Activités') }}</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item menu-accordion" data-kt-menu-trigger="click">
+                    <span class="menu-link">
+                        <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
+                        <span class="menu-title">{{ __('Informations commune') }}</span>
+                        <span class="menu-arrow"></span>
+                    </span>
+                    <div class="menu-sub menu-sub-accordion pt-3">
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->routeIs('settings.communes.*') ? 'active' : '' }}"
+                                href="{{ route('settings.communes.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">{{ __('Voir les informations de la commune') }}</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <!--begin:Menu link-->
+                    <a class="menu-link {{ request()->routeIs('import-view') ? 'active' : '' }}"
+                        href="{{ route('import-view') }}">
+                        <span class="menu-bullet">
+                            <span class="menu-icon">{!! getIcon('user', 'fs-2') !!}</span>
+                        </span>
+                        <span class="menu-title">{{ __('Importer des contribuables') }}</span>
+                    </a>
+                    <!--end:Menu link-->
+                </div>
 
 
                 <!--end:Menu item-->
@@ -612,26 +456,25 @@
                         </div>
                         <!--end:Menu item-->
 
-                        {{--
-					<!--begin:Menu item-->
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('user-management.permissions.*') ? 'active' : '' }}" href="{{ route('user-management.permissions.index') }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
-							</span>
-							<span class="menu-title">{{ __('permissions') }}</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
-					<!--end:Menu item--> --}}
 
-
+                        <!--begin:Menu item-->
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->routeIs('user-management.permissions.*') ? 'active' : '' }}"
+                                href="{{ route('user-management.permissions.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">{{ __('permissions') }}</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+                        <!--end:Menu item-->
                     </div>
                     <!--end:Menu sub-->
                 </div>
                 <!--end:Menu item-->
-            @endhasanyrole
+            @endcan
 
         </div>
         <!--end::Menu-->

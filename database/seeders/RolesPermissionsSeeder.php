@@ -14,92 +14,168 @@ class RolesPermissionsSeeder extends Seeder
      */
     public function run(): void
     {
-        $abilities = [
-            'view',
-            'edit',
-            'create',
-            'delete',
-        ];
-
         $permissions_by_role = [
             'administrateur_system' => [
-                'invoive',
-                'taxpayer',
-                'taxpayer_taxable',
-                'town',
-                'canton',
-                'taxlabel',
-                'gender',
-                'erea',
-                'taxable',
-                'payment',
-                'user',
-                'user_log',
-                'year',
-                'zone',
-                'commune',
-                'address',
-                'activity',
-                'account',
-                'category'
+                // Taxpayer Taxable permissions
+                'create taxpayer taxable asset',
+                'edit taxpayer taxable asset',
+                'delete taxpayer taxable asset',
+
+                // Invoice permissions
+                'create invoice',
+                'create invoice automaticaly',
+                'change invoice draft status to pending',
+                'change invoice pending status to approved',
+                'add invoice delivery date',
+                'print invoice',
+                'reduce invoice amount',
+
+                // Taxpayer permissions
+                'create taxpayer',
+                'edit taxpayer',
+                'delete taxpayer',
+
+                // Payment permissions
+                'create invoice payment',
+                'create no taxpayer invoice payment',
+
+                // Account permissions
+                'view account',
+                'add collector account state',
+                'add collector account supply',
+                'add collector new deposit',
+
+                // Log permissions
+                'view log',
+
+                // Config permissions
+                'view config',
+                'import taxpayer',
+                'create township',
+                'create taxable',
+                'create taxlable',
+                'create canton',
+                'create town',
+                'create tax zone',
+                'create erea',
+                'create activity',
+                'create activity category',
+
+                // User permissions
+                'create user',
+                'edit user',
+                'delete user',
+                'add user role',
+                'add user permission',
+
+
+                // Geolocatoion permissions
+                'view user geolocation',
+                'view zone geolocation',
+
+                // Role permissions
+                'create role',
+                'edit role',
+                'delete role',
             ],
 
-            'administrateur' => [],
+            'administrateur' => [
+                // Config permissions
+                'view config',
+                'import taxpayer',
+                'create township',
+                'create taxable',
+                'create taxlable',
+                'create canton',
+                'create town',
+                'create tax zone',
+                'create erea',
+                'create activity',
+                'create activity category',
 
-            'maire' => [
-                'user',
-                'year',
-                'zone',
-                'commune',
-                'town',
-                'canton',
-                'taxpayer_taxable',
+                // User permissions
+                'create user',
+                'edit user',
+                'delete user',
+                'add user role',
+                'add user permission',
+
+                // Geolocatoion permissions
+                'view user geolocation',
+
+                // Role permissions
+                'create role',
+                'edit role',
+                'delete role',
             ],
+
+            'ordonateur' => [],
 
             'agent_assiette' => [
-                'invoive',
-                'taxpayer',
+                // Taxpayer Taxable permissions
+                'create taxpayer taxable asset',
+                'edit taxpayer taxable asset',
+
+                // Invoice permissions
+                'create invoice',
+                'reduce invoice amount',
             ],
 
             'agent_delegation' => [
-                'invoive',
-                'taxpayer',
+                // Invoice permissions
+                'change invoice draft status to pending',
+                'print invoice',
             ],
 
             'regisseur' => [
-                'invoive',
-                'taxpayer',
-                'payment',
+                // Invoice permissions
+                'change invoice pending status to approved',
+                'print invoice',
+
+                // Payment permissions
+                'create invoice payment',
+                'create no taxpayer invoice payment',
+
+                // Account permissions
+                'view account',
+                'add collector account state',
+                'add collector account supply',
             ],
 
             'agent_recouvrement' => [
-                'payment',
+                // Invoice permissions
+                'add invoice delivery date',
+                'print invoice',
+
+                // Payment permissions
+                'create invoice payment',
+
+                // Account permissions
+                'add collector new deposit',
+
             ],
 
             'collecteur' => [
-                'payment',
+                // Account permissions
+                'add collector new deposit',
             ],
         ];
 
         foreach ($permissions_by_role['administrateur_system'] as $permission) {
-            foreach ($abilities as $ability) {
-                Permission::create(['name' => $ability . ' ' . $permission]);
-            }
+            Permission::create(['name' => $permission]);
         }
 
         foreach ($permissions_by_role as $role => $permissions) {
-            $full_permissions_list = [];
-            foreach ($abilities as $ability) {
-                foreach ($permissions as $permission) {
-                    $full_permissions_list[] = $ability . ' ' . $permission;
-                }
+            $permissions_list = [];
+            foreach ($permissions as $permission) {
+                $permissions_list[] = $permission;
             }
-            Role::create(['name' => $role])->syncPermissions($full_permissions_list);
+            Role::create(['name' => $role])->syncPermissions($permissions_list);
         }
 
         User::find(1)->assignRole('administrateur_system');
         User::find(2)->assignRole('administrateur');
-        User::find(3)->assignRole(['maire']);
+        User::find(3)->assignRole(['ordonateur', 'administrateur']);
         User::find(4)->assignRole('agent_delegation');
         User::find(5)->assignRole('agent_assiette');
         User::find(6)->assignRole('regisseur');

@@ -213,7 +213,7 @@ class AddInvoiceModal extends Component
         DB::transaction(function () {
 
             //dd($this->qty,$this->start_month);
-            if (!$this->edit_mode){
+            if (!$this->edit_mode) {
                 $this->invoice_id = null;
             }
 
@@ -222,8 +222,8 @@ class AddInvoiceModal extends Component
                 'taxpayer_id' => $this->taxpayer_id,
                 'amount' => $this->amount,
                 'qty' => $this->qty,
-                'from_date' => date('Y-').$this->start_month."-01",
-                'to_date' => date('Y-').$this->start_month + $this->qty."-01",
+                'from_date' => date('Y-') . $this->start_month . "-01",
+                'to_date' => date('Y-') . $this->start_month + $this->qty . "-01",
                 // 'pay_status' => 'DRAFT',
             ];
 
@@ -231,8 +231,8 @@ class AddInvoiceModal extends Component
                 $invoiceData['amount'] = $this->amount_e;
                 $invoiceData['reduce_amount'] = $this->reduce_amount;
                 //FIX CANCEL INVOICE BUG
-                if (intval($this->reduce_amount)===0){
-                    $invoiceData['reduce_amount']=$this->amount_e;
+                if (intval($this->reduce_amount) === 0) {
+                    $invoiceData['reduce_amount'] = $this->amount_e;
                 }
                 $invoiceData['status'] = 'DRAFT';
             }
@@ -246,7 +246,7 @@ class AddInvoiceModal extends Component
             // Save the invoice ID into the invoice_no column
 
             $invoice->invoice_no = $this->invoice_id ?? $invoice->id;
-            $invoice->nic = $this->taxpayer_id.($this->invoice_id ?? $invoice->id);
+            $invoice->nic = $this->taxpayer_id . ($this->invoice_id ?? $invoice->id);
             //$invoice->order_no = $this->order_no;
             $invoice->save();
 
@@ -381,39 +381,39 @@ class AddInvoiceModal extends Component
             // Update the value in the component properties using the loop index as the key
             //dd($taxable->taxable);
 
-            if ($invoice_item->taxpayer_taxable->taxable->periodicity == "Mois"){
+            if ($invoice_item->taxpayer_taxable->taxable->periodicity == "Mois") {
                 $period = 1;
             } elseif ($invoice_item->taxpayer_taxable->taxable->periodicity == "Ans") {
                 $period = 0.083333;
-            // }elseif ($taxable->taxable->periodicity == "Jours") {
-            //     $period = 30;
+                // }elseif ($taxable->taxable->periodicity == "Jours") {
+                //     $period = 30;
             } else {
                 $period = 1;
             }
 
             //dd($taxable->taxpayer_taxable->taxable->tax_label->name);
-                $this->periodicity = $invoice_item->taxpayer_taxable->taxable->periodicity;
+            $this->periodicity = $invoice_item->taxpayer_taxable->taxable->periodicity;
 
-                $this->taxable_taxlabel = $invoice_item->taxpayer_taxable->taxable->tax_label->code.' : '.$invoice_item->taxpayer_taxable->taxable->name;
+            $this->taxable_taxlabel = $invoice_item->taxpayer_taxable->taxable->tax_label->code . ' : ' . $invoice_item->taxpayer_taxable->taxable->name;
 
-                $this->taxpayer_taxable_id[$index] = $invoice_item->taxpayer_taxable->id;
-                $this->taxpayer_taxable[$index] = $invoice_item->taxpayer_taxable->name;
+            $this->taxpayer_taxable_id[$index] = $invoice_item->taxpayer_taxable->id;
+            $this->taxpayer_taxable[$index] = $invoice_item->taxpayer_taxable->name;
 
-                $this->s_seize[$index] = $invoice_item->ii_seize;
-                $this->s_seize_e[$index] = $invoice_item->taxpayer_taxable->seize;
+            $this->s_seize[$index] = $invoice_item->ii_seize;
+            $this->s_seize_e[$index] = $invoice_item->taxpayer_taxable->seize;
 
-                    //$this->s_tariff[$index] = $invoice_item->ii_tariff. ' %';
-                    $this->s_tariff[$index] = $invoice_item->ii_tariff;
-                    //$this->s_tariff_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff. ' %';
-                    $this->s_tariff_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff;
+            //$this->s_tariff[$index] = $invoice_item->ii_tariff. ' %';
+            $this->s_tariff[$index] = $invoice_item->ii_tariff;
+            //$this->s_tariff_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff. ' %';
+            $this->s_tariff_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff;
 
-                if ($invoice_item->taxpayer_taxable->taxable->tariff_type == "FIXED"){
-                    $this->s_amount[$index] = $invoice_item->amount;
-                    $this->s_amount_e[$index] =$invoice_item->taxpayer_taxable->taxable->tariff * $invoice_item->taxpayer_taxable->seize * $this->qty * $period;
-                } else {
-                    $this->s_amount[$index] = $invoice_item->amount / 100;
-                    $this->s_amount_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff * $invoice_item->taxpayer_taxable->seize * $this->qty * $period / 100;
-                }
+            if ($invoice_item->taxpayer_taxable->taxable->tariff_type == "FIXED") {
+                $this->s_amount[$index] = $invoice_item->amount;
+                $this->s_amount_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff * $invoice_item->taxpayer_taxable->seize * $this->qty * $period;
+            } else {
+                $this->s_amount[$index] = $invoice_item->amount / 100;
+                $this->s_amount_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff * $invoice_item->taxpayer_taxable->seize * $this->qty * $period / 100;
+            }
 
             // } else {
             //     $this->s_amount[$index] = $taxable->seize * $taxable->taxable->tariff * $value * $period / 100;
@@ -422,8 +422,8 @@ class AddInvoiceModal extends Component
             //$this->taxpayer_taxable_id[$index] = $taxable->id;
         }
 
-        $this->amount_ph = array_sum($this->s_amount)." FCFA";
-        $this->amount_ph_e = array_sum($this->s_amount_e)." FCFA";
+        $this->amount_ph = array_sum($this->s_amount) . " FCFA";
+        $this->amount_ph_e = array_sum($this->s_amount_e) . " FCFA";
 
         $this->amount = array_sum($this->s_amount);
         $this->amount_e = array_sum($this->s_amount_e);
@@ -440,7 +440,7 @@ class AddInvoiceModal extends Component
 
         $this->invoice_id = '';
 
-        $this->qty = '';
+        $this->qty = '1';
 
         // dd($this->edit_mode, 'loadInvoice');
 
@@ -469,6 +469,8 @@ class AddInvoiceModal extends Component
         $this->name = $taxpayer->name;
         $this->tnif = $taxpayer->id;
         $this->zone = $taxpayer->zone->name;
+
+        $this->loadInvoice($this->qty);
     }
 
     public function loadInvoice($value)
@@ -493,12 +495,12 @@ class AddInvoiceModal extends Component
             // Update the value in the component properties using the loop index as the key
             // dd($taxable->taxable);
 
-            if ($taxable->taxable->periodicity == "Mois"){
+            if ($taxable->taxable->periodicity == "Mois") {
                 $period = 1;
             } elseif ($taxable->taxable->periodicity == "Ans") {
                 $period = 0.083333;
-            // }elseif ($taxable->taxable->periodicity == "Jours") {
-            //     $period = 30;
+                // }elseif ($taxable->taxable->periodicity == "Jours") {
+                //     $period = 30;
             } else {
                 $period = 1;
             }
@@ -511,16 +513,16 @@ class AddInvoiceModal extends Component
             $this->s_seize[$index] = $taxable->seize;
             $this->s_tariff[$index] = $taxable->taxable->tariff;
 
-            if ($taxable->taxable->tariff_type == "FIXED"){
+            if ($taxable->taxable->tariff_type == "FIXED") {
                 $this->s_amount[$index] = $taxable->seize * $taxable->taxable->tariff * $this->qty * $period;
             } else {
-                $this->s_amount[$index] = $taxable->seize * $taxable->taxable->tariff * $this->qty* $period / 100;
+                $this->s_amount[$index] = $taxable->seize * $taxable->taxable->tariff * $this->qty * $period / 100;
             }
             //$this->qty[$index] = $taxable->seize;
             $this->taxpayer_taxable_id[$index] = $taxable->id;
         }
 
-        $this->amount_ph = array_sum($this->s_amount)." FCFA";
+        $this->amount_ph = array_sum($this->s_amount) . " FCFA";
         $this->amount = array_sum($this->s_amount);
     }
 

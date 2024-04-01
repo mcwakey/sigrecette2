@@ -1,7 +1,13 @@
-Emission des avis, create invoice by any role??
-
 Breadcrumbs render traduction ??
 
 http://127.0.0.1:8000/user-management/roles/1 , protéger cette page c'est très important !
 
 Mettre en place les middleware pour le management des utilisateurs et les configuration !
+
+Dureé de contrat sur la page d'émissions des avis -> emmanual
+
+Pas de validation sur la date de livrasion d'une avis ? -> date picker
+
+Au niveau de la liste des avis, de laisser la création de l'avis a celui qui peut a la fois réceptionner un payement ? ***** -> emanual
+
+Remove anulation from recrouvement -> honoré

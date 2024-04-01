@@ -48,7 +48,7 @@
                         <div class="card-footer flex-wrap pt-0">
                             <a href="{{ route('user-management.roles.show', $role) }}"
                                 class="btn btn-light btn-active-primary my-1 me-2">{{ __('view role') }}</a>
-                            {{-- <button type="button" class="btn btn-light btn-active-light-primary my-1" data-role-id="{{ $role->name }}" data-bs-toggle="modal" data-bs-target="#kt_modal_update_role">Edit Role</button> --}}
+                            <button type="button" class="btn btn-light btn-active-light-primary my-1" data-role-id="{{ $role->name }}" data-bs-toggle="modal" data-bs-target="#kt_modal_update_role">Edit Role</button>
                         </div>
                         <!--end::Card footer-->
                     </div>
@@ -103,7 +103,7 @@
                         <div class="card-footer flex-wrap pt-0">
                             <a href="{{ route('user-management.roles.show', $role) }}"
                                 class="btn btn-light btn-active-primary my-1 me-2">{{ __('view role') }}</a>
-                            {{-- <button type="button" class="btn btn-light btn-active-light-primary my-1" data-role-id="{{ $role->name }}" data-bs-toggle="modal" data-bs-target="#kt_modal_update_role">Edit Role</button> --}}
+                            <button type="button" class="btn btn-light btn-active-light-primary my-1" data-role-id="{{ $role->name }}" data-bs-toggle="modal" data-bs-target="#kt_modal_update_role">Edit Role</button>
                         </div>
                         <!--end::Card footer-->
                     </div>
@@ -113,7 +113,7 @@
         @endif
     @endforeach
 
-    {{-- <!--begin::Add new card-->
+    <!--begin::Add new card-->
     <div class="ol-md-4">
         <!--begin::Card-->
         <div class="card h-md-100">
@@ -134,6 +134,6 @@
         </div>
         <!--begin::Card-->
     </div>
-    <!--begin::Add new card--> --}}
+    <!--begin::Add new card-->
 
 </div>
