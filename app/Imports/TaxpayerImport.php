@@ -31,87 +31,51 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
      */
     public function model(array $row)
     {
-
-        if (!isset($row['nom'])) {
+        $faker =  fake();
+        if (!isset($row['nom']) || !isset($row['prenoms'])
+            || !isset($row['adresse']  ) || !isset($row['canton'])
+            || !isset($row['ville_village']  ) || !isset($row['zone'])
+            || !isset($row['quartier'])
+        ) {
             return null;
         }
-        $currentRowNumber = $this->getRowNumber();
-        $chunkOffset = $this->getChunkOffset();
-       // dump($currentRowNumber);
+        $existingTaxpayer = Taxpayer::where('name', $row['nom'] . " " . $row['prenoms'])
+            ->where('address', $row["adresse"])
+            ->first();
 
-        //todo update logic to create taxpayers taxables
-        $taxpayer= null;
-        $canton= null;
-        $town= null;
-        $erea= null;
-        $zone= null;
-        if (
-            ($cantonName = $row['canton'] ?? null) !== null &&
-            ($townName = $row['ville_village'] ?? null) !== null &&
-            ($ereaName = $row['quartier'] ?? null) !== null &&
-            ($zoneName = $row['zone'] ?? null) !== null
-        ) {
-            $canton = Canton::firstOrCreate(['name' => $cantonName]);
-            $town = Town::firstOrCreate(['name' => $townName, 'canton_id' => $canton->id]);
-            $erea = Erea::firstOrCreate(['name' => $ereaName, 'town_id' => $town->id]);
-            $zone = Zone::firstOrCreate(['name' => $zoneName]);
+        if ($existingTaxpayer) {
+            return null;
         }
-        if (app()->environment('local')) {
+        $canton = Canton::firstOrCreate(['name' => $row['canton']]);
+        $town = Town::firstOrCreate(['name' => $row['ville_village'], 'canton_id' => $canton->id]);
+        $erea = Erea::firstOrCreate(['name' => $row['quartier'], 'town_id' => $town->id]);
+        $zone = Zone::firstOrCreate(['name' => $row['zone']]);
 
+        // Créer le modèle Taxpayer
+        $taxpayer = new Taxpayer([
+            'tnif' => fake()->randomNumber(3, 1, 10) . Str::random(5) . fake()->randomNumber(3, 0, 9),
+            'name' => $row['nom'] . " " . $row['prenoms'],
+            'email' => fake()->unique()->safeEmail().uniqid("unique"),
+            'email_verified_at' => now(),
+            'gender' => $row["sexe"] ?: $faker->randomElement(['Homme', 'Femme']),
+            'id_type' => $faker->randomElement(['CNI', 'PASSPORT', 'PERMIS DE CONDUIRE', 'CARTE D\'ELECTEUR', 'CARTE DE SEJOUR']),
+            'id_number' => $row["num_identification"] ?? $row["num_carte_electeur"] ?? random_int(1000000, 6000000),
+            'mobilephone' => $row["telephone_1"] ?? " ",
+            'telephone' => $row["telephone_2"] ?? " ",
+            'longitude' => $row["longitude"],
+            'latitude' => $row["latitude"],
+            'address' => $row["adresse"],
+            'town_id' => $town->id,
+            'erea_id' => $erea->id,
+            'zone_id' => $zone->id,
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'remember_token' => Str::random(10),
+        ]);
 
-
-
-            //dd($canton,$town,$erea,$zone);
-
-            $taxpayer= new Taxpayer([
-                'tnif' => fake()->randomNumber(3, 1, 10) . Str::random(5) . fake()->randomNumber(3, 0, 9),
-                'name' => $row['nom']." ".$row['prenoms'],
-                'email' => fake()->unique()->safeEmail().uniqid("unique"),
-                'email_verified_at' => now(),
-                'gender' => $row["sexe"]?:fake()->randomElement(['Homme', 'Femme']),
-                'id_type' => fake()->randomElement(['CNI', 'PASSPORT', 'PERMIS DE CONDUIRE', 'CARTE D\'ELECTEUR', 'CARTE DE SEJOUR']),
-                //'social_work'=>$row[12],
-                'id_number' =>$row[ "num_identification"]?:$row["num_carte_electeur"]?:random_int(1000000, 6000000),
-                'mobilephone' => $row["telephone_1"] ?: fake()->phoneNumber(),
-                'telephone' => $row[ "telephone_2"] ?: fake()->phoneNumber(),
-                'longitude' =>  $row["longitude"],
-                'latitude' => $row["latitude"],
-                'address' => $row["adresse"],
-                'town_id' =>$town ? $town->id : random_int(1, 6),
-                'erea_id' => $erea? $erea->id: random_int(1, 2),
-                'zone_id' => $zone ?$zone->id : random_int(1, 3),
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-                'remember_token' => Str::random(10),
-
-            ]);
-            //$user->setRelation('team', new Team(['name' => $row[1]]));
-
-        }
-        else{
-            $taxpayer= new Taxpayer([
-                'tnif' => fake()->randomNumber(3, 1, 10) . Str::random(5) . fake()->randomNumber(3, 0, 9),
-                'name' => $row['nom']." ".$row['prenoms'],
-                'email' => fake()->unique()->safeEmail().uniqid("unique"),
-                'email_verified_at' => now(),
-                'gender' => $row["sexe"]?:fake()->randomElement(['Homme', 'Femme']),
-                'id_type' => fake()->randomElement(['CNI', 'PASSPORT', 'PERMIS DE CONDUIRE', 'CARTE D\'ELECTEUR', 'CARTE DE SEJOUR']),
-                //'social_work'=>$row[12],
-                'id_number' =>$row[ "num_identification"]?:$row["num_carte_electeur"]?:random_int(1000000, 6000000),
-                'mobilephone' => $row["telephone_1"] ?: fake()->phoneNumber(),
-                'telephone' => $row[ "telephone_2"] ?: fake()->phoneNumber(),
-                'longitude' =>  $row["longitude"],
-                'latitude' => $row["latitude"],
-                'address' => $row["adresse"],
-                'town_id' =>  $town ? $town->id : random_int(1, 6),
-                'erea_id' => $erea? $erea->id: random_int(1, 2),
-                'zone_id' => $zone ?$zone->id : random_int(1, 3),
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-                'remember_token' => Str::random(10),
-
-            ]);
-        }
         return $taxpayer;
     }
+
+
     public function chunkSize(): int
     {
         return 500;
