@@ -72,7 +72,7 @@
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
-                            <span class="menu-title">{{ __('list') }}</span>
+                            <span class="menu-title">Liste des contribuables</span>
                         </a>
 
                         <!--end:Menu link-->
@@ -116,7 +116,7 @@
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">{{ __('list_invoice') }}</span>
+                                <span class="menu-title">Liste des avis</span>
                             </a>
                             <!--end:Menu link-->
                         </div>
@@ -173,7 +173,7 @@
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">{{ __('list_recoveries') }}</span>
+                                <span class="menu-title">Liste des recoverements</span>
                             </a>
                             <!--end:Menu link-->
                         </div>
@@ -401,34 +401,22 @@
 
             @hasanyrole(['administrateur', 'maire', 'administrateur_system'])
                 <!--begin:Menu item-->
+                <!--end:Menu item-->
+                <!--begin:Menu item-->
                 <div class="menu-item pt-5">
                     <!--begin:Menu content-->
                     <div class="menu-content">
-                        <span class="menu-heading fw-bold text-uppercase fs-7">{{ __('control panel') }}</span>
+                        <span class="menu-heading fw-bold text-uppercase fs-7">{{ __('Paramétrages') }}</span>
                     </div>
                     <!--end:Menu content-->
                 </div>
-                <!--end:Menu item-->
-                <!--begin:Menu item-->
-                <div data-kt-menu-trigger="click"
-                    class="menu-item menu-accordion {{ request()->routeIs('settings.*') ? 'here show' : '' }}">
-                    <!--begin:Menu link-->
+                <div class="menu-item menu-accordion" data-kt-menu-trigger="click">
+
                     <span class="menu-link">
-                        <span class="menu-icon">{!! getIcon('abstract-22', 'fs-2') !!}</span>
-                        <span class="menu-title">{{ __('settings') }}</span>
-                        <span class="menu-arrow"></span>
-                    </span>
-                    <!--end:Menu link-->
-                    <!--begin:Menu sub-->
-                    <div class="menu-sub menu-sub-accordion">
-                        <div class="menu-item menu-accordion" data-kt-menu-trigger="click">
-                            <a href="#" class="menu-link py-3">
-                                <span class="menu-bullet">
-                                 <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">{{ __('taxations') }}</span>
+                                <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
+                                <span class="menu-title">{{ __('Taxations')  }}</span>
                                 <span class="menu-arrow"></span>
-                            </a>
+                            </span>
                             <div class="menu-sub menu-sub-accordion pt-3">
                                 <div class="menu-item">
                                     <!--begin:Menu link-->
@@ -460,13 +448,12 @@
                         <!--end:Menu item-->
                         <!--begin:Menu item-->
                         <div class="menu-item menu-accordion" data-kt-menu-trigger="click">
-                            <a href="#" class="menu-link py-3">
-                                <span class="menu-bullet">
-                                 <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">{{ __('administrative_division') }}</span>
+
+                            <span class="menu-link">
+                                <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
+                                <span class="menu-title">{{ __('Découpage administrictif')  }}</span>
                                 <span class="menu-arrow"></span>
-                            </a>
+                            </span>
                             <div class="menu-sub menu-sub-accordion pt-3">
                                 <div class="menu-item">
                                     <!--begin:Menu link-->
@@ -520,13 +507,11 @@
                         </div>
 
                         <div class="menu-item menu-accordion" data-kt-menu-trigger="click">
-                            <a href="#" class="menu-link py-3">
-                                <span class="menu-bullet">
-                                 <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">{{ __('economics_activities') }}</span>
+                            <span class="menu-link">
+                                <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
+                                <span class="menu-title">{{ __('Activities économiques') }}</span>
                                 <span class="menu-arrow"></span>
-                            </a>
+                            </span>
                             <div class="menu-sub menu-sub-accordion pt-3">
                                 <div class="menu-item">
                                     <!--begin:Menu link-->
@@ -535,7 +520,7 @@
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                        <span class="menu-title">{{ __('categories') }}</span>
+                                        <span class="menu-title">{{ __("Categories") }}</span>
                                     </a>
                                     <!--end:Menu link-->
                                 </div>
@@ -546,47 +531,46 @@
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                        <span class="menu-title">{{ __('activities') }}</span>
+                                        <span class="menu-title">{{ __('Activitiés') }}</span>
                                     </a>
                                     <!--end:Menu link-->
                                 </div>
                             </div>
                         </div>
-
-                        <!--end:Menu item-->
-                        <!--begin:Menu item-->
-                        <!--end:Menu item-->
-                        <!--begin:Menu item-->
-
-                        <!--end:Menu item-->
-                        <!--begin:Menu item-->
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('settings.communes.*') ? 'active' : '' }}"
-                                href="{{ route('settings.communes.index') }}">
+            <div class="menu-item menu-accordion" data-kt-menu-trigger="click">
+                <span class="menu-link">
+                                <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
+                                <span class="menu-title">{{ __('Infos communes') }}</span>
+                                <span class="menu-arrow"></span>
+                            </span>
+                <div class="menu-sub menu-sub-accordion pt-3">
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('settings.communes.*') ? 'active' : '' }}"
+                           href="{{ route('settings.communes.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">{{ __('commune_information') }}</span>
-                            </a>
-                            <!--end:Menu link-->
-                        </div>
-
+                            <span class="menu-title">{{ __("Voir les infos communes") }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                </div>
+            </div>
                         <div class="menu-item">
                             <!--begin:Menu link-->
                             <a class="menu-link {{ request()->routeIs('import-view') ? 'active' : '' }}"
                                 href="{{ route('import-view') }}">
                                 <span class="menu-bullet">
+                                <span class="menu-icon">{!! getIcon('abstract-22', 'fs-2') !!}</span>
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">{{ __('import-taxpayers') }}</span>
+                                <span class="menu-title">{{ __('importer des contribuables') }}</span>
                             </a>
                             <!--end:Menu link-->
                         </div>
-                        <!--end:Menu item-->
-                    </div>
-                    <!--end:Menu sub-->
-                </div>
+
+
                 <!--end:Menu item-->
 
                 <!--begin:Menu item-->
