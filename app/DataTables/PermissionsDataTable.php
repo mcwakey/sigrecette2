@@ -20,7 +20,7 @@ class PermissionsDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->editColumn('name', function (Permission $permission) {
-                return ucwords($permission->name);
+                return ucfirst(__($permission->name));
             })
             ->addColumn('assigned_to', function (Permission $permission) {
                 $roles = $permission->roles;

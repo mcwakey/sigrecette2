@@ -24,6 +24,7 @@
 
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
+                @can('create taxlabel')
                 <!--begin::Toolbar-->
                 <div class="d-flex justify-content-end" data-kt-tax_label-table-toolbar="base">
                     <!--begin::Add user-->
@@ -34,6 +35,7 @@
                     <!--end::Add user-->
                 </div>
                 <!--end::Toolbar-->
+                @endcan
 
                 <!--begin::Modal-->
                 <livewire:tax_label.add-tax-label-modal/>

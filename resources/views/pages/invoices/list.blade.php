@@ -85,7 +85,7 @@
                         {{ __('create invoice') }}
                     </button> -->
 
-                    @can('create invoice payment')
+                    @can('create no taxpayer invoice payment')
                         <button type="button" class="btn btn-light-success ms-auto me-5" data-kt-user-id="1"
                                 data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice_no_taxpayer"
                                 data-kt-action="add_no_invoice">

@@ -19,14 +19,13 @@ class RolesPermissionsSeeder extends Seeder
                 // Taxpayer Taxable permissions
                 'create taxpayer taxable asset',
                 'edit taxpayer taxable asset',
-                'delete taxpayer taxable asset',
 
                 // Invoice permissions
                 'create invoice',
                 'create invoice automaticaly',
                 'change invoice draft status to pending',
                 'change invoice pending status to approved',
-                'add invoice delivery date',
+                'create invoice delivery date',
                 'print invoice',
                 'reduce invoice amount',
 
@@ -36,38 +35,37 @@ class RolesPermissionsSeeder extends Seeder
                 'delete taxpayer',
 
                 // Payment permissions
+                'view payment',
                 'create invoice payment',
                 'create no taxpayer invoice payment',
 
                 // Account permissions
                 'view account',
-                'add collector account state',
-                'add collector account supply',
-                'add collector new deposit',
+                'create collector account state',
+                'create collector account supply',
+                'create collector new deposit by manager',
+                'create collector new deposit',
+                'view manager account state',
+                'view manager deposit state',
 
-                // Log permissions
-                'view log',
+                'view manager newspaper',
 
                 // Config permissions
                 'view config',
-                'import taxpayer',
+                'create category',
                 'create township',
                 'create taxable',
-                'create taxlable',
+                'create taxlabel',
                 'create canton',
                 'create town',
-                'create tax zone',
+                'create zone',
                 'create erea',
                 'create activity',
-                'create activity category',
 
                 // User permissions
                 'create user',
                 'edit user',
                 'delete user',
-                'add user role',
-                'add user permission',
-
 
                 // Geolocatoion permissions
                 'view user geolocation',
@@ -79,35 +77,7 @@ class RolesPermissionsSeeder extends Seeder
                 'delete role',
             ],
 
-            'administrateur' => [
-                // Config permissions
-                'view config',
-                'import taxpayer',
-                'create township',
-                'create taxable',
-                'create taxlable',
-                'create canton',
-                'create town',
-                'create tax zone',
-                'create erea',
-                'create activity',
-                'create activity category',
-
-                // User permissions
-                'create user',
-                'edit user',
-                'delete user',
-                'add user role',
-                'add user permission',
-
-                // Geolocatoion permissions
-                'view user geolocation',
-
-                // Role permissions
-                'create role',
-                'edit role',
-                'delete role',
-            ],
+            'administrateur' => [],
 
             'ordonateur' => [],
 
@@ -119,6 +89,10 @@ class RolesPermissionsSeeder extends Seeder
                 // Invoice permissions
                 'create invoice',
                 'reduce invoice amount',
+
+                //Accout permissions
+                'view manager account state',
+                'view manager deposit state',
             ],
 
             'agent_delegation' => [
@@ -129,6 +103,7 @@ class RolesPermissionsSeeder extends Seeder
 
             'regisseur' => [
                 // Invoice permissions
+                'create invoice delivery date',
                 'change invoice pending status to approved',
                 'print invoice',
 
@@ -138,26 +113,23 @@ class RolesPermissionsSeeder extends Seeder
 
                 // Account permissions
                 'view account',
-                'add collector account state',
-                'add collector account supply',
+                'create collector new deposit by manager',
+                'create collector account state',
+                'create collector account supply',
             ],
 
             'agent_recouvrement' => [
                 // Invoice permissions
-                'add invoice delivery date',
+                'create invoice delivery date',
                 'print invoice',
 
                 // Payment permissions
                 'create invoice payment',
-
-                // Account permissions
-                'add collector new deposit',
-
             ],
 
             'collecteur' => [
                 // Account permissions
-                'add collector new deposit',
+                'create collector new deposit',
             ],
         ];
 

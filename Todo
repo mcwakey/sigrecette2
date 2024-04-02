@@ -10,4 +10,15 @@ Pas de validation sur la date de livrasion d'une avis ? -> date picker
 
 Au niveau de la liste des avis, de laisser la création de l'avis a celui qui peut a la fois réceptionner un payement ? ***** -> emanual
 
+Search on permissions list doesn't work properly -> ******
+
+Invoice payment action ****
+
 Remove anulation from recrouvement -> honoré
+
+Tester ces role très rapidement 
+
+Terminer tout sur la géolocalisation
+
+décider du choix entre les notification et le trataitement de la mise a jour d'un utilisateur
+

@@ -128,82 +128,98 @@
             <!--end:Menu item-->
 
 
-            <!--end:Menu item-->
-            <div data-kt-menu-trigger="click"
-                class="menu-item menu-accordion {{ request()->routeIs('accounts.*') ? 'here show' : '' }}">
-                <!--begin:Menu link-->
-                <span class="menu-link">
-                    <span class="menu-icon">{!! getIcon('abstract-27', 'fs-2') !!}</span>
-                    <span class="menu-title">{{ __('accounts') }}</span>
-                    <span class="menu-arrow"></span>
-                </span>
-                <!--end:Menu link-->
-                <!--begin:Menu sub-->
-                <div class="menu-sub menu-sub-accordion">
-                    <!--begin:Menu item-->
-                    <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('accounts.stock-requests.*') ? 'active' : '' }}"
-                            href="{{ route('accounts.stock-requests.index') }}">
-                            <span class="menu-bullet">
-                                <span class="bullet bullet-dot"></span>
-                            </span>
-                            <span class="menu-title">{{ __('comptabilite des valeurs inactives du regisseur') }}
-                            </span>
-                        </a>
-                    </div>
-                    <!--end:Menu item-->
-                    <!--end:Menu item-->
-                    <!--begin:Menu item-->
-                    <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('accounts.stock-requests.*') ? 'active' : '' }}"
-                            href="{{ route('accounts.stock-requests.index') }}">
-                            <span class="menu-bullet">
-                                <span class="bullet bullet-dot"></span>
-                            </span>
-                            <span class="menu-title">{{ __('etat de versement du regisseur') }} </span>
-                        </a>
-                    </div>
-                    <!--end:Menu item-->
+            @can('view account')
+                <!--end:Menu item-->
+                <div data-kt-menu-trigger="click"
+                    class="menu-item menu-accordion {{ request()->routeIs('accounts.*') ? 'here show' : '' }}">
+                    <!--begin:Menu link-->
+                    <span class="menu-link">
+                        <span class="menu-icon">{!! getIcon('abstract-27', 'fs-2') !!}</span>
+                        <span class="menu-title">{{ __('accounts') }}</span>
+                        <span class="menu-arrow"></span>
+                    </span>
+                    <!--end:Menu link-->
+                    <!--begin:Menu sub-->
+                    <div class="menu-sub menu-sub-accordion">
 
-                    <!--begin:Menu item-->
-                    <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('accounts.stock-transfers.*') ? 'active' : '' }}"
-                            href="{{ route('accounts.stock-transfers.index') }}">
-                            <span class="menu-bullet">
-                                <span class="bullet bullet-dot"></span>
-                            </span>
-                            <span class="menu-title">{{ __('comptabilite des valeurs inactives du collecteur') }}
-                            </span>
-                        </a>
+                        @can('view manager account state')
+                            <!--begin:Menu item-->
+                            <div class="menu-item">
+                                <a class="menu-link {{ request()->routeIs('accounts.stock-requests.*') ? 'active' : '' }}"
+                                    href="{{ route('accounts.stock-requests.index') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">{{ __('Comptabilité des valeurs inactives du regisseur') }}
+                                    </span>
+                                </a>
+                            </div>
+                            <!--end:Menu item-->
+                        @endcan
+                        <!--end:Menu item-->
+
+                        @can('view manager deposit state')
+                            <!--begin:Menu item-->
+                            <div class="menu-item">
+                                <a class="menu-link {{ request()->routeIs('accounts.stock-requests.*') ? 'active' : '' }}"
+                                    href="{{ route('accounts.stock-requests.index') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">{{ __('Etat de versement du regisseur') }} </span>
+                                </a>
+                            </div>
+                            <!--end:Menu item-->
+                        @endcan
+
+
+
+                        @can('create collector new deposit by manager')
+                        <!--begin:Menu item-->
+                        <div class="menu-item">
+                            <a class="menu-link {{ request()->routeIs('accounts.stock-transfers.*') ? 'active' : '' }}"
+                                href="{{ route('accounts.stock-transfers.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">{{ __('Comptabilité des valeurs inactives du collecteur') }}
+                                </span>
+                            </a>
+                        </div>
+                        <!--end:Menu item-->
+                        @endcan
+
+
+                        <!--begin:Menu item-->
+                        <div class="menu-item">
+                            <a class="menu-link {{ request()->routeIs('accounts.collector_deposits.*') ? 'active' : '' }}"
+                                href="{{ route('accounts.collector_deposits.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">{{ __('Etat de versement du collecteur') }} </span>
+                            </a>
+                        </div>
+                        <!--end:Menu item-->
+
+                        <!--begin:Menu item-->
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->routeIs('recoveries.*') ? 'active' : '' }}"
+                                href="{{ route('recoveries.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">{{ __('Livre - journal de la regie') }}</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
                     </div>
-                    <!--end:Menu item-->
-                    <!--begin:Menu item-->
-                    <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('accounts.collector_deposits.*') ? 'active' : '' }}"
-                            href="{{ route('accounts.collector_deposits.index') }}">
-                            <span class="menu-bullet">
-                                <span class="bullet bullet-dot"></span>
-                            </span>
-                            <span class="menu-title">{{ __('etat de versement du collecteur') }} </span>
-                        </a>
-                    </div>
-                    <!--end:Menu item-->
-                    <!--begin:Menu item-->
-                    <div class="menu-item">
-                        <!--begin:Menu link-->
-                        <a class="menu-link {{ request()->routeIs('recoveries.*') ? 'active' : '' }}"
-                            href="{{ route('recoveries.index') }}">
-                            <span class="menu-bullet">
-                                <span class="bullet bullet-dot"></span>
-                            </span>
-                            <span class="menu-title">{{ __('livre journal de la regie') }}</span>
-                        </a>
-                        <!--end:Menu link-->
-                    </div>
+                    <!--end:Menu sub-->
                 </div>
-                <!--end:Menu sub-->
-            </div>
-            <!--end:Menu item-->
+                <!--end:Menu item-->
+
+            @endcan
 
             <!--begin:Menu item-->
             <div data-kt-menu-trigger="click"

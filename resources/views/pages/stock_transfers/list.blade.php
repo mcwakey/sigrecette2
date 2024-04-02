@@ -36,7 +36,7 @@
             <div class="card-toolbar">
                 <!--begin::Toolbar-->
 
-                @can('add collector new deposit')
+                @can('create collector new deposit by manager')
                     <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                         <!--begin::Add user-->
                         <button type="button" class="btn btn-warning" data-bs-toggle="modal"
@@ -48,7 +48,7 @@
                     </div>
                 @endcan
 
-                @can('add collector account state')
+                @can('create collector account state')
                     <!--begin::Toolbar-->
                     <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                         <!--begin::Add user-->
@@ -61,7 +61,7 @@
                     </div>
                 @endcan
 
-                @can('add collector account supply')
+                @can('create collector account supply')
                     <!--begin::Toolbar-->
                     <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                         <!--begin::Add user-->
