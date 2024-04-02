@@ -60,7 +60,7 @@ class AddTaxpayerTaxableModal extends Component
 
     protected $rules = [
         'name' => 'required|string',
-        'seize' => 'required|double',
+        'seize' => 'required|numeric',
         //'location' => 'required',
         'taxable_id' => 'required',
         // 'taxpayer_id' => 'required',
