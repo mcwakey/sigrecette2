@@ -221,8 +221,5 @@
 			</div>
 			<!--end::Tab pane-->
 		</div>
-		<!--end::Tab content-->
 	</div>
-	<!--end::Body-->
 </div>
-<!--end::Chart widget 8-->

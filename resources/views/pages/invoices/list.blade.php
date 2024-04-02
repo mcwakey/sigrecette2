@@ -74,11 +74,6 @@
                                 </a>
                             </div>
 
-                            <div class="menu-item px-3">
-                                <a href="#" class="menu-link px-3 print-link" data-type="5" target="_blank">
-                                    {{ __('Fiche de recouvrement des avis distribués') }}
-                                </a>
-                            </div>
                         </div>
 
                 </div>

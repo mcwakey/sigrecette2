@@ -1,6 +1,4 @@
-@php
-$count_tapyers_with_gender = \App\Models\Taxpayer::countTaxpayers();
-@endphp
+
 <div class="card card-flush h-md-50 mb-5 mb-xl-10">
 	<!--begin::Header-->
 	<div class="card-header pt-5">
@@ -10,7 +8,7 @@ $count_tapyers_with_gender = \App\Models\Taxpayer::countTaxpayers();
 			{{-- <span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">{{$count_tapyers_with_gender["Total"]}}</span> --}}
 			<!--end::Amount-->
 			<!--begin::Subtitle-->
-			<span class="text-gray-500 pt-1 fw-semibold fs-6">Contribuables</span>
+			<span class="text-gray-500 pt-1 fw-semibold fs-6"></span>
 			<!--end::Subtitle-->
 		</div>
 		<!--end::Title-->
@@ -21,7 +19,7 @@ $count_tapyers_with_gender = \App\Models\Taxpayer::countTaxpayers();
             <!--begin::Col-->
             <div class="col-7 px-0">
                 <!--begin::Labels-->
-                <div class="d-flex flex-column content-justify-center">
+                <div class="d-flex flex-column content-justify-center" >
                     <!--begin::Label-->
                     <div class="d-flex fs-6 fw-semibold align-items-center">
                         <!--begin::Bullet-->
@@ -29,11 +27,11 @@ $count_tapyers_with_gender = \App\Models\Taxpayer::countTaxpayers();
                         <!--end::Bullet-->
 
                         <!--begin::Label-->
-                        <div class="fs-5 fw-bold text-gray-600 me-5">Femme</div>
+
                         <!--end::Label-->
 
                         <!--begin::Stats-->
-                        <div class="ms-auto fw-bolder text-gray-700 text-end">{{$count_tapyers_with_gender["Femme"] ?? ''}}</div>
+                        <div class="ms-auto fw-bolder text-gray-700 text-end"></div>
 
                         <!--end::Stats-->
                     </div>
@@ -46,11 +44,11 @@ $count_tapyers_with_gender = \App\Models\Taxpayer::countTaxpayers();
                         <!--end::Bullet-->
 
                         <!--begin::Label-->
-                        <div class="fs-5 fw-bold text-gray-600 me-5">Homme</div>
+
                         <!--end::Label-->
 
                         <!--begin::Stats-->
-                        <div class="ms-auto fw-bolder text-gray-700 text-end"> {{$count_tapyers_with_gender["Homme"] ?? ''}}</div>
+                        <div class="ms-auto fw-bolder text-gray-700 text-end"></div>
 
                     </div>
                     <!--end::Label-->
@@ -62,19 +60,20 @@ $count_tapyers_with_gender = \App\Models\Taxpayer::countTaxpayers();
                         <!--end::Bullet-->
 
                         <!--begin::Label-->
-                        <div class="fs-5 fw-bold text-gray-600 me-5">Ratio F/H</div>
+
                         <!--end::Label-->
 
-                        <!--begin::Stats-->
-                        <div class="ms-auto fw-bolder text-gray-700 text-end">
-                        </div>
 
-                        <!--end::Stats-->
+                        <div class="ms-auto fw-bolder text-gray-700 text-end">
+
+                        </div>                        <!--end::Stats-->
                     </div>
                     <!--end::Label-->
                 </div>
+
                 <!--end::Labels-->
             </div>
+
             <!--end::Col-->
 
             <!--begin::Col-->
@@ -83,8 +82,9 @@ $count_tapyers_with_gender = \App\Models\Taxpayer::countTaxpayers();
         </div>
         <!--end::Row-->
     </div>
+
+
 	<!--end::Header-->
 	<!--begin::Card body-->
 	<!--end::Card body-->
 </div>
-<!--end::Card widget 7-->

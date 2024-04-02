@@ -14,12 +14,14 @@ class AddDeliveryForm extends Component
 
     //public $delivery;
     public $delivery_date;
+    public $delivery_to;
 
     public $edit_mode = false;
 
     protected $rules = [
         //"delivery" =>"required",
         "delivery_date" =>"required",
+        "delivery_to"=>"required",
     ];
 
     protected $listeners = [
@@ -45,13 +47,15 @@ class AddDeliveryForm extends Component
             $data = [
                 'delivery' => "DELIVERED",
                 'delivery_date' => $this->delivery_date,
+                "delivery_to"=> $this->delivery_to
+
             ];
 
             //dd($invoiceData);
 
             // Create or update Invoice record
             $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
-            
+
             $this->invoice_id = $invoice->id;
 
             foreach ($data as $k => $v) {

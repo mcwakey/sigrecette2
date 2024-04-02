@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('invoices', function (Blueprint $table) {
-            $table->string('reduce_amount')->after('amount')->nullable()->default('');
+            $table->string('delivery_to')->after('reduce_amount')->nullable()->default('');
         });
-}
+    }
 
     /**
      * Reverse the migrations.
@@ -22,8 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('invoices', function (Blueprint $table) {
-            $table->dropColumn('reduce_amount');
-
+            $table->dropColumn('delivery_to');
         });
     }
 };

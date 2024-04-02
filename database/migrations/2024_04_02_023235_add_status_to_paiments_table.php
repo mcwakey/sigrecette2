@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('payments', function (Blueprint $table) {
-            $table->string('status')->after('remaining_amount')->nullable()->default('DRAFT');;
+            $table->string('status')->after('remaining_amount')->nullable()->default('PENDING');;
             $table->unsignedBigInteger('r_user_id')->index()->nullable();
             $table->foreign('r_user_id')->references('id')->on('users');
         });
