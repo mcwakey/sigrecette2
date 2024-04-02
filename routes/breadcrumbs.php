@@ -122,7 +122,7 @@ Breadcrumbs::for('communes.show', function (BreadcrumbTrail $trail,Commune $comm
 });
 Breadcrumbs::for('import-view', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
-    $trail->push(__('import-taxpayers'), route('import-view'));
+    $trail->push(__('importation de contribuables'), route('import-view'));
 });
 Breadcrumbs::for('communes.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
