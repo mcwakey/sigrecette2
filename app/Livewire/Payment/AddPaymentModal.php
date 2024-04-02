@@ -9,16 +9,18 @@ use App\Models\IdType;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Payment;
-use App\Models\PaymentItem;
+use Illuminate\Support\Facades\Notification;
 use App\Models\Taxpayer;
 use App\Models\TaxpayerTaxable;
 use App\Models\Town;
+use App\Notifications\InvoicePaid;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Spatie\Permission\Models\Role;
 
 class AddPaymentModal extends Component
 {
@@ -151,7 +153,7 @@ class AddPaymentModal extends Component
                 'payment_type' => $this->payment_type,
                 'reference' => $this->reference,
                 'remaining_amount' =>$this->bill-($this->amount + $this->paid),
-                'user_id'=>  Auth::id()
+                'user_id'=>  Auth::id(),
 
             ];
 
@@ -212,7 +214,13 @@ class AddPaymentModal extends Component
             //     ]);
             // }
 
-            // Dispatch success message
+            $role = Role::where('name', 'regisseur')->first();
+
+            if ($role) {
+                $users = $role->users()->get();
+                Notification::send($users, new InvoicePaid($payment));
+
+            }
             if ($this->edit_mode) {
                 $this->dispatch('success', __('Payment updated'));
             } else {

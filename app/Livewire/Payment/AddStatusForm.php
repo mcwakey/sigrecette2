@@ -23,7 +23,7 @@ class AddStatusForm extends Component
 
     protected $listeners = [
         //'delete_user' => 'deleteUser',
-        'update_status' => 'updateStatus',
+        'update_payment_status' => 'updateStatus',
         //'add_payment' => 'addPayment',
     ];
     public function render()
@@ -37,7 +37,7 @@ class AddStatusForm extends Component
 
         // Validate the form input data
         $this->validate();
-
+        
         DB::transaction(function () {
 
             // Prepare data for Payment
@@ -76,7 +76,6 @@ class AddStatusForm extends Component
 
     public function updateStatus($id)
     {
-
         $payment = Payment::find($id);
 
         $this->payment_id = $payment->id;

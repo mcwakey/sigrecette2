@@ -55,19 +55,6 @@
                                     {{ __('Bordereau journal des avis des sommes à payer') }}
                                 </a>
                             </div>
-
-
-                            <div class="menu-item px-3">
-                                <a href="#" class="menu-link px-3 print-link" data-type="3" target="_blank">
-                                    {{ __('Journal des avis des sommes à payer confiés par le receveur') }}
-                                </a>
-                            </div>
-
-                            <div class="menu-item px-3">
-                                <a href="#" class="menu-link px-3 print-link" data-type="4" target="_blank">
-                                    {{ __('Fiche de distribution des avis') }}
-                                </a>
-                            </div>
                             <div class="menu-item px-3">
                                 <a href="#" class="menu-link px-3 print-link" data-type="4" target="_blank">
                                     {{ __('Registre journal des avis distribués') }}

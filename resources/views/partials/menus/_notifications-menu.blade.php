@@ -1,4 +1,11 @@
-<!--begin::Menu-->
+
+
+@php
+    $user = Auth::user();
+
+    // Récupérer les notifications de l'utilisateur
+    $notifications = $user->notifications;
+@endphp
 <div class="menu menu-sub menu-sub-dropdown menu-column w-350px w-lg-375px" data-kt-menu="true" id="kt_menu_notifications">
 	<!--begin::Heading-->
 	<div class="d-flex flex-column bgi-no-repeat rounded-top" style="background-image:url('assets/media/misc/menu-header-bg.jpg')">
@@ -27,28 +34,45 @@
 		<div class="tab-pane fade" id="kt_topbar_notifications_1" role="tabpanel">
 			<!--begin::Items-->
 			<div class="scroll-y mh-325px my-5 px-8">
-				<!--begin::Item-->
-				<div class="d-flex flex-stack py-4">
-					<!--begin::Section-->
-					<div class="d-flex align-items-center">
-						<!--begin::Symbol-->
-						<div class="symbol symbol-35px me-4">
-							<span class="symbol-label bg-light-primary">{!! getIcon('abstract-28', 'fs-2 text-primary') !!}</span>
-						</div>
-						<!--end::Symbol-->
-						<!--begin::Title-->
-						<div class="mb-0 me-2">
-							<a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bold">Project Alice</a>
-							<div class="text-gray-500 fs-7">Phase 1 development</div>
-						</div>
-						<!--end::Title-->
-					</div>
-					<!--end::Section-->
-					<!--begin::Label-->
-					<span class="badge badge-light fs-8">1 hr</span>
-					<!--end::Label-->
-				</div>
-				<!--end::Item-->
+
+                @if(Auth::user() && Auth::user()->notifications->isNotEmpty())
+
+                            @foreach (Auth::user()->notifications as $notification)
+                                <div class="d-flex flex-stack py-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="symbol symbol-35px me-4">
+                                            <span class="symbol-label bg-light-primary">{!! getIcon('abstract-28', 'fs-2 text-primary') !!}</span>
+                                        </div>
+                                        @if ($notification->data['type'] === 'invoice_paid')
+                                            <div class="mb-0 me-2">
+                                                <a href="{{ route('taxpayers.show', \App\Models\Taxpayer::find($notification->data['taxpayer_id'])) }}" class="fs-6 text-gray-800 text-hover-primary fw-bold">Un paiment ajouté</a>
+                                                <div class="text-gray-500 fs-7">{{$notification->data['amount']." "."Invoice_id: ".$notification->data['invoice_id'] }}</div>
+                                            </div>
+                                        @endif
+
+                                        <!--end::Title-->
+                                    </div>
+                                    <!--end::Section-->
+                                    <!--begin::Label-->
+                                    <span class="badge badge-light fs-8">1 hr</span>
+                                    <!--end::Label-->
+                                </div>
+
+
+                                <!-- Ajoutez d'autres conditions pour d'autres types de notification -->
+
+                            @endforeach
+                @else
+                    <p>Aucune notification.</p>
+                @endif
+
+
+
+
+
+
+                {{--
+                <!--end::Item-->
 				<!--begin::Item-->
 				<div class="d-flex flex-stack py-4">
 					<!--begin::Section-->
@@ -180,6 +204,9 @@
 					<span class="badge badge-light fs-8">20 March</span>
 					<!--end::Label-->
 				</div>
+
+
+                --}}
 				<!--end::Item-->
 			</div>
 			<!--end::Items-->
