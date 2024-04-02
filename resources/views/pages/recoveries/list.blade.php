@@ -73,24 +73,6 @@
 
                 </div>
                 <!--begin::Toolbar-->
-                <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
-                    <!--begin::Add user-->
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                        data-bs-target="#kt_modal_add_invoice">
-                        {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        {{ __('create invoice') }}
-                    </button>
-                    <!--end::Add user-->
-                </div>
-                <div class="d-flex justify-content-end" data-kt-invoice-table-toolbar="base">
-                    <!--begin::Add user-->
-                    <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                        data-bs-target="#kt_modal_auto_invoice">
-                        {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        {{ __('create invoice automaticaly') }}
-                    </button>
-                    <!--end::Add user-->
-                </div>
                 <!--end::Toolbar-->
             </div>
             <!--end::Card toolbar-->
