@@ -60,7 +60,7 @@ class Invoice extends Model
                 ->where('status', '!=', 'EXPIRED')
                 ->where('delivery', '=', 'NOT DELIVERED')
                 ->count()])
-            ->merge(['Total' => Invoice::count()])
+            ->merge(['Total' => Invoice::whereYear('created_at', $year->name) ->count()])
             ->toArray();
     }
 

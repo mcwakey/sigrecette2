@@ -97,6 +97,7 @@ class InvoicesDataTable extends DataTable
                         // ->where('taxables.tax_label_id', 'LIKE', '%' . ($this->taxlabel ?? '') . '%')
                         // ->where('invoices.validity', 'EXPIRED')
                         ->select('invoices.*')
+                ->whereBetween('invoices.created_at', [$startOfYear, $endOfYear])
                         ->distinct()
                         ->newQuery();
     }
@@ -136,7 +137,10 @@ class InvoicesDataTable extends DataTable
             Column::make('tax_labels.id')->title(__('taxlabel')),
             Column::make('total')->title(__('amount'))->name('amount'),
             Column::make('validity')->title(__('status')),
-            Column::make('status')->title(__('aproval')),
+            Column::computed('status')->title(__('aproval'))->addClass('text-end text-nowrap')
+                ->exportable(true)
+                ->printable(true)
+                ->width(60),
             Column::make('from_date')->title( __('from_date'))->addClass('text-nowrap'),
             Column::make('to_date')->title( __('expiry date'))->addClass('text-nowrap'),
             Column::computed('action')

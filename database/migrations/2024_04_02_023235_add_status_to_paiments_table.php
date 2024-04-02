@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-
-            Schema::table('payments', function (Blueprint $table) {
-                $table->unsignedBigInteger('user_id')->index();
-                $table->foreign('user_id')->references('id')->on('users');
-            });
-
+        Schema::table('payments', function (Blueprint $table) {
+            $table->string('status')->after('remaining_amount')->nullable()->default('DRAFT');;
+            $table->unsignedBigInteger('r_user_id')->index()->nullable();
+            $table->foreign('r_user_id')->references('id')->on('users');
+        });
     }
 
     /**
@@ -25,7 +24,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('payments', function (Blueprint $table) {
-            $table->dropColumn('user_id');
+            $table->dropColumn('status');
+            $table->dropColumn('r_user_id');
         });
     }
 };
