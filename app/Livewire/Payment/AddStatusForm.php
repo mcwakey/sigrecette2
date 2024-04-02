@@ -33,11 +33,11 @@ class AddStatusForm extends Component
 
     public function submit()
     {
-        //dd($this->status);
+
 
         // Validate the form input data
         $this->validate();
-        
+
         DB::transaction(function () {
 
             // Prepare data for Payment
