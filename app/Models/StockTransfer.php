@@ -16,6 +16,7 @@ class StockTransfer extends Model
         'qty',
         'start_no',
         'end_no',
+        'last_no',
         'taxable_id',
         'trans_type',
         'by_user_id',

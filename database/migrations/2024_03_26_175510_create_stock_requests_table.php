@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('qty')->default(0);
             $table->integer('start_no')->nullable();
             $table->integer('end_no')->nullable();
+            $table->integer('last_no')->nullable();
             $table->string('req_type')->default('DEMANDE');
             $table->string('type')->default('ACTIVE'); // 'ARCHIVE' FOR DONE ONES
             $table->unsignedBigInteger('user_id');

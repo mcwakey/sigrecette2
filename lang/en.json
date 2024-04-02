@@ -307,11 +307,18 @@
     "recoveries information": "Revenue information",
 
     "faire etat de compte du collecteur": "",
-    "": "",
-    "": "",
-    "": "",
-    "": "",
-    "": "",
+
+    "num": "No from - to",
+    "pc qty": "",
+    "pc total": "",
+    "vv qty": "",
+    "vv total": "",
+    "req desc": "Pièces justificatives",
+    
+    "rc qty": "",
+    "rc total": "",
+    "rd qty": "",
+    "rd total": "",
     "": "",
     "": "",
     "": "",

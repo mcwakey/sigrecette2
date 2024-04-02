@@ -2,21 +2,13 @@
 
 namespace App\Livewire\StockRequest;
 
-use App\Models\Canton;
-use App\Models\Erea;
-use App\Models\Gender;
-use App\Models\IdType;
 use App\Models\StockRequest;
 use App\Models\Taxable;
 use App\Models\TaxLabel;
-use App\Models\Taxpayer;
 use App\Models\TaxpayerTaxable;
-use App\Models\Town;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
 
 class AddStockRequestModal extends Component
 {
@@ -32,15 +24,6 @@ class AddStockRequestModal extends Component
 
     public $taxable_id;
     public $taxlabel_id;
-    
-    public $authorisation;
-    public $auth_reference;
-
-    public $unit;
-    
-    public $length;
-    public $width;
-
 
     public $taxables=[];
     public $stock_requests=[];
@@ -48,43 +31,18 @@ class AddStockRequestModal extends Component
     public $taxlabel_name;
     public $taxable_idd;
     public $taxlabel_idd;
-    // public $penalty_type;
-    // public $tax_label_id;
-
-    // public $longitude;
-    // public $latitude;
-    // public $canton;
-    // public $town;
-    // public $erea;
-    // public $address;
-    // public $zone_id;
-    // public $avatar;
-    // public $saved_avatar;
-
 
     public $edit_mode = false;
-    public $option_calculus;
+    //public $option_calculus;
 
     protected $rules = [
         'req_no' => 'required|string',
-        //'seize' => 'required',
-        //'location' => 'required',
-        //'taxable_id' => 'required',
-        // 'taxpayer_id' => 'required',
-
-        // 'penalty' => 'nullable',
-        // 'penalty_type' => 'nullable',
-        //'tax_label' => 'required',
-        // 'tax_label_id' => 'required',
-
-        //'longitude' => 'required',
-        //'latitude' => 'required',
-        // 'canton' => 'required',
-        // 'town' => 'required',
-        // 'erea' => 'required',
-        // 'address' => 'required|string',
-        // 'zone_id' => 'required',
-        // 'avatar' => 'nullable|sometimes|image|max:1024',
+        'qty' => 'required|numeric',
+        'start_no' =>'required|numeric',
+        'end_no' => 'required|numeric',
+        'taxlabel_id' => 'required|numeric',
+        'taxable_id' => 'required|numeric',
+        'user_id' => 'required|numeric',
     ];
 
     protected $listeners = [
@@ -97,17 +55,8 @@ class AddStockRequestModal extends Component
 
     public function render()
     {
-        //$cantons = Canton::all();
-        //$towns = Town::all();
-        //$ereas = Erea::all();
-        //$genders = Gender::all();
         $taxlabels = TaxLabel::all();
-        //$taxables = Taxable::all();
 
-        // Assuming you have a public property $canton in your Livewire component
-
-        //$ereas = $this->town ? Erea::where('town_id', $this->town)->get() : collect();
-        
         $this->user_id = '1';
 
         return view('livewire.stock_request.add-stock-request-modal', compact('taxlabels'));
@@ -115,29 +64,18 @@ class AddStockRequestModal extends Component
 
     public function updatedTaxlabelId($value)
     {
-        $this->taxables = Taxable::where('tax_label_id', $value)->get(); // Load taxables based on tax label ID
-        //$this->reset('taxables');
-        
-        //$this->taxable_id = $taxpayer_taxable->taxable_id;
-
-        //dd($this->taxables);
-        // $this->loadTaxables($value); // Call the loadTaxables method when tax label ID is updated
+        $this->taxables = Taxable::where('tax_label_id', $value)->get();
     }
 
-    public function updatedTaxableId($value)
-    {
-        // Debugging to ensure $value is valid
-        //dd($value." TaxableId");
+    // public function updatedTaxableId($value)
+    // {
+    //     $taxables = Taxable::find($value);
 
-        // Assuming $value is valid, fetch taxables based on tax label ID
-        $taxables = Taxable::find($value);
-        //$this->ereas = Erea::where('town_id', $value)->get(); // Load taxables based on tax label ID
-        //dd($taxables);
-
-        $this->option_calculus = $taxables->unit_type ?? "";
-        $this->unit = $taxables->unit ?? "";
-        $this->tariff = $taxables->tariff ?? "";
-    }
+    //     //$this->option_calculus = $taxables->unit_type ?? "";
+    //     $this->unit = $taxables->unit ?? "";
+    //     $this->tariff = $taxables->tariff ?? "";
+    //     //$this->start_no = $taxables->tariff ?? "";
+    // }
 
     public function updatedEndNo($value)
     {
@@ -164,29 +102,6 @@ class AddStockRequestModal extends Component
         $this->stock_requests = StockRequest::where('req_no', $this->req_no)->where('req_type', 'DEMANDE')->get();
     }
 
-    public function updateCheckbox($id)
-    {
-        // Find the taxpayer by ID
-        //dd($id);
-        $taxpayer_taxables = TaxpayerTaxable::findOrFail($id);
-
-        // Update the invoice_id field based on the checkbox state
-            //dd($taxpayer_taxables->billable);
-        if ($taxpayer_taxables->billable == 0){
-            $taxpayer_taxables->update([
-                'billable' => '1'
-            ]);
-        }else {
-            $taxpayer_taxables->update([
-                'billable' => '0'
-            ]);
-        }
-
-        //$taxpayer_taxables = TaxpayerTaxable::findOrFail($id);
-        //    dd($taxpayer_taxables->billable);
-    }
-
-
     public function submit()
     {
         // Validate the form input data
@@ -200,6 +115,7 @@ class AddStockRequestModal extends Component
                 'req_desc' => 'Demande d’approvisionnement N°'.$this->req_no,
                 'qty' => $this->qty,
                 'start_no' => $this->start_no,
+                'last_no' => $this->start_no,
                 'end_no' => $this->end_no,
                 'taxable_id' => $this->taxable_id,
                 'req_type' => 'DEMANDE',
@@ -214,8 +130,6 @@ class AddStockRequestModal extends Component
 
             $stock_request = StockRequest::create($data);
 
-            //$invoice_old = Invoice::find($this->invoice_id ?? $invoice->id);
-
             $stock_request->req_id = $stock_request->id;
 
             if ($this->edit_mode) {
@@ -225,6 +139,11 @@ class AddStockRequestModal extends Component
             $stock_request->save();
 
             $this->stock_requests = StockRequest::where('req_no', $this->req_no)->where('req_type', 'DEMANDE')->get();
+
+            //$this->req_no = "";
+            $this->qty = "";
+            $this->start_no = "";
+            $this->end_no = "";
 
             if ($this->edit_mode) {
                 // Emit a success event with a message
@@ -239,12 +158,6 @@ class AddStockRequestModal extends Component
 
     public function deleteUser($id)
     {
-        // Prevent deletion of current Taxable
-        // if ($id == Auth::id()) {
-        //     $this->dispatch('error', 'Taxable cannot be deleted');
-        //     return;
-        // }
-
         // Delete the user record with the specified ID
         TaxpayerTaxable::destroy($id);
 
@@ -276,14 +189,6 @@ class AddStockRequestModal extends Component
         $this->taxable_idd = $stock_request->taxable_id;
         $this->taxable_name = $stock_request->taxable->name;
     }
-
-    // public function loadTaxable($id)
-    // {
-    //     $taxables = Taxable::find($id);
-
-
-    //     return $this->taxlabel ? Taxable::where('taxlabel_id', $this->taxlabel)->get() : collect();
-    // }
 
     public function hydrate()
     {

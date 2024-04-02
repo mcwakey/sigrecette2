@@ -20,15 +20,15 @@ class CollectorDepositsDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->filter(function ($query) {
-                if (request()->filled('search.value')) {
-                    $query->where('tax_labels.name', 'like', '%' . request('search.value') . '%')
-                    ->orWhere('taxables.name', 'like', '%' . request('search.value') . '%')
-                    ->orWhere('tax_labels.code', 'like', '%' . request('search.value') . '%')
-                    ->orWhere('bill_status', 'like', '%' . request('search.value') . '%');
-                    // Add additional search conditions as needed for other columns
-                }
-            })
+            // ->filter(function ($query) {
+            //     if (request()->filled('search.value')) {
+            //         $query->where('tax_labels.name', 'like', '%' . request('search.value') . '%')
+            //         ->orWhere('taxables.name', 'like', '%' . request('search.value') . '%')
+            //         ->orWhere('tax_labels.code', 'like', '%' . request('search.value') . '%')
+            //         ->orWhere('bill_status', 'like', '%' . request('search.value') . '%');
+            //         // Add additional search conditions as needed for other columns
+            //     }
+            // })
             ->rawColumns(['status'])
             // ->editColumn('id', function (StockTransfer $stock_transfer) {
             //     return $stock_transfer->id;
@@ -36,16 +36,16 @@ class CollectorDepositsDataTable extends DataTable
             // ->editColumn('trans_no', function (StockTransfer $stock_transfer) {
             //     return view('pages.collector_deposits.columns._bill', compact('collector_deposit'));
             // })
-            ->editColumn('date', function (StockTransfer $stock_transfer) {
+            ->editColumn('stock_transfers.created_at', function (StockTransfer $stock_transfer) {
                 return $stock_transfer->created_at->format('d M Y');
             })
-            ->editColumn('taxable', function (StockTransfer $stock_transfer) {
+            ->editColumn('taxables.name', function (StockTransfer $stock_transfer) {
                 return $stock_transfer->taxable->name;
             })
-            ->editColumn('code', function (StockTransfer $stock_transfer) {
+            ->editColumn('tax_labels.code', function (StockTransfer $stock_transfer) {
                 return $stock_transfer->taxable->tax_label->code;
             })
-            ->editColumn('taxlabel', function (StockTransfer $stock_transfer) {
+            ->editColumn('tax_labels.name', function (StockTransfer $stock_transfer) {
                 return $stock_transfer->taxable->tax_label->name;
             })
             ->editColumn('tariff', function (StockTransfer $stock_transfer) {
@@ -57,12 +57,30 @@ class CollectorDepositsDataTable extends DataTable
             // ->editColumn('tax_type', function (StockTransfer $stock_transfer) {
             //     return $stock_transfer->;
             // })
-            ->editColumn('no', function (StockTransfer $stock_transfer) {
+            ->editColumn('stock_transfers.start_no', function (StockTransfer $stock_transfer) {
                 return $stock_transfer->start_no. " - ". $stock_transfer->end_no;
                 // return view('pages.collector_deposits.columns._seize', compact('collector_deposit'));
             })
+            // ->editColumn('qty', function (StockTransfer $stock_transfer) {
+            //     if ($stock_transfer->trans_type == "RECU") {
+            //         $qty = $stock_transfer->qty ;
+            //     } else {
+            //         $qty =  "";
+            //     }
+
+            //     return $qty;
+            // })
+            // ->editColumn('total', function (StockTransfer $stock_transfer) {
+            //     if ($stock_transfer->trans_type == "RECU") {
+            //         $total = $stock_transfer->qty * $stock_transfer->taxable->tariff; ;
+            //     } else {
+            //         $total =  "";
+            //     }
+
+            //     return $total;
+            // })
             ->editColumn('qty', function (StockTransfer $stock_transfer) {
-                if ($stock_transfer->trans_type == "RECU") {
+                if ($stock_transfer->trans_type == "VENDU") {
                     $qty = $stock_transfer->qty ;
                 } else {
                     $qty =  "";
@@ -71,24 +89,6 @@ class CollectorDepositsDataTable extends DataTable
                 return $qty;
             })
             ->editColumn('total', function (StockTransfer $stock_transfer) {
-                if ($stock_transfer->trans_type == "RECU") {
-                    $total = $stock_transfer->qty * $stock_transfer->taxable->tariff; ;
-                } else {
-                    $total =  "";
-                }
-
-                return $total;
-            })
-            ->editColumn('qty1', function (StockTransfer $stock_transfer) {
-                if ($stock_transfer->trans_type == "VENDU") {
-                    $qty = $stock_transfer->qty ;
-                } else {
-                    $qty =  "";
-                }
-
-                return $qty;
-            })
-            ->editColumn('total1', function (StockTransfer $stock_transfer) {
                 if ($stock_transfer->trans_type == "VENDU") {
                     $total = $stock_transfer->qty * $stock_transfer->taxable->tariff; ;
                 } else {
@@ -97,24 +97,24 @@ class CollectorDepositsDataTable extends DataTable
 
                 return $total;
             })
-            ->editColumn('qty2', function (StockTransfer $stock_transfer) {
-                if ($stock_transfer->trans_type == "RENDU") {
-                    $qty = $stock_transfer->qty ;
-                } else {
-                    $qty =  "";
-                }
+            // ->editColumn('qty2', function (StockTransfer $stock_transfer) {
+            //     if ($stock_transfer->trans_type == "RENDU") {
+            //         $qty = $stock_transfer->qty ;
+            //     } else {
+            //         $qty =  "";
+            //     }
 
-                return $qty;
-            })
-            ->editColumn('total2', function (StockTransfer $stock_transfer) {
-                if ($stock_transfer->trans_type == "RENDU") {
-                    $total = $stock_transfer->qty * $stock_transfer->taxable->tariff; ;
-                } else {
-                    $total =  "";
-                }
+            //     return $qty;
+            // })
+            // ->editColumn('total2', function (StockTransfer $stock_transfer) {
+            //     if ($stock_transfer->trans_type == "RENDU") {
+            //         $total = $stock_transfer->qty * $stock_transfer->taxable->tariff; ;
+            //     } else {
+            //         $total =  "";
+            //     }
 
-                return $total;
-            })
+            //     return $total;
+            // })
             // ->editColumn('qty2', function (StockTransfer $stock_transfer) {
             //     return $stock_transfer->qty;
             // })
@@ -127,8 +127,12 @@ class CollectorDepositsDataTable extends DataTable
             // ->editColumn('location', function (StockTransfer $stock_transfer) {
             //     return view('pages.collector_deposits.columns._location', compact('collector_deposit'));
             // })
-            ->editColumn('created_at', function (StockTransfer $stock_transfer) {
+            ->editColumn('users.name', function (StockTransfer $stock_transfer) {
                 return $stock_transfer->user->name;
+            })
+            ->editColumn('stock_transfers.type', function (StockTransfer $stock_transfer) {
+                return view('pages.stock_transfers.columns._status', compact('stock_transfer'));
+                //return $stock_request->type;
             })
             ->addColumn('action', function (StockTransfer $stock_transfer) {
                 return view('pages.collector_deposits.columns._actions', compact('stock_transfer'));
@@ -142,10 +146,10 @@ class CollectorDepositsDataTable extends DataTable
     // public function query(): QueryBuilder // Remove $request parameter
     public function query(StockTransfer $model): QueryBuilder
     {
-        return $model->with('taxable')
-                    ->join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')
+        return $model->join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')
                     // ->with('taxable.tax_label')
                     ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
+                    ->join('users', 'stock_transfers.to_user_id', '=', 'users.id')
                     ->where('stock_transfers.trans_type', 'VENDU') // Filter collector_deposits by taxpayer_id
                     ->select('stock_transfers.*')
                     //->orderBy('tax_labels.name')
@@ -179,24 +183,25 @@ class CollectorDepositsDataTable extends DataTable
     {
         return [
             Column::make('id')->title(__('id'))->exportable(false)->printable(false)->visible(false), 
-            Column::make('date')->title(__('date'))->addClass('text-nowrap'),
+            Column::make('stock_transfers.created_at')->title(__('date'))->addClass('text-nowrap'),
             //Column::make('trans_desc')->title(__('trans_desc')),
-            Column::make('taxlabel')->title(__('valeur inactif')),
-            Column::make('taxable')->title(__('valeur inactif')),
+            Column::make('tax_labels.name')->title(__('taxlabel')),
+            Column::make('taxables.name')->title(__('taxable')),
             //Column::make('tariff')->title(__('tariff'))->addClass('text-nowrap')->name('tax_labels.name'),
-            Column::make('no')->title(__('no')),
+            Column::make('stock_transfers.start_no')->title(__('num')),
             //Column::make('tax_type')->title(__('tax_type')),
             //Column::make('seize')->title(__('amount')),
             //Column::make('qty')->title(__('rc qty'))->addClass('text-nowrap'),
             //Column::make('total')->title(__('rc total')),
-            Column::make('qty1')->title(__('vd qty'))->addClass('text-nowrap'),
-            Column::make('total1')->title(__('vd total')),
+            Column::make('qty')->title(__('vv qty'))->name('qty'),
+            Column::make('total')->title(__('vv total'))->name('qty'),
             //Column::make('qty2')->title(__('rd qty'))->addClass('text-nowrap'),
             //Column::make('total2')->title(__('rd total')),
             // Column::make('qty2')->title(__('sd qty'))->addClass('text-nowrap'),
             // Column::make('total2')->title(__('sd total')),
-            Column::make('code')->title(__('location'))->addClass('text-nowrap'),
-            Column::make('created_at')->title(__('collector'))->addClass('text-nowrap')->width(150),
+            Column::make('tax_labels.code')->title(__('code')),
+            Column::make('users.name')->title(__('collector')),
+            Column::make('stock_transfers.type')->title(__('status')),
             Column::computed('action')->title(__('action'))
                 ->addClass('text-end text-nowrap')
                 ->exportable(false)

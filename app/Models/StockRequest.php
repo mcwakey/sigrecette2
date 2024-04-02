@@ -16,6 +16,7 @@ class StockRequest extends Model
         'qty',
         'start_no',
         'end_no',
+        'last_no',
         'taxable_id',
         'req_type',
         'user_id',
@@ -24,5 +25,10 @@ class StockRequest extends Model
     public function taxable()
     {
         return $this->belongsTo(Taxable::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

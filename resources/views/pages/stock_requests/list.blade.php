@@ -16,9 +16,19 @@
                 <!--begin::Search-->
                 <div class="d-flex align-items-center position-relative my-1">
                     {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
-                    <input type="text" data-kt-taxpayer-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search Taxpayer" id="mySearchInput"/>
+                    <input type="text" data-kt-taxpayer-table-filter="search" class="form-control w-250px ps-13" placeholder="{{ __('search') }}" id="mySearchInput"/>
                 </div>
                 <!--end::Search-->
+                <!--begin:Action-->
+                <div class="d-flex align-items-center ms-5">
+                        <a href="#" id="kt_horizontal_search_advanced_link" data-kt-rotate="true" class="btn btn-outline btn-outline-dashed btn-outline-secondary btn-active-light-secondary me-5 rotate"
+                            data-bs-toggle="collapse" data-bs-target="#kt_advanced_search_form">
+                            {{ __('advanced search') }} <i
+                                class="ki-duotone ki-black-right-line fs-2 rotate-270 ms-3"><span
+                                    class="path1"></span><span class="path2"></span></i></a>
+                    </div>
+
+                    <!--end:Action-->
             </div>
             <!--begin::Card title-->
 
@@ -27,9 +37,6 @@
 
                 <!--begin::Toolbar-->
                 <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
-                    <span class="ms-2 mt-3 mx-5" data-bs-toggle="tooltip" title="Specify a target name for future usage and referenceSpecify a target name for future usage and referenceSpecify a target name for future usage and referenceSpecify a target name for future usage and referenceSpecify a target name for future usage and reference">
-															<i class="ki-outline ki-information fs-1"></i>
-														</span></a>
                     <!--begin::Add user-->
                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_stock_request"  data-kt-action="add_request">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
@@ -37,11 +44,16 @@
                     </button>
                     <!--end::Add user-->
                 </div>
+                <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
+                        <!--begin::Add user-->
+                        <a href="#" class="ms-5 mt-1" data-bs-toggle="collapse" data-bs-target="#kt_tutorial_form"> 
+                            <span data-bs-toggle="tooltip" title="Onglet tutoriel">
+                                <i class="ki-outline ki-information fs-2tx text-warning"></i>
+                            </span>
+                        </a>
+                        <!--end::Add user-->
+                    </div>
                 <!--end::Toolbar-->
-
-                <!--begin::Modal-->
-                <livewire:stock_request.add-stock-request-modal/>
-                <!--end::Modal-->
             </div>
             <!--end::Card toolbar-->
         </div>
@@ -49,6 +61,143 @@
 
         <!--begin::Card body-->
         <div class="card-body py-4">
+
+            <form action="#">
+                <div class="collapse" id="kt_advanced_search_form">
+                    <!--begin::Separator-->
+                    <!-- <div class="separator separator-dashed mt-5 mb-5"></div> -->
+                    <!--end::Separator-->
+                    <!--begin::Row-->
+                    <div class="row mb-8">
+                        <!--begin::Col-->
+                        <!-- <div class="col-xxl-6"> -->
+                        <!--begin::Col-->
+                        <div class="col-md-2">
+                            <label class="fs-6 form-label fw-bold text-dark">{{ __('No de demande') }}</label>
+                            <input type="text" class="form-control" name="tags" id="mySearchZero" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="fs-6 form-label fw-bold text-dark">{{ __('type') }}</label>
+                            <!-- <input type="text" class="form-control" name="tags" id="mySearchOne" /> -->
+                            <select class="form-select" id="mySearchOne">
+                                <option value=""></option>
+                                <option value="Demande">Demande d'approvisionnement</option>
+                                <option value="Etat">Etat de comptabilite</option>
+                            </select>
+                        </div>
+                        <!--begin::Col-->
+                        <div class="col-md-3">
+                            <label class="fs-6 form-label fw-bold text-dark">{{ __('taxable') }}</label>
+                            <input type="text" class="form-control" name="tags" id="mySearchTwo" />
+                            <!-- <select class="form-select" id="mySearchTwo">
+                                <option value=""></option>
+                                <option value="Demande">Demande d'approvisionnement</option>
+                                <option value="Etat">Etat de comptabilite</option>
+                            </select> -->
+                        </div>
+                        <!--begin::Col-->
+                        <div class="col-md-2">
+                            <label class="fs-6 form-label fw-bold text-dark">{{ __('user') }}</label>
+                            <input type="text" class="form-control" name="tags" id="mySearchFour" />
+                            <!-- <select class="form-select" id="mySearchFour">
+                                <option value=""></option>
+                                <option value="Demande">Demande d'approvisionnement</option>
+                                <option value="Etat">Etat de comptabilite</option>
+                            </select> -->
+                        </div>
+                        <div class="col-md-2">
+                            <label class="fs-6 form-label fw-bold text-dark">{{ __('status') }}</label>
+                            <!-- <input type="text" class="form-control" name="tags" id="mySearchFive" /> -->
+                            <select class="form-select" id="mySearchFive">
+                                <option value=""></option>
+                                <option value="ACTIVE">DEMANDE</option>
+                                <option value="DONE">COMPTABILISE</option>
+                                <option value="ARCHIVE">COMPTE RENDU</option>
+                            </select>
+                        </div>
+                        <!-- </div> -->
+                        <!--end::Col-->
+                    </div>
+                    <!--end::Row-->
+
+                    <div class="separator separator-dashed mt-5 mb-5"></div>
+                </div>
+                <div class="collapse" id="kt_tutorial_form">
+                    <!--begin::Notice-->
+                    <div class="notice d-flex bg-light-danger rounded border-warning border border-dashed p-6">
+                        <!--begin::Icon-->
+                        <i class="ki-outline ki-information fs-2tx text-warning me-4"></i>
+                        <!--end::Icon-->
+                        <!--begin::Wrapper-->
+                        <div class="d-flex flex-stack flex-grow-1">
+                            <!--begin::Content-->
+                            <div class="fw-semibold">
+                                <h4 class="text-gray-900 fw-bold">Tutoriel sur <a class="fw-bold" href="#">Etat de comptabilite des VI du Regisseur</a></h4>
+                                <div class="fs-6 text-gray-700">
+                                   -> clicker ici 
+                                        <a href="#" id="kt_horizontal_search_advanced_link" data-kt-rotate="true" class="btn btn-outline btn-outline-dashed bg-light-secondary btn-outline-secondary btn-active-light-secondary mx-1 rotate"
+                                            data-bs-toggle="collapse" data-bs-target="#kt_advanced_search_form">
+                                            {{ __('advanced search') }} <i
+                                                class="ki-duotone ki-black-right-line fs-2 rotate-270 ms-3"><span
+                                                    class="path1"></span><span class="path2"></span></i></a> pour afficher le formulaire de recherche avancée.
+                                <!-- </div>
+                                <div class="fs-6 text-gray-700"> -->
+                                   -- clicker ici 
+
+                                    <button type="button" class="btn btn-outline-success btn-success mx-1" data-bs-toggle="modal" data-bs-target="#kt_modal_add_stock_request"  data-kt-action="add_request">
+                                        {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                                        {{ __('new stock request') }}
+                                    </button> pour faire une nouvelle demande d'approvisionnement.
+                                </div>
+                                <div class="fs-6 text-gray-700 mt-2">
+                                  -> le STATUT <span class="badge badge-lg badge-light-warning d-inline">DEMANDE</span> est pour les demandes non comptabilisées.
+                                  -> le STATUT <span class="badge badge-lg badge-light-success d-inline">COMPTABILISE</span> est pour les demandes non comptabilisées au niveau des collecteurs.
+                                  -> le STATUT <span class="badge badge-lg badge-light-primary d-inline">COMPTE RENDU</span> est pour les demandes non comptabilisées au niveau du receveur.
+                                  -> utiliser le selecteur <a href="#"
+                                                            class="btn btn-outline-success btn-light btn-active-light-primary btn-flex btn-center btn-sm"
+                                                            data-kt-menu-target="#kt-users-actions"
+                                                            data-kt-menu-trigger="click"
+                                                            data-kt-menu-placement="bottom-end">
+                                                            {{ __('actions') }}
+                                                            <i class="ki-duotone ki-down fs-5 ms-1"></i>
+                                                        </a>
+
+                                                        <!--begin::Menu-->
+                                                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
+                                                            data-kt-menu="true" data-kt-menu-id="#kt-users-actions">
+                                                            <!--begin::Menu item-->
+
+                                                            <div class="menu-item px-3">
+                                                                <a href="#" class="menu-link px-3">
+                                                                    {{ __('view') }}
+                                                                </a>
+                                                            </div>
+                                                            <div class="menu-item px-3">
+                                                                <a href="#" class="menu-link px-3">
+                                                                    {{ __('edit') }}
+                                                                </a>
+                                                            </div>
+                                                            <div class="menu-item px-3">
+                                                                <a href="#" class="menu-link px-3">
+                                                                    {{ __('delete') }}
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                    pour plus de controle sur le tableau en dessous selon vos permissions.
+                                <!-- </div>
+                                <div class="fs-6 text-gray-700 mt-2"> -->
+                                </div>
+                            </div>
+                            <!--end::Content-->
+                        </div>
+                        <!--end::Wrapper-->
+                    </div>
+                    <!--end::Notice-->
+
+                    <div class="separator separator-dashed mt-5 mb-5"></div>
+                </div>
+
+            </form>
             <!--begin::Table-->
             <div class="table-responsive">
                 {{ $dataTable->table() }}
@@ -56,7 +205,12 @@
             <!--end::Table-->
         </div>
         <!--end::Card body-->
+        
     </div>
+
+                <!--begin::Modal-->
+                <livewire:stock_request.add-stock-request-modal/>
+                <!--end::Modal-->
 
     @push('scripts')
         {{ $dataTable->scripts() }}
@@ -64,6 +218,31 @@
             document.getElementById('mySearchInput').addEventListener('keyup', function () {
                 window.LaravelDataTables['stock_requests-table'].search(this.value).draw();
             });
+
+            // document.getElementById('mySearchInput').addEventListener('keyup', function() {
+            //     window.LaravelDataTables['stock_requests-table'].search(this.value).draw();
+            // });
+
+            document.getElementById('mySearchZero').addEventListener('keyup', function() {
+                window.LaravelDataTables['stock_requests-table'].column(2).search(this.value).draw();
+            });
+
+            document.getElementById('mySearchOne').addEventListener('change', function() {
+                window.LaravelDataTables['stock_requests-table'].column(2).search(this.value).draw();
+            });
+
+            document.getElementById('mySearchTwo').addEventListener('keyup', function() {
+                window.LaravelDataTables['stock_requests-table'].column(3).search(this.value).draw();
+            });
+
+            document.getElementById('mySearchFour').addEventListener('keyup', function() {
+                window.LaravelDataTables['stock_requests-table'].column(10).search(this.value).draw();
+            });
+
+            document.getElementById('mySearchFive').addEventListener('change', function() {
+                window.LaravelDataTables['stock_requests-table'].column(11).search(this.value).draw();
+            });
+
             document.addEventListener('livewire:init', function () {
                 Livewire.on('success', function () {
                     $('#kt_modal_add_stock_request').modal('hide');

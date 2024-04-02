@@ -311,6 +311,18 @@
     "recoveries information": "Informations sur les recouvrements",
     "faire etat de compte du collecteur": "Faire etat de compte du Collecteur",
 
+    "num": "No. de - a",
+    "pc qty": "Qté PC",
+    "pc total": "Montant PC",
+    "vv qty": "Qté Vendu",
+    "vv total": "Montant Vendu",
+    "req desc": "Pièces justificatives",
+    
+    "rc qty": "Qté Recu",
+    "rc total": "Montant Recu",
+    "rd qty": "Qté Vendu",
+    "rd total": "Montant Vendu",
+
 
 
 
