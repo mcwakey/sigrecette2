@@ -319,9 +319,10 @@
     "rc total": "",
     "rd qty": "",
     "rd total": "",
-    "": "",
-    "": "",
-    "": "",
+
+    "info commune": "Metro information",
+    "taxations": "Taxation settings",
+    "balance": "Balance",
     "": "",
     "": "",
     "": "",

@@ -41,7 +41,7 @@
             <div class="card-toolbar">
                 <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
                     @can('print invoice')
-                        <div href="#" class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm me-2"
+                        <div href="#" class="btn btn-light btn-active-light-primary btn-flex btn-center ms-auto me-5"
                             data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                             {{ __('print') }}
                             <i class="ki-duotone ki-down fs-5 ms-1"></i>
@@ -247,11 +247,11 @@
             });
 
             document.getElementById('mySearchTen').addEventListener('change', function() {
-                window.LaravelDataTables['invoices-table'].column(10).search(this.value).draw();
+                window.LaravelDataTables['invoices-table'].column(9).search(this.value).draw();
             });
 
             document.getElementById('mySearchEleven').addEventListener('change', function() {
-                window.LaravelDataTables['invoices-table'].column(9).search(this.value).draw();
+                window.LaravelDataTables['invoices-table'].column(12).search(this.value).draw();
             });
 
             document.addEventListener('livewire:init', function() {

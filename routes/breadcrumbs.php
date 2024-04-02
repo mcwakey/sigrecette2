@@ -58,7 +58,6 @@ Breadcrumbs::for('user-management.permissions.index', function (BreadcrumbTrail 
     $trail->push('Permissions', route('user-management.permissions.index'));
 });
 
-
 // Home > Dashboard > Taxpayers
 Breadcrumbs::for('taxpayers.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
@@ -67,7 +66,7 @@ Breadcrumbs::for('taxpayers.index', function (BreadcrumbTrail $trail) {
 
 Breadcrumbs::for('towns.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
-    $trail->push(__('towns'), route('settings.towns.index'));
+    $trail->push(__('towns'), route('administratives.towns.index'));
 });
 Breadcrumbs::for('taxpayers.show', function (BreadcrumbTrail $trail, Taxpayer $taxpayer) {
     $trail->parent('taxpayers.index');
@@ -75,15 +74,15 @@ Breadcrumbs::for('taxpayers.show', function (BreadcrumbTrail $trail, Taxpayer $t
 });
 Breadcrumbs::for('cantons.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
-    $trail->push(__('cantons'), route('settings.cantons.index'));
+    $trail->push(__('cantons'), route('administratives.cantons.index'));
 });
 Breadcrumbs::for('ereas.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
-    $trail->push(__('ereas'), route('settings.ereas.index'));
+    $trail->push(__('ereas'), route('administratives.ereas.index'));
 });
 Breadcrumbs::for('zones.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
-    $trail->push(__('zones'), route('settings.zones.index'));
+    $trail->push(__('zones'), route('administratives.zones.index'));
 });
 Breadcrumbs::for('cantons.show', function (BreadcrumbTrail $trail, Canton $canton) {
     $trail->parent('cantons.index');
@@ -97,7 +96,7 @@ Breadcrumbs::for('categories.show', function (BreadcrumbTrail $trail, Category $
 });
 Breadcrumbs::for('categories.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
-    $trail->push(__('categories'), route('settings.categories.index'));
+    $trail->push(__('categories'), route('economics.categories.index'));
 });
 Breadcrumbs::for('years.show', function (BreadcrumbTrail $trail, Year $year) {
     $trail->parent('years.index');
@@ -105,7 +104,7 @@ Breadcrumbs::for('years.show', function (BreadcrumbTrail $trail, Year $year) {
 });
 Breadcrumbs::for('years.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
-    $trail->push(__('years'), route('settings.years.index'));
+    $trail->push(__('years'), route('economics.years.index'));
 });
 
 Breadcrumbs::for('activities.show', function (BreadcrumbTrail $trail, Activity $activity) {
@@ -114,7 +113,7 @@ Breadcrumbs::for('activities.show', function (BreadcrumbTrail $trail, Activity $
 });
 Breadcrumbs::for('activities.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
-    $trail->push(__('activities'), route('settings.activities.index'));
+    $trail->push(__('activities'), route('economics.activities.index'));
 });
 
 Breadcrumbs::for('communes.show', function (BreadcrumbTrail $trail,Commune $commune) {

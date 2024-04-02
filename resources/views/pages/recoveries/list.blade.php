@@ -43,7 +43,7 @@
                 <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
 
                     @can('print invoice')
-                        <div href="#" class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm me-2"
+                        <div href="#" class="btn btn-light btn-active-light-primary btn-flex btn-center ms-auto me-5"
                             data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                             {{ __('print') }}
                             <i class="ki-duotone ki-down fs-5 ms-1"></i>

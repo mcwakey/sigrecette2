@@ -273,18 +273,20 @@
                     </div>
                     <!--end:Menu content-->
                 </div>
-                <div class="menu-item menu-accordion" data-kt-menu-trigger="click">
+
+                <div data-kt-menu-trigger="click"
+                class="menu-item menu-accordion {{ request()->routeIs('taxations.*') ? 'here show' : '' }}">
 
                     <span class="menu-link">
-                        <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
-                        <span class="menu-title">{{ __('Taxations') }}</span>
+                        <span class="menu-icon">{!! getIcon('technology-4', 'fs-2') !!}</span>
+                        <span class="menu-title">{{ __('taxations') }}</span>
                         <span class="menu-arrow"></span>
                     </span>
                     <div class="menu-sub menu-sub-accordion pt-3">
                         <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('settings.taxlabels.*') ? 'active' : '' }}"
-                                href="{{ route('settings.taxlabels.index') }}">
+                            <a class="menu-link {{ request()->routeIs('taxations.taxlabels.*') ? 'active' : '' }}"
+                                href="{{ route('taxations.taxlabels.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -296,8 +298,8 @@
                         <!--begin:Menu item-->
                         <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('settings.taxables.*') ? 'active' : '' }}"
-                                href="{{ route('settings.taxables.index') }}">
+                            <a class="menu-link {{ request()->routeIs('taxations.taxables.*') ? 'active' : '' }}"
+                                href="{{ route('taxations.taxables.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -310,18 +312,19 @@
 
                 <!--end:Menu item-->
                 <!--begin:Menu item-->
-                <div class="menu-item menu-accordion" data-kt-menu-trigger="click">
+                <div data-kt-menu-trigger="click"
+                class="menu-item menu-accordion {{ request()->routeIs('administratives.*') ? 'here show' : '' }}">
 
                     <span class="menu-link">
-                        <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
+                        <span class="menu-icon">{!! getIcon('pointers', 'fs-2') !!}</span>
                         <span class="menu-title">{{ __('Découpage administratif') }}</span>
                         <span class="menu-arrow"></span>
                     </span>
                     <div class="menu-sub menu-sub-accordion pt-3">
                         <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link  {{ request()->routeIs('settings.cantons.*') ? 'active' : '' }}"
-                                href="{{ route('settings.cantons.index') }}">
+                            <a class="menu-link  {{ request()->routeIs('administratives.cantons.*') ? 'active' : '' }}"
+                                href="{{ route('administratives.cantons.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -333,8 +336,8 @@
                         <!--begin:Menu item-->
                         <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('settings.towns.*') ? 'active' : '' }}"
-                                href="{{ route('settings.towns.index') }}">
+                            <a class="menu-link {{ request()->routeIs('administratives.towns.*') ? 'active' : '' }}"
+                                href="{{ route('administratives.towns.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -346,8 +349,8 @@
                         <!--begin:Menu item-->
                         <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('settings.ereas.*') ? 'active' : '' }}"
-                                href="{{ route('settings.ereas.index') }}">
+                            <a class="menu-link {{ request()->routeIs('administratives.ereas.*') ? 'active' : '' }}"
+                                href="{{ route('administratives.ereas.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -357,8 +360,8 @@
                         </div>
                         <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('settings.zones.*') ? 'active' : '' }}"
-                                href="{{ route('settings.zones.index') }}">
+                            <a class="menu-link {{ request()->routeIs('administratives.zones.*') ? 'active' : '' }}"
+                                href="{{ route('administratives.zones.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -369,7 +372,8 @@
                     </div>
                 </div>
 
-                <div class="menu-item menu-accordion" data-kt-menu-trigger="click">
+                <div data-kt-menu-trigger="click"
+                class="menu-item menu-accordion {{ request()->routeIs('economics.*') ? 'here show' : '' }}">
                     <span class="menu-link">
                         <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
                         <span class="menu-title">{{ __('Activités économiques') }}</span>
@@ -378,8 +382,8 @@
                     <div class="menu-sub menu-sub-accordion pt-3">
                         <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('settings.categories.*') ? 'active' : '' }}"
-                                href="{{ route('settings.categories.index') }}">
+                            <a class="menu-link {{ request()->routeIs('economics.categories.*') ? 'active' : '' }}"
+                                href="{{ route('economics.categories.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -389,8 +393,8 @@
                         </div>
                         <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('settings.activities.*') ? 'active' : '' }}"
-                                href="{{ route('settings.activities.index') }}">
+                            <a class="menu-link {{ request()->routeIs('economics.activities.*') ? 'active' : '' }}"
+                                href="{{ route('economics.activities.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -400,7 +404,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="menu-item menu-accordion" data-kt-menu-trigger="click">
+                <div data-kt-menu-trigger="click"
+                class="menu-item menu-accordion {{ request()->routeIs('settings.*') ? 'here show' : '' }}">
                     <span class="menu-link">
                         <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
                         <span class="menu-title">{{ __('Informations commune') }}</span>

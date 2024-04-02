@@ -490,7 +490,7 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        @if ($invoice->status == 'APROVED')
+                                                        @if ($invoice->status == 'APROVED'||$invoice->status == 'CANCELED')
                                                             @if ($invoice->pay_status == 'OWING')
                                                             <span
                                                             class="badge badge-light-danger">{{ __($invoice->pay_status) }}</span>
@@ -517,7 +517,7 @@
                                                     </td>
 
                                                     <td>
-                                                        @if ($invoice->status == 'APROVED')
+                                                        @if ($invoice->status == 'APROVED'||$invoice->status == 'CANCELED')
                                                             @if ($invoice->delivery == 'NOT DELIVERED')
                                                                 @can('add invoice delivery date')
                                                                     <button type="button"
@@ -540,9 +540,9 @@
                                                                         data-kt-menu-id="kt_modal_add_delivery">
                                                                         <!--begin::Header-->
                                                                         <div class="px-7 py-5">
-                                                                            <div class="fs-5 text-gray-900 fw-bold">Mettre
-                                                                                a
-                                                                                jour la livraison</div>
+                                                                            <div class="fs-5 text-gray-900 fw-bold">
+                                                                                Mettre a jour la livraison
+                                                                            </div>
                                                                         </div>
                                                                         <!--end::Header-->
                                                                         <!--begin::Menu separator-->
@@ -555,13 +555,13 @@
                                                                     </div>
                                                                     <!--end::Task menu-->
                                                                 @else
-                                                                    Pas encore livrée
+                                                                {{ __('NOT DELIVERED') }}
                                                                 @endcan
                                                             @else
                                                                 {{ date('Y-m-d', strtotime($invoice->delivery_date)) }}
                                                             @endif
                                                         @else
-                                                            Pas encore livrée
+                                                        -
                                                         @endif
                                                     </td>
 
@@ -888,7 +888,7 @@
                                                     @elseif($payment->status == 'APROVED')
                                                         <span
                                                             class="badge badge-light-success">{{ __('APROVED') }}</span>
-                                                @endif
+                                                    @endif
 
 
                                                 <!--begin::Task menu-->

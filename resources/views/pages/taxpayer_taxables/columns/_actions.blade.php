@@ -8,7 +8,7 @@
     data-kt-menu="true">
     <!--begin::Menu item-->
     <!-- <div class="menu-item px-3">
-        <a href="{{ route('settings.taxables.show', $taxpayer_taxable) }}" class="menu-link px-3">
+        <a href="{{ route('taxations.taxables.show', $taxpayer_taxable) }}" class="menu-link px-3">
             Aviser
         </a>
     </div> -->

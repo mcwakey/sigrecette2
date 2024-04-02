@@ -66,7 +66,7 @@
             </div>
         @endcan
         @if ($invoice->status != 'REDUCED')
-                @if ($invoice->status !== 'CANCELED'&& $invoice->pay_status != 'PAID')
+                @if ($invoice->status != 'CANCELED' && $invoice->pay_status != 'PAID')
                     @if ( $invoice->status == 'APROVED')
                         @can('create invoice payment')
                             <div class="menu-item px-3">

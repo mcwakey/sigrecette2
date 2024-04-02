@@ -1,7 +1,7 @@
 <x-default-layout>
 
     @section('title')
-    {{ __('communes') }}
+    {{ __('info commune') }}
     @endsection
 
     @section('breadcrumbs')
@@ -19,8 +19,6 @@
             </div>
             <!--begin::Card title-->
 
-            <!--begin::Card toolbar-->
-            <div class="card-toolbar">
                @php
                $commune= \App\Models\Commune::getFirstCommune();
                @endphp
@@ -39,6 +37,7 @@
                 @endif
 
             </div>
+                @endif
             <!--end::Card toolbar-->
         </div>
         <!--end::Card header-->
@@ -64,6 +63,7 @@
             document.getElementById('mySearchInput').addEventListener('keyup', function () {
                 window.LaravelDataTables['communes'].search(this.value).draw();
             });
+
             document.addEventListener('livewire:init', function () {
                 Livewire.on('success', function () {
                     $('#kt_modal_add_commune').modal('hide');

@@ -71,21 +71,32 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('/accounts/collector_deposits', CollectorDepositController::class);
     });
 
+    Route::name('taxations.')->group(function () {
+        Route::resource('/taxations/taxables', TaxableController::class);
+        Route::resource('/taxations/taxlabels', TaxLabelController::class);
+    });
+
+    Route::name('administratives.')->group(function () {
+        Route::resource('/administratives/cantons', CantonsController::class);
+        Route::resource('/administratives/towns', TownsController::class);
+        Route::resource('/administratives/ereas', EreasController::class);
+        Route::resource('/administratives/zones', ZonesController::class);
+    });
+
+    Route::name('economics.')->group(function () {
+        Route::resource('/economics/categories', CategoriesController::class);
+        Route::resource('/economics/activities', ActivitiesController::class);
+    });
+
+    Route::name('economics.')->group(function () {
+        Route::resource('/economics/categories', CategoriesController::class);
+        Route::resource('/economics/activities', ActivitiesController::class);
+    });
+
     Route::name('settings.')->group(function () {
-        Route::resource('/taxables', TaxableController::class);
-        Route::resource('/taxlabels', TaxLabelController::class);
-        Route::resource('/towns', TownsController::class);
-        Route::resource('/cantons', CantonsController::class);
-        Route::resource('/ereas', EreasController::class);
-        Route::resource('/zones', ZonesController::class);
-        Route::resource('/categories', CategoriesController::class);
         Route::resource('/years', YearsController::class);
-        Route::resource('/activities', ActivitiesController::class);
-        Route::resource('/communes', CommunesController::class);
+        Route::resource('settings/communes', CommunesController::class);
         Route::get('/import/taxpayers',[TaxpayerController::class, 'showImportPage'])->name('import-view');
-
-
-        //Route::resource('/user-management/permissions', PermissionManagementController::class);
     });
 
     // Route::name('user-management.')->group(function () {
