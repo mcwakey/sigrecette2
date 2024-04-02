@@ -9,7 +9,8 @@
         <input type="hidden" wire:model="payment_id" name="payment_id" class="form-control form-control-solid mb-3 mb-lg-0"
                placeholder="{{ __('payment_id') }}" />
 
-               
+
+
         @if (!empty($status))
             @if ($status == 'PENDING' )
                 <select class="form-select form-select-solid" wire:model="status" name="status"
@@ -18,25 +19,20 @@
                     <option value="APROVED">{{ __('APROVED') }}</option>
                     <option value="REJECTED">{{ __('REJECTED') }}</option>
                 </select>
-
             @endif
         @else
-            @if ($payment->status == 'PENDING' )
+        <!-- //todo Mr emmanuel your implementation -->
+            @if (!empty($payment->status)  )
                 <select class="form-select form-select-solid" wire:model="status" name="status"
                         data-placeholder="Select option" data-allow-clear="true">
                     <option></option>
                     <option value="APROVED">{{ __('APROVED') }}</option>
                     <option value="REJECTED">{{ __('REJECTED') }}</option>
                 </select>
-            @else
-                <select class="form-select form-select-solid" wire:model="status" name="status"
-                        data-placeholder="Select option" data-allow-clear="true">
-                    <option></option>
-                    <option value="APROVED">{{ __('APROVED') }}</option>
-                    <option value="REJECTED">{{ __('REJECTED') }}</option>
-                </select>
-            @endif
         @endif
+    @endif
+
+
     <!--end::Input-->
     </div>
     <!--end::Input group-->

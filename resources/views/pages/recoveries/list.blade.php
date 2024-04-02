@@ -195,12 +195,8 @@
     @push('scripts')
         {{ $dataTable->scripts() }}
         <script>
-             document.querySelectorAll('[data-kt-action="update_payment_status"]').forEach(function (element) {
-                element.addEventListener('click', function () {
-                    Livewire.dispatch('update_payment_status', [this.getAttribute('data-kt-user-id')]);
-                });
-            });
-            
+
+
             document.getElementById('mySearchInput').addEventListener('keyup', function() {
                 window.LaravelDataTables['payments'].search(this.value).draw();
             });

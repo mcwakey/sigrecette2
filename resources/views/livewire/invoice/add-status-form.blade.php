@@ -19,15 +19,15 @@
                 </select>
             @endhasanyrole
         @elseif($status == 'DRAFT')
+            @hasanyrole(['agent_delegation', 'administrateur_system'])
             <select class="form-select form-select-solid" wire:model="status" name="status"
-                @hasanyrole(['agent_delegation', 'administrateur_system'])
                 data-placeholder="Select option" data-allow-clear="true">
                 <option></option>
                 <option value="PENDING">{{ __('ACCEPTED') }}</option>
                 <option value="CANCELED">{{ __('CANCELED') }}</option>
             </select>
             @endhasanyrole
-                @endif
+        @endif
                 <!--end::Input-->
     </div>
     <!--end::Input group-->

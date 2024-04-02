@@ -21,7 +21,7 @@
                  data-kt-menu-placement="bottom-end">
                 <!--begin::Header-->
                 <div class="px-7 py-5">
-                    <div class="fs-5 text-gray-900 fw-bold">Metre a jour le
+                    <div class="fs-5 text-gray-900 fw-bold">Metre à jour le
                         status</div>
                 </div>
                 <!--end::Header-->
@@ -59,7 +59,7 @@
                  data-kt-menu-placement="bottom-end">
                 <!--begin::Header-->
                 <div class="px-7 py-5">
-                    <div class="fs-5 text-gray-900 fw-bold">Metre a jour le
+                    <div class="fs-5 text-gray-900 fw-bold">Metre à jour le
                         status</div>
                 </div>
                 <!--end::Header-->
