@@ -50,6 +50,9 @@ class RolesPermissionsSeeder extends Seeder
 
                 'view manager newspaper',
 
+                //Recoverie permissions
+                'view recoverie',
+
                 // Config permissions
                 'view config',
                 'create category',
@@ -87,12 +90,9 @@ class RolesPermissionsSeeder extends Seeder
                 'edit taxpayer taxable asset',
 
                 // Invoice permissions
+                'create invoice automaticaly',
                 'create invoice',
                 'reduce invoice amount',
-
-                //Accout permissions
-                'view manager account state',
-                'view manager deposit state',
             ],
 
             'agent_delegation' => [
@@ -116,6 +116,11 @@ class RolesPermissionsSeeder extends Seeder
                 'create collector new deposit by manager',
                 'create collector account state',
                 'create collector account supply',
+                'view manager account state',
+                'view manager deposit state',
+
+                // Recoverie permissions
+                'view recoverie',
             ],
 
             'agent_recouvrement' => [
@@ -125,10 +130,14 @@ class RolesPermissionsSeeder extends Seeder
 
                 // Payment permissions
                 'create invoice payment',
+
+                // Recoverie permissions
+                'view recoverie',
             ],
 
             'collecteur' => [
                 // Account permissions
+                'view account',
                 'create collector new deposit',
             ],
         ];
