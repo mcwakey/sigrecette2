@@ -121,6 +121,10 @@ class RolesPermissionsSeeder extends Seeder
 
                 // Recoverie permissions
                 'view recoverie',
+
+                // Taxpayer permissions
+                'create taxpayer',
+                'edit taxpayer',
             ],
 
             'agent_recouvrement' => [
@@ -133,6 +137,10 @@ class RolesPermissionsSeeder extends Seeder
 
                 // Recoverie permissions
                 'view recoverie',
+
+                // Taxpayer permissions
+                'create taxpayer',
+                'edit taxpayer',
             ],
 
             'collecteur' => [
