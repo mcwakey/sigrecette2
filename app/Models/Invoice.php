@@ -64,6 +64,15 @@ class Invoice extends Model
             ->toArray();
     }
 
+    public static function getReceiverName($id)
+    {
+        $invoice = Invoice::find($id);
+        if ($invoice && $invoice->delivery_date !== null) {
+            return $invoice->delivery_to;
+        }
+        return "";
+    }
+
 //id 	invoice_no 	order_no 	nic 	status 	pay_status 	delivery 	delivery_date
 
 
