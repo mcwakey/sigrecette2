@@ -120,9 +120,7 @@
         <td>{{$item[__('gps')]}}</td>
         <td>{{$item[__('amount')]}}</td>
         <td>
-            @if($item[__('delivery date')] !== __("NOT DELIVERED"))
-                {{$item[__('delivery date')]}}
-            @endif
+            {{$item[__('delivery date')]}}
         </td>
         <td>Emmanuel</td>
     </tr>
