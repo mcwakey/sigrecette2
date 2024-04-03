@@ -11,11 +11,11 @@
             <div class="card-title">
                 <div class="d-flex align-items-center">
                     <!--begin::Input group-->
-                    <div class="d-flex align-items-center position-relative my-1">
+                    {{-- <div class="d-flex align-items-center position-relative my-1">
                         {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
                         <input type="text" data-kt-invoice-table-filter="search" class="form-control w-250px ps-13"
                             placeholder="{{ __('search') }}" id="mySearchInput" />
-                    </div>
+                    </div> --}}
                     <!--end::Input group-->
                     <!--begin:Action-->
                     <div class="d-flex align-items-center ms-5">
@@ -43,15 +43,15 @@
                     <div class="separator separator-dashed mt-5 mb-5"></div>
                     <!--end::Separator-->
                     <!--begin::Row-->
-                    <div class="row g-8 mb-8">
+                    <div class="row g-8 mb-8 ">
                         <!--begin::Col-->
-                        <div class="col-xxl-2">
+                        <div class="col-xxl-3">
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('taxpayer') }}</label>
                             <input type="text" class="form-control" name="tags" id="mySearchOne" />
                         </div>
                         <!--end::Col-->
                         <!--begin::Col-->
-                        <div class="col-xxl-2">
+                        <div class="col-xxl-3">
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('zone') }}</label>
                             <!--begin::Select-->
                             <select class="form-select" id="mySearchFive">
@@ -59,6 +59,16 @@
                             </select>
                             <!--end::Select-->
                         </div>
+
+                             <!--begin::Actions-->
+                            <div class="col-xxl-3">
+                                <button type="submit" class="btn btn-success mt-8">
+                                    <span class="indicator-label" wire:loading.remove>{{ __('Rechercher
+                                    ') }}</span>
+                                </button>
+                            </div>
+                            <!--end::Actions-->
+
                     </div>
                     <!--end::Row-->
 
