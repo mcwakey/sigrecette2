@@ -70,7 +70,7 @@
                                 <label class="required form-control form-control-flush text-end"> {{ __('Duree du contrat') }}</label>
                             </div>
                             <div class="col-md-2">
-                                <div class="position-relative" data-kt-dialer="true" data-kt-dialer-min="0" data-kt-dialer-max="12" data-kt-dialer-step="1">
+                                <div class="position-relative" data-kt-dialer="true" data-kt-dialer-min="1" data-kt-dialer-max="12" data-kt-dialer-step="1">
                                     <!--begin::Decrease control-->
                                     <button type="button" class="btn btn-icon btn-active-color-gray-700 position-absolute translate-middle-y top-50 start-0" data-kt-dialer-control="decrease">
                                         @if ($edit_mode==false)
@@ -79,7 +79,7 @@
                                     </button>
                                     <!--end::Decrease control-->
                                     <!--begin::Input control-->
-                                    <input wire:model="qty" name="qty" type="text" class="form-control border-0 ps-12" data-kt-dialer-control="input" placeholder="0" readonly="readonly" data-kt-action="load_invoice" />
+                                    <input wire:model="qty" name="qty" value="1" type="text" class="form-control border-0 ps-12" data-kt-dialer-control="input" placeholder="1" readonly="readonly" data-kt-action="load_invoice" />
                                     <!--end::Input control-->
                                     @error('qty')
                                     <span class="text-danger">{{ $message }}</span> @enderror

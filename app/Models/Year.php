@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Date;
+use Carbon\Carbon;
 use Throwable;
 
 class Year extends Model
@@ -18,50 +19,50 @@ class Year extends Model
     protected $fillable = [
         'name',
         'status',
-            ];
+        'current_month',
+        'auto_switch'
+    ];
     use HasFactory;
 
     /**
      * Get the active year.
      *
-     * @return Year|null
-     * @throws \Throwable
+     * @return Year
      */
     public static function  getActiveYear():Year {
         $currentYear = date('Y');
+        $current_mounth = Carbon::now()->format('m');
         $activeYear = Year::where('status', "ACTIVE")->first();
 
 
         if (!$activeYear) {
-            $activeYear = Year::where('name', $currentYear)->first();
+            $activeYear = Year::where('name', $currentYear)->first()?? Year::getCurrentYear();
             $activeYear->status = "ACTIVE";
             DB::transaction(function () use ($activeYear) {
                 $activeYear->save();
             });
         }
-        //&&  !(Date::today())->isSameAs('12-31')
-        if (intval($activeYear->name) < intval($currentYear)) {
-            return Year::autoUpdateActiveYear();
+        if($activeYear->auto_switch ==true){
+            if (intval($activeYear->name) < intval($currentYear) ) {
+                $activeYear= Year::autoUpdateActiveYear( $activeYear);
+            }
+            if(
+                (intval($activeYear->name) == intval($currentYear))
+                && $activeYear->current_month!=$current_mounth ){
+                $activeYear = Year::autoUpdateOrCreateCurrentMonth($current_mounth,$activeYear);
+            }
         }
 
         return $activeYear;
     }
+
     /**
      * Automatically updates the active year.
      *
-     * @return Year|null
-     * @throws Throwable
+     * @param Year $active_year
+     * @return Year
      */
-    public static function autoUpdateActiveYear(): Year{
-        $active_year=  Year::where('status', "ACTIVE")->first();
-        if (!$active_year) {
-            $currentYear = date('Y');
-            $activeYear = Year::where('name', $currentYear)->first();
-            $activeYear->status = "ACTIVE";
-            DB::transaction(function () use ($activeYear) {
-                $activeYear->save();
-            });
-        }
+    public static function autoUpdateActiveYear(Year $active_year): Year{
         $active_year->status="INACTIVE";
         $next_year =intval( $active_year->name)+1;
         $data = [
@@ -78,19 +79,10 @@ class Year extends Model
         return $year;
 
     }
-    public static function activeCurrentYear():Year{
-        $currentYear = date('Y');
-        $activeYear = Year::where('name', $currentYear)->first();
-        $activeYear->status = "ACTIVE";
-        DB::transaction(function () use ($activeYear) {
-            $activeYear->save();
-        });
-        return $activeYear;
-    }
+
     /**
      * Makes all years inactive.
      *
-     * @throws Throwable
      */
     public static function makeAllYearsInative(){
         DB::transaction(function ()  {
@@ -101,5 +93,44 @@ class Year extends Model
             }
         });
 
+    }
+
+    /**
+     * Met à jour ou crée le mois actuel dans la base de données.
+     *
+     * @param $current_mounth
+     * @param Year $year
+     * @return Year
+     */
+    public static function autoUpdateOrCreateCurrentMonth($current_mounth,Year $year):Year
+    {
+        $year->current_month = $current_mounth;
+        DB::transaction(function () use ($year) {
+            $year->save();
+        });
+
+        return $year;
+
+
+
+    }
+
+    /**
+     * @return Year
+     */
+    private static function getCurrentYear():Year
+    {
+        $currentYear = date('Y');
+        $data = [
+            'name' => $currentYear,
+            'status' => "INACTIVE",
+        ];
+        $year = Year::where('name', $currentYear)->first() ?? Year::create($data);
+        $year->status = "ACTIVE";
+        $year->auto_switch =true;
+        DB::transaction(function () use ($year) {
+            $year->save();
+        });
+        return $year;
     }
 }

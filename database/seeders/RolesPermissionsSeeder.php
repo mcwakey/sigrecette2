@@ -14,92 +14,157 @@ class RolesPermissionsSeeder extends Seeder
      */
     public function run(): void
     {
-        $abilities = [
-            'view',
-            'edit',
-            'create',
-            'delete',
-        ];
-
         $permissions_by_role = [
             'administrateur_system' => [
-                'invoive',
-                'taxpayer',
-                'taxpayer_taxable',
-                'town',
-                'canton',
-                'taxlabel',
-                'gender',
-                'erea',
-                'taxable',
-                'payment',
-                'user',
-                'user_log',
-                'year',
-                'zone',
-                'commune',
-                'address',
-                'activity',
-                'account',
-                'category'
+                // Taxpayer Taxable permissions
+                'create taxpayer taxable asset',
+                'edit taxpayer taxable asset',
+
+                // Invoice permissions
+                'create invoice',
+                'create invoice automaticaly',
+                'change invoice draft status to pending',
+                'change invoice pending status to approved',
+                'create invoice delivery date',
+                'print invoice',
+                'reduce invoice amount',
+
+                // Taxpayer permissions
+                'create taxpayer',
+                'edit taxpayer',
+                'delete taxpayer',
+
+                // Payment permissions
+                'view payment',
+                'create invoice payment',
+                'create no taxpayer invoice payment',
+
+                // Account permissions
+                'view account',
+                'create collector account state',
+                'create collector account supply',
+                'create collector new deposit by manager',
+                'create collector new deposit',
+                'view manager account state',
+                'view manager deposit state',
+
+                'view manager newspaper',
+
+                //Recoverie permissions
+                'view recoverie',
+
+                // Config permissions
+                'view config',
+                'create category',
+                'create township',
+                'create taxable',
+                'create taxlabel',
+                'create canton',
+                'create town',
+                'create zone',
+                'create erea',
+                'create activity',
+
+                // User permissions
+                'create user',
+                'edit user',
+                'delete user',
+
+                // Geolocatoion permissions
+                'view user geolocation',
+                'view zone geolocation',
+
+                // Role permissions
+                'create role',
+                'edit role',
+                'delete role',
             ],
 
             'administrateur' => [],
 
-            'maire' => [
-                'user',
-                'year',
-                'zone',
-                'commune',
-                'town',
-                'canton',
-                'taxpayer_taxable',
-            ],
+            'ordonateur' => [],
 
             'agent_assiette' => [
-                'invoive',
-                'taxpayer',
+                // Taxpayer Taxable permissions
+                'create taxpayer taxable asset',
+                'edit taxpayer taxable asset',
+
+                // Invoice permissions
+                'create invoice automaticaly',
+                'create invoice',
+                'reduce invoice amount',
             ],
 
             'agent_delegation' => [
-                'invoive',
-                'taxpayer',
+                // Invoice permissions
+                'change invoice draft status to pending',
+                'print invoice',
             ],
 
             'regisseur' => [
-                'invoive',
-                'taxpayer',
-                'payment',
+                // Invoice permissions
+                'create invoice delivery date',
+                'change invoice pending status to approved',
+                'print invoice',
+
+                // Payment permissions
+                'create invoice payment',
+                'create no taxpayer invoice payment',
+
+                // Account permissions
+                'view account',
+                'create collector new deposit by manager',
+                'create collector account state',
+                'create collector account supply',
+                'view manager account state',
+                'view manager deposit state',
+
+                // Recoverie permissions
+                'view recoverie',
+
+                // Taxpayer permissions
+                'create taxpayer',
+                'edit taxpayer',
             ],
 
             'agent_recouvrement' => [
-                'payment',
+                // Invoice permissions
+                'create invoice delivery date',
+                'print invoice',
+
+                // Payment permissions
+                'create invoice payment',
+
+                // Recoverie permissions
+                'view recoverie',
+
+                // Taxpayer permissions
+                'create taxpayer',
+                'edit taxpayer',
             ],
 
             'collecteur' => [
-                'payment',
+                // Account permissions
+                'view account',
+                'create collector new deposit',
             ],
         ];
 
         foreach ($permissions_by_role['administrateur_system'] as $permission) {
-            foreach ($abilities as $ability) {
-                Permission::create(['name' => $ability . ' ' . $permission]);
-            }
+            Permission::create(['name' => $permission]);
         }
 
         foreach ($permissions_by_role as $role => $permissions) {
-            $full_permissions_list = [];
-            foreach ($abilities as $ability) {
-                foreach ($permissions as $permission) {
-                    $full_permissions_list[] = $ability . ' ' . $permission;
-                }
+            $permissions_list = [];
+            foreach ($permissions as $permission) {
+                $permissions_list[] = $permission;
             }
-            Role::create(['name' => $role])->syncPermissions($full_permissions_list);
+            Role::create(['name' => $role])->syncPermissions($permissions_list);
         }
 
         User::find(1)->assignRole('administrateur_system');
         User::find(2)->assignRole('administrateur');
-        User::find(3)->assignRole(['maire']);
+        User::find(3)->assignRole(['ordonateur', 'administrateur']);
         User::find(4)->assignRole('agent_delegation');
         User::find(5)->assignRole('agent_assiette');
         User::find(6)->assignRole('regisseur');

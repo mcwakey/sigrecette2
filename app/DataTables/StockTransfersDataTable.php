@@ -20,15 +20,15 @@ class StockTransfersDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->filter(function ($query) {
-                if (request()->filled('search.value')) {
-                    $query->where('tax_labels.name', 'like', '%' . request('search.value') . '%')
-                    ->orWhere('taxables.name', 'like', '%' . request('search.value') . '%')
-                    ->orWhere('tax_labels.code', 'like', '%' . request('search.value') . '%')
-                    ->orWhere('bill_status', 'like', '%' . request('search.value') . '%');
-                    // Add additional search conditions as needed for other columns
-                }
-            })
+            // ->filter(function ($query) {
+            //     if (request()->filled('search.value')) {
+            //         $query->where('tax_labels.name', 'like', '%' . request('search.value') . '%')
+            //         ->orWhere('taxables.name', 'like', '%' . request('search.value') . '%')
+            //         ->orWhere('tax_labels.code', 'like', '%' . request('search.value') . '%')
+            //         ->orWhere('bill_status', 'like', '%' . request('search.value') . '%');
+            //         // Add additional search conditions as needed for other columns
+            //     }
+            // })
             ->rawColumns(['status'])
             // ->editColumn('id', function (StockTransfer $stock_transfer) {
             //     return $stock_transfer->id;
@@ -36,16 +36,16 @@ class StockTransfersDataTable extends DataTable
             // ->editColumn('trans_no', function (StockTransfer $stock_transfer) {
             //     return view('pages.stock_transfers.columns._bill', compact('stock_transfer'));
             // })
-            ->editColumn('date', function (StockTransfer $stock_transfer) {
+            ->editColumn('stock_transfers.created_at', function (StockTransfer $stock_transfer) {
                 return $stock_transfer->created_at->format('d M Y');
             })
-            ->editColumn('taxable', function (StockTransfer $stock_transfer) {
+            ->editColumn('taxables.name', function (StockTransfer $stock_transfer) {
                 return $stock_transfer->taxable->name;
             })
-            ->editColumn('trans_desc', function (StockTransfer $stock_transfer) {
-                return $stock_transfer->trans_desc;
-            })
-            ->editColumn('tariff', function (StockTransfer $stock_transfer) {
+            // ->editColumn('trans_desc', function (StockTransfer $stock_transfer) {
+            //     return $stock_transfer->trans_desc;
+            // })
+            ->editColumn('taxable.tariff', function (StockTransfer $stock_transfer) {
                 return $stock_transfer->taxable->tariff;
             })
             // ->editColumn('stock_transfer', function (StockTransfer $stock_transfer) {
@@ -54,11 +54,11 @@ class StockTransfersDataTable extends DataTable
             // ->editColumn('tax_type', function (StockTransfer $stock_transfer) {
             //     return $stock_transfer->;
             // })
-            ->editColumn('no', function (StockTransfer $stock_transfer) {
+            ->editColumn('stock_transfers.start_no', function (StockTransfer $stock_transfer) {
                 return $stock_transfer->start_no. " - ". $stock_transfer->end_no;
                 // return view('pages.stock_transfers.columns._seize', compact('stock_transfer'));
             })
-            ->editColumn('qty', function (StockTransfer $stock_transfer) {
+            ->editColumn('stock_transfers.qty', function (StockTransfer $stock_transfer) {
                 if ($stock_transfer->trans_type == "RECU") {
                     $qty = $stock_transfer->qty ;
                 } else {
@@ -124,8 +124,12 @@ class StockTransfersDataTable extends DataTable
             // ->editColumn('location', function (StockTransfer $stock_transfer) {
             //     return view('pages.stock_transfers.columns._location', compact('stock_transfer'));
             // })
-            ->editColumn('created_at', function (StockTransfer $stock_transfer) {
-                return $stock_transfer->created_at->format('d M Y');
+            ->editColumn('users.name', function (StockTransfer $stock_transfer) {
+                return $stock_transfer->user->name;;
+            })
+            ->editColumn('stock_transfers.type', function (StockTransfer $stock_transfer) {
+                return view('pages.stock_transfers.columns._status', compact('stock_transfer'));
+                //return $stock_request->type;
             })
             ->addColumn('action', function (StockTransfer $stock_transfer) {
                 return view('pages.stock_transfers.columns._actions', compact('stock_transfer'));
@@ -139,9 +143,9 @@ class StockTransfersDataTable extends DataTable
     // public function query(): QueryBuilder // Remove $request parameter
     public function query(StockTransfer $model): QueryBuilder
     {
-        return $model->with('taxable')
-                    ->join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')
+        return $model->join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')
                     // ->with('taxable.tax_label')
+                    ->join('users', 'stock_transfers.to_user_id', '=', 'users.id')
                     // ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
                     // ->where('stock_transfers.taxpayer_id', $this->id) // Filter stock_transfers by taxpayer_id
                     ->select('stock_transfers.*')
@@ -175,24 +179,25 @@ class StockTransfersDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('trans_id')->title(__('id'))->exportable(false)->printable(false)->visible(false), 
-            Column::make('date')->title(__('date'))->addClass('text-nowrap'),
+            Column::make('id')->title(__('id'))->exportable(false)->printable(false)->visible(false), 
+            Column::make('stock_transfers.created_at')->title(__('date'))->addClass('text-nowrap'),
             //Column::make('trans_desc')->title(__('trans_desc')),
-            Column::make('taxable')->title(__('valeur inactif')),
-            Column::make('tariff')->title(__('tariff'))->addClass('text-nowrap')->name('tax_labels.name'),
-            Column::make('no')->title(__('no')),
+            Column::make('taxables.name')->title(__('taxable')),
+            Column::make('taxable.tariff')->title(__('tariff')),
+            Column::make('stock_transfers.start_no')->title(__('num')),
             //Column::make('tax_type')->title(__('tax_type')),
             //Column::make('seize')->title(__('amount')),
-            Column::make('qty')->title(__('rc qty'))->addClass('text-nowrap'),
-            Column::make('total')->title(__('rc total')),
-            Column::make('qty1')->title(__('vd qty'))->addClass('text-nowrap'),
-            Column::make('total1')->title(__('vd total')),
-            Column::make('qty2')->title(__('rd qty'))->addClass('text-nowrap'),
-            Column::make('total2')->title(__('rd total')),
+            Column::make('qty')->title(__('rc qty'))->name('qty'),
+            Column::make('total')->title(__('rc total'))->name('qty'),
+            Column::make('qty1')->title(__('vv qty'))->name('qty'),
+            Column::make('total1')->title(__('vv total'))->name('qty'),
+            Column::make('qty2')->title(__('rd qty'))->name('qty'),
+            Column::make('total2')->title(__('rd total'))->name('qty'),
             // Column::make('qty2')->title(__('sd qty'))->addClass('text-nowrap'),
             // Column::make('total2')->title(__('sd total')),
             //Column::make('location')->title(__('location'))->addClass('text-nowrap'),
-            Column::make('created_at')->title(__('collector'))->addClass('text-nowrap')->width(150),
+            Column::make('users.name')->title(__('collector')),
+            Column::make('stock_transfers.type')->title(__('status')),
             Column::computed('action')->title(__('action'))
                 ->addClass('text-end text-nowrap')
                 ->exportable(false)

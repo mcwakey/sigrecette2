@@ -87,7 +87,7 @@ class AddTaxpayerModal extends Component
             'id_type' => 'required',
             'id_number' => 'nullable',
 
-             'telephone' => 'nullable',
+            'telephone' => 'nullable',
             //  [
             //     'required',
             //     'string',
@@ -139,7 +139,7 @@ class AddTaxpayerModal extends Component
         $genders = Gender::all();
         $id_types = IdType::all();
         $zones = Zone::all();
-        
+
         //$activity = Activity::all();
         $categories = Category::all();
 
@@ -232,10 +232,9 @@ class AddTaxpayerModal extends Component
             $taxpayerActionData = [];
             $taxpayerActionData['status'] = $this->edit_mode ? 204 : 201;
             $taxpayerActionData['taxpayerId'] = $taxpayer->id;
-            $taxpayerActionData['statusText'] = $taxpayerActionData['status'] == 204 ? 'UPDATED' : 'CREATED' ;
+            $taxpayerActionData['statusText'] = $taxpayerActionData['status'] == 204 ? 'UPDATED' : 'CREATED';
 
-            event(new TaxpayerAction(request(),$taxpayerActionData));
-
+            event(new TaxpayerAction(request(), $taxpayerActionData));
         });
 
         // Reset the form fields after successful submission
@@ -253,7 +252,7 @@ class AddTaxpayerModal extends Component
         //$this->taxables = Taxable::where('tax_label_id', $value)->get(); // Load taxables based on tax label ID
         $this->towns = Town::where('canton_id', $value)->get(); // Load taxables based on tax label ID
 
-        
+
 
         // $taxpayer = Taxpayer::find($value);
 
@@ -264,7 +263,7 @@ class AddTaxpayerModal extends Component
         // //$this->zone_id = $taxpayer->zone_id;
     }
 
-    public function updatedTownId($value) 
+    public function updatedTownId($value)
     {
         //dd($value);
         $this->ereas = Erea::where('town_id', $value)->get(); // Load taxables based on tax label ID

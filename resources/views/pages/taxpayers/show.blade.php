@@ -41,58 +41,6 @@
                             <div class="badge badge-lg badge-light-danger d-inline">{{ $taxpayer->gender }}</div>
                             <!--begin::Badge-->
                         </div>
-                        <!--end::Position-->
-                        <!--begin::Info-->
-                        <!--begin::Info heading-->
-                        <!-- <div class="fw-bold mb-3">Outstanding Balance
-                            <span class="ms-2" ddata-bs-toggle="popover" data-bs-trigger="hover" data-bs-html="true" data-bs-content="Number of support tickets assigned, closed and pending this week.">
-                                <i class="ki-duotone ki-information fs-7">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                    <span class="path3"></span>
-                                </i>
-                            </span>
-                        </div> -->
-                        <!--end::Info heading-->
-                        <!-- <div class="d-flex flex-wrap flex-center"> -->
-                        <!--begin::Stats-->
-                        <!-- <div class="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
-                                <div class="fs-4 fw-bold text-gray-700">
-                                    <span class="w-75px">243 000</span>
-                                    <i class="ki-duotone ki-arrow-up fs-3 text-success">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </i>
-                                </div>
-                                <div class="fw-semibold text-muted">Total</div>
-                            </div> -->
-                        <!--end::Stats-->
-                        <!--begin::Stats-->
-                        <!-- <div class="border border-gray-300 border-dashed rounded py-3 px-3 mx-4 mb-3">
-                                <div class="fs-4 fw-bold text-gray-700">
-                                    <span class="w-50px">56 000</span>
-                                    <i class="ki-duotone ki-arrow-down fs-3 text-danger">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </i>
-                                </div>
-                                <div class="fw-semibold text-muted">Paid</div>
-                            </div> -->
-                        <!--end::Stats-->
-                        <!--begin::Stats-->
-                        <!-- <div class="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
-                                <div class="fs-4 fw-bold text-gray-700">
-                                    <span class="w-50px">188</span>
-                                    <i class="ki-duotone ki-arrow-up fs-3 text-success">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </i>
-                                </div>
-                                <div class="fw-semibold text-muted">Open</div>
-                            </div> -->
-                        <!--end::Stats-->
-                        <!-- </div> -->
-                        <!--end::Info-->
                     </div>
                     <!--end::User Info-->
                     <!--end::Summary-->
@@ -107,17 +55,17 @@
                         </div>
 
                         @auth
-                            @hasanyrole(['administrateur', 'administrateur_system'])
+                            @can('edit taxpayer')
                                 <span data-bs-toggle="tooltip" data-bs-trigger="hover"
                                     title="{{ __('edit Taxpayers details') }}">
                                     <a href="#" class="btn btn-sm btn-light-success" data-kt-user-id="{{ $taxpayer->id }}"
                                         data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer"
-                                        data-kt-action="update_taxpayer">{{ __('edit') }}</a>
+                                        data-kt-action="update_taxpayer">{{ __('edit') }}
+                                    </a>
                                 </span>
-                            @endhasanyrole
+                            @endcan
                         @endauth
 
-                        {{-- dd (auth()->user()->can('edit taxpayer')) --}}
                     </div>
 
                     <!--end::Details toggle-->
@@ -207,12 +155,12 @@
 
                 <!--end:::Tab item-->
                 <!--begin:::Tab item-->
-                @hasanyrole(['administrateur', 'administrateur_system'])
+                @can('view log')
                     <li class="nav-item">
                         <a class="nav-link text-active-success pb-4" data-bs-toggle="tab"
                             href="#kt_user_view_overview_events_and_logs_tab">{{ __('events logs') }}</a>
                     </li>
-                @endhasanyrole
+                @endcan
                 <!--end:::Tab item-->
                 <!--begin:::Tab item-->
                 <li class="nav-item ms-auto">
@@ -223,38 +171,6 @@
                     <!--begin::Menu-->
                     <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold py-4 w-250px fs-6"
                         data-kt-menu="true">
-                        <!--begin::Menu item-->
-                        <!-- <div class="menu-item px-5">
-                            <div class="menu-content text-muted pb-2 px-5 fs-7 text-uppercase">{{ __('payments') }}</div>
-                        </div> -->
-                        <!--end::Menu item-->
-                        <!--begin::Menu item-->
-                        <!-- <div class="menu-item px-5">
-                            <a href="#" class="menu-link px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer_taxable">{{ __('create asset') }}</a>
-                        </div> -->
-
-                        <!--end::Menu item-->
-                        <!--begin::Menu item-->
-                        <!-- <div class="menu-item px-5">
-                            <a href="#" class="menu-link px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer">{{ __('create invoice') }}</a>
-                        </div> -->
-                        <!--end::Menu item-->
-                        <!--begin::Menu item-->
-                        <!-- <div class="menu-item px-5">
-                            <a href="#" class="menu-link px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_add_taxpayer">{{ __('create payment') }}</a>
-                            <span class="ms-2" data-bs-toggle="tooltip" title="Specify a target name for future usage and reference">
-                                <i class="ki-duotone ki-information fs-7">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                    <span class="path3"></span>
-                                </i>
-                            </span></a>
-                        </div> -->
-                        <!--end::Menu item-->
-                        <!--begin::Menu item-->
-                        <!--begin::Menu separator-->
-                        <!--end::Menu separator-->
-                        <!--begin::Menu item-->
                         <div class="menu-item px-5">
                             <div class="menu-content text-muted pb-2 px-5 fs-7 text-uppercase">{{ __('account') }}
                             </div>
@@ -312,7 +228,7 @@
                             <!--begin::Card toolbar-->
 
                             <div class="card-toolbar">
-                                @hasanyrole(['agent_assiette', 'administrateur_system'])
+                                @can('create taxpayer taxable asset')
                                     <button type="button" class="btn btn-light-success ms-auto me-5"
                                         data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal"
                                         data-bs-target="#kt_modal_add_taxpayer_taxable"
@@ -325,9 +241,9 @@
                                             <span class="path5"></span>
                                         </i>{{ __('create asset') }}
                                     </button>
-                                @endhasanyrole
+                                @endcan
 
-                                @hasanyrole(['agent_assiette', 'administrateur_system'])
+                                @can('create invoice')
                                     <button type="button" class="btn btn-light-danger ms-auto"
                                         data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal"
                                         data-bs-target="#kt_modal_add_invoice" data-kt-action="add_invoice">
@@ -339,21 +255,9 @@
                                             <span class="path5"></span>
                                         </i>{{ __('create invoice') }}
                                     </button>
-                                @endhasanyrole
+                                @endcan
                             </div>
 
-
-
-                            <!-- <div class="card-toolbar">
-                                <button type="button" class="btn btn-light-primary btn-sm" data-bs-toggle="modal" data-bs-target="#kt_modal_add_schedule">
-                                    <i class="ki-duotone ki-brush fs-3">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </i>
-                                    View All
-                                </button>
-                            </div> -->
-                            <!--end::Card toolbar-->
                         </div>
                         <!--end::Card header-->
                         <!--begin::Card body-->
@@ -466,17 +370,6 @@
                                 <div class="fs-6 fw-semibold text-muted">Long: {{ $taxpayer->longitude }} Lat:
                                     {{ $taxpayer->latitude }}</div>
                             </div>
-                            <!--end::Card title-->
-                            <!--begin::Card toolbar-->
-                            <!-- <div class="card-toolbar">
-                                <button type="button" class="btn btn-light-primary btn-sm" data-bs-toggle="modal" data-bs-target="#kt_modal_add_task">
-                                    <i class="ki-duotone ki-add-files fs-3">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                        <span class="path3"></span>
-                                    </i>Add Task</button>
-                            </div> -->
-                            <!--end::Card toolbar-->
                         </div>
                         <!--end::Card header-->
                         <!--begin::Card body-->
@@ -524,18 +417,7 @@
                                     </div>
                                     <!--end::Search-->
                                 </div>
-                                <!--begin::Card title-->
 
-                                <!--begin::Card toolbar-->
-                                <!-- <div class="card-toolbar">
-                                    <div class="d-flex justify-content-end" data-kt-taxpayer_invoices-table-toolbar="base">
-                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice">
-                                            {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                                            {{ __('New Invoice') }}
-                                        </button>
-                                    </div>
-                                </div> -->
-                                <!--end::Card toolbar-->
                             </div>
                             <!--end::Card header-->
 
@@ -586,8 +468,10 @@
                                                                 data-kt-menu-id="kt_modal_add_orderno" tabindex="-1"
                                                                 aria-hidden="true" wire:ignore.self>
                                                                 <div class="px-7 py-5">
-                                                                    <div class="fs-5 text-gray-900 fw-bold">Metre a
-                                                                        jour le No d'ordre</div>
+                                                                    <div class="fs-5 text-gray-900 fw-bold">
+                                                                        Metre a
+                                                                        jour le No d'ordre
+                                                                    </div>
                                                                 </div>
                                                                 <div class="separator border-gray-200"></div>
                                                                 <livewire:invoice.add-orderno-form />
@@ -606,16 +490,21 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        @if ($invoice->pay_status == 'OWING')
+                                                        @if ($invoice->status == 'APROVED'||$invoice->status == 'CANCELED')
+                                                            @if ($invoice->pay_status == 'OWING')
                                                             <span
-                                                                class="badge badge-light-danger">{{ __($invoice->pay_status) }}</span>
-                                                        @elseif($invoice->pay_status == 'PART PAID')
+                                                            class="badge badge-light-danger">{{ __($invoice->pay_status) }}</span>
+                                                            @elseif($invoice->pay_status == 'PART PAID')
                                                             <span
-                                                                class="badge badge-light-warning">{{ __($invoice->pay_status) }}</span>
+                                                            class="badge badge-light-warning">{{ __($invoice->pay_status) }}</span>
+                                                            @else
+                                                            <span
+                                                            class="badge badge-light-success">{{ __($invoice->pay_status) }}</span>
+                                                            @endif
                                                         @else
-                                                            <span
-                                                                class="badge badge-light-success">{{ __($invoice->pay_status) }}</span>
+                                                            <span class="badge badge-light-primary">{{ __('EN ATTENTE DE VALIDATION') }}</span>
                                                         @endif
+
                                                     </td>
                                                     <td>
                                                         @if ($invoice->delivery == 'NOT DELIVERED')
@@ -628,50 +517,51 @@
                                                     </td>
 
                                                     <td>
-                                                        @if ($invoice->status == 'APROVED')
-                                                        @if ($invoice->delivery == 'NOT DELIVERED')
-                                                            @hasanyrole(['agent_recouvrement','administrateur_system'])
-                                                                <button type="button"
-                                                                    class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
-                                                                    data-kt-user-id="{{ $invoice->id }}"
-                                                                    data-kt-menu-target="#kt_modal_add_delivery"
-                                                                    data-kt-menu-trigger="click"
-                                                                    data-kt-menu-placement="bottom-end"
-                                                                    data-kt-action="update_status">
-                                                                    <i class="ki-duotone ki-setting-3 fs-3">
-                                                                        <span class="path1"></span>
-                                                                        <span class="path2"></span>
-                                                                        <span class="path3"></span>
-                                                                        <span class="path4"></span>
-                                                                        <span class="path5"></span>
-                                                                    </i>
-                                                                </button>
-                                                                <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px"
-                                                                    data-kt-menu="true"
-                                                                    data-kt-menu-id="kt_modal_add_delivery">
-                                                                    <!--begin::Header-->
-                                                                    <div class="px-7 py-5">
-                                                                        <div class="fs-5 text-gray-900 fw-bold">Mettre a
-                                                                            jour la livraison</div>
-                                                                    </div>
-                                                                    <!--end::Header-->
-                                                                    <!--begin::Menu separator-->
-                                                                    <div class="separator border-gray-200"></div>
-                                                                    <!--end::Menu separator-->
-                                                                    <!--begin::Form-->
-                                                                    <livewire:invoice.add-delivery-form />
+                                                        @if ($invoice->status == 'APROVED'||$invoice->status == 'CANCELED')
+                                                            @if ($invoice->delivery == 'NOT DELIVERED')
+                                                                @can('add invoice delivery date')
+                                                                    <button type="button"
+                                                                        class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
+                                                                        data-kt-user-id="{{ $invoice->id }}"
+                                                                        data-kt-menu-target="#kt_modal_add_delivery"
+                                                                        data-kt-menu-trigger="click"
+                                                                        data-kt-menu-placement="bottom-end"
+                                                                        data-kt-action="update_status">
+                                                                        <i class="ki-duotone ki-setting-3 fs-3">
+                                                                            <span class="path1"></span>
+                                                                            <span class="path2"></span>
+                                                                            <span class="path3"></span>
+                                                                            <span class="path4"></span>
+                                                                            <span class="path5"></span>
+                                                                        </i>
+                                                                    </button>
+                                                                    <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px"
+                                                                        data-kt-menu="true"
+                                                                        data-kt-menu-id="kt_modal_add_delivery">
+                                                                        <!--begin::Header-->
+                                                                        <div class="px-7 py-5">
+                                                                            <div class="fs-5 text-gray-900 fw-bold">
+                                                                                Mettre a jour la livraison
+                                                                            </div>
+                                                                        </div>
+                                                                        <!--end::Header-->
+                                                                        <!--begin::Menu separator-->
+                                                                        <div class="separator border-gray-200"></div>
+                                                                        <!--end::Menu separator-->
+                                                                        <!--begin::Form-->
+                                                                        <livewire:invoice.add-delivery-form />
 
-                                                                    <!--end::Form-->
-                                                                </div>
-                                                                <!--end::Task menu-->
+                                                                        <!--end::Form-->
+                                                                    </div>
+                                                                    <!--end::Task menu-->
                                                                 @else
-                                                                    Pas encore livrée
-                                                                @endhasanyrole
+                                                                {{ __('NOT DELIVERED') }}
+                                                                @endcan
                                                             @else
                                                                 {{ date('Y-m-d', strtotime($invoice->delivery_date)) }}
                                                             @endif
                                                         @else
-                                                            Pas encore livrée  
+                                                        -
                                                         @endif
                                                     </td>
 
@@ -680,7 +570,7 @@
                                                         @if ($invoice->status == 'PENDING')
                                                             <span
                                                                 class="badge badge-light-primary">{{ __($invoice->status) }}</span>
-                                                            @hasanyrole(['regisseur', 'administrateur_system'])
+                                                            @can('change invoice pending status to approved')
                                                                 <button type="button"
                                                                     class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
                                                                     data-kt-user-id="{{ $invoice->id }}"
@@ -696,7 +586,7 @@
                                                                         <span class="path5"></span>
                                                                     </i>
                                                                 </button>
-                                                            @endhasanyrole
+                                                            @endcan
                                                         @elseif($invoice->status == 'APROVED')
                                                             <span
                                                                 class="badge badge-light-success">{{ __('APROVED') }}</span>
@@ -707,7 +597,7 @@
                                                             <span
                                                                 class="badge badge-light-secondary">{{ __('DRAFT') }}</span>
 
-                                                            @hasanyrole(['agent_delegation', 'administrateur_system'])
+                                                            @can('change invoice draft status to pending')
                                                                 <button type="button"
                                                                     class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
                                                                     data-kt-user-id="{{ $invoice->id }}"
@@ -724,7 +614,7 @@
                                                                         <span class="path5"></span>
                                                                     </i>
                                                                 </button>
-                                                            @endhasanyrole
+                                                            @endcan
                                                         @else
                                                             <span
                                                                 class="badge badge-light-info">{{ __($invoice->status) }}</span>
@@ -782,27 +672,13 @@
 
 
                                                             @if ($invoice->status == 'DRAFT')
-                                                                @hasanyrole(['agent_assiette', 'administrateur_system'])
-                                                                    {{-- <div class="menu-item px-3">
-                                                                        <a href="#" class="menu-link px-3"
-                                                                            data-kt-user-id="{{ $taxpayer->id }}"
-                                                                            data-bs-toggle="modal"
-                                                                            data-bs-target="#kt_modal_add_taxpayer"
-                                                                            data-kt-action="update_taxpayer">
-                                                                            {{ __('edit') }}
-                                                                        </a>
-                                                                    </div>
 
-                                                                    <div class="menu-item px-3">
-                                                                        <a href="#" class="menu-link px-3"
-                                                                            data-kt-user-id="{{ $taxpayer->id }}"
-                                                                            data-kt-action="delete_taxpayer">
-                                                                            {{ __('delete') }}
-                                                                        </a>
-                                                                    </div> --}}
-                                                                @endhasanyrole
-
-                                                            @elseif($invoice->status == 'APROVED' ||  $invoice->status == 'PENDING' || $invoice->status == 'CANCELED')
+                                                                {{-- Nothing here --}}
+                                                            @elseif(
+                                                                $invoice->status == 'APROVED' ||
+                                                                    $invoice->status == 'PENDING' ||
+                                                                    $invoice->status == 'REDUCED' ||
+                                                                    $invoice->status == 'CANCELED')
                                                                 <div class="menu-item px-3">
                                                                     @php
 
@@ -828,7 +704,7 @@
                                                                             ];
                                                                         }
                                                                         $data = [
-                                                                            $invoice->created_at,
+                                                                           $invoice->from_date,
                                                                             $invoice->invoice_no,
                                                                             $invoice->nic,
                                                                             $invoice->amount,
@@ -846,44 +722,51 @@
                                                                         ];
                                                                     @endphp
 
+                                                                    @can('print invoice')
+
                                                                     <a href="{{ route('generatePdf', ['data' => json_encode($data)]) }}"
                                                                         class="menu-link px-3"
                                                                         target="_blank">{{ __('print') }}</a>
 
+                                                                    @endcan
+
 
 
                                                                 </div>
-                                                                @if ($invoice->status !== 'CANCELED')
-                                                                    @if ($invoice->pay_status != 'PAID')
-                                                                        @hasanyrole(['agent_recouvrement',
-                                                                            'administrateur_system'])
+                                                                @if ($invoice->status != 'REDUCED')
+                                                                    @if ($invoice->status !== 'CANCELED' && $invoice->pay_status != 'PAID')
+                                                                        @if ( $invoice->status == 'APROVED')
+                                                                            @can('create invoice payment')
+                                                                                <div class="menu-item px-3">
+                                                                                    <a href="#"
+                                                                                        class="menu-link px-3"
+                                                                                        data-kt-user-id="{{ $invoice->invoice_no }}"
+                                                                                        data-bs-toggle="modal"
+                                                                                        data-bs-target="#kt_modal_add_payment"
+                                                                                        data-kt-action="update_payment">
+                                                                                        {{ __('create payment') }}
+                                                                                    </a>
+                                                                                </div>
+                                                                            @endcan
+                                                                        @endif
+                                                                        @if ($invoice->validity == 'VALID')
+
+                                                                        @can('reduce invoice amount')
+                                                                            <!--begin::Menu item-->
                                                                             <div class="menu-item px-3">
                                                                                 <a href="#" class="menu-link px-3"
-                                                                                    data-kt-user-id="{{ $invoice->invoice_no }}"
+                                                                                    data-kt-user-id="{{ $invoice->id }}"
                                                                                     data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_modal_add_payment"
-                                                                                    data-kt-action="update_payment">
-                                                                                    {{ __('create payment') }}
+                                                                                    data-bs-target="#kt_modal_add_invoice"
+                                                                                    data-kt-action="update_invoice">
+                                                                                    {{ __('reduction cancelation') }}
                                                                                 </a>
                                                                             </div>
+                                                                        @endcan
                                                                         @endif
-                                                                    @endhasanyrole
-                                                                    <!--end::Menu item cancle option-->
-
-                                                                    @hasanyrole(['agent_assiette',
-                                                                        'administrateur_system'])
-                                                                        <!--begin::Menu item-->
-                                                                        <div class="menu-item px-3">
-                                                                            <a href="#" class="menu-link px-3"
-                                                                                data-kt-user-id="{{ $invoice->id }}"
-                                                                                data-bs-toggle="modal"
-                                                                                data-bs-target="#kt_modal_add_invoice"
-                                                                                data-kt-action="update_invoice">
-                                                                                {{ __('reduction cancelation') }}
-                                                                            </a>
-                                                                        </div>
-                                                                    @endhasanyrole
+                                                                    @endif
                                                                 @endif
+
                                                             @endif
                                                             <!--end::Menu item-->
 
@@ -926,30 +809,7 @@
                             <!--end::Card title-->
                             <!--begin::Card toolbar-->
                             <div class="card-toolbar">
-                                <!--begin::Add-->
-                                <!-- <button type="button" class="btn btn-light-success btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                                    <i class="ki-duotone ki-brush fs-3">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                        <span class="path3"></span>
-                                        <span class="path4"></span>
-                                        <span class="path5"></span>
-                                    </i>{{ __('create payment') }}</button> -->
-                                <!--begin::Menu-->
-                                <!-- <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-6 w-200px py-4" data-kt-menu="true"> -->
-                                <!--begin::Menu item-->
-                                <!-- <div class="menu-item px-3"> -->
-                                <!-- <a href="#" class="menu-link px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_add_auth_app">Use authenticator app</a> -->
-                                <!-- </div> -->
-                                <!--end::Menu item-->
-                                <!--begin::Menu item-->
-                                <!-- <div class="menu-item px-3">
-                                        <a href="#" class="menu-link px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_add_one_time_password">Enable one-time password</a>
-                                    </div> -->
-                                <!--end::Menu item-->
-                                <!-- </div> -->
-                                <!--end::Menu-->
-                                <!--end::Add-->
+
                             </div>
                             <!--end::Card toolbar-->
                         </div>
@@ -990,7 +850,52 @@
 
 
                                                 <td>{{ $payment->description }}</td>
-                                                <td>{{ $payment->description }}</td>
+                                                <td>
+                                                    @if ($payment->status == 'PENDING' )
+                                                        <span
+                                                            class="badge badge-light-primary">{{ __($payment->status) }}</span>
+                                                        @can('change invoice pending status to approved')
+                                                            <button type="button"
+                                                                    class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
+                                                                    data-kt-user-id="{{ $payment->id }}"
+                                                                    data-kt-menu-target="#kt_payment_modal_add_status"
+                                                                    data-kt-menu-trigger="click"
+                                                                    data-kt-menu-placement="bottom-end"
+                                                                    data-kt-action="update_payment_status">
+                                                                <i class="ki-duotone ki-setting-3 fs-3">
+                                                                    <span class="path1"></span>
+                                                                    <span class="path2"></span>
+                                                                    <span class="path3"></span>
+                                                                    <span class="path4"></span>
+                                                                    <span class="path5"></span>
+                                                                </i>
+                                                            </button>
+                                                            <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px"
+                                                                 data-kt-menu="true" data-kt-menu-id="#kt_payment_modal_add_status">
+                                                                <div class="px-7 py-5">
+                                                                    <div class="fs-5 text-gray-900 fw-bold">Metre à jour le status</div>
+                                                                </div>
+                                                                <!--end::Header-->
+                                                                <!--begin::Menu separator-->
+                                                                <div class="separator border-gray-200"></div>
+                                                                <!--end::Menu separator-->
+                                                                <!--begin::Form-->
+                                                                <livewire:payment.add-status-form />
+
+                                                                <!--end::Form-->
+                                                            </div>
+                                                        @endcan
+                                                    @elseif($payment->status == 'APROVED')
+                                                        <span
+                                                            class="badge badge-light-success">{{ __('APROVED') }}</span>
+                                                    @endif
+
+
+                                                <!--begin::Task menu-->
+
+                                                    <!--end::Task menu-->
+
+                                                </td>
                                                 <td><a href="#"
                                                         class="btn btn-light bnt-active-light-success btn-sm">{{ __('view') }}</a>
                                                 </td>
@@ -1133,34 +1038,6 @@
                                             </tr>
                                         @endforeach
 
-                                        {{-- <tr>
-                                            <td class="min-w-70px">
-                                                <div class="badge badge-light-danger">500 ERR</div>
-                                            </td>
-                                            <td>POST /v1/invoice/in_6877_1633/invalid</td>
-                                            <td class="pe-0 text-end min-w-200px">25 Oct 2023, 11:30 am</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="min-w-70px">
-                                                <div class="badge badge-light-success">200 OK</div>
-                                            </td>
-                                            <td>POST /v1/invoices/in_5648_7203/payment</td>
-                                            <td class="pe-0 text-end min-w-200px">15 Apr 2023, 6:43 am</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="min-w-70px">
-                                                <div class="badge badge-light-danger">500 ERR</div>
-                                            </td>
-                                            <td>POST /v1/invoice/in_6877_1633/invalid</td>
-                                            <td class="pe-0 text-end min-w-200px">25 Oct 2023, 8:43 pm</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="min-w-70px">
-                                                <div class="badge badge-light-success">200 OK</div>
-                                            </td>
-                                            <td>POST /v1/invoices/in_1431_5657/payment</td>
-                                            <td class="pe-0 text-end min-w-200px">21 Feb 2023, 11:05 am</td>
-                                        </tr> --}}
                                     </tbody>
                                 </table>
                                 <!--end::Table-->
@@ -1461,6 +1338,11 @@
             }
         </script>
         <script type="text/javascript">
+            document.querySelectorAll('[data-kt-action="update_payment_status"]').forEach(function (element) {
+                element.addEventListener('click', function () {
+                    Livewire.dispatch('update_payment_status', [this.getAttribute('data-kt-user-id')]);
+                });
+            });
             var taxpayer_taxables = @json($taxpayer->taxpayer_taxables); // Convert Laravel collection to JSON
             // Check if taxpayer_taxables is not empty
             if (taxpayer_taxables.length > 0) {

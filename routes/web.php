@@ -20,6 +20,7 @@ use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\Apps\RoleManagementController;
 use App\Http\Controllers\Apps\PermissionManagementController;
 use App\Http\Controllers\Apps\UserManagementController;
+use App\Http\Controllers\CollectorDepositController;
 use App\Http\Controllers\EreasController;
 use App\Http\Controllers\Geolocation;
 use App\Http\Controllers\StockRequestController;
@@ -67,17 +68,33 @@ Route::middleware(['auth'])->group(function () {
     Route::name('accounts.')->group(function () {
         Route::resource('/accounts/stock-requests', StockRequestController::class);
         Route::resource('/accounts/stock-transfers', StockTransferController::class);
+        Route::resource('/accounts/collector_deposits', CollectorDepositController::class);
+    });
+
+    Route::name('taxations.')->group(function () {
+        Route::resource('/taxations/taxables', TaxableController::class);
+        Route::resource('/taxations/taxlabels', TaxLabelController::class);
+    });
+
+    Route::name('administratives.')->group(function () {
+        Route::resource('/administratives/cantons', CantonsController::class);
+        Route::resource('/administratives/towns', TownsController::class);
+        Route::resource('/administratives/ereas', EreasController::class);
+        Route::resource('/administratives/zones', ZonesController::class);
+    });
+
+    Route::name('economics.')->group(function () {
+        Route::resource('/economics/categories', CategoriesController::class);
+        Route::resource('/economics/activities', ActivitiesController::class);
+    });
+
+    Route::name('economics.')->group(function () {
+        Route::resource('/economics/categories', CategoriesController::class);
+        Route::resource('/economics/activities', ActivitiesController::class);
     });
 
 
     Route::name('settings.')->group(function () {
-        Route::resource('/taxables', TaxableController::class);
-        Route::resource('/taxlabels', TaxLabelController::class);
-        Route::resource('/towns', TownsController::class);
-        Route::resource('/cantons', CantonsController::class);
-        Route::resource('/ereas', EreasController::class);
-        Route::resource('/zones', ZonesController::class);
-        Route::resource('/categories', CategoriesController::class);
         Route::resource('/years', YearsController::class);
         Route::resource('/activities', ActivitiesController::class);
         Route::resource('/communes', CommunesController::class);
@@ -85,6 +102,9 @@ Route::middleware(['auth'])->group(function () {
 
 
         //Route::resource('/user-management/permissions', PermissionManagementController::class);
+        Route::resource('settings/communes', CommunesController::class);
+        Route::get('/import/taxpayers',[TaxpayerController::class, 'showImportPage'])->name('import-view');
+
     });
 
     // Route::name('user-management.')->group(function () {
@@ -92,6 +112,9 @@ Route::middleware(['auth'])->group(function () {
     //     Route::resource('/user-management/roles', RoleManagementController::class);
     //     Route::resource('/user-management/permissions', PermissionManagementController::class);
     // });
+    Route::get('/generate-pdf/{data}/{type?}/{action?}', [PrintController::class,'download'])->name("generatePdf");
+    Route::Post('/import/taxpayer', [TaxpayerController::class, 'import'])->name('import.process');
+    Route::get('/import/taxpayer',[TaxpayerController::class, 'showImportPage'])->name('import-view');
 
 });
 
@@ -103,4 +126,5 @@ Route::get('/auth/redirect/{provider}', [SocialiteController::class, 'redirect']
 Route::get('/generate-pdf/{data}/{type?}/{action?}', [PrintController::class, 'download'])->name("generatePdf");
 Route::Post('/import/taxpayer', [TaxpayerController::class, 'import'])->name('import.process');
 Route::get('/import/taxpayer', [TaxpayerController::class, 'showImportPage'])->name('import-view');
+
 require __DIR__ . '/auth.php';

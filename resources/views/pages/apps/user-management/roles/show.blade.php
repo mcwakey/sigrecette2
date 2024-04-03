@@ -32,19 +32,19 @@
                             @foreach($role->permissions->shuffle()->take(5) as $permission)
                                 <div class="d-flex align-items-center py-2">
                                     <span class="bullet bg-primary me-3"></span>
-                                    {{ ucfirst($permission->name) }}
+                                    {{ ucfirst(__($permission->name)) }}
                                 </div>
                             @endforeach
                             @if($role->permissions->count() > 5)
                                 <div class="d-flex align-items-center py-2">
                                     <span class='bullet bg-primary me-3'></span>
-                                    <em>and {{ $role->permissions->count()-5 }} more...</em>
+                                    <em>et {{ $role->permissions->count()-5 }} plus...</em>
                                 </div>
                             @endif
                             @if($role->permissions->count() ===0)
                                 <div class="d-flex align-items-center py-2">
                                     <span class='bullet bg-primary me-3'></span>
-                                    <em>{{__('no permissions given')}}...</em>
+                                    <em>{{__('Acune permission assignée')}}...</em>
                                 </div>
                             @endif
                         </div>
@@ -52,9 +52,11 @@
                     </div>
                     <!--end::Card body-->
                     <!--begin::Card footer-->
-                    {{-- <div class="card-footer pt-0">
-                        <button type="button" class="btn btn-light btn-active-primary" data-role-id="{{ $role->name }}" data-bs-toggle="modal" data-bs-target="#kt_modal_update_role">Edit Role</button>
-                    </div> --}}
+                    <div class="card-footer pt-0">
+                        <button type="button" class="btn btn-light btn-active-primary" data-role-id="{{ $role->name }}" data-bs-toggle="modal" data-bs-target="#kt_modal_update_role">
+                            Modifier le role
+                        </button>
+                    </div>
                     <!--end::Card footer-->
                 </div>
                 <!--end::Card-->

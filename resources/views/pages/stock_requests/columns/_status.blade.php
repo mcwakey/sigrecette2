@@ -1,9 +1,11 @@
 <!--begin::User details-->
 <div class="d-flex flex-column">
-    @if($taxpayer_taxable->bill_status == "NOT BILLED")
-        <div class="badge badge-lg badge-light-danger d-inline">{{ __($taxpayer_taxable->bill_status) }}</div>
+    @if($stock_request->type == "ACTIVE")
+        <div class="badge badge-lg badge-light-warning d-inline">DEMANDE</div>
+    @elseif($stock_request->type == "DONE")
+        <div class="badge badge-lg badge-light-success d-inline">COMPTABILISE</div>
     @else
-        <div class="badge badge-lg badge-light-success d-inline">{{ __($taxpayer_taxable->bill_status) }} : {{ $taxpayer_taxable->invoice->invoice_no }}</div>
+        <div class="badge badge-lg badge-light-primary d-inline">COMPTE RENDU</div>
     @endif
 </div>
 <!--begin::User details-->

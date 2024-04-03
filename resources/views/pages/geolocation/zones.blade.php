@@ -4,8 +4,6 @@
         {{ __('zones') }}
     @endsection
 
-    {{-- {{dd($taxpayers[0]->zone->longitude)}} --}}
-
     <div class="card">
         <!--begin::Card header-->
         <div class="card-header border-0 pt-6">
@@ -13,15 +11,20 @@
             <div class="card-title">
                 <div class="d-flex align-items-center">
                     <!--begin::Input group-->
-                    <div class="d-flex align-items-center position-relative my-1">
+                    {{-- <div class="d-flex align-items-center position-relative my-1">
                         {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
-                        <input type="text" data-kt-invoice-table-filter="search" class="form-control w-250px ps-13" placeholder="{{ __('search') }}" id="mySearchInput" />
-                    </div>
+                        <input type="text" data-kt-invoice-table-filter="search" class="form-control w-250px ps-13"
+                            placeholder="{{ __('search') }}" id="mySearchInput" />
+                    </div> --}}
                     <!--end::Input group-->
                     <!--begin:Action-->
                     <div class="d-flex align-items-center ms-5">
-                        <a href="#" id="kt_horizontal_search_advanced_link" data-kt-rotate="true" class="btn btn-outline btn-outline-dashed btn-outline-secondary btn-active-light-secondary me-5 rotate" data-bs-toggle="collapse" data-bs-target="#kt_advanced_search_form">
-                            {{ __('advanced search') }} <i class="ki-duotone ki-black-right-line fs-2 rotate-270 ms-3"><span class="path1"></span><span class="path2"></span></i></a>
+                        <a href="#" id="kt_horizontal_search_advanced_link" data-kt-rotate="true"
+                            class="btn btn-outline btn-outline-dashed btn-outline-secondary btn-active-light-secondary me-5 rotate"
+                            data-bs-toggle="collapse" data-bs-target="#kt_advanced_search_form">
+                            {{ __('advanced search') }} <i
+                                class="ki-duotone ki-black-right-line fs-2 rotate-270 ms-3"><span
+                                    class="path1"></span><span class="path2"></span></i></a>
                     </div>
 
                     <!--end:Action-->
@@ -40,15 +43,15 @@
                     <div class="separator separator-dashed mt-5 mb-5"></div>
                     <!--end::Separator-->
                     <!--begin::Row-->
-                    <div class="row g-8 mb-8">
+                    <div class="row g-8 mb-8 ">
                         <!--begin::Col-->
-                        <div class="col-xxl-2">
+                        <div class="col-xxl-3">
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('taxpayer') }}</label>
                             <input type="text" class="form-control" name="tags" id="mySearchOne" />
                         </div>
                         <!--end::Col-->
                         <!--begin::Col-->
-                        <div class="col-xxl-2">
+                        <div class="col-xxl-3">
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('zone') }}</label>
                             <!--begin::Select-->
                             <select class="form-select" id="mySearchFive">
@@ -56,6 +59,16 @@
                             </select>
                             <!--end::Select-->
                         </div>
+
+                             <!--begin::Actions-->
+                            <div class="col-xxl-3">
+                                <button type="submit" class="btn btn-success mt-8">
+                                    <span class="indicator-label" wire:loading.remove>{{ __('Rechercher
+                                    ') }}</span>
+                                </button>
+                            </div>
+                            <!--end::Actions-->
+
                     </div>
                     <!--end::Row-->
 
@@ -64,10 +77,10 @@
 
             </form>
             <!--end::Table-->
-        <!--begin::Item-->
-        <div class="card-body">
-            <div id="location_map" class="w-100 rounded" style="height: calc(100vh - 200px)"></div>
-        </div>
+            <!--begin::Item-->
+            <div class="card-body">
+                <div id="location_map" class="w-100 rounded" style="height: calc(100vh - 200px)"></div>
+            </div>
         </div>
         <!--end::Card body-->
     </div>
@@ -120,24 +133,6 @@
         </script>
 
         <script type="text/javascript">
-            // const colors = [
-            //     'blue',
-            //     'red',
-            //     'orange',
-            //     'yellow',
-            //     'green',
-            //     'crimson',
-            //     'purple',
-            //     'cyan',
-            //     'magenta',
-            //     'lime',
-            //     'pink',
-            //     'teal',
-            //     'indigo',
-            //     'coral',
-            //     'lavender'
-            // ];
-                        
             // Convert Laravel object to JSON object
             let zones = @json($zones);
 
@@ -157,50 +152,86 @@
             //     return coordinates;
             // }
 
-            zones.forEach((zone,index) => {
+            zones.forEach((zone, index) => {
                 const taxpayers = zone.taxpayers;
                 taxpayers.forEach((taxpayer) => {
-                    if(parseFloat(taxpayer.latitude) && parseFloat(taxpayer.longitude)) {
+                    if (parseFloat(taxpayer.latitude) && parseFloat(taxpayer.longitude)) {
 
                         let marker = null;
-
-                        popupContent = `
-                            Contribuable : ${taxpayer.name} <br>
-                            Ville : ${taxpayer.town.name} <br>
-                            Canton : ${taxpayer.town.canton.name} <br>
-                            Zone : ${taxpayer.erea.name} <br>
-                        `;
+                        let taxpayerTaxable = taxpayer.taxpayer_taxables;
 
                         if (taxpayer.invoices.length) {
-                            let {invoices} = taxpayer;
+                            let {
+                                invoices
+                            } = taxpayer;
                             let icon = null;
 
                             invoices.forEach(invoice => {
-                                if(invoice.pay_status == 'OWING'){
+                                if (invoice.pay_status == 'OWING') {
                                     icon = taxpayerRed;
                                     return;
-                                }
-                                else if(invoice.pay_status == 'PART PAID'){
+                                } else if (invoice.pay_status == 'PART PAID') {
                                     icon = taxpayerOrange;
-                                }else{
+                                } else {
                                     icon = taxpayerGreen;
                                 }
                             });
 
-                            marker = L.marker([taxpayer.latitude, taxpayer.longitude], { icon: icon });
-                                
-                        }else{
-                           marker = L.marker([taxpayer.latitude, taxpayer.longitude], { icon: taxpayerBlue });
+                            marker = L.marker([taxpayer.latitude, taxpayer.longitude], {
+                                icon: icon
+                            });
+
+                        } else {
+                            marker = L.marker([taxpayer.latitude, taxpayer.longitude], {
+                                icon: taxpayerBlue
+                            });
                         }
 
                         // let marker = L.marker([taxpayer.latitude,taxpayer.longitude]);
-        
+
                         marker.bindPopup(`
-                            Contribuable : ${taxpayer.name} <br>
-                            Ville : ${taxpayer.town.name} <br>
-                            Canton : ${taxpayer.town.canton.name} <br>
-                            Zone : ${taxpayer.erea.name} <br>
-                        `);
+                            <div style="width:600px;min-height:200px;border-radius:8px;">
+                                <div style="padding:10px;text-align:center;display:flex;align-items:flex-start;flex-direction:column;">
+                                   
+                                    <div style="margin-bottom:6px;display:flex;justify-content:space-between;width:100%;align-items:center;">
+                                        <h2 class="text-dark">Informations du contribuable</h2 class="text-dark">
+                                        <a class="badge pt-2 pb-2 bg-secondary" href="/taxpayers/${taxpayer.id}" class="">Afficher</a>
+                                    </div>
+
+                                    <div style="margin-bottom:6px;">
+                                        <span style="font-weight:600;font-size:15px;"> Nom complet </span> 
+                                        <span style="font-size:15px"> : ${taxpayer.name}</span>
+                                    </div>
+
+                                    <div style="margin-bottom:6px;">
+                                        <span style="font-weight:600;font-size:15px;"> Téléphone </span> 
+                                        <span style="font-size:15px"> : ${taxpayer.mobilephone}</span>
+                                    </div>
+
+                                    <div style="margin-bottom:6px;">
+                                        <span style="font-weight:600;font-size:15px;"> Adresse </span> 
+                                        <span style="font-size:15px"> : ${taxpayer.address}</span>
+                                    </div>
+
+                                    <div style="margin-bottom:6px;">
+                                        <span style="font-weight:600;font-size:15px;">Ville</span> 
+                                        <span style="font-size:15px">: ${taxpayer.town.name}</span>
+                                    </div>
+
+                                    <div style="margin-bottom:6px;">
+                                        <span style="font-weight:600;font-size:15px;">Canton</span>
+                                        <span style="font-size:15px">: ${taxpayer.town.canton.name}</span>
+                                    </div>
+
+                                    <div style="margin-bottom:6px;">
+                                        <span style="font-weight:600;font-size:15px;">Zone</span>
+                                        <span style="font-size:15px"> : ${taxpayer.erea.name}</span>
+                                    </div>                            
+                                </div>
+                            </div>
+                        `, {
+                            maxWidth: "auto",
+                        });
 
                         markerCluster.addLayer(marker);
                     }
@@ -208,14 +239,6 @@
             });
 
             map_render.addLayer(markerCluster);
-
-            // zones.forEach((zone,index) => {
-            //     let coordinates = createZonePolygonCoordinates(zone);
-            //     L.polygon(coordinates, {color: colors[index]}).addTo(map_render);
-            //     map_render.fitBounds(coordinates);
-            // });
-
-            // console.log(zones);
         </script>
     @endpush
 </x-default-layout>

@@ -58,7 +58,7 @@
                                 <!--begin::Input-->
                                     @if ($edit_mode == 'true')
                                     <input type="text" wire:model="taxable_name" name="taxable_name" class="form-control form-control- mb-3 mb-lg-0" readonly/>
-                                    <input type="hidden" wire:model="taxable_idd" name="taxable_idd" class="form-control form-control- mb-3 mb-lg-0" readonly/>
+                                    <input type="text" wire:model="taxable_idd" name="taxable_idd" class="form-control form-control- mb-3 mb-lg-0" readonly/>
                                     @else
                                     <select data-kt-action="load_drop" wire:model="taxable_id" name="taxable_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_request">
                                     <option>{{ __('select an option') }}</option>

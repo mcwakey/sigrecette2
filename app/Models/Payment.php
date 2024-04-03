@@ -13,10 +13,13 @@ class Payment extends Model
         'amount',
         'payment_type',
         'reference',
+        'description',
         'remaining_amount',
         'taxpayer_id',
         'invoice_id',
         'user_id',
+        'r_user_id',
+        'status',
     ];
 
     public function invoice()
@@ -29,6 +32,10 @@ class Payment extends Model
         return $this->belongsTo(Taxpayer::class);
     }
     public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function r_user()
     {
         return $this->belongsTo(User::class);
     }

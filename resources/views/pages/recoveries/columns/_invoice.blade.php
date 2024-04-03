@@ -1,14 +1,14 @@
 <!--begin:: Avatar -->
-@if($invoice->taxpayer)
+@if($payment->taxpayer)
 <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
-    <a href="{{ route('taxpayers.show', $invoice->taxpayer) }}">
-        @if($invoice->taxpayer->profile_photo_url)
+    <a href="{{ route('taxpayers.show', $payment->taxpayer) }}">
+        @if($payment->taxpayer->profile_photo_url)
             <div class="symbol-label">
-                <img src="{{ $invoice->taxpayer->profile_photo_url }}" class="w-100"/>
+                <img src="{{ $payment->taxpayer->profile_photo_url }}" class="w-100"/>
             </div>
         @else
-            <div class="symbol-label fs-3 {{ app(\App\Actions\GetThemeType::class)->handle('bg-light-? text-?', $invoice->taxpayer->name) }}">
-                {{ substr($invoice->taxpayer->name, 0, 1) }}
+            <div class="symbol-label fs-3 {{ app(\App\Actions\GetThemeType::class)->handle('bg-light-? text-?', $payment->taxpayer->name) }}">
+                {{ substr($payment->taxpayer->name, 0, 1) }}
             </div>
         @endif
     </a>
@@ -16,10 +16,10 @@
 <!--end::Avatar-->
 <!--begin::User details-->
 <div class="d-flex flex-column">
-    <a href="{{ route('taxpayers.show', $invoice->taxpayer) }}" class="text-gray-800 text-hover-primary mb-1">
-        {{ $invoice->taxpayer->name ?? "-" }}
+    <a href="{{ route('taxpayers.show', $payment->taxpayer) }}" class="text-gray-800 text-hover-primary mb-1">
+        {{ $payment->taxpayer->name ?? "-" }}
     </a>
-    <span>{{ $invoice->taxpayer->mobilephone ?? "-"}}</span>
+    <span>{{ $payment->taxpayer->mobilephone ?? "-"}}</span>
 </div>
 @else
 <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">

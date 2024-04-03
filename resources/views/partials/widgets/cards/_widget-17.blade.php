@@ -7,10 +7,10 @@
 			<!--begin::Info-->
 			<div class="d-flex align-items-center">
 				<!--begin::Currency-->
-				<span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">$</span>
+				<span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">CFA</span>
 				<!--end::Currency-->
 				<!--begin::Amount-->
-				<span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">69,700</span>
+				<span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">Solde</span>
 				<!--end::Amount-->
 				<!--begin::Badge-->
 				<span class="badge badge-light-success fs-base">{!! getIcon('arrow-up', 'fs-5 text-success ms-n1') !!} 2.2%</span>
@@ -18,7 +18,7 @@
 			</div>
 			<!--end::Info-->
 			<!--begin::Subtitle-->
-			<span class="text-gray-500 pt-1 fw-semibold fs-6">Projects Earnings in April</span>
+			<span class="text-gray-500 pt-1 fw-semibold fs-6">Mars</span>
 			<!--end::Subtitle-->
 		</div>
 		<!--end::Title-->
@@ -39,7 +39,7 @@
 				<div class="bullet w-8px h-3px rounded-2 bg-success me-3"></div>
 				<!--end::Bullet-->
 				<!--begin::Label-->
-				<div class="text-gray-500 flex-grow-1 me-4">Leaf CRM</div>
+				<div class="text-gray-500 flex-grow-1 me-4">Matière taxable x</div>
 				<!--end::Label-->
 				<!--begin::Stats-->
 				<div class="fw-bolder text-gray-700 text-xxl-end">$7,660</div>
@@ -52,10 +52,10 @@
 				<div class="bullet w-8px h-3px rounded-2 bg-primary me-3"></div>
 				<!--end::Bullet-->
 				<!--begin::Label-->
-				<div class="text-gray-500 flex-grow-1 me-4">Mivy App</div>
+				<div class="text-gray-500 flex-grow-1 me-4">Matière taxable y</div>
 				<!--end::Label-->
 				<!--begin::Stats-->
-				<div class="fw-bolder text-gray-700 text-xxl-end">$2,820</div>
+				<div class="fw-bolder text-gray-700 text-xxl-end">2,8200 CFA</div>
 				<!--end::Stats-->
 			</div>
 			<!--end::Label-->
@@ -68,7 +68,7 @@
 				<div class="text-gray-500 flex-grow-1 me-4">Others</div>
 				<!--end::Label-->
 				<!--begin::Stats-->
-				<div class="fw-bolder text-gray-700 text-xxl-end">$45,257</div>
+				<div class="fw-bolder text-gray-700 text-xxl-end">45,257CFA</div>
 				<!--end::Stats-->
 			</div>
 			<!--end::Label-->

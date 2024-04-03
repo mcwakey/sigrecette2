@@ -6,7 +6,7 @@
             <!--begin::Modal header-->
             <div class="modal-header" id="kt_modal_add_stock_transfer_header">
                 <!--begin::Modal title-->
-                <h2 class="fw-bold">{{ __('stock requests') }}</h2>
+                <h2 class="fw-bold">{{ __('stock transfers') }}</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
@@ -20,33 +20,48 @@
                 <!--begin::Form-->
                 <form id="kt_modal_add_stock_transfer_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
                     <input type="text" wire:model="stock_transfer_id" name="stock_transfer_id"  value=""/>
-                    <input type="text" wire:model="taxpayer_id" name="taxpayer_id" value=""/>
+                    <input type="text" wire:model="user_id" name="user_id" value=""/>
                     <!--begin::Scroll-->
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_stock_transfer_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_stock_transfer_header" data-kt-scroll-wrappers="#kt_modal_add_stock_transfer_scroll" data-kt-scroll-offset="300px">
                         
                         <!--begin::Input group-->
 
                         <div class="row mb-7">
-                            <div class="col-md-12">
+                            <div class="col-md-4">
+                                <!--begin::Label-->
+                                <label class="required fs-6 fw-semibold mb-2">{{ __('collector') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                                    
+                                <select data-kt-action="load_drop" wire:model="collector_id" name="collector_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
+                                    <option>{{ __('select an option') }}</option>
+                                    @foreach($collectors as $collector)
+                                    <option value="{{ $collector->id}}">{{ $collector->user_name}}</option>
+                                    @endforeach
+                                </select>
+                                <!--end::Input-->
+                                @error('collector_id')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-8">
                                 <!--begin::Label-->
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('taxlabels') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                    @if ($edit_mode == 'true')
-                                    <input type="text" wire:model="taxlabel_name" name="taxlabel_name" class="form-control form-control- mb-3 mb-lg-0" readonly/>
-                                    @else                     
+                                                       
                                 <select data-kt-action="load_drop" wire:model="taxlabel_id" name="taxlabel_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
                                     <option>{{ __('select an option') }}</option>
                                     @foreach($taxlabels as $taxlabel)
                                     <option value="{{ $taxlabel->id}}">{{ $taxlabel->code}} -- {{ $taxlabel->name }}</option>
                                     @endforeach
                                 </select>
-                                    @endif
                                 <!--end::Input-->
                                 @error('taxlabel_id')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>
+
+                        @if ($edit_mode == false)
 
                         <div class="separator saperator-dashed my-3"></div>
 
@@ -56,10 +71,7 @@
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('taxables') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                    @if ($edit_mode == 'true')
-                                    <input type="text" wire:model="taxable_name" name="taxable_name" class="form-control form-control- mb-3 mb-lg-0" readonly/>
-                                    <input type="hidden" wire:model="taxable_idd" name="taxable_idd" class="form-control form-control- mb-3 mb-lg-0" readonly/>
-                                    @else
+                                    
                                     <select data-kt-action="load_drop" wire:model="taxable_id" name="taxable_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
                                     <option>{{ __('select an option') }}</option>
                                     @foreach($taxables as $taxable)
@@ -68,7 +80,6 @@
                                     <!-- <option value="Homme">Homme</option>
                                     <option value="Femme">Femme</option> -->
                                 </select>
-                                    @endif
                                 <!--end::Input-->
                                 @error('taxable_id')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -78,9 +89,9 @@
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('req no') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input data-kt-action="load_drop" type="text" wire:model="req_no" name="req_no" class="form-control mb-3 mb-lg-0" placeholder="{{ __('req no') }}"/>
+                                <input data-kt-action="load_drop" type="text" wire:model="trans_no" name="trans_no" class="form-control mb-3 mb-lg-0" placeholder="{{ __('req no') }}" readonly/>
                                 <!--end::Input-->
-                                @error('req_no')
+                                @error('trans_no')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>
@@ -134,7 +145,9 @@
                                 <!--end::Input-->
                             </div>
                         </div>
-                        @if ($edit_mode != 'true')
+
+                          @endif
+                        
                         <div class="separator separator-content separator-dashed my-3">
                             <span class="w-250px text-gray-500 fw-semibold fs-7">{{ __('request summary') }}</span>
                         </div>
@@ -168,9 +181,17 @@
                                         </tbody>
                             </table>
 
-                          @endif  
-
-
+                            @if ($edit_mode)
+                            <div class="text-center pt-5">
+                                <button type="submit" class="btn btn-danger mt-5" data-kt-taxpayer-taxables-modal-action="submit">
+                                    <span class="indicator-label" wire:loading.remove>{{ __('faire etat de compte du collecteur') }}</span>
+                                    <span class="indicator-progress" wire:loading wire:target="submit">
+                                    {{ __('chargenment ...') }}
+                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                </button>
+                            </div>
+                            @endif
                         <!--end::Input group-->
                     </div>
                     <!--end::Scroll-->

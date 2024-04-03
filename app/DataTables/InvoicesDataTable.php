@@ -32,7 +32,8 @@ class InvoicesDataTable extends DataTable
                 return $invoice->invoice_no;
             })
             ->editColumn('order_no', function (Invoice $invoice) {
-                return $invoice->order_no;
+                return view('pages/invoices.columns._order_no', compact('invoice'));
+                //return $invoice->order_no;
             })
             ->editColumn('nic', function (Invoice $invoice) {
                 return $invoice->nic;
@@ -61,8 +62,9 @@ class InvoicesDataTable extends DataTable
             ->editColumn('status', function (Invoice $invoice) {
                 return view('pages/invoices.columns._aproval', compact('invoice'));
             })
-            ->editColumn('from_date', function (Invoice $invoice) {
-                return $invoice->from_date;
+            ->editColumn('delivery_date', function (Invoice $invoice) {
+                //return $invoice->delivery_date;
+                return view('pages/invoices.columns._delivery', compact('invoice'));
             })
 
             ->editColumn('to_date', function (Invoice $invoice) {
@@ -97,6 +99,7 @@ class InvoicesDataTable extends DataTable
                         // ->where('taxables.tax_label_id', 'LIKE', '%' . ($this->taxlabel ?? '') . '%')
                         // ->where('invoices.validity', 'EXPIRED')
                         ->select('invoices.*')
+                ->whereBetween('invoices.created_at', [$startOfYear, $endOfYear])
                         ->distinct()
                         ->newQuery();
     }
@@ -135,10 +138,10 @@ class InvoicesDataTable extends DataTable
             Column::make('taxpayers.latitude')->title(__('gps')),
             Column::make('tax_labels.id')->title(__('taxlabel')),
             Column::make('total')->title(__('amount'))->name('amount'),
-            Column::make('validity')->title(__('status')),
             Column::make('status')->title(__('aproval')),
-            Column::make('from_date')->title( __('from_date'))->addClass('text-nowrap'),
+            Column::make('delivery_date')->title( __('delivery date'))->addClass('text-nowrap'),
             Column::make('to_date')->title( __('expiry date'))->addClass('text-nowrap'),
+            Column::make('validity')->title(__('status')),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
                 ->exportable(true)

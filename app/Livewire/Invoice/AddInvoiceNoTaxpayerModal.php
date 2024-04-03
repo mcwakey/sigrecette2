@@ -292,8 +292,8 @@ class AddInvoiceNoTaxpayerModal extends Component
                 'qty' => $this->qty,
                 'from_date' => date('Y-').$this->start_month."-01",
                 'to_date' => date('Y-').$this->start_month + $this->qty."-01",
-                'status' => 'APROVED',
-                'pay_status' => 'PAID',
+                'status' => 'DRAFT',
+                'pay_status' => 'OWING',
             ];
 
             // if ($this->edit_mode) {
@@ -376,7 +376,12 @@ class AddInvoiceNoTaxpayerModal extends Component
             //dd($paymentData);
 
             // Create or update Payment record
-            Payment::create($paymentData);
+            //Payment::create($paymentData);
+
+
+
+
+
             // $invoice_old = Invoice::find($this->invoice_id ?? $invoice->id);
 
             // if ($this->edit_mode) {

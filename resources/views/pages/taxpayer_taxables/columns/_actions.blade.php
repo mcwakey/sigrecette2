@@ -8,7 +8,7 @@
     data-kt-menu="true">
     <!--begin::Menu item-->
     <!-- <div class="menu-item px-3">
-        <a href="{{ route('settings.taxables.show', $taxpayer_taxable) }}" class="menu-link px-3">
+        <a href="{{ route('taxations.taxables.show', $taxpayer_taxable) }}" class="menu-link px-3">
             Aviser
         </a>
     </div> -->
@@ -21,24 +21,26 @@
     </div>
     <!--end::Menu item-->
 
-    @hasanyrole(['agent_assiette', 'administrateur_system'])
-        <!--begin::Menu item-->
+    <!--begin::Menu item-->
+        @can('edit taxpayer taxable asset')
         <div class="menu-item px-3">
             <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer_taxable->id }}" data-bs-toggle="modal"
                 data-bs-target="#kt_modal_add_taxpayer_taxable" data-kt-action="update_taxable">
                 {{ __('edit') }}
             </a>
         </div>
+        @endcan
         <!--end::Menu item-->
 
         <!--begin::Menu item-->
+        @can('delete taxpayer taxable asset')
         <div class="menu-item px-3">
             <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer_taxable->id }}"
                 data-kt-action="delete_taxpayer">
                 {{ __('delete') }}
             </a>
         </div>
+        @endcan
         <!--end::Menu item-->
     </div>
     <!--end::Menu-->
-@endhasanyrole

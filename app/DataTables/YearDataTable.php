@@ -10,6 +10,7 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class YearDataTable extends DataTable
 {
@@ -26,6 +27,12 @@ class YearDataTable extends DataTable
             ->rawColumns(['status'])
             ->editColumn('name', function (Year $year) {
                 return $year->name;
+            })
+            ->editColumn('current_month', function (Year $year) {
+                return Carbon::createFromFormat('m', $year->current_month)->monthName;
+            })
+            ->editColumn('auto_switch', function (Year $year) {
+                return view('pages/years.columns._auto_switch', compact('year'));
             })
             ->editColumn('status', function (Year $year) {
                 // return $year->status;
@@ -74,6 +81,8 @@ class YearDataTable extends DataTable
         return [
             Column::make('name')->title(__('year')),
             //Column::make('gender')->title('Tax Name'),
+            Column::make('current_month')->title(__('current_month')),
+            Column::make('auto_switch')->title(__('auto_switch')),
             Column::make('status')->title(__('status'))->width(150),
             Column::make('created_at')->title(__('created at'))->addClass('text-nowrap')->width(150),
             Column::computed('action')

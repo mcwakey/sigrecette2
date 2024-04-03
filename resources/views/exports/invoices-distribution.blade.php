@@ -1,3 +1,7 @@
+@php
+	use Carbon\Carbon;
+    $year= \App\Models\Year::getActiveYear();
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,7 +45,7 @@
 <table>
     <tr>
         <td colspan="6"  style="border: none; padding: 2px;">
-            REGION PLATEAUX
+            {{$commune->region_name}}
 
         </td>
         <td colspan="6"  style="border: none; padding:2px ;text-align: right;">
@@ -52,7 +56,7 @@
     <tr>
         <td colspan="6" style="border: none; margin: 0; padding:2px ;">
 
-            Commune de Agou
+            {{$commune->title}}
         </td>
         <td colspan="6"  style="border: none; margin: 0 ; padding:2px ; ;text-align: right;">
 
@@ -63,19 +67,19 @@
         <th colspan="12" style="border: none; margin: 0; text-align: center;" class="caption">Fiche de distribution des avis</th>
     </tr>
     <tr>
-        <td colspan="12" style="border: none; margin: 0; text-align: center;">N°01</td>
+        <td colspan="12" style="border: none; margin: 0; text-align: center;">N°</td>
     </tr>
     <tr>
-        <td colspan="12" style="border: none; margin: 0;" >Exercice : 2023</td>
+        <td colspan="12" style="border: none; margin: 0;" >Exercice : {{" ".$year->name}}</td>
     </tr>
     <tr>
         <td colspan="12" style="border: none; margin: 0;">Zone fiscale : Zone 1</td>
     </tr>
     <tr>
-        <td colspan="12" style="border: none; margin: 0;" >Nom de l’agent de recouvrement : Nyuiadzi</td>
+        <td colspan="12" style="border: none; margin: 0;" >Nom de l’agent de recouvrement : {{\Illuminate\Support\Facades\Auth::user()->name}}</td>
     </tr>
     <tr>
-        <td  colspan="12" style="border: none; margin: 0;" >Période de distribution: Du 05/01 Au 14/01</td>
+        <td  colspan="12" style="border: none; margin: 0;" >Période de distribution: </td>
     </tr>
     <tr>
         <th>N° Avis</th>
@@ -91,53 +95,42 @@
         <th>Date de notification</th>
         <th>Nom et émargement du réceptionnaire</th>
     </tr>
+    @php
+        $total_somme = 0;
+    @endphp
 
-
+    @foreach($data as $index => $item)
+        @php
+            $contribuable = $item[__('taxpayer')];
+               $lines = explode("\n", $contribuable);
+               $name=$lines[1];
+               $derniereLigne = end($lines);
+               $numeroTelephone = trim($derniereLigne);
+                $total_somme +=intval($item[__('amount')]);
+        @endphp
     <tr>
-        <td>001/23</td>
-        <td>001/23</td>
-        <td>00011</td>
-        <td>Sté Mont Agou</td>
-        <td>91..</td>
+        <td>{{$item[__('invoice no')]}}</td>
+        <td>{{$item[__('order no')]}}</td>
+        <td>{{$item[__('nic')]}}</td>
+        <td>{{$name}}</td>
+        <td>{{$numeroTelephone}}</td>
         <td>XX</td>
-        <td>YY</td>
-        <td>ZZ</td>
-        <td>XY</td>
-        <td>60 000</td>
-        <td>05/01</td>
+        <td>{{$item[__('zone')]}}</td>
+        <td>{{$item[__('address')]}}</td>
+        <td>{{$item[__('gps')]}}</td>
+        <td>{{$item[__('amount')]}}</td>
+        <td>
+            @if($item[__('delivery date')] !== __("NOT DELIVERED"))
+                {{$item[__('delivery date')]}}
+            @endif
+        </td>
         <td>Emmanuel</td>
     </tr>
-    <tr>
-        <td>002/23</td>
-        <td>002/23</td>
-        <td>00012</td>
-        <td>Jacqueline</td>
-        <td>91..</td>
-        <td>XX</td>
-        <td>YY</td>
-        <td>ZZ</td>
-        <td>XY</td>
-        <td>120 000</td>
-        <td>06/01</td>
-        <td>Jacqueline</td>
-    </tr>
-    <tr>
-        <td>003/23</td>
-        <td>003/23</td>
-        <td>00013</td>
-        <td>Florence</td>
-        <td>91..</td>
-        <td>XX</td>
-        <td>YY</td>
-        <td>ZZ</td>
-        <td>XY</td>
-        <td>24 000</td>
-        <td>07/01</td>
-        <td>Florence</td>
-    </tr>
+    @endforeach
+
     <tr>
         <td colspan="9" style="text-align: center;">TOTAL</td>
-        <td>204 000</td>
+        <td>{{ $total_somme}}</td>
         <td></td>
         <td></td>
     </tr>

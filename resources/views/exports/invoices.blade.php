@@ -219,7 +219,7 @@
                     @endforeach
                     <tr>
                         <th colspan="6" style="text-align: right;">Total:</th>
-                        <td >{{$invoice->amount}}</td>
+                        <td  style="text-align: center;">{{$invoice->amount}}</td>
                     </tr>
                     <tr>
                         <th colspan="7">Tableau du nouveau décompte </th>
@@ -240,7 +240,7 @@
                 <tr>
                     <td colspan="6" style="text-align: right;"><strong>Total :</strong></td>
 
-                    <td>{{$data[3]}}</td>
+                    <td style="text-align: center;">{{$data[3]}}</td>
 
 
 
@@ -256,7 +256,7 @@
             <table>
                 <tr class="text-start">
                     <td class="">
-                        <p>A ………, le<span class="write"> {{date("d/m/Y", strtotime( $data[0]))}}</span></p>
+                        <p>A {{$commune->name}}, le<span class="write"> {{date("d/m/Y", strtotime( $data[0]))}}</span></p>
                     </td>
                     <td class="">
                         <p>Le Maire <span>{{ " ".$commune->mayor_name}}</span></p>
@@ -264,8 +264,8 @@
                 </tr>
             </table>
             @if($action==1)
-            <p>N.B. Le paiement peut être effectué en numéraire, par chèque au nom du Receveur de la Commune de <span class="write"> ………………………………</span>. ou
-                par virement au compte trésor RIB<span class="write">{{$commune->treasury_rib}}</span>. La quittance est délivrée à la réception des espèces, du
+            <p>N.B. Le paiement peut être effectué en numéraire, par chèque au nom du Receveur de la <span class="write"> {{$commune->title}}</span>. ou
+                par virement au compte trésor RIB<span class="write">{{" ".$commune->treasury_rib}}</span>. La quittance est délivrée à la réception des espèces, du
                 chèque ou de l’ordre de virement par le Régisseur de recettes.</p>
             @endif
         </div>

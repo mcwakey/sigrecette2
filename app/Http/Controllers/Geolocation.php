@@ -10,18 +10,29 @@ use Illuminate\Contracts\View\View;
 
 class Geolocation extends Controller
 {
-    public function zones(){
-        $zones = Zone::with(['taxpayers','taxpayers.town','taxpayers.town.canton','taxpayers.erea','taxpayers.invoices'])->get();
-        return View('pages/geolocation.zones',compact('zones'));
+    public function zones()
+    {
+        $zones = Zone::with([
+            'taxpayers',
+            'taxpayers.taxpayer_taxables',
+            'taxpayers.town',
+            'taxpayers.town.canton',
+            'taxpayers.erea',
+            'taxpayers.invoices'
+        ])->get();
+
+        return View('pages/geolocation.zones', compact('zones'));
     }
 
-    public function zoneWithTaxpayers(string $zone){
-        $zone = Zone::with(['taxpayers','taxpayers.town','taxpayers.town.canton','taxpayers.erea'])->find($zone);     
-        return View('pages/geolocation.zone_with_taxpayers',compact('zone'));
+    public function zoneWithTaxpayers(string $zone)
+    {
+        $zone = Zone::with(['taxpayers', 'taxpayers.town', 'taxpayers.town.canton', 'taxpayers.erea'])->find($zone);
+        return View('pages/geolocation.zone_with_taxpayers', compact('zone'));
     }
 
-    public function users(){
+    public function users()
+    {
         $users = User::all();
-        return View('pages/geolocation.users',compact('users'));
+        return View('pages/geolocation.users', compact('users'));
     }
 }

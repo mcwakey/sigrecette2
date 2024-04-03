@@ -20,15 +20,15 @@ class StockRequestsDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->filter(function ($query) {
-                if (request()->filled('search.value')) {
-                    $query->where('tax_labels.name', 'like', '%' . request('search.value') . '%')
-                    ->orWhere('taxables.name', 'like', '%' . request('search.value') . '%')
-                    ->orWhere('tax_labels.code', 'like', '%' . request('search.value') . '%')
-                    ->orWhere('bill_status', 'like', '%' . request('search.value') . '%');
-                    // Add additional search conditions as needed for other columns
-                }
-            })
+            // ->filter(function ($query) {
+            //     if (request()->filled('search.value')) {
+            //         $query->where('tax_labels.name', 'like', '%' . request('search.value') . '%')
+            //         ->orWhere('taxables.name', 'like', '%' . request('search.value') . '%')
+            //         ->orWhere('tax_labels.code', 'like', '%' . request('search.value') . '%')
+            //         ->orWhere('bill_status', 'like', '%' . request('search.value') . '%');
+            //         // Add additional search conditions as needed for other columns
+            //     }
+            // })
             ->rawColumns(['status'])
             // ->editColumn('id', function (StockRequest $stock_request) {
             //     return $stock_request->id;
@@ -36,16 +36,16 @@ class StockRequestsDataTable extends DataTable
             // ->editColumn('req_no', function (StockRequest $stock_request) {
             //     return view('pages.stock_requests.columns._bill', compact('stock_request'));
             // })
-            ->editColumn('date', function (StockRequest $stock_request) {
+            ->editColumn('stock_requests.created_at', function (StockRequest $stock_request) {
                 return $stock_request->created_at->format('d M Y');
             })
-            ->editColumn('taxable', function (StockRequest $stock_request) {
+            ->editColumn('taxables.name', function (StockRequest $stock_request) {
                 return $stock_request->taxable->name;
             })
             ->editColumn('req_desc', function (StockRequest $stock_request) {
                 return $stock_request->req_desc;
             })
-            ->editColumn('tariff', function (StockRequest $stock_request) {
+            ->editColumn('taxables.tariff', function (StockRequest $stock_request) {
                 return $stock_request->taxable->tariff;
             })
             // ->editColumn('stock_request', function (StockRequest $stock_request) {
@@ -54,7 +54,7 @@ class StockRequestsDataTable extends DataTable
             // ->editColumn('tax_type', function (StockRequest $stock_request) {
             //     return $stock_request->;
             // })
-            ->editColumn('no', function (StockRequest $stock_request) {
+            ->editColumn('stock_requests.start_no', function (StockRequest $stock_request) {
                 return $stock_request->start_no. " - ". $stock_request->end_no;
                 // return view('pages.stock_requests.columns._seize', compact('stock_request'));
             })
@@ -103,11 +103,12 @@ class StockRequestsDataTable extends DataTable
             // ->editColumn('bill_status', function (StockRequest $stock_request) {
             //     return view('pages.stock_requests.columns._status', compact('stock_request'));
             // })
-            // ->editColumn('location', function (StockRequest $stock_request) {
-            //     return view('pages.stock_requests.columns._location', compact('stock_request'));
-            // })
-            ->editColumn('created_at', function (StockRequest $stock_request) {
-                return $stock_request->created_at->format('d M Y');
+            ->editColumn('users.name', function (StockRequest $stock_request) {
+                return $stock_request->user->name;
+            })
+            ->editColumn('stock_requests.type', function (StockRequest $stock_request) {
+                return view('pages.stock_requests.columns._status', compact('stock_request'));
+                //return $stock_request->type;
             })
             ->addColumn('action', function (StockRequest $stock_request) {
                 return view('pages.stock_requests.columns._actions', compact('stock_request'));
@@ -124,7 +125,7 @@ class StockRequestsDataTable extends DataTable
         return $model->with('taxable')
                     ->join('taxables', 'stock_requests.taxable_id', '=', 'taxables.id')
                     // ->with('taxable.tax_label')
-                    // ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
+                    ->join('users', 'stock_requests.user_id', '=', 'users.id')
                     // ->where('stock_requests.taxpayer_id', $this->id) // Filter stock_requests by taxpayer_id
                     ->select('stock_requests.*')
                     //->orderBy('tax_labels.name')
@@ -158,21 +159,21 @@ class StockRequestsDataTable extends DataTable
     {
         return [
             Column::make('req_id')->title(__('id'))->exportable(false)->printable(false)->visible(false), 
-            Column::make('date')->title(__('date'))->addClass('text-nowrap'),
-            Column::make('req_desc')->title(__('req_desc')),
-            Column::make('taxable')->title(__('valeur inactif')),
-            Column::make('tariff')->title(__('tariff'))->addClass('text-nowrap')->name('tax_labels.name'),
-            Column::make('no')->title(__('no')),
+            Column::make('stock_requests.created_at')->title(__('date'))->addClass('text-nowrap'),
+            Column::make('req_desc')->title(__('req desc')),
+            Column::make('taxables.name')->title(__('taxable')),
+            Column::make('taxables.tariff')->title(__('tariff')),
+            Column::make('stock_requests.start_no')->title(__('num')),
             //Column::make('tax_type')->title(__('tax_type')),
             //Column::make('seize')->title(__('amount')),
-            Column::make('qty')->title(__('pc qty'))->addClass('text-nowrap'),
-            Column::make('total')->title(__('pc total')),
-            Column::make('qty1')->title(__('vv qty'))->addClass('text-nowrap'),
-            Column::make('total1')->title(__('vv total')),
+            Column::make('qty')->title(__('pc qty'))->name('qty'),
+            Column::make('total')->title(__('pc total'))->name('qty'),
+            Column::make('qty1')->title(__('vv qty'))->name('qty'),
+            Column::make('total1')->title(__('vv total'))->name('qty'),
             // Column::make('qty2')->title(__('sd qty'))->addClass('text-nowrap'),
             // Column::make('total2')->title(__('sd total')),
-            //Column::make('location')->title(__('location'))->addClass('text-nowrap'),
-            Column::make('created_at')->title(__('created at'))->addClass('text-nowrap')->width(150),
+            Column::make('users.name')->title(__('user')),
+            Column::make('stock_requests.type')->title(__('status')),
             Column::computed('action')->title(__('action'))
                 ->addClass('text-end text-nowrap')
                 ->exportable(false)

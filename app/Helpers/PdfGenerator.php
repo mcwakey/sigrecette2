@@ -25,7 +25,8 @@ class PdfGenerator
     public function generateInvoiceListPdf(array $data,string $template,int $action=null):array
     {
 
-        //dd($data);
+        //dd($data,$template,$action);
+
         if ($this->checkInvoiceListDataUniformity($data)&& $this->checkIfCommuneIsNotNull()) {
 
             $filename = "Invoice-list-" . Str::random(8) . ".pdf";

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use function Symfony\Component\Translation\t;
 
 class Taxpayer extends Model
 {
@@ -119,4 +120,102 @@ class Taxpayer extends Model
     {
         return $this->hasOne(Activity::class);
     }
+    public static function countTaxpayers(){
+        return Taxpayer::selectRaw('gender, count(*) as count')
+            ->groupBy('gender')
+            ->pluck('count', 'gender')
+            ->merge(['Total' =>Taxpayer::count()])
+            ->toArray();
+    }
+    public static function countTaxpayersByActivity()
+    {
+        $categories = Category::all()->pluck('name', 'id');
+
+        $counts = Taxpayer::selectRaw('category_id, count(*) as count')
+            ->groupBy('category_id')
+            ->get()
+            ->map(function ($item) use ($categories) {
+                $categoryName = $categories[$item->category_id] ?? 'Unknown category';
+                return ['value' => $item->count, 'category' => $categoryName];
+            })
+            ->toArray();
+
+        return $counts;
+    }
+
+    public static function countTaxpayersByCanton()
+    {
+        $cantons = Canton::all()->pluck('name', 'id');
+        $counts = Taxpayer::selectRaw('town_id, count(*) as count')
+            ->groupBy('town_id')
+            ->get()
+            ->map(function ($item) use ($cantons) {
+                $categoryName = $item->town ? $cantons[$item->town->canton_id] ?? 'Unknown canton' : 'Unknown town';
+                return ['value' => $item->count, 'category' => $categoryName];
+            })
+            ->unique(function ($item) {
+                return $item['category'];
+            })
+            ->toArray();
+
+        return array_values($counts);
+    }
+    public static function countTaxpayersState()
+    {
+        $count_valid = 0;
+        $count_no_valid = 0;
+        $taxpayers_without_invoices=0;
+
+        $taxpayers = Taxpayer::all();
+        foreach ($taxpayers as $taxpayer) {
+            if ($taxpayer->invoices->isNotEmpty()) {
+                $is_valid = true;
+                foreach ($taxpayer->invoices as $invoice) {
+                    if ($invoice->pay_status == 'OWING'|| $invoice->pay_status == 'PART PAID') {
+                        $is_valid = false;
+                        break;
+                    }
+                }
+                if ($is_valid) {
+                    $count_valid++;
+                }else {
+                    $count_no_valid++;
+                }
+            }else{
+                $taxpayers_without_invoices+=1;
+            }
+        }
+
+        // Retourner les compteurs
+        return [
+            ['value' => $count_valid, 'category' => "A jour"],
+            ['value' => $count_no_valid, 'category' => "Non à jour"],
+            ['value' => $taxpayers_without_invoices, 'category' => "Sans avis"],
+        ];
+    }
+
+
+
+
+
+    public static function countTaxpayersByTaxables()
+    {
+        $taxables = Taxable::all()->pluck('name', 'id');
+        $counts = TaxpayerTaxable::selectRaw('taxable_id, count(*) as count')
+            ->groupBy('taxable_id')
+            ->get()
+            ->map(function ($item) use ($taxables) {
+                $categoryName = $taxables[$item->taxable_id];
+                return ['value' => $item->count, 'category' => $categoryName];
+            })
+            ->unique(function ($item) {
+                return $item['category'];
+            })
+            ->toArray();
+
+
+        return array_values($counts);
+    }
+
+
 }

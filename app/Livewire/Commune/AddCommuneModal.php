@@ -54,7 +54,7 @@ class AddCommuneModal extends Component
     {
         // Validate the form input data
         $this->validate();
-        $this->title = "Commune ".$this->title.$this->name;
+        $this->title = "Commune ".$this->title." ".$this->name;
         DB::transaction(function () {
             // Prepare the data for creating a new Taxable
             $data = [
