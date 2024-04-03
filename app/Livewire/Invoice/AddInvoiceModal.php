@@ -11,11 +11,16 @@ use App\Models\InvoiceItem;
 use App\Models\Taxpayer;
 use App\Models\TaxpayerTaxable;
 use App\Models\Town;
+use App\Notifications\InvoiceCreated;
+use App\Notifications\InvoicePaid;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Spatie\Permission\Models\Role;
 
 class AddInvoiceModal extends Component
 {
@@ -313,7 +318,17 @@ class AddInvoiceModal extends Component
             $invoice->pay_status = $invoice_old->pay_status;
             $invoice->save();
 
-            // Dispatch success message
+            if($this->edit_mode!=false){
+                $role = Role::where('name', 'agent_delegation')->first();
+                if ($role) {
+                    $users = $role->users()->get();
+                    Notification::send($users, new InvoiceCreated($invoice,Auth::user(),'agent_delegation'));
+
+                }
+            }
+
+
+
             if ($this->edit_mode) {
                 $this->dispatch('success', __('Invoice updated'));
             } else {

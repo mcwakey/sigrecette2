@@ -81,10 +81,12 @@ class RecoveriesDataTable extends DataTable
         $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
 
         return $model->newQuery()
-                    ->join('invoices', 'invoices.id', '=', 'payments.invoice_id')
-                    ->whereBetween('payments.created_at', [$startOfYear, $endOfYear])
-                    ->select('payments.*');
+            ->join('invoices', 'invoices.id', '=', 'payments.invoice_id')
+            ->whereNotNull('payments.user_id')
+            ->whereBetween('payments.created_at', [$startOfYear, $endOfYear])
+            ->select('payments.*');
     }
+
 
     /**
      * Optional method if you want to use the html builder.

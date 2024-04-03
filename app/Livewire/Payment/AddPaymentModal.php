@@ -218,7 +218,7 @@ class AddPaymentModal extends Component
 
             if ($role) {
                 $users = $role->users()->get();
-                Notification::send($users, new InvoicePaid($payment));
+                Notification::send($users, new InvoicePaid($payment,Auth::user()));
 
             }
             if ($this->edit_mode) {

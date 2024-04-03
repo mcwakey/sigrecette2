@@ -56,10 +56,16 @@
                                 </a>
                             </div>
                             <div class="menu-item px-3">
-                                <a href="#" class="menu-link px-3 print-link" data-type="4" target="_blank">
+                                <a href="#" class="menu-link px-3 print-link" data-type="2" target="_blank">
+                                    {{ __('Bordereau journal des avis de réduction ou d’annulation') }}
+                                </a>
+                            </div>
+                            <div class="menu-item px-3">
+                                <a href="#" class="menu-link px-3 print-link" data-type="3" target="_blank">
                                     {{ __('Registre journal des avis distribués') }}
                                 </a>
                             </div>
+
 
                         </div>
 
@@ -237,8 +243,9 @@
             document.getElementById('mySearchTwo').addEventListener('keyup', function() {
                 window.LaravelDataTables['invoices-table'].column(1).search(this.value).draw();
             });
-
+            let zone ="zone 1";
             document.getElementById('mySearchFive').addEventListener('change', function() {
+                zone = this.value;
                 window.LaravelDataTables['invoices-table'].column(4).search(this.value).draw();
             });
 
@@ -299,12 +306,11 @@
                         dataArray.push(rowData);
                     }
 
-                    // console.log(dataArray);
+
 
                     let r_type = 2;
-                    if (selectedValue === '3') {
-                        r_type = 3;
-                    } else if (selectedValue === '4') {
+
+                    if (selectedValue === '4') {
                         r_type = 4;
                     } else if (selectedValue === '5') {
                         r_type = selectedValue;
@@ -317,7 +323,6 @@
                     url = url.replace(':jsonData', encodeURIComponent(jsonData));
                     url = url.replace(':r_type', encodeURIComponent(r_type));
                     url = url.replace(':selectedValue', encodeURIComponent(selectedValue));
-
                     window.location.href = url;
                 });
             });

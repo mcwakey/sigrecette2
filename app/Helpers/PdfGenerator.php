@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Commune;
 use App\Models\Invoice;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -16,18 +17,113 @@ class PdfGenerator
     }
 
 
+
+    /**
+     * @param $type
+     * @param $data
+     * @return \Illuminate\Http\RedirectResponse|Response|mixed
+     */
+    public function processType($type, $data,$action)
+    {
+        //dd($type,$data,$action);
+        switch ($type) {
+            case 1:
+                return $this->downloadReceipt($data,$action,'payments');
+            case 2:
+                if($action=3){
+                    return $this->downloadInvoicesList($data,$action,'invoices-registre',15);
+                }
+                else{
+                    return $this->downloadInvoicesList($data,$action,'invoices-list',15);
+
+                }
+            //case 3:
+            //case 4:return 'invoices-distribution';
+            //case 5:return 'invoices-recouvrement';
+            //case 6:return 'invoices-registre';
+            default:
+                return $this->downloadInvoice($data,$action,'invoices');
+
+        }
+    }
+    /**
+     * @param $data
+     * @param $type
+     * @param PdfGenerator $pdfGenerator
+     * @return \Illuminate\Http\RedirectResponse|mixed
+     */
+    public function downloadInvoice($data,$action,$templateName){
+        $result = $this->generateInvoicePdf($data,$templateName,$action);
+        if ($result['success']) {
+            return $result['pdf'];
+        }
+
+        return back()->with('error', $result['message']);
+    }
+
+
+    public function downloadMultiple( $data)
+    {
+
+        $data = json_decode($data, true);
+        foreach ($data as $key => $subdata) {
+
+            if(count($subdata)>4){
+                $filename = 'document_' . $key . '.pdf';
+                $pdf= PDF::loadView('exports.invoices', ['data' => $subdata])
+                    ->save(Storage::path('exports') . DIRECTORY_SEPARATOR . $filename)
+                    ->stream($filename);
+                dd($pdf);
+            }
+
+        }
+        return back();
+    }
+    public function downloadReceipt( $data)
+    {
+
+
+        $data = json_decode($data, true);
+
+        $filename="receipt-".$data[2].'-'.Str::random(8).".pdf";
+
+        //dd($data);
+        $pdf= PDF::loadView('exports.payments', ['data' => $data])
+            // ->save(Storage::path('exports') . DIRECTORY_SEPARATOR . $filename)
+            ->stream($filename);
+        return $pdf;
+
+    }
+
+
+    /**
+     * @param $data
+     * @param $type
+     * @return \Illuminate\Http\RedirectResponse|mixed
+     */
+    public function downloadInvoicesList($data,$action, $templateName,$expectedDataSize = 14)
+    {
+
+        $result = $this->generateInvoiceListPdf($data,$templateName,$action,$expectedDataSize);
+        //dd($data);
+        if ($result['success']) {
+            return $result['pdf'];
+        }
+
+        return back()->with('error', $result['message']);
+    }
+
     /**
      * @param array $data
      * @param string $template
      * @param int|null $action
      * @return array
      */
-    public function generateInvoiceListPdf(array $data,string $template,int $action=null):array
+    public function generateInvoiceListPdf(array $data,string $template,int $action=null,$expectedDataSize):array
     {
 
         //dd($data,$template,$action);
-
-        if ($this->checkInvoiceListDataUniformity($data)&& $this->checkIfCommuneIsNotNull()) {
+        if ($this->checkInvoiceListDataUniformity($data,$expectedDataSize)&& $this->checkIfCommuneIsNotNull()) {
 
             $filename = "Invoice-list-" . Str::random(8) . ".pdf";
             //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
@@ -98,11 +194,8 @@ class PdfGenerator
      * @param $data
      * @return bool
      */
-    private function checkInvoiceListDataUniformity($data): bool
+    private function checkInvoiceListDataUniformity($data,int $expectedDataSize): bool
     {
-
-
-        $expectedDataSize = 14;
 
         foreach ($data as $item) {
             if (count($item) !== $expectedDataSize) {
@@ -168,8 +261,6 @@ class PdfGenerator
      */
     public function generateInvoicePdf(array $data,string $templateName,int $action=null ):array
     {
-
-
 
         if ($this->checkInvoiceDataUniformity($data) && $this->checkIfCommuneIsNotNull()) {
 

@@ -117,7 +117,7 @@
         <td>204 000</td>
     </tr>
     <tr>
-        <td colspan="6">TOTAL A REPORTER</td>
+        <td colspan="6"style="border: none; margin: 0; text-align: center;">TOTAL A REPORTER</td>
         <td>204 000</td>
         <td></td>
         <td>204 000</td>

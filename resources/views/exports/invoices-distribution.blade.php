@@ -114,7 +114,7 @@
         <td>{{$item[__('nic')]}}</td>
         <td>{{$name}}</td>
         <td>{{$numeroTelephone}}</td>
-        <td>XX</td>
+        <td>Pas encore dynamique</td>
         <td>{{$item[__('zone')]}}</td>
         <td>{{$item[__('address')]}}</td>
         <td>{{$item[__('gps')]}}</td>
@@ -122,7 +122,7 @@
         <td>
             {{$item[__('delivery date')]}}
         </td>
-        <td>Emmanuel</td>
+        <td>Pas encore dynamique</td>
     </tr>
     @endforeach
 

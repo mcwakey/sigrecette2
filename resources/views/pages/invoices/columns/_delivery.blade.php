@@ -1,5 +1,6 @@
 @if ($invoice->status == 'APROVED'||$invoice->status == 'CANCELED')
-    @if ($invoice->delivery == 'NOT DELIVERED')
+    @if ($invoice->delivery_date == null)
+        {{ __('NOT DELIVERED') }}
         @can('add invoice delivery date')
             <button type="button"
                 class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
@@ -35,8 +36,8 @@
                 <!--end::Form-->
             </div>
             <!--end::Task menu-->
-        @else
-        {{ __('NOT DELIVERED') }}
+
+
         @endcan
     @else
         {{ date('Y-m-d', strtotime($invoice->delivery_date)) }}

@@ -135,7 +135,13 @@
         @endphp
         <tr>
             <td>{{$item[__('invoice no')]}}</td>
-            <td>{{date("d-m-Y", strtotime( $item[ __('from_date')]))}}</td>
+            <td>@if(isset($item[ __('from_date')]))
+                    {{
+    date(
+        "d-m-Y", strtotime( $item[ __('from_date')] )
+    )
+    }}
+                @endif</td>
             <td>{{$item[__('order no')]}}</td>
             <td>{{$item[__('nic')]}}</td>
             <td>{{$name}}</td>

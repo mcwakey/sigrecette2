@@ -3,8 +3,13 @@
 namespace App\Livewire\Invoice;
 
 use App\Models\Invoice;
+use App\Models\Payment;
+use App\Notifications\InvoiceCreated;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 
 class AddStatusForm extends Component
 {
@@ -49,15 +54,38 @@ class AddStatusForm extends Component
             // Create or update Invoice record
             $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
 
-            
+
             $this->invoice_id = $invoice->id;
 
             foreach ($data as $k => $v) {
                 $invoice->$k = $v;
             }
+            if ($this->status=="APROVED" &&  ($invoice->amount==$invoice->reduce_amount)){
+
+               //last payment not check
+                $paymentData = [
+                    'invoice_id' => $this->invoice_id,
+                    'taxpayer_id' =>  $invoice->taxpayer_id,
+                    'amount' => $invoice->amount,
+                    'description' =>"Annulation",
+
+                ];
+                Payment::create($paymentData);
+                $invoice->pay_status="PAID";
+            }
             $invoice->save();
-                $this->dispatch('success', __('Invoice updated'));
+            $this->dispatch('success', __('Avis mis à jour'));
+            if($this->status=="PENDING"){
+                $role = Role::where('name', 'regisseur')->first();
+                if ($role) {
+                    $users = $role->users()->get();
+                    Notification::send($users, new InvoiceCreated($invoice ,Auth::user(),"regisseur"));
+
+                }
+            }
+
         });
+
 
         // Reset form fields after successful submission
         $this->reset();
