@@ -126,7 +126,7 @@ $count_tapyers_with_gender = \App\Models\Taxpayer::countTaxpayers();
                             <span class="bullet bullet-dot bg-warning me-2 h-10px w-10px"></span>
                             <!--end::Bullet-->
                             <!--begin::Label-->
-                            <span class="fw-bold text-gray-600 fs-6">Courses</span>
+                            <span class="fw-bold text-gray-600 fs-6">****</span>
                             <!--end::Label-->
                         </div>
                         <!--ed::Item-->
