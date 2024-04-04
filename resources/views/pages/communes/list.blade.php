@@ -16,6 +16,7 @@
             <!--begin::Card title-->
             <div class="card-title"></div>
                 @if(!$commune)
+
                     @can('create township')
                         <div class="d-flex justify-content-end" data-kt-commune-table-toolbar="base">
                             <!--begin::Add user-->

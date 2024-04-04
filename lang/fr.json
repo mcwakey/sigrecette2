@@ -283,7 +283,7 @@
     "add taxpayer infos": "Ajouter les informations du contribuable",
     "taxable info": "Informations de la matiere taxable",
     "accounts": "Comptabilité",
-    "new stock request": "Nouvelle demande d'approvisionement",
+    "new stock request": "Nouvel approvisionement",
     "account state": "État de compte du Collecteur",
     "print account state": "Imprimer l'état de compte",
     "valeur inactif": "Imposable",
@@ -317,11 +317,24 @@
     
     "rc qty": "Qté Recu",
     "rc total": "Montant Recu",
-    "rd qty": "Qté Vendu",
-    "rd total": "Montant Vendu",
+    "rd qty": "Qté Rendu",
+    "rd total": "Montant Rendu",
     
     "info commune": "Information de la Commune",
     "taxations": "Paramètres de Taxation",
+
+    "taxpayer info": "Informations sur le contribuable",
+    "activity info": "Informations sur l'activité",
+    "business info": "Informations sur l'entreprise",
+    "location info": "Informations sur l'emplacement",
+    
+    "tickets": "Valeurs Inactives",
+    "ticket": "Valeur Inactive",
+    "new ticket": "Nouvelle Valeur Inactive",
+
+    "batch no": "No de bon",
+    "payment description": "Description de l'opération",
+    "deposit": "Versement",
 
 
 

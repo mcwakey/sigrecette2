@@ -139,7 +139,7 @@ class InvoicesDataTable extends DataTable
             Column::make('tax_labels.id')->title(__('taxlabel')),
             Column::make('total')->title(__('amount'))->name('amount'),
             Column::make('status')->title(__('aproval')),
-            Column::make('delivery_date')->title( __('delivery date'))->addClass('text-nowrap'),
+            Column::make('delivery_date')->title( __('delivery date'))->addClass('text-center'),
             Column::make('to_date')->title( __('expiry date'))->addClass('text-nowrap'),
             Column::make('validity')->title(__('status')),
             Column::computed('action')

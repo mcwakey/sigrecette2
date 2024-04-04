@@ -117,30 +117,30 @@
                         </div>
 
                         <div class="row">
-                        <div class="notice d-flex bg-light-warning rounded border-warning border border-dashed mb-5 p-2 py-3">
+                            <div class="notice d-flex bg-light-warning rounded border-warning border border-dashed mb-5 p-2 py-3">
 
-                            <div class="col-md-3">
-                                <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('amount paid') }} :" readonly />
-                            </div>
-                            <div class="col-md-2">
-                                <div class="input-group mb-2">
-                                    <input wire:model="paid" name="paid" class="form-control form-control-flush" type="text" readonly />
-                                    <span class="input-group-text" id="basic-addon1">{{ __('currency') }}</span>
+                                <div class="col-md-3">
+                                    <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('amount paid') }} :" readonly />
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="input-group mb-2">
+                                        <input wire:model="paid" name="paid" class="form-control form-control-flush" type="text" readonly />
+                                        <span class="input-group-text" id="basic-addon1">{{ __('currency') }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('balance') }} :" readonly />
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="input-group mb-2">
+                                    <input wire:model="balance" name="balance" class="form-control form-control-flush text-end" type="text" readonly />
+                                        <span class="input-group-text" id="basic-addon1">{{ __('currency') }}</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-2">
-
-                            </div>
-                            <div class="col-md-3">
-                                <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('balance') }} :" readonly />
-                            </div>
-                            <div class="col-md-2">
-                                <div class="input-group mb-2">
-                                <input wire:model="balance" name="balance" class="form-control form-control-flush text-end" type="text" readonly />
-                                    <span class="input-group-text" id="basic-addon1">{{ __('currency') }}</span>
-                                </div>
-                            </div>
-                        </div>
                         </div>
 
                         <div class="separator separator-content mb-5">

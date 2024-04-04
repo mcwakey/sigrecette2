@@ -161,7 +161,7 @@ class StockRequestsDataTable extends DataTable
             Column::make('req_id')->title(__('id'))->exportable(false)->printable(false)->visible(false), 
             Column::make('stock_requests.created_at')->title(__('date'))->addClass('text-nowrap'),
             Column::make('req_desc')->title(__('req desc')),
-            Column::make('taxables.name')->title(__('taxable')),
+            Column::make('taxables.name')->title(__('ticket')),
             Column::make('taxables.tariff')->title(__('tariff')),
             Column::make('stock_requests.start_no')->title(__('num')),
             //Column::make('tax_type')->title(__('tax_type')),

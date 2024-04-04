@@ -40,14 +40,14 @@ class CollectorDepositsDataTable extends DataTable
                 return $stock_transfer->created_at->format('d M Y');
             })
             ->editColumn('taxables.name', function (StockTransfer $stock_transfer) {
-                return $stock_transfer->taxable->name;
+                return $stock_transfer->taxable->name ?? '-';
             })
-            ->editColumn('tax_labels.code', function (StockTransfer $stock_transfer) {
-                return $stock_transfer->taxable->tax_label->code;
+            ->editColumn('stock_transfers.code', function (StockTransfer $stock_transfer) {
+                return $stock_transfer->code;
             })
-            ->editColumn('tax_labels.name', function (StockTransfer $stock_transfer) {
-                return $stock_transfer->taxable->tax_label->name;
-            })
+            // ->editColumn('tax_labels.name', function (StockTransfer $stock_transfer) {
+            //     return $stock_transfer->taxable->tax_label->name;
+            // })
             ->editColumn('tariff', function (StockTransfer $stock_transfer) {
                 return $stock_transfer->taxable->tariff;
             })
@@ -127,9 +127,9 @@ class CollectorDepositsDataTable extends DataTable
             // ->editColumn('location', function (StockTransfer $stock_transfer) {
             //     return view('pages.collector_deposits.columns._location', compact('collector_deposit'));
             // })
-            ->editColumn('users.name', function (StockTransfer $stock_transfer) {
-                return $stock_transfer->user->name;
-            })
+            // ->editColumn('users.name', function (StockTransfer $stock_transfer) {
+            //     return $stock_transfer->user->name ?? '-';
+            // })
             ->editColumn('stock_transfers.type', function (StockTransfer $stock_transfer) {
                 return view('pages.stock_transfers.columns._status', compact('stock_transfer'));
                 //return $stock_request->type;
@@ -148,7 +148,7 @@ class CollectorDepositsDataTable extends DataTable
     {
         return $model->join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')
                     // ->with('taxable.tax_label')
-                    ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
+                    // ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
                     ->join('users', 'stock_transfers.to_user_id', '=', 'users.id')
                     ->where('stock_transfers.trans_type', 'VENDU') // Filter collector_deposits by taxpayer_id
                     ->select('stock_transfers.*')
@@ -185,8 +185,8 @@ class CollectorDepositsDataTable extends DataTable
             Column::make('id')->title(__('id'))->exportable(false)->printable(false)->visible(false), 
             Column::make('stock_transfers.created_at')->title(__('date'))->addClass('text-nowrap'),
             //Column::make('trans_desc')->title(__('trans_desc')),
-            Column::make('tax_labels.name')->title(__('taxlabel')),
-            Column::make('taxables.name')->title(__('taxable')),
+            // Column::make('tax_labels.name')->title(__('taxlabel')),
+            Column::make('taxables.name')->title(__('ticket')),
             //Column::make('tariff')->title(__('tariff'))->addClass('text-nowrap')->name('tax_labels.name'),
             Column::make('stock_transfers.start_no')->title(__('num')),
             //Column::make('tax_type')->title(__('tax_type')),
@@ -199,8 +199,8 @@ class CollectorDepositsDataTable extends DataTable
             //Column::make('total2')->title(__('rd total')),
             // Column::make('qty2')->title(__('sd qty'))->addClass('text-nowrap'),
             // Column::make('total2')->title(__('sd total')),
-            Column::make('tax_labels.code')->title(__('code')),
-            Column::make('users.name')->title(__('collector')),
+            Column::make('stock_transfers.code')->title(__('code')),
+            // Column::make('users.name')->title(__('collector')),
             Column::make('stock_transfers.type')->title(__('status')),
             Column::computed('action')->title(__('action'))
                 ->addClass('text-end text-nowrap')

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('unit')->nullable();
             $table->string('unit_type')->nullable();
             $table->string('modality')->nullable();
-            $table->string('periodicity');
+            $table->string('periodicity')->nullable();
             $table->string('penalty')->nullable();
             $table->string('penalty_type')->nullable()->default('FIXED');;
             $table->string('status')->default('ACTIVE');

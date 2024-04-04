@@ -39,7 +39,7 @@
                 @can('create collector new deposit by manager')
                     <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                         <!--begin::Add user-->
-                        <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                        <button type="button" class="btn btn-light-warning" data-bs-toggle="modal"
                             data-bs-target="#kt_modal_add_stock_transfer" data-kt-action="add_deposit">
                             {!! getIcon('plus', 'fs-2', '', 'i') !!}
                             {{ __('new deposit') }}
@@ -52,7 +52,7 @@
                     <!--begin::Toolbar-->
                     <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                         <!--begin::Add user-->
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                        <button type="button" class="btn btn-light-danger" data-bs-toggle="modal"
                             data-bs-target="#kt_modal_add_stock_transfer" data-kt-action="update_transfer">
                             {!! getIcon('plus', 'fs-2', '', 'i') !!}
                             {{ __('account state') }}
@@ -65,7 +65,7 @@
                     <!--begin::Toolbar-->
                     <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                         <!--begin::Add user-->
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                        <button type="button" class="btn btn-light-success" data-bs-toggle="modal"
                             data-bs-target="#kt_modal_add_stock_transfer" data-kt-action="add_transfer">
                             {!! getIcon('plus', 'fs-2', '', 'i') !!}
                             {{ __('new supply') }}
@@ -112,7 +112,7 @@
                         <!--begin::Col-->
                         <div class="col-md-3">
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('taxable') }}</label>
-                            <!-- <input type="text" class="form-control" name="tags" id="mySearchTwo" /> -->
+                            <input type="text" class="form-control" name="tags" id="mySearchTwo" />
                             <!-- <select class="form-select" aria-label="Select a Country" select2="true" data-placeholder="{{ __('select an option') }}" id="mySearchTwo"> -->
                                 <!-- <select name="country" id="mySearchTwo" aria-label="Select a Country" data-control="select2" data-placeholder="{{ __('select an option') }}" class="form-select form-select-solid form-select-lg fw-semibold"> -->
                                 <!-- <option value=""></option>
@@ -121,7 +121,7 @@
                                 <option value="RENDU">RENDU</option>
                             </select> -->
 
-                            <select class="form-select" data-control="select2" data-placeholder="Select an option" data-allow-clear="true" id="mySearchTwo">
+                            <!-- <select class="form-select" data-control="select2" data-placeholder="Select an option" data-allow-clear="true" id="mySearchTwo">
                                 <option></option>
                                 <option value="1">Option 1</option>
                                 <option value="2">Option 2</option>
@@ -133,7 +133,7 @@
                                 <option value="8">Option 8</option>
                                 <option value="9">Option 9</option>
                                 <option value="10">Option 10</option>
-                            </select>
+                            </select> -->
 
 
                         </div>
