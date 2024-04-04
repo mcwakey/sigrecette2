@@ -46,7 +46,7 @@
                 </div>
                 <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
                     <!--begin::Add user-->
-                    <a href="#" class="ms-5 mt-1" data-bs-toggle="collapse" data-bs-target="#kt_tutorial_form">
+                    <a href="#" class="ms-5 mt-1" data-bs-toggle="collapse" data-bs-target="#kt_tutorial_form"> 
                         <span data-bs-toggle="tooltip" title="Onglet tutoriel">
                             <i class="ki-outline ki-information fs-2tx text-warning"></i>
                         </span>

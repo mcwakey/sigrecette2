@@ -319,7 +319,6 @@
     "rc total": "Montant Recu",
     "rd qty": "Qté Rendu",
     "rd total": "Montant Rendu",
-
     "info commune": "Information de la Commune",
     "taxations": "Paramètres de Taxation",
 
@@ -327,7 +326,6 @@
     "activity info": "Informations sur l'activité",
     "business info": "Informations sur l'entreprise",
     "location info": "Informations sur l'emplacement",
-
     "tickets": "Valeurs Inactives",
     "ticket": "Valeur Inactive",
     "new ticket": "Nouvelle Valeur Inactive",
