@@ -20,8 +20,8 @@
                 <!--begin::Form-->
                 <form id="kt_modal_add_invoice_no_taxpayer_form" class="form" action="#" wire:submit="submit"
                     enctype="multipart/form-data">
-                    <input type="text" wire:model="invoice_id" name="invoice_id" />
-                    <input type="text" wire:model="taxpayer_id" name="taxpayer_id" />
+                    <input type="hidden" wire:model="invoice_id" name="invoice_id" />
+                    <input type="hidden" wire:model="taxpayer_id" name="taxpayer_id" />
                     <!--begin::Scroll-->
 
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_invoice_no_taxpayer_scroll"
@@ -49,74 +49,10 @@
                         <div class="card-body py-4">
 
                             <div class="collapse" id="kt_add_taxpayer_form">
-                                <!--begin::Separator-->
-                                <div class="separator separator-dashed mt-5 mb-5"></div>
-                                <!--end::Separator-->
                                 <!--begin::Row-->
 
-                                <div class="row mb-7">
-                                    <div class="col-md-4">
-                                        <!--begin::Label-->
-                                        <label class="required fw-semibold fs-6 mb-2">{{ __('fullname') }}</label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <input type="text" wire:model="name" name="name"
-                                            class="form-control mb-3 mb-lg-0" placeholder="{{ __('fullname') }}" />
-                                        <!--end::Input-->
-                                        @error('name')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="col-md-4">
-                                        <!--begin::Label-->
-                                        <label class="required fw-semibold fs-6 mb-2">{{ __('account id') }}</label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <input type="text" wire:model="tnif" name="tnif"
-                                            class="form-control mb-3 mb-lg-0" placeholder="{{ __('tnif') }}" />
-
-                                        <!--end::Input-->
-                                        @error('zone_id')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="col-md-3">
-                                        <!--begin::Label-->
-                                        <label class="required fw-semibold fs-6 mb-2">{{ __('zone') }}</label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <input type="text" wire:model="zone" name="zone"
-                                            class="form-control mb-3 mb-lg-0" placeholder="{{ __('zone') }}" />
-
-                                        <!--end::Input-->
-                                        @error('zone_id')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="col-md-1">
-                                        <!--begin::Label-->
-                                        <label class=" fw-semibold fs-6 mb-2">{{ __('empty') }}.</label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-
-                                        <button type="button" class="btn btn-light-success ms-auto me-5"
-                                            data-kt-user-id="{{-- $taxpayer->id --}}" data-bs-toggle="modal"
-                                            data-bs-target="#kt_modal_add_taxpayer_taxable"
-                                            data-kt-action="add_taxable">
-                                            <i class="ki-duotone ki-add-files fs-3">
-                                                <span class="path1"></span>
-                                                <span class="path2"></span>
-                                                <span class="path3"></span>
-                                                <span class="path4"></span>
-                                                <span class="path5"></span>
-                                            </i>
-                                        </button>
-
-                                        <!--end::Input-->
-                                        @error('zone_id')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
+                                <div class="separator separator-content mb-7 mt-7">
+                                    <span class="w-250px text-gray-500 fw-semibold fs-7">{{ __('taxpayer info') }}</span>
                                 </div>
 
                                 <div class="row mb-7">
@@ -125,67 +61,104 @@
                                         <label class="required fw-semibold fs-6 mb-2">{{ __('fullname') }}</label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="text" wire:model="name" name="name"
-                                            class="form-control mb-3 mb-lg-0" placeholder="{{ __('fullname') }}" />
+                                        <input type="text" wire:model="fullname" name="fullname" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('fullname') }}" />
                                         <!--end::Input-->
-                                        @error('name')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
+                                        @error('fullname')
+                                        <span class="text-danger">{{ $message }}</span> @enderror
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-2">
                                         <!--begin::Label-->
-                                        <label class="required fw-semibold fs-6 mb-2">{{ __('account id') }}</label>
+                                        <label class="required fw-semibold fs-6 mb-2">{{ __('gender') }}</label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="text" wire:model="tnif" name="tnif"
-                                            class="form-control mb-3 mb-lg-0" placeholder="{{ __('tnif') }}" />
-
+                                        <select wire:model="gender" name="gender" class="form-select " data-dropdown-parent="#kt_modal_add_taxpayer">
+                                            <option>{{ __('select an option') }}</option>
+                                            @foreach($genders as $gender)
+                                            <option value="{{ $gender->name}}">{{ $gender->name }}</option>
+                                            @endforeach
+                                            <!-- <option value="Homme">Homme</option>
+                                            <option value="Femme">Femme</option> -->
+                                        </select>
                                         <!--end::Input-->
-                                        @error('zone_id')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
+                                        @error('gender')
+                                        <span class="text-danger">{{ $message }}</span> @enderror
                                     </div>
                                     <div class="col-md-3">
                                         <!--begin::Label-->
-                                        <label class="required fw-semibold fs-6 mb-2">{{ __('zone') }}</label>
+                                        <label class="required fw-semibold fs-6 mb-2">{{ __('id type') }}</label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="text" wire:model="zone" name="zone"
-                                            class="form-control mb-3 mb-lg-0" placeholder="{{ __('zone') }}" />
+                                        <!-- <select aria-label="Select an ID Type" data-control="select2" data-placeholder="Select an ID Type..." class="form-select "
+                                            data-dropdown-parent="#kt_modal_add_taxpayer">
+                                            <option value="Homme">Homme</option>
+                                            <option value="Femme">Femme</option>
+                                        </select> -->
 
+                                        <select wire:model="id_type" name="id_type" class="form-select " data-dropdown-parent="#kt_modal_add_taxpayer" data-allow-clear="true">
+                                            <option>{{ __('select an option') }}</option>
+                                            @foreach($id_types as $id_type)
+                                            <option value="{{ $id_type->name}}">{{ $id_type->name }}</option>
+                                            @endforeach
+                                            <!-- <option value="1">Approved</option>
+                                            <option value="2">Pending</option>
+                                            <option value="3">In Process</option>
+                                            <option value="4">Rejected</option> -->
+                                        </select>
                                         <!--end::Input-->
-                                        @error('zone_id')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
+                                        @error('id_type')
+                                        <span class="text-danger">{{ $message }}</span> @enderror
                                     </div>
-                                    <div class="col-md-1">
+                                    <div class="col-md-3">
                                         <!--begin::Label-->
-                                        <label class=" fw-semibold fs-6 mb-2">{{ __('empty') }}.</label>
+                                        <label class="fw-semibold fs-6 mb-2">{{ __('id number') }}</label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-
-                                        <button type="button" class="btn btn-light-success ms-auto me-5"
-                                            data-kt-user-id="{{-- $taxpayer->id --}}" data-bs-toggle="modal"
-                                            data-bs-target="#kt_modal_add_taxpayer_taxable"
-                                            data-kt-action="add_taxable">
-                                            <i class="ki-duotone ki-add-files fs-3">
-                                                <span class="path1"></span>
-                                                <span class="path2"></span>
-                                                <span class="path3"></span>
-                                                <span class="path4"></span>
-                                                <span class="path5"></span>
-                                            </i>
-                                        </button>
-
+                                        <input type="text" wire:model="id_number" name="id_number" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('id number') }}" />
                                         <!--end::Input-->
-                                        @error('zone_id')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
+                                        @error('id_number')
+                                        <span class="text-danger">{{ $message }}</span> @enderror
                                     </div>
+                                </div>
+                                <div class="row mb-7">
+                                    <!-- <div class="notice"> -->
+                                        <div class="col-md-3">
+
+                                            <!--begin::Label-->
+                                            <label class="required fw-semibold fs-6 mb-2">{{ __('mobilephone') }}</label>
+                                            <!--end::Label-->
+
+                                            <div class="input-group mb-5">
+                                                <span class="input-group-text" id="basic-addon1">+228</span>
+                                                <!--begin::Input-->
+                                                <input type="text" wire:model="mobilephone" name="mobilephone" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('mobilephone') }}" />
+                                                <!--end::Input-->
+                                            </div>
+
+                                            @error('mobilephone')
+                                            <span class="text-danger">{{ $message }}</span> @enderror
+                                        </div>
+                                        <div class="col-md-3">
+                                            <!--begin::Label-->
+                                            <label class="fw-semibold fs-6 mb-2">{{ __('telephone') }}</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input type="text" wire:model="telephone" name="telephone" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('telephone') }}" />
+                                            <!--end::Input-->
+                                            @error('telephone')
+                                            <span class="text-danger">{{ $message }}</span> @enderror
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="fw-semibold fs-6 mb-2">{{ __('email') }}</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input type="email" wire:model="email" name="email" class="form-control  mb-3 mb-lg-0" placeholder="example@domain.com" />
+                                            <!--end::Input-->
+                                            @error('email')
+                                            <span class="text-danger">{{ $message }}</span> @enderror
+                                        </div>
+                                    <!-- </div> -->
                                 </div>
                                 <!--end::Row-->
-
-                                <div class="separator separator-dashed mt-5 mb-5"></div>
                             </div>
 
                             <!--begin::Table-->
@@ -194,8 +167,8 @@
                         <!--end::Card body-->
 
 
-                        <div class="separator separator-content my-8">
-                            <span class="w-200px text-gray-500 fw-semibold fs-7">{{ __('taxable info') }}</span>
+                        <div class="separator separator-content mb-6">
+                            <span class="w-300px text-gray-500 fw-semibold fs-7">{{ __('taxable info') }}</span>
                         </div>
 
                         <div class="row mb-5">

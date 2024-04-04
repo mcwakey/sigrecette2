@@ -16,20 +16,20 @@
             </div>
             <!--end::Modal header-->
             <!--begin::Modal body-->
-            <div class="modal-body px-5 my-7">
+            <div class="modal-body px-5 my-2">
                 <!--begin::Form-->
                 <form id="kt_modal_add_stock_request_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
-                    <input type="text" wire:model="stock_request_id" name="stock_request_id"  value=""/>
-                    <input type="text" wire:model="user_id" name="user_id" value=""/>
+                    <input type="hidden" wire:model="stock_request_id" name="stock_request_id"  value=""/>
+                    <input type="hidden" wire:model="user_id" name="user_id" value=""/>
                     <!--begin::Scroll-->
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_stock_request_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_stock_request_header" data-kt-scroll-wrappers="#kt_modal_add_stock_request_scroll" data-kt-scroll-offset="300px">
                         
                         <!--begin::Input group-->
 
                         <div class="row mb-7">
-                            <div class="col-md-12">
+                            <div class="col-md-8">
                                 <!--begin::Label-->
-                                <label class="required fs-6 fw-semibold mb-2">{{ __('taxlabels') }}</label>
+                                <label class="required fs-6 fw-semibold mb-2">{{ __('type') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                     @if ($edit_mode == 'true')
@@ -37,13 +37,22 @@
                                     @else                     
                                 <select data-kt-action="load_drop" wire:model="taxlabel_id" name="taxlabel_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_request">
                                     <option>{{ __('select an option') }}</option>
-                                    @foreach($taxlabels as $taxlabel)
-                                    <option value="{{ $taxlabel->id}}">{{ $taxlabel->code}} -- {{ $taxlabel->name }}</option>
-                                    @endforeach
+                                    <option value="TICKET">TICKET</option>
+                                    <option value="TIMBRE">TIMBRE</option>
                                 </select>
                                     @endif
                                 <!--end::Input-->
                                 @error('taxlabel_id')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-4">
+                                <!--begin::Label-->
+                                <label class="required fs-6 fw-semibold mb-2">{{ __('batch no') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input data-kt-action="load_drop" type="text" wire:model="req_no" name="req_no" class="form-control mb-3 mb-lg-0" placeholder="{{ __('req no') }}"/>
+                                <!--end::Input-->
+                                @error('req_no')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>
@@ -53,7 +62,7 @@
                         <div class="row mb-7">
                             <div class="col-md-8">
                                 <!--begin::Label-->
-                                <label class="required fs-6 fw-semibold mb-2">{{ __('taxables') }}</label>
+                                <label class="required fs-6 fw-semibold mb-2">{{ __('tickets') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                     @if ($edit_mode == 'true')
@@ -146,6 +155,7 @@
                                                 <th class="min-w-50px">{{ __('tariff') }}</th>
                                                 <th class="min-w-50px">{{ __('qty') }}</th>
                                                 <th class="min-w-50px">{{ __('amount') }}</th>
+                                                <th class="min-w-50px">{{ __('num') }}</th>
                                             </tr>
                                         </thead>
                                         <tbody class="fs-6 fw-semibold text-gray-600">
@@ -162,6 +172,9 @@
                                             </td>
                                             <td>
                                                 {{ $stock_request->qty*$stock_request->taxable->tariff }}
+                                            </td>
+                                            <td>
+                                                {{ $stock_request->start_no." - ".$stock_request->end_no }}
                                             </td>
                                         </tr>
                                         @endforeach

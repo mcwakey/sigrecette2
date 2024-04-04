@@ -163,8 +163,8 @@
                         @can('view manager deposit state')
                             <!--begin:Menu item-->
                             <div class="menu-item">
-                                <a class="menu-link {{ request()->routeIs('accounts.stock-requests.*') ? 'active' : '' }}"
-                                    href="{{ route('accounts.stock-requests.index') }}">
+                                <a class="menu-link {{ request()->routeIs('accounts.accountant-deposits.*') ? 'active' : '' }}"
+                                    href="{{ route('accounts.accountant-deposits.index') }}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>
@@ -194,8 +194,8 @@
 
                         <!--begin:Menu item-->
                         <div class="menu-item">
-                            <a class="menu-link {{ request()->routeIs('accounts.collector_deposits.*') ? 'active' : '' }}"
-                                href="{{ route('accounts.collector_deposits.index') }}">
+                            <a class="menu-link {{ request()->routeIs('accounts.collector-deposits.*') ? 'active' : '' }}"
+                                href="{{ route('accounts.collector-deposits.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -207,8 +207,8 @@
                         <!--begin:Menu item-->
                         <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('recoveries.*') ? 'active' : '' }}"
-                                href="{{ route('recoveries.index') }}">
+                            <a class="menu-link {{ request()->routeIs('accounts.ledgers.*') ? 'active' : '' }}"
+                                href="{{ route('accounts.ledgers.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -304,6 +304,17 @@
                                     <span class="bullet bullet-dot"></span>
                                 </span>
                                 <span class="menu-title">{{ __('taxables') }}</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->routeIs('taxations.tickets.*') ? 'active' : '' }}"
+                                href="{{ route('taxations.tickets.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">{{ __('tickets') }}</span>
                             </a>
                             <!--end:Menu link-->
                         </div>

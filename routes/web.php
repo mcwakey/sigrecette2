@@ -9,6 +9,7 @@ use App\Http\Controllers\RecoveryController;
 use App\Http\Controllers\TaxableController;
 use App\Http\Controllers\LanguageController;
 use App\DataTables\TaxpayerInvoicesDataTable;
+use App\Http\Controllers\AccountantDepositController;
 use App\Http\Controllers\CantonsController;
 use App\Http\Controllers\TaxpayerController;
 use App\Http\Controllers\TaxLabelController;
@@ -23,8 +24,10 @@ use App\Http\Controllers\Apps\UserManagementController;
 use App\Http\Controllers\CollectorDepositController;
 use App\Http\Controllers\EreasController;
 use App\Http\Controllers\Geolocation;
+use App\Http\Controllers\LedgerController;
 use App\Http\Controllers\StockRequestController;
 use App\Http\Controllers\StockTransferController;
+use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TownsController;
 
 /*
@@ -68,12 +71,15 @@ Route::middleware(['auth'])->group(function () {
     Route::name('accounts.')->group(function () {
         Route::resource('/accounts/stock-requests', StockRequestController::class);
         Route::resource('/accounts/stock-transfers', StockTransferController::class);
-        Route::resource('/accounts/collector_deposits', CollectorDepositController::class);
+        Route::resource('/accounts/collector-deposits', CollectorDepositController::class);
+        Route::resource('/accounts/accountant-deposits', AccountantDepositController::class);
+        Route::resource('/accounts/ledgers', LedgerController::class);
     });
 
     Route::name('taxations.')->group(function () {
         Route::resource('/taxations/taxables', TaxableController::class);
         Route::resource('/taxations/taxlabels', TaxLabelController::class);
+        Route::resource('/taxations/tickets', TicketController::class);
     });
 
     Route::name('administratives.')->group(function () {

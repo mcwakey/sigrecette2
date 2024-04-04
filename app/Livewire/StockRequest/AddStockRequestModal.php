@@ -40,7 +40,7 @@ class AddStockRequestModal extends Component
         'qty' => 'required|numeric',
         'start_no' =>'required|numeric',
         'end_no' => 'required|numeric',
-        'taxlabel_id' => 'required|numeric',
+        //'taxlabel_id' => 'required|numeric',
         'taxable_id' => 'required|numeric',
         'user_id' => 'required|numeric',
     ];
@@ -64,7 +64,7 @@ class AddStockRequestModal extends Component
 
     public function updatedTaxlabelId($value)
     {
-        $this->taxables = Taxable::where('tax_label_id', $value)->get();
+        $this->taxables = Taxable::where('tax_label_id', null)->where('unit', $value)->get();
     }
 
     // public function updatedTaxableId($value)

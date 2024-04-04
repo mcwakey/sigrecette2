@@ -1,6 +1,6 @@
 <div class="modal fade" id="kt_modal_add_stock_transfer" tabindex="-1" aria-hidden="true" wire:ignore.self>
     <!--begin::Modal dialog-->
-    <div class="modal-dialog modal-dialog-centered mw-800px">
+    <div class="modal-dialog modal-dialog-centered mw-1000px">
         <!--begin::Modal content-->
         <div class="modal-content">
             <!--begin::Modal header-->
@@ -19,8 +19,8 @@
             <div class="modal-body px-5 my-7">
                 <!--begin::Form-->
                 <form id="kt_modal_add_stock_transfer_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
-                    <input type="text" wire:model="stock_transfer_id" name="stock_transfer_id"  value=""/>
-                    <input type="text" wire:model="user_id" name="user_id" value=""/>
+                    <input type="hidden" wire:model="stock_transfer_id" name="stock_transfer_id"  value=""/>
+                    <input type="hidden" wire:model="user_id" name="user_id" value=""/>
                     <!--begin::Scroll-->
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_stock_transfer_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_stock_transfer_header" data-kt-scroll-wrappers="#kt_modal_add_stock_transfer_scroll" data-kt-scroll-offset="300px">
                         
@@ -45,15 +45,14 @@
                             </div>
                             <div class="col-md-8">
                                 <!--begin::Label-->
-                                <label class="required fs-6 fw-semibold mb-2">{{ __('taxlabels') }}</label>
+                                <label class="required fs-6 fw-semibold mb-2">{{ __('type') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                                        
                                 <select data-kt-action="load_drop" wire:model="taxlabel_id" name="taxlabel_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
                                     <option>{{ __('select an option') }}</option>
-                                    @foreach($taxlabels as $taxlabel)
-                                    <option value="{{ $taxlabel->id}}">{{ $taxlabel->code}} -- {{ $taxlabel->name }}</option>
-                                    @endforeach
+                                    <option value="TICKET">TICKET</option>
+                                    <option value="TIMBRE">TIMBRE</option>
                                 </select>
                                 <!--end::Input-->
                                 @error('taxlabel_id')
@@ -61,14 +60,13 @@
                             </div>
                         </div>
 
-                        @if ($edit_mode == false)
 
                         <div class="separator saperator-dashed my-3"></div>
 
                         <div class="row mb-7">
                             <div class="col-md-8">
                                 <!--begin::Label-->
-                                <label class="required fs-6 fw-semibold mb-2">{{ __('taxables') }}</label>
+                                <label class="required fs-6 fw-semibold mb-2">{{ __('tickets') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                     
@@ -99,7 +97,7 @@
                         <div class="separator saperator-dashed my-3"></div>
 
                         <div class="row mb-7">
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <!--begin::Label-->
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('start no') }}</label>
                                 <!--end::Label-->
@@ -109,7 +107,7 @@
                                 @error('start_no')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <!--begin::Label-->
                                 <label class="fw-semibold fs-6 mb-2">{{ __('end no') }}</label>
                                 <!--end::Label-->
@@ -119,7 +117,7 @@
                                 @error('end_no')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <!--begin::Label-->
                                 <label class="fw-semibold fs-6 mb-2">{{ __('qty') }}</label>
                                 <!--end::Label-->
@@ -129,6 +127,18 @@
                                 @error('qty')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
+                            @if ($deposit_mode) 
+                            <div class="col-md-3">
+                                <!--begin::Label-->
+                                <label class="fw-semibold fs-6 mb-2">{{ __('code') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" wire:model="code" name="code" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('code') }}" data-kt-action="change_qty" />
+                                <!--end::Input-->
+                                @error('code')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                            @endif
                             <div class="col-md-3">
                                 <!--begin::Label-->
                                 <!-- <label class="fw-semibold fs-6 mb-2">{{ __('empty') }}.</label> -->
@@ -146,7 +156,6 @@
                             </div>
                         </div>
 
-                          @endif
                         
                         <div class="separator separator-content separator-dashed my-3">
                             <span class="w-250px text-gray-500 fw-semibold fs-7">{{ __('request summary') }}</span>
@@ -155,10 +164,11 @@
                         <table class="table g-5 gs-0 mb-0 fw-bolder text-gray-700" data-kt-element="items">
                         <thead class="border-bottom border-gray-200 fs-7 fw-bold">
                                             <tr class="text-start text-muted text-uppercase gs-0">
-                                                <th class="min-w-50px">{{ __('taxable') }}</th>
+                                                <th class="min-w-50px">{{ __('ticket') }}</th>
                                                 <th class="min-w-50px">{{ __('tariff') }}</th>
                                                 <th class="min-w-50px">{{ __('qty') }}</th>
                                                 <th class="min-w-50px">{{ __('amount') }}</th>
+                                                <th class="min-w-50px">{{ __('num') }}</th>
                                             </tr>
                                         </thead>
                                         <tbody class="fs-6 fw-semibold text-gray-600">
@@ -175,6 +185,9 @@
                                             </td>
                                             <td>
                                                 {{ $stock_transfer->qty*$stock_transfer->taxable->tariff }}
+                                            </td>
+                                            <td>
+                                                {{ $stock_transfer->start_no." - ".$stock_transfer->end_no }}
                                             </td>
                                         </tr>
                                         @endforeach

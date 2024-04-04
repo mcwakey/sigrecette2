@@ -172,6 +172,9 @@ class AddInvoiceNoTaxpayerModal extends Component
         //$id_types = IdType::all();
         $taxpayers = Taxpayer::all();
         $taxlabels = TaxLabel::all();
+        
+        $genders = Gender::all();
+        $id_types = IdType::all();
         //$taxpayer_taxables = TaxpayerTaxable::all();
 
         //$taxpayer_taxables = $this->taxpayer_id ? TaxpayerTaxable::where('taxpayer_id', $this->taxpayer_id)->where('billable', 1)->get() : collect();
@@ -183,7 +186,7 @@ class AddInvoiceNoTaxpayerModal extends Component
 
         //return view('livewire.invoice.add-invoice-modal', ['taxpayer_id' => $this->taxpayer_id]);
 
-        return view('livewire.invoice.add-invoice-no-taxpayer-modal', compact('taxpayers','taxlabels'));
+        return view('livewire.invoice.add-invoice-no-taxpayer-modal', compact('taxpayers','taxlabels','genders','id_types'));
     }
 
     // public function loadDrop($value)

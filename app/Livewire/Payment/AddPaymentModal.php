@@ -57,7 +57,7 @@ class AddPaymentModal extends Component
         "payment_type" => "required",
         "reference" => "required",
 
-        'taxpayer_id' => 'required',
+        //'taxpayer_id' => 'required',
         'invoice_id' => 'required',
     ];
 
@@ -147,8 +147,9 @@ class AddPaymentModal extends Component
 
             // Prepare data for Payment
             $paymentData = [
+                // 'invoice_id' => $this->invoice_id,
                 'invoice_id' => $this->invoice_id,
-                'taxpayer_id' => $this->taxpayer_id,
+                'taxpayer_id' => ($this->taxpayer_id === "") ? null : $this->taxpayer_id,
                 'amount' => $this->amount,
                 'payment_type' => $this->payment_type,
                 'reference' => $this->reference,
@@ -262,11 +263,11 @@ class AddPaymentModal extends Component
                             //dd($invoice);
 
         $this->invoice_id = $invoice->id;
-        $this->taxpayer_id = $invoice->taxpayer->id;
+        $this->taxpayer_id = $invoice->taxpayer->id ?? "";
 
-        $this->name = $invoice->taxpayer->name;
-        $this->tnif = $invoice->taxpayer->id;
-        $this->zone = $invoice->taxpayer->zone->name;
+        $this->name = $invoice->taxpayer->name ?? "";
+        $this->tnif = $invoice->taxpayer->id ?? "";
+        $this->zone = $invoice->taxpayer->zone->name ?? "";
 
         $this->invoice_no = $invoice->invoice_no;
         $this->order_no = $invoice->order_no;

@@ -182,7 +182,7 @@ class StockTransfersDataTable extends DataTable
             Column::make('id')->title(__('id'))->exportable(false)->printable(false)->visible(false), 
             Column::make('stock_transfers.created_at')->title(__('date'))->addClass('text-nowrap'),
             //Column::make('trans_desc')->title(__('trans_desc')),
-            Column::make('taxables.name')->title(__('taxable')),
+            Column::make('taxables.name')->title(__('ticket')),
             Column::make('taxable.tariff')->title(__('tariff')),
             Column::make('stock_transfers.start_no')->title(__('num')),
             //Column::make('tax_type')->title(__('tax_type')),

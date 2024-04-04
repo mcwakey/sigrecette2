@@ -519,7 +519,7 @@
                                                     <td>
                                                         @if ($invoice->status == 'APROVED'||$invoice->status == 'CANCELED')
                                                             @if ($invoice->delivery == 'NOT DELIVERED')
-                                                                @can('add invoice delivery date')
+                                                                @can('create invoice delivery date')
                                                                     <button type="button"
                                                                         class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
                                                                         data-kt-user-id="{{ $invoice->id }}"
