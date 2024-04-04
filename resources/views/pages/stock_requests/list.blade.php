@@ -46,7 +46,7 @@
                 </div>
                 <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
                     <!--begin::Add user-->
-                    <a href="#" class="ms-5 mt-1" data-bs-toggle="collapse" data-bs-target="#kt_tutorial_form"> 
+                    <a href="#" class="ms-5 mt-1" data-bs-toggle="collapse" data-bs-target="#kt_tutorial_form">
                         <span data-bs-toggle="tooltip" title="Onglet tutoriel">
                             <i class="ki-outline ki-information fs-2tx text-warning"></i>
                         </span>
@@ -54,8 +54,43 @@
                     <!--end::Add user-->
                 </div>
                 <!--end::Toolbar-->
+                        <!--begin::Add user-->
+                        <a href="#" class="ms-5 mt-1" data-bs-toggle="collapse" data-bs-target="#kt_tutorial_form">
+                            <span data-bs-toggle="tooltip" title="Onglet tutoriel">
+                                <i class="ki-outline ki-information fs-2tx text-warning"></i>
+                            </span>
+                        </a>
+                        <!--end::Add user-->
+                    </div>
+                <div class="card-toolbar">
+                    <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
+                        @can('print invoice')
+                            <div href="#" class="btn btn-light btn-active-light-primary btn-flex btn-center ms-auto me-5"
+                                 data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                {{ __('print') }}
+                                <i class="ki-duotone ki-down fs-5 ms-1"></i>
+                            </div>
+                        @endcan
+
+                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4"
+                             data-kt-menu="true" id="print-modal">
+                            <div class="menu-item px-3">
+                                <a href="#" class="menu-link px-3 print-link" data-type="1" target="_blank">
+                                    {{ __('ETAT DE COMPTABILITÉ DES VALEURS INACTIVES DU REGISSEUR  ') }}
+                                </a>
+                            </div>
+
+
+
+                        </div>
+
+                    </div>
+                    <!--begin::Toolbar-->
+
+                    <!--end::Toolbar-->
+                </div>
             </div>
-            <!--end::Card toolbar-->
+
         </div>
         <!--end::Card header-->
 
@@ -134,7 +169,7 @@
                             <div class="fw-semibold">
                                 <h4 class="text-gray-900 fw-bold">Tutoriel sur <a class="fw-bold" href="#">Etat de comptabilite des VI du Regisseur</a></h4>
                                 <div class="fs-6 text-gray-700">
-                                   -> clicker ici 
+                                   -> clicker ici
                                         <a href="#" id="kt_horizontal_search_advanced_link" data-kt-rotate="true" class="btn btn-outline btn-outline-dashed bg-light-secondary btn-outline-secondary btn-active-light-secondary mx-1 rotate"
                                             data-bs-toggle="collapse" data-bs-target="#kt_advanced_search_form">
                                             {{ __('advanced search') }} <i
@@ -142,7 +177,7 @@
                                                     class="path1"></span><span class="path2"></span></i></a> pour afficher le formulaire de recherche avancée.
                                 <!-- </div>
                                 <div class="fs-6 text-gray-700"> -->
-                                   -- clicker ici 
+                                   -- clicker ici
 
                                     <button type="button" class="btn btn-outline-success btn-success mx-1" data-bs-toggle="modal" data-bs-target="#kt_modal_add_stock_request"  data-kt-action="add_request">
                                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
@@ -205,7 +240,7 @@
             <!--end::Table-->
         </div>
         <!--end::Card body-->
-        
+
     </div>
 
                 <!--begin::Modal-->
@@ -249,6 +284,62 @@
                     window.LaravelDataTables['stock_requests-table'].ajax.reload();
                 });
             });
+            document.querySelectorAll('.print-link').forEach(function(link) {
+
+                function capitalizeFirstLetter(str) {
+                    let array = ["NIC", "GPS"];
+
+                    if (array.includes(str.toUpperCase())) {
+                        return str;
+                    } else {
+                        let words = str.toLowerCase().split(' ');
+                        for (let i = 0; i < words.length; i++) {
+                            words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+                        }
+                        return words.join(' ');
+                    }
+                }
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    let selectedValue = link.getAttribute('data-type');
+                    let table = document.getElementById("stock_requests-table");
+                    let dataArray = [];
+                    let headers = [];
+
+
+                    // for (let i = 1; i < table.rows.length; i++) {let row = table.rows[i];let rowData = [];for (let j = 0; j < row.cells.length; j++) {let cellValue = row.cells[j].innerText.trim();rowData.push(cellValue);}dataArray.push(rowData);}
+
+                    let headerRow = table.getElementsByTagName("thead")[0].getElementsByTagName("tr")[0];
+                    for (let i = 0; i < headerRow.cells.length; i++) {
+                        headers.push(headerRow.cells[i].innerText.trim());
+                    }
+
+                    for (let i = 1; i < table.rows.length; i++) {
+                        let row = table.rows[i];
+                        let rowData = {};
+                        for (let j = 0; j < row.cells.length; j++) {
+                            let cellValue = row.cells[j].innerText.trim();
+                            let header = headers[j];
+                            rowData[capitalizeFirstLetter(header)] = cellValue;
+                        }
+
+                        dataArray.push(rowData);
+                    }
+
+
+
+                    let r_type = 7;
+
+                    let jsonData = JSON.stringify(dataArray);
+                    let url =
+                        "{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type', 'action' => ':selectedValue']) }}";
+                    url = url.replace(':jsonData', encodeURIComponent(jsonData));
+                    url = url.replace(':r_type', encodeURIComponent(r_type));
+                    url = url.replace(':selectedValue', encodeURIComponent(selectedValue));
+                    window.location.href = url;
+                });
+            });
+
         </script>
     @endpush
 

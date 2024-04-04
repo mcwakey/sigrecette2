@@ -308,18 +308,18 @@
     "recoveries information": "Informations sur les recouvrements",
     "faire etat de compte du collecteur": "Faire etat de compte du Collecteur",
 
-    "num": "No. de - a",
+    "num": "No . de - a",
     "pc qty": "Qté PC",
     "pc total": "Montant PC",
     "vv qty": "Qté Vendu",
     "vv total": "Montant Vendu",
     "req desc": "Pièces justificatives",
-    
+
     "rc qty": "Qté Recu",
     "rc total": "Montant Recu",
     "rd qty": "Qté Rendu",
     "rd total": "Montant Rendu",
-    
+
     "info commune": "Information de la Commune",
     "taxations": "Paramètres de Taxation",
 
@@ -327,7 +327,7 @@
     "activity info": "Informations sur l'activité",
     "business info": "Informations sur l'entreprise",
     "location info": "Informations sur l'emplacement",
-    
+
     "tickets": "Valeurs Inactives",
     "ticket": "Valeur Inactive",
     "new ticket": "Nouvelle Valeur Inactive",
@@ -463,7 +463,7 @@
     "create role": "Créer un role",
     "edit role": "Modifier un role",
     "delete role": "Supprimer un role",
-    
+
     "manager account state" : "Etat de comptabilité du régisseur",
     "manager deposit state" : "Etat de versement du régisseur",
 

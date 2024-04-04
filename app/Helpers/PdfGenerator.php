@@ -25,7 +25,7 @@ class PdfGenerator
      */
     public function processType($type, $data,$action)
     {
-        //dd($type,$data,$action);
+       //dd($data);
         switch ($type) {
             case 1:
                 return $this->downloadReceipt($data,$action,'payments');
@@ -41,6 +41,8 @@ class PdfGenerator
             //case 4:return 'invoices-distribution';
             //case 5:return 'invoices-recouvrement';
             //case 6:return 'invoices-registre';
+            case 6:return $this->downloadStateValueCollector($data,$action,'state-account-iv-collector',15);
+            case 7:return $this->downloadStateValueReciepient($data,$action,'state-account-iv-receveur',15);
             default:
                 return $this->downloadInvoice($data,$action,'invoices');
 
@@ -290,6 +292,56 @@ class PdfGenerator
 
             return ['success' => true, 'pdf' => $pdf];
         }
+
+        return ['success' => false, 'message' => 'Invalid data structure.'];
+    }
+
+    private function downloadStateValueCollector($data, $action, string$templateName,$expectedDataSize)
+    {
+        $result = $this->generateStateValueCollectorPdf($data,$templateName,$action,$expectedDataSize);
+        //dd($data);
+        if ($result['success']) {
+            return $result['pdf'];
+        }
+
+        return back()->with('error', $result['message']);
+    }
+
+    private function generateStateValueCollectorPdf($data, string $template, $action, $expectedDataSize)
+    {
+       // if ($this->checkInvoiceListDataUniformity($data,$expectedDataSize)&& $this->checkIfCommuneIsNotNull()) {
+
+            $filename = "StateValueCollector" . Str::random(8) . ".pdf";
+            //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
+            $pdf = PDF::loadView("exports.".$template, ['data' => $data,"commune"=> $this->commune])->setPaper('a4', 'landscape')->stream($filename);
+
+            return ['success' => true, 'pdf' => $pdf];
+       // }
+
+        return ['success' => false, 'message' => 'Invalid data structure.'];
+    }
+
+    private function downloadStateValueReciepient($data, $action, string $template, int $expectedDataSize)
+    {
+        $result = $this->generateStateValueReciepientPdf($data,$template,$action,$expectedDataSize);
+        //dd($data);
+        if ($result['success']) {
+            return $result['pdf'];
+        }
+
+        return back()->with('error', $result['message']);
+    }
+
+    private function generateStateValueReciepientPdf($data, $template, $action, $expectedDataSize)
+    {
+        // if ($this->checkInvoiceListDataUniformity($data,$expectedDataSize)&& $this->checkIfCommuneIsNotNull()) {
+
+        $filename = "StateValueCollector" . Str::random(8) . ".pdf";
+        //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
+        $pdf = PDF::loadView("exports.".$template, ['data' => $data,"commune"=> $this->commune])->setPaper('a4', 'landscape')->stream($filename);
+
+        return ['success' => true, 'pdf' => $pdf];
+        // }
 
         return ['success' => false, 'message' => 'Invalid data structure.'];
     }

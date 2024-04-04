@@ -125,8 +125,9 @@ class StockTransfersDataTable extends DataTable
             //     return view('pages.stock_transfers.columns._location', compact('stock_transfer'));
             // })
             ->editColumn('users.name', function (StockTransfer $stock_transfer) {
-                return $stock_transfer->user->name;;
+                return $stock_transfer->user->name;
             })
+
             ->editColumn('stock_transfers.type', function (StockTransfer $stock_transfer) {
                 return view('pages.stock_transfers.columns._status', compact('stock_transfer'));
                 //return $stock_request->type;
@@ -179,7 +180,7 @@ class StockTransfersDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('id')->title(__('id'))->exportable(false)->printable(false)->visible(false), 
+            Column::make('id')->title(__('id'))->exportable(false)->printable(false)->visible(false),
             Column::make('stock_transfers.created_at')->title(__('date'))->addClass('text-nowrap'),
             //Column::make('trans_desc')->title(__('trans_desc')),
             Column::make('taxables.name')->title(__('ticket')),

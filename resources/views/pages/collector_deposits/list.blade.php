@@ -51,17 +51,15 @@
                     <!--begin::Toolbar-->
                     <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
                         <!--begin::Add user-->
-                        <a href="#" class="ms-5 mt-1" data-bs-toggle="collapse" data-bs-target="#kt_tutorial_form"> 
+                        <a href="#" class="ms-5 mt-1" data-bs-toggle="collapse" data-bs-target="#kt_tutorial_form">
                             <span data-bs-toggle="tooltip" title="Onglet tutoriel">
                                 <i class="ki-outline ki-information fs-2tx text-warning"></i>
                             </span>
                         </a>
                         <!--end::Add user-->
                     </div>
-                <!--begin::Modal-->
-                <!--end::Modal-->
             </div>
-            
+
         </div>
         <!--end::Card header-->
 
@@ -163,7 +161,7 @@
                 <div class="fw-semibold">
                     <h4 class="text-gray-900 fw-bold">Tutoriel sur <a class="fw-bold" href="#">Etat de comptabilite des VI du Regisseur</a></h4>
                     <div class="fs-6 text-gray-700">
-                    -> clicker ici 
+                    -> clicker ici
                             <a href="#" id="kt_horizontal_search_advanced_link" data-kt-rotate="true" class="btn btn-outline btn-outline-dashed bg-light-secondary btn-outline-secondary btn-active-light-secondary mx-1 rotate"
                                 data-bs-toggle="collapse" data-bs-target="#kt_advanced_search_form">
                                 {{ __('advanced search') }} <i
@@ -171,7 +169,7 @@
                                         class="path1"></span><span class="path2"></span></i></a> pour afficher le formulaire de recherche avancée.
                     <!-- </div>
                     <div class="fs-6 text-gray-700"> -->
-                    -- clicker ici 
+                    -- clicker ici
 
                         <button type="button" class="btn btn-outline-success btn-success mx-1" data-bs-toggle="modal" data-bs-target="#kt_modal_add_stock_request"  data-kt-action="add_request">
                             {!! getIcon('plus', 'fs-2', '', 'i') !!}
