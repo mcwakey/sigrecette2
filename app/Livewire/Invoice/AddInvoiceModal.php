@@ -314,7 +314,7 @@ class AddInvoiceModal extends Component
                 $invoice_old->save();
             }
 
-            $invoice->order_no = $invoice_old->order_no;
+            //$invoice->order_no = $invoice_old->order_no;
             $invoice->pay_status = $invoice_old->pay_status;
             $invoice->save();
 

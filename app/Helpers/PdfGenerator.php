@@ -264,28 +264,36 @@ class PdfGenerator
     public function generateInvoicePdf(array $data,string $templateName,int $action=null ):array
     {
 
-        if ($this->checkInvoiceDataUniformity($data) && $this->checkIfCommuneIsNotNull()) {
+        $data=Invoice::retrieveByUUIDs($data);
 
-            $filename="Invoice-".$data[2].'-'.Str::random(8).".pdf";
+        if ( $data!==false&&count($data)==1&&$this->checkIfCommuneIsNotNull()) {
+            $default_invoice =$data[0];
+            $filename="Invoice-".Str::random(8).".pdf";
 
-            //dd($data);
-            $new_amount=0;
 
 
-            if($action==2 || ( intval($data[1]) !==end($data))){
+
+            if($action==2 || ( intval($default_invoice->invoice_no) !==$default_invoice->id)){
                 $action=2;
-                $invoice = Invoice::find( $data[1]);
+                $invoice = Invoice::find( $default_invoice->invoice_no);
+
             }
+
 
             if($action ==null){
 
                 $action=1;
-                $pdf= PDF::loadView("exports.".$templateName, ['data' => $data,'action'=>$action,"commune"=> $this->commune])
+                $pdf= PDF::loadView(
+                    "exports.".$templateName, ['data' => $default_invoice,'action'=>$action,"commune"=> $this->commune])
                     // ->save(Storage::path('exports') . DIRECTORY_SEPARATOR . $filename)
+
+                    //->setPaper('a4', 'landscape')
                     ->stream($filename);
             }else{
-                $pdf= PDF::loadView("exports.".$templateName, ['data' => $data,'action'=>$action,'invoice'=> $invoice,"commune"=> $this->commune])
+                $pdf= PDF::loadView(
+                    "exports.".$templateName, ['data' => $default_invoice,'action'=>$action,'invoice'=> $invoice,"commune"=> $this->commune])
                     // ->save(Storage::path('exports') . DIRECTORY_SEPARATOR . $filename)
+                    //->setPaper('a4', 'landscape')
                     ->stream($filename);
             }
 

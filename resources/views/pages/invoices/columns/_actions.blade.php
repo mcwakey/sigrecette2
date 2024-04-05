@@ -21,44 +21,7 @@
     @elseif($invoice->status == 'APROVED' || $invoice->status == 'CANCELED')
         @can('print invoice')
             @php
-
-                $invoiceItems = [];
-                foreach (
-                    $invoice->invoiceitems
-                    as $invoiceitem
-                ) {
-                    $invoiceItems[] = [
-                        $invoiceitem->taxpayer_taxable->taxable
-                            ->tax_label->name,
-                        $invoiceitem->taxpayer_taxable->taxable
-                            ->tax_label->code,
-                        $invoiceitem->taxpayer_taxable->taxable
-                            ->name,
-                        $invoiceitem->ii_seize,
-                        $invoiceitem->taxpayer_taxable->taxable
-                            ->unit,
-                        $invoiceitem->ii_tariff,
-                        $invoiceitem->amount,
-                        $invoiceitem->qty,
-                        $invoiceitem->taxpayer_taxable->name,
-                    ];
-                }
-                $data = [
-                    $invoice->from_date,
-                    $invoice->invoice_no,
-                    $invoice->nic,
-                    $invoice->amount,
-                    $invoice->taxpayer ? $invoice->taxpayer->name : '---',
-                    $invoice->taxpayer ? $invoice->taxpayer->mobilephone : '---',
-                    $invoice->taxpayer && $invoice->taxpayer->town->canton ? $invoice->taxpayer->town->canton->name : '---',
-                    $invoice->taxpayer && $invoice->taxpayer->town ? $invoice->taxpayer->town->name : '---',
-                    $invoice->taxpayer ? $invoice->taxpayer->address : '---',
-                     $invoice->taxpayer && $invoice->taxpayer->zone ? $invoice->taxpayer->zone->name : '---',
-                    $invoice->taxpayer ? $invoice->taxpayer->longitude : '---',
-                     $invoice->taxpayer ? $invoice->taxpayer->latitude : '---',
-                    $invoiceItems,
-                    $invoice->id,
-                ];
+                $data = [$invoice->uuid];
             @endphp
 
             <div class="menu-item px-3">

@@ -144,17 +144,14 @@
 
         <div class="avis-header">
 
-                @if($action===1)
+
                 <h2 class="text-center">
-                   <span> AVIS DES SOMMES À PAYER </span>
+
+                   <span>@if($action===1) AVIS DES SOMMES À PAYER @else AVIS DE REDUCTION OU D’ANNULATION @endif </span>
+
                 </h2>
-                <h6>N°:<span class="write">{{$data[1]}}/</span>{{date("Y", strtotime($data[0]))}}</h6>
-                @else
-                <h2 class="text-center">
-                    <span>AVIS DE REDUCTION OU D’ANNULATION </span>
-                </h2>
-                <h6>N°:<span class="write">{{$data[1]}}/</span>{{date("Y", strtotime($data[0]))}}</h6>
-                @endif
+                <h6>N°:<span class="write">{{$data->invoice_no}}/</span>{{date("Y", strtotime($data->from_date))}}</h6>
+
 
 
 
@@ -162,37 +159,36 @@
 
         </div>
         <div class="sub-header">
-            <p>Nom/Raison sociale :<span class="write">{{$data[4]}}</span></p>
-            <p>Nic :<span class="write"> {{$data[2]}}</span></p>
-            <p>Téléphone :<span class="write"> {{$data[5]}}</span></p>
-            <p>Zone fiscale :<span class="write"> {{$data[9]}}</span></p>
-            <p>Canton :<span class="write">{{$data[6]}}</span></p>
-            <p>Quartier/Village :<span class="write"> {{$data[7]}}</span></p>
-            <p>Adresse complète :<span class="write">{{$data[8]}}</span></p>
-            <p>Coordonnées GPS :<span class="write"> {{$data[10]}} , {{$data[11]}}</span></p>
+            <p>Nom/Raison sociale :<span class="write">{{$data->taxpayer->name}}</span></p>
+            <p>Nic :<span class="write"> {{$data->nic}}</span></p>
+            <p>Téléphone :<span class="write"> {{$data->taxpayer->mobilephone}}</span></p>
+            <p>Zone fiscale :<span class="write"> {{$data->taxpayer->zone->name}}</span></p>
+            <p>Canton :<span class="write">{{$data->taxpayer->town->canton->name}}</span></p>
+            <p>Quartier/Village :<span class="write"> {{$data->taxpayer->town->name}}</span></p>
+            <p>Adresse complète :<span class="write">{{$data->taxpayer->address}}</span></p>
+            <p>Coordonnées GPS :<span class="write"> {{$data->taxpayer->longitude}} , {{$data->taxpayer->latitude}}</span></p>
         </div>
         <div class="avis-content">
             <p>Madame, Mademoiselle, Monsieur,</p>
             @if($action==1)
-                <p>Vous êtes priés de bien vouloir payer à la régie des recettes de la mairie de {{$data[6]}}
+                <p>Vous êtes priés de bien vouloir payer à la régie des recettes de la mairie {{$commune->name}}
                     le montant ci-dessous :</p>
-                <p>N° d’ordre de recette :<span class="write">{{$data[1]}}/</span> {{date("Y", strtotime( $data[0]))}}</p>
             @else
-                Votre avis des sommes à payer {{$data[1]}}/{{date("Y", strtotime($data[0]))}} du  {{date("d/m/Y", strtotime( $data[0]))}} est réduit suivant les détails ci-après :
-                <p>N° de l’ordre de recette de réduction ou d'annulation :<span class="write">{{$data[1]}}/</span> {{date("Y", strtotime( $data[0]))}}</p>
+                Votre avis des sommes à payer {{$data->invoice_no}}/{{date("Y", strtotime($data->from_date))}} du  {{date("d/m/Y", strtotime( $data->from_date))}} est réduit suivant les détails ci-après :
             @endif
+            <p>N° d’ordre de recette :<span class="write">{{$data->order_no}}/</span> {{date("Y", strtotime( $data->from_date))}}</p>
 
 
 
-            <p>Libellé de la recette :<span class="write"> {{$data[12][0][0]}}</span></p>
-            <p>Imputation budgétaire :<span class="write"> {{$data[12][0][1]}}</span></p>
+
 
             <table border="1">
 
                 <tr>
+                    <th>Libellé de la recette </th>
+                    <th>Imputation budgétaire</th>
                     <th>Matière taxable</th>
                     <th>Nom de la Taxation</th>
-
                     <th>Unité d’assiette</th>
                     <th>Valeur d’assiette</th>
                     <th>Tarif (FCFA)</th>
@@ -204,11 +200,13 @@
 
                 @if($action==2)
                     <tr>
-                        <th colspan="7">Tableau de l’ancien décompte </th>
+                        <th colspan="9">Tableau de l’ancien décompte </th>
                     </tr>
                     @foreach($invoice->invoiceitems as  $item)
                         <tr>
                             <td style="text-align: center">{{$item->taxpayer_taxable->taxable->tax_label->name}}</td>
+                            <td style="text-align: center">{{$item->taxpayer_taxable->taxable->tax_label->code}}</td>
+                            <td style="text-align: center">{{$item->taxpayer_taxable->taxable->name}}</td>
                             <td style="text-align: center">{{$item->taxpayer_taxable->name}}</td>
                             <td style="text-align: center"> {{$item->taxpayer_taxable->taxable->unit}}</td>
                             <td style="text-align: center">{{$item->ii_seize}}</td>
@@ -218,29 +216,31 @@
                         </tr>
                     @endforeach
                     <tr>
-                        <th colspan="6" style="text-align: right;">Total:</th>
+                        <th colspan="8" style="text-align: right;">Total:</th>
                         <td  style="text-align: center;">{{$invoice->amount}}</td>
                     </tr>
                     <tr>
-                        <th colspan="7">Tableau du nouveau décompte </th>
+                        <th colspan="9">Tableau du nouveau décompte </th>
                     </tr>
                 @endif
-                @foreach($data[12] as $index => $item)
+                @foreach($data->invoiceitems as $index => $item)
                     <tr>
-                        <td style="text-align: center">{{$item[2]}}</td>
-                        <td style="text-align: center">{{$item[8]}}</td>
-                        <td style="text-align: center"> {{$item[4]}}</td>
-                        <td style="text-align: center">{{$item[3]}}</td>
-                        <td style="text-align: center">{{$item[5]}}</td>
-                        <td style="text-align: center">{{$item[7]}}</td>
-                        <td style="text-align: center">{{$item[6]}}</td>
+                        <td style="text-align: center">{{$item->taxpayer_taxable->taxable->tax_label->name}}</td>
+                        <td style="text-align: center">{{$item->taxpayer_taxable->taxable->tax_label->code}}</td>
+                        <td style="text-align: center">{{$item->taxpayer_taxable->taxable->tax_label->name}}</td>
+                        <td style="text-align: center">{{$item->taxpayer_taxable->name}}</td>
+                        <td style="text-align: center"> {{$item->taxpayer_taxable->taxable->unit}}</td>
+                        <td style="text-align: center">{{$item->ii_seize}}</td>
+                        <td style="text-align: center">{{$item->ii_tariff}}</td>
+                        <td style="text-align: center">{{$item->qty}}</td>
+                        <td style="text-align: center">{{$item->amount}}</td>
                     </tr>
                 @endforeach
 
                 <tr>
-                    <td colspan="6" style="text-align: right;"><strong>Total :</strong></td>
+                    <td colspan="8" style="text-align: right;"><strong>Total :</strong></td>
 
-                    <td style="text-align: center;">{{$data[3]}}</td>
+                    <td style="text-align: center;">{{$data->amount}}</td>
 
 
 
@@ -248,7 +248,7 @@
 
 
             </table>
-            <p>Arrêté le présent avis à la somme de :<span class="write">@if($action==1){{number_to_words($data[3]) }}@else {{number_to_words($invoice->amount -$data[3]) }}  @endif</span> Francs CFA (Sauf erreur ou omission).</p>
+            <p>Arrêté le présent avis à la somme de :<span class="write">@if($action==1){{number_to_words($data->amount) }}@else {{number_to_words($invoice->amount -$data->amount) }}  @endif</span> Francs CFA (Sauf erreur ou omission).</p>
             @if($action==1)
             <p>A payer dans les 30 jours suivant la réception de l’avis, ou avant la fin de chaque mois pour les
                 paiements mensualisés.</p>
@@ -256,7 +256,7 @@
             <table>
                 <tr class="text-start">
                     <td class="">
-                        <p>A {{$commune->name}}, le<span class="write"> {{date("d/m/Y", strtotime( $data[0]))}}</span></p>
+                        <p>A {{$commune->name}}, le<span class="write"> {{date("d/m/Y", strtotime( $data->from_date))}}</span></p>
                     </td>
                     <td class="">
                         <p>Le Maire <span>{{ " ".$commune->mayor_name}}</span></p>

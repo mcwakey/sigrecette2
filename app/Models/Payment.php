@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Ramsey\Uuid\Uuid;
 
 class Payment extends Model
 {
@@ -20,6 +21,7 @@ class Payment extends Model
         'user_id',
         'r_user_id',
         'status',
+        'uuid'
     ];
 
     public function invoice()
@@ -38,5 +40,12 @@ class Payment extends Model
     public function r_user()
     {
         return $this->belongsTo(User::class);
+    }
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function ($payment) {
+            $payment->uuid = Uuid::uuid4()->toString();
+        });
     }
 }

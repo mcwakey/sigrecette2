@@ -146,7 +146,7 @@
     "taxpayers information": "Informations du contribuable",
 
     "invoice no": "No d'avis",
-    "order no": "No d'ordre",
+    "order no": "No d'ordre de recette",
     "nic": "NIC",
     "asset name": "Nom de la Taxation",
     "receipt date": "Date de réception",
@@ -225,7 +225,7 @@
     "new town": "Nouvelle Ville",
     "new erea": "Nouvelle Quartier",
     "new zone": "Nouvelle Zone",
-    "zones": "Zones Fiscaux",
+    "zones": "Zones Fiscales",
 
     "length": "Longueur",
     "width": "Largeur",

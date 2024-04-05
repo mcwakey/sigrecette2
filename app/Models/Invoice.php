@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Ramsey\Uuid\Uuid;
 
 class Invoice extends Model
 {
@@ -21,6 +22,7 @@ class Invoice extends Model
         'to_date',
         'pay_status',
         'status',
+        'uuid',
         // 'profile_photo_path',
     ];
 
@@ -73,7 +75,32 @@ class Invoice extends Model
         return "";
     }
 
-//id 	invoice_no 	order_no 	nic 	status 	pay_status 	delivery 	delivery_date
-
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function ($invoice) {
+            $invoice->uuid = Uuid::uuid4()->toString();
+        });
+    }
+    /**
+     * Retrieve invoices based on provided UUIDs.
+     *
+     * @param array $uuids
+     * @return array|bool Returns a collection of invoices if all UUIDs are found,
+     *                               `false` if any UUID is not found, or an empty array if `$uuids` is empty.
+     */
+    public static function retrieveByUUIDs(array $uuids):array|bool
+    {
+        $invoices = [];
+        foreach ($uuids as $uuid) {
+            $invoice = Invoice::where('uuid', $uuid)->first();
+            if ($invoice instanceof Invoice) {
+                $invoices[] = $invoice;
+            } else {
+                return false;
+            }
+        }
+        return $invoices ?: [];
+    }
 
 }
