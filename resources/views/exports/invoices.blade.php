@@ -185,8 +185,6 @@
             <table border="1">
 
                 <tr>
-                    <th>Libellé de la recette </th>
-                    <th>Imputation budgétaire</th>
                     <th>Matière taxable</th>
                     <th>Nom de la Taxation</th>
                     <th>Unité d’assiette</th>
@@ -200,12 +198,23 @@
 
                 @if($action==2)
                     <tr>
-                        <th colspan="9">Tableau de l’ancien décompte </th>
+                        <th colspan="7">Tableau de l’ancien décompte </th>
                     </tr>
+                    @php
+                        $last_code=0;
+                    @endphp
                     @foreach($invoice->invoiceitems as  $item)
+                        @if($last_code!==$item->taxpayer_taxable->taxable->tax_label->code|| $last_code==0 )
+                            @php
+                                $last_code= $item->taxpayer_taxable->taxable->tax_label->code;
+                            @endphp
+                            <tr>
+                                <th colspan="3">Libellé de la recette:{{$item->taxpayer_taxable->taxable->tax_label->name}} </th>
+                                <th colspan="4">Imputation budgétaire : {{$item->taxpayer_taxable->taxable->tax_label->code}}</th>
+                            </tr>
+
+                        @endif
                         <tr>
-                            <td style="text-align: center">{{$item->taxpayer_taxable->taxable->tax_label->name}}</td>
-                            <td style="text-align: center">{{$item->taxpayer_taxable->taxable->tax_label->code}}</td>
                             <td style="text-align: center">{{$item->taxpayer_taxable->taxable->name}}</td>
                             <td style="text-align: center">{{$item->taxpayer_taxable->name}}</td>
                             <td style="text-align: center"> {{$item->taxpayer_taxable->taxable->unit}}</td>
@@ -216,18 +225,29 @@
                         </tr>
                     @endforeach
                     <tr>
-                        <th colspan="8" style="text-align: right;">Total:</th>
+                        <th colspan="6" style="text-align: right;">Total:</th>
                         <td  style="text-align: center;">{{$invoice->amount}}</td>
                     </tr>
                     <tr>
-                        <th colspan="9">Tableau du nouveau décompte </th>
+                        <th colspan="7">Tableau du nouveau décompte </th>
                     </tr>
                 @endif
+                @php
+                $last_code=0;
+                @endphp
                 @foreach($data->invoiceitems as $index => $item)
+                    @if($last_code!==$item->taxpayer_taxable->taxable->tax_label->code|| $last_code==0 )
+                        @php
+                            $last_code= $item->taxpayer_taxable->taxable->tax_label->code;
+                        @endphp
+                        <tr>
+                            <th colspan="3">Libellé de la recette:{{$item->taxpayer_taxable->taxable->tax_label->name}} </th>
+                            <th colspan="4">Imputation budgétaire : {{$item->taxpayer_taxable->taxable->tax_label->code}}</th>
+                        </tr>
+
+                    @endif
                     <tr>
-                        <td style="text-align: center">{{$item->taxpayer_taxable->taxable->tax_label->name}}</td>
-                        <td style="text-align: center">{{$item->taxpayer_taxable->taxable->tax_label->code}}</td>
-                        <td style="text-align: center">{{$item->taxpayer_taxable->taxable->tax_label->name}}</td>
+                        <td style="text-align: center">{{$item->taxpayer_taxable->taxable->name}}</td>
                         <td style="text-align: center">{{$item->taxpayer_taxable->name}}</td>
                         <td style="text-align: center"> {{$item->taxpayer_taxable->taxable->unit}}</td>
                         <td style="text-align: center">{{$item->ii_seize}}</td>
@@ -238,7 +258,7 @@
                 @endforeach
 
                 <tr>
-                    <td colspan="8" style="text-align: right;"><strong>Total :</strong></td>
+                    <td colspan="6" style="text-align: right;"><strong>Total :</strong></td>
 
                     <td style="text-align: center;">{{$data->amount}}</td>
 

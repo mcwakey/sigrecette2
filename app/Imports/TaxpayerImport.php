@@ -50,8 +50,8 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
             return null;
         }
         $canton = Canton::firstOrCreate(['name' => $row['canton']]);
-        $town = Town::firstOrCreate(['name' => $row['ville_village'], 'canton_id' => $canton->id]);
-        $erea = Erea::firstOrCreate(['name' => $row['quartier'], 'town_id' => $town->id]);
+        $town = Town::firstOrCreate(['name' => $row['ville_village']."/". $row['quartier'], 'canton_id' => $canton->id]);
+        //$erea = Erea::firstOrCreate(['name' => $row['quartier'], 'town_id' => $town->id]);
         $zone = Zone::firstOrCreate(['name' => $row['zone']]);
         $category = Category::firstOrCreate(['name' => $row['categ_activite']]);
         $activity= Activity::firstOrCreate(['name' => $row["activite"], 'category_id' => $category->id]);
@@ -72,7 +72,7 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
             'latitude' => $row["latitude"],
             'address' => $row["adresse"],
             'town_id' => $town->id,
-            'erea_id' => $erea->id,
+            //'erea_id' => $erea->id,
             'zone_id' => $zone->id,
             'category_id'=>$category->id,
             'activity_id'=>$activity->id,

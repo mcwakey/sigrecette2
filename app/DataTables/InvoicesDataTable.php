@@ -51,7 +51,11 @@ class InvoicesDataTable extends DataTable
                 return $invoice->invoiceitems()->first()->taxpayer_taxable->taxable->tax_label->name ?? '';
             })
             ->editColumn('total', function (Invoice $invoice) {
-                return $invoice->amount;
+                if ($invoice->reduce_amount != '')
+                    return '-' . $invoice->reduce_amount ;
+                else
+                   return $invoice->amount;
+                //return $invoice->amount;
             })
 
             ->editColumn('validity', function (Invoice $invoice) {

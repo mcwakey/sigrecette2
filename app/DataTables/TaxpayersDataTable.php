@@ -54,17 +54,10 @@ class TaxpayersDataTable extends DataTable
                 // if ($taxpayer->town){
                     return $taxpayer->town->name;
                 // } else {
-                //     return ''; 
+                //     return '';
                 // }
             })
-            ->editColumn('erea.name', function (Taxpayer $taxpayer) {
-                // if ($taxpayer->erea){
-                    return $taxpayer->erea->name;
-                // } else {
-                //     return ''; 
-                // } 
-                //return $taxpayer->erea->name;
-            })
+
             ->editColumn('address', function (Taxpayer $taxpayer) {
                 return $taxpayer->address;
             })
@@ -72,8 +65,8 @@ class TaxpayersDataTable extends DataTable
                 // if ($taxpayer->zone){
                     return $taxpayer->zone->name;
                 // } else {
-                //     return ''; 
-                // } 
+                //     return '';
+                // }
                 //return $taxpayer->zone->name;
             })
             ->editColumn('created_at', function (Taxpayer $taxpayer) {
@@ -141,8 +134,8 @@ class TaxpayersDataTable extends DataTable
             Column::make('gender')->title(__('gender')),
             Column::make('mobilephone')->title(__('mobilephone'))->name("taxpayers.mobilephone"),
             Column::make('town.canton.name')->title(__('canton')),
-            Column::make('town.name')->title(__('town')),
-            Column::make('erea.name')->title(__('erea')),
+            Column::make('town.name')->title(__('Villages/Quartiers')),
+            //Column::make('erea.name')->title(__('erea')),
             Column::make('address')->title(__('address')),
             Column::make('zone.name')->title(__('zone'))->name("zone.name"),
             //Column::make('created_at')->title(__('created at'))->addClass('text-nowrap created_at')->visible(false),

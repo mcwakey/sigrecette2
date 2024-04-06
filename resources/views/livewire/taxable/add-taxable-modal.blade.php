@@ -24,7 +24,7 @@
 
                     <!--begin::Scroll-->
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_taxable_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_taxable_header" data-kt-scroll-wrappers="#kt_modal_add_taxable_scroll" data-kt-scroll-offset="300px">
-                        
+
                         <!--begin::Input group-->
 
                         <div class="row mb-7">
@@ -47,7 +47,7 @@
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>
-                        
+
                         <div class="separator saperator-dashed my-5"></div>
 
                         <div class="row mb-7">
@@ -69,10 +69,10 @@
                                 <select wire:model="periodicity" name="periodicity" class="form-select"
                                     data-dropdown-parent="#kt_modal_add_taxable">
                                     <option>{{ __('select an option') }}</option>
-                                    <!-- <option value="Jours">Jours</option> -->
+                                    <option value="Jours">Jours</option>
                                     <option value="Mois">Mois</option>
                                     <option value="Ans">Ans</option>
-                                    <option value="Forfait">Forfait</option>
+                                    <option value="Autre">Autre</option>
                                 </select>
                                 <!--end::Input-->
                                 @error('periodicity')

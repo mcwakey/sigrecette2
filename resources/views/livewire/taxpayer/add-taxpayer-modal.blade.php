@@ -28,12 +28,12 @@
                                     <span class="path1"></span>
                                     <span class="path2"></span>
                                     <span class="path3"></span>
-                                </i>    <!--begin::Description-->    
+                                </i>    <!--begin::Description-->
                                 <div class="text-gray-700 fw-bold fs-6">
                                 Tous les champs marque par <code>*</code> sont obligatoire! Veiller remplir le formulaire judicieusement et avec le plus d information possible. Clicker sur <button class="btn btn-success btn sm mx-3" wire:loading.attr="disabled">{{ __('submit') }}</button> en bas de la page, pour sauvegarder les informations du contribuable.
                                 </div>    <!--end::Description-->
                             </div>
-                            <!--end::Information-->    
+                            <!--end::Information-->
                         </div>
 
                         <form id="kt_modal_add_taxpayer_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
@@ -41,7 +41,7 @@
                             <!--begin::Scroll-->
                             <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_taxpayer_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_taxpayer_header" data-kt-scroll-wrappers="#kt_modal_add_taxpayer_scroll" data-kt-scroll-offset="300px">
                                 <!--begin::Input group-->
-                                {{-- 
+                                {{--
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="d-block fw-semibold fs-6 mb-5">{{ __('avatar') }}</label>
@@ -343,9 +343,9 @@
                                         @error('canton')
                                         <span class="text-danger">{{ $message }}</span> @enderror
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-6">
                                         <!--begin::Label-->
-                                        <label class="required fw-semibold fs-6 mb-2">{{ __('town') }}</label>
+                                        <label class="required fw-semibold fs-6 mb-2">{{ __('Villages/Quartiers') }}</label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
                                         <select data-kt-action="load_drop" wire:model="town_id" name="town_id" class="form-select">
@@ -356,21 +356,6 @@
                                         </select>
                                         <!--end::Input-->
                                         @error('town_id')
-                                        <span class="text-danger">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div class="col-md-3">
-                                        <!--begin::Label-->
-                                        <label class="required fw-semibold fs-6 mb-2">{{ __('erea') }}</label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <select wire:model="erea_id" name="erea_id" class="form-select " data-dropdown-parent="#kt_modal_add_taxpayer">
-                                            <option>{{ __('select an option') }}</option>
-                                            @foreach($ereas as $erea)
-                                            <option value="{{ $erea->id }}">{{ $erea->name }}</option>
-                                            @endforeach
-                                        </select>
-                                        <!--end::Input-->
-                                        @error('erea_id')
                                         <span class="text-danger">{{ $message }}</span> @enderror
                                     </div>
                                     <div class="col-md-3">

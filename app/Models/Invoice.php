@@ -89,7 +89,7 @@ class Invoice extends Model
      * @return array|bool Returns a collection of invoices if all UUIDs are found,
      *                               `false` if any UUID is not found, or an empty array if `$uuids` is empty.
      */
-    public static function retrieveByUUIDs(array $uuids):array|bool
+    public static function retrieveByUUIDs(array $uuids): array|bool
     {
         $invoices = [];
         foreach ($uuids as $uuid) {
@@ -100,7 +100,15 @@ class Invoice extends Model
                 return false;
             }
         }
+
+        usort($invoices, function ($a, $b) {
+            $codeA = $a->taxpayer_taxable->taxable->tax_label->code;
+            $codeB = $b->taxpayer_taxable->taxable->tax_label->code;
+            return strcmp($codeA, $codeB);
+        });
+
         return $invoices ?: [];
     }
+
 
 }

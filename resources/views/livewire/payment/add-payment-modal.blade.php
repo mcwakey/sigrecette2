@@ -96,7 +96,7 @@
                         <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed mb-1 p-2">
 
                             <div class="col-md-3">
-                                <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('exercise duration') }} :" readonly />
+                                <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('Nombre de taxation') }} :" readonly />
                             </div>
                             <div class="col-md-2">
                                 <input wire:model="qty" name="qty" class="form-control form-control-flush mb-2" type="text" readonly />

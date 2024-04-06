@@ -1,4 +1,4 @@
-@if ($invoice->status == 'APROVED'||$invoice->status == 'CANCELED')
+@if ($invoice->status == 'APROVED'||$invoice->status == 'CANCELED'  || $invoice->status =='REDUCED')
     @if ($invoice->delivery_date == null && $invoice->order_no !== null)
         {{ __('NOT DELIVERED') }}
         @can('add invoice delivery date')

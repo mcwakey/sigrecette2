@@ -66,7 +66,7 @@ Breadcrumbs::for('taxpayers.index', function (BreadcrumbTrail $trail) {
 
 Breadcrumbs::for('towns.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
-    $trail->push(__('towns'), route('administratives.towns.index'));
+    $trail->push(__('Villages/Quartiers'), route('administratives.towns.index'));
 });
 Breadcrumbs::for('taxpayers.show', function (BreadcrumbTrail $trail, Taxpayer $taxpayer) {
     $trail->parent('taxpayers.index');

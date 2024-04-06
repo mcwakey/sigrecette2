@@ -352,23 +352,13 @@
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">{{ __('towns') }}</span>
+                                <span class="menu-title">{{ __('Villages/Quartiers') }}</span>
                             </a>
                             <!--end:Menu link-->
                         </div>
                         <!--end:Menu item-->
                         <!--begin:Menu item-->
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('administratives.ereas.*') ? 'active' : '' }}"
-                                href="{{ route('administratives.ereas.index') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">{{ __('ereas') }}</span>
-                            </a>
-                            <!--end:Menu link-->
-                        </div>
+
                         <div class="menu-item">
                             <!--begin:Menu link-->
                             <a class="menu-link {{ request()->routeIs('administratives.zones.*') ? 'active' : '' }}"

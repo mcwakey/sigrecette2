@@ -451,7 +451,7 @@
                                                 <td>{{ $invoice->created_at->format('Y-m-d') }}</td>
                                                 <td>{{ $invoice->invoice_no }}</td>
                                                 <td>
-                                                    @if ($invoice->status == 'APROVED' && $invoice->order_no == null)
+                                                    @if ($invoice->status == 'PENDING' || ($invoice->order_no == null && $invoice->delivery == 'NOT DELIVERED'))
                                                         <button type="button"
                                                                 class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
                                                                 data-kt-user-id="{{ $invoice->id }}"
@@ -494,7 +494,7 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    @if ($invoice->status == 'APROVED'||$invoice->status == 'CANCELED')
+                                                    @if ($invoice->status == 'APROVED'||$invoice->status == 'CANCELED' || $invoice->status =='REDUCED')
                                                         @if ($invoice->pay_status == 'OWING')
                                                             <span
                                                                 class="badge badge-light-danger">{{ __($invoice->pay_status) }}</span>
@@ -522,7 +522,7 @@
                                                 </td>
 
                                                 <td>
-                                                    @if ($invoice->status == 'APROVED'||$invoice->status == 'CANCELED')
+                                                    @if ($invoice->status == 'APROVED'||$invoice->status == 'CANCELED' || $invoice->status =='REDUCED')
                                                         @if ($invoice->delivery == 'NOT DELIVERED'&& $invoice->order_no !== null)
                                                             @can('create invoice delivery date')
                                                                 <button type="button"
