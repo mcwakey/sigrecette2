@@ -13,6 +13,7 @@ use App\Models\TaxpayerTaxable;
 use App\Models\Town;
 use App\Notifications\InvoiceCreated;
 use App\Notifications\InvoicePaid;
+use App\Traits\DispatchesMessages;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
@@ -25,6 +26,7 @@ use Spatie\Permission\Models\Role;
 class AddInvoiceModal extends Component
 {
     //use WithFileUploads;
+    use DispatchesMessages;
 
     public $invoice_id;
 
@@ -109,13 +111,13 @@ class AddInvoiceModal extends Component
         // 'nic' => 'required',
         // 'status' => 'required|string',
 
-        "s_amount" => "required",
-        "taxpayer_taxable_id" => "required",
-        "qty" => "required",
-        "start_month" => "required",
+        "s_amount" => "required|numeric",
+        "taxpayer_taxable_id" => "required|int",
+        "qty" => "required|numeric",
+        "start_month" => "required|string",
 
-        'taxpayer_id' => 'required',
-        'amount' => 'required',
+        'taxpayer_id' => 'required|int',
+        'amount' => 'required|numeric',
         //'cancel_reduct' => 'required',
 
         // 'telephone' => 'required|string|min:10|max:10',
@@ -212,7 +214,7 @@ class AddInvoiceModal extends Component
 
 
         // Validate the form input data
-        $this->validate();
+
 
         //dd($this);
         DB::transaction(function () {
@@ -327,12 +329,10 @@ class AddInvoiceModal extends Component
                 }
             }
 
-
-
             if ($this->edit_mode) {
-                $this->dispatch('success', __('Invoice updated'));
+                $this->dispatchMessage('Avis', 'update');
             } else {
-                $this->dispatch('success', __('New Invoice created'));
+                $this->dispatchMessage('Avis');
             }
         });
 
@@ -353,7 +353,7 @@ class AddInvoiceModal extends Component
         Invoice::destroy($id);
 
         // Emit a success event with a message
-        $this->dispatch('success', 'Invoice successfully deleted');
+        $this->dispatchMessage('Avis', 'delete');
     }
 
     public function viewInvoice($id)

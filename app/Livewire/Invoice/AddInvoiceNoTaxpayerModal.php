@@ -14,6 +14,7 @@ use App\Models\TaxLabel;
 use App\Models\Taxpayer;
 use App\Models\TaxpayerTaxable;
 use App\Models\Town;
+use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
@@ -24,6 +25,7 @@ class AddInvoiceNoTaxpayerModal extends Component
 {
     //use WithFileUploads;
 
+    use DispatchesMessages;
     public $invoice_id;
 
     public $name;
@@ -67,7 +69,7 @@ class AddInvoiceNoTaxpayerModal extends Component
 
     public $taxlabel_name;
     public $taxpayer_taxable;
-    
+
     public $unit;
     public $seize;
     public $tariff_type;
@@ -78,7 +80,7 @@ class AddInvoiceNoTaxpayerModal extends Component
 
     public $amount_ph;
     public $amount;
-    
+
     public $payment_type;
     public $reference;
     // public function reduce($index)
@@ -122,13 +124,13 @@ class AddInvoiceNoTaxpayerModal extends Component
         // 'nic' => 'required',
         // 'status' => 'required|string',
 
-        "s_amount" => "required",
-        "taxpayer_taxable_id" => "required",
-        "qty" => "required",
-        "start_month" => "required",
+        "s_amount" => 'required|numeric',
+        "taxpayer_taxable_id" => "required|int",
+        "qty" => "required|numeric",
+        "start_month" => "required|string",
 
         // 'taxpayer_id' => 'required',
-        'amount' => 'required',
+        'amount' => 'required|numeric',
         //'cancel_reduct' => 'required',
 
         // 'telephone' => 'required|string|min:10|max:10',
@@ -149,7 +151,7 @@ class AddInvoiceNoTaxpayerModal extends Component
 
         'change_tarrif' => 'changeTarrif',
         'load_invoice' => 'loadInvoice',
-        
+
         'add_taxable' => 'addTaxable',
         'load_drop' => 'loadDrop',
     ];
@@ -172,7 +174,7 @@ class AddInvoiceNoTaxpayerModal extends Component
         //$id_types = IdType::all();
         $taxpayers = Taxpayer::all();
         $taxlabels = TaxLabel::all();
-        
+
         $genders = Gender::all();
         $id_types = IdType::all();
         //$taxpayer_taxables = TaxpayerTaxable::all();
@@ -199,7 +201,7 @@ class AddInvoiceNoTaxpayerModal extends Component
     {
         $this->taxables = Taxable::where('tax_label_id', $value)->get(); // Load taxables based on tax label ID
         //$this->reset('taxables');
-        
+
         $taxlabels = TaxLabel::find( $value); // Load taxables based on tax label ID
         //$this->taxable_id = $taxpayer_taxable->taxable_id;
 
@@ -310,7 +312,7 @@ class AddInvoiceNoTaxpayerModal extends Component
             $invoice = Invoice::create($invoiceData);
 
             // Save the invoice ID into the invoice_no column
-            
+
             $invoice->invoice_no = $invoice->id;
             $invoice->nic = '00000'.$invoice->id;
             //$invoice->order_no = $this->order_no;
@@ -403,7 +405,7 @@ class AddInvoiceNoTaxpayerModal extends Component
             // if ($this->edit_mode) {
             //     $this->dispatch('success', __('Invoice updated'));
             // } else {
-                $this->dispatch('success', __('New Invoice created'));
+            $this->dispatchMessage('Avis');
             // }
         });
 
@@ -424,7 +426,7 @@ class AddInvoiceNoTaxpayerModal extends Component
         Invoice::destroy($id);
 
         // Emit a success event with a message
-        $this->dispatch('success', 'Invoice successfully deleted');
+        $this->dispatchMessage('Avis', 'delete');
     }
 
     public function viewInvoice($id)

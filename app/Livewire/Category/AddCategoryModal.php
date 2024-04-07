@@ -3,6 +3,7 @@
 namespace App\Livewire\Category;
 
 use App\Models\Category;
+use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 class AddCategoryModal extends Component
 {
     use WithFileUploads;
+    use DispatchesMessages;
 
     public $category_id;
 
@@ -54,13 +56,10 @@ class AddCategoryModal extends Component
                 }
                 $category->save();
             }
-
             if ($this->edit_mode) {
-                // Emit a success event with a message
-                $this->dispatch('success', __('Category updated'));
+                $this->dispatchMessage('Catégorie', 'update');
             } else {
-                // Emit a success event with a message
-                $this->dispatch('success', __('New Category created'));
+                $this->dispatchMessage('Catégorie');
             }
         });
 
@@ -74,7 +73,7 @@ class AddCategoryModal extends Component
         Category::destroy($id);
 
         // Emit a success event with a message
-        $this->dispatch('success', 'Taxpayer successfully deleted');
+        $this->dispatchMessage('Catégorie', 'delete');
     }
 
     public function updateCategory($id)

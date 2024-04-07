@@ -9,6 +9,7 @@ use App\Models\IdType;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Payment;
+use App\Traits\DispatchesMessages;
 use Illuminate\Support\Facades\Notification;
 use App\Models\Taxpayer;
 use App\Models\TaxpayerTaxable;
@@ -25,6 +26,7 @@ use Spatie\Permission\Models\Role;
 class AddPaymentModal extends Component
 {
     //use WithFileUploads;
+    use DispatchesMessages;
 
     public $payment_id;
     public $invoice_id;
@@ -222,10 +224,11 @@ class AddPaymentModal extends Component
                 Notification::send($users, new InvoicePaid($payment,Auth::user()));
 
             }
+
             if ($this->edit_mode) {
-                $this->dispatch('success', __('Payment updated'));
+                $this->dispatchMessage('Paiement', 'update');
             } else {
-                $this->dispatch('success', __('New Payment created'));
+                $this->dispatchMessage('Paiement');
             }
         });
 
@@ -246,7 +249,8 @@ class AddPaymentModal extends Component
         Payment::destroy($id);
 
         // Emit a success event with a message
-        $this->dispatch('success', 'Payment successfully deleted');
+       // $this->dispatch('success', 'Payment successfully deleted');
+        $this->dispatchMessage('Paiement', 'delete');
     }
 
     public function updatePayment($id)

@@ -11,6 +11,7 @@ use App\Models\TaxLabel;
 use App\Models\Taxpayer;
 use App\Models\TaxpayerTaxable;
 use App\Models\Town;
+use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Password;
 class AddTaxpayerTaxableModal extends Component
 {
     use WithFileUploads;
+    use DispatchesMessages;
 
     public $taxpayer_taxable_id;
     public $name;
@@ -62,7 +64,7 @@ class AddTaxpayerTaxableModal extends Component
         'name' => 'required|string',
         'seize' => 'required|numeric',
         //'location' => 'required',
-        'taxable_id' => 'required',
+        'taxable_id' => 'required|int',
         // 'taxpayer_id' => 'required',
 
         // 'penalty' => 'nullable',
@@ -220,7 +222,8 @@ class AddTaxpayerTaxableModal extends Component
                 //$taxable->syncRoles($this->tax_label);
 
                 // Emit a success event with a message
-                $this->dispatch('success', __('Asset updated'));
+                //$this->dispatch('success', __('Asset updated'));
+                $this->dispatchMessage('Taxation du contribuable', 'update');
             } else {
                 // Assign selected role for user
                 //$taxable->assignRole($this->tax_label);
@@ -229,7 +232,8 @@ class AddTaxpayerTaxableModal extends Component
                 //Password::sendResetLink($taxable->only('email'));
 
                 // Emit a success event with a message
-                $this->dispatch('success', __('New Asset created'));
+                //$this->dispatch('success', __('New Asset created'));
+                $this->dispatchMessage('Taxation du contribuable');
             }
         });
 
@@ -249,7 +253,8 @@ class AddTaxpayerTaxableModal extends Component
         TaxpayerTaxable::destroy($id);
 
         // Emit a success event with a message
-        $this->dispatch('success', 'Asset successfully deleted');
+        //$this->dispatch('success', 'Asset successfully deleted');
+        $this->dispatchMessage('Taxation du contribuable', 'delete');
     }
 
     public function updateTaxpayerTaxable($id)

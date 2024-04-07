@@ -11,6 +11,7 @@ use App\Models\Canton;
 use App\Models\Category;
 use App\Models\Gender;
 use App\Models\IdType;
+use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use App\Models\Taxpayer;
 use Illuminate\Http\Request;
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\Password;
 class AddTaxpayerModal extends Component
 {
     use WithFileUploads;
+    use DispatchesMessages;
 
     public $taxpayer_id;
     public $tnif;
@@ -217,7 +219,8 @@ class AddTaxpayerModal extends Component
                 //$taxpayer->syncRoles($this->role);
 
                 // Emit a success event with a message
-                $this->dispatch('success', __('Taxpayer updated'));
+                //$this->dispatch('success', __('Taxpayer updated'));
+                $this->dispatchMessage('Contribuable', 'update');
             } else {
                 // Assign selected role for user
                 //$taxpayer->assignRole($this->role);
@@ -226,7 +229,8 @@ class AddTaxpayerModal extends Component
                 //Password::sendResetLink($taxpayer->only('email'));
 
                 // Emit a success event with a message
-                $this->dispatch('success', __('New Taxpayer created'));
+                //$this->dispatch('success', __('New Taxpayer created'));
+                $this->dispatchMessage('Contribuable');
             }
 
             $taxpayerActionData = [];
@@ -295,7 +299,8 @@ class AddTaxpayerModal extends Component
         Taxpayer::destroy($id);
 
         // Emit a success event with a message
-        $this->dispatch('success', 'Taxpayer successfully deleted');
+        //$this->dispatch('success', 'Taxpayer successfully deleted');
+        $this->dispatchMessage('Contribuable', 'delete');
     }
 
     public function updateTaxPayer($id)

@@ -5,6 +5,7 @@ namespace App\Livewire\Invoice;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Notifications\InvoiceCreated;
+use App\Traits\DispatchesMessages;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
@@ -14,7 +15,7 @@ use Spatie\Permission\Models\Role;
 class AddStatusForm extends Component
 {
     //use WithFileUploads;
-
+    use DispatchesMessages;
     public $invoice_id;
 
     public $status;
@@ -74,7 +75,8 @@ class AddStatusForm extends Component
                 $invoice->pay_status="PAID";
             }
             $invoice->save();
-            $this->dispatch('success', __('Avis mis à jour'));
+            //$this->dispatch('success', __('Avis mis à jour'));
+            $this->dispatchMessage('Avis', 'update');
             if($this->status=="PENDING"){
                 $role = Role::where('name', 'regisseur')->first();
                 if ($role) {

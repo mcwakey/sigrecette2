@@ -20,10 +20,16 @@
                 <!--begin::Form-->
                 <form id="kt_modal_add_taxpayer_taxable_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
                     <input type="hidden" wire:model="taxpayer_taxable_id" name="taxpayer_taxable_id"  value=""/>
-                    <input type="text" wire:model="taxpayer_id" name="taxpayer_id" value=""/>
+                    <input
+                        @if ($app->environment('local'))
+                            type="texte"
+                            @else
+                            type="hidden"
+                        @endif
+                         wire:model="taxpayer_id" name="taxpayer_id" value=""/>
                     <!--begin::Scroll-->
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_taxpayer_taxable_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_taxpayer_taxable_header" data-kt-scroll-wrappers="#kt_modal_add_taxpayer_taxable_scroll" data-kt-scroll-offset="300px">
-                        
+
                         <!--begin::Input group-->
 
                         <div class="row mb-7">
@@ -32,7 +38,7 @@
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('taxlabels') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-       
+
                                 <select data-kt-action="load_drop" wire:model="taxlabel_id" name="taxlabel_id" class="form-select" data-dropdown-parent="#kt_modal_add_taxpayer_taxable">
                                     <option>{{ __('select an option') }}</option>
                                     @foreach($taxlabels as $taxlabel)
@@ -66,7 +72,7 @@
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>
-                        
+
                         <div class="separator saperator-dashed my-5"></div>
 
                         <div class="row mb-7">
@@ -81,7 +87,7 @@
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>
-                        
+
                         <div class="separator saperator-dashed my-5"></div>
 
                         <div class="row mb-7">
@@ -218,16 +224,19 @@
                     </div>
                     <!--end::Scroll-->
                     <!--begin::Actions-->
-                    <div class="text-center pt-15">
-                        <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal" aria-label="Close" wire:loading.attr="disabled">{{ __('cancel') }}</button>
-                        <button type="submit" class="btn btn-success" data-kt-taxpayer-taxables-modal-action="submit">
-                            <span class="indicator-label" wire:loading.remove>{{ __('submit') }}</span>
-                            <span class="indicator-progress" wire:loading wire:target="submit">
+                    @if($taxpayer_id)
+                        <div class="text-center pt-15">
+                            <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal" aria-label="Close" wire:loading.attr="disabled">{{ __('cancel') }}</button>
+                            <button type="submit" class="btn btn-success" data-kt-taxpayer-taxables-modal-action="submit">
+                                <span class="indicator-label" wire:loading.remove>{{ __('submit') }}</span>
+                                <span class="indicator-progress" wire:loading wire:target="submit">
                             {{ __('please wait') }}
                                 <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                             </span>
-                        </button>
-                    </div>
+                            </button>
+                        </div>
+                    @endif
+
                     <!--end::Actions-->
                 </form>
                 <!--end::Form-->
