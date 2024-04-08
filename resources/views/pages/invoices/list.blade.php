@@ -51,22 +51,6 @@
                         <div
                             class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4"
                             data-kt-menu="true" id="print-modal">
-                            <div class="menu-item px-3">
-                                <a href="#" class="menu-link px-3 print-link" data-type="1" target="_blank">
-                                    {{ __('Bordereau journal des avis des sommes à payer') }}
-                                </a>
-                            </div>
-                            <div class="menu-item px-3">
-                                <a href="#" class="menu-link px-3 print-link" data-type="2" target="_blank">
-                                    {{ __('Bordereau journal des avis de réduction ou d’annulation') }}
-                                </a>
-                            </div>
-                            <div class="menu-item px-3">
-                                <a href="#" class="menu-link px-3 print-link" data-type="3" target="_blank">
-                                    {{ __('Registre journal des avis distribués') }}
-                                </a>
-                            </div>
-
 
                         </div>
 
@@ -191,6 +175,7 @@
                                 <option value="APROVED">{{ __('APROVED') }}</option>
                                 <option value="REJECTED">{{ __('REJECTED') }}</option>
                                 <option value="CANCELED">{{ __('CANCELED') }}</option>
+                                <option value="APROVED-CANCELLATION">{{ __("AVIS D'ANNULATION/REDUCTION") }}</option>
                                 <option value="PENDING">{{ __('PENDING') }}</option>
                             </select>
                             <!--end::Select-->
@@ -394,6 +379,78 @@
                     window.LaravelDataTables['invoices-table'].ajax.reload();
                 });
             });
+
+            const printModal = document.getElementById('print-modal');
+
+            function removePrintMenuItems() {
+                while (printModal.firstChild) {
+                    printModal.removeChild(printModal.firstChild);
+                }
+            }
+
+            function addPrintMenuItem(text, type) {
+                const newMenuItem = document.createElement('div');
+                newMenuItem.classList.add('menu-item', 'px-3');
+
+                const newLink = document.createElement('a');
+                newLink.classList.add('menu-link', 'px-3', 'print-link');
+                newLink.href = '#';
+                newLink.setAttribute('data-type', type);
+                newLink.setAttribute('target', '_blank');
+
+                newLink.textContent = text;
+
+                newMenuItem.appendChild(newLink);
+                printModal.appendChild(newMenuItem);
+            }
+
+            function onSelectedValueChanged(selectedValue) {
+                removePrintMenuItems();
+                if (selectedValue === 'APROVED') {
+                    addPrintMenuItem('{{ __('Fiche de distribution des avis') }}', '1');
+                    addPrintMenuItem('{{ __('Fiche de recouvrement des avis distribués') }}', '3');
+                } else if (selectedValue === 'APROVED-CANCELLATION') {
+                    addPrintMenuItem('{{ __('Bordereau journal des avis de réduction ou d’annulation') }}', '2');
+                }
+            }
+
+            const selectElement = document.getElementById('mySearchTen');
+            selectElement.addEventListener('change', function(event) {
+                console.log(18)
+                const selectedValue = event.target.value;
+                onSelectedValueChanged(selectedValue);
+                document.querySelectorAll('.print-link').forEach(function(link) {
+                    link.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        let selectedValue = link.getAttribute('data-type');
+                        let table = document.getElementById("invoices-table");
+                        let tbody =  table.getElementsByTagName('tbody');
+                        let rows = tbody[0].querySelectorAll('tr');
+                        let dataArray = [];
+                        for (let i = 0; i < rows.length; i++) {
+                            let id = rows[i].getAttribute('id');
+                            dataArray.push(id);
+                        }
+
+                        let r_type = 2;
+                        if (selectedValue === '4') {
+                            r_type = 4;
+                        } else if (selectedValue === '5' || selectedValue === '6') {
+                            r_type = selectedValue;
+                        }
+                        let jsonData = JSON.stringify(dataArray);
+                        let url = "{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type', 'action' => ':selectedValue']) }}";
+                        url = url.replace(':jsonData', encodeURIComponent(jsonData));
+                        url = url.replace(':r_type', encodeURIComponent(r_type));
+                        url = url.replace(':selectedValue', encodeURIComponent(selectedValue));
+
+                        window.open(url,'_blank');
+                    });
+                });
+            });
+
+
+
 
         </script>
     @endpush

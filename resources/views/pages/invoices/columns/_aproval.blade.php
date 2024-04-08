@@ -31,8 +31,9 @@
             </div>
         @endcan
     </div>
-    @elseif($invoice->status=="APROVED")
-    <div class="badge badge-lg badge-light-success d-inline">{{ __('APROVED') }}</div>
+    @elseif($invoice->status=="APROVED" || $invoice->status=="APROVED-CANCELLATION")
+    <div class="badge badge-lg badge-light-success d-inline">
+        {{ __('APROVED') }}</div>
     @elseif($invoice->status=="REJECTED")
     <div class="badge badge-lg badge-light-danger d-inline">{{ __('REJECTED') }}</div>
     @elseif($invoice->status=="DRAFT")

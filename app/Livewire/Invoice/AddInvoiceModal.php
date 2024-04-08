@@ -118,7 +118,7 @@ class AddInvoiceModal extends Component
 
         'taxpayer_id' => 'required|int',
         'amount' => 'required|numeric',
-        //'cancel_reduct' => 'required',
+        'cancel_reduct' => 'required|string',
 
         // 'telephone' => 'required|string|min:10|max:10',
         // 'longitude' => 'nullable',

@@ -150,7 +150,7 @@ class AddPaymentModal extends Component
             // Prepare data for Payment
             $paymentData = [
                 // 'invoice_id' => $this->invoice_id,
-                'invoice_id' => $this->invoice_id,
+                'invoice_id' => $this->invoice_no,
                 'taxpayer_id' => ($this->taxpayer_id === "") ? null : $this->taxpayer_id,
                 'amount' => $this->amount,
                 'payment_type' => $this->payment_type,
@@ -267,6 +267,7 @@ class AddPaymentModal extends Component
                             //dd($invoice);
 
         $this->invoice_id = $invoice->id;
+
         $this->taxpayer_id = $invoice->taxpayer->id ?? "";
 
         $this->name = $invoice->taxpayer->name ?? "";
@@ -280,11 +281,13 @@ class AddPaymentModal extends Component
         $this->qty = $invoice->qty;
         $this->bill = $invoice->amount;
 
-        $payments = Payment::where('invoice_id', $invoice->id)->get();
+        $payments = Payment::where('invoice_id', $invoice->invoice_no)->get();
         $this->s_amount = []; // Initialize as an empty array
 
         foreach ($payments as $index => $payment) {
-            $this->s_amount[$index] = $payment->amount;
+            if ($payment->description!=="Annulation/Réduction"){
+                $this->s_amount[$index] = $payment->amount;
+            }
         }
 
         $this->paid = array_sum($this->s_amount) ?? 0;

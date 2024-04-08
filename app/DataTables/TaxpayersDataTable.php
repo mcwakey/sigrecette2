@@ -94,8 +94,8 @@ class TaxpayersDataTable extends DataTable
                     ->join('towns', 'taxpayers.town_id', '=', 'towns.id')
                     ->with('town.canton')
                     ->join('cantons', 'towns.canton_id', '=', 'cantons.id')
-                    ->with('erea')
-                    ->join('ereas', 'taxpayers.erea_id', '=', 'ereas.id')
+                   // ->with('erea')
+                  //  ->join('ereas', 'taxpayers.erea_id', '=', 'ereas.id')
                     ->with('zone')
                     ->join('zones', 'taxpayers.zone_id', '=', 'zones.id')
                     ->select('taxpayers.*') // Select columns from taxpayers table

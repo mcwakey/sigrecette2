@@ -61,18 +61,23 @@ class AddStatusForm extends Component
             foreach ($data as $k => $v) {
                 $invoice->$k = $v;
             }
-            if ($this->status=="APROVED" &&  ($invoice->amount==$invoice->reduce_amount)){
+            if ($this->status=="APROVED" &&  $invoice->reduce_amount != ''){
 
                //last payment not check
                 $paymentData = [
-                    'invoice_id' => $this->invoice_id,
+                    'invoice_id' => $invoice->invoice_no,
                     'taxpayer_id' =>  $invoice->taxpayer_id,
-                    'amount' => $invoice->amount,
-                    'description' =>"Annulation",
+                    'amount' => $invoice->reduce_amount,
+                    'description' =>"Annulation/Réduction",
 
                 ];
                 Payment::create($paymentData);
-                $invoice->pay_status="PAID";
+                if ($invoice->reduce_amount==$invoice->amount){
+                    $invoice->pay_status="PAID";
+                }else{
+                    $invoice->pay_status="PART PAID";
+                }
+               $invoice->status='APROVED-CANCELLATION';
             }
             $invoice->save();
             //$this->dispatch('success', __('Avis mis à jour'));

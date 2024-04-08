@@ -451,7 +451,7 @@
                                                 <td>{{ $invoice->created_at->format('Y-m-d') }}</td>
                                                 <td>{{ $invoice->invoice_no }}</td>
                                                 <td>
-                                                    @if ($invoice->status == 'PENDING' || ($invoice->order_no == null && $invoice->delivery == 'NOT DELIVERED'))
+                                                    @if ( $invoice->order_no == null && $invoice->delivery == 'NOT DELIVERED')
                                                         <button type="button"
                                                                 class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
                                                                 data-kt-user-id="{{ $invoice->id }}"
@@ -494,7 +494,7 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    @if ($invoice->status == 'APROVED'||$invoice->status == 'CANCELED' || $invoice->status =='REDUCED')
+                                                    @if ($invoice->status == 'APROVED' || $invoice->status =='APROVED-CANCELLATION')
                                                         @if ($invoice->pay_status == 'OWING')
                                                             <span
                                                                 class="badge badge-light-danger">{{ __($invoice->pay_status) }}</span>
@@ -505,6 +505,9 @@
                                                             <span
                                                                 class="badge badge-light-success">{{ __($invoice->pay_status) }}</span>
                                                         @endif
+                                                    @elseif($invoice->status == 'CANCELED' || $invoice->status =='REDUCED')
+                                                        <span
+                                                            class="badge badge-light-warning">{{ "----" }}</span>
                                                     @else
                                                         <span
                                                             class="badge badge-light-primary">{{ __('EN ATTENTE DE VALIDATION') }}</span>
@@ -522,7 +525,7 @@
                                                 </td>
 
                                                 <td>
-                                                    @if ($invoice->status == 'APROVED'||$invoice->status == 'CANCELED' || $invoice->status =='REDUCED')
+                                                    @if ($invoice->status == 'APROVED'||$invoice->status == 'CANCELED' || $invoice->status =='REDUCED' || $invoice->status =='APROVED-CANCELLATION')
                                                         @if ($invoice->delivery == 'NOT DELIVERED'&& $invoice->order_no !== null)
                                                             @can('create invoice delivery date')
                                                                 <button type="button"
@@ -593,7 +596,7 @@
                                                                 </i>
                                                             </button>
                                                         @endcan
-                                                    @elseif($invoice->status == 'APROVED')
+                                                    @elseif($invoice->status == 'APROVED' || $invoice->status == 'APROVED-CANCELLATION')
                                                         <span
                                                             class="badge badge-light-success">{{ __('APROVED') }}</span>
                                                     @elseif($invoice->status == 'REJECTED')
@@ -683,6 +686,7 @@
                                                             {{-- Nothing here --}}
                                                         @elseif(
                                                             $invoice->status == 'APROVED' ||
+                                                             $invoice->status == 'APROVED-CANCELLATION' ||
                                                                 $invoice->status == 'PENDING' ||
                                                                 $invoice->status == 'REDUCED' ||
                                                                 $invoice->status == 'CANCELED')
@@ -704,7 +708,7 @@
                                                             </div>
                                                             @if ($invoice->status != 'REDUCED')
                                                                 @if ($invoice->status !== 'CANCELED' && $invoice->pay_status != 'PAID')
-                                                                    @if ( $invoice->status == 'APROVED')
+                                                                    @if ( $invoice->status == 'APROVED' || $invoice->status =='APROVED-CANCELLATION')
                                                                         @can('create invoice payment')
                                                                             <div class="menu-item px-3">
                                                                                 <a href="#"

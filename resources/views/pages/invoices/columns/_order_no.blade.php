@@ -1,4 +1,4 @@
-@if ($invoice->order_no == null)
+@if ($invoice->order_no == null && $invoice->delivery == 'NOT DELIVERED')
     <button type="button"
         class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
         data-kt-user-id="{{ $invoice->id }}"
