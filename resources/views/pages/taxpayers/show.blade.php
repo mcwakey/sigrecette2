@@ -178,7 +178,10 @@
                             </div>
                         </div>
                         <!--end::Menu item-->
-                        <!--begin::Menu item-->
+                        <!--TODO Fiche du contribuable-->
+                        <div class="menu-item px-5">
+                            <a href="#" class="menu-link px-5">{{ __('Fiche du contribuable') }}</a>
+                        </div>
                         <div class="menu-item px-5">
                             <a href="#" class="menu-link px-5">{{ __('reports et stats') }}</a>
                         </div>
@@ -1420,7 +1423,9 @@ Address: ${taxpayer_taxable.location}
             //         window.LaravelDataTables['taxpayer_taxables-table'].ajax.reload();
             //     });
             // });
+
         </script>
+
         <!-- <script>
         document.getElementById('mySearchInput').addEventListener('keyup', function() {
         window.LaravelDataTables['taxpayer_invoices-table'].search(this.value).draw();

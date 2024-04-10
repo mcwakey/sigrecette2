@@ -101,11 +101,8 @@ class Invoice extends Model
             }
         }
 
-        usort($invoices, function ($a, $b) {
-            $codeA = $a->taxpayer_taxable->taxable->tax_label->code;
-            $codeB = $b->taxpayer_taxable->taxable->tax_label->code;
-            return strcmp($codeA, $codeB);
-        });
+
+
 
         return $invoices ?: [];
     }

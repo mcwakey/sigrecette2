@@ -160,15 +160,20 @@
 
     </div>
     <div class="sub-header">
-        <p>Nom/Raison sociale :<span class="write">{{$data->taxpayer->name}}</span></p>
-        <p>Nic :<span class="write"> {{$data->nic}}</span></p>
-        <p>Téléphone :<span class="write"> {{$data->taxpayer->mobilephone}}</span></p>
-        <p>Zone fiscale :<span class="write"> {{$data->taxpayer->zone->name}}</span></p>
-        <p>Canton :<span class="write">{{$data->taxpayer->town->canton->name}}</span></p>
-        <p>Quartier/Village :<span class="write"> {{$data->taxpayer->town->name}}</span></p>
-        <p>Adresse complète :<span class="write">{{$data->taxpayer->address}}</span></p>
-        <p>Coordonnées GPS :<span class="write"> {{$data->taxpayer->longitude}} , {{$data->taxpayer->latitude}}</span>
+        <p>
+            <span>Nom/Raison sociale: {{$data->taxpayer->name}},</span>
+            <span>Téléphone :{{$data->taxpayer->mobilephone}}</span>
         </p>
+        <p>
+            <span class="write">Canton :{{$data->taxpayer->town->canton->name}},</span>
+            <span class="write">Quartier/Village: {{$data->taxpayer->town->name}},</span>
+            <span class="write"> Zone fiscale :{{$data->taxpayer->zone->name}}</span>
+        </p>
+        <p>
+            <span class="write">Adresse complète :{{$data->taxpayer->address}}</span>
+            <span class="write"> Coordonnées GPS :{{$data->taxpayer->longitude}} , {{$data->taxpayer->latitude}}</span>
+        </p>
+        <p>Nic :<span class="write"> {{$data->nic}}</span></p>
     </div>
     <div class="avis-content">
         <p>Madame, Mademoiselle, Monsieur,</p>

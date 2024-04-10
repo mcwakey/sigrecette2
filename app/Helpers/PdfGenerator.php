@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Commune;
 use App\Models\Invoice;
+use App\Traits\DispatchesMessages;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -25,17 +26,22 @@ class PdfGenerator
      */
     public function processType($type, $data,$action)
     {
-       dd($data,$type,$action);
+        //dd($data,$type,$action);
+
         switch ($type) {
             case 1:
                 return $this->downloadReceipt($data,$action,'payments');
             case 2:
-                if($action=3){
+
+                if($action==3){
                     return $this->downloadInvoicesList($data,$action,'invoices-registre',15);
+                }
+                elseif ($action==4){
+                    return $this->downloadInvoicesList($data,$action,'invoices-distribution',15);
+
                 }
                 else{
                     return $this->downloadInvoicesList($data,$action,'invoices-list',15);
-
                 }
             //case 3:
             //case 4:return 'invoices-distribution';
@@ -109,9 +115,10 @@ class PdfGenerator
         $result = $this->generateInvoiceListPdf($data,$templateName,$action,$expectedDataSize);
         //dd($data);
         if ($result['success']) {
+            //$this->dispatchMessage("document");
             return $result['pdf'];
         }
-
+        //$this->dispatchMessage("document","create","error");
         return back()->with('error', $result['message']);
     }
 
@@ -125,7 +132,8 @@ class PdfGenerator
     {
 
         //dd($data,$template,$action);
-        if ($this->checkInvoiceListDataUniformity($data,$expectedDataSize)&& $this->checkIfCommuneIsNotNull()) {
+        $data=Invoice::retrieveByUUIDs($data);
+        if ($this->checkIfCommuneIsNotNull()) {
 
             $filename = "Invoice-list-" . Str::random(8) . ".pdf";
             //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
@@ -172,8 +180,21 @@ class PdfGenerator
                 $base_array[14]= "Arrêté le présent bordereau journal de réduction ou d’annulation à la somme de";
                 $base_array[15]= "Bordereau journal des avis de réduction ou d’annulation";
                 break;
-            case 3:
-                $base_array[15]= "Journal des avis des sommes à payer confiés par le receveur";
+            case 5:
+                $base_array = [
+                    "Date réception/ encaissement",
+                    "N° OR",
+                    "N° Avis des sommes à payer",
+                    "NIC",
+                    "Nom ou raison sociale du contribuable",
+                    "Coordonnées GPS",
+                    "Imputation",
+                    "Montant émis",
+                    "N° quittance",
+                    "Montant encaissé/ annulé",
+                    "Reste à recouvrer",
+                    "Journal des avis des sommes à payer confiés par le receveur"
+                ];
                 break;
             default:
                 $base_array[0] = "N° Avis de réduction ou d’annulation";
@@ -265,9 +286,15 @@ class PdfGenerator
     {
 
         $data=Invoice::retrieveByUUIDs($data);
+        usort($data, function ($a, $b) {
+            $codeA = $a->taxpayer_taxable->taxable->tax_label->code;
+            $codeB = $b->taxpayer_taxable->taxable->tax_label->code;
+            return strcmp($codeA, $codeB);
+        });
 
         if ( $data!==false&&count($data)==1&&$this->checkIfCommuneIsNotNull()) {
             $default_invoice =$data[0];
+
             $filename="Invoice-".Str::random(8).".pdf";
 
 

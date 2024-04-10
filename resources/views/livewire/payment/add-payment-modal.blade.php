@@ -161,6 +161,7 @@
                                 <select wire:model="payment_type" name="payment_type" class="form-select" data-dropdown-parent="#kt_modal_add_payment">
                                     <option></option>
                                     <option value="CASH">CASH</option>
+                                    <!--TODO CHEQUE implementation-->
                                     <option value="CASH">CHEQUE</option>
                                     <option value="DIGI">DIGI</option>
                                 </select>

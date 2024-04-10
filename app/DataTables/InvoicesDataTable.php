@@ -77,7 +77,7 @@ class InvoicesDataTable extends DataTable
             ->addColumn('action', function (Invoice $invoice) {
                 return view('pages/invoices.columns._actions', compact('invoice'));
             })
-            ->setRowId('id');
+            ->setRowId('uuid');
     }
 
 

@@ -42,10 +42,11 @@
             <div class="card-toolbar">
                 @can('print invoice')
                     <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
-                        <div href="#" class="btn btn-light btn-active-light-primary btn-flex btn-center ms-auto me-5"
+                        <div href="#" id="print-btn" class="btn btn-light  btn-flex btn-center ms-auto me-5 hover-elevate-up pulse pulse-success d-none"
                              data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                             {{ __('print') }}
                             <i class="ki-duotone ki-down fs-5 ms-1"></i>
+                            <span class="pulse-ring"></span>
                         </div>
 
                         <div
@@ -56,6 +57,47 @@
 
                     </div>
                 @endcan
+                    <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
+                        <div href="#"  class="btn btn-light  btn-flex btn-center ms-auto me-5 hover-elevate-up "
+                             data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                            {{ __('Export') }}
+                            <i class="ki-duotone ki-down fs-5 ms-1"></i>
+
+                        </div>
+
+                        <div
+                            class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4"
+                            data-kt-menu="true"
+                            id="kt_datatable_example_export_menu">
+                            <div class="menu-item px-3">
+                                <a href="#" class="menu-link px-3" data-kt-export="copy">
+                                    Copy to clipboard
+                                </a>
+                            </div>
+                            <!--end::Menu item-->
+                            <!--begin::Menu item-->
+                            <div class="menu-item px-3">
+                                <a href="#" class="menu-link px-3" data-kt-export="excel">
+                                    Export as Excel
+                                </a>
+                            </div>
+                            <!--end::Menu item-->
+                            <!--begin::Menu item-->
+                            <div class="menu-item px-3">
+                                <a href="#" class="menu-link px-3" data-kt-export="csv">
+                                    Export as CSV
+                                </a>
+                            </div>
+                            <!--end::Menu item-->
+                            <!--begin::Menu item-->
+                            <div class="menu-item px-3">
+                                <a href="#" class="menu-link px-3" data-kt-export="pdf">
+                                    Export as PDF
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
             <!--begin::Toolbar-->
                 @can('create no taxpayer invoice payment')
                     <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
@@ -382,6 +424,10 @@
 
             const printModal = document.getElementById('print-modal');
 
+            // Sélectionnez le bouton
+            const printButton = document.getElementById('print-btn');
+
+
             function removePrintMenuItems() {
                 while (printModal.firstChild) {
                     printModal.removeChild(printModal.firstChild);
@@ -405,12 +451,33 @@
             }
 
             function onSelectedValueChanged(selectedValue) {
+                const array = ['APROVED', 'APROVED-CANCELLATION','CANCELED',"PENDING"];
                 removePrintMenuItems();
-                if (selectedValue === 'APROVED') {
-                    addPrintMenuItem('{{ __('Fiche de distribution des avis') }}', '1');
-                    addPrintMenuItem('{{ __('Fiche de recouvrement des avis distribués') }}', '3');
-                } else if (selectedValue === 'APROVED-CANCELLATION') {
-                    addPrintMenuItem('{{ __('Bordereau journal des avis de réduction ou d’annulation') }}', '2');
+                if (array.includes(selectedValue)) {
+                    printButton.classList.add('btn-active-light-primary');
+                    printButton.classList.remove( "d-none");
+                    if (selectedValue === 'APROVED' || selectedValue === "CANCELED") {
+                        addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
+                        addPrintMenuItem('{{ __('Fiche de distribution des avis') }}', '4');
+                        addPrintMenuItem('{{ __('Registre-journal des avis distribués') }}', '3');
+                        {{--
+                         // addPrintMenuItem('{{ __('Journal des avis des sommes à payer confiés par le receveur') }}', '5');
+                        //addPrintMenuItem('{{ __('Fiche de recouvrement des avis distribués') }}', '41');
+                        --}}
+
+
+
+                    } else if (selectedValue === 'APROVED-CANCELLATION') {
+                        addPrintMenuItem('{{ __('Bordereau journal des avis de réduction ou d’annulation') }}', '2');
+                    }else if(selectedValue === "PENDING"){
+                        addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
+
+                    }
+                }
+                else {
+                    printButton.classList.remove('btn-active-light-primary');
+                    printButton.classList.add( "d-none");
+
                 }
             }
 
@@ -433,11 +500,6 @@
                         }
 
                         let r_type = 2;
-                        if (selectedValue === '4') {
-                            r_type = 4;
-                        } else if (selectedValue === '5' || selectedValue === '6') {
-                            r_type = selectedValue;
-                        }
                         let jsonData = JSON.stringify(dataArray);
                         let url = "{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type', 'action' => ':selectedValue']) }}";
                         url = url.replace(':jsonData', encodeURIComponent(jsonData));
@@ -453,6 +515,7 @@
 
 
         </script>
+
     @endpush
 
 </x-default-layout>
