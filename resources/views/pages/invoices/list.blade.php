@@ -57,47 +57,6 @@
 
                     </div>
                 @endcan
-                    <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
-                        <div href="#"  class="btn btn-light  btn-flex btn-center ms-auto me-5 hover-elevate-up "
-                             data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                            {{ __('Export') }}
-                            <i class="ki-duotone ki-down fs-5 ms-1"></i>
-
-                        </div>
-
-                        <div
-                            class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4"
-                            data-kt-menu="true"
-                            id="kt_datatable_example_export_menu">
-                            <div class="menu-item px-3">
-                                <a href="#" class="menu-link px-3" data-kt-export="copy">
-                                    Copy to clipboard
-                                </a>
-                            </div>
-                            <!--end::Menu item-->
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-3">
-                                <a href="#" class="menu-link px-3" data-kt-export="excel">
-                                    Export as Excel
-                                </a>
-                            </div>
-                            <!--end::Menu item-->
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-3">
-                                <a href="#" class="menu-link px-3" data-kt-export="csv">
-                                    Export as CSV
-                                </a>
-                            </div>
-                            <!--end::Menu item-->
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-3">
-                                <a href="#" class="menu-link px-3" data-kt-export="pdf">
-                                    Export as PDF
-                                </a>
-                            </div>
-                        </div>
-
-                    </div>
             <!--begin::Toolbar-->
                 @can('create no taxpayer invoice payment')
                     <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
