@@ -230,7 +230,7 @@ class AddInvoiceModal extends Component
                 'amount' => $this->amount,
                 'qty' => $this->qty,
                 'from_date' => date('Y-') . $this->start_month . "-01",
-                'to_date' => date('Y-') . $this->start_month + $this->qty . "-01",
+                'to_date' => date('Y-') . $this->start_month + $this->qty - 1 . "-31",
                 // 'pay_status' => 'DRAFT',
             ];
 

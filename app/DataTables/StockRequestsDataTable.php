@@ -1,6 +1,7 @@
 <?php
 
 namespace App\DataTables;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\StockRequest;
 use Yajra\DataTables\Html\Column;
@@ -58,47 +59,57 @@ class StockRequestsDataTable extends DataTable
                 return $stock_request->start_no. " - ". $stock_request->end_no;
                 // return view('pages.stock_requests.columns._seize', compact('stock_request'));
             })
-            ->editColumn('qty', function (StockRequest $stock_request) {
-                if ($stock_request->req_type == "DEMANDE") {
-                    $qty = $stock_request->qty ;
+            ->editColumn('pc_qty', function (StockRequest $stock_request) {
+                // if ($stock_request->req_type == "DEMANDE") {
+                //     $qty = $stock_request->qty ;
+                // } else {
+                //     $qty =  "";
+                // }
+
+                return $stock_request->pc_qty;
+            })
+            ->editColumn('pc_total', function (StockRequest $stock_request) {
+                // if ($stock_request->req_type == "DEMANDE") {
+                    $pc_total = $stock_request->pc_qty * $stock_request->taxable->tariff; ;
+                // } else {
+                //     $total =  "";
+                // }
+
+                return $pc_total;
+            })
+            ->editColumn('vv_qty', function (StockRequest $stock_request) {
+                if (!$stock_request->pc_qty || !$stock_request->sd_qty) {
+                    $vv_qty =  "";
                 } else {
-                    $qty =  "";
+                    $vv_qty = $stock_request->pc_qty - $stock_request->sd_qty;
                 }
 
-                return $qty;
+                return $vv_qty;
             })
-            ->editColumn('total', function (StockRequest $stock_request) {
-                if ($stock_request->req_type == "DEMANDE") {
-                    $total = $stock_request->qty * $stock_request->taxable->tariff; ;
+            ->editColumn('vv_total', function (StockRequest $stock_request) {
+                if (!$stock_request->pc_qty || !$stock_request->sd_qty) {
+                    $vv_total =  "";
                 } else {
-                    $total =  "";
+                    $vv_total = ($stock_request->pc_qty - $stock_request->sd_qty) * $stock_request->taxable->tariff; 
                 }
 
-                return $total;
+                return $vv_total;
             })
-            ->editColumn('qty1', function (StockRequest $stock_request) {
-                if ($stock_request->req_type == "COMPTABILITE") {
-                    $qty = $stock_request->qty ;
-                } else {
-                    $qty =  "";
+            ->editColumn('sd_qty', function (StockRequest $stock_request) {
+                if (!$stock_request->pc_qty || !$stock_request->sd_qty) {
+                    $sd_qty =  "";
+                }else{
+                    $sd_qty = $stock_request->sd_qty;
                 }
-
-                return $qty;
+                return  $sd_qty;
             })
-            ->editColumn('total1', function (StockRequest $stock_request) {
-                if ($stock_request->req_type == "COMPTABILITE") {
-                    $total = $stock_request->qty * $stock_request->taxable->tariff; ;
-                } else {
-                    $total =  "";
+            ->editColumn('sd_total', function (StockRequest $stock_request) {
+                if (!$stock_request->pc_qty || !$stock_request->sd_qty) {
+                    $sd_total =  "";
+                }else{
+                    $sd_total = $stock_request->sd_qty * $stock_request->taxable->tariff;
                 }
-
-                return $total;
-            })
-            ->editColumn('qty2', function (StockRequest $stock_request) {
-                return $stock_request->qty;
-            })
-            ->editColumn('total2', function (StockRequest $stock_request) {
-                return $stock_request->qty * $stock_request->taxable->tariff;
+                return $sd_total;
             })
             // ->editColumn('bill_status', function (StockRequest $stock_request) {
             //     return view('pages.stock_requests.columns._status', compact('stock_request'));
@@ -122,14 +133,35 @@ class StockRequestsDataTable extends DataTable
     // public function query(): QueryBuilder // Remove $request parameter
     public function query(StockRequest $model): QueryBuilder
     {
-        return $model->with('taxable')
-                    ->join('taxables', 'stock_requests.taxable_id', '=', 'taxables.id')
-                    // ->with('taxable.tax_label')
-                    ->join('users', 'stock_requests.user_id', '=', 'users.id')
-                    // ->where('stock_requests.taxpayer_id', $this->id) // Filter stock_requests by taxpayer_id
-                    ->select('stock_requests.*')
-                    //->orderBy('tax_labels.name')
-                    ->newQuery();
+        // return $model->join('taxables', 'stock_requests.taxable_id', '=', 'taxables.id')
+        //             ->join('users', 'stock_requests.user_id', '=', 'users.id')
+        //             ->select('stock_requests.req_id', 
+        //                     \DB::raw('MAX(CASE WHEN req_type = "DEMANDE" THEN qty END) AS pc_qty'),
+        //                     \DB::raw('MAX(CASE WHEN req_type = "COMPTABILITE" THEN qty END) AS vv_qty'))
+        //             ->groupBy('req_id')
+        //             ->orderBy('req_id', 'desc');
+
+        return $model->join('taxables', 'stock_requests.taxable_id', '=', 'taxables.id')
+        ->join('users', 'stock_requests.user_id', '=', 'users.id')
+        ->select('stock_requests.req_id',
+                 DB::raw('MAX(CASE WHEN req_type = "DEMANDE" THEN qty END) AS pc_qty'),
+                 DB::raw('MAX(CASE WHEN req_type = "COMPTABILISE" THEN qty END) AS sd_qty'),
+                 DB::raw('MAX(stock_requests.id) AS id'),
+                 DB::raw('MAX(stock_requests.req_no) AS req_no'),
+                 DB::raw('MAX(stock_requests.req_desc) AS req_desc'),
+                 DB::raw('MAX(stock_requests.start_no) AS start_no'),
+                 DB::raw('MAX(stock_requests.end_no) AS end_no'),
+                 DB::raw('MAX(stock_requests.last_no) AS last_no'),
+                 DB::raw('MIN(stock_requests.req_type) AS req_type'),
+                 DB::raw('MIN(stock_requests.type) AS type'),
+                 DB::raw('MAX(stock_requests.user_id) AS user_id'),
+                 DB::raw('MAX(stock_requests.created_at) AS created_at'),
+                 DB::raw('MAX(stock_requests.taxable_id) AS taxable_id'))
+        ->groupBy('stock_requests.req_id')
+        ->orderBy('req_id', 'desc');
+   
+
+   
 
         // return StockRequest::where('taxpayer_id', $this->id); // Filter stock_requests by taxpayer_id
     }
@@ -158,20 +190,20 @@ class StockRequestsDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('req_id')->title(__('id'))->exportable(false)->printable(false)->visible(false), 
+            // Column::make('req_id')->title(__('id'))->exportable(false)->printable(false)->visible(false), 
             Column::make('stock_requests.created_at')->title(__('date'))->addClass('text-nowrap'),
-            Column::make('req_desc')->title(__('req desc')),
+            // Column::make('req_desc')->title(__('req desc')),
             Column::make('taxables.name')->title(__('ticket')),
             Column::make('taxables.tariff')->title(__('tariff')),
             Column::make('stock_requests.start_no')->title(__('num')),
-            //Column::make('tax_type')->title(__('tax_type')),
-            //Column::make('seize')->title(__('amount')),
-            Column::make('qty')->title(__('pc qty'))->name('qty'),
-            Column::make('total')->title(__('pc total'))->name('qty'),
-            Column::make('qty1')->title(__('vv qty'))->name('qty'),
-            Column::make('total1')->title(__('vv total'))->name('qty'),
-            // Column::make('qty2')->title(__('sd qty'))->addClass('text-nowrap'),
-            // Column::make('total2')->title(__('sd total')),
+            // //Column::make('tax_type')->title(__('tax_type')),
+            // //Column::make('seize')->title(__('amount')),
+            Column::make('pc_qty')->title(__('pc qty')),
+            Column::make('pc_total')->title(__('pc total'))->name('qty'),
+            Column::make('vv_qty')->title(__('vv qty')),
+            Column::make('vv_total')->title(__('vv total'))->name('qty'),
+            Column::make('sd_qty')->title(__('sd qty')),
+            Column::make('sd_total')->title(__('sd total'))->name('qty'),
             Column::make('users.name')->title(__('user')),
             Column::make('stock_requests.type')->title(__('status')),
             Column::computed('action')->title(__('action'))

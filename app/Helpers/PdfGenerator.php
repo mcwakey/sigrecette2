@@ -26,8 +26,7 @@ class PdfGenerator
      */
     public function processType($type, $data,$action)
     {
-        //dd($data,$type,$action);
-
+       //dd($data,$type,$action);
         switch ($type) {
             case 1:
                 return $this->downloadReceipt($data,$action,'payments');

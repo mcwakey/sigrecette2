@@ -127,6 +127,10 @@
                                 @error('qty')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
+
+
+
+                            @if (!$edit_mode)
                             <div class="col-md-3">
                                 <!--begin::Label-->
                                 <!-- <label class="fw-semibold fs-6 mb-2">{{ __('empty') }}.</label> -->
@@ -142,6 +146,8 @@
                                 
                                 <!--end::Input-->
                             </div>
+                            @endif
+
                         </div>
                         @if ($edit_mode != 'true')
                         <div class="separator separator-content separator-dashed my-3">
@@ -151,7 +157,7 @@
                         <table class="table g-5 gs-0 mb-0 fw-bolder text-gray-700" data-kt-element="items">
                         <thead class="border-bottom border-gray-200 fs-7 fw-bold">
                                             <tr class="text-start text-muted text-uppercase gs-0">
-                                                <th class="min-w-50px">{{ __('taxable') }}</th>
+                                                <th class="min-w-50px">{{ __('ticket') }}</th>
                                                 <th class="min-w-50px">{{ __('tariff') }}</th>
                                                 <th class="min-w-50px">{{ __('qty') }}</th>
                                                 <th class="min-w-50px">{{ __('amount') }}</th>
@@ -182,6 +188,20 @@
                             </table>
 
                           @endif  
+
+
+
+                            @if ($edit_mode)
+                            <div class="text-center pt-5">
+                                <button type="submit" class="btn btn-danger mt-5" data-kt-taxpayer-taxables-modal-action="submit">
+                                    <span class="indicator-label" wire:loading.remove>{{ __('account state') }}</span>
+                                    <span class="indicator-progress" wire:loading wire:target="submit">
+                                    {{ __('chargenment ...') }}
+                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                </button>
+                            </div>
+                            @endif
 
 
                         <!--end::Input group-->

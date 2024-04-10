@@ -41,7 +41,7 @@ class AddStockRequestModal extends Component
         'start_no' =>'required|numeric',
         'end_no' => 'required|numeric',
         //'taxlabel_id' => 'required|numeric',
-        'taxable_id' => 'required|numeric',
+        //'taxable_id' => 'required|numeric',
         'user_id' => 'required|numeric',
     ];
 
@@ -125,7 +125,7 @@ class AddStockRequestModal extends Component
             if ($this->edit_mode) {
                 $data['taxable_id'] = $this->taxable_idd;
                 $data['req_desc'] = 'Etat de comptabilité des VI N°'.$this->req_no;
-                $data['req_type'] = 'COMPTABILITE';
+                $data['req_type'] = 'COMPTABILISE';
             }
 
             $stock_request = StockRequest::create($data);
@@ -178,16 +178,20 @@ class AddStockRequestModal extends Component
         //dd($id);
         // $taxpayer = Taxpayer::find($id);
         $stock_request = StockRequest::find($id);
-        //dd($stock_request->taxable->tax_label);
+        //dd($stock_request);
 
         $this->stock_request_id = $id;
         $this->req_no = $stock_request->req_no;
         
-        $this->taxlabel_idd = $stock_request->taxable->tax_label->id;
-        $this->taxlabel_name = $stock_request->taxable->tax_label->name;
+        //$this->taxlabel_idd = $stock_request->taxable->tax_label->id ?? '';
+        $this->taxlabel_name = $stock_request->taxable->unit;
 
         $this->taxable_idd = $stock_request->taxable_id;
         $this->taxable_name = $stock_request->taxable->name;
+        
+        $this->start_no = $stock_request->last_no;
+        $this->end_no = $stock_request->end_no;
+        $this->qty =$stock_request->end_no  - $stock_request->last_no + 1;
     }
 
     public function hydrate()

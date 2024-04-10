@@ -284,7 +284,7 @@
     "taxable info": "Informations de la matiere taxable",
     "accounts": "Comptabilité",
     "new stock request": "Nouvel approvisionement",
-    "account state": "État de compte du Collecteur",
+    "account state": "Faire l'état de compte",
     "print account state": "Imprimer l'état de compte",
     "valeur inactif": "Imposable",
     "request summary": "Résumé de la demande",
@@ -294,7 +294,7 @@
     "end no": "No de fin",
     "stock requests": "Demandes d'approvisionement",
 
-    "comptabilite des valeurs inactives du regisseur": "Etat de comptabilite des VI du Regisseur",
+    "comptabilite des valeurs inactives du regisseur": "Etat de comptabilite des Valeurs Inactives du Regisseur au Receveur",
     "comptabilite des valeurs inactives du collecteur": "Etat de comptabilite des VI du Collecteur",
     "livre journal de la regie": "Livre - journal de Regie",
     "etat de versement du regisseur": "Etat de versement du Regisseur",
@@ -319,6 +319,9 @@
     "rc total": "Montant Recu",
     "rd qty": "Qté Rendu",
     "rd total": "Montant Rendu",
+    "sd qty": "Qté Restant",
+    "sd total": "Montant Restant",
+
     "info commune": "Information de la Commune",
     "taxations": "Paramètres de Taxation",
 
