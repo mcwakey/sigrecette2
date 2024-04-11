@@ -156,6 +156,7 @@ class AddPaymentModal extends Component
                     'amount' => $this->amount,
                     'payment_type' => $this->payment_type,
                     'reference' => $this->reference,
+                    'description' => "Avis ".$this->invoice_no.", OR " .$this->order_no,
                     'remaining_amount' =>$this->bill-($this->amount + $this->paid),
                     'user_id'=>  Auth::id(),
 

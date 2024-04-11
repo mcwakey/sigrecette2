@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('trans_type')->default('DEMANDE');
             $table->string('type')->default('ACTIVE'); // DONE FOR REGISSEUR VERIFICATION // 'ARCHIVE' FOR RECEVEUR VERIFICATION
             $table->integer('code')->nullable();
+            $table->unsignedBigInteger('payment_id')->nullable();
+            $table->foreign('payment_id')->references('id')->on('payments');
             $table->unsignedBigInteger('by_user_id');
             $table->foreign('by_user_id')->references('id')->on('users');
             $table->unsignedBigInteger('to_user_id');

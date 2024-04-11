@@ -42,6 +42,10 @@ class Payment extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function stock_transfers()
+    {
+        return $this->hasMany(StockTransfer::class);
+    }
     public static function boot()
     {
         parent::boot();

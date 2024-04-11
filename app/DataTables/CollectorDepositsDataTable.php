@@ -134,6 +134,10 @@ class CollectorDepositsDataTable extends DataTable
                 return view('pages.stock_transfers.columns._status', compact('stock_transfer'));
                 //return $stock_request->type;
             })
+            ->editColumn('payments.reference', function (StockTransfer $stock_transfer) {
+                return $stock_transfer->payment->reference;
+                // return view('pages.collector_deposits.columns._seize', compact('collector_deposit'));
+            })
             ->addColumn('action', function (StockTransfer $stock_transfer) {
                 return view('pages.collector_deposits.columns._actions', compact('stock_transfer'));
             })
@@ -150,6 +154,7 @@ class CollectorDepositsDataTable extends DataTable
                     // ->with('taxable.tax_label')
                     // ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
                     ->join('users', 'stock_transfers.to_user_id', '=', 'users.id')
+                    ->join('payments', 'stock_transfers.payment_id', '=', 'payments.id')
                     ->where('stock_transfers.trans_type', 'VENDU') // Filter collector_deposits by taxpayer_id
                     ->select('stock_transfers.*')
                     //->orderBy('tax_labels.name')
@@ -202,6 +207,7 @@ class CollectorDepositsDataTable extends DataTable
             Column::make('stock_transfers.code')->title(__('code')),
             // Column::make('users.name')->title(__('collector')),
             Column::make('stock_transfers.type')->title(__('status')),
+            Column::make('payments.reference')->title(__('reference no')),
             Column::computed('action')->title(__('action'))
                 ->addClass('text-end text-nowrap')
                 ->exportable(false)

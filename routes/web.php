@@ -72,6 +72,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('/accounts/stock-requests', StockRequestController::class);
         Route::resource('/accounts/stock-transfers', StockTransferController::class);
         Route::resource('/accounts/collector-deposits', CollectorDepositController::class);
+        // Route::resource('/accounts/collector-deposits/{id}', CollectorDepositController::class);
         Route::resource('/accounts/accountant-deposits', AccountantDepositController::class);
         Route::resource('/accounts/ledgers', LedgerController::class);
     });

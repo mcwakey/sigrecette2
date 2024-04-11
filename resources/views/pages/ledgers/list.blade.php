@@ -36,15 +36,13 @@
                 <!--begin::Toolbar-->
 
                 @can('create collector new deposit')
-                    <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
-                        <!--begin::Add user-->
+                    <!-- <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                         <button type="button" class="btn btn-warning" data-bs-toggle="modal"
                             data-bs-target="#kt_modal_add_stock_transfer" data-kt-action="add_deposit">
                             {!! getIcon('plus', 'fs-2', '', 'i') !!}
                             {{ __('new deposit') }}
                         </button>
-                        <!--end::Add user-->
-                    </div>
+                    </div> -->
                 @endcan
                 <!--end::Toolbar-->
 

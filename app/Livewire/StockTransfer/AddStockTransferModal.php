@@ -268,7 +268,24 @@ class AddStockTransferModal extends Component
             if ($this->edit_mode) {
                 $total_sold = 0;
                 if ($stock_transfers){
+
+                    $paymentData = [
+                        'amount' => $total_sold,
+                        //'qty' => $stock_transfer->qty,
+                        'payment_type' => 'CASH',
+                        'reference' => "-",
+                        'description' => "Etat de versement collecteur N°".$this->collector_id,
+                        'user_id' => $this->user_id,
+                        'to_user_id' => $this->collector_id,
+                        'reference' => $this->taxlabel_id,
+                    ];
+
+                    //dd($paymentData);
+
+                    $payment = Payment::create($paymentData);
+
                     foreach ($stock_transfers as $stock_transfer) {
+
                         $stockTtransferData = [
                             'trans_no' => $stock_transfer->trans_no,
                             'trans_id' => $stock_transfer->trans_id,
@@ -277,6 +294,7 @@ class AddStockTransferModal extends Component
                             'end_no' => $stock_transfer->end_no,
                             'taxable_id' => $stock_transfer->taxable_id,
                             'trans_type' => 'RENDU',
+                            'payment_id' => $payment->id,
                             'by_user_id' => $this->user_id,
                             'to_user_id' => $stock_transfer->to_user_id,
                         ];
@@ -311,20 +329,8 @@ class AddStockTransferModal extends Component
                         //dd($stock_transfer->type);
                     }
 
-                    $paymentData = [
-                        'amount' => $total_sold,
-                        //'qty' => $stock_transfer->qty,
-                        'payment_type' => 'CASH',
-                        'reference' => "-",
-                        'description' => "Etat de versement collecteur N°".$this->collector_id,
-                        'user_id' => $this->user_id,
-                        'to_user_id' => $this->collector_id,
-                        'reference' => $this->taxlabel_id,
-                    ];
-
-                    //dd($paymentData);
-
-                    Payment::create($paymentData);
+                    $payment->amount = $total_sold;
+                    $payment->save();
                     
                     $this->dispatch('success', __('Etat de comptabilité mis a jour avec succès'));
                 }
