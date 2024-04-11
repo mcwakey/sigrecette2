@@ -10,27 +10,27 @@
         </a>
     </div> -->
     
-    <div class="menu-item px-3">
-        <a href="#" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{ $stock_request->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_stock_request" data-kt-action="update_taxable">
-        {{ __('view') }}
+    <!-- <div class="menu-item px-3">
+        <a href="#" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{-- $stock_request->id --}}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_stock_request" data-kt-action="update_taxable">
+        {{-- {{ __('view') }} --}}
         </a>
-    </div>
+    </div> -->
     <!--end::Menu item-->
 
     <!--begin::Menu item-->
-    <div class="menu-item px-3">
-        <a href="#" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{ $stock_request->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_stock_request" data-kt-action="update_taxable">
-        {{ __('edit') }}
+    <!-- <div class="menu-item px-3">
+        <a href="#" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{-- $stock_request->id --}}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_stock_request" data-kt-action="update_taxable">
+        {{-- {{ __('edit') }} --}}
         </a>
-    </div>
+    </div> -->
     <!--end::Menu item-->
 
     <!--begin::Menu item-->
-    <div class="menu-item px-3">
+    <!-- <div class="menu-item px-3">
         <a href="#" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{ $stock_request->id }}" data-kt-action="delete_taxpayer">
-        {{ __('delete') }}
+        {{-- {{ __('delete') }} --}}
         </a>
-    </div>
+    </div> -->
     <!--end::Menu item-->
 
     <!--begin::Menu item-->

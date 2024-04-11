@@ -35,6 +35,40 @@
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
                 <!--begin::Toolbar-->
+                    <div class="d-flex justify-content-end ms-5" data-kt-invoice-table-toolbar="base">
+                        @can('print invoice')
+                            <div href="#" class="btn btn-light btn-active-light-primary btn-flex btn-center ms-auto me-5"
+                                 data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                {{ __('print') }}
+                                <i class="ki-duotone ki-down fs-5 ms-1"></i>
+                            </div>
+                        @endcan
+
+                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4"
+                             data-kt-menu="true" id="print-modal">
+                            <div class="menu-item px-3">
+                                <a href="#" class="menu-link px-3 print-link" data-type="1" target="_blank">
+                                    {{ __('ETAT DE COMPTABILITE DES VALEURS INACTIVES ') }}
+                                </a>
+                            </div>
+
+
+
+                        </div>
+
+                    </div>
+                        
+                        <!--begin::Col-->
+                    <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
+                            <!-- <label class="fs-6 form-label fw-bold text-dark">{{ __('user') }}</label> -->
+                            <!-- <input type="text" class="form-control" name="tags" id="mySearchFour" /> -->
+                            <select class="form-select" id="mySearchFour">
+                                <option value="xxx">{{ __('select an option') }}</option>
+                                @foreach($collectors as $collector)
+                                    <option value="{{ $collector->user_name}}">{{ $collector->user_name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
                 @can('create collector new deposit by manager')
                     <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
@@ -85,33 +119,6 @@
                         </a>
                         <!--end::Add user-->
                     </div>
-                <div class="card-toolbar">
-                    <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
-                        @can('print invoice')
-                            <div href="#" class="btn btn-light btn-active-light-primary btn-flex btn-center ms-auto me-5"
-                                 data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                                {{ __('print') }}
-                                <i class="ki-duotone ki-down fs-5 ms-1"></i>
-                            </div>
-                        @endcan
-
-                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4"
-                             data-kt-menu="true" id="print-modal">
-                            <div class="menu-item px-3">
-                                <a href="#" class="menu-link px-3 print-link" data-type="1" target="_blank">
-                                    {{ __('ETAT DE COMPTABILITE DES VALEURS INACTIVES ') }}
-                                </a>
-                            </div>
-
-
-
-                        </div>
-
-                    </div>
-                    <!--begin::Toolbar-->
-
-                    <!--end::Toolbar-->
-                </div>
 
             </div>
             <!--end::Card toolbar-->
@@ -176,7 +183,7 @@
                         <!--begin::Col-->
                         <div class="col-md-2">
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('user') }}</label>
-                            <input type="text" class="form-control" name="tags" id="mySearchFour" />
+                            <input type="text" class="form-control" name="tags" id="mySearchFours" />
                             <!-- <select class="form-select" id="mySearchFour">
                                 <option value=""></option>
                                 <option value="Demande">Demande d'approvisionnement</option>
@@ -312,12 +319,12 @@
                 window.LaravelDataTables['stock_transfers-table'].column(2).search(this.value).draw();
             });
 
-            document.getElementById('mySearchFour').addEventListener('keyup', function() {
-                window.LaravelDataTables['stock_transfers-table'].column(11).search(this.value).draw();
+            document.getElementById('mySearchFour').addEventListener('change', function() {
+                window.LaravelDataTables['stock_transfers-table'].column(10).search(this.value).draw();
             });
 
             document.getElementById('mySearchFive').addEventListener('change', function() {
-                window.LaravelDataTables['stock_transfers-table'].column(12).search(this.value).draw();
+                window.LaravelDataTables['stock_transfers-table'].column(11).search(this.value).draw();
             });
 
             document.addEventListener('livewire:init', function() {

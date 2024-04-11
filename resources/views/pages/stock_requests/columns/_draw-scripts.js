@@ -57,6 +57,14 @@ document.querySelectorAll('[data-kt-action="update_request"]').forEach(function 
     });
 });
 
+// Add click event listener to update buttons
+document.querySelectorAll('[data-kt-action="update_request_status"]').forEach(function (element) {
+    element.addEventListener('click', function () {
+        console.log([this.getAttribute('data-kt-user-id')]);
+        Livewire.dispatch('update_request_status', [this.getAttribute('data-kt-user-id')]);
+    });
+});
+
 // Listen for 'success' event emitted by Livewire
 Livewire.on('success', (message) => {
     // Reload the users-table datatable

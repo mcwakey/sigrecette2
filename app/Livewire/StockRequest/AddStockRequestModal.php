@@ -6,6 +6,7 @@ use App\Models\StockRequest;
 use App\Models\Taxable;
 use App\Models\TaxLabel;
 use App\Models\TaxpayerTaxable;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
@@ -42,7 +43,7 @@ class AddStockRequestModal extends Component
         'end_no' => 'required|numeric',
         //'taxlabel_id' => 'required|numeric',
         //'taxable_id' => 'required|numeric',
-        'user_id' => 'required|numeric',
+        //'user_id' => 'required|numeric',
     ];
 
     protected $listeners = [
@@ -57,7 +58,7 @@ class AddStockRequestModal extends Component
     {
         $taxlabels = TaxLabel::all();
 
-        $this->user_id = '1';
+        $this->user_id = Auth::id();
 
         return view('livewire.stock_request.add-stock-request-modal', compact('taxlabels'));
     }
@@ -119,7 +120,7 @@ class AddStockRequestModal extends Component
                 'end_no' => $this->end_no,
                 'taxable_id' => $this->taxable_id,
                 'req_type' => 'DEMANDE',
-                'user_id' => $this->user_id,
+                'user_id' => Auth::id(),
             ];
 
             if ($this->edit_mode) {

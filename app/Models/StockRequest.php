@@ -20,6 +20,7 @@ class StockRequest extends Model
         'taxable_id',
         'req_type',
         'user_id',
+        'type',
     ];
 
     public function taxable()

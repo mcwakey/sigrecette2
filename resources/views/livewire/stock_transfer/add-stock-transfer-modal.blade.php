@@ -27,7 +27,7 @@
                         <!--begin::Input group-->
 
                         <div class="row mb-7">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <!--begin::Label-->
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('collector') }}</label>
                                 <!--end::Label-->
@@ -43,24 +43,28 @@
                                 @error('collector_id')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col-md-8">
+                            @if ($edit_mode) 
+                            <div class="col-md-6">
                                 <!--begin::Label-->
-                                <label class="required fs-6 fw-semibold mb-2">{{ __('type') }}</label>
+                                <label class="required fs-6 fw-semibold mb-2">{{ __('reference no') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                                       
-                                <select data-kt-action="load_drop" wire:model="taxlabel_id" name="taxlabel_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
+                                
+                                <input type="text" wire:model="taxlabel_id" name="taxlabel_id" class="form-control mb-3 mb-lg-0" placeholder="{{ __('reference no') }}"/>
+
+                                <!-- <select wire:model="taxlabel_id" name="taxlabel_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
                                     <option>{{ __('select an option') }}</option>
                                     <option value="TICKET">TICKET</option>
                                     <option value="TIMBRE">TIMBRE</option>
-                                </select>
+                                </select> -->
                                 <!--end::Input-->
                                 @error('taxlabel_id')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
+                            @endif
                         </div>
 
-
+                        @if (!$edit_mode) 
                         <div class="separator saperator-dashed my-3"></div>
 
                         <div class="row mb-7">
@@ -155,7 +159,7 @@
                                 <!--end::Input-->
                             </div>
                         </div>
-
+                        @endif
                         
                         <div class="separator separator-content separator-dashed my-3">
                             <span class="w-250px text-gray-500 fw-semibold fs-7">{{ __('request summary') }}</span>
