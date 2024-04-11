@@ -31,7 +31,7 @@
         <!--end::Col-->
         <!--begin::Col-->
         <div class="col-xxl-6">
-            @include('pages.dashboards.widget.root')
+            @include('pages.dashboards.widget_root')
         </div>
 
         <!--end::Col-->
