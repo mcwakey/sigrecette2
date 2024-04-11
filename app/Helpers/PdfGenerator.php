@@ -43,6 +43,10 @@ class PdfGenerator
                     return $this->downloadInvoicesList($data,$action,'invoices-journal-receveur',15);
 
                 }
+                elseif ($action==41){
+                    return $this->downloadInvoicesList($data,$action,'invoices-recouvrement',15);
+
+                }
                 else{
                     return $this->downloadInvoicesList($data,$action,'invoices-list',15);
                 }
