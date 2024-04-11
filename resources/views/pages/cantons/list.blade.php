@@ -24,7 +24,6 @@
 
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
-                @can('create canton')
                 <!--begin::Toolbar-->
                 <div class="d-flex justify-content-end" data-kt-canton-table-toolbar="base">
                     <!--begin::Add user-->
@@ -35,7 +34,6 @@
                     <!--end::Add user-->
                 </div>
                 <!--end::Toolbar-->
-                @endcan
             </div>
             <!--end::Card toolbar-->
         </div>
