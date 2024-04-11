@@ -54,12 +54,12 @@
                         data-kt-menu="true" id="print-modal">
 
                         <div class="menu-item px-3">
-                            <a href="#" class="menu-link px-3 print-link" data-type="1" target="_blank">
+                            <a href="#" class="menu-link px-3 print-link" data-type="41" target="_blank">
                                 {{ __('Fiche de recouvrement des avis distribués') }}
                             </a>
                         </div>
                         <div class="menu-item px-3">
-                            <a href="#" class="menu-link px-3 print-link" data-type="1" target="_blank">
+                            <a href="#" class="menu-link px-3 print-link" data-type="5" target="_blank">
                                 {{ __('Journal des avis des sommes à payer confiés par le receveur') }}
                             </a>
                         </div>
@@ -246,42 +246,20 @@
                 link.addEventListener('click', function(event) {
                     event.preventDefault();
                     let selectedValue = link.getAttribute('data-type');
-                    let table = document.getElementById("invoices-table");
+                    let table = document.getElementById("recoveries-table");
+                    let tbody =  table.getElementsByTagName('tbody');
+                    let rows = tbody[0].querySelectorAll('tr');
                     let dataArray = [];
-                    let headers = [];
-
-
-                    // for (let i = 1; i < table.rows.length; i++) {let row = table.rows[i];let rowData = [];for (let j = 0; j < row.cells.length; j++) {let cellValue = row.cells[j].innerText.trim();rowData.push(cellValue);}dataArray.push(rowData);}
-
-                    let headerRow = table.getElementsByTagName("thead")[0].getElementsByTagName("tr")[0];
-                    for (let i = 0; i < headerRow.cells.length; i++) {
-                        headers.push(headerRow.cells[i].innerText.trim());
+                    for (let i = 0; i < rows.length; i++) {
+                        let id = rows[i].getAttribute('id');
+                        dataArray.push(id);
                     }
 
-                    for (let i = 1; i < table.rows.length; i++) {
-                        let row = table.rows[i];
-                        let rowData = {};
-                        for (let j = 0; j < row.cells.length; j++) {
-                            let cellValue = row.cells[j].innerText.trim();
-                            let header = headers[j];
-                            rowData[capitalizeFirstLetter(header)] = cellValue;
-                        }
-
-                        dataArray.push(rowData);
-                    }
 
                     // console.log(dataArray);
 
-                    let r_type = 2;
-                    if (selectedValue === '3') {
-                        r_type = 3;
-                    } else if (selectedValue === '4') {
-                        r_type = 4;
-                    } else if (selectedValue === '5') {
-                        r_type = selectedValue;
-                    } else if (selectedValue === '6') {
-                        r_type = selectedValue;
-                    }
+                    let r_type = 3;
+
                     let jsonData = JSON.stringify(dataArray);
                     let url =
                         "{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type', 'action' => ':selectedValue']) }}";

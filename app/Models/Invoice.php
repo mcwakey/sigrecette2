@@ -121,6 +121,15 @@ class Invoice extends Model
         //$array = (array)$invoiceitems;
         dd($invoiceitems);
     }
+    /**
+     * Sum amounts by tax code for the given invoice.
+     *
+     * This function calculates the total amount for each tax code present in the invoice
+     * by summing up the amounts of all invoice items associated with that tax code.
+     *
+     * @param Invoice $invoice The invoice object.
+     * @return array An associative array where keys are tax codes and values are the total amounts.
+     */
     public static function sumAmountsByTaxCode(Invoice $invoice)
     {
         //$data = Invoice::retrieveByUUIDs($uuids);
@@ -142,7 +151,19 @@ class Invoice extends Model
         //dd($sumsByTaxCode);
         return $sumsByTaxCode;
     }
-    public static function getCode($id, int $amount, array $paymentData): ?array {
+
+    /**
+     * Get payment codes for a given invoice based on the specified amount.
+     *
+     * This function calculates the payment codes required to cover the specified amount
+     * based on the amounts already paid for each tax code of the invoice.
+     *
+     * @param int $id The ID of the invoice.
+     * @param float $amount The amount to be paid.
+     * @param array $paymentData Additional data for payments.
+     * @return array|null An array containing the payment codes or null if the invoice does not exist.
+     */
+    public static function getCode($id, float $amount, array $paymentData): ?array {
         $invoice = Invoice::find($id);
 
         if ($invoice instanceof Invoice) {

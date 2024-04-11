@@ -31,7 +31,7 @@
         <!--end::Col-->
         <!--begin::Col-->
         <div class="col-xxl-6">
-            @include('partials/widgets/engage/_widget-10')
+            @include('pages.dashboards.widget.root')
         </div>
 
         <!--end::Col-->

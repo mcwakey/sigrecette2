@@ -14,7 +14,7 @@ trait DispatchesMessages
      * @param string $type
      * @return void
      */
-    protected function dispatchMessage(string $resourceName, string $eventType = "create", string $type = "success")
+    protected function dispatchMessage(string $resourceName, string $eventType = "create", string $type = "success",string $custom_message=null)
     {
         switch ($eventType) {
             case 'update':
@@ -27,8 +27,12 @@ trait DispatchesMessages
                 $message = __(':resource créé', ['resource' => $resourceName]);
                 break;
         }
+        if($type=="error"&& $custom_message!=null){
+            $this->dispatch($type, $custom_message);
+        }else{
+            $this->dispatch($type, $message);
+        }
 
-        $this->dispatch($type, $message);
     }
 
 }

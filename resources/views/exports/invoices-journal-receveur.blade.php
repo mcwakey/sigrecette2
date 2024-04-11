@@ -36,7 +36,7 @@
         }
     </style>
 
-    <title>{{$titles[15]}}</title>
+    <title>{{$titles[11]}}</title>
 </head>
 <body>
 
@@ -70,7 +70,7 @@
     <tr>
         <th colspan="11" style="border: none; margin: 0;">
 
-            {{$titles[15]}}
+            {{$titles[11]}}
 
 
         </th>
@@ -112,70 +112,36 @@
 
 
     @foreach($data as $index => $item)
+        @php
+            $sumsByTaxCode = \App\Models\Invoice::sumAmountsByTaxCode($item);
+        @endphp
 
-
-            <td>@if(isset($item->from_date))
-                    {{
-    date(
-        "d-m-Y", strtotime( $item->from_date )
-    )
-    }}
-                @endif</td>
-            <td>{{$item->order_no}}</td>
-            <td>{{$item->invoice_no}}</td>
-            <td>{{$item->nic}}</td>
-            <td>{{$item->taxpayer->name}}</td>
-            <td>{{$item->taxpayer->town->canton->name."-".$item->taxpayer->town->name."-".$item->taxpayer->address}}</td>
-            <td>{{$item->taxpayer->longitude,$item->taxpayer->latitude}}</td>
-            <td>{{$item->amount}}</td>
-        </tr>
+            @foreach($sumsByTaxCode as $code => &$totalAmount)
+                            <tr>
+                                <td>@if($item->delivery_date !=null)
+                                        {{date("d-m-Y", strtotime( $item->delivery_date  ))}}
+                                    @endif</td>
+                                <td>{{$item->order_no}}</td>
+                                <td>{{$item->invoice_no}}</td>
+                                <td>{{$item->nic}}</td>
+                                <td>{{$item->taxpayer->name}}</td>
+                                <td>{{$item->taxpayer->longitude,$item->taxpayer->latitude}}</td>
+                                <td>{{$code}}</td>
+                                <td>{{$totalAmount}}</td>
+                                <td></td>
+                                <td></td>
+                                <td>{{$totalAmount}}</td>
+                            </tr>
+            @endforeach
     @endforeach
 
 
     <tr>
-        <td colspan="9" >{{$titles[11]}} </td>
+        <td colspan="9" >Total </td>
         <td>{{ $total_somme}}</td>
-        <td rowspan="3"></td>
+        <td ></td>
     </tr>
-    <tr>
-        <td colspan="9" >{{$titles[12]}} </td>
-        <td></td>
 
-    </tr>
-    <tr>
-        <td colspan="9">{{$titles[13]}}</td>
-        <td>{{ $total_somme}} </td>
-
-    </tr>
-    <tr>
-        <td colspan="5"></td>
-        <td colspan="6">{{$titles[14]}} : <span>{{number_to_words($total_somme) }}</span> </td>
-
-    </tr>
-    <tr>
-        <td colspan="5" style="border: none; margin: 5;padding: 5;"> </td>
-        <td colspan="6" style="border: none; margin: 5;padding: 5;"></td>
-    </tr>
-    <tr>
-        <td colspan="5" style="border: none; margin: 0; padding: 5px;">
-            A <span> {{$commune->title}}</span> le <span>{{ now()->locale('fr')->format('d-m-Y') }}</span>
-        </td>
-
-
-        <td colspan="6" style="border: none; margin: 0;padding: 0;">Le Maire</td>
-    </tr>
-    <tr>
-        <td colspan="5" style="border: none; margin: 5;padding: 5;"> </td>
-        <td colspan="6" style="border: none; margin: 5;padding: 5;"> {{$commune->mayor_name}} </td>
-    </tr>
-    <tr>
-        <td colspan="5" style="border: none; margin: 5;padding: 5;"> </td>
-        <td colspan="6" style="border: none; margin: 5;padding: 5;"></td>
-    </tr>
-    <tr>
-        <td colspan="5" style="border: none; margin: 0;padding: 0;"></td>
-        <td colspan="6" style="border: none; margin: 0;padding: 0;">[Cachet, signature, Nom et prénoms]</td>
-    </tr>
     </tbody>
 </table>
 

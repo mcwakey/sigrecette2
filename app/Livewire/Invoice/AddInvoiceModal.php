@@ -105,12 +105,6 @@ class AddInvoiceModal extends Component
     public $button_mode = false;
 
     protected $rules = [
-        // 'invoice_id' => 'required|string',
-        // 'invoice_no' => 'required',
-        // 'order_no' => 'required',
-        // 'nic' => 'required',
-        // 'status' => 'required|string',
-
         "s_amount" => "required|numeric",
         "taxpayer_taxable_id" => "required|int",
         "qty" => "required|numeric",
@@ -118,17 +112,9 @@ class AddInvoiceModal extends Component
 
         'taxpayer_id' => 'required|int',
         'amount' => 'required|numeric',
-        'cancel_reduct' => 'required|string',
+        'cancel_reduct' => 'required|string|in:REDUCED,CANCELED',
 
-        // 'telephone' => 'required|string|min:10|max:10',
-        // 'longitude' => 'nullable',
-        // 'latitude' => 'nullable',
-        // 'canton' => 'required',
-        // 'town' => 'required',
-        // 'erea' => 'required',
-        // 'address' => 'required|string',
-        // 'zone_id' => 'required',
-        // 'avatar' => 'nullable|sometimes|image|max:1024',
+
     ];
 
     protected $listeners = [
@@ -216,7 +202,7 @@ class AddInvoiceModal extends Component
         // Validate the form input data
 
 
-        //dd($this);
+        $this->validate();
         DB::transaction(function () {
 
             //dd($this->qty,$this->start_month);

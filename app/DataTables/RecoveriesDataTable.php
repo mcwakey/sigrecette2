@@ -70,7 +70,7 @@ class RecoveriesDataTable extends DataTable
             ->addColumn('action', function (Payment $payment) {
                 return view('pages/recoveries.columns._actions', compact('payment'));
             })
-            ->setRowId('id');
+            ->setRowId('uuid');
     }
 
 

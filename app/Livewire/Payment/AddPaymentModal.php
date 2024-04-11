@@ -55,7 +55,7 @@ class AddPaymentModal extends Component
 
     protected $rules = [
 
-        "amount" => "required",
+        "amount" => "required|numeric",
         "payment_type" => "required",
         "reference" => "required",
 
@@ -239,7 +239,10 @@ class AddPaymentModal extends Component
                     $this->dispatchMessage('Paiement');
                 }
             }
-            $this->dispatchMessage('Paiement','update','error');
+            else{
+                $this->dispatchMessage('Paiment','update','error',"Erreur lors de la mise à jour du paiement,Vous avez saisi des données de paiement incorrectes.");
+
+            }
         });
 
         // Reset form fields after successful submission
