@@ -35,7 +35,6 @@
             <div class="card-toolbar">
                 <!--begin::Toolbar-->
 
-                @can('create collector new deposit')
                     <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                         <!--begin::Add user-->
                         <button type="button" class="btn btn-warning" data-bs-toggle="modal"
@@ -45,7 +44,6 @@
                         </button>
                         <!--end::Add user-->
                     </div>
-                @endcan
                 <!--end::Toolbar-->
 
                     <!--begin::Toolbar-->
