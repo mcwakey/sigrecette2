@@ -36,11 +36,11 @@ class PrintController extends Controller
 
 
         if ($result['success']) {
-            $this->dispatchMessage("Ficher imprimable","create");
+            //$this->dispatchMessage("Ficher imprimable");
             return $result['pdf'];
         }
 
-        $this->dispatchMessage("Ficher imprimable","create","error",$result['message']);
+        //$this->dispatchMessage("Ficher imprimable","create","error",$result['message']);
         return back()->with('error', $result['message']);
     }
 
