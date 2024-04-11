@@ -25,7 +25,6 @@
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
                 <!--begin::Toolbar-->
-                @can('create taxable')
                 <div class="d-flex justify-content-end" data-kt-ticket-table-toolbar="base">
                     <!--begin::Add user-->
                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_ticket">
@@ -35,7 +34,6 @@
                     <!--end::Add user-->
                 </div>
                 <!--end::Toolbar-->
-                @endcan
             </div>
             <!--end::Card toolbar-->
         </div>
