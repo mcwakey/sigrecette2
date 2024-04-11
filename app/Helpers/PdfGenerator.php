@@ -39,10 +39,15 @@ class PdfGenerator
                     return $this->downloadInvoicesList($data,$action,'invoices-distribution',15);
 
                 }
+                elseif ($action==5){
+                    return $this->downloadInvoicesList($data,$action,'invoices-journal-receveur',15);
+
+                }
                 else{
                     return $this->downloadInvoicesList($data,$action,'invoices-list',15);
                 }
-            //case 3:
+            case 3:
+                dd($data,$action,'invoices-journal-receveur');
             //case 4:return 'invoices-distribution';
             //case 5:return 'invoices-recouvrement';
             //case 6:return 'invoices-registre';
@@ -61,11 +66,7 @@ class PdfGenerator
      */
     public function downloadInvoice($data,$action,$templateName){
         $result = $this->generateInvoicePdf($data,$templateName,$action);
-        if ($result['success']) {
-            return $result['pdf'];
-        }
-
-        return back()->with('error', $result['message']);
+        return $result;
     }
 
 
@@ -113,12 +114,7 @@ class PdfGenerator
 
         $result = $this->generateInvoiceListPdf($data,$templateName,$action,$expectedDataSize);
         //dd($data);
-        if ($result['success']) {
-            //$this->dispatchMessage("document");
-            return $result['pdf'];
-        }
-        //$this->dispatchMessage("document","create","error");
-        return back()->with('error', $result['message']);
+        return $result;
     }
 
     /**
