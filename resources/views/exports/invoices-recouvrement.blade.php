@@ -6,7 +6,6 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 900px;
             font-size: 0.75em;
             padding: 2px;
             margin: 0 auto;
@@ -16,7 +15,6 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            padding: 2px;
         }
 
         table, th, td {
@@ -42,7 +40,7 @@
 <table>
     <tr>
         <td colspan="7"  style="border: none; padding: 2px;">
-            REGION PLATEAUX
+            {{$commune->region_name}}
 
         </td>
         <td colspan="7"  style="border: none; padding:2px ;text-align: right;">
@@ -53,7 +51,7 @@
     <tr>
         <td colspan="7" style="border: none; margin: 0; padding:2px ;">
 
-            Commune de Agou
+            {{$commune->title}}
         </td>
         <td colspan="7"  style="border: none; margin: 0 ; padding:2px ; ;text-align: right;">
 
@@ -64,10 +62,10 @@
         <th colspan="14" style="border: none; margin: 0; text-align: center;" class="caption">Fiche de recouvrement des avis distribués</th>
     </tr>
     <tr>
-        <td colspan="14" style="border: none; margin: 0; text-align: center;">N°01</td>
+        <td colspan="14" style="border: none; margin: 0; text-align: center;">N°....</td>
     </tr>
     <tr>
-        <td colspan="14" style="border: none; margin: 0;" >Exercice : 2023</td>
+        <td colspan="14" style="border: none; margin: 0;" >Exercice : {{" ".$year->name}}</td>
     </tr>
     <tr>
         <td colspan="14" style="border: none; margin: 0;">Zone fiscale : Zone 1</td>
@@ -93,31 +91,35 @@
     </tr>
     <tr>
 
-        <td>Somme due (1)</td>
-        <td>Sommes déjà recouvrées (2)</td>
-        <td>Reste à recouvrer (1) – (2)</td>
+        <td>Somme due </td>
+        <td>Sommes déjà recouvrées </td>
+        <td>Reste à recouvrer </td>
         <td>Date de recouvrement</td>
 
         <td>Somme recouvrée</td>
         <td>N° quittance</td>
     </tr>
+    @foreach($data as $index => $item)
+        @foreach($item->invoiceitems as  $subitem)
     <tr>
 
-        <td>ligne2 col1</td>
-        <td>ligne2 col2</td>
-        <td>ligne2 col3</td>
-        <td>ligne2 col4</td>
-        <td>ligne2 col5</td>
-        <td>ligne2 col6</td>
-        <td>ligne2 col7</td>
-        <td>ligne2 col8</td>
-        <td>ligne2 col9</td>
-        <td>ligne2 col10</td>
-        <td>ligne2 col11</td>
-        <td>ligne2 col12</td>
-        <td>ligne2 col13</td>
-        <td>ligne2 col14</td>
+        <td>{{$item->invoice_no}}</td>
+        <td>{{$item->order_no}}</td>
+        <td>{{$subitem->taxpayer_taxable->taxable->tax_label->name}}</td>
+        <td>{{$subitem->taxpayer_taxable->taxable->tax_label->code}}</td>
+        <td>{{$item->nic}}</td>
+        <td>{{$item->taxpayer->name}}</td>
+        <td>{{$item->taxpayer->longitude,$item->taxpayer->latitude}}</td>
+        <td>{{$item->taxpayer->address}}</td>
+        <td>{{$subitem->amount}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
     </tr>
+        @endforeach
+    @endforeach
 
 
 </table>
