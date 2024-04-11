@@ -35,7 +35,6 @@
             <div class="card-toolbar">
                 <!--begin::Toolbar-->
 
-                @can('create collector new deposit')
                     <!-- <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                         <button type="button" class="btn btn-warning" data-bs-toggle="modal"
                             data-bs-target="#kt_modal_add_stock_transfer" data-kt-action="add_deposit">
@@ -43,7 +42,6 @@
                             {{ __('new deposit') }}
                         </button>
                     </div> -->
-                @endcan
                 <!--end::Toolbar-->
 
                     <!--begin::Toolbar-->

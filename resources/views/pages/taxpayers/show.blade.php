@@ -589,7 +589,7 @@
 
 
                                                 <td>
-                                                    @if ($invoice->status == 'PENDING')
+                                                    @if ($invoice->status == 'PENDING' && $invoice->order_no !== null)
                                                         <span
                                                             class="badge badge-light-primary">{{ __($invoice->status) }}</span>
                                                         @can('peut prendre en charge un avis')

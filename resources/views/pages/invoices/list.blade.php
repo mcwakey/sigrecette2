@@ -418,10 +418,7 @@
                         addPrintMenuItem('{{ __('Fiche de distribution des avis') }}', '4');
                         addPrintMenuItem('{{ __('Registre-journal des avis distribués') }}', '3');
                         addPrintMenuItem('{{ __('Journal des avis des sommes à payer confiés par le receveur') }}', '5');
-                        {{--
-                         //
-                        //addPrintMenuItem('{{ __('Fiche de recouvrement des avis distribués') }}', '41');
-                        --}}
+                        addPrintMenuItem('{{ __('Fiche de recouvrement des avis distribués') }}', '41');
 
 
 
