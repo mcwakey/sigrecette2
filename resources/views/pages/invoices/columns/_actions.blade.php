@@ -19,7 +19,6 @@
     @if($invoice->status == 'DRAFT')
         {{-- Anything here --}}
     @elseif($invoice->status == 'APROVED' || $invoice->status == 'CANCELED')
-        @can('print invoice')
             @php
                 $data = [$invoice->uuid];
             @endphp
@@ -27,11 +26,10 @@
             <div class="menu-item px-3">
                 <a href="{{route('generatePdf', ['data' => json_encode($data)]) }}" class="menu-link px-3" target="_blank">{{ __('print') }}</a>
             </div>
-        @endcan
         @if ($invoice->status != 'REDUCED')
                 @if ($invoice->status != 'CANCELED' && $invoice->pay_status != 'PAID')
                     @if ( $invoice->status == 'APROVED')
-                        @can('create invoice delivery date')
+                        @can('peut ajouter la date de livraison d\'un avis')
                             <div class="menu-item px-3">
                                 <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->invoice_no }}"
                                     data-bs-toggle="modal" data-bs-target="#kt_modal_add_payment" data-kt-action="update_payment">
@@ -41,7 +39,7 @@
                         @endcan
                     @endif
                     @if ($invoice->validity == 'VALID')
-                            @can('reduce invoice amount')
+                            @can('peut réduire ou annuler un avis')
                                 <div class="menu-item px-3">
                                     <a href="#" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{ $invoice->id }}"
                                        data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice" data-kt-action="update_invoice">

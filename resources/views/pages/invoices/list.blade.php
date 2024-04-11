@@ -40,7 +40,6 @@
 
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
-                @can('print invoice')
                     <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
                         <div href="#" id="print-btn" class="btn btn-light  btn-flex btn-center ms-auto me-5 hover-elevate-up pulse pulse-success d-none"
                              data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
@@ -56,9 +55,8 @@
                         </div>
 
                     </div>
-                @endcan
             <!--begin::Toolbar-->
-                @can('create no taxpayer invoice payment')
+                @can('peut émettre un avis')
                     <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
                         <!--begin::Add user-->
                     <!-- <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice_no_taxpayer">
@@ -82,7 +80,7 @@
                         <!--end::Add user-->
                     </div>
                 @endcan
-                @can('create invoice automaticaly')
+                @can('peut générer automatiquement les avis')
                         @if (now()->format('m') === '01' || $app->environment('local'))
                             <div class="d-flex justify-content-end" data-kt-invoice-table-toolbar="base">
                                 <!--begin::Add user-->
@@ -234,8 +232,8 @@
 
                                     <button type="button" class="btn btn-light-success ms-auto mx-5" data-kt-user-id="1"
                                             data-bs-toggle="modal"
-                                            @can('create no taxpayer invoice payment') data-bs-target="#kt_modal_add_invoice_no_taxpayer"
-                                            data-kt-action="add_no_invoice" @endcan >
+                                             data-bs-target="#kt_modal_add_invoice_no_taxpayer"
+                                            data-kt-action="add_no_invoice">
                                         <i class="ki-duotone ki-add-files fs-3">
                                             <span class="path1"></span>
                                             <span class="path2"></span>

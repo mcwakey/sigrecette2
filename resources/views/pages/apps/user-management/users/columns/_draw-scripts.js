@@ -5,12 +5,12 @@ KTMenu.init();
 document.querySelectorAll('[data-kt-action="delete_row"]').forEach(function (element) {
     element.addEventListener('click', function () {
         Swal.fire({
-            text: 'Are you sure you want to remove?',
+            text: 'Voulez-vous supprimer ce utilisateur?',
             icon: 'warning',
             buttonsStyling: false,
             showCancelButton: true,
-            confirmButtonText: 'Yes',
-            cancelButtonText: 'No',
+            confirmButtonText: 'Oui',
+            cancelButtonText: 'Non',
             customClass: {
                 confirmButton: 'btn btn-danger',
                 cancelButton: 'btn btn-secondary',

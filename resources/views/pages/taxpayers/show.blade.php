@@ -55,7 +55,7 @@
                         </div>
 
                         @auth
-                            @can('edit taxpayer')
+                            @can('peut modifier un contribuable')
                                 <span data-bs-toggle="tooltip" data-bs-trigger="hover"
                                       title="{{ __('edit Taxpayers details') }}">
                                     <a href="#" class="btn btn-sm btn-light-success"
@@ -161,7 +161,7 @@
                         <a class="nav-link text-active-success pb-4" data-bs-toggle="tab"
                            href="#kt_user_view_overview_events_and_logs_tab">{{ __('events logs') }}</a>
                     </li>
-            @endcan
+                @endcan
             <!--end:::Tab item-->
                 <!--begin:::Tab item-->
                 <li class="nav-item ms-auto">
@@ -196,19 +196,26 @@
                             <div class="menu-content text-muted pb-2 px-5 fs-7 text-uppercase">{{ __('setting') }}
                             </div>
                         </div>
-                        <!--begin::Menu item-->
-                        <div class="menu-item px-5 my-1">
-                            <a href="#" class="menu-link px-5">{{ __('account settings') }}</a>
-                        </div>
-                        <!--end::Menu item-->
+
+                        @can('peut supprimer un contribuable')
+
+                            <!--begin::Menu item-->
+                            <div class="menu-item px-5 my-1">
+                                <a href="#" class="menu-link px-5">{{ __('account settings') }}</a>
+                            </div>
+                            <!--end::Menu item-->
+
+                        @endcan
 
                         <div class="separator my-3"></div>
 
-                        <!--begin::Menu item-->
-                        <div class="menu-item px-5">
-                            <a href="#" class="menu-link text-danger px-5">{{ __('delete taxpayer') }}</a>
-                        </div>
-                        <!--end::Menu item-->
+                        @can('peut supprimer un contribuable')
+                            <!--begin::Menu item-->
+                            <div class="menu-item px-5">
+                                <a href="#" class="menu-link text-danger px-5">{{ __('delete taxpayer') }}</a>
+                            </div>
+                            <!--end::Menu item-->
+                        @endcan
                     </div>
                     <!--end::Menu-->
                     <!--end::Menu-->
@@ -233,7 +240,7 @@
                             <!--begin::Card toolbar-->
 
                             <div class="card-toolbar">
-                                @can('create taxpayer taxable asset')
+                                @can('peut créer une taxation')
                                     <button type="button" class="btn btn-light-success ms-auto me-5"
                                             data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal"
                                             data-bs-target="#kt_modal_add_taxpayer_taxable"
@@ -248,7 +255,7 @@
                                     </button>
                                 @endcan
 
-                                @can('create invoice')
+                                @can('peut émettre un avis')
                                     <button type="button" class="btn btn-light-danger ms-auto"
                                             data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal"
                                             data-bs-target="#kt_modal_add_invoice" data-kt-action="add_invoice">
@@ -455,6 +462,7 @@
                                                 <td>{{ $invoice->invoice_no }}</td>
                                                 <td>
                                                     @if ( $invoice->order_no == null && $invoice->delivery == 'NOT DELIVERED')
+                                                        @can('peut ajouter le numéro d\'ordre de recette d\'un avis')
                                                         <button type="button"
                                                                 class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
                                                                 data-kt-user-id="{{ $invoice->id }}"
@@ -468,6 +476,8 @@
                                                                 <span class="path2"></span>
                                                             </i>
                                                         </button>
+                                                        @endcan
+
                                                         <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px"
                                                              data-kt-menu="true"
                                                              data-kt-menu-id="kt_modal_add_orderno" tabindex="-1"
@@ -530,7 +540,7 @@
                                                 <td>
                                                     @if ($invoice->status == 'APROVED'||$invoice->status == 'CANCELED' || $invoice->status =='REDUCED' || $invoice->status =='APROVED-CANCELLATION')
                                                         @if ($invoice->delivery == 'NOT DELIVERED'&& $invoice->order_no !== null)
-                                                            @can('create invoice delivery date')
+                                                            @can('peut ajouter la date de livraison d\'un avis')
                                                                 <button type="button"
                                                                         class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
                                                                         data-kt-user-id="{{ $invoice->id }}"
@@ -582,7 +592,7 @@
                                                     @if ($invoice->status == 'PENDING')
                                                         <span
                                                             class="badge badge-light-primary">{{ __($invoice->status) }}</span>
-                                                        @can('change invoice pending status to approved')
+                                                        @can('peut prendre en charge un avis')
                                                             <button type="button"
                                                                     class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
                                                                     data-kt-user-id="{{ $invoice->id }}"
@@ -609,7 +619,7 @@
                                                         <span
                                                             class="badge badge-light-secondary">{{ __('DRAFT') }}</span>
 
-                                                        @can('change invoice draft status to pending')
+                                                        @can('peut accepter un avis')
                                                             <button type="button"
                                                                     class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
                                                                     data-kt-user-id="{{ $invoice->id }}"
@@ -699,20 +709,16 @@
                                                                 @php
                                                                     $data = [$invoice->uuid];
                                                                 @endphp
-                                                                @can('print invoice')
 
                                                                     <a href="{{ route('generatePdf', ['data' => json_encode($data)]) }}"
                                                                        class="menu-link px-3"
                                                                        target="_blank">{{ __('print') }}</a>
 
-                                                                @endcan
-
-
                                                             </div>
                                                             @if ($invoice->status != 'REDUCED')
                                                                 @if ($invoice->status !== 'CANCELED' && $invoice->pay_status != 'PAID')
                                                                     @if ( $invoice->status == 'APROVED' || $invoice->status =='APROVED-CANCELLATION')
-                                                                        @can('create invoice payment')
+                                                                        @can('peut ajouter un paiement')
                                                                             <div class="menu-item px-3">
                                                                                 <a href="#"
                                                                                    class="menu-link px-3"
@@ -727,7 +733,7 @@
                                                                 @endif
                                                                 @if ($invoice->validity == 'VALID')
 
-                                                                    @can('reduce invoice amount')
+                                                                    @can('peut réduire ou annuler un avis')
                                                                         <!--begin::Menu item-->
                                                                             <div class="menu-item px-3">
                                                                                 <a href="#" class="menu-link px-3"
@@ -826,7 +832,7 @@
                                                 @if ($payment->status == 'PENDING' )
                                                     <span
                                                         class="badge badge-light-primary">{{ __($payment->status) }}</span>
-                                                    @can('change invoice pending status to approved')
+                                                    @can('peut prendre en charge un paiement')
                                                         <button type="button"
                                                                 class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
                                                                 data-kt-user-id="{{ $payment->id }}"

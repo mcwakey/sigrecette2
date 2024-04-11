@@ -26,7 +26,7 @@ class UsersAssignedRoleDataTable extends DataTable
                 return view('pages/apps.user-management.roles.columns._user', compact('user'));
             })
             ->editColumn('created_at', function (User $user) {
-                return $user->created_at->format('d M Y, h:i a');
+                return \Carbon\Carbon::parse($user->created_at)->locale('fr')->isoFormat('LL');
             })
             ->addColumn('action', function (User $user) {
                 return view('pages/apps.user-management.roles.columns._actions', compact('user'));

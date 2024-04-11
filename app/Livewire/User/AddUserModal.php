@@ -65,9 +65,9 @@ class AddUserModal extends Component
             $this->rules['email'] = 'required|email|unique:users,email,' . $this->user_id;
         }
 
-        $roleNeedZone = ['agent_recouvrement', 'collecteur'];
+        $roleNeedZone = [__('agent_recouvrement'), __('collecteur')];
 
-        if (in_array($this->role, $roleNeedZone)) {
+        if (in_array(__($this->role), $roleNeedZone)) {
             $this->rules['zone_id'] = 'required|integer';
         } else if ($this->zone_id) {
             $this->zone_id =  null;
@@ -110,7 +110,7 @@ class AddUserModal extends Component
                 $user->syncRoles($this->role);
 
                 // Emit a success event with a message
-                $this->dispatch('success', __('User updated'));
+                $this->dispatch('success', __('Utilisateur mis a jour avec succès'));
             } else {
                 // Assign selected role for user
                 $user->assignRole($this->role);
@@ -119,7 +119,7 @@ class AddUserModal extends Component
                 // Password::sendResetLink($user->only('email'));
 
                 // Emit a success event with a message
-                $this->dispatch('success', __('New user created'));
+                $this->dispatch('success', __('Utilisateur créer avec succès'));
             }
         });
 
@@ -131,7 +131,7 @@ class AddUserModal extends Component
     {
         // Prevent deletion of current user
         if ($id == Auth::id()) {
-            $this->dispatch('error', 'User cannot be deleted');
+            $this->dispatch('error', 'La session courant ne peut etre supprimé.');
             return;
         }
 
@@ -139,7 +139,7 @@ class AddUserModal extends Component
         User::destroy($id);
 
         // Emit a success event with a message
-        $this->dispatch('success', 'User successfully deleted');
+        $this->dispatch('success', 'Utilisateur supprimer avec succès');
     }
 
     public function updateUser($id)
@@ -149,6 +149,7 @@ class AddUserModal extends Component
         $user = User::find($id);
 
         $this->user_id = $user->id;
+        $this->zone_id = $user->zone_id;
         $this->saved_avatar = $user->profile_photo_url;
         $this->name = $user->name;
         $this->email = $user->email;

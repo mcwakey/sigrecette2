@@ -27,7 +27,7 @@ class PermissionsDataTable extends DataTable
                 return view('pages/apps.user-management.permissions.columns._assign-to', compact('roles'));
             })
             ->editColumn('created_at', function (Permission $permission) {
-                return $permission->created_at->format('d M Y');
+                return \Carbon\Carbon::parse($permission->created_at)->locale('fr')->isoFormat('LL');
             })
             ->addColumn('actions', function (Permission $permission) {
                 return view('pages/apps.user-management.permissions.columns._actions', compact('permission'));
@@ -65,9 +65,9 @@ class PermissionsDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('name'),
-            Column::make('assigned_to'),
-            Column::make('created_at')->addClass('text-nowrap'),
+            Column::make('name')->title('Nom de la permission'),
+            Column::make('assigned_to')->title('Assigner a '),
+            Column::make('created_at')->addClass('text-nowrap')->title('CEER le'),
             // Column::computed('actions')
             //     ->addClass('text-end text-nowrap')
             //     ->exportable(false)

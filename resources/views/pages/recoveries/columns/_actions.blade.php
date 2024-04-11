@@ -14,7 +14,7 @@
 
         @if($payment->status=="CANCELED")
         <div class="menu-item px-3">
-            <a href="{{-- route('generatePdf', ['data' => json_encode($data)]) --}}" class="menu-link px-3" target="_blank">{{ __('print') }}</a>
+            <a href="" class="menu-link px-3" target="_blank">{{ __('print') }}</a>
         </div>
         @elseif($payment->status=="DRAFT")
         <!-- <div class="menu-item px-3">
@@ -28,24 +28,23 @@
             </a>
         </div>
         @elseif($payment->status=="APROVED")
-
-            <div class="menu-item px-3">
-
-                <a href="{{-- route('generatePdf', ['data' => json_encode($data)]) --}}" class="menu-link px-3" target="_blank">{{ __('print') }}</a>
-            </div>
             @if($payment->pay_status != "PAID")
-            <div class="menu-item px-3">
+            @can('peut ajouter un paiement')
+            {{-- <div class="menu-item px-3">
                 <a href="#" class="menu-link px-3" data-kt-user-id="{{ $payment->invoice_no }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_payment" data-kt-action="update_payment">
                     {{ __('create payment') }}
                 </a>
-            </div>
+            </div> --}}
+            @endcan
             @endif
             @if($payment->validity == "VALID")
-            <div class="menu-item px-3">
-                <a href="#" class="menu-link px-3" data-kt-user-id="{{ $payment->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice" data-kt-action="update_invoice">
-                    {{ __('reduction cancelation') }}
-                </a>
-            </div>
+                @can('peut réduire ou annuler un avis')
+                {{-- <div class="menu-item px-3">
+                    <a href="#" class="menu-link px-3" data-kt-user-id="{{ $payment->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice" data-kt-action="update_invoice">
+                        {{ __('reduction cancelation') }}
+                    </a>
+                </div> --}}
+                @endcan
             @endif
 
         @endif

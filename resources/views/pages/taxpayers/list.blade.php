@@ -43,7 +43,7 @@
             <div class="card-toolbar">
 
             <!--begin::Toolbar-->
-            @can('create taxpayer')
+            @can('peut créer un contribuable')
             <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
                 <!--begin::Add user-->
                 <button type="button" class="btn btn-light-success h-45px ms-auto" data-bs-toggle="modal"

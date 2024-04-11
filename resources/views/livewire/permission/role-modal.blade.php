@@ -32,7 +32,7 @@
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input class="form-control form-control-solid" placeholder="Entrer le nom du role"
+                            <input class="form-control form-control" placeholder="Entrer le nom du role"
                                 name="name" wire:model="name" />
                             <!--end::Input-->
                             @error('name')
@@ -62,7 +62,7 @@
                                             </td> --}}
                                                 <!--begin::Checkbox-->
                                                 <label
-                                                    class="form-check my-4 form-check-sm form-check-custom form-check-solid me-9">
+                                                    class="form-check my-4 form-check-sm form-check-custom form-check me-9">
                                                     <input class="form-check-input" type="checkbox"
                                                         id="kt_roles_select_all" wire:model="check_all"
                                                         wire:change="checkAll" />
@@ -86,7 +86,7 @@
                                                         <div class="d-flex">
                                                             <!--begin::Checkbox-->
                                                             <label
-                                                                class="form-check form-check-sm form-check-custom form-check-solid me-5 me-lg-20">
+                                                                class="form-check form-check-sm form-check-custom form-check me-5 me-lg-20">
                                                                 <input class="form-check-input" type="checkbox"
                                                                     wire:model="checked_permissions"
                                                                     value="{{ $permission->name }}" />

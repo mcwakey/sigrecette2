@@ -127,7 +127,7 @@ class AddTaxpayerModal extends Component
     }
 
     protected $listeners = [
-        'delete_user' => 'deleteUser',
+        'delete_taxpayer' => 'deleteUser',
         'update_taxpayer' => 'updateTaxPayer',
         'load_drop' => 'loadDrop',
     ];

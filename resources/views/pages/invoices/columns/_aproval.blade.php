@@ -1,6 +1,6 @@
     @if($invoice->status == "PENDING")
     <div class="badge badge-lg badge-light-primary d-inline">{{ __($invoice->status) }}
-        @can('change invoice pending status to approved')
+        @can('peut prendre en charge un avis')
             <button type="button"
                     class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
                     data-kt-user-id="{{ $invoice->id }}"
@@ -38,7 +38,7 @@
     <div class="badge badge-lg badge-light-danger d-inline">{{ __('REJECTED') }}</div>
     @elseif($invoice->status=="DRAFT")
     <div class="badge badge-lg badge-light-secondary d-inline">{{ __('DRAFT')}}
-        @can('change invoice draft status to pending')
+        @can('peut accepter un avis')
             <button type="button"
                     class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
                     data-kt-user-id="{{ $invoice->id }}"

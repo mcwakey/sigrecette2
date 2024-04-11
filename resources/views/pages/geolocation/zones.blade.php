@@ -10,14 +10,6 @@
             <!--begin::Card title-->
             <div class="card-title">
                 <div class="d-flex align-items-center">
-                    <!--begin::Input group-->
-                    {{-- <div class="d-flex align-items-center position-relative my-1">
-                        {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
-                        <input type="text" data-kt-invoice-table-filter="search" class="form-control w-250px ps-13"
-                            placeholder="{{ __('search') }}" id="mySearchInput" />
-                    </div> --}}
-                    <!--end::Input group-->
-                    <!--begin:Action-->
                     <div class="d-flex align-items-center ms-5">
                         <a href="#" id="kt_horizontal_search_advanced_link" data-kt-rotate="true"
                             class="btn btn-outline btn-outline-dashed btn-outline-secondary btn-active-light-secondary me-5 rotate"
@@ -26,9 +18,7 @@
                                 class="ki-duotone ki-black-right-line fs-2 rotate-270 ms-3"><span
                                     class="path1"></span><span class="path2"></span></i></a>
                     </div>
-
                     <!--end:Action-->
-
                 </div>
             </div>
         </div>
@@ -50,6 +40,17 @@
                             <input type="text" class="form-control" name="tags" id="mySearchOne" />
                         </div>
                         <!--end::Col-->
+
+                        <!--begin::Col-->
+                        <div class="col-xxl-3">
+                            <label class="fs-6 form-label fw-bold text-dark">{{ __('Status') }}</label>
+                            <!--begin::Select-->
+                            <select class="form-select" id="mySearchFive">
+                                <option value=""></option>
+                            </select>
+                            <!--end::Select-->
+                        </div>
+
                         <!--begin::Col-->
                         <div class="col-xxl-3">
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('zone') }}</label>
@@ -60,14 +61,15 @@
                             <!--end::Select-->
                         </div>
 
-                             <!--begin::Actions-->
-                            <div class="col-xxl-3">
-                                <button type="submit" class="btn btn-success mt-8">
-                                    <span class="indicator-label" wire:loading.remove>{{ __('Rechercher
-                                    ') }}</span>
-                                </button>
-                            </div>
-                            <!--end::Actions-->
+                        <!--begin::Actions-->
+                        <div class="col-xxl-3">
+                            <button type="submit" class="btn btn-success mt-8">
+                                <span class="indicator-label"
+                                    wire:loading.remove>{{ __('Rechercher
+                                                                        ') }}</span>
+                            </button>
+                        </div>
+                        <!--end::Actions-->
 
                     </div>
                     <!--end::Row-->

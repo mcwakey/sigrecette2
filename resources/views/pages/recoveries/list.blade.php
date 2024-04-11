@@ -42,13 +42,11 @@
             <div class="card-toolbar">
                 <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
 
-                    @can('print invoice')
                         <div href="#" class="btn btn-light btn-active-light-primary btn-flex btn-center ms-auto me-5"
                             data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                             {{ __('print') }}
                             <i class="ki-duotone ki-down fs-5 ms-1"></i>
                         </div>
-                    @endcan
 
                     <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4"
                         data-kt-menu="true" id="print-modal">
