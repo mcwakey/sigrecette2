@@ -17,6 +17,7 @@
                     <span class="path5"></span>
                 </i>
             </button>
+            @endcan
             <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px"
                 data-kt-menu="true"
                 data-kt-menu-id="kt_modal_add_delivery">
@@ -38,7 +39,6 @@
             <!--end::Task menu-->
 
 
-        @endcan
     @elseif($invoice->delivery == 'DELIVERED')
         {{ date('Y-m-d', strtotime($invoice->delivery_date)) }}
     @endif
