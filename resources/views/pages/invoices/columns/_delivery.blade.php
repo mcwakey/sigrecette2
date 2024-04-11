@@ -1,6 +1,7 @@
-@if ($invoice->status == 'APROVED'||$invoice->status == 'CANCELED')
-    @if ($invoice->delivery == 'NOT DELIVERED')
-        @can('add invoice delivery date')
+@if ($invoice->status == 'APROVED'||$invoice->status == 'CANCELED'  || $invoice->status =='REDUCED')
+    @if ($invoice->delivery_date == null && $invoice->order_no !== null)
+        {{ __('NOT DELIVERED') }}
+        @can('peut ajouter la date de livraison d\'un avis')
             <button type="button"
                 class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
                 data-kt-user-id="{{ $invoice->id }}"
@@ -35,10 +36,10 @@
                 <!--end::Form-->
             </div>
             <!--end::Task menu-->
-        @else
-        {{ __('NOT DELIVERED') }}
+
+
         @endcan
-    @else
+    @elseif($invoice->delivery == 'DELIVERED')
         {{ date('Y-m-d', strtotime($invoice->delivery_date)) }}
     @endif
 @else

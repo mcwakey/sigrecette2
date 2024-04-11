@@ -24,6 +24,7 @@
 
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
+                @can('peut créer un utilisateur')
                 <!--begin::Toolbar-->
                 <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
                     <!--begin::Add user-->
@@ -34,6 +35,7 @@
                     <!--end::Add user-->
                 </div>
                 <!--end::Toolbar-->
+                @endcan
 
                 <!--begin::Modal-->
                 <livewire:user.add-user-modal></livewire:user.add-user-modal>

@@ -56,7 +56,7 @@
                                 <input type="text" wire:model="zone" name="zone" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('zone') }}" />
 
                                 <!--end::Input-->
-                                @error('zone_id')
+                                @error('zone')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>
@@ -118,7 +118,8 @@
                                 </select>
                                 <span class="input-group-text" id="basic-addon1">2024</span>
                                         </div>
-
+                                @error('start_month')
+                                <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
 
                         </div>
@@ -268,7 +269,7 @@
                                     <!--begin::Input control-->
                                     <input wire:model="reduce_amount" name="reduce_amount" type="text" class="form-control text-end" readonly />
                                     <!--end::Input control-->
-                                    @error('qty')
+                                    @error('reduce_amount')
                                     <span class="text-danger">{{ $message }}</span> @enderror
                                     <!--begin::Increase control-->
 

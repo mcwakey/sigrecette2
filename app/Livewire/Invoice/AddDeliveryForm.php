@@ -3,13 +3,14 @@
 namespace App\Livewire\Invoice;
 
 use App\Models\Invoice;
+use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 
 class AddDeliveryForm extends Component
 {
     //use WithFileUploads;
-
+    use DispatchesMessages;
     public $invoice_id;
 
     //public $delivery;
@@ -20,8 +21,8 @@ class AddDeliveryForm extends Component
 
     protected $rules = [
         //"delivery" =>"required",
-        "delivery_date" =>"required",
-        "delivery_to"=>"required",
+        "delivery_date" =>"required|string",
+        "delivery_to"=>"required|string",
     ];
 
     protected $listeners = [
@@ -62,8 +63,7 @@ class AddDeliveryForm extends Component
                 $invoice->$k = $v;
             }
             $invoice->save();
-
-            $this->dispatch('success', __('Invoice updated'));
+            $this->dispatchMessage('Avis', 'update');
         });
 
         // Reset form fields after successful submission

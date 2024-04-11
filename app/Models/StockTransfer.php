@@ -16,6 +16,7 @@ class StockTransfer extends Model
         'qty',
         'start_no',
         'end_no',
+        'code',
         'last_no',
         'taxable_id',
         'trans_type',
@@ -31,5 +32,10 @@ class StockTransfer extends Model
     public function user()
     {
         return $this->belongsTo(User::class, "to_user_id");
+    }
+    
+    public function payment()
+    {
+        return $this->belongsTo(Payment::class);
     }
 }

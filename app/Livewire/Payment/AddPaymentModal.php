@@ -9,6 +9,7 @@ use App\Models\IdType;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Payment;
+use App\Traits\DispatchesMessages;
 use Illuminate\Support\Facades\Notification;
 use App\Models\Taxpayer;
 use App\Models\TaxpayerTaxable;
@@ -25,6 +26,7 @@ use Spatie\Permission\Models\Role;
 class AddPaymentModal extends Component
 {
     //use WithFileUploads;
+    use DispatchesMessages;
 
     public $payment_id;
     public $invoice_id;
@@ -53,11 +55,11 @@ class AddPaymentModal extends Component
 
     protected $rules = [
 
-        "amount" => "required",
+        "amount" => "required|numeric",
         "payment_type" => "required",
         "reference" => "required",
 
-        'taxpayer_id' => 'required',
+        //'taxpayer_id' => 'required',
         'invoice_id' => 'required',
     ];
 
@@ -145,86 +147,101 @@ class AddPaymentModal extends Component
 
         DB::transaction(function () {
 
-            // Prepare data for Payment
-            $paymentData = [
-                'invoice_id' => $this->invoice_id,
-                'taxpayer_id' => $this->taxpayer_id,
-                'amount' => $this->amount,
-                'payment_type' => $this->payment_type,
-                'reference' => $this->reference,
-                'remaining_amount' =>$this->bill-($this->amount + $this->paid),
-                'user_id'=>  Auth::id(),
-
-            ];
-
-            //dd($paymentData);
-
-            // Create or update Payment record
-            $payment = Payment::find($this->payment_id) ?? Payment::create($paymentData);
-
-
-            // $taxpayerTaxableData = [
-            //     'pay_status' => $payment->id,
-            // ];
-
-            // $invoice = Invoice::find($this->invoice_id);
-            //dd($this->bill,$this->amount);
-
-            if ($this->amount + $this->paid >= $this->bill){
-                $paystatus = "PAID";
-            }else{
-                $paystatus = "PART PAID";
-            }
-            $data = [
-                'pay_status' => $paystatus,
-            ];
-
-            //dd($invoiceData);
-
-            // Create or update Invoice record
             $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
+            if(($this->paid+$this->amount)<= $invoice->amount){
+                $paymentData = [
+                    // 'invoice_id' => $this->invoice_id,
+                    'invoice_id' => $this->invoice_no,
+                    'taxpayer_id' => ($this->taxpayer_id === "") ? null : $this->taxpayer_id,
+                    'amount' => $this->amount,
+                    'payment_type' => $this->payment_type,
+                    'reference' => $this->reference,
+                    'description' => "Avis ".$this->invoice_no.", OR " .$this->order_no,
+                    'remaining_amount' =>$this->bill-($this->amount + $this->paid),
+                    'user_id'=>  Auth::id(),
 
-            $this->invoice_id = $invoice->id;
+                ];
+                $payments=Invoice::getCode($this->invoice_no,$this->amount,$paymentData);
+                //dd($paymentData);
 
-            foreach ($data as $k => $v) {
-                $invoice->$k = $v;
+                // Create or update Payment record
+                $payment = Payment::find($this->payment_id) ;
+
+                if($payment==null){
+                    foreach ($payments as $payment){
+                        Payment::create($payment);
+                    }
+                }
+
+
+                // $taxpayerTaxableData = [
+                //     'pay_status' => $payment->id,
+                // ];
+
+                // $invoice = Invoice::find($this->invoice_id);
+                //dd($this->bill,$this->amount);
+
+                if ($this->amount + $this->paid >= $this->bill){
+                    $paystatus = "PAID";
+                }else{
+                    $paystatus = "PART PAID";
+                }
+                $data = [
+                    'pay_status' => $paystatus,
+                ];
+
+                //dd($invoiceData);
+
+                // Create or update Invoice record
+
+
+                $this->invoice_id = $invoice->id;
+
+                foreach ($data as $k => $v) {
+                    $invoice->$k = $v;
+                }
+                $invoice->save();
+
+                // foreach ($taxpayerTaxables as $taxpayerTaxable) {
+                //     $taxpayerTaxable->update($taxpayerTaxableData);
+                // }
+
+                // // Prepare data for Payment_items
+                // $paymentItemsData = [
+                //     'payment_id' => $payment->id,
+                //     'taxpayer_taxable_id' => $this->taxpayer_taxable_id,
+                //     'qty' => $this->qty,
+                //     'amount' => $this->s_amount,
+                // ];
+
+                //dd($paymentItemsData);
+
+                // foreach ($this->taxpayer_taxable_id as $index => $taxpayer_taxable_id) {
+                //     PaymentItem::create([
+                //         'payment_id' => $payment->id,
+                //         'taxpayer_taxable_id' => $taxpayer_taxable_id,
+                //         'qty' => $this->qty,
+                //         'amount' => $this->s_amount[$index],
+                //     ]);
+                // }
+
+                $role = Role::where('name', 'regisseur')->first();
+
+                if ($role) {
+                    $users = $role->users()->get();
+                    // Notification::send($users, new InvoicePaid($payment,Auth::user()));
+
+                }
+
+                if ($this->edit_mode) {
+                    $this->dispatchMessage('Paiement', 'update');
+                } else {
+                    $this->dispatchMessage('Paiement');
+                }
             }
-            $invoice->save();
+            else{
+                $this->dispatchMessage('Paiment','update','error',"Erreur lors de la mise à jour du paiement,Vous avez saisi des données de paiement incorrectes.");
 
-            // foreach ($taxpayerTaxables as $taxpayerTaxable) {
-            //     $taxpayerTaxable->update($taxpayerTaxableData);
-            // }
-
-            // // Prepare data for Payment_items
-            // $paymentItemsData = [
-            //     'payment_id' => $payment->id,
-            //     'taxpayer_taxable_id' => $this->taxpayer_taxable_id,
-            //     'qty' => $this->qty,
-            //     'amount' => $this->s_amount,
-            // ];
-
-            //dd($paymentItemsData);
-
-            // foreach ($this->taxpayer_taxable_id as $index => $taxpayer_taxable_id) {
-            //     PaymentItem::create([
-            //         'payment_id' => $payment->id,
-            //         'taxpayer_taxable_id' => $taxpayer_taxable_id,
-            //         'qty' => $this->qty,
-            //         'amount' => $this->s_amount[$index],
-            //     ]);
-            // }
-
-            $role = Role::where('name', 'regisseur')->first();
-
-            if ($role) {
-                $users = $role->users()->get();
-                Notification::send($users, new InvoicePaid($payment));
-
-            }
-            if ($this->edit_mode) {
-                $this->dispatch('success', __('Payment updated'));
-            } else {
-                $this->dispatch('success', __('New Payment created'));
             }
         });
 
@@ -245,7 +262,8 @@ class AddPaymentModal extends Component
         Payment::destroy($id);
 
         // Emit a success event with a message
-        $this->dispatch('success', 'Payment successfully deleted');
+       // $this->dispatch('success', 'Payment successfully deleted');
+        $this->dispatchMessage('Paiement', 'delete');
     }
 
     public function updatePayment($id)
@@ -262,11 +280,12 @@ class AddPaymentModal extends Component
                             //dd($invoice);
 
         $this->invoice_id = $invoice->id;
-        $this->taxpayer_id = $invoice->taxpayer->id;
 
-        $this->name = $invoice->taxpayer->name;
-        $this->tnif = $invoice->taxpayer->id;
-        $this->zone = $invoice->taxpayer->zone->name;
+        $this->taxpayer_id = $invoice->taxpayer->id ?? "";
+
+        $this->name = $invoice->taxpayer->name ?? "";
+        $this->tnif = $invoice->taxpayer->id ?? "";
+        $this->zone = $invoice->taxpayer->zone->name ?? "";
 
         $this->invoice_no = $invoice->invoice_no;
         $this->order_no = $invoice->order_no;
@@ -275,11 +294,13 @@ class AddPaymentModal extends Component
         $this->qty = $invoice->qty;
         $this->bill = $invoice->amount;
 
-        $payments = Payment::where('invoice_id', $invoice->id)->get();
+        $payments = Payment::where('invoice_id', $invoice->invoice_no)->get();
         $this->s_amount = []; // Initialize as an empty array
 
         foreach ($payments as $index => $payment) {
-            $this->s_amount[$index] = $payment->amount;
+            if ($payment->description!=="Annulation/Réduction"){
+                $this->s_amount[$index] = $payment->amount;
+            }
         }
 
         $this->paid = array_sum($this->s_amount) ?? 0;

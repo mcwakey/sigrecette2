@@ -17,11 +17,12 @@ document.querySelectorAll('[data-kt-action="delete_taxpayer"]').forEach(function
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                Livewire.dispatch('delete_user', [this.getAttribute('data-kt-user-id')]);
+                Livewire.dispatch('delete_taxpayer', [this.getAttribute('data-kt-user-id')]);
             }
         });
     });
 });
+
 
 // Add click event listener to update buttons
 document.querySelectorAll('[data-kt-action="update_taxpayer"]').forEach(function (element) {

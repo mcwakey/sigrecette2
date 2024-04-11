@@ -37,64 +37,14 @@
                         <div class="mb-9">
                             @foreach($user->roles as $role)
                                 <!--begin::Badge-->
-                                <div class="badge badge-lg badge-light-primary d-inline">{{ ucwords($role->name) }}</div>
+                                <div class="badge badge-lg badge-light-primary d-inline">{{ ucwords(__($role->name)) }}</div>
                                 <!--begin::Badge-->
                             @endforeach
                         </div>
                         <!--end::Position-->
-                        <!--begin::Info-->
-                        <!--begin::Info heading-->
-                        <div class="fw-bold mb-3">Assigned Tickets
-                            <span class="ms-2" ddata-bs-toggle="popover" data-bs-trigger="hover" data-bs-html="true" data-bs-content="Number of support tickets assigned, closed and pending this week.">
-                                <i class="ki-duotone ki-information fs-7">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                    <span class="path3"></span>
-                                </i>
-                            </span>
-                        </div>
-                        <!--end::Info heading-->
-                        <div class="d-flex flex-wrap flex-center">
-                            <!--begin::Stats-->
-                            <div class="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
-                                <div class="fs-4 fw-bold text-gray-700">
-                                    <span class="w-75px">243</span>
-                                    <i class="ki-duotone ki-arrow-up fs-3 text-success">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </i>
-                                </div>
-                                <div class="fw-semibold text-muted">Total</div>
-                            </div>
-                            <!--end::Stats-->
-                            <!--begin::Stats-->
-                            <div class="border border-gray-300 border-dashed rounded py-3 px-3 mx-4 mb-3">
-                                <div class="fs-4 fw-bold text-gray-700">
-                                    <span class="w-50px">56</span>
-                                    <i class="ki-duotone ki-arrow-down fs-3 text-danger">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </i>
-                                </div>
-                                <div class="fw-semibold text-muted">Solved</div>
-                            </div>
-                            <!--end::Stats-->
-                            <!--begin::Stats-->
-                            <div class="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
-                                <div class="fs-4 fw-bold text-gray-700">
-                                    <span class="w-50px">188</span>
-                                    <i class="ki-duotone ki-arrow-up fs-3 text-success">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </i>
-                                </div>
-                                <div class="fw-semibold text-muted">Open</div>
-                            </div>
-                            <!--end::Stats-->
-                        </div>
-                        <!--end::Info-->
                     </div>
                     <!--end::User Info-->
+
                     <!--end::Summary-->
                     <!--begin::Details toggle-->
                     <div class="d-flex flex-stack fs-4 py-3">
@@ -103,9 +53,17 @@
                                 <i class="ki-duotone ki-down fs-3"></i>
                             </span>
                         </div>
-                        <span data-bs-toggle="tooltip" data-bs-trigger="hover" title="Edit customer details">
-                            <a href="#" class="btn btn-sm btn-light-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_update_details">Edit</a>
+                        @can('peut modifier un utilisateur')
+                        <span data-bs-toggle="tooltip" data-bs-trigger="hover">
+                            <a href="#" class="btn btn-sm btn-light btn-active-light-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_update_details">Modifier</a>
                         </span>
+                        @endcan
+
+                        @can('peut supprimer un utilisateur')
+                        <span data-bs-toggle="tooltip" data-bs-trigger="hover">
+                            <a href="#" class="btn btn-sm btn-light btn-active-light-danger" data-bs-toggle="modal" data-bs-target="#kt_modal_update_details">supprimer</a>
+                        </span>
+                        @endcan
                     </div>
                     <!--end::Details toggle-->
                     <div class="separator"></div>
@@ -121,22 +79,14 @@
                             <div class="text-gray-600">
                                 <a href="#" class="text-gray-600 text-hover-primary">{{ $user->email }}</a>
                             </div>
-                            {{-- <!--begin::Details item-->
-                            <!--begin::Details item-->
-                            <div class="fw-bold mt-5">Address</div>
-                            <div class="text-gray-600">101 Collin Street,
-                                <br />Melbourne 3000 VIC
-                                <br />Australia
-                            </div>
-                            <!--begin::Details item-->
-                            <!--begin::Details item-->
-                            <div class="fw-bold mt-5">Language</div>
-                            <div class="text-gray-600">English</div>
-                            <!--begin::Details item-->
-                            <!--begin::Details item-->
-                            <div class="fw-bold mt-5">Last Login</div>
-                            <div class="text-gray-600">05 May 2023, 9:23 pm</div>
-                            <!--begin::Details item--> --}}
+
+                            <div class="fw-bold mt-5">{{ __('zone') }}</div>
+                            <div class="text-gray-600">{{ $user->zone ? $user->zone->name  : '---' }}</div>
+
+                            
+                            <div class="fw-bold mt-5">{{ __('joined_date') }}</div>
+                            <div class="text-gray-600">{{ \Carbon\Carbon::parse($user->created_at)->locale('fr')->isoFormat('LL') }}</div>
+
                         </div>
                     </div>
                     <!--end::Details content-->
@@ -145,144 +95,31 @@
             </div>
             <!--end::Card-->
 
-
-            {{-- <!--begin::Connected Accounts-->
-            <div class="card mb-5 mb-xl-8">
-                <!--begin::Card header-->
-                <div class="card-header border-0">
-                    <div class="card-title">
-                        <h3 class="fw-bold m-0">Connected Accounts</h3>
-                    </div>
-                </div>
-                <!--end::Card header-->
-                <!--begin::Card body-->
-                <div class="card-body pt-2">
-                    <!--begin::Notice-->
-                    <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed mb-9 p-6">
-                        <!--begin::Icon-->
-                        <i class="ki-duotone ki-design-1 fs-2tx text-primary me-4"></i>
-                        <!--end::Icon-->
-                        <!--begin::Wrapper-->
-                        <div class="d-flex flex-stack flex-grow-1">
-                            <!--begin::Content-->
-                            <div class="fw-semibold">
-                                <div class="fs-6 text-gray-700">By connecting an account, you hereby agree to our
-                                    <a href="#" class="me-1">privacy policy</a>and
-                                    <a href="#">terms of use</a>.
-                                </div>
-                            </div>
-                            <!--end::Content-->
-                        </div>
-                        <!--end::Wrapper-->
-                    </div>
-                    <!--end::Notice-->
-                    <!--begin::Items-->
-                    <div class="py-2">
-                        <!--begin::Item-->
-                        <div class="d-flex flex-stack">
-                            <div class="d-flex">
-                                <img src="{{ image('svg/brand-logos/google-icon.svg') }}" class="w-30px me-6" alt=""/>
-                                <div class="d-flex flex-column">
-                                    <a href="#" class="fs-5 text-gray-900 text-hover-primary fw-bold">Google</a>
-                                    <div class="fs-6 fw-semibold text-muted">Plan properly your workflow</div>
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <!--begin::Switch-->
-                                <label class="form-check form-switch form-switch-sm form-check-custom form-check-solid">
-                                    <!--begin::Input-->
-                                    <input class="form-check-input" name="google" type="checkbox" value="1" id="kt_modal_connected_accounts_google" checked="checked" />
-                                    <!--end::Input-->
-                                    <!--begin::Label-->
-                                    <span class="form-check-label fw-semibold text-muted" for="kt_modal_connected_accounts_google"></span>
-                                    <!--end::Label-->
-                                </label>
-                                <!--end::Switch-->
-                            </div>
-                        </div>
-                        <!--end::Item-->
-                        <div class="separator separator-dashed my-5"></div>
-                        <!--begin::Item-->
-                        <div class="d-flex flex-stack">
-                            <div class="d-flex">
-                                <img src="{{ image('svg/brand-logos/github.svg') }}" class="w-30px me-6" alt="" />
-                                <div class="d-flex flex-column">
-                                    <a href="#" class="fs-5 text-gray-900 text-hover-primary fw-bold">Github</a>
-                                    <div class="fs-6 fw-semibold text-muted">Keep eye on on your Repositories</div>
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <!--begin::Switch-->
-                                <label class="form-check form-switch form-switch-sm form-check-custom form-check-solid">
-                                    <!--begin::Input-->
-                                    <input class="form-check-input" name="github" type="checkbox" value="1" id="kt_modal_connected_accounts_github" checked="checked" />
-                                    <!--end::Input-->
-                                    <!--begin::Label-->
-                                    <span class="form-check-label fw-semibold text-muted" for="kt_modal_connected_accounts_github"></span>
-                                    <!--end::Label-->
-                                </label>
-                                <!--end::Switch-->
-                            </div>
-                        </div>
-                        <!--end::Item-->
-                        <div class="separator separator-dashed my-5"></div>
-                        <!--begin::Item-->
-                        <div class="d-flex flex-stack">
-                            <div class="d-flex">
-                                <img src="{{ image('svg/brand-logos/slack-icon.svg') }}" class="w-30px me-6" alt="" />
-                                <div class="d-flex flex-column">
-                                    <a href="#" class="fs-5 text-gray-900 text-hover-primary fw-bold">Slack</a>
-                                    <div class="fs-6 fw-semibold text-muted">Integrate Projects Discussions</div>
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <!--begin::Switch-->
-                                <label class="form-check form-switch form-switch-sm form-check-custom form-check-solid">
-                                    <!--begin::Input-->
-                                    <input class="form-check-input" name="slack" type="checkbox" value="1" id="kt_modal_connected_accounts_slack" />
-                                    <!--end::Input-->
-                                    <!--begin::Label-->
-                                    <span class="form-check-label fw-semibold text-muted" for="kt_modal_connected_accounts_slack"></span>
-                                    <!--end::Label-->
-                                </label>
-                                <!--end::Switch-->
-                            </div>
-                        </div>
-                        <!--end::Item-->
-                    </div>
-                    <!--end::Items-->
-                </div>
-                <!--end::Card body-->
-                <!--begin::Card footer-->
-                <div class="card-footer border-0 d-flex justify-content-center pt-0">
-                    <button class="btn btn-sm btn-light-primary">Save Changes</button>
-                </div>
-                <!--end::Card footer-->
-            </div>
-            <!--end::Connected Accounts--> --}}
-
         </div>
         <!--end::Sidebar-->
         <!--begin::Content-->
         <div class="flex-lg-row-fluid ms-lg-15">
             <!--begin:::Tabs-->
             <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-semibold mb-8">
-                <!--begin:::Tab item-->
+                {{-- <!--begin:::Tab item-->
                 <li class="nav-item">
                     <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab" href="#kt_user_view_overview_tab">Overview</a>
                 </li>
-                <!--end:::Tab item-->
+                <!--end:::Tab item--> --}}
                 <!--begin:::Tab item-->
                 <li class="nav-item">
-                    <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab" href="#kt_user_view_overview_security">Security</a>
+                    <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab" href="#kt_user_view_overview_events_and_logs_tab">Événements</a>
                 </li>
                 <!--end:::Tab item-->
                 <!--begin:::Tab item-->
                 <li class="nav-item">
-                    <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#kt_user_view_overview_events_and_logs_tab">Events & Logs</a>
+                    <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab" href="#kt_user_view_overview_security">Sécurité</a>
                 </li>
                 <!--end:::Tab item-->
-                <!--begin:::Tab item-->
+
+                {{-- Action section **** --}}
+
+                {{-- <!--begin:::Tab item-->
                 <li class="nav-item ms-auto">
                     <!--begin::Action menu-->
                     <a href="#" class="btn btn-primary ps-7" data-kt-menu-trigger="click" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">Actions
@@ -378,12 +215,14 @@
                     <!--end::Menu-->
                     <!--end::Menu-->
                 </li>
-                <!--end:::Tab item-->
+                <!--end:::Tab item--> --}}
             </ul>
             <!--end:::Tabs-->
+
             <!--begin:::Tab content-->
             <div class="tab-content" id="myTabContent">
-                <!--begin:::Tab pane-->
+
+                {{-- <!--begin:::Tab pane-->
                 <div class="tab-pane fade show active" id="kt_user_view_overview_tab" role="tabpanel">
                     <!--begin::Card-->
                     <div class="card card-flush mb-6 mb-xl-9">
@@ -2121,7 +1960,8 @@
                     </div>
                     <!--end::Tasks-->
                 </div>
-                <!--end:::Tab pane-->
+                <!--end:::Tab pane--> --}}
+
                 <!--begin:::Tab pane-->
                 <div class="tab-pane fade" id="kt_user_view_overview_security" role="tabpanel">
                     <!--begin::Card-->
@@ -2475,18 +2315,20 @@
                     <!--end::Card-->
                 </div>
                 <!--end:::Tab pane-->
+                
                 <!--begin:::Tab pane-->
-                <div class="tab-pane fade" id="kt_user_view_overview_events_and_logs_tab" role="tabpanel">
+                <div class="tab-pane fade show active" id="kt_user_view_overview_events_and_logs_tab" role="tabpanel">
                     <!--begin::Card-->
                     <div class="card pt-4 mb-6 mb-xl-9">
                         <!--begin::Card header-->
                         <div class="card-header border-0">
                             <!--begin::Card title-->
                             <div class="card-title">
-                                <h2>Login Sessions</h2>
+                                <h2>Session</h2>
                             </div>
                             <!--end::Card title-->
-                            <!--begin::Card toolbar-->
+
+                            {{-- <!--begin::Card toolbar-->
                             <div class="card-toolbar">
                                 <!--begin::Filter-->
                                 <button type="button" class="btn btn-sm btn-flex btn-light-primary" id="kt_modal_sign_out_sesions">
@@ -2496,7 +2338,9 @@
                                     </i>Sign out all sessions</button>
                                 <!--end::Filter-->
                             </div>
-                            <!--end::Card toolbar-->
+                            <!--end::Card toolbar--> --}}
+
+
                         </div>
                         <!--end::Card header-->
                         <!--begin::Card body-->
@@ -2507,36 +2351,16 @@
                                 <table class="table align-middle table-row-dashed gy-5" id="kt_table_users_login_session">
                                     <thead class="border-bottom border-gray-200 fs-7 fw-bold">
                                         <tr class="text-start text-muted text-uppercase gs-0">
-                                            <th class="min-w-100px">Location</th>
-                                            <th>Device</th>
-                                            <th>IP Address</th>
-                                            <th class="min-w-125px">Time</th>
+                                            <th>Address IP</th>
+                                            <th class="min-w-125px">{{ __('last_login') }}</th>
                                             <th class="min-w-70px">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody class="fs-6 fw-semibold text-gray-600">
                                         <tr>
-                                            <td>Australia</td>
-                                            <td>Chome - Windows</td>
-                                            <td>207.20.21.295</td>
-                                            <td>23 seconds ago</td>
-                                            <td>Current session</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Australia</td>
-                                            <td>Safari - iOS</td>
-                                            <td>207.15.21.72</td>
-                                            <td>3 days ago</td>
-                                            <td>
-                                                <a href="#" data-kt-users-sign-out="single_user">Sign out</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Australia</td>
-                                            <td>Chrome - Windows</td>
-                                            <td>207.10.28.325</td>
-                                            <td>last week</td>
-                                            <td>Expired</td>
+                                            <td>{{ $user->last_login_ip ?? '---' }}</td>
+                                            <td>{{ $user->last_login_at ? $user->last_login_at->diffForHumans() : $user->updated_at->diffForHumans()}}</td>
+                                            <td>Connexion</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -2556,7 +2380,8 @@
                                 <h2>Logs</h2>
                             </div>
                             <!--end::Card title-->
-                            <!--begin::Card toolbar-->
+
+                            {{-- <!--begin::Card toolbar-->
                             <div class="card-toolbar">
                                 <!--begin::Button-->
                                 <button type="button" class="btn btn-sm btn-light-primary">
@@ -2566,7 +2391,8 @@
                                     </i>Download Report</button>
                                 <!--end::Button-->
                             </div>
-                            <!--end::Card toolbar-->
+                            <!--end::Card toolbar--> --}}
+
                         </div>
                         <!--end::Card header-->
                         <!--begin::Card body-->
@@ -2576,7 +2402,7 @@
                                 <!--begin::Table-->
                                 <table class="table align-middle table-row-dashed fw-semibold text-gray-600 fs-6 gy-5" id="kt_table_users_logs">
                                     <tbody>
-                                        @foreach ($taxpayerActionLog as $action)   
+                                        @foreach ($userActionLog as $action)   
                                         <tr>
                                             <td class="min-w-70px">
                                                 <div class="badge {{(int)json_decode($action->response)->status <= 300 ? 'badge-light-success' : 'badge-light-danger' }}">
@@ -2589,40 +2415,10 @@
                                                 {{ $action->taxpayer ? ' : ' . $action->taxpayer->name : '' }}
                                             </td>
                                             <td class="pe-0 text-end min-w-200px">
-                                                {{$action->created_at}}
+                                                {{\Carbon\Carbon::parse($action->created_at)->locale('fr')->isoFormat('LL');}}
                                             </td>
                                         </tr>
                                         @endforeach
-
-
-                                        {{-- <tr>
-                                            <td class="min-w-70px">
-                                                <div class="badge badge-light-danger">500 ERR</div>
-                                            </td>
-                                            <td>POST /v1/invoice/in_6877_1633/invalid</td>
-                                            <td class="pe-0 text-end min-w-200px">25 Oct 2023, 11:30 am</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="min-w-70px">
-                                                <div class="badge badge-light-success">200 OK</div>
-                                            </td>
-                                            <td>POST /v1/invoices/in_5648_7203/payment</td>
-                                            <td class="pe-0 text-end min-w-200px">15 Apr 2023, 6:43 am</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="min-w-70px">
-                                                <div class="badge badge-light-danger">500 ERR</div>
-                                            </td>
-                                            <td>POST /v1/invoice/in_6877_1633/invalid</td>
-                                            <td class="pe-0 text-end min-w-200px">25 Oct 2023, 8:43 pm</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="min-w-70px">
-                                                <div class="badge badge-light-success">200 OK</div>
-                                            </td>
-                                            <td>POST /v1/invoices/in_1431_5657/payment</td>
-                                            <td class="pe-0 text-end min-w-200px">21 Feb 2023, 11:05 am</td>
-                                        </tr> --}}
                                     </tbody>
                                 </table>
                                 <!--end::Table-->
@@ -2632,7 +2428,7 @@
                         <!--end::Card body-->
                     </div>
                     <!--end::Card-->
-                    <!--begin::Card-->
+                    {{-- <!--begin::Card-->
                     <div class="card pt-4 mb-6 mb-xl-9">
                         <!--begin::Card header-->
                         <div class="card-header border-0">
@@ -2738,7 +2534,7 @@
                         </div>
                         <!--end::Card body-->
                     </div>
-                    <!--end::Card-->
+                    <!--end::Card--> --}}
                 </div>
                 <!--end:::Tab pane-->
             </div>

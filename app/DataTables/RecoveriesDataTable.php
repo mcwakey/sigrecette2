@@ -39,7 +39,7 @@ class RecoveriesDataTable extends DataTable
                 return $payment->reference;
             })
             ->editColumn('tax_labels.id', function (Payment $payment) {
-                return $payment->invoice->invoiceitems()->first()->taxpayer_taxable->taxable->tax_label->code ?? '';
+                return $payment->code ?? '';
             })
             ->editColumn('nic', function (Payment $payment) {
                 return $payment->invoice->nic;
@@ -70,7 +70,7 @@ class RecoveriesDataTable extends DataTable
             ->addColumn('action', function (Payment $payment) {
                 return view('pages/recoveries.columns._actions', compact('payment'));
             })
-            ->setRowId('id');
+            ->setRowId('uuid');
     }
 
 
@@ -81,10 +81,12 @@ class RecoveriesDataTable extends DataTable
         $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
 
         return $model->newQuery()
-                    ->join('invoices', 'invoices.id', '=', 'payments.invoice_id')
-                    ->whereBetween('payments.created_at', [$startOfYear, $endOfYear])
-                    ->select('payments.*');
+            ->join('invoices', 'invoices.id', '=', 'payments.invoice_id')
+            ->whereNotNull('payments.user_id')
+            ->whereBetween('payments.created_at', [$startOfYear, $endOfYear])
+            ->select('payments.*');
     }
+
 
     /**
      * Optional method if you want to use the html builder.

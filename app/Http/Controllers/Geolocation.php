@@ -10,29 +10,39 @@ use Illuminate\Contracts\View\View;
 
 class Geolocation extends Controller
 {
-    public function zones()
+    public function zones(Request $request)
     {
-        $zones = Zone::with([
-            'taxpayers',
-            'taxpayers.taxpayer_taxables',
-            'taxpayers.town',
-            'taxpayers.town.canton',
-            'taxpayers.erea',
-            'taxpayers.invoices'
-        ])->get();
+        $taxpayers = Taxpayer::query()->with([
+            'taxpayer_taxables',
+            'town',
+            'town.canton',
+            'erea',
+            'zone',
+            'invoices'
+        ]);
 
-        return View('pages/geolocation.zones', compact('zones'));
-    }
+        if ($request->has('zone')) {
+            $taxpayers->where('zone', $request->zone);
+        }
 
-    public function zoneWithTaxpayers(string $zone)
-    {
-        $zone = Zone::with(['taxpayers', 'taxpayers.town', 'taxpayers.town.canton', 'taxpayers.erea'])->find($zone);
-        return View('pages/geolocation.zone_with_taxpayers', compact('zone'));
+        if ($request->has('status')) {
+            $taxpayers->whereHas('invoices', function ($invoiceQuery) use ($request) {
+                $invoiceQuery->where('pay_status', $request->invoice_status);
+            });
+        }
+
+        if ($request->has('taxpayer')) {
+            $taxpayers->where('name', 'like', '%' . $request->taxpayer . '%');
+        }
+
+        $taxpayers = $taxpayers->get();
+
+        return View('pages.geolocation.taxpayers', compact('taxpayers',));
     }
 
     public function users()
     {
         $users = User::all();
-        return View('pages/geolocation.users', compact('users'));
+        return View('pages.geolocation.users', compact('users'));
     }
 }

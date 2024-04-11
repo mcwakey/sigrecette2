@@ -4,6 +4,8 @@ namespace App\Helpers;
 
 use App\Models\Commune;
 use App\Models\Invoice;
+use App\Traits\DispatchesMessages;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -16,18 +18,117 @@ class PdfGenerator
     }
 
 
+
+    /**
+     * @param $type
+     * @param $data
+     * @return \Illuminate\Http\RedirectResponse|Response|mixed
+     */
+    public function processType($type, $data,$action)
+    {
+
+        switch ($type) {
+            case 1:
+                return $this->downloadReceipt($data,$action,'payments');
+            case 2:
+
+                if($action==3){
+                    return $this->downloadInvoicesList($data,$action,'invoices-registre',15);
+                }
+                elseif ($action==4){
+                    return $this->downloadInvoicesList($data,$action,'invoices-distribution',15);
+
+                }
+                elseif ($action==5){
+                    return $this->downloadInvoicesList($data,$action,'invoices-journal-receveur',15);
+
+                }
+                else{
+                    return $this->downloadInvoicesList($data,$action,'invoices-list',15);
+                }
+            case 3:
+                dd($data,$action,'invoices-journal-receveur');
+            //case 4:return 'invoices-distribution';
+            //case 5:return 'invoices-recouvrement';
+            //case 6:return 'invoices-registre';
+            case 6:return $this->downloadStateValueCollector($data,$action,'state-account-iv-collector',15);
+            case 7:return $this->downloadStateValueReciepient($data,$action,'state-account-iv-receveur',15);
+            default:
+                return $this->downloadInvoice($data,$action,'invoices');
+
+        }
+    }
+    /**
+     * @param $data
+     * @param $type
+     * @param PdfGenerator $pdfGenerator
+     * @return \Illuminate\Http\RedirectResponse|mixed
+     */
+    public function downloadInvoice($data,$action,$templateName){
+        $result = $this->generateInvoicePdf($data,$templateName,$action);
+        return $result;
+    }
+
+
+    public function downloadMultiple( $data)
+    {
+
+        $data = json_decode($data, true);
+        foreach ($data as $key => $subdata) {
+
+            if(count($subdata)>4){
+                $filename = 'document_' . $key . '.pdf';
+                $pdf= PDF::loadView('exports.invoices', ['data' => $subdata])
+                    ->save(Storage::path('exports') . DIRECTORY_SEPARATOR . $filename)
+                    ->stream($filename);
+                dd($pdf);
+            }
+
+        }
+        return back();
+    }
+    public function downloadReceipt( $data)
+    {
+
+
+        $data = json_decode($data, true);
+
+        $filename="receipt-".$data[2].'-'.Str::random(8).".pdf";
+
+        //dd($data);
+        $pdf= PDF::loadView('exports.payments', ['data' => $data])
+            // ->save(Storage::path('exports') . DIRECTORY_SEPARATOR . $filename)
+            ->stream($filename);
+        return $pdf;
+
+    }
+
+
+    /**
+     * @param $data
+     * @param $type
+     * @return \Illuminate\Http\RedirectResponse|mixed
+     */
+    public function downloadInvoicesList($data,$action, $templateName,$expectedDataSize = 14)
+    {
+
+        $result = $this->generateInvoiceListPdf($data,$templateName,$action,$expectedDataSize);
+        //dd($data);
+        return $result;
+    }
+
     /**
      * @param array $data
      * @param string $template
      * @param int|null $action
      * @return array
      */
-    public function generateInvoiceListPdf(array $data,string $template,int $action=null):array
+    public function generateInvoiceListPdf(array $data,string $template,int $action=null,$expectedDataSize):array
     {
 
         //dd($data,$template,$action);
-
-        if ($this->checkInvoiceListDataUniformity($data)&& $this->checkIfCommuneIsNotNull()) {
+        $data=Invoice::retrieveByUUIDs($data);
+        if ($this->checkIfCommuneIsNotNull()) {
 
             $filename = "Invoice-list-" . Str::random(8) . ".pdf";
             //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
@@ -74,8 +175,21 @@ class PdfGenerator
                 $base_array[14]= "Arrêté le présent bordereau journal de réduction ou d’annulation à la somme de";
                 $base_array[15]= "Bordereau journal des avis de réduction ou d’annulation";
                 break;
-            case 3:
-                $base_array[15]= "Journal des avis des sommes à payer confiés par le receveur";
+            case 5:
+                $base_array = [
+                    "Date réception/ encaissement",
+                    "N° OR",
+                    "N° Avis des sommes à payer",
+                    "NIC",
+                    "Nom ou raison sociale du contribuable",
+                    "Coordonnées GPS",
+                    "Imputation",
+                    "Montant émis",
+                    "N° quittance",
+                    "Montant encaissé/ annulé",
+                    "Reste à recouvrer",
+                    "Journal des avis des sommes à payer confiés par le receveur"
+                ];
                 break;
             default:
                 $base_array[0] = "N° Avis de réduction ou d’annulation";
@@ -98,11 +212,8 @@ class PdfGenerator
      * @param $data
      * @return bool
      */
-    private function checkInvoiceListDataUniformity($data): bool
+    private function checkInvoiceListDataUniformity($data,int $expectedDataSize): bool
     {
-
-
-        $expectedDataSize = 14;
 
         foreach ($data as $item) {
             if (count($item) !== $expectedDataSize) {
@@ -169,36 +280,98 @@ class PdfGenerator
     public function generateInvoicePdf(array $data,string $templateName,int $action=null ):array
     {
 
+        $data=Invoice::retrieveByUUIDs($data);
+        usort($data, function ($a, $b) {
+            $codeA = $a->taxpayer_taxable->taxable->tax_label->code;
+            $codeB = $b->taxpayer_taxable->taxable->tax_label->code;
+            return strcmp($codeA, $codeB);
+        });
+
+        if ( $data!==false&&count($data)==1&&$this->checkIfCommuneIsNotNull()) {
+            $default_invoice =$data[0];
+
+            $filename="Invoice-".Str::random(8).".pdf";
 
 
-        if ($this->checkInvoiceDataUniformity($data) && $this->checkIfCommuneIsNotNull()) {
-
-            $filename="Invoice-".$data[2].'-'.Str::random(8).".pdf";
-
-            //dd($data);
-            $new_amount=0;
 
 
-            if($action==2 || ( intval($data[1]) !==end($data))){
+            if($action==2 || ( intval($default_invoice->invoice_no) !==$default_invoice->id)){
                 $action=2;
-                $invoice = Invoice::find( $data[1]);
+                $invoice = Invoice::find( $default_invoice->invoice_no);
+
             }
+
 
             if($action ==null){
 
                 $action=1;
-                $pdf= PDF::loadView("exports.".$templateName, ['data' => $data,'action'=>$action,"commune"=> $this->commune])
+                $pdf= PDF::loadView(
+                    "exports.".$templateName, ['data' => $default_invoice,'action'=>$action,"commune"=> $this->commune])
                     // ->save(Storage::path('exports') . DIRECTORY_SEPARATOR . $filename)
+
+                    //->setPaper('a4', 'landscape')
                     ->stream($filename);
             }else{
-                $pdf= PDF::loadView("exports.".$templateName, ['data' => $data,'action'=>$action,'invoice'=> $invoice,"commune"=> $this->commune])
+                $pdf= PDF::loadView(
+                    "exports.".$templateName, ['data' => $default_invoice,'action'=>$action,'invoice'=> $invoice,"commune"=> $this->commune])
                     // ->save(Storage::path('exports') . DIRECTORY_SEPARATOR . $filename)
+                    //->setPaper('a4', 'landscape')
                     ->stream($filename);
             }
 
 
             return ['success' => true, 'pdf' => $pdf];
         }
+
+        return ['success' => false, 'message' => 'Invalid data structure.'];
+    }
+
+    private function downloadStateValueCollector($data, $action, string$templateName,$expectedDataSize)
+    {
+        $result = $this->generateStateValueCollectorPdf($data,$templateName,$action,$expectedDataSize);
+        //dd($data);
+        if ($result['success']) {
+            return $result['pdf'];
+        }
+
+        return back()->with('error', $result['message']);
+    }
+
+    private function generateStateValueCollectorPdf($data, string $template, $action, $expectedDataSize)
+    {
+       // if ($this->checkInvoiceListDataUniformity($data,$expectedDataSize)&& $this->checkIfCommuneIsNotNull()) {
+
+            $filename = "StateValueCollector" . Str::random(8) . ".pdf";
+            //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
+            $pdf = PDF::loadView("exports.".$template, ['data' => $data,"commune"=> $this->commune])->setPaper('a4', 'landscape')->stream($filename);
+
+            return ['success' => true, 'pdf' => $pdf];
+       // }
+
+        return ['success' => false, 'message' => 'Invalid data structure.'];
+    }
+
+    private function downloadStateValueReciepient($data, $action, string $template, int $expectedDataSize)
+    {
+        $result = $this->generateStateValueReciepientPdf($data,$template,$action,$expectedDataSize);
+        //dd($data);
+        if ($result['success']) {
+            return $result['pdf'];
+        }
+
+        return back()->with('error', $result['message']);
+    }
+
+    private function generateStateValueReciepientPdf($data, $template, $action, $expectedDataSize)
+    {
+        // if ($this->checkInvoiceListDataUniformity($data,$expectedDataSize)&& $this->checkIfCommuneIsNotNull()) {
+
+        $filename = "StateValueCollector" . Str::random(8) . ".pdf";
+        //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
+        $pdf = PDF::loadView("exports.".$template, ['data' => $data,"commune"=> $this->commune])->setPaper('a4', 'landscape')->stream($filename);
+
+        return ['success' => true, 'pdf' => $pdf];
+        // }
 
         return ['success' => false, 'message' => 'Invalid data structure.'];
     }

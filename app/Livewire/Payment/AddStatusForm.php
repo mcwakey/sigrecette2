@@ -3,6 +3,7 @@
 namespace App\Livewire\Payment;
 
 use App\Models\Payment;
+use App\Traits\DispatchesMessages;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 class AddStatusForm extends Component
 {
     //use WithFileUploads;
+    use DispatchesMessages;
 
     public $payment_id;
 
@@ -58,7 +60,8 @@ class AddStatusForm extends Component
                 $payment->$k = $v;
             }
             $payment->save();
-                $this->dispatch('success', __('Payment updated'));
+                //$this->dispatch('success', __('Payment updated'));
+            $this->dispatchMessage('Paiement', 'update');
         });
 
         // Reset form fields after successful submission

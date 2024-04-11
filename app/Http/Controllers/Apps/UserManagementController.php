@@ -39,11 +39,12 @@ class UserManagementController extends Controller
      */
     public function show(User $user)
     {
-        $taxpayerActionLog = UserLogs::where('user_id',$user->id)
+        $userActionLog = UserLogs::where('user_id',$user->id)
         ->orderBy('id', 'desc')
+        ->limit(3)
         ->get();
         
-        return view('pages/apps.user-management.users.show', compact('user','taxpayerActionLog'));
+        return view('pages/apps.user-management.users.show', compact('user','userActionLog'));
     }
 
     /**

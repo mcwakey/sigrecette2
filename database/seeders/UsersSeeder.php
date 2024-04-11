@@ -27,7 +27,7 @@ class UsersSeeder extends Seeder
 
         User::create([
             'name'  => 'Administrateur',
-            'email' => 'Administeur@demo.com',
+            'email' => 'Administrateur@demo.com',
             'password' => Hash::make('demo'),
             'email_verified_at' => now(),
             'longitude' => json_encode([6.145761, 6.148153, 6.142344]),
@@ -35,8 +35,8 @@ class UsersSeeder extends Seeder
         ]);
 
         User::create([
-            'name'  => 'Maire',
-            'email' => 'Maire@demo.com',
+            'name'  => 'Ordonateur',
+            'email' => 'Ordonateur@demo.com',
             'password' => Hash::make('demo'),
             'email_verified_at' => now(),
             'longitude' => json_encode([6.145761, 6.148153, 6.142344]),
@@ -73,15 +73,6 @@ class UsersSeeder extends Seeder
         User::create([
             'name'  => 'Agent De Recouvrement',
             'email' => 'AgentDeRecouvrement@demo.com',
-            'password' => Hash::make('demo'),
-            'email_verified_at' => now(),
-            'longitude' => json_encode([6.145761, 6.148153, 6.142344]),
-            'latitude' => json_encode([1.204888, 1.209127, 1.207924]),
-        ]);
-
-        User::create([
-            'name'  => 'Collecteur',
-            'email' => 'Collecteur@demo.com',
             'password' => Hash::make('demo'),
             'email_verified_at' => now(),
             'longitude' => json_encode([6.145761, 6.148153, 6.142344]),

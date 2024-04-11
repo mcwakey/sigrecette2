@@ -1,25 +1,18 @@
 
-
-@php
-    $user = Auth::user();
-
-    // Récupérer les notifications de l'utilisateur
-    $notifications = $user->notifications;
-@endphp
 <div class="menu menu-sub menu-sub-dropdown menu-column w-350px w-lg-375px" data-kt-menu="true" id="kt_menu_notifications">
 	<!--begin::Heading-->
 	<div class="d-flex flex-column bgi-no-repeat rounded-top" style="background-image:url('assets/media/misc/menu-header-bg.jpg')">
 		<!--begin::Title-->
 		<h3 class="text-white fw-semibold px-9 mt-10 mb-6">Notifications
-		<span class="fs-8 opacity-75 ps-3">24 reports</span></h3>
+    <span class="fs-8 opacity-75 ps-3">{{count(Auth::user()->notifications)}}</span></h3>
 		<!--end::Title-->
 		<!--begin::Tabs-->
 		<ul class="nav nav-line-tabs nav-line-tabs-2x nav-stretch fw-semibold px-9">
 			<li class="nav-item">
-				<a class="nav-link text-white opacity-75 opacity-state-100 pb-4" data-bs-toggle="tab" href="#kt_topbar_notifications_1">Alerts</a>
+				<a class="nav-link text-white opacity-75 opacity-state-100 pb-4 active" data-bs-toggle="tab" href="#kt_topbar_notifications_1">Alerts</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link text-white opacity-75 opacity-state-100 pb-4 active" data-bs-toggle="tab" href="#kt_topbar_notifications_2">Updates</a>
+				<a class="nav-link text-white opacity-75 opacity-state-100 pb-4 " data-bs-toggle="tab" href="#kt_topbar_notifications_2">Updates</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link text-white opacity-75 opacity-state-100 pb-4" data-bs-toggle="tab" href="#kt_topbar_notifications_3">Logs</a>
@@ -35,7 +28,7 @@
 			<!--begin::Items-->
 			<div class="scroll-y mh-325px my-5 px-8">
 
-                @if(Auth::user() && Auth::user()->notifications->isNotEmpty())
+                @if(Auth::user()->notifications->isNotEmpty())
 
                             @foreach (Auth::user()->notifications as $notification)
                                 <div class="d-flex flex-stack py-4">

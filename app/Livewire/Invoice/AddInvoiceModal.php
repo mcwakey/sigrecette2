@@ -11,15 +11,22 @@ use App\Models\InvoiceItem;
 use App\Models\Taxpayer;
 use App\Models\TaxpayerTaxable;
 use App\Models\Town;
+use App\Notifications\InvoiceCreated;
+use App\Notifications\InvoicePaid;
+use App\Traits\DispatchesMessages;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Spatie\Permission\Models\Role;
 
 class AddInvoiceModal extends Component
 {
     //use WithFileUploads;
+    use DispatchesMessages;
 
     public $invoice_id;
 
@@ -98,30 +105,16 @@ class AddInvoiceModal extends Component
     public $button_mode = false;
 
     protected $rules = [
-        // 'invoice_id' => 'required|string',
-        // 'invoice_no' => 'required',
-        // 'order_no' => 'required',
-        // 'nic' => 'required',
-        // 'status' => 'required|string',
+        "s_amount" => "required|numeric",
+        "taxpayer_taxable_id" => "required|int",
+        "qty" => "required|numeric",
+        "start_month" => "required|string",
 
-        "s_amount" => "required",
-        "taxpayer_taxable_id" => "required",
-        "qty" => "required",
-        "start_month" => "required",
+        'taxpayer_id' => 'required|int',
+        'amount' => 'required|numeric',
+        'cancel_reduct' => 'required|string|in:REDUCED,CANCELED',
 
-        'taxpayer_id' => 'required',
-        'amount' => 'required',
-        //'cancel_reduct' => 'required',
 
-        // 'telephone' => 'required|string|min:10|max:10',
-        // 'longitude' => 'nullable',
-        // 'latitude' => 'nullable',
-        // 'canton' => 'required',
-        // 'town' => 'required',
-        // 'erea' => 'required',
-        // 'address' => 'required|string',
-        // 'zone_id' => 'required',
-        // 'avatar' => 'nullable|sometimes|image|max:1024',
     ];
 
     protected $listeners = [
@@ -207,9 +200,9 @@ class AddInvoiceModal extends Component
 
 
         // Validate the form input data
-        $this->validate();
 
-        //dd($this);
+
+        $this->validate();
         DB::transaction(function () {
 
             //dd($this->qty,$this->start_month);
@@ -223,7 +216,7 @@ class AddInvoiceModal extends Component
                 'amount' => $this->amount,
                 'qty' => $this->qty,
                 'from_date' => date('Y-') . $this->start_month . "-01",
-                'to_date' => date('Y-') . $this->start_month + $this->qty . "-01",
+                'to_date' => date('Y-') . $this->start_month + $this->qty - 1 . "-31",
                 // 'pay_status' => 'DRAFT',
             ];
 
@@ -309,15 +302,23 @@ class AddInvoiceModal extends Component
                 $invoice_old->save();
             }
 
-            $invoice->order_no = $invoice_old->order_no;
+            //$invoice->order_no = $invoice_old->order_no;
             $invoice->pay_status = $invoice_old->pay_status;
             $invoice->save();
 
-            // Dispatch success message
+            if($this->edit_mode!=false){
+                $role = Role::where('name', 'agent_delegation')->first();
+                if ($role) {
+                    $users = $role->users()->get();
+                    Notification::send($users, new InvoiceCreated($invoice,Auth::user(),'agent_delegation'));
+
+                }
+            }
+
             if ($this->edit_mode) {
-                $this->dispatch('success', __('Invoice updated'));
+                $this->dispatchMessage('Avis', 'update');
             } else {
-                $this->dispatch('success', __('New Invoice created'));
+                $this->dispatchMessage('Avis');
             }
         });
 
@@ -338,7 +339,7 @@ class AddInvoiceModal extends Component
         Invoice::destroy($id);
 
         // Emit a success event with a message
-        $this->dispatch('success', 'Invoice successfully deleted');
+        $this->dispatchMessage('Avis', 'delete');
     }
 
     public function viewInvoice($id)

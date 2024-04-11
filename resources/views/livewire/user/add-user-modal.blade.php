@@ -6,7 +6,7 @@
             <!--begin::Modal header-->
             <div class="modal-header" id="kt_modal_add_user_header">
                 <!--begin::Modal title-->
-                <h2 class="fw-bold">{{ __('add_user') }}</h2>
+                <h2 class="fw-bold">Utilisateur</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
@@ -81,7 +81,7 @@
                             <label class="required fw-semibold fs-6 mb-2">{{ __('fullname') }}</label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="text" wire:model="name" name="name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('fullname') }}"/>
+                            <input type="text" wire:model="name" name="name" class="form-control form-control mb-3 mb-lg-0" placeholder="{{ __('fullname') }}"/>
                             <!--end::Input-->
                             @error('name')
                             <span class="text-danger">{{ $message }}</span> @enderror
@@ -93,7 +93,7 @@
                             <label class="required fw-semibold fs-6 mb-2">{{ __('email') }}</label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="email" wire:model="email" name="email" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="example@domain.com"/>
+                            <input type="email" wire:model="email" name="email" class="form-control form-control mb-3 mb-lg-0" placeholder="example@domain.com"/>
                             <!--end::Input-->
                             @error('email')
                             <span class="text-danger">{{ $message }}</span> @enderror
@@ -152,6 +152,7 @@
                             @endforeach
                             <!--end::Roles-->
 
+                            
                             <div class="fv-row mt-7">
                                 <!--begin::Label-->
                                 <label class="fw-semibold fs-6 mb-2">{{ __('Zone') }}</label>
@@ -168,7 +169,7 @@
                                 <span class="text-danger">{{ $message }}</span> 
                                 @enderror
                             </div>
-
+                            
                         </div>
                         <!--end::Input group-->
                     </div>
@@ -179,7 +180,7 @@
                         <button type="submit" class="btn btn-primary" data-kt-users-modal-action="submit">
                             <span class="indicator-label" wire:loading.remove>{{ __('submit') }}</span>
                             <span class="indicator-progress" wire:loading wire:target="submit">
-                                {{ __('please wait...') }}
+                                {{ __('Patientez svp...') }}
                                 <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                             </span>
                         </button>

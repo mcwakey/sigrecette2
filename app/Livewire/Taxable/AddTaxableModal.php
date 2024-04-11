@@ -9,6 +9,7 @@ use App\Models\IdType;
 use App\Models\Taxable;
 use App\Models\TaxLabel;
 use App\Models\Town;
+use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Password;
 class AddTaxableModal extends Component
 {
     use WithFileUploads;
+    use DispatchesMessages;
 
     public $taxable_id;
     public $name;
@@ -44,17 +46,17 @@ class AddTaxableModal extends Component
     public $edit_mode = false;
 
     protected $rules = [
-        'name' => 'required',
-        'tariff' => 'required',
-        'tariff_type' => 'required',
-        'unit' => 'required',
-        'unit_type' => 'required',
+        'name' => 'required|string',
+        'tariff' => 'required|numeric',
+        'tariff_type' => 'required|string',
+        'unit' => 'required|string',
+        'unit_type' => 'required|string',
         //'modality' => 'required',
-        'periodicity' => 'required',
+        'periodicity' => 'required|string',
         //'penalty' => 'nullable',
         //'penalty_type' => 'nullable',
         //'tax_label' => 'required',
-        'tax_label_id' => 'required',
+        'tax_label_id' => 'required|int',
 
         // 'longitude' => 'nullable',
         // 'latitude' => 'nullable',
@@ -135,21 +137,11 @@ class AddTaxableModal extends Component
                 $taxable->save();
             }
 
+
             if ($this->edit_mode) {
-                // Assign selected role for user
-                //$taxable->syncRoles($this->tax_label);
-
-                // Emit a success event with a message
-                $this->dispatch('success', __('Taxable updated'));
+                $this->dispatchMessage('Matière Taxable', 'update');
             } else {
-                // Assign selected role for user
-                //$taxable->assignRole($this->tax_label);
-
-                // Send a password reset link to the user's email
-                //Password::sendResetLink($taxable->only('email'));
-
-                // Emit a success event with a message
-                $this->dispatch('success', __('New Taxable created'));
+                $this->dispatchMessage('Matière Taxable');
             }
         });
 
@@ -169,7 +161,8 @@ class AddTaxableModal extends Component
         Taxable::destroy($id);
 
         // Emit a success event with a message
-        $this->dispatch('success', 'Taxable successfully deleted');
+        //$this->dispatch('success', 'Taxable successfully deleted');
+        $this->dispatchMessage('Matière Taxable', 'delete');
     }
 
     public function updateUser($id)
@@ -190,7 +183,7 @@ class AddTaxableModal extends Component
         $this->periodicity = $taxable->periodicity;
         $this->penalty = $taxable->penalty;
         $this->penalty_type = $taxable->penalty_type;
-        
+
         //$this->tax_label = $taxable->tax_labels?->first()->name ?? '';
 
         // $this->mobilephone = $taxable->mobilephone;

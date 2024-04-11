@@ -3,6 +3,7 @@
 namespace App\Livewire\Canton;
 
 use App\Models\Canton;
+use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
@@ -11,9 +12,10 @@ use Illuminate\Support\Facades\DB;
 class AddCantonModal extends Component
 {
     use WithFileUploads;
+    use DispatchesMessages;
 
     public $canton_id;
-    
+
     public $name;
     public $status;
 
@@ -45,7 +47,7 @@ class AddCantonModal extends Component
                 'name' => $this->name,
                 'status' => $this->status,
             ];
-            
+
             $canton = Canton::find($this->canton_id) ?? Canton::create($data);
 
             if ($this->edit_mode) {
@@ -56,11 +58,9 @@ class AddCantonModal extends Component
             }
 
             if ($this->edit_mode) {
-                // Emit a success event with a message
-                $this->dispatch('success', __('Canton updated'));
+                $this->dispatchMessage('Canton', 'update');
             } else {
-                // Emit a success event with a message
-                $this->dispatch('success', __('New Caton created'));
+                $this->dispatchMessage('Canton');
             }
         });
 
@@ -74,7 +74,9 @@ class AddCantonModal extends Component
         Canton::destroy($id);
 
         // Emit a success event with a message
-        $this->dispatch('success', 'Taxpayer successfully deleted');
+        //$this->dispatch('success', 'Taxpayer successfully deleted');
+        $this->dispatchMessage('Canton', 'delete');
+
     }
 
     public function updateCanton($id)

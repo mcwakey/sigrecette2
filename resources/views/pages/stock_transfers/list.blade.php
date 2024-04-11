@@ -35,11 +35,45 @@
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
                 <!--begin::Toolbar-->
+                    <div class="d-flex justify-content-end ms-5" data-kt-invoice-table-toolbar="base">
+                        @can('print invoice')
+                            <div href="#" class="btn btn-light btn-active-light-primary btn-flex btn-center ms-auto me-5"
+                                 data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                {{ __('print') }}
+                                <i class="ki-duotone ki-down fs-5 ms-1"></i>
+                            </div>
+                        @endcan
+
+                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4"
+                             data-kt-menu="true" id="print-modal">
+                            <div class="menu-item px-3">
+                                <a href="#" class="menu-link px-3 print-link" data-type="1" target="_blank">
+                                    {{ __('ETAT DE COMPTABILITE DES VALEURS INACTIVES ') }}
+                                </a>
+                            </div>
+
+
+
+                        </div>
+
+                    </div>
+                        
+                        <!--begin::Col-->
+                    <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
+                            <!-- <label class="fs-6 form-label fw-bold text-dark">{{ __('user') }}</label> -->
+                            <!-- <input type="text" class="form-control" name="tags" id="mySearchFour" /> -->
+                            <select class="form-select" id="mySearchFour">
+                                <option value="xxx">{{ __('select an option') }}</option>
+                                @foreach($collectors as $collector)
+                                    <option value="{{ $collector->user_name}}">{{ $collector->user_name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
                 @can('create collector new deposit by manager')
                     <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                         <!--begin::Add user-->
-                        <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                        <button type="button" class="btn btn-light-warning" data-bs-toggle="modal"
                             data-bs-target="#kt_modal_add_stock_transfer" data-kt-action="add_deposit">
                             {!! getIcon('plus', 'fs-2', '', 'i') !!}
                             {{ __('new deposit') }}
@@ -52,7 +86,7 @@
                     <!--begin::Toolbar-->
                     <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                         <!--begin::Add user-->
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                        <button type="button" class="btn btn-light-danger" data-bs-toggle="modal"
                             data-bs-target="#kt_modal_add_stock_transfer" data-kt-action="update_transfer">
                             {!! getIcon('plus', 'fs-2', '', 'i') !!}
                             {{ __('account state') }}
@@ -65,7 +99,7 @@
                     <!--begin::Toolbar-->
                     <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                         <!--begin::Add user-->
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                        <button type="button" class="btn btn-light-success" data-bs-toggle="modal"
                             data-bs-target="#kt_modal_add_stock_transfer" data-kt-action="add_transfer">
                             {!! getIcon('plus', 'fs-2', '', 'i') !!}
                             {{ __('new supply') }}
@@ -78,15 +112,14 @@
                     <!--begin::Toolbar-->
                     <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
                         <!--begin::Add user-->
-                        <a href="#" class="ms-5 mt-1" data-bs-toggle="collapse" data-bs-target="#kt_tutorial_form"> 
+                        <a href="#" class="ms-5 mt-1" data-bs-toggle="collapse" data-bs-target="#kt_tutorial_form">
                             <span data-bs-toggle="tooltip" title="Onglet tutoriel">
                                 <i class="ki-outline ki-information fs-2tx text-warning"></i>
                             </span>
                         </a>
                         <!--end::Add user-->
                     </div>
-                <!--begin::Modal-->
-                <!--end::Modal-->
+
             </div>
             <!--end::Card toolbar-->
         </div>
@@ -112,7 +145,7 @@
                         <!--begin::Col-->
                         <div class="col-md-3">
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('taxable') }}</label>
-                            <!-- <input type="text" class="form-control" name="tags" id="mySearchTwo" /> -->
+                            <input type="text" class="form-control" name="tags" id="mySearchTwo" />
                             <!-- <select class="form-select" aria-label="Select a Country" select2="true" data-placeholder="{{ __('select an option') }}" id="mySearchTwo"> -->
                                 <!-- <select name="country" id="mySearchTwo" aria-label="Select a Country" data-control="select2" data-placeholder="{{ __('select an option') }}" class="form-select form-select-solid form-select-lg fw-semibold"> -->
                                 <!-- <option value=""></option>
@@ -121,7 +154,7 @@
                                 <option value="RENDU">RENDU</option>
                             </select> -->
 
-                            <select class="form-select" data-control="select2" data-placeholder="Select an option" data-allow-clear="true" id="mySearchTwo">
+                            <!-- <select class="form-select" data-control="select2" data-placeholder="Select an option" data-allow-clear="true" id="mySearchTwo">
                                 <option></option>
                                 <option value="1">Option 1</option>
                                 <option value="2">Option 2</option>
@@ -133,7 +166,7 @@
                                 <option value="8">Option 8</option>
                                 <option value="9">Option 9</option>
                                 <option value="10">Option 10</option>
-                            </select>
+                            </select> -->
 
 
                         </div>
@@ -150,7 +183,7 @@
                         <!--begin::Col-->
                         <div class="col-md-2">
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('user') }}</label>
-                            <input type="text" class="form-control" name="tags" id="mySearchFour" />
+                            <input type="text" class="form-control" name="tags" id="mySearchFours" />
                             <!-- <select class="form-select" id="mySearchFour">
                                 <option value=""></option>
                                 <option value="Demande">Demande d'approvisionnement</option>
@@ -190,7 +223,7 @@
                             <div class="fw-semibold">
                                 <h4 class="text-gray-900 fw-bold">Tutoriel sur <a class="fw-bold" href="#">Etat de comptabilite des VI du Regisseur</a></h4>
                                 <div class="fs-6 text-gray-700">
-                                -> clicker ici 
+                                -> clicker ici
                                         <a href="#" id="kt_horizontal_search_advanced_link" data-kt-rotate="true" class="btn btn-outline btn-outline-dashed bg-light-secondary btn-outline-secondary btn-active-light-secondary mx-1 rotate"
                                             data-bs-toggle="collapse" data-bs-target="#kt_advanced_search_form">
                                             {{ __('advanced search') }} <i
@@ -198,7 +231,7 @@
                                                     class="path1"></span><span class="path2"></span></i></a> pour afficher le formulaire de recherche avancée.
                                 <!-- </div>
                                 <div class="fs-6 text-gray-700"> -->
-                                -- clicker ici 
+                                -- clicker ici
 
                                     <button type="button" class="btn btn-outline-success btn-success mx-1" data-bs-toggle="modal" data-bs-target="#kt_modal_add_stock_request"  data-kt-action="add_request">
                                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
@@ -286,12 +319,12 @@
                 window.LaravelDataTables['stock_transfers-table'].column(2).search(this.value).draw();
             });
 
-            document.getElementById('mySearchFour').addEventListener('keyup', function() {
-                window.LaravelDataTables['stock_transfers-table'].column(11).search(this.value).draw();
+            document.getElementById('mySearchFour').addEventListener('change', function() {
+                window.LaravelDataTables['stock_transfers-table'].column(10).search(this.value).draw();
             });
 
             document.getElementById('mySearchFive').addEventListener('change', function() {
-                window.LaravelDataTables['stock_transfers-table'].column(12).search(this.value).draw();
+                window.LaravelDataTables['stock_transfers-table'].column(11).search(this.value).draw();
             });
 
             document.addEventListener('livewire:init', function() {
@@ -300,6 +333,62 @@
                     window.LaravelDataTables['stock_transfers-table'].ajax.reload();
                 });
             });
+            document.querySelectorAll('.print-link').forEach(function(link) {
+
+                function capitalizeFirstLetter(str) {
+                    let array = ["NIC", "GPS"];
+
+                    if (array.includes(str.toUpperCase())) {
+                        return str;
+                    } else {
+                        let words = str.toLowerCase().split(' ');
+                        for (let i = 0; i < words.length; i++) {
+                            words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+                        }
+                        return words.join(' ');
+                    }
+                }
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    let selectedValue = link.getAttribute('data-type');
+                    let table = document.getElementById("stock_transfers-table");
+                    let dataArray = [];
+                    let headers = [];
+
+
+                    // for (let i = 1; i < table.rows.length; i++) {let row = table.rows[i];let rowData = [];for (let j = 0; j < row.cells.length; j++) {let cellValue = row.cells[j].innerText.trim();rowData.push(cellValue);}dataArray.push(rowData);}
+
+                    let headerRow = table.getElementsByTagName("thead")[0].getElementsByTagName("tr")[0];
+                    for (let i = 0; i < headerRow.cells.length; i++) {
+                        headers.push(headerRow.cells[i].innerText.trim());
+                    }
+
+                    for (let i = 1; i < table.rows.length; i++) {
+                        let row = table.rows[i];
+                        let rowData = {};
+                        for (let j = 0; j < row.cells.length; j++) {
+                            let cellValue = row.cells[j].innerText.trim();
+                            let header = headers[j];
+                            rowData[capitalizeFirstLetter(header)] = cellValue;
+                        }
+
+                        dataArray.push(rowData);
+                    }
+
+
+
+                    let r_type = 6;
+
+                    let jsonData = JSON.stringify(dataArray);
+                    let url =
+                        "{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type', 'action' => ':selectedValue']) }}";
+                    url = url.replace(':jsonData', encodeURIComponent(jsonData));
+                    url = url.replace(':r_type', encodeURIComponent(r_type));
+                    url = url.replace(':selectedValue', encodeURIComponent(selectedValue));
+                    window.location.href = url;
+                });
+            });
+
         </script>
     @endpush
 

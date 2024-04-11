@@ -13,6 +13,7 @@ class IdTypesSeeder extends Seeder
     public function run(): void
     {
         $idTypeNames = [
+            'Identifiant unique',
             'PAS DE CARTE',
             'CNI',
             'PASSPORT',

@@ -3,13 +3,19 @@
 namespace App\Livewire\Invoice;
 
 use App\Models\Invoice;
+use App\Models\Payment;
+use App\Notifications\InvoiceCreated;
+use App\Traits\DispatchesMessages;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 
 class AddStatusForm extends Component
 {
     //use WithFileUploads;
-
+    use DispatchesMessages;
     public $invoice_id;
 
     public $status;
@@ -49,15 +55,44 @@ class AddStatusForm extends Component
             // Create or update Invoice record
             $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
 
-            
+
             $this->invoice_id = $invoice->id;
 
             foreach ($data as $k => $v) {
                 $invoice->$k = $v;
             }
+            if ($this->status=="APROVED" &&  $invoice->reduce_amount != ''){
+
+               //last payment not check
+                $paymentData = [
+                    'invoice_id' => $invoice->invoice_no,
+                    'taxpayer_id' =>  $invoice->taxpayer_id,
+                    'amount' => $invoice->reduce_amount,
+                    'description' =>"Annulation/Réduction",
+
+                ];
+                Payment::create($paymentData);
+                if ($invoice->reduce_amount==$invoice->amount){
+                    $invoice->pay_status="PAID";
+                }else{
+                    $invoice->pay_status="PART PAID";
+                }
+               $invoice->status='APROVED-CANCELLATION';
+            }
             $invoice->save();
-                $this->dispatch('success', __('Invoice updated'));
+            //$this->dispatch('success', __('Avis mis à jour'));
+            $this->dispatchMessage('Avis', 'update');
+            if($this->status=="PENDING"){
+                $role = Role::where('name', 'regisseur')->first();
+                if ($role) {
+                    $users = $role->users()->get();
+                    Notification::send($users, new InvoiceCreated($invoice ,Auth::user(),"regisseur"));
+
+                }
+            }
+
         });
+
 
         // Reset form fields after successful submission
         $this->reset();

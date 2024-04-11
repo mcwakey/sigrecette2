@@ -6,9 +6,8 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 800px;
             font-size: 0.75em;
-            padding: 2px;
+            padding: 0px;
             margin: 0 auto;
             line-height: 1.2;
         }
@@ -114,37 +113,39 @@
 
     @foreach($data as $index => $item)
         @php
-            $contribuable = $item[__('taxpayer')];
-            $lines = explode("\n", $contribuable);
-            $name=$lines[1];
-            $derniereLigne = end($lines);
-            $numeroTelephone = trim($derniereLigne);
-            $total_somme +=intval($item[__('amount')]);
+            $total_somme +=intval($item->amount);
             $year = date("Y", strtotime( $item[ __('from_date')])) ;
-            switch ($item[__('aproval')]) {
-                case "PRIS EN CHARGE":
-                    $item[__('aproval')] = "PC";
+            switch ($item->status) {
+                case "APROVED-CANCELLATION":
+                case "APROVED":
+                    $item->status = "PC";
                     break;
-                case "REJETÉ":
-                    $item[__('aproval')] = "REJETÉ";
+                case "REJECTED":
+                    $item->status = "REJETÉ";
                     break;
                 default:
-                    $item[__('aproval')] = "";
+                    $item->status = "";
                     break;
             }
         @endphp
         <tr>
-            <td>{{$item[__('invoice no')]}}</td>
-            <td>{{date("d-m-Y", strtotime( $item[ __('from_date')]))}}</td>
-            <td>{{$item[__('order no')]}}</td>
-            <td>{{$item[__('nic')]}}</td>
-            <td>{{$name}}</td>
-            <td>{{$numeroTelephone}}</td>
-            <td>{{$item[__('zone')]}}</td>
-            <td>{{$item[__('address')]}}</td>
-            <td>{{$item[__('gps')]}}</td>
-            <td>{{$item[__('amount')]}}</td>
-            <td>{{$item[__('aproval')]}}</td>
+            <td>{{$item->invoice_no}}</td>
+            <td>@if(isset($item->from_date))
+                    {{
+    date(
+        "d-m-Y", strtotime( $item->from_date )
+    )
+    }}
+                @endif</td>
+            <td>{{$item->order_no}}</td>
+            <td>{{$item->nic}}</td>
+            <td>{{$item->taxpayer->name}}</td>
+            <td>{{$item->taxpayer->mobilephone}}</td>
+            <td>{{$item->taxpayer->zone->name}}</td>
+            <td>{{$item->taxpayer->town->canton->name."-".$item->taxpayer->town->name."-".$item->taxpayer->address}}</td>
+            <td>{{$item->taxpayer->longitude,$item->taxpayer->latitude}}</td>
+            <td>{{$item->amount}}</td>
+            <td>{{$item->status}}</td>
         </tr>
     @endforeach
 
@@ -165,8 +166,13 @@
 
     </tr>
     <tr>
-        <td colspan="11">{{$titles[14]}} : <span>{{number_to_words($total_somme) }}</span> </td>
+        <td colspan="5"></td>
+        <td colspan="6">{{$titles[14]}} : <span>{{number_to_words($total_somme) }}</span> </td>
 
+    </tr>
+    <tr>
+        <td colspan="5" style="border: none; margin: 5;padding: 5;"> </td>
+        <td colspan="6" style="border: none; margin: 5;padding: 5;"></td>
     </tr>
     <tr>
         <td colspan="5" style="border: none; margin: 0; padding: 5px;">

@@ -30,7 +30,7 @@
                     <!--begin::Add user-->
                     <button type="button" class="btn btn-light-success h-45px ms-auto"  data-bs-toggle="modal" data-bs-target="#kt_modal_add_category">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        {{ __('new category') }}
+                        {{ __('Créer une nouvelle catégorie') }}
                     </button>
                     <!--end::Add user-->
                 </div>

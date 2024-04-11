@@ -5,6 +5,7 @@ namespace App\Livewire\Activity;
 use App\Models\Activity;
 use App\Models\Canton;
 use App\Models\Category;
+use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 class AddActivityModal extends Component
 {
     use WithFileUploads;
+    use DispatchesMessages;
 
     public $category_id;
     public $activity_id;
@@ -63,12 +65,11 @@ class AddActivityModal extends Component
             }
 
             if ($this->edit_mode) {
-                // Emit a success event with a message
-                $this->dispatch('success', __('Activity updated'));
+                $this->dispatchMessage('Activité', 'update');
             } else {
-                // Emit a success event with a message
-                $this->dispatch('success', __('Activity created'));
+                $this->dispatchMessage('Activité');
             }
+
         });
 
         // Reset the form fields after successful submission
@@ -81,7 +82,8 @@ class AddActivityModal extends Component
         Activity::destroy($id);
 
         // Emit a success event with a message
-        $this->dispatch('success', 'Activity successfully deleted');
+       // $this->dispatch('success', 'Activity successfully deleted');
+        $this->dispatchMessage('Activité', 'delete');
     }
 
     public function updateActivity($id)

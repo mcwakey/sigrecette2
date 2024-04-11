@@ -70,7 +70,7 @@ class TownsDataTable extends DataTable
         return [
             // Column::make('taxable')->addClass('d-flex align-items-center')->name('name'),
             //Column::make('gender')->title('Tax Name'),
-            Column::make('name')->title(__('town')),
+            Column::make('name')->title(__('Villages/Quartiers')),
             Column::make('canton_id')->title(__('canton'))->width(400),
             // Column::make('periodicity')->title('periodicity'),
             // Column::make('modality')->title('modality'),

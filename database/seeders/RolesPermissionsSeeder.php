@@ -17,137 +17,70 @@ class RolesPermissionsSeeder extends Seeder
         $permissions_by_role = [
             'administrateur_system' => [
                 // Taxpayer Taxable permissions
-                'create taxpayer taxable asset',
-                'edit taxpayer taxable asset',
+                'peut créer une taxation',
+                'peut modifier une taxation',
+                'peut supprimer une taxation',
 
                 // Invoice permissions
-                'create invoice',
-                'create invoice automaticaly',
-                'change invoice draft status to pending',
-                'change invoice pending status to approved',
-                'create invoice delivery date',
-                'print invoice',
-                'reduce invoice amount',
+                'peut émettre un avis',
+                'peut accepter un avis',
+                'peut prendre en charge un avis',
+                'peut rejeter un avis',
+                'peut réduire ou annuler un avis',
+                'peut générer automatiquement les avis',
+
+                // Date permissions
+                'peut ajouter la date de livraison d\'un avis',
 
                 // Taxpayer permissions
-                'create taxpayer',
-                'edit taxpayer',
-                'delete taxpayer',
+                'peut créer un contribuable',
+                'peut modifier un contribuable',
+                'peut supprimer un contribuable',
 
                 // Payment permissions
-                'view payment',
-                'create invoice payment',
-                'create no taxpayer invoice payment',
-
-                // Account permissions
-                'view account',
-                'create collector account state',
-                'create collector account supply',
-                'create collector new deposit by manager',
-                'create collector new deposit',
-                'view manager account state',
-                'view manager deposit state',
-
-                'view manager newspaper',
-
-                //Recoverie permissions
-                'view recoverie',
+                'peut ajouter un paiement',
+                'peut prendre en charge un paiement',
 
                 // Config permissions
-                'view config',
-                'create category',
-                'create township',
-                'create taxable',
-                'create taxlabel',
-                'create canton',
-                'create town',
-                'create zone',
-                'create erea',
-                'create activity',
+                'peut accedeé aux paramétrages du système',
+
+                // Order no permissions
+                'peut ajouter le numéro d\'ordre de recette d\'un avis',
 
                 // User permissions
-                'create user',
-                'edit user',
-                'delete user',
+                'peut créer un utilisateur',
+                'peut modifier un utilisateur',
+                'peut supprimer un utilisateur',
 
                 // Geolocatoion permissions
-                'view user geolocation',
-                'view zone geolocation',
+                'peut voir la geolocalisation d\'un utilisateur',
+                'peut voir la geolocalisation d\'un contribuable',
+
+                // Account permissions 
+                'peut voir la comptabilité',
+
+                // Recovery permissions
+                'peut voir le recouvrement', 
 
                 // Role permissions
-                'create role',
-                'edit role',
-                'delete role',
+                'peut créer un rôle',
+                'peut modifier un rôle',
+                'peut supprimer un rôle',
             ],
 
             'administrateur' => [],
 
             'ordonateur' => [],
 
-            'agent_assiette' => [
-                // Taxpayer Taxable permissions
-                'create taxpayer taxable asset',
-                'edit taxpayer taxable asset',
+            'agent_assiette' => [],
 
-                // Invoice permissions
-                'create invoice automaticaly',
-                'create invoice',
-                'reduce invoice amount',
-            ],
+            'agent_delegation' => [],
 
-            'agent_delegation' => [
-                // Invoice permissions
-                'change invoice draft status to pending',
-                'print invoice',
-            ],
+            'regisseur' => [],
 
-            'regisseur' => [
-                // Invoice permissions
-                'create invoice delivery date',
-                'change invoice pending status to approved',
-                'print invoice',
+            'agent_recouvrement' => [],
 
-                // Payment permissions
-                'create invoice payment',
-                'create no taxpayer invoice payment',
-
-                // Account permissions
-                'view account',
-                'create collector new deposit by manager',
-                'create collector account state',
-                'create collector account supply',
-                'view manager account state',
-                'view manager deposit state',
-
-                // Recoverie permissions
-                'view recoverie',
-
-                // Taxpayer permissions
-                'create taxpayer',
-                'edit taxpayer',
-            ],
-
-            'agent_recouvrement' => [
-                // Invoice permissions
-                'create invoice delivery date',
-                'print invoice',
-
-                // Payment permissions
-                'create invoice payment',
-
-                // Recoverie permissions
-                'view recoverie',
-
-                // Taxpayer permissions
-                'create taxpayer',
-                'edit taxpayer',
-            ],
-
-            'collecteur' => [
-                // Account permissions
-                'view account',
-                'create collector new deposit',
-            ],
+            'collecteur' =>  [],
         ];
 
         foreach ($permissions_by_role['administrateur_system'] as $permission) {
@@ -159,7 +92,7 @@ class RolesPermissionsSeeder extends Seeder
             foreach ($permissions as $permission) {
                 $permissions_list[] = $permission;
             }
-            Role::create(['name' => $role])->syncPermissions($permissions_list);
+            Role::create(['name' => $role, 'user_id' => 1])->syncPermissions($permissions_list);
         }
 
         User::find(1)->assignRole('administrateur_system');
@@ -169,6 +102,5 @@ class RolesPermissionsSeeder extends Seeder
         User::find(5)->assignRole('agent_assiette');
         User::find(6)->assignRole('regisseur');
         User::find(7)->assignRole('agent_recouvrement');
-        User::find(8)->assignRole('collecteur');
     }
 }

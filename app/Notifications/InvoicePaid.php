@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\Payment;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -15,7 +16,7 @@ class InvoicePaid extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct(private Payment $payment)
+    public function __construct(private Payment $payment,private User $user)
     {
         //
     }
@@ -40,6 +41,7 @@ class InvoicePaid extends Notification
     {
         return [
             'type' => 'invoice_paid',
+            'user_id' => $this->user->id,
             'invoice_id' => $this->payment->invoice->id,
             'taxpayer_id' => $this->payment->taxpayer_id,
             'amount' => $this->payment->amount,

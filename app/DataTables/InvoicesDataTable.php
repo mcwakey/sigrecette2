@@ -51,7 +51,11 @@ class InvoicesDataTable extends DataTable
                 return $invoice->invoiceitems()->first()->taxpayer_taxable->taxable->tax_label->name ?? '';
             })
             ->editColumn('total', function (Invoice $invoice) {
-                return $invoice->amount;
+                if ($invoice->reduce_amount != '')
+                    return '-' . $invoice->reduce_amount ;
+                else
+                   return $invoice->amount;
+                //return $invoice->amount;
             })
 
             ->editColumn('validity', function (Invoice $invoice) {
@@ -66,13 +70,14 @@ class InvoicesDataTable extends DataTable
                 //return $invoice->delivery_date;
                 return view('pages/invoices.columns._delivery', compact('invoice'));
             })
-
+            ->editColumn('from_date', function (Invoice $invoice) {
+                return $invoice->from_date;})
             ->editColumn('to_date', function (Invoice $invoice) {
                 return $invoice->to_date;})
             ->addColumn('action', function (Invoice $invoice) {
                 return view('pages/invoices.columns._actions', compact('invoice'));
             })
-            ->setRowId('id');
+            ->setRowId('uuid');
     }
 
 
@@ -140,6 +145,8 @@ class InvoicesDataTable extends DataTable
             Column::make('total')->title(__('amount'))->name('amount'),
             Column::make('status')->title(__('aproval')),
             Column::make('delivery_date')->title( __('delivery date'))->addClass('text-nowrap'),
+            Column::make('from_date')->title( __('from_date'))->addClass('text-nowrap'),
+
             Column::make('to_date')->title( __('expiry date'))->addClass('text-nowrap'),
             Column::make('validity')->title(__('status')),
             Column::computed('action')

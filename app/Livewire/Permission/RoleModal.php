@@ -13,16 +13,22 @@ class RoleModal extends Component
     public $name;
     public $checked_permissions;
     public $check_all;
+    public $edit_mode;
 
     public Role $role;
     public Collection $permissions;
 
     protected $rules = [
-        'name' => 'required|string',
+        'name' => 'required|string|unique:roles,name',
     ];
 
+    // 'name' => 'required|string|unique:users,name,' . $this->id,
+
     // This is the list of listeners that this component listens to.
-    protected $listeners = ['modal.show.role_name' => 'mountRole'];
+    protected $listeners = [
+        'modal.show.role_name' => 'mountRole',
+        'delete_role' => 'deleteRole',
+    ];
 
     // This function is called when the component receives the `modal.show.role_name` event.
     public function mountRole($role_name = '')
@@ -37,7 +43,7 @@ class RoleModal extends Component
         // Get the role by name.
         $role = Role::where('name', $role_name)->first();
         if (is_null($role)) {
-            $this->dispatch('error', 'The selected role [' . $role_name . '] is not found');
+            $this->dispatch('error', 'Le role séléctioner [' . $role_name . '] est introuvable');
             return;
         }
 
@@ -76,18 +82,35 @@ class RoleModal extends Component
     // This function submits the form and updates the role's permissions.
     public function submit()
     {
-        $this->validate();
+        (!empty($this->name) || !is_null($this->name)) && Role::where('name', $this->name)->first() ? $this->edit_mode = true : $this->edit_mode = false;
 
-        $this->role->name = $this->name;
-        if ($this->role->isDirty()) {
-            $this->role->save();
+        if ($this->edit_mode) {
+            $this->rules['name'] = 'required|string|unique:roles,name,' . $this->role->id;
         }
 
-        // Sync the role's permissions with the checked permissions property.
-        $this->role->syncPermissions($this->checked_permissions);
+        $this->validate();
 
-        // Emit a success event with a message indicating that the permissions have been updated.
-        $this->dispatch('success', 'Permissions for ' . ucwords($this->role->name) . ' role updated');
+        if ($this->edit_mode) {
+            $this->role->name = $this->name;
+            $this->role->syncPermissions($this->checked_permissions);
+            $this->dispatch('success', 'Permissions pour ' . ucwords($this->role->name) . ' mis a jour avec succès');
+        } else {
+            $role = Role::create([
+                'name' => $this->name,
+                'user_id' => auth()->user()->hasRole('administrateur_system') ? auth()->user()->id : null,
+            ]);
+
+            $role->syncPermissions($this->checked_permissions);
+            $this->dispatch('success', 'Role ' . ucwords($role->name) . ' créer avec succès');
+        }
+    }
+
+    public function deleteRole($id)
+    {
+        $role = Role::find($id);
+        $name = $role?->name;
+        $role->delete();
+        $this->dispatch('success', 'Role ' . ucwords($name) . ' supprimé avec succès');
     }
 
     // This function checks all of the permissions.

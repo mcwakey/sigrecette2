@@ -44,7 +44,7 @@
                 <div class="menu-sub menu-sub-accordion">
                     <div class="menu-item">
 
-                        @can('create taxpayer')
+                        @can('peut créer un contribuable')
                             <span class="menu-link ">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
@@ -98,7 +98,7 @@
             </div>
             <!--end:Menu item-->
 
-            @can('view recoverie')
+            @can('peut voir le recouvrement')
                 <!--begin:Menu item-->
                 <div data-kt-menu-trigger="click"
                     class="menu-item menu-accordion {{ request()->routeIs('recoveries.*') ? 'here show' : '' }}">
@@ -129,8 +129,7 @@
                 <!--end:Menu item-->
             @endcan
 
-
-            @can('view account')
+            @can('peut voir la comptabilité')
                 <!--end:Menu item-->
                 <div data-kt-menu-trigger="click"
                     class="menu-item menu-accordion {{ request()->routeIs('accounts.*') ? 'here show' : '' }}">
@@ -144,58 +143,51 @@
                     <!--begin:Menu sub-->
                     <div class="menu-sub menu-sub-accordion">
 
-                        @can('view manager account state')
-                            <!--begin:Menu item-->
-                            <div class="menu-item">
-                                <a class="menu-link {{ request()->routeIs('accounts.stock-requests.*') ? 'active' : '' }}"
-                                    href="{{ route('accounts.stock-requests.index') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title">{{ __('Comptabilité des valeurs inactives du regisseur') }}
-                                    </span>
-                                </a>
-                            </div>
-                            <!--end:Menu item-->
-                        @endcan
+                        <!--begin:Menu item-->
+                        <div class="menu-item">
+                            <a class="menu-link {{ request()->routeIs('accounts.stock-requests.*') ? 'active' : '' }}"
+                                href="{{ route('accounts.stock-requests.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">{{ __('Comptabilité des valeurs inactives du regisseur') }}
+                                </span>
+                            </a>
+                        </div>
+                        <!--end:Menu item-->
                         <!--end:Menu item-->
 
-                        @can('view manager deposit state')
-                            <!--begin:Menu item-->
-                            <div class="menu-item">
-                                <a class="menu-link {{ request()->routeIs('accounts.stock-requests.*') ? 'active' : '' }}"
-                                    href="{{ route('accounts.stock-requests.index') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title">{{ __('Etat de versement du regisseur') }} </span>
-                                </a>
-                            </div>
-                            <!--end:Menu item-->
-                        @endcan
-
-
-
-                        @can('create collector new deposit by manager')
-                            <!--begin:Menu item-->
-                            <div class="menu-item">
-                                <a class="menu-link {{ request()->routeIs('accounts.stock-transfers.*') ? 'active' : '' }}"
-                                    href="{{ route('accounts.stock-transfers.index') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title">{{ __('Comptabilité des valeurs inactives du collecteur') }}
-                                    </span>
-                                </a>
-                            </div>
-                            <!--end:Menu item-->
-                        @endcan
+                        <!--begin:Menu item-->
+                        <div class="menu-item">
+                            <a class="menu-link {{ request()->routeIs('accounts.accountant-deposits.*') ? 'active' : '' }}"
+                                href="{{ route('accounts.accountant-deposits.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">{{ __('Etat de versement du regisseur') }} </span>
+                            </a>
+                        </div>
+                        <!--end:Menu item-->
 
 
                         <!--begin:Menu item-->
                         <div class="menu-item">
-                            <a class="menu-link {{ request()->routeIs('accounts.collector_deposits.*') ? 'active' : '' }}"
-                                href="{{ route('accounts.collector_deposits.index') }}">
+                            <a class="menu-link {{ request()->routeIs('accounts.stock-transfers.*') ? 'active' : '' }}"
+                                href="{{ route('accounts.stock-transfers.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">{{ __('Comptabilité des valeurs inactives du collecteur') }}
+                                </span>
+                            </a>
+                        </div>
+                        <!--end:Menu item-->
+
+
+                        <!--begin:Menu item-->
+                        <div class="menu-item">
+                            <a class="menu-link {{ request()->routeIs('accounts.collector-deposits.*') ? 'active' : '' }}"
+                                href="{{ route('accounts.collector-deposits.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -207,8 +199,8 @@
                         <!--begin:Menu item-->
                         <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('recoveries.*') ? 'active' : '' }}"
-                                href="{{ route('recoveries.index') }}">
+                            <a class="menu-link {{ request()->routeIs('accounts.ledgers.*') ? 'active' : '' }}"
+                                href="{{ route('accounts.ledgers.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -220,8 +212,8 @@
                     <!--end:Menu sub-->
                 </div>
                 <!--end:Menu item-->
-
             @endcan
+
 
             <!--begin:Menu item-->
             <div data-kt-menu-trigger="click"
@@ -245,7 +237,7 @@
                             <span class="menu-title">{{ __('zones') }}</span>
                         </a>
 
-                        @can('view user geolocation')
+                        @can('peut voir la geolocalisation d\'un utilisateur')
                             <a class="menu-link {{ request()->routeIs('geolocation.users') ? 'active' : '' }}"
                                 href="{{ route('geolocation.users') }}">
                                 <span class="menu-bullet">
@@ -262,10 +254,11 @@
             </div>
             <!--end:Menu item-->
 
-            @can('view config')
-                <!--begin:Menu item-->
-                <!--end:Menu item-->
-                <!--begin:Menu item-->
+            <!--begin:Menu item-->
+            <!--end:Menu item-->
+            <!--begin:Menu item-->
+            @can('peut accedeé aux paramétrages du système')
+
                 <div class="menu-item pt-5">
                     <!--begin:Menu content-->
                     <div class="menu-content">
@@ -275,7 +268,7 @@
                 </div>
 
                 <div data-kt-menu-trigger="click"
-                class="menu-item menu-accordion {{ request()->routeIs('taxations.*') ? 'here show' : '' }}">
+                    class="menu-item menu-accordion {{ request()->routeIs('taxations.*') ? 'here show' : '' }}">
 
                     <span class="menu-link">
                         <span class="menu-icon">{!! getIcon('technology-4', 'fs-2') !!}</span>
@@ -307,13 +300,25 @@
                             </a>
                             <!--end:Menu link-->
                         </div>
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->routeIs('taxations.tickets.*') ? 'active' : '' }}"
+                                href="{{ route('taxations.tickets.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">{{ __('tickets') }}</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
                     </div>
                 </div>
 
                 <!--end:Menu item-->
+
                 <!--begin:Menu item-->
                 <div data-kt-menu-trigger="click"
-                class="menu-item menu-accordion {{ request()->routeIs('administratives.*') ? 'here show' : '' }}">
+                    class="menu-item menu-accordion {{ request()->routeIs('administratives.*') ? 'here show' : '' }}">
 
                     <span class="menu-link">
                         <span class="menu-icon">{!! getIcon('pointers', 'fs-2') !!}</span>
@@ -341,23 +346,13 @@
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">{{ __('towns') }}</span>
+                                <span class="menu-title">{{ __('Villages/Quartiers') }}</span>
                             </a>
                             <!--end:Menu link-->
                         </div>
                         <!--end:Menu item-->
                         <!--begin:Menu item-->
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('administratives.ereas.*') ? 'active' : '' }}"
-                                href="{{ route('administratives.ereas.index') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">{{ __('ereas') }}</span>
-                            </a>
-                            <!--end:Menu link-->
-                        </div>
+
                         <div class="menu-item">
                             <!--begin:Menu link-->
                             <a class="menu-link {{ request()->routeIs('administratives.zones.*') ? 'active' : '' }}"
@@ -373,7 +368,7 @@
                 </div>
 
                 <div data-kt-menu-trigger="click"
-                class="menu-item menu-accordion {{ request()->routeIs('economics.*') ? 'here show' : '' }}">
+                    class="menu-item menu-accordion {{ request()->routeIs('economics.*') ? 'here show' : '' }}">
                     <span class="menu-link">
                         <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
                         <span class="menu-title">{{ __('Activités économiques') }}</span>
@@ -405,7 +400,7 @@
                     </div>
                 </div>
                 <div data-kt-menu-trigger="click"
-                class="menu-item menu-accordion {{ request()->routeIs('settings.*') ? 'here show' : '' }}">
+                    class="menu-item menu-accordion {{ request()->routeIs('settings.*') ? 'here show' : '' }}">
                     <span class="menu-link">
                         <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
                         <span class="menu-title">{{ __('Informations commune') }}</span>
@@ -425,20 +420,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link {{ request()->routeIs('import-view') ? 'active' : '' }}"
-                        href="{{ route('import-view') }}">
-                        <span class="menu-bullet">
-                            <span class="menu-icon">{!! getIcon('user', 'fs-2') !!}</span>
-                        </span>
-                        <span class="menu-title">{{ __('Importer des contribuables') }}</span>
-                    </a>
-                    <!--end:Menu link-->
-                </div>
 
+                @hasanyrole(['administrateur_system'])
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('import-view') ? 'active' : '' }}"
+                            href="{{ route('import-view') }}">
+                            <span class="menu-bullet">
+                                <span class="menu-icon">{!! getIcon('user', 'fs-2') !!}</span>
+                            </span>
+                            <span class="menu-title">{{ __('Importer des contribuables') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                @endhasanyrole
 
                 <!--end:Menu item-->
+
 
                 <!--begin:Menu item-->
                 <div data-kt-menu-trigger="click"
@@ -497,7 +495,9 @@
                     <!--end:Menu sub-->
                 </div>
                 <!--end:Menu item-->
+
             @endcan
+
 
         </div>
         <!--end::Menu-->

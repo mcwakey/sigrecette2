@@ -3,6 +3,7 @@
 namespace App\Livewire\Commune;
 
 use App\Models\Commune;
+use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 class AddCommuneModal extends Component
 {
     use WithFileUploads;
+    use DispatchesMessages;
 
     public $commune_id;
     public $mayor_name;
@@ -79,11 +81,9 @@ class AddCommuneModal extends Component
             }
 
             if ($this->edit_mode) {
-                // Emit a success event with a message
-                $this->dispatch('success', __('Commune updated'));
+                $this->dispatchMessage('Commune', 'update');
             } else {
-                // Emit a success event with a message
-                $this->dispatch('success', __('New Commune created'));
+                $this->dispatchMessage('Commune');
             }
         });
 
@@ -97,7 +97,9 @@ class AddCommuneModal extends Component
         Commune::destroy($id);
 
         // Emit a success event with a message
-        $this->dispatch('success', 'Commune successfully deleted');
+       // $this->dispatch('success', 'Commune successfully deleted');
+        $this->dispatchMessage('Commune', 'delete');
+
     }
 
     public function updateCommune($id)

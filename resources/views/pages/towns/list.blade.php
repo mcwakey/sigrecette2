@@ -1,7 +1,7 @@
 <x-default-layout>
 
     @section('title')
-    {{ __('towns') }}
+    {{ __('Villages/Quartiers') }}
     @endsection
 
     @section('breadcrumbs')

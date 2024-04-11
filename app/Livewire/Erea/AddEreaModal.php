@@ -5,6 +5,7 @@ namespace App\Livewire\Erea;
 use App\Models\Canton;
 use App\Models\Erea;
 use App\Models\Town;
+use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 class AddEreaModal extends Component
 {
     use WithFileUploads;
+    use DispatchesMessages;
 
     public $canton_id;
     public $town_id;
@@ -21,7 +23,7 @@ class AddEreaModal extends Component
     public $name;
     public $status;
 
-    
+
     public $towns = [];
 
     public $edit_mode = false;
@@ -42,7 +44,7 @@ class AddEreaModal extends Component
     {
         $this->towns = Town::where('canton_id', $value)->get(); // Load taxables based on tax label ID
         //$this->reset('taxables');
-        
+
         //dd($this->taxables);
         // $this->loadTaxables($value); // Call the loadTaxables method when tax label ID is updated
     }
@@ -50,7 +52,7 @@ class AddEreaModal extends Component
     public function render()
     {
         $cantons = Canton::all();
-        
+
         return view('livewire.erea.add-erea-modal', compact('cantons'));
     }
 
@@ -75,13 +77,10 @@ class AddEreaModal extends Component
                 }
                 $erea->save();
             }
-
             if ($this->edit_mode) {
-                // Emit a success event with a message
-                $this->dispatch('success', __('Erea updated'));
+                $this->dispatchMessage('Quartier', 'update');
             } else {
-                // Emit a success event with a message
-                $this->dispatch('success', __('New Erea created'));
+                $this->dispatchMessage('Quartier');
             }
         });
 
@@ -95,7 +94,8 @@ class AddEreaModal extends Component
         Erea::destroy($id);
 
         // Emit a success event with a message
-        $this->dispatch('success', 'Taxpayer successfully deleted');
+        $this->dispatchMessage('Quartier', 'delete');
+
     }
 
     public function updateErea($id)

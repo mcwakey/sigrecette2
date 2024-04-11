@@ -10,7 +10,6 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 900px;
             font-size: 0.75em;
             padding: 2px;
             margin: 0 auto;
@@ -67,19 +66,19 @@
         <th colspan="12" style="border: none; margin: 0; text-align: center;" class="caption">Fiche de distribution des avis</th>
     </tr>
     <tr>
-        <td colspan="12" style="border: none; margin: 0; text-align: center;">N°</td>
+        <td colspan="12" style="border: none; margin: 0; text-align: center;">N°....</td>
     </tr>
     <tr>
         <td colspan="12" style="border: none; margin: 0;" >Exercice : {{" ".$year->name}}</td>
     </tr>
     <tr>
-        <td colspan="12" style="border: none; margin: 0;">Zone fiscale : Zone 1</td>
+        <td colspan="12" style="border: none; margin: 0;">Zone fiscale : {{$data[0]->taxpayer->zone->name}}</td>
     </tr>
     <tr>
         <td colspan="12" style="border: none; margin: 0;" >Nom de l’agent de recouvrement : {{\Illuminate\Support\Facades\Auth::user()->name}}</td>
     </tr>
     <tr>
-        <td  colspan="12" style="border: none; margin: 0;" >Période de distribution: </td>
+        <td  colspan="12" style="border: none; margin: 0;" >Période de distribution: .....</td>
     </tr>
     <tr>
         <th>N° Avis</th>
@@ -100,32 +99,37 @@
     @endphp
 
     @foreach($data as $index => $item)
-        @php
-            $contribuable = $item[__('taxpayer')];
-               $lines = explode("\n", $contribuable);
-               $name=$lines[1];
-               $derniereLigne = end($lines);
-               $numeroTelephone = trim($derniereLigne);
-                $total_somme +=intval($item[__('amount')]);
-        @endphp
+
+
+    @if($item->order_no!=null)
+            @php
+                $total_somme +=intval($item->amount);
+            @endphp
     <tr>
-        <td>{{$item[__('invoice no')]}}</td>
-        <td>{{$item[__('order no')]}}</td>
-        <td>{{$item[__('nic')]}}</td>
-        <td>{{$name}}</td>
-        <td>{{$numeroTelephone}}</td>
-        <td>XX</td>
-        <td>{{$item[__('zone')]}}</td>
-        <td>{{$item[__('address')]}}</td>
-        <td>{{$item[__('gps')]}}</td>
-        <td>{{$item[__('amount')]}}</td>
-        <td>
-            @if($item[__('delivery date')] !== __("NOT DELIVERED"))
-                {{$item[__('delivery date')]}}
-            @endif
+        <td style="text-align: center">{{$item->invoice_no}}</td>
+        <td style="text-align: center">{{$item->order_no}}</td>
+        <td style="text-align: center">{{$item->nic}}</td>
+        <td style="text-align: center">{{$item->taxpayer->name}}</td>
+        <td style="text-align: center">{{$item->taxpayer->mobilephone}}</td>
+        <td style="text-align: center">{{$item->taxpayer->town->canton->name}}</td>
+        <td style="text-align: center">{{$item->taxpayer->town->name}}</td>
+        <td style="text-align: center">{{$item->taxpayer->address}}</td>
+        <td style="text-align: center">{{$item->taxpayer->longitude,$item->taxpayer->latitude}}</td>
+        <td style="text-align: center">{{$item->amount}}</td>
+        @if ($item->delivery_date != null)
+        <td style="text-align: center">
+            {{$item->delivery_date}}
         </td>
-        <td>Emmanuel</td>
+        <td style="text-align: center">{{$item->delivery_to}}</td>
+            @else
+            <td>
+            </td>
+            <td>
+            </td>
+
+        @endif
     </tr>
+        @endif
     @endforeach
 
     <tr>

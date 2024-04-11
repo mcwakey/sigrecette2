@@ -2,7 +2,9 @@
 
 namespace App\Imports;
 
+use App\Models\Activity;
 use App\Models\Canton;
+use App\Models\Category;
 use App\Models\Erea;
 use App\Models\Taxpayer;
 use App\Models\Town;
@@ -35,7 +37,8 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
         if (!isset($row['nom']) || !isset($row['prenoms'])
             || !isset($row['adresse']  ) || !isset($row['canton'])
             || !isset($row['ville_village']  ) || !isset($row['zone'])
-            || !isset($row['quartier'])
+            || !isset($row['quartier']) || !isset($row["categ_activite"])
+            || !isset($row['activite'])
         ) {
             return null;
         }
@@ -47,15 +50,18 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
             return null;
         }
         $canton = Canton::firstOrCreate(['name' => $row['canton']]);
-        $town = Town::firstOrCreate(['name' => $row['ville_village'], 'canton_id' => $canton->id]);
-        $erea = Erea::firstOrCreate(['name' => $row['quartier'], 'town_id' => $town->id]);
+        $town = Town::firstOrCreate(['name' => $row['ville_village']."/". $row['quartier'], 'canton_id' => $canton->id]);
+        //$erea = Erea::firstOrCreate(['name' => $row['quartier'], 'town_id' => $town->id]);
         $zone = Zone::firstOrCreate(['name' => $row['zone']]);
+        $category = Category::firstOrCreate(['name' => $row['categ_activite']]);
+        $activity= Activity::firstOrCreate(['name' => $row["activite"], 'category_id' => $category->id]);
 
+       // dump($category,$activity);
         // Créer le modèle Taxpayer
         $taxpayer = new Taxpayer([
             'tnif' => fake()->randomNumber(3, 1, 10) . Str::random(5) . fake()->randomNumber(3, 0, 9),
             'name' => $row['nom'] . " " . $row['prenoms'],
-            'email' => fake()->unique()->safeEmail().uniqid("unique"),
+            'email' => $row['email'],
             'email_verified_at' => now(),
             'gender' => $row["sexe"] ?: $faker->randomElement(['Homme', 'Femme']),
             'id_type' => $faker->randomElement(['CNI', 'PASSPORT', 'PERMIS DE CONDUIRE', 'CARTE D\'ELECTEUR', 'CARTE DE SEJOUR']),
@@ -66,8 +72,11 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
             'latitude' => $row["latitude"],
             'address' => $row["adresse"],
             'town_id' => $town->id,
-            'erea_id' => $erea->id,
+            //'erea_id' => $erea->id,
             'zone_id' => $zone->id,
+            'category_id'=>$category->id,
+            'activity_id'=>$activity->id,
+            "other_work"=>$row["autre_activite"],
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
         ]);

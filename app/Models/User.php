@@ -66,6 +66,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Address::class);
     }
 
+    public function zone()
+    {
+        return $this->belongsTo(Zone::class);
+    }
+
     public function getDefaultAddressAttribute()
     {
         return $this->addresses?->first();

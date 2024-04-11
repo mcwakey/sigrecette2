@@ -3,12 +3,14 @@
 namespace App\Livewire\Invoice;
 
 use App\Models\Invoice;
+use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 
 class AddOrdernoForm extends Component
 {
     //use WithFileUploads;
+    use DispatchesMessages;
 
     public $invoice_id;
 
@@ -49,14 +51,15 @@ class AddOrdernoForm extends Component
         // Create or update Invoice record
         $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
 
-        
+
         $this->invoice_id = $invoice->id;
 
         foreach ($data as $k => $v) {
             $invoice->$k = $v;
         }
         $invoice->save();
-            $this->dispatch('success', __('Invoice updated'));
+        $this->dispatchMessage('Avis', 'update');
+
     });
 
     // Reset form fields after successful submission

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Ramsey\Uuid\Uuid;
 
 class Invoice extends Model
 {
@@ -21,6 +22,7 @@ class Invoice extends Model
         'to_date',
         'pay_status',
         'status',
+        'uuid',
         // 'profile_photo_path',
     ];
 
@@ -73,7 +75,127 @@ class Invoice extends Model
         return "";
     }
 
-//id 	invoice_no 	order_no 	nic 	status 	pay_status 	delivery 	delivery_date
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function ($invoice) {
+            $invoice->uuid = Uuid::uuid4()->toString();
+        });
+    }
+    /**
+     * Retrieve invoices based on provided UUIDs.
+     *
+     * @param array $uuids
+     * @return array|bool Returns a collection of invoices if all UUIDs are found,
+     *                               `false` if any UUID is not found, or an empty array if `$uuids` is empty.
+     */
+    public static function retrieveByUUIDs(array $uuids): array|bool
+    {
+        $invoices = [];
+        foreach ($uuids as $uuid) {
+            $invoice = Invoice::where('uuid', $uuid)->first();
+            if ($invoice instanceof Invoice) {
+                $invoices[] = $invoice;
+            } else {
+                return false;
+            }
+        }
+
+
+
+
+        return $invoices ?: [];
+    }
+
+
+    public static function isuperFunction(array $uuids){
+        $data=Invoice::retrieveByUUIDs($uuids);
+        usort($data, function ($a, $b) {
+            $codeA = $a->taxpayer_taxable->taxable->tax_label->code;
+            $codeB = $b->taxpayer_taxable->taxable->tax_label->code;
+            return strcmp($codeA, $codeB);
+        });
+
+        $default= $data[0];
+        $invoiceitems=$default->invoiceitems()->get();
+        //$array = (array)$invoiceitems;
+        dd($invoiceitems);
+    }
+    /**
+     * Sum amounts by tax code for the given invoice.
+     *
+     * This function calculates the total amount for each tax code present in the invoice
+     * by summing up the amounts of all invoice items associated with that tax code.
+     *
+     * @param Invoice $invoice The invoice object.
+     * @return array An associative array where keys are tax codes and values are the total amounts.
+     */
+    public static function sumAmountsByTaxCode(Invoice $invoice)
+    {
+        //$data = Invoice::retrieveByUUIDs($uuids);
+
+        $sumsByTaxCode = [];
+        //$invoice=$data[0];
+
+        foreach ($invoice->invoiceitems as $item) {
+            $code = $item->taxpayer_taxable->taxable->tax_label->code;
+            $amount = $item->amount;
+            if (array_key_exists($code, $sumsByTaxCode)) {
+                $sumsByTaxCode[$code] += $amount;
+            } else {
+                $sumsByTaxCode[$code] = $amount;
+            }
+        }
+
+        asort($sumsByTaxCode);
+        //dd($sumsByTaxCode);
+        return $sumsByTaxCode;
+    }
+
+    /**
+     * Get payment codes for a given invoice based on the specified amount.
+     *
+     * This function calculates the payment codes required to cover the specified amount
+     * based on the amounts already paid for each tax code of the invoice.
+     *
+     * @param int $id The ID of the invoice.
+     * @param float $amount The amount to be paid.
+     * @param array $paymentData Additional data for payments.
+     * @return array|null An array containing the payment codes or null if the invoice does not exist.
+     */
+    public static function getCode($id, float $amount, array $paymentData): ?array {
+        $invoice = Invoice::find($id);
+
+        if ($invoice instanceof Invoice) {
+            $paymentArray = [];
+            $last_payments = Payment::where('invoice_id', $invoice->invoice_no)->get();
+            $sumsByTaxCode = Invoice::sumAmountsByTaxCode($invoice);
+            $s_amount= [];
+            foreach ($sumsByTaxCode as $code => &$totalAmount) {
+                foreach ($last_payments as $index => $payment) {
+                    if ($payment->description !== "Annulation/Réduction" && $payment->code == $code) {
+                        $totalAmount -= $payment->amount;
+                        $s_amount[$index] = $payment->amount;
+                    }
+                }
+                if ($totalAmount === 0) {
+                    unset($sumsByTaxCode[$code]);
+                }
+            }
+            $paid = array_sum($s_amount) ?? 0;
+            foreach ($sumsByTaxCode as $code => $code_amount) {
+                if ($amount > 0&& $code_amount>0) {
+                    $paymentData["code"] = $code;
+                    $paymentData['amount'] = min($amount, $code_amount);
+                    $paymentData['remaining_amount']= $invoice->amount -( $paid+$paymentData['amount']) ;
+                    $paymentArray[] = $paymentData;
+                    $amount -= $paymentData['amount'];
+                }
+            }
+            return $paymentArray;
+        }
+        return null;
+    }
 
 
 }
