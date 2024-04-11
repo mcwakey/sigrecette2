@@ -142,43 +142,6 @@ class Invoice extends Model
         //dd($sumsByTaxCode);
         return $sumsByTaxCode;
     }
-    public static function LgetCode($id, int $amount,array $paymentData): ?array {
-        $invoice=Invoice::find($id);
-
-        if($invoice instanceof Invoice){
-            $paymentArray = [];
-            $last_paiements = Payment::where( 'invoice_id', $invoice->invoice_no);
-            $sumsByTaxCode = Invoice::sumAmountsByTaxCode($invoice);
-
-            foreach ($sumsByTaxCode as $code => $totalAmount) {
-                foreach ($last_paiements as $index => $payment) {
-                    if ($payment->description!=="Annulation/Réduction"&& $payment->code==$code){
-                        $sumsByTaxCode[$code]=$totalAmount-$payment->amount;
-                    }
-                }
-
-            }
-            foreach ($sumsByTaxCode as $code => $code_amount) {
-                if ($code_amount === 0) {
-                    unset($sumsByTaxCode[$code]);
-                }
-            }
-            foreach ($sumsByTaxCode as $code => $code_amount) {
-                if($amount>0 && $amount<=$code_amount){
-                    $paymentData["code"]=$code;
-                    $paymentArray[]=$paymentData;
-                    $amount-=$code_amount;
-                }elseif ($amount>=$code_amount){
-                    $paymentData["code"]=$code;
-                    $paymentData['amount'] = $code_amount;
-                    $paymentArray[]=$paymentData;
-                    $amount-=$code_amount;
-                }
-            }
-            return $paymentArray;
-        }
-        return null;
-    }
     public static function getCode($id, int $amount, array $paymentData): ?array {
         $invoice = Invoice::find($id);
 
