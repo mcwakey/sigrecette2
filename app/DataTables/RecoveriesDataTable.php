@@ -39,7 +39,7 @@ class RecoveriesDataTable extends DataTable
                 return $payment->reference;
             })
             ->editColumn('tax_labels.id', function (Payment $payment) {
-                return $payment->invoice->invoiceitems()->first()->taxpayer_taxable->taxable->tax_label->code ?? '';
+                return $payment->code ?? '';
             })
             ->editColumn('nic', function (Payment $payment) {
                 return $payment->invoice->nic;

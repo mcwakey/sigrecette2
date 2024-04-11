@@ -21,7 +21,8 @@ class Payment extends Model
         'user_id',
         'r_user_id',
         'status',
-        'uuid'
+        'uuid',
+        'code'
     ];
 
     public function invoice()

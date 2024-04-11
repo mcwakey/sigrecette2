@@ -108,4 +108,113 @@ class Invoice extends Model
     }
 
 
+    public static function isuperFunction(array $uuids){
+        $data=Invoice::retrieveByUUIDs($uuids);
+        usort($data, function ($a, $b) {
+            $codeA = $a->taxpayer_taxable->taxable->tax_label->code;
+            $codeB = $b->taxpayer_taxable->taxable->tax_label->code;
+            return strcmp($codeA, $codeB);
+        });
+
+        $default= $data[0];
+        $invoiceitems=$default->invoiceitems()->get();
+        //$array = (array)$invoiceitems;
+        dd($invoiceitems);
+    }
+    public static function sumAmountsByTaxCode(Invoice $invoice)
+    {
+        //$data = Invoice::retrieveByUUIDs($uuids);
+
+        $sumsByTaxCode = [];
+        //$invoice=$data[0];
+
+        foreach ($invoice->invoiceitems as $item) {
+            $code = $item->taxpayer_taxable->taxable->tax_label->code;
+            $amount = $item->amount;
+            if (array_key_exists($code, $sumsByTaxCode)) {
+                $sumsByTaxCode[$code] += $amount;
+            } else {
+                $sumsByTaxCode[$code] = $amount;
+            }
+        }
+
+        asort($sumsByTaxCode);
+        //dd($sumsByTaxCode);
+        return $sumsByTaxCode;
+    }
+    public static function LgetCode($id, int $amount,array $paymentData): ?array {
+        $invoice=Invoice::find($id);
+
+        if($invoice instanceof Invoice){
+            $paymentArray = [];
+            $last_paiements = Payment::where( 'invoice_id', $invoice->invoice_no);
+            $sumsByTaxCode = Invoice::sumAmountsByTaxCode($invoice);
+
+            foreach ($sumsByTaxCode as $code => $totalAmount) {
+                foreach ($last_paiements as $index => $payment) {
+                    if ($payment->description!=="Annulation/Réduction"&& $payment->code==$code){
+                        $sumsByTaxCode[$code]=$totalAmount-$payment->amount;
+                    }
+                }
+
+            }
+            foreach ($sumsByTaxCode as $code => $code_amount) {
+                if ($code_amount === 0) {
+                    unset($sumsByTaxCode[$code]);
+                }
+            }
+            foreach ($sumsByTaxCode as $code => $code_amount) {
+                if($amount>0 && $amount<=$code_amount){
+                    $paymentData["code"]=$code;
+                    $paymentArray[]=$paymentData;
+                    $amount-=$code_amount;
+                }elseif ($amount>=$code_amount){
+                    $paymentData["code"]=$code;
+                    $paymentData['amount'] = $code_amount;
+                    $paymentArray[]=$paymentData;
+                    $amount-=$code_amount;
+                }
+            }
+            return $paymentArray;
+        }
+        return null;
+    }
+    public static function getCode($id, int $amount, array $paymentData): ?array {
+        $invoice = Invoice::find($id);
+
+        if ($invoice instanceof Invoice) {
+            $paymentArray = [];
+            $last_payments = Payment::where('invoice_id', $invoice->invoice_no)->get();
+            $sumsByTaxCode = Invoice::sumAmountsByTaxCode($invoice);
+            $s_amount= [];
+            foreach ($sumsByTaxCode as $code => &$totalAmount) {
+                foreach ($last_payments as $index => $payment) {
+                    if ($payment->description !== "Annulation/Réduction" && $payment->code == $code) {
+                        $totalAmount -= $payment->amount;
+                        $s_amount[$index] = $payment->amount;
+                    }
+                }
+
+                if ($totalAmount === 0) {
+                    unset($sumsByTaxCode[$code]);
+                }
+            }
+            $paid = array_sum($s_amount) ?? 0;
+            foreach ($sumsByTaxCode as $code => $code_amount) {
+                if ($amount > 0&& $code_amount>0) {
+                    $paymentData["code"] = $code;
+                    $paymentData['amount'] = min($amount, $code_amount);
+                    $paymentData['remaining_amount']= $invoice->amount -( $paid+$paymentData['amount']) ;
+                    $paymentArray[] = $paymentData;
+                    $amount -= $paymentData['amount'];
+                }
+            }
+
+            return $paymentArray;
+        }
+
+        return null;
+    }
+
+
 }
