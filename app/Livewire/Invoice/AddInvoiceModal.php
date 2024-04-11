@@ -112,7 +112,7 @@ class AddInvoiceModal extends Component
 
         'taxpayer_id' => 'required|int',
         'amount' => 'required|numeric',
-        'cancel_reduct' => 'required|string|in:REDUCED,CANCELED',
+        //'cancel_reduct' => 'required|string',
 
 
     ];
@@ -202,7 +202,7 @@ class AddInvoiceModal extends Component
         // Validate the form input data
 
 
-        $this->validate();
+        //$this->validate();
         DB::transaction(function () {
 
             //dd($this->qty,$this->start_month);
