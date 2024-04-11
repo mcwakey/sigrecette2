@@ -38,7 +38,7 @@
                             </div>
                         @endcan
                     @endif
-                    @if ($invoice->validity == 'VALID')
+                    @if ($invoice->validity == 'VALID'&& $invoice->status != 'CANCELED' && $invoice->status == 'APROVED')
                             @can('peut réduire ou annuler un avis')
                                 <div class="menu-item px-3">
                                     <a href="#" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{ $invoice->id }}"

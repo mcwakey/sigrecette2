@@ -158,13 +158,13 @@
                                 <label class="fw-semibold fs-6 mb-2">{{ __('.') }}</label>
                                 <input class="form-control form-control-flush mb-2" type="text" placeholder="FCFA" readonly />
                             </div>
+                            <!--TODO CHEQUE implementation-->
                             <div class="col-md-3">
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('payment type') }}</label>
                                 <select wire:model="payment_type" name="payment_type" class="form-select" data-dropdown-parent="#kt_modal_add_payment">
                                     <option></option>
                                     <option value="CASH">CASH</option>
-                                    <!--TODO CHEQUE implementation-->
-                                    <option value="CASH">CHEQUE</option>
+                                    <option value="CHEQUE">CHEQUE</option>
                                     <option value="DIGI">DIGI</option>
                                 </select>
                                 @error('payment_type')
