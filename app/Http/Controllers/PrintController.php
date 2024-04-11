@@ -3,15 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\PdfGenerator;
-use App\Traits\DispatchesMessages;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+
 
 class PrintController extends Controller
 {
-    use DispatchesMessages;
+
     public function __construct(private PdfGenerator $pdfGenerator)
     {
     }
@@ -40,7 +38,7 @@ class PrintController extends Controller
             return $result['pdf'];
         }
 
-        //$this->dispatchMessage("Ficher imprimable","create","error",$result['message']);
+       // $this->dispatchMessage("Ficher imprimable","create","error",$result['message']);
         return back()->with('error', $result['message']);
     }
 
