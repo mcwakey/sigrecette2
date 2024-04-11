@@ -157,7 +157,6 @@ class Invoice extends Model
                         $s_amount[$index] = $payment->amount;
                     }
                 }
-
                 if ($totalAmount === 0) {
                     unset($sumsByTaxCode[$code]);
                 }
@@ -172,10 +171,8 @@ class Invoice extends Model
                     $amount -= $paymentData['amount'];
                 }
             }
-
             return $paymentArray;
         }
-
         return null;
     }
 

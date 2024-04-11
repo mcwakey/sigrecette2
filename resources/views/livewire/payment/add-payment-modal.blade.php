@@ -151,6 +151,8 @@
                             <div class="col-md-3">
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('amount paid') }}</label>
                                 <input wire:model="amount" name="amount" class="form-control mb-2 text-end" type="text" />
+                                @error('amount')
+                                <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div class="col-md-2">
                                 <label class="fw-semibold fs-6 mb-2">{{ __('.') }}</label>
@@ -165,16 +167,20 @@
                                     <option value="CASH">CHEQUE</option>
                                     <option value="DIGI">DIGI</option>
                                 </select>
+                                @error('payment_type')
+                                <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div class="col-md-4">
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('reference no') }}</label>
                                 <input wire:model="reference" name="reference" class="form-control mb-2 text-end" type="text" />
+                                @error('reference')
+                                <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>
 
                         <div class="mb-0">
                             <label class="form-label fs-6 fw-bolder text-gray-700">Notes</label>
-                            <textarea  wire:model="description" name="description"  class="form-control" rows="2" placeholder="Thanks for your business"></textarea>
+                            <textarea  wire:model="description" name="description"  class="form-control" rows="2" placeholder=""></textarea>
                         </div>
 
                         <!--end::Input group-->

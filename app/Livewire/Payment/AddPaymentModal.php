@@ -238,7 +238,7 @@ class AddPaymentModal extends Component
                     $this->dispatchMessage('Paiement');
                 }
             }
-
+            $this->dispatchMessage('Paiement','update','error');
         });
 
         // Reset form fields after successful submission
