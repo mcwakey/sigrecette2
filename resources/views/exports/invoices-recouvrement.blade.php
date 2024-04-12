@@ -71,10 +71,10 @@
         <td colspan="14" style="border: none; margin: 0;" >Exercice : {{" ".$year->name}}</td>
     </tr>
     <tr>
-        <td colspan="14" style="border: none; margin: 0;">Zone fiscale : Zone 1</td>
+        <td colspan="14" style="border: none; margin: 0;">Zone fiscale :{{$data[0]->taxpayer->zone->name}}</td>
     </tr>
     <tr>
-        <td colspan="14" style="border: none; margin: 0;" >Nom de l’agent de recouvrement :{{\Illuminate\Support\Facades\Auth::user()->name}}</td>
+        <td colspan="14" style="border: none; margin: 0;" >Nom de l’agent de recouvrement : {{\Illuminate\Support\Facades\Auth::user()->name}}</td>
     </tr>
     <tr>
         <td  colspan="14" style="border: none; margin: 0;" >Période de distribution: ........</td>
