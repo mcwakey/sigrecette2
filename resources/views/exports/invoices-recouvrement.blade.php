@@ -65,6 +65,9 @@
         <td colspan="14" style="border: none; margin: 0; text-align: center;">N°....</td>
     </tr>
     <tr>
+        @php
+            $year = \App\Models\Year::getActiveYear()
+        @endphp
         <td colspan="14" style="border: none; margin: 0;" >Exercice : {{" ".$year->name}}</td>
     </tr>
     <tr>
