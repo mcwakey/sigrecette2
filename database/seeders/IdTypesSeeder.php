@@ -13,13 +13,13 @@ class IdTypesSeeder extends Seeder
     public function run(): void
     {
         $idTypeNames = [
-            'Identifiant unique',
             'PAS DE CARTE',
             'CNI',
             'PASSPORT',
             'PERMIS DE CONDUIRE',
             'CARTE D\'ELECTEUR',
             'CARTE DE SEJOUR',
+            'IDENTIFIANT UNIQUE',
         ];
 
         foreach ($idTypeNames as $name) {

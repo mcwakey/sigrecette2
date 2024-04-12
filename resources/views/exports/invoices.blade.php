@@ -275,13 +275,23 @@
             </tr>
 
 
+
         </table>
-        <p>Arrêté le présent avis à la somme de :<span
-                class="write">@if($action==1){{number_to_words($data->amount) }}@else {{number_to_words($invoice->amount -$data->amount) }}  @endif</span>
+        <p>Arrêté le présent @if($action!=1) Avis d'annulation @else avis @endifà la somme de:<span
+                class="write">@if($action==1){{number_to_words($data->amount) }}@else
+                    @if($invoice->amount ==$data->amount)
+                        {{number_to_words($invoice->amount) }}
+                    @else
+                        {{number_to_words($invoice->amount -$data->amount) }}
+                    @endif
+                @endif</span>
             Francs CFA (Sauf erreur ou omission).</p>
         @if($action==1)
             <p>A payer dans les 30 jours suivant la réception de l’avis, ou avant la fin de chaque mois pour les
                 paiements mensualisés.</p>
+            @else
+
+                <p>N.B. Somme Total Nouveau décompte: {{ $data->amount}} Francs CFA (Sauf erreur ou omission).</p>
         @endif
         <table>
             <tr class="text-start">

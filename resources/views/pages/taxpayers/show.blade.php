@@ -731,7 +731,7 @@
                                                                             </div>
                                                                     @endcan
                                                                 @endif
-                                                                @if ($invoice->validity == 'VALID')
+                                                                @if ($invoice->validity == 'VALID' && ($invoice->status == 'APROVED' || $invoice->status =='APROVED-CANCELLATION') )
 
                                                                     @can('peut réduire ou annuler un avis')
                                                                         <!--begin::Menu item-->

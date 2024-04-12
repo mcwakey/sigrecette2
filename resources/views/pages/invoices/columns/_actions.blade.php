@@ -18,7 +18,7 @@
 
     @if($invoice->status == 'DRAFT')
         {{-- Anything here --}}
-    @elseif($invoice->status == 'APROVED' || $invoice->status == 'CANCELED')
+    @elseif($invoice->status == 'APROVED' || $invoice->status == 'CANCELED'||  $invoice->status=="APROVED-CANCELLATION")
             @php
                 $data = [$invoice->uuid];
             @endphp
@@ -28,7 +28,7 @@
             </div>
         @if ($invoice->status != 'REDUCED')
                 @if ($invoice->status != 'CANCELED' && $invoice->pay_status != 'PAID')
-                    @if ( $invoice->status == 'APROVED')
+                    @if ( $invoice->status == 'APROVED'||  $invoice->status=="APROVED-CANCELLATION")
                         @can('peut ajouter la date de livraison d\'un avis')
                             <div class="menu-item px-3">
                                 <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->invoice_no }}"
@@ -38,7 +38,7 @@
                             </div>
                         @endcan
                     @endif
-                    @if ($invoice->validity == 'VALID'&& $invoice->status != 'CANCELED' && $invoice->status == 'APROVED')
+                    @if (($invoice->validity == 'VALID'&& $invoice->status != 'CANCELED') && ($invoice->status == 'APROVED'||  $invoice->status=="APROVED-CANCELLATION"))
                             @can('peut réduire ou annuler un avis')
                                 <div class="menu-item px-3">
                                     <a href="#" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{ $invoice->id }}"

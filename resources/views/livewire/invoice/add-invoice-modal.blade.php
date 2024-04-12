@@ -1,3 +1,19 @@
+@php
+    use Carbon\Carbon;
+    $year= \App\Models\Year::getActiveYear();
+    $months = [];
+    // Obtenez le mois actuel
+    $currentMonth = Carbon::now()->month;
+    $remainingMonths = 12 - $currentMonth;
+
+    for ($i = $currentMonth + 1; $i <= $currentMonth + $remainingMonths; $i++) {
+        $monthIndex = $i > 12 ? $i - 12 : $i;
+        $monthName = Carbon::createFromFormat('m',$monthIndex)->monthName;
+        $monthNumber = str_pad($monthIndex, 2, '0', STR_PAD_LEFT);
+        $months[$monthNumber] = $monthName;
+    }
+
+@endphp
 <div class="modal fade" id="kt_modal_add_invoice" tabindex="-1" aria-hidden="true" wire:ignore.self>
     <!--begin::Modal dialog-->
     <div class="modal-dialog modal-dialog-centered mw-1000px">
@@ -67,10 +83,10 @@
 
                         <div class="row mb-2">
                             <div class="col-md-3">
-                                <label class="required form-control form-control-flush text-end"> {{ __('Duree du contrat') }}</label>
+                                <label class="required form-control form-control-flush text-end"> {{ __('Nombre de Taxation') }}</label>
                             </div>
                             <div class="col-md-2">
-                                <div class="position-relative" data-kt-dialer="true" data-kt-dialer-min="1" data-kt-dialer-max="12" data-kt-dialer-step="1">
+                                <div class="position-relative" data-kt-dialer="true" data-kt-dialer-min="1" data-kt-dialer-max="{{count($months)}}" data-kt-dialer-step="1">
                                     <!--begin::Decrease control-->
                                     <button type="button" class="btn btn-icon btn-active-color-gray-700 position-absolute translate-middle-y top-50 start-0" data-kt-dialer-control="decrease">
                                         @if ($edit_mode==false)
@@ -100,23 +116,15 @@
                                 <label  class="required form-control form-control-flush text-end">{{ __('A compter de') }} </label>
                             </div>
                             <div class="col-md-3">
+
                             <div class="input-group mb-2">
                                 <select wire:model="start_month" name="start_month" class="form-select form-control-select" data-dropdown-parent="#kt_modal_add_invoice">
-                                    <option></option>
-                                    <option value="01">Janvier</option>
-                                    <option value="02">Fevrier</option>
-                                    <option value="03">Mars</option>
-                                    <option value="04">Avril</option>
-                                    <option value="05">Mai</option>
-                                    <option value="06">Juin</option>
-                                    <option value="07">Juillet</option>
-                                    <option value="08">Aout</option>
-                                    <option value="09">Septembre</option>
-                                    <option value="10">Octobre</option>
-                                    <option value="11">Novembre</option>
-                                    <option value="12">Decembre</option>
+                                    @foreach ($months as $monthNumber => $monthName)
+                                        <option value="{{ $monthNumber }}" @if($start_month!=null && $monthNumber==$start_month) selected @endif>{{ $monthName }}</option>
+                                    @endforeach
                                 </select>
-                                <span class="input-group-text" id="basic-addon1">2024</span>
+
+                                <span class="input-group-text" id="basic-addon1">{{" ".$year->name}}</span>
                                         </div>
                                 @error('start_month')
                                 <span class="text-danger">{{ $message }}</span> @enderror

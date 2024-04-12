@@ -69,6 +69,8 @@ class AddStatusForm extends Component
                     'taxpayer_id' =>  $invoice->taxpayer_id,
                     'amount' => $invoice->reduce_amount,
                     'description' =>"Annulation/Réduction",
+                    'user_id'=>  Auth::id(),
+                    'reference'
 
                 ];
                 Payment::create($paymentData);
