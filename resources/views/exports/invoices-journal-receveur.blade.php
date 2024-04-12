@@ -115,6 +115,7 @@
         @php
             $sumsByTaxCode = \App\Models\Invoice::sumAmountsByTaxCode($item);
         @endphp
+        {{--TODO logique à refaire l'implémentation n'est pas correction doit gérer la creation des avis et les paiement associés --}}
 
             @foreach($sumsByTaxCode as $code => &$totalAmount)
                             <tr>
@@ -127,10 +128,17 @@
                                 <td>{{$item->taxpayer->name}}</td>
                                 <td>{{$item->taxpayer->longitude,$item->taxpayer->latitude}}</td>
                                 <td>{{$code}}</td>
-                                <td>{{$totalAmount}}</td>
-                                <td></td>
-                                <td></td>
-                                <td>{{$totalAmount}}</td>
+                                @if($item->reduce_amount== '')
+                                    <td>{{$totalAmount}}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>{{$totalAmount}}</td>
+                                @else
+                                    <td>{{0}}</td>
+                                    <td></td>
+                                    <td>{{$item->reduce_amount}}</td>
+                                    <td>{{$totalAmount}}</td>
+                                @endif
                             </tr>
             @endforeach
     @endforeach

@@ -106,6 +106,7 @@
         @endforeach
     </tr>
     <tbody>
+
     @php
         $total_somme = 0;
     @endphp
@@ -113,20 +114,26 @@
 
     @foreach($data as $index => $item)
         @php
-            $total_somme +=intval($item->amount);
-            $year = date("Y", strtotime( $item[ __('from_date')])) ;
-            switch ($item->status) {
-                case "APROVED-CANCELLATION":
-                case "APROVED":
-                    $item->status = "PC";
-                    break;
-                case "REJECTED":
-                    $item->status = "REJETÉ";
-                    break;
-                default:
-                    $item->status = "";
-                    break;
+            if($action==2) {
+            $total_somme +=intval($item->reduce_amount);
             }
+            else{
+                         $total_somme +=intval($item->amount);
+                    }
+
+                $year = date("Y", strtotime( $item[ __('from_date')])) ;
+                switch ($item->status) {
+                    case "APROVED-CANCELLATION":
+                    case "APROVED":
+                        $item->status = "PC";
+                        break;
+                    case "REJECTED":
+                        $item->status = "REJETÉ";
+                        break;
+                    default:
+                        $item->status = "";
+                        break;
+                }
         @endphp
         <tr>
             <td>{{$item->invoice_no}}</td>
@@ -144,7 +151,14 @@
             <td>{{$item->taxpayer->zone->name}}</td>
             <td>{{$item->taxpayer->town->canton->name."-".$item->taxpayer->town->name."-".$item->taxpayer->address}}</td>
             <td>{{$item->taxpayer->longitude,$item->taxpayer->latitude}}</td>
-            <td>{{$item->amount}}</td>
+            <td>
+                @if($action==2)
+                    {{$item->reduce_amount}}
+                @else
+                    {{$item->amount}}
+                @endif
+
+            </td>
             <td>{{$item->status}}</td>
         </tr>
     @endforeach

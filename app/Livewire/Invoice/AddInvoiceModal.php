@@ -14,6 +14,7 @@ use App\Models\Town;
 use App\Notifications\InvoiceCreated;
 use App\Notifications\InvoicePaid;
 use App\Traits\DispatchesMessages;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
@@ -152,6 +153,8 @@ class AddInvoiceModal extends Component
 
         //return view('livewire.invoice.add-invoice-modal', ['taxpayer_id' => $this->taxpayer_id]);
 
+
+
         return view('livewire.invoice.add-invoice-modal', compact('taxpayers'));
     }
 
@@ -210,13 +213,15 @@ class AddInvoiceModal extends Component
                 $this->invoice_id = null;
             }
 
-            // Prepare data for Invoice
+            $from_date = Carbon::createFromDate(date('Y'), $this->start_month, 1);
+
+            $to_date = $from_date->copy()->addMonths($this->qty - 1)->endOfMonth();
             $invoiceData = [
                 'taxpayer_id' => $this->taxpayer_id,
                 'amount' => $this->amount,
                 'qty' => $this->qty,
-                'from_date' => date('Y-') . $this->start_month . "-01",
-                'to_date' => date('Y-') . $this->start_month + $this->qty - 1 . "-31",
+                'from_date' => $from_date->toDateString(),
+                'to_date' => $to_date->toDateString(),
                 // 'pay_status' => 'DRAFT',
             ];
 

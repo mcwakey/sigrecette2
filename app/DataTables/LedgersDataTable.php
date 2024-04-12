@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 
 class LedgersDataTable extends DataTable
 {
+
     /**
      * Build the DataTable class.
      *
@@ -19,121 +20,12 @@ class LedgersDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
+
+    $newAmount = 0;
+
         return (new EloquentDataTable($query))
-            // ->filter(function ($query) {
-            //     if (request()->filled('search.value')) {
-            //         $query->where('tax_labels.name', 'like', '%' . request('search.value') . '%')
-            //         ->orWhere('taxables.name', 'like', '%' . request('search.value') . '%')
-            //         ->orWhere('tax_labels.code', 'like', '%' . request('search.value') . '%')
-            //         ->orWhere('bill_status', 'like', '%' . request('search.value') . '%');
-            //         // Add additional search conditions as needed for other columns
-            //     }
-            // })
             ->rawColumns(['status'])
-            // ->editColumn('id', function (Payment $payment) {
-            //     return $payment->id;
-            // })
-            // ->editColumn('trans_no', function (Payment $payment) {
-            //     return view('pages.collector_deposits.columns._bill', compact('collector_deposit'));
-            // })
-            // ->editColumn('payments.created_at', function (Payment $payment) {
-            //     return $payment->created_at->format('d M Y');
-            // })
-            // ->editColumn('taxables.name', function (Payment $payment) {
-            //     return $payment->taxable->name;
-            // })
-            // ->editColumn('tax_labels.code', function (Payment $payment) {
-            //     return $payment->taxable->tax_label->code;
-            // })
-            // ->editColumn('tax_labels.name', function (Payment $payment) {
-            //     return $payment->taxable->tax_label->name;
-            // })
-            // ->editColumn('tariff', function (Payment $payment) {
-            //     return $payment->taxable->tariff;
-            // })
-            // ->editColumn('collector_deposit', function (Payment $payment) {
-            //     return view('pages.collector_deposits.columns._label', compact('collector_deposit'));
-            // })
-            // ->editColumn('tax_type', function (Payment $payment) {
-            //     return $payment->;
-            // })
-            // ->editColumn('payments.start_no', function (Payment $payment) {
-            //     return $payment->start_no. " - ". $payment->end_no;
-            //     // return view('pages.collector_deposits.columns._seize', compact('collector_deposit'));
-            // })
-            // ->editColumn('qty', function (Payment $payment) {
-            //     if ($payment->trans_type == "RECU") {
-            //         $qty = $payment->qty ;
-            //     } else {
-            //         $qty =  "";
-            //     }
-
-            //     return $qty;
-            // })
-            // ->editColumn('total', function (Payment $payment) {
-            //     if ($payment->trans_type == "RECU") {
-            //         $total = $payment->qty * $payment->taxable->tariff; ;
-            //     } else {
-            //         $total =  "";
-            //     }
-
-            //     return $total;
-            // })
-            // ->editColumn('qty', function (Payment $payment) {
-            //     if ($payment->trans_type == "VENDU") {
-            //         $qty = $payment->qty ;
-            //     } else {
-            //         $qty =  "";
-            //     }
-
-            //     return $qty;
-            // })
-            // ->editColumn('total', function (Payment $payment) {
-            //     if ($payment->trans_type == "VENDU") {
-            //         $total = $payment->qty * $payment->taxable->tariff; ;
-            //     } else {
-            //         $total =  "";
-            //     }
-
-            //     return $total;
-            // })
-            // ->editColumn('qty2', function (Payment $payment) {
-            //     if ($payment->trans_type == "RENDU") {
-            //         $qty = $payment->qty ;
-            //     } else {
-            //         $qty =  "";
-            //     }
-
-            //     return $qty;
-            // })
-            // ->editColumn('total2', function (Payment $payment) {
-            //     if ($payment->trans_type == "RENDU") {
-            //         $total = $payment->qty * $payment->taxable->tariff; ;
-            //     } else {
-            //         $total =  "";
-            //     }
-
-            //     return $total;
-            // })
-            // ->editColumn('qty2', function (Payment $payment) {
-            //     return $payment->qty;
-            // })
-            // ->editColumn('total2', function (Payment $payment) {
-            //     return $payment->qty * $payment->taxable->tariff;
-            // })
-            // ->editColumn('bill_status', function (Payment $payment) {
-            //     return view('pages.collector_deposits.columns._status', compact('collector_deposit'));
-            // })
-            // ->editColumn('location', function (Payment $payment) {
-            //     return view('pages.collector_deposits.columns._location', compact('collector_deposit'));
-            // })
-            // ->editColumn('users.name', function (Payment $payment) {
-            //     return $payment->user->name;
-            // })
-            // ->editColumn('payments.type', function (Payment $payment) {
-            //     return view('pages.payments.columns._status', compact('payment'));
-            //     //return $stock_request->type;
-            // })
+            
             ->editColumn('payments.created_at', function (Payment $payment) {
                 return $payment->created_at->format('d M Y');
             })
@@ -146,8 +38,17 @@ class LedgersDataTable extends DataTable
             ->editColumn('amount', function (Payment $payment) {
                 return $payment->amount;
             })
+            
+        ->editColumn('newAmount', function (Payment $payment) use (&$newAmount) {
+            // Add the amount of the current row to the accumulated amount
+            $newAmount += $payment->amount;
+            
+            // Return the accumulated amount
+            return $newAmount;
+        })
+
             ->editColumn('stock_transfers.code', function (Payment $payment) {
-                return $payment->stock_transfers->first()->code ?? "";
+                return $payment->stock_transfers->first()->code ?? $payment->code;
                 //return $payment->code;
             })
             ->addColumn('action', function (Payment $payment) {
@@ -176,7 +77,7 @@ class LedgersDataTable extends DataTable
                     // ->with('taxable.tax_label')
                     // ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
                     // ->join('users', 'payments.to_user_id', '=', 'users.id')
-                    //  ->orWhere('invoice_id', null) // Filter collector_deposits by taxpayer_id
+                     ->where('status', 'APROVED') // Filter collector_deposits by taxpayer_id
                     //  ->orWhere('taxpayer_id', null) // Filter collector_deposits by taxpayer_id
                     // ->select('payments.*')
                     //->orderBy('tax_labels.name')
@@ -219,8 +120,8 @@ class LedgersDataTable extends DataTable
             Column::make('amount')->title(__('amount')),
             //Column::make('tax_type')->title(__('tax_type')),
             //Column::make('qty')->title(__('rc qty'))->addClass('text-nowrap'),
-            Column::make('r_user_id')->title(__('versement')),
-            Column::make('r_user_id')->title(__('solde')),
+            Column::make('deposit')->title(__('versement')),
+            Column::make('newAmount')->title(__('solde')),
             // Column::make('total')->title(__('vv total'))->name('qty'),
             //Column::make('qty2')->title(__('rd qty'))->addClass('text-nowrap'),
             //Column::make('total2')->title(__('rd total')),
@@ -234,13 +135,6 @@ class LedgersDataTable extends DataTable
                 ->exportable(false)
                 ->printable(false)
                 ->width(60)
-                // ->buttons(
-                //     Button::make('create'),
-                //     Button::make('export'),
-                //     Button::make('print'),
-                //     Button::make('reset'),
-                //     Button::make('reload')
-                // )
         ];
     }
 

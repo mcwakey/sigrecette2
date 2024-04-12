@@ -42,7 +42,7 @@
 				<div class="text-gray-500 flex-grow-1 me-4">Matière taxable x</div>
 				<!--end::Label-->
 				<!--begin::Stats-->
-				<div class="fw-bolder text-gray-700 text-xxl-end">$7,660</div>
+				<div class="fw-bolder text-gray-700 text-xxl-end">7,660 CFA</div>
 				<!--end::Stats-->
 			</div>
 			<!--end::Label-->

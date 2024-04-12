@@ -196,6 +196,18 @@ class Invoice extends Model
         }
         return null;
     }
+    public static function getRestToPaid(Invoice $invoice):int{
+        $s_amount= [];
+        $last_payments = Payment::where('invoice_id', $invoice->invoice_no)->get();
+        foreach ($last_payments as $index => $payment) {
+            //if ($payment->description !== "Annulation/Réduction") {
+                $s_amount[$index] = $payment->amount;
+
+        }
+        $paid=array_sum($s_amount) ?? 0;
+        return $invoice->amount - $paid;
+
+    }
 
 
 }

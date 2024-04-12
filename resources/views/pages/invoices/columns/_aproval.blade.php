@@ -1,4 +1,4 @@
-    @if($invoice->status == "PENDING")
+    @if($invoice->status == "PENDING" && $invoice->order_no!=null)
     <div class="badge badge-lg badge-light-primary d-inline">{{ __($invoice->status) }}
         @can('peut prendre en charge un avis')
             <button type="button"

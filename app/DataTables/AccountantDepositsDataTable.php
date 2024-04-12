@@ -39,8 +39,11 @@ class AccountantDepositsDataTable extends DataTable
             ->editColumn('payments.created_at', function (Payment $payment) {
                 return $payment->created_at->format('d M Y');
             })
-            ->editColumn('description', function (Payment $payment) {
-                return $payment->description;
+            ->editColumn('invoice_no', function (Payment $payment) {
+                return $payment->invoice->invoice_no ?? '';
+            })
+            ->editColumn('order_no', function (Payment $payment) {
+                return $payment->invoice->order_no ?? '';
             })
             ->editColumn('reference', function (Payment $payment) {
                 return $payment->reference;
@@ -49,7 +52,7 @@ class AccountantDepositsDataTable extends DataTable
                 return $payment->amount;
             })
             ->editColumn('stock_transfers.code', function (Payment $payment) {
-                return $payment->stock_transfers->first()->code ?? "";
+                return $payment->stock_transfers->first()->code ?? '';
                 //return $payment->code;
             })
             // ->editColumn('tariff', function (Payment $payment) {
@@ -155,8 +158,9 @@ class AccountantDepositsDataTable extends DataTable
                     // ->with('taxable.tax_label')
                     // ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
                     // ->join('users', 'payments.to_user_id', '=', 'users.id')
-                     ->orWhere('invoice_id', null) // Filter collector_deposits by taxpayer_id
-                     ->orWhere('taxpayer_id', null) // Filter collector_deposits by taxpayer_id
+                    //  ->orWhere('invoice_id', null) // Filter collector_deposits by taxpayer_id
+                    //  ->orWhere('taxpayer_id', null) // Filter collector_deposits by taxpayer_id
+                    ->whereNot('status', 'PENDING') // Filter collector_deposits by taxpayer_id
                     // ->select('payments.*')
                     //->orderBy('tax_labels.name')
                     ->newQuery();
@@ -191,23 +195,24 @@ class AccountantDepositsDataTable extends DataTable
             Column::make('id')->title(__('id'))->exportable(false)->printable(false)->visible(false), 
             Column::make('payments.created_at')->title(__('date'))->addClass('text-nowrap'),
             //Column::make('trans_desc')->title(__('trans_desc')),
-            Column::make('description')->title(__('description')),
+            Column::make('invoice_no')->title(__('invoice no')),
+            Column::make('order_no')->title(__('order no')),
             Column::make('reference')->title(__('reference no')),
             //Column::make('tariff')->title(__('tariff'))->addClass('text-nowrap')->name('tax_labels.name'),
             Column::make('amount')->title(__('amount')),
             //Column::make('tax_type')->title(__('tax_type')),
-            Column::make('stock_transfers.code')->title(__('code')),
-            //Column::make('qty')->title(__('rc qty'))->addClass('text-nowrap'),
-            Column::make('r_user_id')->title(__('Date')),
-            Column::make('r_user_id')->title(__('No d\'ordre')),
-            // Column::make('total')->title(__('vv total'))->name('qty'),
-            //Column::make('qty2')->title(__('rd qty'))->addClass('text-nowrap'),
-            //Column::make('total2')->title(__('rd total')),
-            // Column::make('qty2')->title(__('sd qty'))->addClass('text-nowrap'),
-            // // Column::make('total2')->title(__('sd total')),
-            // Column::make('tax_labels.code')->title(__('code')),
-            // Column::make('users.name')->title(__('collector')),
-            // Column::make('payments.type')->title(__('status')),
+            // Column::make('stock_transfers.code')->title(__('code')),
+            // //Column::make('qty')->title(__('rc qty'))->addClass('text-nowrap'),
+            // Column::make('r_user_id')->title(__('Date')),
+            // Column::make('r_user_id')->title(__('No d\'ordre')),
+            // // Column::make('total')->title(__('vv total'))->name('qty'),
+            // //Column::make('qty2')->title(__('rd qty'))->addClass('text-nowrap'),
+            // //Column::make('total2')->title(__('rd total')),
+            // // Column::make('qty2')->title(__('sd qty'))->addClass('text-nowrap'),
+            // // // Column::make('total2')->title(__('sd total')),
+            // // Column::make('tax_labels.code')->title(__('code')),
+            // // Column::make('users.name')->title(__('collector')),
+            // // Column::make('payments.type')->title(__('status')),
             Column::computed('action')->title(__('action'))
                 ->addClass('text-end text-nowrap')
                 ->exportable(false)
