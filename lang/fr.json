@@ -297,7 +297,8 @@
     "comptabilite des valeurs inactives du regisseur": "Etat de comptabilite des Valeurs Inactives du Regisseur au Receveur",
     "comptabilite des valeurs inactives du collecteur": "Etat de comptabilite des Valeurs Inactives du Collecteur au Regisseur",
     "livre journal de la regie": "Livre - journal de Regie",
-    "etat de versement du regisseur": "Etat de versement du Regisseur au Receveur",
+    "etat de versement du regisseur title": "Etat de versement du Regisseur au Receveur - Recettes sur titre",
+    "etat de versement du regisseur outright": "Etat de versement du Regisseur au Receveur - Recettes au comptant",
     "etat de versement du collecteur": "Etat de versement du Collecteur au Regisseur",
 
     "close": "Fermer",
@@ -336,6 +337,8 @@
     "batch no": "No de bon",
     "payment description": "Description de l'opération",
     "deposit": "Versement",
+
+    "versement du regisseur title": "Versement du Regisseur au Receveur - Recettes sur titre",
 
 
 

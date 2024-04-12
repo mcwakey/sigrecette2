@@ -1,7 +1,7 @@
 <x-default-layout>
 
     @section('title')
-    {{ __('etat de versement du regisseur') }}
+    {{ __('etat de versement du regisseur title') }}
     @endsection
 
     @section('breadcrumbs')
@@ -38,7 +38,7 @@
                     <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                         <!--begin::Add user-->
                         <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                            data-bs-target="#kt_modal_add_stock_transfer" data-kt-action="add_deposit">
+                            data-bs-target="#kt_modal_add_accountant_deposit" data-kt-action="add_accountant_deposit">
                             {!! getIcon('plus', 'fs-2', '', 'i') !!}
                             {{ __('new deposit') }}
                         </button>
@@ -233,7 +233,7 @@
 </div>
         <!--end::Card body-->
     </div>
-                <livewire:stock_transfer.add-stock-transfer-modal/>
+                <livewire:accountant_deposit.add-accountant-deposit-modal/>
 
     @push('scripts')
         {{ $dataTable->scripts() }}
@@ -264,7 +264,7 @@
 
             document.addEventListener('livewire:init', function () {
                 Livewire.on('success', function () {
-                    $('#kt_modal_add_stock_transfer').modal('hide');
+                    $('#kt_modal_add_accountant_deposit').modal('hide');
                     window.LaravelDataTables['collector_deposits-table'].ajax.reload();
                 });
             });

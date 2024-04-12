@@ -16,6 +16,7 @@ return new class extends Migration
             $table->double('amount')->default(0);
             $table->string('payment_type')->nullable();
             // $table->string('status')->default('DRAFT');
+            $table->double('deposit')->nullable();
             $table->string('reference')->nullable();
             $table->string('description')->nullable();
             //$table->string('account_id')->nullable();

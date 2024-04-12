@@ -135,7 +135,7 @@ class CollectorDepositsDataTable extends DataTable
                 //return $stock_request->type;
             })
             ->editColumn('payments.reference', function (StockTransfer $stock_transfer) {
-                return $stock_transfer->payment->reference;
+                return $stock_transfer->payment->reference ?? '';
                 // return view('pages.collector_deposits.columns._seize', compact('collector_deposit'));
             })
             ->addColumn('action', function (StockTransfer $stock_transfer) {
@@ -154,7 +154,7 @@ class CollectorDepositsDataTable extends DataTable
                     // ->with('taxable.tax_label')
                     // ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
                     ->join('users', 'stock_transfers.to_user_id', '=', 'users.id')
-                    ->join('payments', 'stock_transfers.payment_id', '=', 'payments.id')
+                    ->leftjoin('payments', 'stock_transfers.payment_id', '=', 'payments.id')
                     ->where('stock_transfers.trans_type', 'VENDU') // Filter collector_deposits by taxpayer_id
                     ->select('stock_transfers.*')
                     //->orderBy('tax_labels.name')
