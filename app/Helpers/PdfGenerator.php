@@ -170,8 +170,8 @@ class PdfGenerator
                 break;
             case 2:
                 $base_array[0] = "N° Avis de réduction ou d’annulation";
-                $base_array[2] = "N° Avis réduit ou annulé";
-                $base_array[3] = "N° OR d’annulation ou réduction";
+                $base_array[3] = "N° Avis réduit ou annulé";
+                $base_array[2] = "N° OR d’annulation ou réduction";
                 $base_array[9]= "Somme réduite ou annulée";
                 $base_array[11]= "TOTAL DU PRESENT BORDEREAU D’ANNULATION";
                 $base_array[12]= "TOTAL GENERAL DU PRECEDENT BORDEREAU D’ANNULATION";
