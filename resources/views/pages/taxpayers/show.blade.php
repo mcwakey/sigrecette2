@@ -538,7 +538,7 @@
                                                 </td>
 
                                                 <td>
-                                                    @if ($invoice->status == 'APROVED'||$invoice->status == 'CANCELED' || $invoice->status =='REDUCED' || $invoice->status =='APROVED-CANCELLATION')
+                                                    @if( $invoice->status != 'REJECTED')
                                                         @if ($invoice->delivery == 'NOT DELIVERED'&& $invoice->order_no !== null)
                                                             @can('peut ajouter la date de livraison d\'un avis')
                                                                 <button type="button"
@@ -803,6 +803,7 @@
                                         <th class="min-w-50px">{{ __('payment date') }}</th>
                                         <th class="min-w-50px">{{ __('invoice no') }}</th>
                                         <th class="min-w-50px">{{ __('reference no') }}</th>
+                                        <th class="min-w-50px">{{ __("code d'imputation") }}</th>
                                         <th class="min-w-50px">{{ __('amount') }}</th>
                                         <th class="min-w-50px">{{ __('type') }}</th>
                                         <th class="min-w-50px">{{ __('description') }}</th>
@@ -816,6 +817,7 @@
                                             <td>{{ $payment->created_at->format('Y-m-d') }}</td>
                                             <td>{{ $payment->invoice->invoice_no }}</td>
                                             <td>{{ $payment->reference }}</td>
+                                            <td>{{ $payment->code }}</td>
                                             <td>
 
 

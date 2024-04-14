@@ -133,4 +133,13 @@ class Year extends Model
         });
         return $year;
     }
+
+    /**
+     * @return Year|null
+     */
+    public static function getOldestYear(): ?Year
+    {
+        return Year::orderBy('name')->first();
+    }
+
 }

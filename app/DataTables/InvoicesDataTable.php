@@ -90,11 +90,8 @@ class InvoicesDataTable extends DataTable
 
     public function query(Invoice $model): QueryBuilder
     {
-        $activeYear = Year::getActiveYear();
-        $startOfYear = Carbon::parse("{$activeYear->name}-01-01 00:00:00");
-        $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
 
-            return $model->join('invoice_items', 'invoice_items.invoice_id', '=', 'invoices.id')
+            $query= $model->join('invoice_items', 'invoice_items.invoice_id', '=', 'invoices.id')
                         ->leftjoin('taxpayers', 'taxpayers.id', '=', 'invoices.taxpayer_id')
                         ->join('taxpayer_taxables', 'taxpayer_taxables.id', '=', 'invoice_items.taxpayer_taxable_id')
                         ->join('taxables', 'taxables.id', '=', 'taxpayer_taxables.taxable_id')
@@ -104,9 +101,18 @@ class InvoicesDataTable extends DataTable
                         // ->where('taxables.tax_label_id', 'LIKE', '%' . ($this->taxlabel ?? '') . '%')
                         // ->where('invoices.validity', 'EXPIRED')
                         ->select('invoices.*')
-                ->whereBetween('invoices.created_at', [$startOfYear, $endOfYear])
+                ->whereBetween('invoices.created_at', [$this->startDate, $this->endDate])
                         ->distinct()
                         ->newQuery();
+        if ($this->notDelivery!==null && $this->notDelivery) {
+            $query->whereNull('delivery_date');
+        }elseif ($this->notDelivery!==null && !$this->notDelivery)  {
+            $query->whereNotNull('delivery_date');
+        }
+        if ($this->startInvoiceId!== null && $this->endInvoiceId!== null) {
+            $query->whereBetween('invoices.id', [$this->startInvoiceId, $this->endInvoiceId]);
+        }
+        return $query;
     }
 
 

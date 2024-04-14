@@ -6,7 +6,9 @@ use App\DataTables\InvoicesDataTable;
 use App\Models\Taxpayer;
 use App\Models\Invoice;
 use App\Models\TaxLabel;
+use App\Models\Year;
 use App\Models\Zone;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
@@ -14,14 +16,35 @@ class InvoiceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(InvoicesDataTable $dataTable)
+    public function index(Request $request,InvoicesDataTable $dataTable)
     {
-        //return view('pages/invoices.list');
 
+
+        $year = Year::getActiveYear()->name;
+        $validatedData = $request->validate([
+            'notDelivery'=>'nullable|integer',
+            'startInvoiceId' => 'nullable|integer',
+            'endInvoiceId' => 'nullable|integer',
+            's_date'=> 'nullable',
+            'e_date'=> 'nullable',
+        ]);
+        $notDelivery = $validatedData['notDelivery'] ?? null;
+        $startInvoiceId = $validatedData['startInvoiceId'] ?? null;
+        $endInvoiceId = $validatedData['endInvoiceId'] ?? null;
+        $startDate = $validatedData['s_date'] ??  Carbon::parse("{$year}-01-01 00:00:00");
+        $endDate = $validatedData['e_date'] ?? Carbon::parse("{$year}-12-31 23:59:59");
         $zones = Zone::all();
         $tax_labels = TaxLabel::all();
 
-        return $dataTable->render('pages/invoices.list', compact('zones', 'tax_labels'));
+        return $dataTable->with(
+            [
+                'notDelivery' => $notDelivery,
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+                'startInvoiceId'=>$startInvoiceId ,
+                'endInvoiceId'=>$endInvoiceId
+            ]
+        )->render('pages/invoices.list', compact('zones', 'tax_labels'));
     }
 
     /**
