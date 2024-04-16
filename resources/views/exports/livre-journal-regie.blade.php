@@ -6,6 +6,10 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            font-size: 0.75em;
+            padding: 0px;
+            margin: 0 auto;
+            line-height: 1.2;
         }
 
         table {
@@ -18,7 +22,6 @@
         }
 
         th, td {
-            padding: 10px;
             text-align: center;
         }
 
@@ -58,7 +61,7 @@
     <tr>
         <td colspan="2" style="margin: 0;text-align:left">
             <h5> Exercice : 2023 </h5>
-            <h5> Nom de l’agent de recouvrement : Niyuiadzi </h5>
+            <h5> Nom de l’agent de recouvrement : ... </h5>
             <h5> Période du 05/01 Au 14/01</h5>
 
         </td>

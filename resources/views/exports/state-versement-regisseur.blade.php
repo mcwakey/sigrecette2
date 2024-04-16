@@ -39,57 +39,56 @@
 
 <table>
 
+
+
+</table>
+
+<table>
     <tr>
-        <td>REGION PLATEAUX </td>
-        <td>REPUBLIQUE TOGOLAISE
-        </td>
+        <td  colspan="2">REGION PLATEAUX </td>
+        <td  colspan="3">REPUBLIQUE TOGOLAISE</td>
     </tr>
     <tr>
-        <td>Commune de Agou</td>
-        <td>Travail-Liberté-Patrie</td>
+        <td colspan="2">Commune de Agou</td>
+        <td colspan="3">Travail-Liberté-Patrie</td>
     </tr>
     <tr>
-        <td colspan="2">
+        <td colspan="5">
             ETAT DE VERSEMENT DU REGISSEUR DES RECETTES
 
         </td>
 
     </tr>
     <tr>
-        <td colspan="2">
+        <td colspan="5">
             (Recettes sur titre)
 
         </td>
 
     </tr>
     <tr>
-        <td colspan="2">
+        <td colspan="5">
             N°001
         </td>
 
     </tr>
     <tr>
-        <td colspan="2">
+        <td colspan="5">
             Nom du régisseur : Kwassi
         </td>
 
     </tr>
     <tr>
-        <td colspan="2">
+        <td colspan="5">
             Exercice : 2023
         </td>
 
     </tr>
     <tr>
-        <td colspan="2">
+        <td colspan="5">
             Période de : 05/01 à 07/01
         </td>
     </tr>
-
-</table>
-
-<table>
-
     <tr>
         <th>Date</th>
         <th>N° Avis des sommes à payer</th>
@@ -98,7 +97,7 @@
         <th>Montant</th>
     </tr>
 
-    <tbody>
+
     <tr>
         <td>06/01</td>
         <td>Avis 02/23</td>
@@ -136,7 +135,7 @@
         <td colspan="3"> [Signature, nom]</td>
         <td colspan="3">[Signature, nom]</td>
     </tr>
-    </tbody>
+   
 </table>
 
 
