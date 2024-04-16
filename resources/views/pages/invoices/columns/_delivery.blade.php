@@ -1,4 +1,4 @@
-@if ($invoice->status == 'APROVED'||$invoice->status == 'CANCELED'  || $invoice->status =='REDUCED')
+@if ($invoice->status != 'REJECTED')
     @if ($invoice->delivery_date == null && $invoice->order_no !== null)
         {{ __('NOT DELIVERED') }}
         @can('peut ajouter la date de livraison d\'un avis')
@@ -17,10 +17,9 @@
                     <span class="path5"></span>
                 </i>
             </button>
-            @endcan
             <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px"
-                data-kt-menu="true"
-                data-kt-menu-id="kt_modal_add_delivery">
+                 data-kt-menu="true"
+                 data-kt-menu-id="kt_modal_add_delivery">
                 <!--begin::Header-->
                 <div class="px-7 py-5">
                     <div class="fs-5 text-gray-900 fw-bold">
@@ -36,12 +35,12 @@
 
                 <!--end::Form-->
             </div>
-            <!--end::Task menu-->
-
-
+        @else
+            {{ __('NOT DELIVERED') }}
+        @endcan
     @elseif($invoice->delivery == 'DELIVERED')
         {{ date('Y-m-d', strtotime($invoice->delivery_date)) }}
     @endif
 @else
--
+-{{ __('NOT DELIVERED') }}
 @endif

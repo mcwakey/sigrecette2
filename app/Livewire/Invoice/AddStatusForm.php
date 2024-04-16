@@ -63,17 +63,19 @@ class AddStatusForm extends Component
             }
             if ($this->status=="APROVED" &&  $invoice->reduce_amount != ''){
 
-               //last payment not check
+               $description_str=$invoice->reduce_amount==$invoice->amount?"Annulation":"Réduction";
                 $paymentData = [
                     'invoice_id' => $invoice->invoice_no,
                     'taxpayer_id' =>  $invoice->taxpayer_id,
                     'amount' => $invoice->reduce_amount,
-                    'description' =>"Annulation/Réduction",
+                    'description' =>$description_str,
                     'user_id'=>  Auth::id(),
-                    'reference'
 
                 ];
-                Payment::create($paymentData);
+                $payments=Invoice::getCode($invoice->invoice_no,$invoice->reduce_amount,$paymentData);
+                foreach ($payments as $payment){
+                    Payment::create($payment);
+                }
                 if ($invoice->reduce_amount==$invoice->amount){
                     $invoice->pay_status="PAID";
                 }else{

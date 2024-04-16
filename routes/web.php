@@ -11,6 +11,7 @@ use App\Http\Controllers\LanguageController;
 
 use App\DataTables\TaxpayerInvoicesDataTable;
 use App\Http\Controllers\AccountantDepositController;
+use App\Http\Controllers\AccountantDepositOutrightController;
 use App\Http\Controllers\CantonsController;
 use App\Http\Controllers\TaxpayerController;
 use App\Http\Controllers\TaxLabelController;
@@ -59,7 +60,10 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::resource('/taxpayers', TaxpayerController::class);
-    Route::resource('/invoices', InvoiceController::class);
+    Route::resource('/invoices', InvoiceController::class)->parameters([
+        'invoices' => 'invoice:notDelivery?,s_date?,e_date?,startInvoiceId?,endInvoiceId?',
+
+    ]);
     Route::resource('/recoveries', RecoveryController::class);
 
     Route::name('geolocation.')->group(function () {
@@ -76,7 +80,8 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('/accounts/stock-transfers', StockTransferController::class);
         Route::resource('/accounts/collector-deposits', CollectorDepositController::class);
         // Route::resource('/accounts/collector-deposits/{id}', CollectorDepositController::class);
-        Route::resource('/accounts/accountant-deposits', AccountantDepositController::class);
+        Route::resource('/accounts/accountant-deposits-title', AccountantDepositController::class);
+        Route::resource('/accounts/accountant-deposits-outright', AccountantDepositOutrightController::class);
         Route::resource('/accounts/ledgers', LedgerController::class);
     });
 

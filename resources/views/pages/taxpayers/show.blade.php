@@ -7,7 +7,6 @@
 @section('breadcrumbs')
     {{ Breadcrumbs::render('taxpayers.show', $taxpayer) }}
 @endsection
-
 <!--begin::Layout-->
     <div class="d-flex flex-column flex-lg-row">
         <!--begin::Sidebar-->
@@ -180,7 +179,7 @@
                         <!--end::Menu item-->
                         <!--TODO Fiche du contribuable-->
                         <div class="menu-item px-5">
-                            <a href="#" class="menu-link px-5">{{ __('Fiche du contribuable') }}</a>
+                            <a href="{{ route('generatePdf', ['data' => json_encode([$taxpayer->id]),'type' => '11']) }}" class="menu-link px-5">{{ __('Fiche du contribuable') }}</a>
                         </div>
                         <div class="menu-item px-5">
                             <a href="#" class="menu-link px-5">{{ __('reports et stats') }}</a>
@@ -538,7 +537,7 @@
                                                 </td>
 
                                                 <td>
-                                                    @if ($invoice->status == 'APROVED'||$invoice->status == 'CANCELED' || $invoice->status =='REDUCED' || $invoice->status =='APROVED-CANCELLATION')
+                                                    @if( $invoice->status != 'REJECTED' && $invoice->status != 'PENDING')
                                                         @if ($invoice->delivery == 'NOT DELIVERED'&& $invoice->order_no !== null)
                                                             @can('peut ajouter la date de livraison d\'un avis')
                                                                 <button type="button"
@@ -803,6 +802,7 @@
                                         <th class="min-w-50px">{{ __('payment date') }}</th>
                                         <th class="min-w-50px">{{ __('invoice no') }}</th>
                                         <th class="min-w-50px">{{ __('reference no') }}</th>
+                                        <th class="min-w-50px">{{ __("code d'imputation") }}</th>
                                         <th class="min-w-50px">{{ __('amount') }}</th>
                                         <th class="min-w-50px">{{ __('type') }}</th>
                                         <th class="min-w-50px">{{ __('description') }}</th>
@@ -816,6 +816,7 @@
                                             <td>{{ $payment->created_at->format('Y-m-d') }}</td>
                                             <td>{{ $payment->invoice->invoice_no }}</td>
                                             <td>{{ $payment->reference }}</td>
+                                            <td>{{ $payment->code }}</td>
                                             <td>
 
 

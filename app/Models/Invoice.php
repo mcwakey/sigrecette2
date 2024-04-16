@@ -23,6 +23,7 @@ class Invoice extends Model
         'pay_status',
         'status',
         'uuid',
+        'delivery_date'
         // 'profile_photo_path',
     ];
 
@@ -132,25 +133,28 @@ class Invoice extends Model
      */
     public static function sumAmountsByTaxCode(Invoice $invoice)
     {
-        //$data = Invoice::retrieveByUUIDs($uuids);
-
         $sumsByTaxCode = [];
-        //$invoice=$data[0];
 
         foreach ($invoice->invoiceitems as $item) {
             $code = $item->taxpayer_taxable->taxable->tax_label->code;
+            $name = $item->taxpayer_taxable->taxable->tax_label->name;
             $amount = $item->amount;
+
             if (array_key_exists($code, $sumsByTaxCode)) {
-                $sumsByTaxCode[$code] += $amount;
+                $sumsByTaxCode[$code]['amount'] += $amount;
             } else {
-                $sumsByTaxCode[$code] = $amount;
+                $sumsByTaxCode[$code] = [
+                    'name' => $name,
+                    'amount' => $amount
+                ];
             }
         }
 
         asort($sumsByTaxCode);
-        //dd($sumsByTaxCode);
+
         return $sumsByTaxCode;
     }
+
 
     /**
      * Get payment codes for a given invoice based on the specified amount.

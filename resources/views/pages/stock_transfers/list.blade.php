@@ -35,7 +35,7 @@
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
                 <!--begin::Toolbar-->
-                    <div class="d-flex justify-content-end ms-5" data-kt-invoice-table-toolbar="base">
+                    <!-- <div class="d-flex justify-content-end ms-5" data-kt-invoice-table-toolbar="base">
                             <div href="#" class="btn btn-light btn-active-light-primary btn-flex btn-center ms-auto me-5"
                                  data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                                 {{ __('print') }}
@@ -54,58 +54,39 @@
 
                         </div>
 
-                    </div>
-                        
-                        <!--begin::Col-->
-                    <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
-                            <!-- <label class="fs-6 form-label fw-bold text-dark">{{ __('user') }}</label> -->
-                            <!-- <input type="text" class="form-control" name="tags" id="mySearchFour" /> -->
-                            <select class="form-select" id="mySearchFour">
-                                <option value="xxx">{{ __('select an option') }}</option>
-                                @foreach($collectors as $collector)
-                                    <option value="{{ $collector->user_name}}">{{ $collector->user_name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                    </div> -->
 
-                    <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
-                        <!--begin::Add user-->
+                    <!-- <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                         <button type="button" class="btn btn-light-warning" data-bs-toggle="modal"
                             data-bs-target="#kt_modal_add_stock_transfer" data-kt-action="add_deposit">
                             {!! getIcon('plus', 'fs-2', '', 'i') !!}
                             {{ __('new deposit') }}
                         </button>
-                        <!--end::Add user-->
                     </div>
 
-                    <!--begin::Toolbar-->
                     <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
-                        <!--begin::Add user-->
                         <button type="button" class="btn btn-light-danger" data-bs-toggle="modal"
                             data-bs-target="#kt_modal_add_stock_transfer" data-kt-action="update_transfer">
                             {!! getIcon('plus', 'fs-2', '', 'i') !!}
                             {{ __('account state') }}
                         </button>
-                        <!--end::Add user-->
-                    </div>
+                    </div> -->
 
-                    <!--begin::Toolbar-->
                     <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
-                        <!--begin::Add user-->
                         <button type="button" class="btn btn-light-success" data-bs-toggle="modal"
                             data-bs-target="#kt_modal_add_stock_transfer" data-kt-action="add_transfer">
                             {!! getIcon('plus', 'fs-2', '', 'i') !!}
                             {{ __('new supply') }}
                         </button>
-                        <!--end::Add user-->
                     </div>
+
                 <!--end::Toolbar-->
 
                     <!--begin::Toolbar-->
                     <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
                         <!--begin::Add user-->
                         <a href="#" class="ms-5 mt-1" data-bs-toggle="collapse" data-bs-target="#kt_tutorial_form">
-                            <span data-bs-toggle="tooltip" title="Onglet tutoriel">
+                            <span>
                                 <i class="ki-outline ki-information fs-2tx text-warning"></i>
                             </span>
                         </a>
@@ -130,14 +111,14 @@
                         <!--begin::Col-->
                         <!-- <div class="col-xxl-6"> -->
                         <!--begin::Col-->
-                        <div class="col-md-2">
+                        <!-- <div class="col-md-2">
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('No de demande') }}</label>
                             <input type="text" class="form-control" name="tags" id="mySearchZero" />
-                        </div>
+                        </div> -->
                         <!--begin::Col-->
-                        <div class="col-md-3">
+                        <!-- <div class="col-md-3">
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('taxable') }}</label>
-                            <input type="text" class="form-control" name="tags" id="mySearchTwo" />
+                            <input type="text" class="form-control" name="tags" id="mySearchTwo" /> -->
                             <!-- <select class="form-select" aria-label="Select a Country" select2="true" data-placeholder="{{ __('select an option') }}" id="mySearchTwo"> -->
                                 <!-- <select name="country" id="mySearchTwo" aria-label="Select a Country" data-control="select2" data-placeholder="{{ __('select an option') }}" class="form-select form-select-solid form-select-lg fw-semibold"> -->
                                 <!-- <option value=""></option>
@@ -161,7 +142,7 @@
                             </select> -->
 
 
-                        </div>
+                        <!-- </div> -->
                         <div class="col-md-3">
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('type') }}</label>
                             <!-- <input type="text" class="form-control" name="tags" id="mySearchOne" /> -->
@@ -175,12 +156,13 @@
                         <!--begin::Col-->
                         <div class="col-md-2">
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('user') }}</label>
-                            <input type="text" class="form-control" name="tags" id="mySearchFours" />
-                            <!-- <select class="form-select" id="mySearchFour">
-                                <option value=""></option>
-                                <option value="Demande">Demande d'approvisionnement</option>
-                                <option value="Etat">Etat de comptabilite</option>
-                            </select> -->
+                            <!-- <input type="text" class="form-control" name="tags" id="mySearchFours" /> -->
+                            <select class="form-select" id="mySearchFour">
+                                <option value="xxx">{{ __('select an option') }}</option>
+                                @foreach($collectors as $collector)
+                                    <option value="{{ $collector->user_name}}">{{ $collector->user_name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="col-md-2">
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('status') }}</label>
@@ -191,9 +173,9 @@
                                 <option value="DONE">COMPTABILISE</option>
                                 <option value="ARCHIVE">COMPTE RENDU</option>
 
-                                <option value="RECU">RECU</option>
+                                <!-- <option value="RECU">RECU</option>
                                 <option value="VENDU">VENDU</option>
-                                <option value="RENDU">RENDU</option>
+                                <option value="RENDU">RENDU</option> -->
                             </select>
                         </div>
                         <!-- </div> -->

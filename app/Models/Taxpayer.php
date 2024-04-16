@@ -217,6 +217,35 @@ class Taxpayer extends Model
 
         return array_values($counts);
     }
+    public static function getInvoiceAndPayments($id):array
+    {
+        $result = [];
+        $items= [];
+        $taxpayer = Taxpayer::find($id);
+        if($taxpayer instanceof  Taxpayer){
+            $result[] = $taxpayer;
+            foreach ($taxpayer->invoices()->get() as $invoice) {
+                $items[] = $invoice;
+                foreach ($invoice->payments()->get() as $payment){
+                    $items[] = $payment;
+                }
+            }
+            $result[] = $items;
+        }
+        $compareByDate = function ($a, $b) {
+            $dateA = $a instanceof Invoice ? ($a->delivery_date ?? $a->created_at) : $a->created_at;
+            $dateB = $b instanceof Invoice ? ($b->delivery_date ?? $b->created_at) : $b->created_at;
+
+            return strcmp($dateA, $dateB);
+        };
+
+        // Trier le tableau une seule fois
+        usort($result[1], $compareByDate);
+
+
+        return $result;
+    }
+
 
 
 }

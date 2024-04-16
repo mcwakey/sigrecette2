@@ -71,7 +71,7 @@
 
             <!--begin:Menu item-->
             <div data-kt-menu-trigger="click"
-                class="menu-item menu-accordion {{ request()->routeIs('invoices.*') ? 'here show' : '' }}">
+                class="menu-item menu-accordion {{ request()->routeIs('invoices') ? 'here show' : '' }}">
                 <!--begin:Menu link-->
                 <span class="menu-link">
                     <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
@@ -84,15 +84,40 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link {{ request()->routeIs('invoices.*') ? 'active' : '' }}"
-                            href="{{ route('invoices.index') }}">
-                            <span class="menu-bullet">
-                                <span class="bullet bullet-dot"></span>
-                            </span>
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery') ? 'active' : '' }}"
+                           href="{{ route('invoices.index') }}">
+        <span class="menu-bullet">
+            <span class="bullet bullet-dot"></span>
+        </span>
                             <span class="menu-title">Liste des avis</span>
                         </a>
                         <!--end:Menu link-->
                     </div>
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && request()->input('notDelivery') == 1 ? 'active' : '' }}"
+                           href="{{ route('invoices.index', ['notDelivery' => true]) }}">
+        <span class="menu-bullet">
+            <span class="bullet bullet-dot"></span>
+        </span>
+                            <span class="menu-title">Liste des avis non distribués</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->has('notDelivery')&& request()->input('notDelivery') == 0 ? 'active' : '' }}"
+                           href="{{ route('invoices.index', ['notDelivery' => false]) }}">
+        <span class="menu-bullet">
+            <span class="bullet bullet-dot"></span>
+        </span>
+                            <span class="menu-title">Liste des avis distribués</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+
+
+
                 </div>
                 <!--end:Menu sub-->
             </div>
@@ -159,8 +184,8 @@
 
                         <!--begin:Menu item-->
                         <div class="menu-item">
-                            <a class="menu-link {{ request()->routeIs('accounts.accountant-deposits.*') ? 'active' : '' }}"
-                                href="{{ route('accounts.accountant-deposits.index') }}">
+                            <a class="menu-link {{ request()->routeIs('accounts.accountant-deposits-title.*') ? 'active' : '' }}"
+                                href="{{ route('accounts.accountant-deposits-title.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -170,15 +195,15 @@
                         <!--end:Menu item-->
 
                         <!--begin:Menu item-->
-                        <!-- <div class="menu-item">
-                            <a class="menu-link {{ request()->routeIs('accounts.accountant-deposits.*') ? 'active' : '' }}"
-                                href="{{ route('accounts.accountant-deposits.index') }}">
+                        <div class="menu-item">
+                            <a class="menu-link {{ request()->routeIs('accounts.accountant-deposits-outright.*') ? 'active' : '' }}"
+                                href="{{ route('accounts.accountant-deposits-outright.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
                                 <span class="menu-title">{{ __('Etat de versement du regisseur - Recettes au comptant') }} </span>
                             </a>
-                        </div> -->
+                        </div>
                         <!--end:Menu item-->
 
 
