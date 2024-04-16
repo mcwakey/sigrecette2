@@ -10,7 +10,7 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
 
-class AccountantDepositsDataTable extends DataTable
+class AccountantDepositsOutrightDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -159,7 +159,7 @@ class AccountantDepositsDataTable extends DataTable
                     // ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
                     // ->join('users', 'payments.to_user_id', '=', 'users.id')
                     //  ->orWhere('invoice_id', null) // Filter collector_deposits by taxpayer_id
-                    ->where('invoice_type', 'TITRE') // Filter collector_deposits by taxpayer_id
+                    ->where('invoice_type', 'COMPTANT') // Filter collector_deposits by taxpayer_id
                     ->where('status', 'APROVED') // Filter collector_deposits by taxpayer_id
                     // ->select('payments.*')
                     //->orderBy('tax_labels.name')
@@ -194,12 +194,12 @@ class AccountantDepositsDataTable extends DataTable
         return [
             Column::make('id')->title(__('id'))->exportable(false)->printable(false)->visible(false), 
             Column::make('payments.created_at')->title(__('date'))->addClass('text-nowrap'),
-            //Column::make('trans_desc')->title(__('trans_desc')),
-            Column::make('invoice_no')->title(__('invoice no')),
-            Column::make('order_no')->title(__('order no')),
+            Column::make('description')->title(__('description')),
             Column::make('reference')->title(__('reference no')),
-            //Column::make('tariff')->title(__('tariff'))->addClass('text-nowrap')->name('tax_labels.name'),
             Column::make('amount')->title(__('amount')),
+            Column::make('code')->title(__('code')),
+            Column::make('order_no')->title(__('order no')),
+            //Column::make('tariff')->title(__('tariff'))->addClass('text-nowrap')->name('tax_labels.name'),
             //Column::make('tax_type')->title(__('tax_type')),
             // Column::make('stock_transfers.code')->title(__('code')),
             // //Column::make('qty')->title(__('rc qty'))->addClass('text-nowrap'),

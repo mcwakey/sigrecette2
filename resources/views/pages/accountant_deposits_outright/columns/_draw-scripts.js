@@ -73,14 +73,6 @@ document.querySelectorAll('[data-kt-action="add_accountant_deposit"]').forEach(f
     });
 });
 
-// Add click event listener to update buttons
-document.querySelectorAll('[data-kt-action="add_accountant_deposit_outright"]').forEach(function (element) {
-    element.addEventListener('click', function () {
-        console.log("add_accountant_deposit_outright ", this.getAttribute('data-kt-user-id'));
-        Livewire.dispatch('add_accountant_deposit_outright', [this.getAttribute('data-kt-user-id')]);
-    });
-});
-
 // Listen for 'success' event emitted by Livewire
 Livewire.on('success', (message) => {
     // Reload the users-table datatable

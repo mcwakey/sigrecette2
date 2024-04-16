@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class StockTransfersDataTable extends DataTable
+class CollectorsDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -126,7 +126,8 @@ class StockTransfersDataTable extends DataTable
             //     return view('pages.stock_transfers.columns._location', compact('stock_transfer'));
             // })
             ->editColumn('users.name', function (StockTransfer $stock_transfer) {
-                return $stock_transfer->user->name;
+                // return $stock_transfer->user->name;
+                return view('pages.stock_transfers.columns._collector', compact('stock_transfer'));
             })
 
             ->editColumn('stock_transfers.type', function (StockTransfer $stock_transfer) {
@@ -134,7 +135,7 @@ class StockTransfersDataTable extends DataTable
                 //return $stock_request->type;
             })
             ->addColumn('action', function (StockTransfer $stock_transfer) {
-                return view('pages.stock_transfers.columns._actions', compact('stock_transfer'));
+                return view('pages.stock_transfers.columns._collector_actions', compact('stock_transfer'));
             })
             ->setRowId('id');
     }
@@ -156,23 +157,23 @@ class StockTransfersDataTable extends DataTable
 
         return $model->join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')
                     ->join('users', 'stock_transfers.to_user_id', '=', 'users.id')
-                    ->select('stock_transfers.trans_id',
-                            DB::raw('SUM(CASE WHEN trans_type = "RECU" THEN qty END) AS rc_qty'),
-                            DB::raw('SUM(CASE WHEN trans_type = "VENDU" THEN qty END) AS vv_qty'),
-                            DB::raw('MAX(CASE WHEN trans_type = "RENDU" THEN qty END) AS rd_qty'),
+                    ->select('stock_transfers.to_user_id',
+                            DB::raw('SUM(CASE WHEN trans_type = "RECU" THEN qty*tariff END) AS rc_qty'),
+                            DB::raw('SUM(CASE WHEN trans_type = "VENDU" THEN qty*tariff END) AS vv_qty'),
+                            DB::raw('MAX(CASE WHEN trans_type = "RENDU" THEN qty*tariff END) AS rd_qty'),
                             DB::raw('MAX(stock_transfers.id) AS id'),
-                            DB::raw('MAX(stock_transfers.trans_no) AS trans_no'),
+                            // DB::raw('MAX(users.name) AS trans_no'),
                             //DB::raw('MAX(stock_transfers.trans_desc) AS trans_desc'),
                             DB::raw('MAX(stock_transfers.start_no) AS start_no'),
                             DB::raw('MAX(stock_transfers.end_no) AS end_no'),
                             DB::raw('MAX(stock_transfers.last_no) AS last_no'),
                             DB::raw('MIN(stock_transfers.trans_type) AS trans_type'),
                             DB::raw('MIN(stock_transfers.type) AS type'),
-                            DB::raw('MAX(stock_transfers.to_user_id) AS to_user_id'),
+                            //DB::raw('MAX(stock_transfers.to_user_id) AS to_user_id'),
                             DB::raw('MAX(stock_transfers.created_at) AS created_at'),
                             DB::raw('MAX(stock_transfers.taxable_id) AS taxable_id'))
-                    ->where('stock_transfers.to_user_id', $this->id) 
-                    ->groupBy('stock_transfers.trans_id')
+                    // ->where('stock_transfers.to_user_id', $this->id) 
+                    ->groupBy( 'stock_transfers.to_user_id')
                     ->orderBy('trans_id', 'desc');
 
         // return StockTransfer::where('taxpayer_id', $this->id); // Filter stock_transfers by taxpayer_id
@@ -205,17 +206,17 @@ class StockTransfersDataTable extends DataTable
             // //Column::make('id')->title(__('id'))->exportable(false)->printable(false)->visible(false),
             Column::make('stock_transfers.created_at')->title(__('date'))->addClass('text-nowrap'),
             // //Column::make('trans_desc')->title(__('trans_desc')),
-            Column::make('taxables.name')->title(__('ticket')),
-            Column::make('taxable.tariff')->title(__('tariff')),
-            Column::make('stock_transfers.start_no')->title(__('num')),
+            Column::make('users.name')->title(__('collector')),
+            // Column::make('taxable.tariff')->title(__('tariff')),
+            // Column::make('stock_transfers.start_no')->title(__('num')),
             // //Column::make('tax_type')->title(__('tax_type')),
             // //Column::make('seize')->title(__('amount')),
-            Column::make('rc_qty')->title(__('rc qty'))->name('qty'),
-            Column::make('rc_total')->title(__('rc total'))->name('qty'),
-            Column::make('vv_qty')->title(__('vv qty'))->name('qty'),
-            Column::make('vv_total')->title(__('vv total'))->name('qty'),
-            Column::make('rd_qty')->title(__('rd qty'))->name('qty'),
-            Column::make('rd_total')->title(__('rd total'))->name('qty'),
+            Column::make('rc_qty')->title(__('rc total'))->name('qty'),
+            // Column::make('rc_total')->title(__('rc total'))->name('qty'),
+            Column::make('vv_qty')->title(__('vv total'))->name('qty'),
+            // Column::make('vv_total')->title(__('vv total'))->name('qty'),
+            Column::make('rd_qty')->title(__('rd total'))->name('qty'),
+            // Column::make('rd_total')->title(__('rd total'))->name('qty'),
             // // Column::make('qty2')->title(__('sd qty'))->addClass('text-nowrap'),
             // // Column::make('total2')->title(__('sd total')),
             // //Column::make('location')->title(__('location'))->addClass('text-nowrap'),

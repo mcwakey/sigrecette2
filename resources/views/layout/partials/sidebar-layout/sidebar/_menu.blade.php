@@ -184,8 +184,8 @@
 
                         <!--begin:Menu item-->
                         <div class="menu-item">
-                            <a class="menu-link {{ request()->routeIs('accounts.accountant-deposits.*') ? 'active' : '' }}"
-                                href="{{ route('accounts.accountant-deposits.index') }}">
+                            <a class="menu-link {{ request()->routeIs('accounts.accountant-deposits-title.*') ? 'active' : '' }}"
+                                href="{{ route('accounts.accountant-deposits-title.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -195,15 +195,15 @@
                         <!--end:Menu item-->
 
                         <!--begin:Menu item-->
-                        <!-- <div class="menu-item">
-                            <a class="menu-link {{ request()->routeIs('accounts.accountant-deposits.*') ? 'active' : '' }}"
-                                href="{{ route('accounts.accountant-deposits.index') }}">
+                        <div class="menu-item">
+                            <a class="menu-link {{ request()->routeIs('accounts.accountant-deposits-outright.*') ? 'active' : '' }}"
+                                href="{{ route('accounts.accountant-deposits-outright.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
                                 <span class="menu-title">{{ __('Etat de versement du regisseur - Recettes au comptant') }} </span>
                             </a>
-                        </div> -->
+                        </div>
                         <!--end:Menu item-->
 
 

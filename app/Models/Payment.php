@@ -13,6 +13,7 @@ class Payment extends Model
     protected $fillable = [
         'amount',
         'payment_type',
+        'invoice_type',
         'reference',
         'description',
         'remaining_amount',
@@ -22,7 +23,8 @@ class Payment extends Model
         'r_user_id',
         'status',
         'uuid',
-        'code'
+        'code',
+        'deposit'
     ];
 
     public function invoice()

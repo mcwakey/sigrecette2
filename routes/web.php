@@ -10,6 +10,7 @@ use App\Http\Controllers\TaxableController;
 use App\Http\Controllers\LanguageController;
 use App\DataTables\TaxpayerInvoicesDataTable;
 use App\Http\Controllers\AccountantDepositController;
+use App\Http\Controllers\AccountantDepositOutrightController;
 use App\Http\Controllers\CantonsController;
 use App\Http\Controllers\TaxpayerController;
 use App\Http\Controllers\TaxLabelController;
@@ -76,7 +77,8 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('/accounts/stock-transfers', StockTransferController::class);
         Route::resource('/accounts/collector-deposits', CollectorDepositController::class);
         // Route::resource('/accounts/collector-deposits/{id}', CollectorDepositController::class);
-        Route::resource('/accounts/accountant-deposits', AccountantDepositController::class);
+        Route::resource('/accounts/accountant-deposits-title', AccountantDepositController::class);
+        Route::resource('/accounts/accountant-deposits-outright', AccountantDepositOutrightController::class);
         Route::resource('/accounts/ledgers', LedgerController::class);
     });
 
