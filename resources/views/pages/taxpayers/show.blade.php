@@ -460,7 +460,7 @@
                                                 <td>{{ $invoice->created_at->format('Y-m-d') }}</td>
                                                 <td>{{ $invoice->invoice_no }}</td>
                                                 <td>
-                                                    @if ( $invoice->order_no == null && $invoice->delivery == 'NOT DELIVERED')
+                                                    @if ( $invoice->order_no == null && $invoice->delivery == 'NOT DELIVERED' &&  $invoice->status!="DRAFT" )
                                                         @can('peut ajouter le numéro d\'ordre de recette d\'un avis')
                                                         <button type="button"
                                                                 class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
