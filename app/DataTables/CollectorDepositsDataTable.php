@@ -127,9 +127,9 @@ class CollectorDepositsDataTable extends DataTable
             // ->editColumn('location', function (StockTransfer $stock_transfer) {
             //     return view('pages.collector_deposits.columns._location', compact('collector_deposit'));
             // })
-            // ->editColumn('users.name', function (StockTransfer $stock_transfer) {
-            //     return $stock_transfer->user->name ?? '-';
-            // })
+            ->editColumn('users.name', function (StockTransfer $stock_transfer) {
+                return $stock_transfer->user->name ?? '-';
+            })
             ->editColumn('stock_transfers.type', function (StockTransfer $stock_transfer) {
                 return view('pages.stock_transfers.columns._status', compact('stock_transfer'));
                 //return $stock_request->type;
@@ -205,9 +205,9 @@ class CollectorDepositsDataTable extends DataTable
             // Column::make('qty2')->title(__('sd qty'))->addClass('text-nowrap'),
             // Column::make('total2')->title(__('sd total')),
             Column::make('stock_transfers.code')->title(__('code')),
-            // Column::make('users.name')->title(__('collector')),
-            Column::make('stock_transfers.type')->title(__('status')),
             Column::make('payments.reference')->title(__('reference no')),
+            Column::make('stock_transfers.type')->title(__('status')),
+            Column::make('users.name')->title(__('collector')),
             Column::computed('action')->title(__('action'))
                 ->addClass('text-end text-nowrap')
                 ->exportable(false)

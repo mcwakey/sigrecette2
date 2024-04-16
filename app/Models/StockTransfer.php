@@ -22,6 +22,7 @@ class StockTransfer extends Model
         'trans_type',
         'by_user_id',
         'to_user_id',
+        'payment_id',
     ];
     
     public function taxable()

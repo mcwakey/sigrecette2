@@ -1,12 +1,12 @@
-<div class="modal fade" id="kt_modal_add_accountant_deposit" tabindex="-1" aria-hidden="true" wire:ignore.self>
+<div class="modal fade" id="kt_modal_add_accountant_deposit_outright" tabindex="-1" aria-hidden="true" wire:ignore.self>
     <!--begin::Modal dialog-->
     <div class="modal-dialog modal-dialog-centered mw-1000px">
         <!--begin::Modal content-->
         <div class="modal-content">
             <!--begin::Modal header-->
-            <div class="modal-header" id="kt_modal_add_accountant_deposit_header">
+            <div class="modal-header" id="kt_modal_add_accountant_deposit_outright_header">
                 <!--begin::Modal title-->
-                <h2 class="fw-bold">{{ __('versement du regisseur title') }}</h2>
+                <h2 class="fw-bold">{{ __('versement du regisseur outright') }}</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
@@ -18,11 +18,11 @@
             <!--begin::Modal body-->
             <div class="modal-body px-5 my-7">
                 <!--begin::Form-->
-                <form id="kt_modal_add_accountant_deposit_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
+                <form id="kt_modal_add_accountant_deposit_outright_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
                     <input type="hidden" wire:model="accountant_deposit_id" name="accountant_deposit_id"  value=""/>
                     <input type="hidden" wire:model="user_id" name="user_id" value=""/>
                     <!--begin::Scroll-->
-                    <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_accountant_deposit_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_accountant_deposit_header" data-kt-scroll-wrappers="#kt_modal_add_accountant_deposit_scroll" data-kt-scroll-offset="300px">
+                    <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_accountant_deposit_outright_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_accountant_deposit_outright_header" data-kt-scroll-wrappers="#kt_modal_add_accountant_deposit_outright_scroll" data-kt-scroll-offset="300px">
                         
                         <!--begin::Input group-->
                         <div class="row mb-7">
@@ -42,7 +42,7 @@
 
                                 <input type="text" wire:model="total_amount" name="total_amount" class="form-control mb-3 mb-lg-0" placeholder="{{ __('Montant a verser') }}" readonly/>
 
-                                <!-- <select wire:model="taxlabel_id" name="taxlabel_id" class="form-select" data-dropdown-parent="#kt_modal_add_accountant_deposit">
+                                <!-- <select wire:model="taxlabel_id" name="taxlabel_id" class="form-select" data-dropdown-parent="#kt_modal_add_accountant_deposit_outright">
                                     <option>{{ __('select an option') }}</option>
                                     <option value="TICKET">TICKET</option>
                                     <option value="TIMBRE">TIMBRE</option>
@@ -74,13 +74,13 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                                     
-                                <select wire:model="payment_type" name="payment_type" class="form-select" data-dropdown-parent="#kt_modal_add_accountant_deposit">
+                                <select wire:model="payment_type" name="payment_type" class="form-select" data-dropdown-parent="#kt_modal_add_accountant_deposit_outright">
                                     <option>{{ __('select an option') }}</option>
                                     <option value="CASH">CASH</option>
                                     <option value="CHEQUE">CHEQUE</option>
                                 </select>
 
-                                <!-- <select wire:model="taxlabel_id" name="taxlabel_id" class="form-select" data-dropdown-parent="#kt_modal_add_accountant_deposit">
+                                <!-- <select wire:model="taxlabel_id" name="taxlabel_id" class="form-select" data-dropdown-parent="#kt_modal_add_accountant_deposit_outright">
                                     <option>{{ __('select an option') }}</option>
                                     <option value="TICKET">TICKET</option>
                                     <option value="TIMBRE">TIMBRE</option>
@@ -97,7 +97,7 @@
                                 
                                 <input type="text" wire:model="reference" name="reference" class="form-control mb-3 mb-lg-0" placeholder="{{ __('reference no') }}"/>
 
-                                <!-- <select wire:model="taxlabel_id" name="taxlabel_id" class="form-select" data-dropdown-parent="#kt_modal_add_accountant_deposit">
+                                <!-- <select wire:model="taxlabel_id" name="taxlabel_id" class="form-select" data-dropdown-parent="#kt_modal_add_accountant_deposit_outright">
                                     <option>{{ __('select an option') }}</option>
                                     <option value="TICKET">TICKET</option>
                                     <option value="TIMBRE">TIMBRE</option>

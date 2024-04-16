@@ -41,7 +41,7 @@ class LedgersDataTable extends DataTable
             
         ->editColumn('newAmount', function (Payment $payment) use (&$newAmount) {
             // Add the amount of the current row to the accumulated amount
-            $newAmount += $payment->amount;
+            $newAmount += $payment->amount - $payment->deposit;
             
             // Return the accumulated amount
             return $newAmount;
@@ -77,10 +77,10 @@ class LedgersDataTable extends DataTable
                     // ->with('taxable.tax_label')
                     // ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
                     // ->join('users', 'payments.to_user_id', '=', 'users.id')
-                     ->where('status', 'APROVED') // Filter collector_deposits by taxpayer_id
+                     ->whereNot('status', 'PENDING') // Filter collector_deposits by taxpayer_id
                     //  ->orWhere('taxpayer_id', null) // Filter collector_deposits by taxpayer_id
                     // ->select('payments.*')
-                    //->orderBy('tax_labels.name')
+                    ->orderBy('created_at', 'asc')
                     ->newQuery();
 
         // return Payment::where('taxpayer_id', $this->id); // Filter collector_deposits by taxpayer_id
