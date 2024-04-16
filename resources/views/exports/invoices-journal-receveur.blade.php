@@ -117,7 +117,7 @@
         @endphp
         {{--TODO logique à refaire l'implémentation n'est pas correction doit gérer la creation des avis et les paiement associés --}}
 
-            @foreach($sumsByTaxCode as $code => &$totalAmount)
+            @foreach($sumsByTaxCode as $code => &$tax)
                             <tr>
                                 <td>@if($item->delivery_date !=null)
                                         {{date("d-m-Y", strtotime( $item->delivery_date  ))}}
@@ -129,15 +129,15 @@
                                 <td>{{$item->taxpayer->longitude,$item->taxpayer->latitude}}</td>
                                 <td>{{$code}}</td>
                                 @if($item->reduce_amount== '')
-                                    <td>{{$totalAmount}}</td>
+                                    <td>{{ $tax['amount']}}</td>
                                     <td></td>
                                     <td></td>
-                                    <td>{{$totalAmount}}</td>
+                                    <td>{{ $tax['amount']}}</td>
                                 @else
                                     <td>{{0}}</td>
                                     <td></td>
                                     <td>{{$item->reduce_amount}}</td>
-                                    <td>{{$totalAmount}}</td>
+                                    <td>{{ $tax['amount']}}</td>
                                 @endif
                             </tr>
             @endforeach

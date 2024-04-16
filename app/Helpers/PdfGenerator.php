@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Commune;
 use App\Models\Invoice;
+use App\Models\Taxpayer;
 use App\Traits\DispatchesMessages;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
@@ -26,6 +27,7 @@ class PdfGenerator
      */
     public function processType($type, $data,$action)
     {
+        //dd($type, $data);
 
         switch ($type) {
             case 1:
@@ -54,9 +56,13 @@ class PdfGenerator
                 dd($data,$action,'invoices-journal-receveur');
             //case 4:return 'invoices-distribution';
             //case 5:return 'invoices-recouvrement';
-            //case 6:return 'invoices-registre';
+            case 11: return $this->downloadTaxpayerForm($data,'taxpayer-form');
             case 6:return $this->downloadStateValueCollector($data,$action,'state-account-iv-collector',15);
             case 7:return $this->downloadStateValueReciepient($data,$action,'state-account-iv-receveur',15);
+            case 8:return $this->downloadStateValueReciepient($data,$action,'state-versement-collecteur',15);
+            case 9:return $this->downloadStateValueReciepient($data,$action,'state-versement-regisseur',15);
+            case 10:return $this->downloadStateValueReciepient($data,$action,'livre-journal-regie',15);
+
             default:
                 return $this->downloadInvoice($data,$action,'invoices');
 
@@ -70,7 +76,7 @@ class PdfGenerator
      */
     public function downloadInvoice($data,$action,$templateName){
         $result = $this->generateInvoicePdf($data,$templateName,$action);
-        return $result;
+        return $this->generateInvoicePdf($data,$templateName,$action);
     }
 
 
@@ -332,8 +338,7 @@ class PdfGenerator
 
     private function downloadStateValueCollector($data, $action, string$templateName,$expectedDataSize)
     {
-        $result = $this->generateStateValueCollectorPdf($data,$templateName,$action,$expectedDataSize);
-        //dd($data);
+       return $this->generateStateValueCollectorPdf($data,$templateName,$action,$expectedDataSize);
         if ($result['success']) {
             return $result['pdf'];
         }
@@ -357,7 +362,7 @@ class PdfGenerator
 
     private function downloadStateValueReciepient($data, $action, string $template, int $expectedDataSize)
     {
-        $result = $this->generateStateValueReciepientPdf($data,$template,$action,$expectedDataSize);
+        return $this->generateStateValueReciepientPdf($data,$template,$action,$expectedDataSize);
         //dd($data);
         if ($result['success']) {
             return $result['pdf'];
@@ -376,6 +381,27 @@ class PdfGenerator
 
         return ['success' => true, 'pdf' => $pdf];
         // }
+
+        return ['success' => false, 'message' => 'Invalid data structure.'];
+    }
+
+    private function downloadTaxpayerForm($data, string $template)
+    {
+        return $this->generataxpayerFormPdf($data,$template);
+    }
+
+    private function generataxpayerFormPdf($data, string $template)
+    {
+        $data=Taxpayer::getInvoiceAndPayments($data[0]);
+        if ($this->checkIfCommuneIsNotNull()) {
+
+            //dd($data);
+            $filename = "Fiche-contribuable" . Str::random(8) . ".pdf";
+            //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
+            $pdf = PDF::loadView("exports.".$template, ['data' => $data,"commune"=> $this->commune])->setPaper('a4')->stream($filename);
+
+            return ['success' => true, 'pdf' => $pdf];
+        }
 
         return ['success' => false, 'message' => 'Invalid data structure.'];
     }

@@ -76,7 +76,7 @@
     </tr>
     <tr>
         <td  colspan="14" style="border: none; margin: 0;text-align: left">
-            Nom du collecteur :  {{\Illuminate\Support\Facades\Auth::user()->name}}
+            Nom du collecteur :
 
     </tr>
     <tr>
@@ -112,71 +112,49 @@
 
     </tr>
 
-    @php
-        $total = array_reduce($data, function ($carry, $item) {
-     return $carry + intval($item['Montant Recu']);
- }, 0);
-$total_vendu = array_reduce($data, function ($carry, $item) {
-     return $carry + intval($item['Montant Vendu']);
- }, 0);
-$total_rendu = array_reduce($data, function ($carry, $item) {
-     return $carry + intval($item['Montant Rendu']);
- }, 0);
-    @endphp
-    @foreach($data as $index => $item)
-        @if($item['Statut']=="COMPTE RENDU")
+
             <tr>
-                <td>{{ explode(" ", $item[__('taxable')])[0] }}</td>
-                <td>{{$item[__('tariff')]}}</td>
+                <td></td>
+                <td></td>
                 <td>
-                    @if($item["Montant Rendu"]=="")
-                        {{ explode(" - ", $item['No . De - A'])[0] }}</td>
-                    @endif
+
 
                 <td>
-                    @if($item["Montant Rendu"]=="" && $item["Qté Rendu"]=="")
-                        {{ explode(" - ", $item['No . De - A'])[1] }}</td>
-                    @endif
+
                 </td>
-                <td>{{$item['Qté Recu']}}</td>
-                <td>{{ $item['Montant Recu']}}</td>
-                <td>{{ explode(" - ", $item['No . De - A'])[0] }}</td></td>
-                <td> {{ explode(" - ", $item['No . De - A'])[1] }}</td></td>
-                <td>{{$item['Qté Vendu']}}</td>
-                <td>{{$item['Montant Vendu']}}</td>
+                <td></td>
+                <td></td>
+                <td></td></td>
+                <td> </td></td>
+                <td></td>
+                <td></td>
                 <td>
 
-                        {{ explode(" - ", $item['No . De - A'])[0] }}</td>
+                       </td>
 
 
                 <td>
-                        {{ explode(" - ", $item['No . De - A'])[1] }}</td>
+                       </td>
 
                 <td>
-                    @if($item["Montant Rendu"]!="")
-                        {{$item["Qté Rendu"]}}
-                    @endif
+
                 </td>
                 <td>
-                    @if($item["Montant Rendu"]!="")
-                    {{$item["Montant Rendu"]}}
-                    @endif
+
                 </td>
             </tr>
-        @endif
 
-    @endforeach
     <tr>
         <td colspan="5" style="margin: 0;text-align: center">Total</td>
-        <td>{{$total}}</td>
+        <td></td>
         <td colspan="3"></td>
-        <td >{{$total_vendu}}</td>
+        <td ></td>
         <td colspan="3"></td>
-        <td >{{$total_rendu}}</td>
+        <td ></td>
     </tr>
     <tr>
-        <td colspan="7" style="border: none; margin: 0;text-align: left">Reçu du Régisseur des valeurs pour un montant de {{ number_to_words($total) ." "."Francs CFA"}} </td>
-        <td colspan="7" style="border: none; margin: 0;text-align: left">Reçu du collecteur des valeurs invendues pour un montant de {{ number_to_words($total_rendu) ." "."Francs CFA"}}..Francs CFA    </td>
+        <td colspan="7" style="border: none; margin: 0;text-align: left">Reçu du Régisseur des valeurs pour un montant de  </td>
+        <td colspan="7" style="border: none; margin: 0;text-align: left">Reçu du collecteur des valeurs invendues pour un montant de ..Francs CFA    </td>
     </tr>
     <tr>
         <td colspan="7" style="border: none; margin: 0;text-align: left">A Agou, le 4 janvier 2023</td>
@@ -187,7 +165,7 @@ $total_rendu = array_reduce($data, function ($carry, $item) {
         <td colspan="7" style="border: none; margin: 0;text-align: left">Le Régisseur de recettes,</td>
     </tr>
     <tr>
-        <td colspan="7" style="border: none; margin: 0;text-align: left">{{$data[0]["Collecteur"]}}</td>
+        <td colspan="7" style="border: none; margin: 0;text-align: left"></td>
         <td colspan="7" style="border: none; margin: 0;text-align: left"></td>
     </tr>
     <tr>

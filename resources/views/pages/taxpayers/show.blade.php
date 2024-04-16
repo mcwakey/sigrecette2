@@ -7,7 +7,6 @@
 @section('breadcrumbs')
     {{ Breadcrumbs::render('taxpayers.show', $taxpayer) }}
 @endsection
-
 <!--begin::Layout-->
     <div class="d-flex flex-column flex-lg-row">
         <!--begin::Sidebar-->
@@ -180,7 +179,7 @@
                         <!--end::Menu item-->
                         <!--TODO Fiche du contribuable-->
                         <div class="menu-item px-5">
-                            <a href="#" class="menu-link px-5">{{ __('Fiche du contribuable') }}</a>
+                            <a href="{{ route('generatePdf', ['data' => json_encode([$taxpayer->id]),'type' => '11']) }}" class="menu-link px-5">{{ __('Fiche du contribuable') }}</a>
                         </div>
                         <div class="menu-item px-5">
                             <a href="#" class="menu-link px-5">{{ __('reports et stats') }}</a>
@@ -538,7 +537,7 @@
                                                 </td>
 
                                                 <td>
-                                                    @if( $invoice->status != 'REJECTED')
+                                                    @if( $invoice->status != 'REJECTED' && $invoice->status != 'PENDING')
                                                         @if ($invoice->delivery == 'NOT DELIVERED'&& $invoice->order_no !== null)
                                                             @can('peut ajouter la date de livraison d\'un avis')
                                                                 <button type="button"
