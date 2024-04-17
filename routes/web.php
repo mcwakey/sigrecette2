@@ -65,8 +65,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/recoveries', RecoveryController::class);
 
     Route::name('geolocation.')->group(function () {
-        Route::get('/geolocation/zones', [Geolocation::class, 'zones'])->name('zones');
-        Route::get('/geolocation/{zone}/taxpayers', [Geolocation::class, 'zoneWithTaxpayers'])->name('zoneWithTaxpayers');
+        Route::get('/geolocation/taxpayers', [Geolocation::class, 'zones'])->name('taxpayers');
         Route::get('/geolocation/users', [Geolocation::class, 'users'])->name('users');
         Route::post('/geolocation/user', [Geolocation::class, 'setUserGeolocation'])->name('user');
         Route::post('/geolocation/zone', [Geolocation::class, 'setZoneGeolocation'])->name('zone');
