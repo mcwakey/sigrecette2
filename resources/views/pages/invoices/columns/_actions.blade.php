@@ -18,7 +18,12 @@
 
     @if($invoice->status == 'DRAFT')
         {{-- Anything here --}}
-    @elseif($invoice->status == 'APROVED' || $invoice->status == 'CANCELED'||  $invoice->status=="APROVED-CANCELLATION")
+    @elseif(
+                                                            $invoice->status == 'APROVED' ||
+                                                             $invoice->status == 'APROVED-CANCELLATION' ||
+                                                                $invoice->status == 'PENDING' ||
+                                                                $invoice->status == 'REDUCED' ||
+                                                                $invoice->status == 'CANCELED')
             @php
                 $data = [$invoice->uuid];
             @endphp
