@@ -696,8 +696,8 @@
 
                                                             </div>
                                                             @if ($invoice->status != 'REDUCED' )
-                                                                @if ($invoice->status !== 'CANCELED' && $invoice->pay_status != 'PAID'&& $invoice->delivery_date!=null)
-                                                                    @if ( $invoice->status == 'APROVED' || $invoice->status =='APROVED-CANCELLATION')
+                                                                @if ($invoice->status !== 'CANCELED' && $invoice->pay_status != 'PAID')
+                                                                    @if ( $invoice->status == 'APROVED' || $invoice->status =='APROVED-CANCELLATION'&& $invoice->delivery_date!=null)
                                                                         @can('peut ajouter un paiement')
                                                                             <div class="menu-item px-3">
                                                                                 <a href="#"
