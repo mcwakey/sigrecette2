@@ -46,6 +46,4 @@ Utilisateurs --> liste le filtre par role ne fonctionne pas
 
 -- Terminer le profil utilisateur 
 
--- Implémenter le filtre su la géolocalisation d'un contribuable 
-
 -- Tester correctement les role et permissions 
