@@ -97,7 +97,7 @@ class AddTaxpayerTaxableModal extends Component
         //$towns = Town::all();
         //$ereas = Erea::all();
         //$genders = Gender::all();
-        $taxlabels = TaxLabel::where("category","catégorie 1");
+        $taxlabels = TaxLabel::where("category","catégorie 1")->get();
         //$taxables = Taxable::all();
 
         // Assuming you have a public property $canton in your Livewire component
