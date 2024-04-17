@@ -12,7 +12,7 @@
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
                     {!! getIcon('cross', 'fs-1') !!}
-                    
+
                 </div>
                 <!--end::Close-->
             </div>
@@ -37,7 +37,7 @@
                                 <!--begin::Input-->
                                 <select wire:model="title" name="title" class="form-select mb-3 mb-lg-0"
                                     data-dropdown-parent="#kt_modal_add_commune">
-                                    <option>Sélectionnez le préfixe :</option>
+                                    <option value="">Sélectionnez le préfixe :</option>
                                     <option value="de">{{ __('Commune de') }}</option>
                                     <option value="d'">{{ __("Commune d'") }}</option>
                                 </select>
