@@ -135,10 +135,7 @@
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('invoice no') }}</label>
                             <input type="text" class="form-control" name="tags" id="mySearchTwo"/>
                         </div>
-                        <div class="col-xxl-2">
-                            <label class="fs-6 form-label fw-bold text-dark">{{ __('invoice no')."à" }}</label>
-                            <input type="text" class="form-control" name="tags" id="mySearchTwo0"/>
-                        </div>
+                       
                         <!--end::Col-->
                         <!--begin::Col-->
                         <div class="col-xxl-2">
