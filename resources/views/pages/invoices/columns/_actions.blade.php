@@ -32,7 +32,7 @@
                 <a href="{{route('generatePdf', ['data' => json_encode($data)]) }}" class="menu-link px-3" target="_blank">{{ __('print') }}</a>
             </div>
         @if ($invoice->status != 'REDUCED')
-                @if ($invoice->status != 'CANCELED' && $invoice->pay_status != 'PAID')
+                @if ($invoice->status != 'CANCELED' && $invoice->pay_status != 'PAID' && $invoice->delivery_date!=null)
                     @if ( $invoice->status == 'APROVED'||  $invoice->status=="APROVED-CANCELLATION")
                         @can('peut ajouter un paiement')
                             <div class="menu-item px-3">
