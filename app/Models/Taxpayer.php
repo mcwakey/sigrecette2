@@ -36,7 +36,6 @@ class Taxpayer extends Model
         'nif',
         'social_work',
 
-        //'canton',
         'town_id',
         'erea_id',
         'zone_id',
@@ -117,10 +116,12 @@ class Taxpayer extends Model
     {
         return $this->addresses?->first();
     }
+
     public function activity()
     {
         return $this->hasOne(Activity::class);
     }
+
     public static function countTaxpayers(){
         return Taxpayer::selectRaw('gender, count(*) as count')
             ->groupBy('gender')
@@ -128,6 +129,7 @@ class Taxpayer extends Model
             ->merge(['Total' =>Taxpayer::count()])
             ->toArray();
     }
+
     public static function countTaxpayersByActivity()
     {
         $categories = Category::all()->pluck('name', 'id');
@@ -161,6 +163,7 @@ class Taxpayer extends Model
 
         return array_values($counts);
     }
+
     public static function countTaxpayersState()
     {
         $count_valid = 0;
@@ -194,9 +197,6 @@ class Taxpayer extends Model
             ['value' => $taxpayers_without_invoices, 'category' => "Sans avis"],
         ];
     }
-
-
-
 
 
     public static function countTaxpayersByTaxables()

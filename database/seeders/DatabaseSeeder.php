@@ -26,37 +26,28 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call([
-            UsersSeeder::class,
+        $seedersArray = [];
+
+        if (!app()->environment('production')) {
+            array_push(
+                $seedersArray,
+                UsersSeeder::class,
+                CantonsSeeder::class,
+                TownsSeeder::class,
+                EreasSeeder::class,
+                TaxLabelsSeeder::class,
+                TaxablesSeeder::class,
+                ZonesSeeder::class,
+            );
+        }
+
+        array_push(
+            $seedersArray,
             RolesPermissionsSeeder::class,
-            CantonsSeeder::class,
-            TownsSeeder::class,
-            EreasSeeder::class,
-            TaxLabelsSeeder::class,
-            TaxablesSeeder::class,
-            ZonesSeeder::class,
-            // InvoiceSeeder::class,
-            // TaxpayerTaxablesSeeder::class,
             GendersSeeder::class,
             IdTypesSeeder::class,
-            // TaxpayersSeeder::class,
-        ]);
+        );
 
-
-        // User::factory(20)->create();
-        //Address::factory(20)->create();
-        // Taxpayer::factory(50)->create();
-        //Canton::factory(10)->create();
-        //Town::factory(30)->create();
-        //Erea::factory(100)->create();
-        //TaxLabel::factory(10)->create();
-        //Taxable::factory(100)->create();
-        //Invoice::factory(5)->create();
-        //TaxpayerTaxable::factory(20)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $this->call($seedersArray);
     }
 }

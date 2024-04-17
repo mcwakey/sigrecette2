@@ -12,6 +12,7 @@
     </div>
     <!--end::Menu item-->
 
+    @can('peut modifier une activité')
     <!--begin::Menu item-->
     <div class="menu-item px-3">
         <a href="#" class="menu-link px-3" data-kt-user-id="{{ $activity->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_activity" data-kt-action="update_row">
@@ -19,13 +20,16 @@
         </a>
     </div>
     <!--end::Menu item-->
+    @endcan
 
-    <!--begin::Menu item-->
-    <div class="menu-item px-3">
-        <a href="#" class="menu-link px-3" data-kt-user-id="{{ $activity->id }}" data-kt-action="delete_row">
-        {{ __('delete') }}
-        </a>
-    </div>
-    <!--end::Menu item-->
+    @can('peut supprimer une activité')
+        <!--begin::Menu item-->
+        <div class="menu-item px-3">
+            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $activity->id }}" data-kt-action="delete_row">
+            {{ __('delete') }}
+            </a>
+        </div>
+        <!--end::Menu item-->
+    @endcan
 </div>
 <!--end::Menu-->

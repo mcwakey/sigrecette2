@@ -24,3 +24,28 @@ décider du choix entre les notification et le trataitement de la mise a jour d'
 
 Utilisateurs --> liste le filtre par role ne fonctionne pas 
 
+
+********
+
+-- collumn role not found error on filter user
+-- Est ce que le no de bon est identique au no de demande sur la demande approvisionnement ?
+
+-- la modification d'une valeur inactive ne  marche pas.
+
+-- qty bug au niveau de la l'alimenation du collecteur.
+
+-- Etat de comptabilite des Valeurs Inactives du Collecteur au Regisseur  page individuelle.
+
+-- Invoice des champs a masquer ?
+
+--- Recoverie action
+
+<!-- Tache pour demain matin  -->
+
+-- Terminer la définition des permissions et la distribution
+
+-- Terminer le profil utilisateur 
+
+-- Implémenter le filtre su la géolocalisation d'un contribuable 
+
+-- Tester correctement les role et permissions 

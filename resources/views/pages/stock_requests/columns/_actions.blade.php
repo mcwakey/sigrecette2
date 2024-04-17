@@ -35,16 +35,18 @@
 
     <!--begin::Menu item-->
     @if ($stock_request->req_type == 'DEMANDE')
-    <div class="menu-item px-3">
-        <a href="#" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{ $stock_request->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_stock_request" data-kt-action="update_request">
-       {{ __('account state') }}
-        </a>
-    </div>
-    <div class="menu-item px-3">
-        <a href="#" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{ $stock_request->id }}" data-kt-action="delete_taxpayer">
-        {{ __('print account state') }}
-        </a>
-    </div>
+        @can('peut faire un etat de compte')
+            <div class="menu-item px-3">
+                <a href="#" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{ $stock_request->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_stock_request" data-kt-action="update_request">
+                    {{ __('account state') }}
+                </a>
+            </div>
+        @endcan
+        <div class="menu-item px-3">
+            <a href="#" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{ $stock_request->id }}" data-kt-action="delete_taxpayer">
+                {{ __('print account state') }}
+            </a>
+        </div>
     @endif
     <!--end::Menu item-->
 </div>

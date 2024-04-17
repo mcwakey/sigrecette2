@@ -148,6 +148,17 @@ return [
     'url'                  => 'Le format de l\'URL de :attribute n\'est pas valide.',
     'uuid'                 => 'Le champ :attribute doit être un UUID valide',
     'attributes'           => [
+        'id_type'                  => 'type d\'identifiant',
+        'zone_id'                  => 'zone fiscale',
+        'authorisation'           => 'autorisation',
+        'mobilephone'              => 'téléphone',
+        'town_id'                  => 'villages/quartiers',
+        'id_number'                => 'no d\'identifiant',
+        'category_id'              => 'catégorie d\'activité',
+        'activity_id'              => 'activité principale',
+
+
+
         'address'                  => 'adresse',
         'affiliate_url'            => 'URL d\'affiliation',
         'age'                      => 'âge',

@@ -72,13 +72,15 @@
                         </button>
                     </div> -->
 
-                    <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
-                        <button type="button" class="btn btn-light-success" data-bs-toggle="modal"
-                            data-bs-target="#kt_modal_add_stock_transfer" data-kt-action="add_transfer">
-                            {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                            {{ __('new supply') }}
-                        </button>
-                    </div>
+                    @can('peut effectuer une alimentation des collecteurs')
+                        <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
+                            <button type="button" class="btn btn-light-success" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_add_stock_transfer" data-kt-action="add_transfer">
+                                {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                                {{ __('new supply') }}
+                            </button>
+                        </div>
+                    @endcan
 
                 <!--end::Toolbar-->
 

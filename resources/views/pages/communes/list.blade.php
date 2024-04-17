@@ -16,15 +16,16 @@
             <!--begin::Card title-->
             <div class="card-title"></div>
                 @if(!$commune)
-
-                        <div class="d-flex justify-content-end" data-kt-commune-table-toolbar="base">
-                            <!--begin::Add user-->
-                            <button type="button" class="btn btn-light-success h-45px ms-auto" data-bs-toggle="modal" data-bs-target="#kt_modal_add_commune">
-                                {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                                {{ __('create commune') }}
-                            </button>
-                            <!--end::Add user-->
-                        </div>
+                        @can('peut créer une commune')
+                            <div class="d-flex justify-content-end" data-kt-commune-table-toolbar="base">
+                                <!--begin::Add user-->
+                                <button type="button" class="btn btn-light-success h-45px ms-auto" data-bs-toggle="modal" data-bs-target="#kt_modal_add_commune">
+                                    {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                                    {{ __('create commune') }}
+                                </button>
+                                <!--end::Add user-->
+                            </div>
+                        @endcan
                 @endif
 
             </div>
