@@ -55,40 +55,40 @@ class PrintController extends Controller
 
         switch ($type) {
             case 1:
-                return $this->pdfGenerator->downloadReceipt($data,$action,'payments');
+                return $this->pdfGenerator->downloadReceipt($data,'payments',$action);
             case 2:
 
                 if($action==3){
-                    return $this->pdfGenerator->generateInvoiceListPdf($data,$action,'invoices-registre');
+                    return $this->pdfGenerator->generateInvoiceListPdf($data,'invoices-registre',$action);
                 }
                 elseif ($action==4){
-                    return $this->pdfGenerator->generateInvoiceListPdf($data,$action,'invoices-distribution');
+                    return $this->pdfGenerator->generateInvoiceListPdf($data,'invoices-distribution',$action);
 
                 }
                 elseif ($action==5){
-                    return $this->pdfGenerator->generateInvoiceListPdf($data,$action,'invoices-journal-receveur');
+                    return $this->pdfGenerator->generateInvoiceListPdf($data,'invoices-journal-receveur',$action);
 
                 }
                 elseif ($action==41){
-                    return $this->pdfGenerator->generateInvoiceListPdf($data,$action,'invoices-recouvrement');
+                    return $this->pdfGenerator->generateInvoiceListPdf($data,'invoices-recouvrement',$action);
 
                 }
                 else{
-                    return $this->pdfGenerator->generateInvoiceListPdf($data,$action,'invoices-list');
+                    return $this->pdfGenerator->generateInvoiceListPdf($data,'invoices-list',$action);
                 }
             case 3:
                 dd($data,$action,'invoices-journal-receveur');
             //case 4:return 'invoices-distribution';
             //case 5:return 'invoices-recouvrement';
             case 11: return $this->pdfGenerator->generataxpayerFormPdf($data,'taxpayer-form');
-            case 6:return $this->pdfGenerator->generateStateValueCollectorPdf($data,$action,'state-account-iv-collector');
-            case 7:return $this->pdfGenerator->generateStateValueCollectorPdf($data,$action,'state-account-iv-receveur');
-            case 8:return $this->pdfGenerator->generateStateValueCollectorPdf($data,$action,'state-versement-collecteur');
-            case 9:return $this->pdfGenerator->generateStateValueCollectorPdf($data,$action,'state-versement-regisseur');
-            case 10:return $this->pdfGenerator->generateStateValueCollectorPdf($data,$action,'livre-journal-regie');
+            case 6:return $this->pdfGenerator->generateStateValueCollectorPdf($data,'state-account-iv-collector',$action);
+            case 7:return $this->pdfGenerator->generateStateValueCollectorPdf($data,'state-account-iv-receveur',$action);
+            case 8:return $this->pdfGenerator->generateStateValueCollectorPdf($data,'state-versement-collecteur',$action);
+            case 9:return $this->pdfGenerator->generateStateValueCollectorPdf($data,'state-versement-regisseur',$action);
+            case 10:return $this->pdfGenerator->generateStateValueCollectorPdf($data,'livre-journal-regie',$action);
 
             default:
-                return$this->pdfGenerator->generateInvoicePdf($data,$action,'invoices');
+                return$this->pdfGenerator->generateInvoicePdf($data,'invoices',$action);
 
         }
     }

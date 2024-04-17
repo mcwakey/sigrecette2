@@ -43,7 +43,7 @@
 
 
 <table>
-    <caption>REGION PLATEAUX - Commune Agou - REPUBLIQUE TOGOLAISE</caption>
+    <caption>{{$commune->region_name}} - {{$commune->title}} - REPUBLIQUE TOGOLAISE</caption>
     <tr>
         <td>Travail-Liberté-Patrie</td>
     </tr>
@@ -54,19 +54,19 @@
         <td>NIC : 00012</td>
     </tr>
     <tr>
-        <td>Nom / Raison sociale : Jacqueline</td>
+        <td>Nom / Raison sociale : {{$data[0]->name}}   </td>
     </tr>
     <tr>
-        <td>N° Téléphone : 91..</td>
+        <td>N° Téléphone :{{$data[0]->mobilephone}}  </td>
     </tr>
     <tr>
-        <td>Zone fiscale : Zone 1</td>
+        <td>Zone fiscale : {{$data[0]->zone->name}}</td>
     </tr>
     <tr>
-        <td>Adresse complète : XX YY ZZ</td>
+        <td>Adresse complète : {{$data[0]->address}}</td>
     </tr>
     <tr>
-        <td>Coordonnées GPS : XY</td>
+        <td>Coordonnées GPS : {{$data[0]->longitude,$data[0]->latitude}}</td>
     </tr>
 </table>
 
@@ -84,41 +84,69 @@
     </tr>
     </thead>
     <tbody>
+    @php
+    $cumul_plus=0;
+$cumul_recouvré=0;
+        @endphp
     @foreach($data[1] as  $item)
 
 
         @if($item instanceof \App\Models\Invoice )
-            @if($item->delivery_date!=null)
+            @if($item->delivery_date!=null && $item->status!="APROVED-CANCELLATION")
                 @foreach(\App\Models\Invoice::sumAmountsByTaxCode($item) as $code => $tax)
                     <tr>
                         <td>{{$item->delivery_date}}</td>
-                        <td>Distribution Avis {{$item->invoice_no}}, OR {{$item->order_no}}, redevance occupation domaine 2023</td>
-                        @if($item->reduce_amount != '')
-                            <td></td>
-                            <td>{{$item->reduce_amount}}</td>
-                        @else
-                            <td>{{$tax['amount']}}</td>
-                            <td></td>
-                        @endif
-                        <td>120 000</td>
+                        <td>Distribution Avis {{$item->invoice_no}}, OR {{$item->order_no}}, {{$tax['name']}}</td>
+                        @php
+                            $cumul_plus+=$tax['amount'];
+                        @endphp
+                        <td>{{$tax['amount']}}</td>
                         <td></td>
-                        <td>120 000</td>
+                        <td>{{$cumul_plus-0}}</td>
                         <td></td>
+                        <td></td>
+                        <td>{{$cumul_plus-$cumul_recouvré}}</td>
                     </tr>
                 @endforeach
 
             @endif
         @else
-            <tr>
-                <td>{{$item->created_at}}</td>
-                <td>Recouvrement Avis {{$item->invoice->invoice_no}}, OR {{$item->reference}},redevance occupation domaine 2023</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>{{ $item->amount }}</td>
-                <td>120 000</td>
-                <td></td>
-            </tr>
+            @if( $item->reference!=null)
+                <tr>
+                    <td>{{$item->created_at}}</td>
+                    <td>Recouvrement Avis {{$item->invoice->invoice_no}}, OR {{$item->reference}},{{\App\Models\TaxLabel::getNameByCode($item->code)}}</td>
+
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    @php
+                        $cumul_recouvré+=$item->amount;
+                        @endphp
+                    <td>{{ $item->amount }}</td>
+                    <td>{{ $cumul_recouvré}}</td>
+                    <td>{{$cumul_plus-$cumul_recouvré}}</td>
+                </tr>
+                @else
+                    @if($item->invoice->delivery_date!=null)
+                    <tr>
+                        <td>{{$item->invoice->delivery_date}}</td>
+                        <td>Distribution Avis {{$item->invoice->invoice_no}}, OR {{$item->invoice->order_no}}, {{\App\Models\TaxLabel::getNameByCode($item->code)}}</td>
+                        <td></td>
+
+                        @php
+                            $cumul_plus-=$item->amount;
+                            //$cumul_recouvré+=$item->amount;
+                        @endphp
+                        <td>{{$item->amount}}</td>
+                        <td>{{$cumul_plus}}</td>
+                        <td></td>
+                        <td></td>
+                        <td>{{$cumul_plus-$cumul_recouvré}}</td>
+                    </tr>
+
+                    @endif
+            @endif
+
         @endif
 
     @endforeach

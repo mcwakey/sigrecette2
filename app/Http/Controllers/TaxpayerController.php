@@ -180,7 +180,7 @@ class TaxpayerController extends Controller
 
         //dd($request->file('file')->store('files'));
         if($request->file('file')){
-            Excel::import(new TaxpayerImport,
+            Excel::queueImport(new TaxpayerImport,
                 $request->file('file')->store('files'));
             return redirect()->back();
         }
@@ -189,7 +189,7 @@ class TaxpayerController extends Controller
 
         if (!Storage::missing("imports")) {
             $filePath = Storage::path('imports') . DIRECTORY_SEPARATOR . $filename;
-            Excel::import(new TaxpayerImport, $filePath);
+            Excel::queueImport(new TaxpayerImport, $filePath);
         }
 
         return redirect('/')->with('success', 'All good!');
