@@ -24,17 +24,18 @@
 
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
-                <!--begin::Toolbar-->
-                <div class="d-flex justify-content-end" data-kt-tax_label-table-toolbar="base">
-                    <!--begin::Add user-->
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_tax_label">
-                        {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        {{ __('new taxlabel') }}
-                    </button>
-                    <!--end::Add user-->
-                </div>
-                <!--end::Toolbar-->
-
+                @can('peut créer un libellé fiscale')
+                    <!--begin::Toolbar-->
+                    <div class="d-flex justify-content-end" data-kt-tax_label-table-toolbar="base">
+                        <!--begin::Add user-->
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_tax_label">
+                            {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                            {{ __('new taxlabel') }}
+                        </button>
+                        <!--end::Add user-->
+                    </div>
+                    <!--end::Toolbar-->
+                @endcan
                 <!--begin::Modal-->
                 <livewire:tax_label.add-tax-label-modal/>
                 <!--end::Modal-->

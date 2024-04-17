@@ -12,6 +12,7 @@
     </div>
     <!--end::Menu item-->
 
+    @can('peut modifier une commune')
     <!--begin::Menu item-->
     <div class="menu-item px-3">
         <a href="#" class="menu-link px-3" data-kt-user-id="{{ $commune->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_commune" data-kt-action="update_row">
@@ -19,6 +20,7 @@
         </a>
     </div>
     <!--end::Menu item-->
+    @endcan
 
     <!--begin::Menu item-->
 

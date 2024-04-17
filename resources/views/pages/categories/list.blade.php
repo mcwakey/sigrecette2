@@ -24,16 +24,18 @@
 
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
-                <!--begin::Toolbar-->
-                <div class="d-flex justify-content-end" data-kt-category-table-toolbar="base">
-                    <!--begin::Add user-->
-                    <button type="button" class="btn btn-light-success h-45px ms-auto"  data-bs-toggle="modal" data-bs-target="#kt_modal_add_category">
-                        {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        {{ __('Créer une nouvelle catégorie') }}
-                    </button>
-                    <!--end::Add user-->
-                </div>
-                <!--end::Toolbar-->
+                @can('peut créer une catégorie')
+                    <!--begin::Toolbar-->
+                    <div class="d-flex justify-content-end" data-kt-category-table-toolbar="base">
+                        <!--begin::Add user-->
+                        <button type="button" class="btn btn-light-success h-45px ms-auto"  data-bs-toggle="modal" data-bs-target="#kt_modal_add_category">
+                            {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                            {{ __('Créer une nouvelle catégorie') }}
+                        </button>
+                        <!--end::Add user-->
+                    </div>
+                    <!--end::Toolbar-->
+                @endcan
             </div>
             <!--end::Card toolbar-->
         </div>
@@ -44,7 +46,7 @@
             <!--begin::Table-->
             <div class="table-responsive">
 
-                {{$dataTable->table() }}
+                {{ $dataTable->table() }}
             </div>
             <!--end::Table-->
         </div>

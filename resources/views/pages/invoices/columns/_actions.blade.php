@@ -29,7 +29,7 @@
         @if ($invoice->status != 'REDUCED')
                 @if ($invoice->status != 'CANCELED' && $invoice->pay_status != 'PAID')
                     @if ( $invoice->status == 'APROVED'||  $invoice->status=="APROVED-CANCELLATION")
-                        @can('peut ajouter la date de livraison d\'un avis')
+                        @can('peut ajouter un paiement')
                             <div class="menu-item px-3">
                                 <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->invoice_no }}"
                                     data-bs-toggle="modal" data-bs-target="#kt_modal_add_payment" data-kt-action="update_payment">

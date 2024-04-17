@@ -1,10 +1,8 @@
 <x-default-layout>
 
     @section('title')
-        {{ __('zones') }}
+        {{ __('Géolocalisation des contribuables') }}
     @endsection
-
-    {{-- {{dd($taxpayers->first()->erea)}} --}}
 
     <div class="card">
         <!--begin::Card header-->
@@ -51,8 +49,8 @@
                                 <option value="OWING">Facturé et Non payé</option>
                                 <option value="PART PAID">Facturé et Partiellement payé</option>
                                 <option value="PAID">Facturé et Payé</option>
-                                <option value="{{null}}">Non Facturé</option>
-                            </select>   
+                                <option value="{{ null }}">Non Facturé</option>
+                            </select>
                             <!--end::Select-->
                         </div>
 
@@ -71,7 +69,7 @@
                             <button type="submit" class="btn btn-success mt-8">
                                 <span class="indicator-label"
                                     wire:loading.remove>{{ __('Rechercher
-                                                                                                            ') }}</span>
+                                                                                                                                                                                    ') }}</span>
                             </button>
                         </div>
                         <!--end::Actions-->
@@ -98,16 +96,22 @@
 
     @push('scripts')
         <script>
-            let map_render = L.map('location_map').setView([8.2, 1.1], 8); // Set initial coordinates and zoom level
-           
+            let mapRender = L.map('location_map').setView([8.2, 1.1], 8); // Set initial coordinates and zoom level
+
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
-            }).addTo(map_render);
+            }).addTo(mapRender);
+
+            let legend = L.control({
+                position: 'bottomright'
+            });
 
             let markerCluster = new L.markerClusterGroup();
 
+            const getTaxpayerIconUrl = (icon) => `http://127.0.0.1:8000/assets/media/icons/${icon}`;
+
             let taxpayerGreen = L.icon({
-                iconUrl: 'http://127.0.0.1:8000/assets/media/icons/taxpayer-green.svg',
+                iconUrl: getTaxpayerIconUrl('taxpayer-green.svg'),
                 iconSize: [25, 41],
                 iconAnchor: [12, 41],
                 popupAnchor: [1, -34],
@@ -115,7 +119,7 @@
             });
 
             let taxpayerOrange = L.icon({
-                iconUrl: 'http://127.0.0.1:8000/assets/media/icons/taxpayer-orange.svg',
+                iconUrl: getTaxpayerIconUrl('taxpayer-orange.svg'),
                 iconSize: [25, 41],
                 iconAnchor: [12, 41],
                 popupAnchor: [1, -34],
@@ -123,7 +127,7 @@
             });
 
             let taxpayerBlue = L.icon({
-                iconUrl: 'http://127.0.0.1:8000/assets/media/icons/taxpayer-blue.svg',
+                iconUrl: getTaxpayerIconUrl('taxpayer-blue.svg'),
                 iconSize: [25, 41],
                 iconAnchor: [12, 41],
                 popupAnchor: [1, -34],
@@ -131,7 +135,7 @@
             });
 
             let taxpayerRed = L.icon({
-                iconUrl: 'http://127.0.0.1:8000/assets/media/icons/taxpayer-red.svg',
+                iconUrl: getTaxpayerIconUrl('taxpayer-red.svg'),
                 iconSize: [25, 41],
                 iconAnchor: [12, 41],
                 popupAnchor: [1, -34],
@@ -143,63 +147,40 @@
             // Convert Laravel object to JSON object
             let taxpayers = @json($taxpayers);
 
-
-            // const createZonePolygonCoordinates = (zone) => {
-            //     let {longitude,latitude} = zone;
-            //     longitude = JSON.parse(longitude);
-            //     latitude = JSON.parse(latitude);
-
-            //     const size = longitude.length;
-            //     let coordinates = [];
-
-            //     for (let i = 0; i < size; i++) {
-            //         coordinates.push([longitude[i],latitude[i]]);
-            //     }
-
-            //     return coordinates;
-            // }
-
-            // zones.forEach((zone, index) => {
-            //     const taxpayers = zone.taxpayers;
-
-            // });
-
             taxpayers.forEach((taxpayer) => {
-                    if (parseFloat(taxpayer.latitude) && parseFloat(taxpayer.longitude)) {
+                if (parseFloat(taxpayer.latitude) && parseFloat(taxpayer.longitude)) {
 
-                        let marker = null;
-                        let taxpayerTaxable = taxpayer.taxpayer_taxables;
+                    let marker = null;
+                    let taxpayerTaxable = taxpayer.taxpayer_taxables;
 
-                        if (taxpayer.invoices.length) {
-                            let {
-                                invoices
-                            } = taxpayer;
-                            let icon = null;
+                    if (taxpayer.invoices.length) {
+                        let {
+                            invoices
+                        } = taxpayer;
+                        let icon = null;
 
-                            invoices.forEach(invoice => {
-                                if (invoice.pay_status == 'OWING') {
-                                    icon = taxpayerRed;
-                                    return;
-                                } else if (invoice.pay_status == 'PART PAID') {
-                                    icon = taxpayerOrange;
-                                } else {
-                                    icon = taxpayerGreen;
-                                }
-                            });
+                        invoices.forEach(invoice => {
+                            if (invoice.pay_status == 'OWING') {
+                                icon = taxpayerRed;
+                                return;
+                            } else if (invoice.pay_status == 'PART PAID') {
+                                icon = taxpayerOrange;
+                            } else {
+                                icon = taxpayerGreen;
+                            }
+                        });
 
-                            marker = L.marker([taxpayer.latitude, taxpayer.longitude], {
-                                icon: icon
-                            });
+                        marker = L.marker([taxpayer.latitude, taxpayer.longitude], {
+                            icon: icon
+                        });
 
-                        } else {
-                            marker = L.marker([taxpayer.latitude, taxpayer.longitude], {
-                                icon: taxpayerBlue
-                            });
-                        }
+                    } else {
+                        marker = L.marker([taxpayer.latitude, taxpayer.longitude], {
+                            icon: taxpayerBlue
+                        });
+                    }
 
-                        // let marker = L.marker([taxpayer.latitude,taxpayer.longitude]);
-
-                        marker.bindPopup(`
+                    marker.bindPopup(`
                             <div style="width:600px;min-height:200px;border-radius:8px;">
                                 <div style="padding:10px;text-align:center;display:flex;align-items:flex-start;flex-direction:column;">
                                    
@@ -245,14 +226,31 @@
                                 </div>
                             </div>
                         `, {
-                            maxWidth: "auto",
-                        });
+                        maxWidth: "auto",
+                    });
 
-                        markerCluster.addLayer(marker);
-                    }
-                });
+                    markerCluster.addLayer(marker);
+                }
+            });
 
-            map_render.addLayer(markerCluster);
+            mapRender.addLayer(markerCluster);
+
+            legend.onAdd = function(map) {
+                var div = L.DomUtil.create('div', 'info legend');
+                labels = ['<strong>Status de paiement</strong>'],
+                    categories = ['Road Surface', 'Signage', 'Line Markings', 'Roadside Hazards', 'Other']
+
+
+                for (var i = 0; i < categories.length; i++) {
+                    div.innerHTML += labels.push('<img src=""/>');
+                }
+
+                div.innerHTML = labels.join('<br>');
+                return div;
+
+            };
+
+            legend.addTo(mapRender);
         </script>
     @endpush
 </x-default-layout>

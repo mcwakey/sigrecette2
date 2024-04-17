@@ -56,26 +56,30 @@
 
                     </div>
 
-                    <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
-                        <!--begin::Add user-->
-                        <button type="button" class="btn btn-light-warning" data-bs-toggle="modal"
-                            data-bs-target="#kt_modal_add_stock_transfer" data-kt-user-id="{{ $user->id }}" data-kt-action="add_deposit">
-                            {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                            {{ __('new deposit') }}
-                        </button>
-                        <!--end::Add user-->
-                    </div>
+                    @can('peut effectuer un versement')
+                        <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
+                            <!--begin::Add user-->
+                            <button type="button" class="btn btn-light-warning" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_add_stock_transfer" data-kt-user-id="{{ $user->id }}" data-kt-action="add_deposit">
+                                {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                                {{ __('new deposit') }}
+                            </button>
+                            <!--end::Add user-->
+                        </div>
+                    @endcan
 
                     <!--begin::Toolbar-->
-                    <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
-                        <!--begin::Add user-->
-                        <button type="button" class="btn btn-light-danger" data-bs-toggle="modal"
-                            data-bs-target="#kt_modal_add_stock_transfer" data-kt-user-id="{{ $user->id }}" data-kt-action="update_transfer">
-                            {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                            {{ __('account state') }}
-                        </button>
-                        <!--end::Add user-->
-                    </div>
+                    @can('peut faire un etat de compte')
+                        <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
+                            <!--begin::Add user-->
+                            <button type="button" class="btn btn-light-danger" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_add_stock_transfer" data-kt-user-id="{{ $user->id }}" data-kt-action="update_transfer">
+                                {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                                {{ __('account state') }}
+                            </button>
+                            <!--end::Add user-->
+                        </div>
+                    @endcan
 
                     <!--begin::Toolbar-->
                     <!-- <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">

@@ -24,15 +24,17 @@
 
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
-                <!--begin::Toolbar-->
-                <div class="d-flex justify-content-end" data-kt-town-table-toolbar="base">
-                    <!--begin::Add user-->
-                    <button type="button" class="btn btn-light-success h-45px ms-auto" data-bs-toggle="modal" data-bs-target="#kt_modal_add_town">
-                        {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        {{ __('create_town_or_village') }}
-                    </button>
-                    <!--end::Add user-->
-                </div>
+                @can('peut créer un village/quartier')
+                    <!--begin::Toolbar-->
+                    <div class="d-flex justify-content-end" data-kt-town-table-toolbar="base">
+                        <!--begin::Add user-->
+                        <button type="button" class="btn btn-light-success h-45px ms-auto" data-bs-toggle="modal" data-bs-target="#kt_modal_add_town">
+                            {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                            {{ __('create_town_or_village') }}
+                        </button>
+                        <!--end::Add user-->
+                    </div>
+                @endcan
             </div>
             <!--end::Card toolbar-->
         </div>

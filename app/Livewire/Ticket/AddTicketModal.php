@@ -140,7 +140,7 @@ class AddTicketModal extends Component
                 //$taxable->syncRoles($this->tax_label);
 
                 // Emit a success event with a message
-                $this->dispatch('success', __('Taxable updated'));
+                $this->dispatch('success', __('Valeur inactive mis a jour'));
             } else {
                 // Assign selected role for user
                 //$taxable->assignRole($this->tax_label);
@@ -149,7 +149,7 @@ class AddTicketModal extends Component
                 //Password::sendResetLink($taxable->only('email'));
 
                 // Emit a success event with a message
-                $this->dispatch('success', __('New Taxable created'));
+                $this->dispatch('success', __('Valeur inactive créer'));
             }
         });
 
@@ -169,7 +169,7 @@ class AddTicketModal extends Component
         Taxable::destroy($id);
 
         // Emit a success event with a message
-        $this->dispatch('success', 'Taxable successfully deleted');
+        $this->dispatch('success', 'Valeur inactive supprimer.');
     }
 
     public function updateUser($id)

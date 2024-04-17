@@ -12,20 +12,24 @@
     </div>
     <!--end::Menu item-->
 
-    <!--begin::Menu item-->
-    <div class="menu-item px-3">
-        <a href="#" class="menu-link px-3" data-kt-user-id="{{ $town->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_town" data-kt-action="update_row">
-        {{ __('edit') }}
-        </a>
-    </div>
-    <!--end::Menu item-->
+    @can('peut modifier un village/quartier')
+        <!--begin::Menu item-->
+        <div class="menu-item px-3">
+            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $town->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_town" data-kt-action="update_row">
+            {{ __('edit') }}
+            </a>
+        </div>
+        <!--end::Menu item-->
+    @endcan
 
-    <!--begin::Menu item-->
-    <div class="menu-item px-3">
-        <a href="#" class="menu-link px-3" data-kt-user-id="{{ $town->id }}" data-kt-action="delete_row">
-        {{ __('delete') }}
-        </a>
-    </div>
-    <!--end::Menu item-->
+    @can('peut supprimer un village/quartier')
+        <!--begin::Menu item-->
+        <div class="menu-item px-3">
+            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $town->id }}" data-kt-action="delete_row">
+            {{ __('delete') }}
+            </a>
+        </div>
+        <!--end::Menu item-->
+    @endcan
 </div>
 <!--end::Menu-->

@@ -53,7 +53,6 @@
                             </span>
                         </div>
 
-                        @auth
                             @can('peut modifier un contribuable')
                                 <span data-bs-toggle="tooltip" data-bs-trigger="hover"
                                       title="{{ __('edit Taxpayers details') }}">
@@ -64,7 +63,6 @@
                                     </a>
                                 </span>
                             @endcan
-                        @endauth
 
                     </div>
 
@@ -119,8 +117,8 @@
                             <!--begin::Details item-->
                             <div class="fw-bold mt-5">{{ __('zone') }}</div>
                             <div class="text-gray-600">
-                                @if ($taxpayer->erea)
-                                    <span class="badge badge-light-info">{{ $taxpayer->zone->name }}</span>
+                                @if ($taxpayer->zone)
+                                    <span class="badge badge-light-info">{{$taxpayer->zone->name }}</span>
                                 @endif
                             </div>
                             <!--begin::Details item-->
@@ -188,23 +186,6 @@
                             <a href="#" class="menu-link px-5">{{ __('statement of account') }}</a>
                         </div>
                         <!--end::Menu item-->
-
-                        <div class="separator my-3"></div>
-
-                        <div class="menu-item px-5">
-                            <div class="menu-content text-muted pb-2 px-5 fs-7 text-uppercase">{{ __('setting') }}
-                            </div>
-                        </div>
-
-                        @can('peut supprimer un contribuable')
-
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-5 my-1">
-                                <a href="#" class="menu-link px-5">{{ __('account settings') }}</a>
-                            </div>
-                            <!--end::Menu item-->
-
-                        @endcan
 
                         <div class="separator my-3"></div>
 

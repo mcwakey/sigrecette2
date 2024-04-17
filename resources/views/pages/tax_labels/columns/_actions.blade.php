@@ -12,6 +12,7 @@
     </div>
     <!--end::Menu item-->
 
+    @can('peut modifier un libellé fiscale')
     <!--begin::Menu item-->
     <div class="menu-item px-3">
         <a href="#" class="menu-link px-3" data-kt-user-id="{{ $tax_label->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_tax_label" data-kt-action="update_row">
@@ -19,7 +20,9 @@
         </a>
     </div>
     <!--end::Menu item-->
+    @endcan
 
+    @can('peut supprimer un libellé fiscale')
     <!--begin::Menu item-->
     <div class="menu-item px-3">
         <a href="#" class="menu-link px-3" data-kt-user-id="{{ $tax_label->id }}" data-kt-action="delete_row">
@@ -27,5 +30,6 @@
         </a>
     </div>
     <!--end::Menu item-->
+    @endcan
 </div>
 <!--end::Menu-->
