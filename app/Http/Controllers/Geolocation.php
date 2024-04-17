@@ -22,7 +22,7 @@ class Geolocation extends Controller
         ]);
 
         if ($request->has('zone')) {
-            $taxpayers->where('zone', $request->zone);
+            $taxpayers->where('zone_id', $request->zone);
         }
 
         if ($request->has('status')) {
@@ -37,7 +37,9 @@ class Geolocation extends Controller
 
         $taxpayers = $taxpayers->get();
 
-        return View('pages.geolocation.taxpayers', compact('taxpayers',));
+        $zones = Zone::all();
+
+        return View('pages.geolocation.taxpayers', compact('taxpayers','zones'));
     }
 
     public function users()

@@ -268,7 +268,7 @@
                         @can('peut voir la geolocalisation d\'un contribuable')
                         <!--begin:Menu link-->
                             <a class="menu-link {{ request()->routeIs('geolocation.zones') ? 'active' : '' }}"
-                                href="{{ route('geolocation.zones') }}">
+                                href="{{ route('geolocation.taxpayers') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
