@@ -117,7 +117,7 @@
             @php
             $sumsByTaxCode = \App\Models\Invoice::sumAmountsByTaxCode($item);
             @endphp
-           
+
         {{--TODO logique à refaire l'implémentation n'est pas correction doit gérer la creation des avis et les paiement associés --}}
             @if($item->status!="APROVED-CANCELLATION")
                 @foreach($sumsByTaxCode as $code => &$tax)
