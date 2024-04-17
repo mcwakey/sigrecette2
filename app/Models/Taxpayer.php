@@ -232,20 +232,12 @@ class Taxpayer extends Model
             }
             $result[] = $items;
         }
-        $compareByDate = function ($a, $b) {
-            $dateA = $a instanceof Invoice ? ($a->delivery_date ?? $a->created_at) : $a->created_at;
-            $dateB = $b instanceof Invoice ? ($b->delivery_date ?? $b->created_at) : $b->created_at;
-
-            return strcmp($dateA, $dateB);
-        };
-
-        // Trier le tableau une seule fois
-        usort($result[1], $compareByDate);
+        //dd($result[1]);
+        //$compareByDate = function ($a, $b) {$dateA = $a instanceof Invoice ? ($a->delivery_date ?? $a->created_at) : $a->created_at;$dateB = $b instanceof Invoice ? ($b->delivery_date ?? $b->created_at) : $b->created_at;return strcmp($dateA, $dateB);};usort($result[1], $compareByDate);
 
 
         return $result;
     }
-
 
 
 }
