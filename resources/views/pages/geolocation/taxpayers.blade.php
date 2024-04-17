@@ -206,17 +206,19 @@
             let commune = @json($commune);
 
             const createZonePolygonCoordinates = (zone) => {
-                zone = JSON.parse(zone);
-
-                let coordinates = [];
-
-                for (let i = 0; i < zone.length; i++) {
-                    coordinates.push([zone[i][1], zone[i][0]]);
+                if(zone){
+                    zone = JSON.parse(zone);
+    
+                    let coordinates = [];
+    
+                    for (let i = 0; i < zone.length; i++) {
+                        coordinates.push([zone[i][1], zone[i][0]]);
+                    }
+    
+                    return coordinates;
                 }
 
-                return coordinates;
-
-
+                return [];
             }
 
 
