@@ -1,4 +1,4 @@
-@if ($invoice->status != 'REJECTED')
+@if ($invoice->status != 'REJECTED'&& $invoice->status != 'PENDING'&& $invoice->status != 'DRAFT')
     @if ($invoice->delivery_date == null && $invoice->order_no !== null)
         {{ __('NOT DELIVERED') }}
         @can('peut ajouter la date de livraison d\'un avis')

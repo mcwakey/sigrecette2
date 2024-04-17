@@ -518,7 +518,7 @@
                                                 </td>
 
                                                 <td>
-                                                    @if( $invoice->status != 'REJECTED' && $invoice->status != 'PENDING')
+                                                    @if( $invoice->status != 'REJECTED' && $invoice->status != 'PENDING'&& $invoice->status != 'DRAFT')
                                                         @if ($invoice->delivery == 'NOT DELIVERED'&& $invoice->order_no !== null)
                                                             @can('peut ajouter la date de livraison d\'un avis')
                                                                 <button type="button"
