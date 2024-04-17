@@ -59,7 +59,9 @@ class AddCommuneModal extends Component
     {
         // Validate the form input data
         // $this->validate();
-        $this->title = "Commune " . $this->title . " " . $this->name;
+        if (!$this->edit_mode) {
+            $this->title = "Commune " . $this->title . " " . $this->name;
+        }
 
         DB::transaction(function () {
             $string_data = null;
