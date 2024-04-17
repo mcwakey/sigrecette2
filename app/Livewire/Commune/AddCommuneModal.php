@@ -68,7 +68,7 @@ class AddCommuneModal extends Component
 
             if ($this->limit_json) {
                 $content = $this->limit_json->store('uploads', 'public');
-                $string_data = json_encode(file_get_contents(storage_path('app/public/' . $content)), true);
+                $string_data = json_decode(file_get_contents(storage_path('app/public/' . $content)), true);
             }
 
             // Prepare the data for creating a new Taxable
