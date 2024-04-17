@@ -236,7 +236,7 @@
                     }
 
                     marker.bindPopup(`
-                            <div style="width:400px;min-height:200px;border-radius:8px;">
+                            <div style="width:480px;min-height:200px;border-radius:8px;">
                                 <div style="padding:10px;text-align:center;display:flex;align-items:flex-start;flex-direction:column;">
                                    
                                     <div style="margin-bottom:6px;display:flex;justify-content:space-between;width:100%;align-items:center;">
@@ -366,8 +366,6 @@
             status.addEventListener('change', () => {
                 submitSearch()
             });
-
-            searchBtn.setAttribute('href', '#');
         </script>
     @endpush
 </x-default-layout>

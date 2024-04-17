@@ -1147,6 +1147,44 @@
 
             <!--end:::Tab content-->
         </div>
+
+        <style>
+            .legend {
+                width: 320px;
+                background: white;
+                padding: 10px 12px;
+                border-radius: 6px;
+            }
+    
+            .legend .title {
+                font-size: 18px;
+                font-weight: 500;
+                display: block;
+                margin-bottom: -16px;
+            }
+    
+            .legend .detail {
+                margin-left: 5px;
+                margin-bottom: -10px;
+                display: flex;
+                align-items: center;
+            }
+    
+            .legend .detail:last-child {
+                margin-bottom: 0px;
+            }
+    
+            .legend .text {
+                font-size: 16px;
+                font-weight: 500;
+            }
+    
+            .legend .img {
+                margin-right: 4px;
+                min-width: 20px;
+            }
+        </style>
+
         <!--end::Content-->
     </div>
 
@@ -1201,40 +1239,48 @@
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
             }).addTo(map_render);
+
+
+            let legend = L.control({
+                position: 'bottomright'
+            });
+
         </script>
 
         <script type="text/javascript">
-            let taxpayerGreen = L.icon({
-                iconUrl: 'http://127.0.0.1:8000/assets/media/icons/taxpayer-green.svg',
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
-                popupAnchor: [1, -34],
-                shadowSize: [41, 41]
-            });
+         const getTaxpayerIconUrl = (icon) => `http://127.0.0.1:8000/assets/media/icons/${icon}`;
 
-            let taxpayerOrange = L.icon({
-                iconUrl: 'http://127.0.0.1:8000/assets/media/icons/taxpayer-orange.svg',
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
-                popupAnchor: [1, -34],
-                shadowSize: [41, 41]
-            });
+        let taxpayerGreen = L.icon({
+            iconUrl: getTaxpayerIconUrl('taxpayer-green.svg'),
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
 
-            let taxpayerBlue = L.icon({
-                iconUrl: 'http://127.0.0.1:8000/assets/media/icons/taxpayer-blue.svg',
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
-                popupAnchor: [1, -34],
-                shadowSize: [41, 41]
-            });
+        let taxpayerOrange = L.icon({
+            iconUrl: getTaxpayerIconUrl('taxpayer-orange.svg'),
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
 
-            let taxpayerRed = L.icon({
-                iconUrl: 'http://127.0.0.1:8000/assets/media/icons/taxpayer-red.svg',
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
-                popupAnchor: [1, -34],
-                shadowSize: [41, 41]
-            });
+        let taxpayerBlue = L.icon({
+            iconUrl: getTaxpayerIconUrl('taxpayer-blue.svg'),
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        let taxpayerRed = L.icon({
+            iconUrl: getTaxpayerIconUrl('taxpayer-red.svg'),
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
 
             let taxpayer = @json($taxpayer); // Convert Laravel object to JSON
 
@@ -1255,13 +1301,50 @@
 // Telephone: ${taxpayer.telephone}<br>
 
                 var popupContent = `
-<strong>${taxpayer.name}</strong><br>
-Mobile Phone: ${taxpayer.mobilephone}<br>
-Canton: ${taxpayer.town.canton.name}<br>
-Town: ${taxpayer.town.name}<br>
-Erea: ${taxpayer.erea.name}<br>
-Address: ${taxpayer.address}
-`;
+                <div style="width:480px;min-height:200px;border-radius:8px;">
+                                <div style="padding:10px;text-align:center;display:flex;align-items:flex-start;flex-direction:column;">
+                                   
+                                    <div style="margin-bottom:6px;display:flex;justify-content:space-between;width:100%;align-items:center;">
+                                        <h2 class="text-dark">Informations du contribuable</h2 class="text-dark">
+                                        <a class="badge pt-2 pb-2 bg-secondary" href="/taxpayers/${taxpayer.id}" class="">Afficher</a>
+                                    </div>
+
+                                    <div style="margin-bottom:6px;">
+                                        <span style="font-weight:600;font-size:15px;"> Nom complet </span> 
+                                        <span style="font-size:15px"> : ${taxpayer.name}</span>
+                                    </div>
+
+                                    <div style="margin-bottom:6px;">
+                                        <span style="font-weight:600;font-size:15px;"> Téléphone </span> 
+                                        <span style="font-size:15px"> : ${taxpayer.mobilephone}</span>
+                                    </div>
+
+                                    <div style="margin-bottom:6px;">
+                                        <span style="font-weight:600;font-size:15px;"> Adresse </span> 
+                                        <span style="font-size:15px"> : ${taxpayer.address}</span>
+                                    </div>
+
+                                    <div style="margin-bottom:6px;">
+                                        <span style="font-weight:600;font-size:15px;">Ville</span> 
+                                        <span style="font-size:15px">: ${taxpayer.town.name}</span>
+                                    </div>
+
+                                    <div style="margin-bottom:6px;">
+                                        <span style="font-weight:600;font-size:15px;">Canton</span>
+                                        <span style="font-size:15px">: ${taxpayer.town.canton.name}</span>
+                                    </div>
+
+                                    <div style="margin-bottom:6px;">
+                                        <span style="font-weight:600;font-size:15px;">Zone</span>
+                                        <span style="font-size:15px"> : ${taxpayer.zone.name}</span>
+                                    </div>  
+                                    
+                                    <div style="margin-bottom:6px;">
+                                        <span style="font-weight:600;font-size:15px;">Quartié</span>
+                                        <span style="font-size:15px"> : ${taxpayer.erea ? taxpayer.erea.name : '---'}</span>
+                                    </div> 
+                                </div>
+                            </div>`;
 
 
                 if (taxpayer.invoices.length) {
@@ -1299,9 +1382,44 @@ Address: ${taxpayer.address}
                     easeLinearity: 0.5, // Animation easing factor (0.5 for a smooth effect)
                 });
             } else {
-// Log a message when there is missing or invalid latitude or longitude
-                console.log('Taxpayer does not have valid latitude or longitude:', taxpayer);
+
             }
+
+            
+            legend.onAdd = function(map) {
+                let div = L.DomUtil.create('div', 'info legend');
+                let labels = [
+                    '<div class="legend"><strong class="title">Légende : contribuable</strong><div class="hr"></div></div>'
+                ];
+                let status = ['OWING', 'PART PAID', 'PAID', null];
+
+
+                for (let i = 0; i < status.length; i++) {
+                    if (status[i] == 'OWING') {
+                        div.innerHTML += labels.push(
+                            `<div class="detail"><img class="img" src="${getTaxpayerIconUrl('taxpayer-red.svg')}"/> <span class="text">Facturé et Non payé</span></div>`
+                        );
+                    } else if (status[i] == 'PART PAID') {
+                        div.innerHTML += labels.push(
+                            `<div class="detail"><img class="img" src="${getTaxpayerIconUrl('taxpayer-orange.svg')}"/> <span class="text">Facturé et Partiellement payé</span></div>`
+                        );
+                    } else if (status[i] == 'PAID') {
+                        div.innerHTML += labels.push(
+                            `<div class="detail"><img class="img" src="${getTaxpayerIconUrl('taxpayer-green.svg')}"/> <span class="text">Facturé et Payé</span></div>`
+                        );
+                    } else if (status[i] == null) {
+                        div.innerHTML += labels.push(
+                            `<div class="detail"><img class="img" src="${getTaxpayerIconUrl('taxpayer-blue.svg')}"/> <span class="text">Non Facturé</span></div>`
+                        );
+                    }
+                }
+
+                div.innerHTML = labels.join('<br>');
+                return div;
+
+            };
+
+            legend.addTo(map_render);
         </script>
         <script type="text/javascript">
             document.querySelectorAll('[data-kt-action="update_payment_status"]').forEach(function (element) {
