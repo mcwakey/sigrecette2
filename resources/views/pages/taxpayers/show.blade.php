@@ -695,8 +695,8 @@
                                                                        target="_blank">{{ __('print') }}</a>
 
                                                             </div>
-                                                            @if ($invoice->status != 'REDUCED')
-                                                                @if ($invoice->status !== 'CANCELED' && $invoice->pay_status != 'PAID')
+                                                            @if ($invoice->status != 'REDUCED' )
+                                                                @if ($invoice->status !== 'CANCELED' && $invoice->pay_status != 'PAID'&& $invoice->delivery_date!=null)
                                                                     @if ( $invoice->status == 'APROVED' || $invoice->status =='APROVED-CANCELLATION')
                                                                         @can('peut ajouter un paiement')
                                                                             <div class="menu-item px-3">
@@ -1155,30 +1155,30 @@
                 padding: 10px 12px;
                 border-radius: 6px;
             }
-    
+
             .legend .title {
                 font-size: 18px;
                 font-weight: 500;
                 display: block;
                 margin-bottom: -16px;
             }
-    
+
             .legend .detail {
                 margin-left: 5px;
                 margin-bottom: -10px;
                 display: flex;
                 align-items: center;
             }
-    
+
             .legend .detail:last-child {
                 margin-bottom: 0px;
             }
-    
+
             .legend .text {
                 font-size: 16px;
                 font-weight: 500;
             }
-    
+
             .legend .img {
                 margin-right: 4px;
                 min-width: 20px;
@@ -1303,29 +1303,29 @@
                 var popupContent = `
                 <div style="width:480px;min-height:200px;border-radius:8px;">
                                 <div style="padding:10px;text-align:center;display:flex;align-items:flex-start;flex-direction:column;">
-                                   
+
                                     <div style="margin-bottom:6px;display:flex;justify-content:space-between;width:100%;align-items:center;">
                                         <h2 class="text-dark">Informations du contribuable</h2 class="text-dark">
                                         <a class="badge pt-2 pb-2 bg-secondary" href="/taxpayers/${taxpayer.id}" class="">Afficher</a>
                                     </div>
 
                                     <div style="margin-bottom:6px;">
-                                        <span style="font-weight:600;font-size:15px;"> Nom complet </span> 
+                                        <span style="font-weight:600;font-size:15px;"> Nom complet </span>
                                         <span style="font-size:15px"> : ${taxpayer.name}</span>
                                     </div>
 
                                     <div style="margin-bottom:6px;">
-                                        <span style="font-weight:600;font-size:15px;"> Téléphone </span> 
+                                        <span style="font-weight:600;font-size:15px;"> Téléphone </span>
                                         <span style="font-size:15px"> : ${taxpayer.mobilephone}</span>
                                     </div>
 
                                     <div style="margin-bottom:6px;">
-                                        <span style="font-weight:600;font-size:15px;"> Adresse </span> 
+                                        <span style="font-weight:600;font-size:15px;"> Adresse </span>
                                         <span style="font-size:15px"> : ${taxpayer.address}</span>
                                     </div>
 
                                     <div style="margin-bottom:6px;">
-                                        <span style="font-weight:600;font-size:15px;">Ville</span> 
+                                        <span style="font-weight:600;font-size:15px;">Ville</span>
                                         <span style="font-size:15px">: ${taxpayer.town.name}</span>
                                     </div>
 
@@ -1337,12 +1337,12 @@
                                     <div style="margin-bottom:6px;">
                                         <span style="font-weight:600;font-size:15px;">Zone</span>
                                         <span style="font-size:15px"> : ${taxpayer.zone.name}</span>
-                                    </div>  
-                                    
+                                    </div>
+
                                     <div style="margin-bottom:6px;">
                                         <span style="font-weight:600;font-size:15px;">Quartié</span>
                                         <span style="font-size:15px"> : ${taxpayer.erea ? taxpayer.erea.name : '---'}</span>
-                                    </div> 
+                                    </div>
                                 </div>
                             </div>`;
 
@@ -1385,7 +1385,7 @@
 
             }
 
-            
+
             legend.onAdd = function(map) {
                 let div = L.DomUtil.create('div', 'info legend');
                 let labels = [
