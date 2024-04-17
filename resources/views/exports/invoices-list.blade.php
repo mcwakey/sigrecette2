@@ -206,7 +206,7 @@
     </tr>
     <tr>
         <td colspan="5" style="border: none; margin: 0;padding: 0;"></td>
-        <td colspan="6" style="border: none; margin: 0;padding: 0;">[Cachet, signature, Nom et prénoms]</td>
+        <td colspan="6" style="border: none; margin: 0;padding: 0;">[Cachet, signature, Nom et prénoms de l’ordonnateur]</td>
     </tr>
     </tbody>
 </table>

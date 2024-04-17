@@ -44,7 +44,7 @@
 
     <tr>
         <td colspan="5"  style="border: none; margin: 0">
-            REGION PLATEAUX
+            {{$commune->region_name}}
 
         </td>
         <td colspan="6"  style="border: none; margin: 0">
