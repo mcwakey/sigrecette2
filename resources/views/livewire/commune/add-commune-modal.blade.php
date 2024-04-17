@@ -38,7 +38,7 @@
                                 <select wire:model="title" name="title" class="form-select mb-3 mb-lg-0"
                                     data-dropdown-parent="#kt_modal_add_commune">
                                     <option>Sélectionnez le préfixe :</option>
-                                    <option value="de" selected>{{ __('Commune de') }}</option>
+                                    <option value="de">{{ __('Commune de') }}</option>
                                     <option value="d'">{{ __("Commune d'") }}</option>
                                 </select>
                                 <!--end::Input-->
