@@ -156,7 +156,7 @@
                 <td>{{$payment->code}}</td>
                     <td></td>
                     <td>
-                        @if( $payment->reference!=null)
+                        @if( $payment->reference!=\App\Helpers\Constants::$REDUCTION &&  $payment->reference!=\App\Helpers\Constants::$ANNULATION )
                             {{ $payment->reference}}
                         @else
                         @endif

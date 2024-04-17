@@ -786,7 +786,6 @@
                                         <th class="min-w-50px">{{ __("code d'imputation") }}</th>
                                         <th class="min-w-50px">{{ __('amount') }}</th>
                                         <th class="min-w-50px">{{ __('type') }}</th>
-                                        <th class="min-w-50px">{{ __('description') }}</th>
                                         <th class="min-w-50px">{{ __('aproval') }}</th>
                                         <th class="min-w-50px">{{ __('actions') }}</th>
                                     </tr>
@@ -809,7 +808,7 @@
                                             </td>
 
 
-                                            <td>{{ $payment->description }}</td>
+
                                             <td>
                                                 @if ($payment->status == 'PENDING' )
                                                     <span
