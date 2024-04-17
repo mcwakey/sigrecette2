@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Commune;
 use App\Models\User;
 use App\Models\Zone;
 use App\Models\Taxpayer;
@@ -39,7 +40,9 @@ class Geolocation extends Controller
 
         $zones = Zone::all();
 
-        return View('pages.geolocation.taxpayers', compact('taxpayers','zones'));
+        $commune = Commune::getFirstCommune();
+
+        return View('pages.geolocation.taxpayers', compact('taxpayers','zones','commune'));
     }
 
     public function users()

@@ -79,17 +79,18 @@
                         <!--begin::Actions-->
                         <div class="col-xxl-3 d-flex justify-space-arround">
                             <div class="d-flex w-100">
-                                <a id="search-btn" href="" type="submit" class="btn btn-success mt-8" style="margin-right: 4px;">
+                                <a id="search-btn" href="" type="submit" class="btn btn-success mt-8"
+                                    style="margin-right: 4px;">
                                     <span class="indicator-label" wire:loading.remove>{{ __('Rechercher') }}</span>
                                 </a>
-                               
+
                                 <a href="/geolocation/taxpayers" type="submit" class="btn btn-light-warning mt-8">
                                     <span class="indicator-label" wire:loading.remove>{{ __('Rénitialiser') }}</span>
                                 </a>
                             </div>
                         </div>
 
-                    
+
                         <!--end::Actions-->
 
                     </div>
@@ -201,6 +202,25 @@
         <script type="text/javascript">
             // Convert Laravel object to JSON object
             let taxpayers = @json($taxpayers);
+
+            let commune = @json($commune);
+
+            const createZonePolygonCoordinates = (zone) => {
+                if(zone){
+                    zone = JSON.parse(zone);
+    
+                    let coordinates = [];
+    
+                    for (let i = 0; i < zone.length; i++) {
+                        coordinates.push([zone[i][1], zone[i][0]]);
+                    }
+    
+                    return coordinates;
+                }
+
+                return [];
+            }
+
 
             taxpayers.forEach((taxpayer) => {
                 if (parseFloat(taxpayer.latitude) && parseFloat(taxpayer.longitude)) {
@@ -324,6 +344,17 @@
             };
 
             legend.addTo(mapRender);
+
+            let coordinates = createZonePolygonCoordinates(commune.limit_json);
+
+            L.polygon(coordinates, {
+                color: 'blue'
+            }).addTo(mapRender);
+
+            mapRender.flyTo([commune.longitude, commune.latitude], 11, {
+                duration: 8, // Animation duration in seconds
+                easeLinearity: 0.5, // Animation easing factor (0.5 for a smooth effect)
+            });
 
             let searchBtn = document.getElementById('search-btn');
             let zones = document.getElementById('zones');

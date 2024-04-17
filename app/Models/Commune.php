@@ -16,6 +16,9 @@ class Commune extends Model
         'treasury_name',
         'treasury_address',
         'treasury_rib',
+        'longitude',
+        'latitude',
+        'limit_json'
     ];
 
     /**

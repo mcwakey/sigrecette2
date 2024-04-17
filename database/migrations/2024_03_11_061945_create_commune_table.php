@@ -19,7 +19,9 @@ return new class extends Migration
             $table->string('treasury_name');
             $table->string('treasury_address');
             $table->string( 'treasury_rib');
-
+            $table->string( 'longitude')->nullable();
+            $table->string( 'latitude')->nullable();
+            $table->longText( 'limit_json')->nullable();
             $table->timestamps();
         });
     }
