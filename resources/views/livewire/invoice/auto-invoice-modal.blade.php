@@ -63,7 +63,7 @@
 
                         <div class="row mb-2">
                             <div class="col-md-3">
-                                <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('Duree du contrat') }}" readonly />
+                                <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('Nombre de taxation') }}" readonly />
                             </div>
                             <div class="col-md-2">
                                 <div class="position-relative" data-kt-dialer="true" data-kt-dialer-default="12" data-kt-dialer-min="1" data-kt-dialer-max="12" data-kt-dialer-step="1">
@@ -86,7 +86,7 @@
 
                             </div>
                             <div class="col-md-2">
-                                <input type="text" value="{{ __('month') }}" class="required form-control form-control-flush" readonly />
+                                <input type="text" value="{{ __('Mois') }}" class="required form-control form-control-flush" readonly />
                             </div>
                             <div class="col-md-2">
                                 <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('A compter de') }}" readonly />

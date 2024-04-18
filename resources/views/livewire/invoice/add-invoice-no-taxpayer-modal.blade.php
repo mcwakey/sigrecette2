@@ -262,7 +262,7 @@
                         <div class="row mb-2">
                             <div class="col-md-3">
                                 <input type="text" class="required form-control form-control-flush text-end"
-                                    placeholder="{{ __('Duree du contrat') }}" readonly />
+                                    placeholder="{{ __('Nombre de taxation') }}" readonly />
                                 @error('qty')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror

@@ -48,7 +48,7 @@
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('fullname') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="name" name="name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('fullname') }}" />
+                                <input type="text" wire:model="name" name="name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('fullname') }}" readonly/>
                                 <!--end::Input-->
                                 @error('name')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -58,7 +58,7 @@
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('account id') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="tnif" name="tnif" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('tnif') }}" />
+                                <input type="text" wire:model="tnif" name="tnif" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('tnif') }}"  readonly/>
 
                                 <!--end::Input-->
                                 @error('zone_id')
@@ -69,7 +69,7 @@
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('zone') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="zone" name="zone" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('zone') }}" />
+                                <input type="text" wire:model="zone" name="zone" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('zone') }}" readonly/>
 
                                 <!--end::Input-->
                                 @error('zone')
@@ -86,7 +86,7 @@
                                 <label class="required form-control form-control-flush text-end"> {{ __('Nombre de Taxation') }}</label>
                             </div>
                             <div class="col-md-2">
-                                <div class="position-relative" data-kt-dialer="true" data-kt-dialer-min="1" data-kt-dialer-max="{{count($months)}}" data-kt-dialer-step="1">
+                                <div class="position-relative" data-kt-dialer="true" data-kt-dialer-min="1" data-kt-dialer-max="{{count($months)}}" data-kt-dialer-step="1" id='month-dialer'>
                                     <!--begin::Decrease control-->
                                     <button type="button" class="btn btn-icon btn-active-color-gray-700 position-absolute translate-middle-y top-50 start-0" data-kt-dialer-control="decrease">
                                         @if ($edit_mode==false)
@@ -95,7 +95,7 @@
                                     </button>
                                     <!--end::Decrease control-->
                                     <!--begin::Input control-->
-                                    <input wire:model="qty" name="qty" value="1" type="text" class="form-control border-0 ps-12" data-kt-dialer-control="input" placeholder="1" readonly="readonly" data-kt-action="load_invoice" />
+                                    <input wire:model="qty" name="qty" value="{{count($months)}}" type="text" class="form-control border-0 ps-12" data-kt-dialer-control="input" placeholder="1" readonly="readonly" data-kt-action="load_invoice" />
                                     <!--end::Input control-->
                                     @error('qty')
                                     <span class="text-danger">{{ $message }}</span> @enderror
@@ -107,10 +107,9 @@
                                     </button>
                                     <!--end::Increase control-->
                                 </div>
-
                             </div>
                             <div class="col-md-2">
-                                <label class="form-control form-control-flush"  > Mois</label>
+                                <label class="form-control form-control-flush"> Mois</label>
                             </div>
                             <div class="col-md-2">
                                 <label  class="required form-control form-control-flush text-end">{{ __('A compter de') }} </label>
@@ -131,6 +130,19 @@
                             </div>
 
                         </div>
+
+
+                                @push('scripts')
+                                    <script>
+                                        // let monthDialer = document.getElementById('month-dialer');
+                                        // let totalMounth = @json($months);
+
+                                        // monthDialer.setAttribute('data-kt-dialer-min', totalMounth.length);
+                                        // monthDialer.setAttribute('data-kt-dialer-max', totalMounth.length);
+
+                                        // console.log(monthDialer);
+                                    </script>
+                                @endpush
 
 
                         <div class="separator separator-dashed my-2"></div>
@@ -242,7 +254,7 @@
                             </table>
                             <div>
                                 <label class="form-label fs-6 fw-bolder text-gray-700">Notes</label>
-                                <textarea name="notes" class="form-control" rows="2" placeholder="Thanks for your business"></textarea>
+                                <textarea name="notes" class="form-control" rows="2" placeholder=""></textarea>
                             </div>
                         </div>
 

@@ -811,7 +811,7 @@
                                                 @if ($payment->status == 'PENDING' )
                                                     <span
                                                         class="badge badge-light-primary">{{ __($payment->status) }}</span>
-                                                    @can('peut prendre en charge un paiement')
+                                                    @can('peut accepter un paiement')
                                                         <button type="button"
                                                                 class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
                                                                 data-kt-user-id="{{ $payment->id }}"

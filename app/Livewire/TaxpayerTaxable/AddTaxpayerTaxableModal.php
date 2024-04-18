@@ -279,6 +279,7 @@ class AddTaxpayerTaxableModal extends Component
 
         $this->authorisation = $taxpayer_taxable->authorisation;
         $this->auth_reference = $taxpayer_taxable->auth_reference;
+        $this->option_calculus = $taxpayer_taxable->taxable->unit_type;
     }
 
     public function addTaxpayerTaxable($id)
