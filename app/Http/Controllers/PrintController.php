@@ -86,6 +86,9 @@ class PrintController extends Controller
             case 8:return $this->pdfGenerator->generateStateValueCollectorPdf($data,'state-versement-collecteur',$action);
             case 9:return $this->pdfGenerator->generateStateValueCollectorPdf($data,'state-versement-regisseur',$action);
             case 10:return $this->pdfGenerator->generateStateValueCollectorPdf($data,'livre-journal-regie',$action);
+            case 15:return $this->pdfGenerator->generateStateValueCollectorPdf($data,'state-iv-regisseur',$action);
+            case 16:return $this->pdfGenerator->generateStateValueCollectorPdf($data,"state-versement-regisseur-comptant",$action);
+
 
             default:
                 return$this->pdfGenerator->generateInvoicePdf($data,'invoices',$action);

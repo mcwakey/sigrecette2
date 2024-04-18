@@ -59,7 +59,7 @@
     </tr>
     <tr>
         <td colspan="5">
-            (Recettes sur titre)
+            (Recettes sur au comptant)
 
         </td>
 
@@ -89,10 +89,19 @@
     </tr>
     <tr>
         <th>Date</th>
-        <th>N° Avis des sommes à payer</th>
-        <th>N° ordre de recettes</th>
+        <th>Motif de la recette</th>
         <th>Pièces justificatives des encaissements</th>
         <th>Montant</th>
+        <th>Imputation</th>
+        <th>Odre de de recette de regularisation </th>
+    </tr>
+    <tr>
+        <th>valeurs</th>
+        <th>>Quitance</th>
+        <th>Pièces justificatives des encaissements</th>
+        <th>Montant</th>
+        <th>Imputation</th>
+        <th>Ordre de recette de régularisation</th>
     </tr>
 
     @php

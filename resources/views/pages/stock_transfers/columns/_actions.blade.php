@@ -9,7 +9,7 @@
             Aviser
         </a>
     </div> -->
-    
+
     <div class="menu-item px-3">
         <a href="#" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{ $stock_transfer->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_stock_transfer" data-kt-action="update_taxable">
         {{ __('view') }}
@@ -40,11 +40,11 @@
        {{ __('account state') }}
         </a>
     </div>
-    <!--end::Menu item-->
-
-    <!--begin::Menu item-->
+        @php
+            $data = [$stock_transfer->id];
+        @endphp
     <div class="menu-item px-3">
-        <a href="#" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{ $stock_transfer->id }}" data-kt-action="delete_taxpayer">
+        <a href="{{route('generatePdf', ['data' => json_encode($data),'type' => '15']) }}" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{ $stock_transfer->id }}" data-kt-action="delete_taxpayer">
         {{ __('print account state') }}
         </a>
     </div>

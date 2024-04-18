@@ -326,11 +326,12 @@
                         for (let j = 0; j < row.cells.length; j++) {
                             let cellValue = row.cells[j].innerText.trim();
                             let header = headers[j];
-                            rowData[capitalizeFirstLetter(header)] = cellValue;
+                            rowData[header] = cellValue;
                         }
 
                         dataArray.push(rowData);
                     }
+
 
 
 
