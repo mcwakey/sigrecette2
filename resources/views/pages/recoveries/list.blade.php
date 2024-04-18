@@ -256,7 +256,7 @@
 
                     // console.log(dataArray);
 
-                    let r_type = 3;
+                    let r_type = 2;
 
                     let jsonData = JSON.stringify(dataArray);
                     let url =

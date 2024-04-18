@@ -72,6 +72,7 @@ class AddStatusForm extends Component
                     'description' =>$description_str,
                     'user_id'=>  Auth::id(),
                     'reference' =>  $description_str,
+                    'invoice_type'=>$description_str
 
                 ];
                 $payments=Invoice::getCode($invoice->invoice_no,$invoice->reduce_amount,$paymentData);

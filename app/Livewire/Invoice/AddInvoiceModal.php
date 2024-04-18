@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Invoice;
 
+use App\Helpers\Constants;
 use Carbon\Carbon;
 
 use App\Models\Canton;
@@ -159,7 +160,7 @@ class AddInvoiceModal extends Component
         // Obtenez le mois actuel
         $currentMonth = Carbon::now()->month;
         $remainingMonths = 12 - $currentMonth;
-    
+
         for ($i = $currentMonth + 1; $i <= $currentMonth + $remainingMonths; $i++) {
             $monthIndex = $i > 12 ? $i - 12 : $i;
             $monthName = Carbon::createFromFormat('m',$monthIndex)->monthName;
@@ -243,7 +244,7 @@ class AddInvoiceModal extends Component
                 $invoiceData['amount'] = $this->amount_e;
                 $invoiceData['reduce_amount'] = $this->reduce_amount;
                 //FIX CANCEL INVOICE BUG
-                if (intval($this->reduce_amount) === 0) {
+                if ($this->cancel_reduct==Constants::$CANCELED) {
                     $invoiceData['reduce_amount'] = $this->amount_e;
                 }
                 $invoiceData['status'] = 'DRAFT';
