@@ -265,14 +265,16 @@
                 <!--begin:Menu sub-->
                 <div class="menu-sub menu-sub-accordion">
                     <div class="menu-item">
+                        @can('peut voir la geolocalisation d\'un contribuable')
                         <!--begin:Menu link-->
-                        <a class="menu-link {{ request()->routeIs('geolocation.zones') ? 'active' : '' }}"
-                            href="{{ route('geolocation.zones') }}">
-                            <span class="menu-bullet">
-                                <span class="bullet bullet-dot"></span>
-                            </span>
-                            <span class="menu-title">{{ __('zones') }}</span>
-                        </a>
+                            <a class="menu-link {{ request()->routeIs('geolocation.zones') ? 'active' : '' }}"
+                                href="{{ route('geolocation.taxpayers') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">{{ __('taxpayers') }}</span>
+                            </a>
+                        @endcan
 
                         @can('peut voir la geolocalisation d\'un utilisateur')
                             <a class="menu-link {{ request()->routeIs('geolocation.users') ? 'active' : '' }}"

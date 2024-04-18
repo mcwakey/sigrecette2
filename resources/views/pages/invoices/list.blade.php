@@ -135,6 +135,7 @@
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('invoice no') }}</label>
                             <input type="text" class="form-control" name="tags" id="mySearchTwo"/>
                         </div>
+
                         <!--end::Col-->
                         <!--begin::Col-->
                         <div class="col-xxl-2">
@@ -197,6 +198,7 @@
                             <!--end::Select-->
                             <!--end::Row-->
                         </div>
+
                     </div>
                     <!--end::Row-->
 
@@ -351,7 +353,19 @@
             });
 
             document.getElementById('mySearchTwo').addEventListener('keyup', function () {
-                window.LaravelDataTables['invoices-table'].column(1).search(this.value).draw();
+                let s_id = this.value;
+                window.LaravelDataTables['invoices-table'].column(1).search(s_id).draw();
+            });
+            document.getElementById('mySearchTwo0').addEventListener('keyup', function () {
+                let s_id = document.getElementById('mySearchTwo').value;
+                let end_id = this.value;
+                if(s_id !==""&& end_id!==""){
+                    let url = "{{ route('invoices.index', ['startInvoiceId' => ':s_id', 'endInvoiceId' => ':end_id']) }}";
+                    url = url.replace(':s_id', encodeURIComponent(s_id));
+                    url = url.replace(':end_id', encodeURIComponent(end_id));
+                    window.open(url,'_blank');
+                }
+               // window.LaravelDataTables['invoices-table'].column(1).search(s_id + '-' + end_id).draw();
             });
             let zone = "zone 1";
             document.getElementById('mySearchFive').addEventListener('change', function () {
@@ -408,25 +422,24 @@
             }
 
             function onSelectedValueChanged(selectedValue) {
-                const array = ['APROVED', 'APROVED-CANCELLATION','CANCELED',"PENDING"];
+                const array = ['APROVED', 'APROVED-CANCELLATION','CANCELED',"PENDING","REJECTED"];
                 removePrintMenuItems();
                 if (array.includes(selectedValue)) {
                     printButton.classList.add('btn-active-light-primary');
                     printButton.classList.remove( "d-none");
                     if (selectedValue === 'APROVED' || selectedValue === "CANCELED") {
                         addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
+                        addPrintMenuItem('{{ __('Journal des avis des sommes à payer confiés par le receveur') }}', '5');
                         addPrintMenuItem('{{ __('Fiche de distribution des avis') }}', '4');
                         addPrintMenuItem('{{ __('Registre-journal des avis distribués') }}', '3');
-                        addPrintMenuItem('{{ __('Journal des avis des sommes à payer confiés par le receveur') }}', '5');
                         addPrintMenuItem('{{ __('Fiche de recouvrement des avis distribués') }}', '41');
-
-
 
                     } else if (selectedValue === 'APROVED-CANCELLATION') {
                         addPrintMenuItem('{{ __('Bordereau journal des avis de réduction ou d’annulation') }}', '2');
-                    }else if(selectedValue === "PENDING"){
+                    }else if(selectedValue === "PENDING"|| selectedValue ==="REJECTED"){
                         addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
-
+                    }else {
+                        addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
                     }
                 }
                 else {

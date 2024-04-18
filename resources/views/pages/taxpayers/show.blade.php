@@ -53,7 +53,6 @@
                             </span>
                         </div>
 
-                        @auth
                             @can('peut modifier un contribuable')
                                 <span data-bs-toggle="tooltip" data-bs-trigger="hover"
                                       title="{{ __('edit Taxpayers details') }}">
@@ -64,7 +63,6 @@
                                     </a>
                                 </span>
                             @endcan
-                        @endauth
 
                     </div>
 
@@ -119,8 +117,8 @@
                             <!--begin::Details item-->
                             <div class="fw-bold mt-5">{{ __('zone') }}</div>
                             <div class="text-gray-600">
-                                @if ($taxpayer->erea)
-                                    <span class="badge badge-light-info">{{ $taxpayer->zone->name }}</span>
+                                @if ($taxpayer->zone)
+                                    <span class="badge badge-light-info">{{$taxpayer->zone->name }}</span>
                                 @endif
                             </div>
                             <!--begin::Details item-->
@@ -184,27 +182,8 @@
                         <div class="menu-item px-5">
                             <a href="#" class="menu-link px-5">{{ __('reports et stats') }}</a>
                         </div>
-                        <div class="menu-item px-5">
-                            <a href="#" class="menu-link px-5">{{ __('statement of account') }}</a>
-                        </div>
+
                         <!--end::Menu item-->
-
-                        <div class="separator my-3"></div>
-
-                        <div class="menu-item px-5">
-                            <div class="menu-content text-muted pb-2 px-5 fs-7 text-uppercase">{{ __('setting') }}
-                            </div>
-                        </div>
-
-                        @can('peut supprimer un contribuable')
-
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-5 my-1">
-                                <a href="#" class="menu-link px-5">{{ __('account settings') }}</a>
-                            </div>
-                            <!--end::Menu item-->
-
-                        @endcan
 
                         <div class="separator my-3"></div>
 
@@ -460,7 +439,7 @@
                                                 <td>{{ $invoice->created_at->format('Y-m-d') }}</td>
                                                 <td>{{ $invoice->invoice_no }}</td>
                                                 <td>
-                                                    @if ( $invoice->order_no == null && $invoice->delivery == 'NOT DELIVERED')
+                                                    @if ( $invoice->order_no == null && $invoice->delivery == 'NOT DELIVERED' &&  $invoice->status!="DRAFT" )
                                                         @can('peut ajouter le numéro d\'ordre de recette d\'un avis')
                                                         <button type="button"
                                                                 class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
@@ -537,7 +516,7 @@
                                                 </td>
 
                                                 <td>
-                                                    @if( $invoice->status != 'REJECTED' && $invoice->status != 'PENDING')
+                                                    @if( $invoice->status != 'REJECTED' && $invoice->status != 'PENDING'&& $invoice->status != 'DRAFT')
                                                         @if ($invoice->delivery == 'NOT DELIVERED'&& $invoice->order_no !== null)
                                                             @can('peut ajouter la date de livraison d\'un avis')
                                                                 <button type="button"
@@ -714,9 +693,9 @@
                                                                        target="_blank">{{ __('print') }}</a>
 
                                                             </div>
-                                                            @if ($invoice->status != 'REDUCED')
+                                                            @if ($invoice->status != 'REDUCED' )
                                                                 @if ($invoice->status !== 'CANCELED' && $invoice->pay_status != 'PAID')
-                                                                    @if ( $invoice->status == 'APROVED' || $invoice->status =='APROVED-CANCELLATION')
+                                                                    @if ($invoice->delivery_date!=null &&( $invoice->status == 'APROVED' || $invoice->status =='APROVED-CANCELLATION') )
                                                                         @can('peut ajouter un paiement')
                                                                             <div class="menu-item px-3">
                                                                                 <a href="#"
@@ -730,7 +709,7 @@
                                                                             </div>
                                                                     @endcan
                                                                 @endif
-                                                                @if ($invoice->validity == 'VALID' && ($invoice->status == 'APROVED' || $invoice->status =='APROVED-CANCELLATION') )
+                                                                @if($invoice->delivery_date!=null &&   ($invoice->validity == 'VALID' && ($invoice->status == 'APROVED' || $invoice->status =='APROVED-CANCELLATION')) )
 
                                                                     @can('peut réduire ou annuler un avis')
                                                                         <!--begin::Menu item-->
@@ -805,7 +784,6 @@
                                         <th class="min-w-50px">{{ __("code d'imputation") }}</th>
                                         <th class="min-w-50px">{{ __('amount') }}</th>
                                         <th class="min-w-50px">{{ __('type') }}</th>
-                                        <th class="min-w-50px">{{ __('description') }}</th>
                                         <th class="min-w-50px">{{ __('aproval') }}</th>
                                         <th class="min-w-50px">{{ __('actions') }}</th>
                                     </tr>
@@ -828,7 +806,7 @@
                                             </td>
 
 
-                                            <td>{{ $payment->description }}</td>
+
                                             <td>
                                                 @if ($payment->status == 'PENDING' )
                                                     <span
@@ -1166,6 +1144,44 @@
 
             <!--end:::Tab content-->
         </div>
+
+        <style>
+            .legend {
+                width: 320px;
+                background: white;
+                padding: 10px 12px;
+                border-radius: 6px;
+            }
+
+            .legend .title {
+                font-size: 18px;
+                font-weight: 500;
+                display: block;
+                margin-bottom: -16px;
+            }
+
+            .legend .detail {
+                margin-left: 5px;
+                margin-bottom: -10px;
+                display: flex;
+                align-items: center;
+            }
+
+            .legend .detail:last-child {
+                margin-bottom: 0px;
+            }
+
+            .legend .text {
+                font-size: 16px;
+                font-weight: 500;
+            }
+
+            .legend .img {
+                margin-right: 4px;
+                min-width: 20px;
+            }
+        </style>
+
         <!--end::Content-->
     </div>
 
@@ -1220,40 +1236,48 @@
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
             }).addTo(map_render);
+
+
+            let legend = L.control({
+                position: 'bottomright'
+            });
+
         </script>
 
         <script type="text/javascript">
-            let taxpayerGreen = L.icon({
-                iconUrl: 'http://127.0.0.1:8000/assets/media/icons/taxpayer-green.svg',
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
-                popupAnchor: [1, -34],
-                shadowSize: [41, 41]
-            });
+         const getTaxpayerIconUrl = (icon) => `http://127.0.0.1:8000/assets/media/icons/${icon}`;
 
-            let taxpayerOrange = L.icon({
-                iconUrl: 'http://127.0.0.1:8000/assets/media/icons/taxpayer-orange.svg',
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
-                popupAnchor: [1, -34],
-                shadowSize: [41, 41]
-            });
+        let taxpayerGreen = L.icon({
+            iconUrl: getTaxpayerIconUrl('taxpayer-green.svg'),
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
 
-            let taxpayerBlue = L.icon({
-                iconUrl: 'http://127.0.0.1:8000/assets/media/icons/taxpayer-blue.svg',
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
-                popupAnchor: [1, -34],
-                shadowSize: [41, 41]
-            });
+        let taxpayerOrange = L.icon({
+            iconUrl: getTaxpayerIconUrl('taxpayer-orange.svg'),
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
 
-            let taxpayerRed = L.icon({
-                iconUrl: 'http://127.0.0.1:8000/assets/media/icons/taxpayer-red.svg',
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
-                popupAnchor: [1, -34],
-                shadowSize: [41, 41]
-            });
+        let taxpayerBlue = L.icon({
+            iconUrl: getTaxpayerIconUrl('taxpayer-blue.svg'),
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        let taxpayerRed = L.icon({
+            iconUrl: getTaxpayerIconUrl('taxpayer-red.svg'),
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
 
             let taxpayer = @json($taxpayer); // Convert Laravel object to JSON
 
@@ -1274,13 +1298,50 @@
 // Telephone: ${taxpayer.telephone}<br>
 
                 var popupContent = `
-<strong>${taxpayer.name}</strong><br>
-Mobile Phone: ${taxpayer.mobilephone}<br>
-Canton: ${taxpayer.town.canton.name}<br>
-Town: ${taxpayer.town.name}<br>
-Erea: ${taxpayer.erea.name}<br>
-Address: ${taxpayer.address}
-`;
+                <div style="width:480px;min-height:200px;border-radius:8px;">
+                                <div style="padding:10px;text-align:center;display:flex;align-items:flex-start;flex-direction:column;">
+
+                                    <div style="margin-bottom:6px;display:flex;justify-content:space-between;width:100%;align-items:center;">
+                                        <h2 class="text-dark">Informations du contribuable</h2 class="text-dark">
+                                        <a class="badge pt-2 pb-2 bg-secondary" href="/taxpayers/${taxpayer.id}" class="">Afficher</a>
+                                    </div>
+
+                                    <div style="margin-bottom:6px;">
+                                        <span style="font-weight:600;font-size:15px;"> Nom complet </span>
+                                        <span style="font-size:15px"> : ${taxpayer.name}</span>
+                                    </div>
+
+                                    <div style="margin-bottom:6px;">
+                                        <span style="font-weight:600;font-size:15px;"> Téléphone </span>
+                                        <span style="font-size:15px"> : ${taxpayer.mobilephone}</span>
+                                    </div>
+
+                                    <div style="margin-bottom:6px;">
+                                        <span style="font-weight:600;font-size:15px;"> Adresse </span>
+                                        <span style="font-size:15px"> : ${taxpayer.address}</span>
+                                    </div>
+
+                                    <div style="margin-bottom:6px;">
+                                        <span style="font-weight:600;font-size:15px;">Ville</span>
+                                        <span style="font-size:15px">: ${taxpayer.town.name}</span>
+                                    </div>
+
+                                    <div style="margin-bottom:6px;">
+                                        <span style="font-weight:600;font-size:15px;">Canton</span>
+                                        <span style="font-size:15px">: ${taxpayer.town.canton.name}</span>
+                                    </div>
+
+                                    <div style="margin-bottom:6px;">
+                                        <span style="font-weight:600;font-size:15px;">Zone</span>
+                                        <span style="font-size:15px"> : ${taxpayer.zone.name}</span>
+                                    </div>
+
+                                    <div style="margin-bottom:6px;">
+                                        <span style="font-weight:600;font-size:15px;">Quartié</span>
+                                        <span style="font-size:15px"> : ${taxpayer.erea ? taxpayer.erea.name : '---'}</span>
+                                    </div>
+                                </div>
+                            </div>`;
 
 
                 if (taxpayer.invoices.length) {
@@ -1318,9 +1379,44 @@ Address: ${taxpayer.address}
                     easeLinearity: 0.5, // Animation easing factor (0.5 for a smooth effect)
                 });
             } else {
-// Log a message when there is missing or invalid latitude or longitude
-                console.log('Taxpayer does not have valid latitude or longitude:', taxpayer);
+
             }
+
+
+            legend.onAdd = function(map) {
+                let div = L.DomUtil.create('div', 'info legend');
+                let labels = [
+                    '<div class="legend"><strong class="title">Légende : contribuable</strong><div class="hr"></div></div>'
+                ];
+                let status = ['OWING', 'PART PAID', 'PAID', null];
+
+
+                for (let i = 0; i < status.length; i++) {
+                    if (status[i] == 'OWING') {
+                        div.innerHTML += labels.push(
+                            `<div class="detail"><img class="img" src="${getTaxpayerIconUrl('taxpayer-red.svg')}"/> <span class="text">Facturé et Non payé</span></div>`
+                        );
+                    } else if (status[i] == 'PART PAID') {
+                        div.innerHTML += labels.push(
+                            `<div class="detail"><img class="img" src="${getTaxpayerIconUrl('taxpayer-orange.svg')}"/> <span class="text">Facturé et Partiellement payé</span></div>`
+                        );
+                    } else if (status[i] == 'PAID') {
+                        div.innerHTML += labels.push(
+                            `<div class="detail"><img class="img" src="${getTaxpayerIconUrl('taxpayer-green.svg')}"/> <span class="text">Facturé et Payé</span></div>`
+                        );
+                    } else if (status[i] == null) {
+                        div.innerHTML += labels.push(
+                            `<div class="detail"><img class="img" src="${getTaxpayerIconUrl('taxpayer-blue.svg')}"/> <span class="text">Non Facturé</span></div>`
+                        );
+                    }
+                }
+
+                div.innerHTML = labels.join('<br>');
+                return div;
+
+            };
+
+            legend.addTo(map_render);
         </script>
         <script type="text/javascript">
             document.querySelectorAll('[data-kt-action="update_payment_status"]').forEach(function (element) {

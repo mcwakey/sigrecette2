@@ -24,6 +24,7 @@
 
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
+                @can('peut créer une matière taxable')
                 <!--begin::Toolbar-->
                 <div class="d-flex justify-content-end" data-kt-taxable-table-toolbar="base">
                     <!--begin::Add user-->
@@ -34,6 +35,7 @@
                     <!--end::Add user-->
                 </div>
                 <!--end::Toolbar-->
+                @endcan
             </div>
             <!--end::Card toolbar-->
         </div>

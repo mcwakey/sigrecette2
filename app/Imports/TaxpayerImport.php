@@ -64,6 +64,7 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
             'email' => $row['email'],
             'email_verified_at' => now(),
             'gender' => $row["sexe"] ?: $faker->randomElement(['Homme', 'Femme']),
+            //todo end
             'id_type' => $faker->randomElement(['CNI', 'PASSPORT', 'PERMIS DE CONDUIRE', 'CARTE D\'ELECTEUR', 'CARTE DE SEJOUR']),
             'id_number' => $row["num_identification"] ?? $row["num_carte_electeur"] ?? random_int(1000000, 6000000),
             'mobilephone' => $row["telephone_1"] ?? " ",
@@ -87,11 +88,11 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
 
     public function chunkSize(): int
     {
-        return 500;
+        return 1000;
     }
 
     public function batchSize(): int
     {
-        return 500;
+        return 1000;
     }
 }

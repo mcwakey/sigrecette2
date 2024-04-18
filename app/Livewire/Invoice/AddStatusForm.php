@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Invoice;
 
+use App\Helpers\Constants;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Notifications\InvoiceCreated;
@@ -61,15 +62,16 @@ class AddStatusForm extends Component
             foreach ($data as $k => $v) {
                 $invoice->$k = $v;
             }
-            if ($this->status=="APROVED" &&  $invoice->reduce_amount != ''){
+            if ($this->status==Constants::$INVOICE_STATUS_APROVED &&  $invoice->reduce_amount != ''){
 
-               $description_str=$invoice->reduce_amount==$invoice->amount?"Annulation":"Réduction";
+               $description_str=$invoice->reduce_amount==$invoice->amount?Constants::$ANNULATION:Constants::$REDUCTION;
                 $paymentData = [
                     'invoice_id' => $invoice->invoice_no,
                     'taxpayer_id' =>  $invoice->taxpayer_id,
                     'amount' => $invoice->reduce_amount,
                     'description' =>$description_str,
                     'user_id'=>  Auth::id(),
+                    'reference' =>  $description_str,
 
                 ];
                 $payments=Invoice::getCode($invoice->invoice_no,$invoice->reduce_amount,$paymentData);
@@ -81,7 +83,7 @@ class AddStatusForm extends Component
                 }else{
                     $invoice->pay_status="PART PAID";
                 }
-               $invoice->status='APROVED-CANCELLATION';
+               $invoice->status= Constants::$INVOICE_STATUS_APROVED_CANCELLATON;
             }
             $invoice->save();
             //$this->dispatch('success', __('Avis mis à jour'));

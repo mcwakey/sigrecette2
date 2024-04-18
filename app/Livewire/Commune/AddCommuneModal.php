@@ -24,20 +24,23 @@ class AddCommuneModal extends Component
     public $title;
     public $name;
     public $region_name;
+    public $latitude;
+    public $longitude;
+    public $limit_json;
 
     public $edit_mode = false;
 
 
     protected $rules = [
-        "title"=> 'required|string',
-        'name'=> 'required|string',
-        'region_name'=> 'required|string',
-        'mayor_name'=> 'required|string',
-        'phone_number'=> 'required|string',
-        'address'=> 'required|string',
-        'treasury_name'=> 'required|string',
-        'treasury_address'=> 'required|string',
-        'treasury_rib'=> 'required|string',
+        "title" => 'required|string',
+        'name' => 'required|string',
+        'region_name' => 'required|string',
+        'mayor_name' => 'required|string',
+        'phone_number' => 'required|string',
+        'address' => 'required|string',
+        'treasury_name' => 'required|string',
+        'treasury_address' => 'required|string',
+        'treasury_rib' => 'required|string',
     ];
 
     protected $listeners = [
@@ -55,23 +58,39 @@ class AddCommuneModal extends Component
     public function submit()
     {
         // Validate the form input data
-        $this->validate();
-        $this->title = "Commune ".$this->title." ".$this->name;
+        // $this->validate();
+        if (!$this->edit_mode) {
+            $this->title = "Commune " . $this->title . " " . $this->name;
+        }
+
         DB::transaction(function () {
+            $string_data = null;
+
+            if ($this->limit_json) {
+                $content = $this->limit_json->store('uploads', 'public');
+                $string_data = json_decode(file_get_contents(storage_path('app/public/' . $content)), true);
+            }
+
             // Prepare the data for creating a new Taxable
             $data = [
-                "title"=> $this->title,
-                'name'=> $this->name,
-                'region_name'=> $this->region_name,
-                 'mayor_name' => $this->mayor_name,
-                'phone_number'=> $this->phone_number,
-                'address'=> $this->address,
-                'treasury_name'=> $this->treasury_name,
-                'treasury_address'=> $this->treasury_address,
-                'treasury_rib'=> $this->treasury_rib,
+                "title" => $this->title,
+                'name' => $this->name,
+                'region_name' => $this->region_name,
+                'mayor_name' => $this->mayor_name,
+                'phone_number' => $this->phone_number,
+                'address' => $this->address,
+                'treasury_name' => $this->treasury_name,
+                'treasury_address' => $this->treasury_address,
+                'treasury_rib' => $this->treasury_rib,
+                'latitude' => $this->latitude,
+                'longitude' => $this->longitude,
             ];
 
-            $commune = Commune::find($this->commune_id) ?? Commune::getFirstCommune()?? Commune::create($data);
+            if ($this->limit_json) {
+                $data['limit_json'] = json_encode($string_data['geometry']['coordinates'][0][0]);
+            }
+
+            $commune = Commune::find($this->commune_id) ?? Commune::getFirstCommune() ?? Commune::create($data);
 
             if ($this->edit_mode) {
                 foreach ($data as $k => $v) {
@@ -97,21 +116,19 @@ class AddCommuneModal extends Component
         Commune::destroy($id);
 
         // Emit a success event with a message
-       // $this->dispatch('success', 'Commune successfully deleted');
+        // $this->dispatch('success', 'Commune successfully deleted');
         $this->dispatchMessage('Commune', 'delete');
-
     }
 
     public function updateCommune($id)
     {
         $this->edit_mode = true;
 
-
         $commune = Commune::find($id);
 
         $this->commune_id = $commune->id;
         $this->name = $commune->name;
-        $this->region_name =$commune->region_name ;
+        $this->region_name = $commune->region_name;
         $this->title = $commune->title;
 
         $this->mayor_name = $commune->mayor_name;
@@ -121,6 +138,8 @@ class AddCommuneModal extends Component
         $this->treasury_address = $commune->treasury_address;
         $this->treasury_rib = $commune->treasury_rib;
 
+        $this->latitude = $commune->latitude;
+        $this->longitude = $commune->longitude;
     }
 
     public function hydrate()

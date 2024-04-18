@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Constants;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
@@ -174,24 +175,24 @@ class Invoice extends Model
             $paymentArray = [];
             $last_payments = Payment::where('invoice_id', $invoice->invoice_no)->get();
             $sumsByTaxCode = Invoice::sumAmountsByTaxCode($invoice);
-            $s_amount= [];
+            $paidAmounts = [];
             foreach ($sumsByTaxCode as $code => &$totalAmount) {
                 foreach ($last_payments as $index => $payment) {
-                    if ($payment->description !== "Annulation/Réduction" && $payment->code == $code) {
-                        $totalAmount -= $payment->amount;
-                        $s_amount[$index] = $payment->amount;
+                    if (($payment->description !== Constants::$ANNULATION && $payment->description !== Constants::$REDUCTION) && $payment->code == $code) {
+                        $totalAmount['amount'] -= $payment->amount;
+                        $paidAmounts[$index] = $payment->amount;
                     }
                 }
-                if ($totalAmount === 0) {
+                if ($totalAmount['amount'] <= 0) {
                     unset($sumsByTaxCode[$code]);
                 }
             }
-            $paid = array_sum($s_amount) ?? 0;
+            $paidTotal = array_sum($paidAmounts) ?? 0;
             foreach ($sumsByTaxCode as $code => $code_amount) {
-                if ($amount > 0&& $code_amount>0) {
+                if ($amount > 0 && $code_amount['amount'] > 0) {
                     $paymentData["code"] = $code;
-                    $paymentData['amount'] = min($amount, $code_amount);
-                    $paymentData['remaining_amount']= $invoice->amount -( $paid+$paymentData['amount']) ;
+                    $paymentData['amount'] = min($amount, $code_amount['amount']);
+                    $paymentData['remaining_amount'] = $invoice->amount - ($paidTotal + $paymentData['amount']);
                     $paymentArray[] = $paymentData;
                     $amount -= $paymentData['amount'];
                 }
@@ -200,6 +201,7 @@ class Invoice extends Model
         }
         return null;
     }
+
     public static function getRestToPaid(Invoice $invoice):int{
         $s_amount= [];
         $last_payments = Payment::where('invoice_id', $invoice->invoice_no)->get();

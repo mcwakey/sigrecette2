@@ -22,7 +22,7 @@
                     <input type="hidden" wire:model="taxpayer_taxable_id" name="taxpayer_taxable_id"  value=""/>
                     <input
                         @if ($app->environment('local'))
-                            type="texte"
+                            type="hidden"
                             @else
                             type="hidden"
                         @endif

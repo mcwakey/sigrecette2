@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Commune;
 use App\Models\User;
 use App\Models\Zone;
 use App\Models\Taxpayer;
@@ -22,7 +23,7 @@ class Geolocation extends Controller
         ]);
 
         if ($request->has('zone')) {
-            $taxpayers->where('zone', $request->zone);
+            $taxpayers->where('zone_id', $request->zone);
         }
 
         if ($request->has('status')) {
@@ -37,7 +38,11 @@ class Geolocation extends Controller
 
         $taxpayers = $taxpayers->get();
 
-        return View('pages.geolocation.taxpayers', compact('taxpayers',));
+        $zones = Zone::all();
+
+        $commune = Commune::getFirstCommune();
+
+        return View('pages.geolocation.taxpayers', compact('taxpayers','zones','commune'));
     }
 
     public function users()

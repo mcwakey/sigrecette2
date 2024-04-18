@@ -34,22 +34,23 @@
 
             <div class="card-toolbar">
                 <!--begin::Toolbar-->
-
-                    <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
-                        <!--begin::Add user-->
-                        <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                            data-bs-target="#kt_modal_add_accountant_deposit_outright" data-kt-user-id="COMPTANT" data-kt-action="add_accountant_deposit_outright">
-                            {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                            {{ __('new deposit') }}
-                        </button>
-                        <!--end::Add user-->
-                    </div>
+                    @can('peut effectuer un versement')
+                        <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
+                            <!--begin::Add user-->
+                            <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_add_accountant_deposit_outright" data-kt-user-id="COMPTANT" data-kt-action="add_accountant_deposit_outright">
+                                {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                                {{ __('new deposit') }}
+                            </button>
+                            <!--end::Add user-->
+                        </div>
+                    @endcan
                 <!--end::Toolbar-->
 
                     <!--begin::Toolbar-->
                     <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
                         <!--begin::Add user-->
-                        <a href="#" class="ms-5 mt-1" data-bs-toggle="collapse" data-bs-target="#kt_tutorial_form"> 
+                        <a href="#" class="ms-5 mt-1" data-bs-toggle="collapse" data-bs-target="#kt_tutorial_form">
                             <span data-bs-toggle="tooltip" title="Onglet tutoriel">
                                 <i class="ki-outline ki-information fs-2tx text-warning"></i>
                             </span>
@@ -59,7 +60,7 @@
                 <!--begin::Modal-->
                 <!--end::Modal-->
             </div>
-            
+
         </div>
         <!--end::Card header-->
 
@@ -161,7 +162,7 @@
                 <div class="fw-semibold">
                     <h4 class="text-gray-900 fw-bold">Tutoriel sur <a class="fw-bold" href="#">Etat de comptabilite des VI du Regisseur</a></h4>
                     <div class="fs-6 text-gray-700">
-                    -> clicker ici 
+                    -> clicker ici
                             <a href="#" id="kt_horizontal_search_advanced_link" data-kt-rotate="true" class="btn btn-outline btn-outline-dashed bg-light-secondary btn-outline-secondary btn-active-light-secondary mx-1 rotate"
                                 data-bs-toggle="collapse" data-bs-target="#kt_advanced_search_form">
                                 {{ __('advanced search') }} <i
@@ -169,7 +170,7 @@
                                         class="path1"></span><span class="path2"></span></i></a> pour afficher le formulaire de recherche avancée.
                     <!-- </div>
                     <div class="fs-6 text-gray-700"> -->
-                    -- clicker ici 
+                    -- clicker ici
 
                         <button type="button" class="btn btn-outline-success btn-success mx-1" data-bs-toggle="modal" data-bs-target="#kt_modal_add_stock_request"  data-kt-action="add_request">
                             {!! getIcon('plus', 'fs-2', '', 'i') !!}
@@ -268,6 +269,66 @@
                     window.LaravelDataTables['collector_deposits-table'].ajax.reload();
                 });
             });
+            document.querySelectorAll('.print-link').forEach(function(link) {
+
+                function capitalizeFirstLetter(str) {
+                    let array = ["NIC", "GPS"];
+
+                    if (array.includes(str.toUpperCase())) {
+                        return str;
+                    } else {
+                        let words = str.toLowerCase().split(' ');
+                        for (let i = 0; i < words.length; i++) {
+                            words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+                        }
+                        return words.join(' ');
+                    }
+                }
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    let selectedValue = link.getAttribute('data-type');
+                    let table = document.getElementById("collector_deposits-table");
+                    let dataArray = [];
+                    let headers = [];
+
+
+                    // for (let i = 1; i < table.rows.length; i++) {let row = table.rows[i];let rowData = [];for (let j = 0; j < row.cells.length; j++) {let cellValue = row.cells[j].innerText.trim();rowData.push(cellValue);}dataArray.push(rowData);}
+
+                    let headerRow = table.getElementsByTagName("thead")[0].getElementsByTagName("tr")[0];
+                    for (let i = 0; i < headerRow.cells.length; i++) {
+                        headers.push(headerRow.cells[i].innerText.trim());
+                    }
+
+                    for (let i = 1; i < table.rows.length; i++) {
+                        let row = table.rows[i];
+                        let rowData = {};
+                        for (let j = 0; j < row.cells.length; j++) {
+                            let cellValue = row.cells[j].innerText.trim();
+                            let header = headers[j];
+                            rowData[header] = cellValue;
+                        }
+
+                        dataArray.push(rowData);
+                    }
+
+
+
+
+                    let r_type = 16;
+
+                    let jsonData = JSON.stringify(dataArray);
+                    let url =
+                        "{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type', 'action' => ':selectedValue']) }}";
+                    url = url.replace(':jsonData', encodeURIComponent(jsonData));
+                    url = url.replace(':r_type', encodeURIComponent(r_type));
+                    url = url.replace(':selectedValue', encodeURIComponent(selectedValue));
+                    window.location.href = url;
+                });
+            });
+
+
+
+
         </script>
     @endpush
 

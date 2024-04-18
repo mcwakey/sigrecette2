@@ -18,7 +18,12 @@
 
     @if($invoice->status == 'DRAFT')
         {{-- Anything here --}}
-    @elseif($invoice->status == 'APROVED' || $invoice->status == 'CANCELED'||  $invoice->status=="APROVED-CANCELLATION")
+    @elseif(
+                                                            $invoice->status == 'APROVED' ||
+                                                             $invoice->status == 'APROVED-CANCELLATION' ||
+                                                                $invoice->status == 'PENDING' ||
+                                                                $invoice->status == 'REDUCED' ||
+                                                                $invoice->status == 'CANCELED')
             @php
                 $data = [$invoice->uuid];
             @endphp
@@ -27,9 +32,9 @@
                 <a href="{{route('generatePdf', ['data' => json_encode($data)]) }}" class="menu-link px-3" target="_blank">{{ __('print') }}</a>
             </div>
         @if ($invoice->status != 'REDUCED')
-                @if ($invoice->status != 'CANCELED' && $invoice->pay_status != 'PAID')
-                    @if ( $invoice->status == 'APROVED'||  $invoice->status=="APROVED-CANCELLATION")
-                        @can('peut ajouter la date de livraison d\'un avis')
+                @if ($invoice->status != 'CANCELED' && $invoice->pay_status != 'PAID' )
+                    @if ($invoice->delivery_date!=null &&( $invoice->status == 'APROVED' || $invoice->status =='APROVED-CANCELLATION') )
+                        @can('peut ajouter un paiement')
                             <div class="menu-item px-3">
                                 <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->invoice_no }}"
                                     data-bs-toggle="modal" data-bs-target="#kt_modal_add_payment" data-kt-action="update_payment">
@@ -38,7 +43,10 @@
                             </div>
                         @endcan
                     @endif
-                    @if (($invoice->validity == 'VALID'&& $invoice->status != 'CANCELED') && ($invoice->status == 'APROVED'||  $invoice->status=="APROVED-CANCELLATION"))
+                    @if (
+   $invoice->delivery_date!=null && ( ($invoice->validity == 'VALID'&& $invoice->status != 'CANCELED') && ($invoice->status == 'APROVED'||  $invoice->status=="APROVED-CANCELLATION"))
+
+    )
                             @can('peut réduire ou annuler un avis')
                                 <div class="menu-item px-3">
                                     <a href="#" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{ $invoice->id }}"

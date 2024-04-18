@@ -38,7 +38,6 @@ class AddTaxpayerModal extends Component
     public $latitude;
     public $canton;
     public $town_id;
-    public $erea_id;
     public $address;
     public $zone_id;
 
@@ -50,53 +49,24 @@ class AddTaxpayerModal extends Component
     public $auth_reference;
     public $nif;
     public $social_work;
-    //public $zone_id;
 
     public $avatar;
     public $saved_avatar;
 
-
     public $towns = [];
-    public $ereas = [];
     public $activities = [];
 
     public $edit_mode = false;
 
-    // protected $rules = [
-    //     'name' => 'required|string',
-    //     'email' => 'required|email',
-    //     'gender' => 'required',
-    //     'id_type' => 'required',
-    //     'id_number' => 'required|string',
-    //     'mobilephone' => 'required|string|min:10|max:10',
-    //     'telephone' => 'required|string|min:10|max:10',
-    //     'longitude' => 'nullable',
-    //     'latitude' => 'nullable',
-    //     'address' => 'required|string',
-    //     //'canton' => 'required',
-    //     'town_id' => 'required',
-    //     'erea_id' => 'required',
-    //     'zone_id' => 'required',
-    //     'avatar' => 'nullable|sometimes|image|max:1024',
-    // ];
-
     protected function rules()
     {
-        return [
+
+        $rules =  [
             'name' => 'required|string',
             'email' => 'nullable|sometimes|email',
             'gender' => 'required',
-            'id_type' => 'required',
-            'id_number' => 'nullable',
 
             'telephone' => 'nullable',
-            //  [
-            //     'required',
-            //     'string',
-            //     'min:8',
-            //     'max:8',
-            //     new \App\Rules\ValidPhoneNumber,
-            // ],
 
             'mobilephone' => [
                 'required',
@@ -105,25 +75,38 @@ class AddTaxpayerModal extends Component
                 'max:8',
                 new \App\Rules\ValidPhoneNumber,
             ],
+
             'longitude' => 'nullable|sometimes|string',
             'latitude' => 'nullable|sometimes|string',
             'address' => 'nullable|sometimes|string',
 
             // 'file_no' => 'required',
-            //'category_id' => 'required|int',
-            //'activity_id' => 'required|int',
+            'category_id' => 'required|int',
+            'activity_id' => 'required|int',
             // 'other_work' => 'required',
+
             'authorisation' => 'required|string',
+
             // 'auth_reference' => 'required',
             // 'nif' => 'required',
             // 'social_work' => 'required',
 
-            //'canton' => 'required',
-            //'town_id' => 'required|int',
-            //'erea_id' => 'required|int',
+            'canton' => 'required',
+            'town_id' => 'required|int',
             'zone_id' => 'required|int',
             'avatar' => 'nullable|sometimes|image|max:1024',
         ];
+
+        if($this->id_type != 'PAS DE CARTE'){
+            $rules['id_type'] = 'required';
+            $rules['id_number'] = 'required';
+        }
+
+        if(strtolower($this->authorisation) == 'yes'){
+            $rules['auth_reference'] = 'required';
+        }
+
+        return $rules;
     }
 
     protected $listeners = [
@@ -136,28 +119,16 @@ class AddTaxpayerModal extends Component
     public function render()
     {
         $cantons = Canton::all();
-        //$towns = Town::all();
-        //$ereas = Erea::all();
         $genders = Gender::all();
         $id_types = IdType::all();
         $zones = Zone::all();
-
-        //$activity = Activity::all();
         $categories = Category::all();
-
-        //dd($categories);
-
-        // Assuming you have a public property $canton in your Livewire component
-        //$towns = $this->canton ? Town::where('canton_id', $this->canton)->get() : [];
-        //$ereas = $this->town ? Erea::where('town_id', $this->town)->get() :  [];
 
         return view('livewire.taxpayer.add-taxpayer-modal', compact('cantons', 'genders', 'id_types', 'zones', 'categories'));
     }
 
     public function submit(Request $request)
     {
-
-        // dd($this->id_type);
 
         // Validate the form input data
         $this->validate();
@@ -182,15 +153,11 @@ class AddTaxpayerModal extends Component
                 'authorisation' => $this->authorisation,
                 'auth_reference' => $this->auth_reference,
                 'nif' => $this->nif,
-                //'social_work' => $this->social_work,
+                // 'social_work' => $this->social_work,
 
-                //'canton' => $this->canton,
                 'town_id' => $this->town_id,
-                'erea_id' => $this->erea_id,
                 'zone_id' => $this->zone_id,
             ];
-
-            //dd($data);
 
             if ($this->avatar) {
                 $data['profile_photo_path'] = $this->avatar->store('avatars', 'public');
@@ -215,21 +182,8 @@ class AddTaxpayerModal extends Component
             }
 
             if ($this->edit_mode) {
-                // Assign selected role for user
-                //$taxpayer->syncRoles($this->role);
-
-                // Emit a success event with a message
-                //$this->dispatch('success', __('Taxpayer updated'));
                 $this->dispatchMessage('Contribuable', 'update');
             } else {
-                // Assign selected role for user
-                //$taxpayer->assignRole($this->role);
-
-                // Send a password reset link to the user's email
-                //Password::sendResetLink($taxpayer->only('email'));
-
-                // Emit a success event with a message
-                //$this->dispatch('success', __('New Taxpayer created'));
                 $this->dispatchMessage('Contribuable');
             }
 
@@ -245,67 +199,27 @@ class AddTaxpayerModal extends Component
         $this->reset();
     }
 
-    // public function loadDrop($id)
-    // {
-    //     //dd($id);
-    // }
-
     public function updatedCanton($value)
     {
-        // dd($value);
-        //$this->taxables = Taxable::where('tax_label_id', $value)->get(); // Load taxables based on tax label ID
-        $this->towns = Town::where('canton_id', $value)->get(); // Load taxables based on tax label ID
-
-
-
-        // $taxpayer = Taxpayer::find($value);
-
-        // //dd( $taxpayer);
-
-        //$this->town_id = $taxpayer->town_id;
-        //$this->erea_id = $taxpayer->erea_id;
-        // //$this->zone_id = $taxpayer->zone_id;
-    }
-
-    public function updatedTownId($value)
-    {
-        //dd($value);
-        $this->ereas = Erea::where('town_id', $value)->get(); // Load taxables based on tax label ID
-        //dd($value);
-        //$this->taxables = Taxable::where('tax_label_id', $value)->get(); // Load taxables based on tax label ID
-        //$this->towns = Town::where('canton_id', $value)->get(); // Load taxables based on tax label ID
-
+        $this->towns = Town::where('canton_id', $value)->get();
     }
 
     public function updatedCategoryId($value)
     {
-        //dd($value);
-        $this->activities = Activity::where('category_id', $value)->get(); // Load taxables based on tax label ID
-        //dd($value);
-        //$this->taxables = Taxable::where('tax_label_id', $value)->get(); // Load taxables based on tax label ID
-        //$this->towns = Town::where('canton_id', $value)->get(); // Load taxables based on tax label ID
-
+        $this->activities = Activity::where('category_id', $value)->get();
     }
 
     public function deleteUser($id)
     {
-        // Prevent deletion of current Taxpayer
-        // if ($id == Auth::id()) {
-        //     $this->dispatch('error', 'Taxpayer cannot be deleted');
-        //     return;
-        // }
-
-        // Delete the user record with the specified ID
+        // Delete the taxpayer record with the specified ID
         Taxpayer::destroy($id);
 
         // Emit a success event with a message
-        //$this->dispatch('success', 'Taxpayer successfully deleted');
         $this->dispatchMessage('Contribuable', 'delete');
     }
 
     public function updateTaxPayer($id)
     {
-        //dd($id);
 
         $this->edit_mode = true;
 
@@ -335,7 +249,6 @@ class AddTaxpayerModal extends Component
 
         $this->canton = $taxpayer->town->canton->id;
         $this->town_id = $taxpayer->town_id;
-        $this->erea_id = $taxpayer->erea_id;
         $this->zone_id = $taxpayer->zone_id;
     }
 

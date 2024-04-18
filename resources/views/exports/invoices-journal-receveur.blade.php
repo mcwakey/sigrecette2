@@ -111,13 +111,16 @@
     @endphp
 
 
-    @foreach($data as $index => $item)
-        @php
-            $sumsByTaxCode = \App\Models\Invoice::sumAmountsByTaxCode($item);
-        @endphp
-        {{--TODO logique à refaire l'implémentation n'est pas correction doit gérer la creation des avis et les paiement associés --}}
 
-            @foreach($sumsByTaxCode as $code => &$tax)
+    @foreach($data as $index => $item )
+
+            @php
+            $sumsByTaxCode = \App\Models\Invoice::sumAmountsByTaxCode($item);
+            @endphp
+
+        {{--TODO logique à refaire l'implémentation n'est pas correction doit gérer la creation des avis et les paiement associés --}}
+            @if($item->status!="APROVED-CANCELLATION")
+                @foreach($sumsByTaxCode as $code => &$tax)
                             <tr>
                                 <td>@if($item->delivery_date !=null)
                                         {{date("d-m-Y", strtotime( $item->delivery_date  ))}}
@@ -128,25 +131,49 @@
                                 <td>{{$item->taxpayer->name}}</td>
                                 <td>{{$item->taxpayer->longitude,$item->taxpayer->latitude}}</td>
                                 <td>{{$code}}</td>
-                                @if($item->reduce_amount== '')
-                                    <td>{{ $tax['amount']}}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>{{ $tax['amount']}}</td>
-                                @else
-                                    <td>{{0}}</td>
-                                    <td></td>
-                                    <td>{{$item->reduce_amount}}</td>
-                                    <td>{{ $tax['amount']}}</td>
-                                @endif
+                                @php
+                                    $total_somme+=$tax['amount'];
+                                    @endphp
+                                <td>{{ $tax['amount']}}</td>
+                                <td></td>
+                                <td></td>
+                                <td>{{$total_somme}}</td>
+
                             </tr>
             @endforeach
+            @endif
+
+        @foreach($item->payments()->get() as $payment)
+                <tr>
+                <td>@if($item->delivery_date !=null)
+                        {{date("d-m-Y", strtotime( $item->delivery_date  ))}}
+                    @endif</td>
+                <td></td>
+                <td>{{$item->invoice_no}}</td>
+                <td>{{$item->nic}}</td>
+                <td>{{$item->taxpayer->name}}</td>
+                <td>{{$item->taxpayer->longitude,$item->taxpayer->latitude}}</td>
+                <td>{{$payment->code}}</td>
+                    <td></td>
+                    <td>
+                        @if( $payment->reference!=\App\Helpers\Constants::$REDUCTION &&  $payment->reference!=\App\Helpers\Constants::$ANNULATION )
+                            {{ $payment->reference}}
+                        @else
+                        @endif
+                       </td>
+                    @php
+                        $total_somme-=$payment->amount;
+                    @endphp
+                    <td>{{ $payment->amount}}</td>
+                    <td>{{$total_somme}}</td>
+            </tr>
+        @endforeach
     @endforeach
 
 
     <tr>
         <td colspan="9" >Total </td>
-        <td>{{ $total_somme}}</td>
+        <td></td>
         <td ></td>
     </tr>
 

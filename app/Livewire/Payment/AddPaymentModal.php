@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Payment;
 
+use App\Helpers\Constants;
 use App\Models\Canton;
 use App\Models\Erea;
 use App\Models\Gender;
@@ -297,8 +298,9 @@ class AddPaymentModal extends Component
         $payments = Payment::where('invoice_id', $invoice->invoice_no)->get();
         $this->s_amount = []; // Initialize as an empty array
 
+
         foreach ($payments as $index => $payment) {
-            if ($payment->description!=="Annulation/Réduction"){
+            if ($payment->description!= Constants::$ANNULATION && $payment->description!=Constants::$REDUCTION){
                 $this->s_amount[$index] = $payment->amount;
             }
         }

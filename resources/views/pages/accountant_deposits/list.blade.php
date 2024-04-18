@@ -53,15 +53,19 @@
                     </div>
                 </div>
 
-                    <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
-                        <!--begin::Add user-->
-                        <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                            data-bs-target="#kt_modal_add_accountant_deposit" data-kt-user-id="TITRE" data-kt-action="add_accountant_deposit">
-                            {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                            {{ __('new deposit') }}
-                        </button>
-                        <!--end::Add user-->
-                    </div>
+                    @can('peut effectuer un versement')
+
+                        <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
+                            <!--begin::Add user-->
+                            <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_add_accountant_deposit" data-kt-user-id="TITRE" data-kt-action="add_accountant_deposit">
+                                {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                                {{ __('new deposit') }}
+                            </button>
+                            <!--end::Add user-->
+                        </div>
+
+                    @endcan
                 <!--end::Toolbar-->
 
                     <!--begin::Toolbar-->
@@ -322,11 +326,12 @@
                         for (let j = 0; j < row.cells.length; j++) {
                             let cellValue = row.cells[j].innerText.trim();
                             let header = headers[j];
-                            rowData[capitalizeFirstLetter(header)] = cellValue;
+                            rowData[header] = cellValue;
                         }
 
                         dataArray.push(rowData);
                     }
+
 
 
 

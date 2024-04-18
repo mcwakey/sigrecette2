@@ -21,8 +21,6 @@ class UsersSeeder extends Seeder
             'email' => 'AdministrateurSystem@demo.com',
             'password' => Hash::make('demo'),
             'email_verified_at' => now(),
-            'longitude' => json_encode([6.145761, 6.148153, 6.142344]),
-            'latitude' => json_encode([1.204888, 1.209127, 1.207924]),
         ]);
 
         User::create([
@@ -30,8 +28,6 @@ class UsersSeeder extends Seeder
             'email' => 'Administrateur@demo.com',
             'password' => Hash::make('demo'),
             'email_verified_at' => now(),
-            'longitude' => json_encode([6.145761, 6.148153, 6.142344]),
-            'latitude' => json_encode([1.204888, 1.209127, 1.207924]),
         ]);
 
         User::create([
@@ -39,8 +35,6 @@ class UsersSeeder extends Seeder
             'email' => 'Ordonateur@demo.com',
             'password' => Hash::make('demo'),
             'email_verified_at' => now(),
-            'longitude' => json_encode([6.145761, 6.148153, 6.142344]),
-            'latitude' => json_encode([1.204888, 1.209127, 1.207924]),
         ]);
 
         User::create([
@@ -48,8 +42,6 @@ class UsersSeeder extends Seeder
             'email' => 'AgentParDelegation@demo.com',
             'password' => Hash::make('demo'),
             'email_verified_at' => now(),
-            'longitude' => json_encode([6.145761, 6.148153, 6.142344]),
-            'latitude' => json_encode([1.204888, 1.209127, 1.207924]),
         ]);
 
         User::create([
@@ -57,8 +49,6 @@ class UsersSeeder extends Seeder
             'email' => 'AgentAssiette@demo.com',
             'password' => Hash::make('demo'),
             'email_verified_at' => now(),
-            'longitude' => json_encode([6.145761, 6.148153, 6.142344]),
-            'latitude' => json_encode([1.204888, 1.209127, 1.207924]),
         ]);
 
         User::create([
@@ -66,13 +56,20 @@ class UsersSeeder extends Seeder
             'email' => 'Regisseur@demo.com',
             'password' => Hash::make('demo'),
             'email_verified_at' => now(),
-            'longitude' => json_encode([6.145761, 6.148153, 6.142344]),
-            'latitude' => json_encode([1.204888, 1.209127, 1.207924]),
         ]);
 
         User::create([
             'name'  => 'Agent De Recouvrement',
             'email' => 'AgentDeRecouvrement@demo.com',
+            'password' => Hash::make('demo'),
+            'email_verified_at' => now(),
+            'longitude' => json_encode([6.145761, 6.148153, 6.142344]),
+            'latitude' => json_encode([1.204888, 1.209127, 1.207924]),
+        ]);
+
+        User::create([
+            'name'  => 'Collecteur',
+            'email' => 'Collecteur@demo.com',
             'password' => Hash::make('demo'),
             'email_verified_at' => now(),
             'longitude' => json_encode([6.145761, 6.148153, 6.142344]),

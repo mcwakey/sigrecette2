@@ -132,7 +132,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <!--begin::Label-->
-                                        <label class="required fw-semibold fs-6 mb-2">{{ __('id type') }}</label>
+                                        <label class="fw-semibold fs-6 mb-2">{{ __('id type') }}</label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
                                         <!-- <select aria-label="Select an ID Type" data-control="select2" data-placeholder="Select an ID Type..." class="form-select "
@@ -226,7 +226,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <!--begin::Label-->
-                                        <label class="fw-semibold fs-6 mb-2">{{ __('work category') }}</label>
+                                        <label class="required fw-semibold fs-6 mb-2">{{ __('work category') }}</label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
                                         <select data-kt-action="load_drop" wire:model="category_id" name="category_id" class="form-select" data-dropdown-parent="#kt_modal_add_taxpayer">
@@ -241,7 +241,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <!--begin::Label-->
-                                        <label class="fw-semibold fs-6 mb-2">{{ __('work') }}</label>
+                                        <label class="required fw-semibold fs-6 mb-2">{{ __('work') }}</label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
                                         <select wire:model="activity_id" name="activity_id" class="form-select " data-dropdown-parent="#kt_modal_add_taxpayer">
@@ -305,6 +305,8 @@
                                         <!--begin::Input-->
                                         <input type="text" wire:model="auth_reference" name="auth_reference" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('auth reference') }}" />
                                         <!--end::Input-->
+                                        @error('auth_reference')
+                                        <span class="text-danger">{{ $message }}</span> @enderror
                                     </div>
                                     <div class="col-md-3">
                                         <!--begin::Label-->

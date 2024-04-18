@@ -53,13 +53,26 @@
                     <!--end::Card body-->
                     <!--begin::Card footer-->
                     <div class="card-footer pt-0">
-                        @can('peut modifier un rôle')
-                            <button type="button" class="btn btn-light btn-active-primary"
-                                data-role-id="{{ $role->name }}" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_update_role">
-                                Modifier
-                            </button>
-                        @endcan
+                        @if ($role->user_id == auth()->user()->id && auth()->user()->hasRole('administrateur_system'))
+                            @can('peut modifier un rôle')
+                                <button type="button" class="btn btn-light btn-active-primary"
+                                    data-role-id="{{ $role->name }}" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_update_role">
+                                    Modifier
+                                </button>
+                            @endcan
+                        @elseif (
+                            $role->user_id == null ||
+                                auth()->user()->hasanyrole(['administrateur_system']))
+                            @can('peut modifier un rôle')
+                                <button type="button" class="btn btn-light btn-active-primary"
+                                    data-role-id="{{ $role->name }}" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_update_role">
+                                    Modifier
+                                </button>
+                            @endcan
+                        @endif
+
                         @if ($role->user_id == auth()->user()->id && auth()->user()->hasRole('administrateur_system'))
                             @can('peut supprimer un rôle')
                                 <button type="button" class="btn btn-light btn-active-light-danger my-1"
@@ -67,7 +80,7 @@
                             @endcan
                         @elseif (
                             $role->user_id == null ||
-                                auth()->user()->hasanyrole(['administrateur', 'administrateur_system']))
+                                auth()->user()->hasanyrole(['administrateur_system']))
                             @can('peut supprimer un rôle')
                                 <button type="button" class="btn btn-light btn-active-light-danger my-1"
                                     data-kt-role-id="{{ $role->id }}" data-kt-action="delete_role">Supprimer</button>

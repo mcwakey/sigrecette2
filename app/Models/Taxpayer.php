@@ -36,7 +36,6 @@ class Taxpayer extends Model
         'nif',
         'social_work',
 
-        //'canton',
         'town_id',
         'erea_id',
         'zone_id',
@@ -117,10 +116,12 @@ class Taxpayer extends Model
     {
         return $this->addresses?->first();
     }
+
     public function activity()
     {
         return $this->hasOne(Activity::class);
     }
+
     public static function countTaxpayers(){
         return Taxpayer::selectRaw('gender, count(*) as count')
             ->groupBy('gender')
@@ -128,6 +129,7 @@ class Taxpayer extends Model
             ->merge(['Total' =>Taxpayer::count()])
             ->toArray();
     }
+
     public static function countTaxpayersByActivity()
     {
         $categories = Category::all()->pluck('name', 'id');
@@ -161,6 +163,7 @@ class Taxpayer extends Model
 
         return array_values($counts);
     }
+
     public static function countTaxpayersState()
     {
         $count_valid = 0;
@@ -196,9 +199,6 @@ class Taxpayer extends Model
     }
 
 
-
-
-
     public static function countTaxpayersByTaxables()
     {
         $taxables = Taxable::all()->pluck('name', 'id');
@@ -232,20 +232,12 @@ class Taxpayer extends Model
             }
             $result[] = $items;
         }
-        $compareByDate = function ($a, $b) {
-            $dateA = $a instanceof Invoice ? ($a->delivery_date ?? $a->created_at) : $a->created_at;
-            $dateB = $b instanceof Invoice ? ($b->delivery_date ?? $b->created_at) : $b->created_at;
-
-            return strcmp($dateA, $dateB);
-        };
-
-        // Trier le tableau une seule fois
-        usort($result[1], $compareByDate);
+        //dd($result[1]);
+        //$compareByDate = function ($a, $b) {$dateA = $a instanceof Invoice ? ($a->delivery_date ?? $a->created_at) : $a->created_at;$dateB = $b instanceof Invoice ? ($b->delivery_date ?? $b->created_at) : $b->created_at;return strcmp($dateA, $dateB);};usort($result[1], $compareByDate);
 
 
         return $result;
     }
-
 
 
 }

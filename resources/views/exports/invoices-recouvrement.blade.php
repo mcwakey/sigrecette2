@@ -103,24 +103,30 @@
         <td>N° quittance</td>
     </tr>
     @foreach($data as $index => $item)
-        @foreach($item->invoiceitems as  $subitem)
-    <tr>
+        @foreach(\App\Models\Invoice::sumAmountsByTaxCode($item) as $code => $tax)
 
-        <td>{{$item->invoice_no}}</td>
-        <td>{{$item->order_no}}</td>
-        <td>{{$subitem->taxpayer_taxable->taxable->tax_label->name}}</td>
-        <td>{{$subitem->taxpayer_taxable->taxable->tax_label->code}}</td>
-        <td>{{$item->nic}}</td>
-        <td>{{$item->taxpayer->name}}</td>
-        <td>{{$item->taxpayer->longitude,$item->taxpayer->latitude}}</td>
-        <td>{{$item->taxpayer->address}}</td>
-        <td>{{$subitem->amount}}</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
+            @php
+            $paid = \App\Models\Payment::getSumPaymentByCode($code,$item);
+                @endphp
+            <tr>
+
+                <td>{{$item->invoice_no}}</td>
+                <td>{{$item->order_no}}</td>
+                <td>{{\App\Models\TaxLabel::getNameByCode($code)}}</td>
+                <td>{{$code}}</td>
+                <td>{{$item->nic}}</td>
+                <td>{{$item->taxpayer->name}}</td>
+                <td>{{$item->taxpayer->longitude,$item->taxpayer->latitude}}</td>
+                <td>{{$item->taxpayer->address}}</td>
+                <td>{{$tax['amount']}}</td>
+                <td>{{$paid}}</td>
+                <td>{{$tax['amount']-$paid}}</td>
+
+
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
         @endforeach
     @endforeach
 
