@@ -220,6 +220,7 @@ class PdfGenerator  implements PdfGeneratorInterface
 
     public function generateStateValueCollectorPdf($data, string $template, $action):array
     {
+        //dd($data);
        // if ($this->checkInvoiceListDataUniformity($data,$expectedDataSize)&& $this->checkIfCommuneIsNotNull()) {
 
             $filename = "StateValueCollector" . Str::random(8) . ".pdf";

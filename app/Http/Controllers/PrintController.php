@@ -51,7 +51,7 @@ class PrintController extends Controller
      */
     public function processType($type, $data,$action):array
     {
-        //dd($type, $data);
+       // dd($type, $data);
 
         switch ($type) {
             case 1:

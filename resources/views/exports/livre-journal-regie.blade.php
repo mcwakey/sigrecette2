@@ -1,3 +1,7 @@
+@php
+    use Carbon\Carbon;
+    $year= \App\Models\Year::getActiveYear();
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,40 +39,40 @@
             font-weight: bold;
         }
     </style>
-    <title>Journal des sommes à payer</title>
+    <title>LIVRE-JOURNAL DE REGIE</title>
 </head>
 <body>
-<table>
-    <thead>
-    <th style="border: none;">
-        REGION PLATEAUX
-        Commune de Agou
-    </th>
-    <th style="border: none;">
-        REPUBLIQUE TOGOLAISE
-        Travail-Liberté-Patrie
-    </th>
-    </thead>
-    <tbody>
-    <tr>
-        <td colspan="2" style="border: none;">
-            <h5>
-                Fiche de recouvrement des avis distribués
-            </h5>
-        </td>
-
-    </tr>
-    <tr>
-        <td colspan="2" style="margin: 0;text-align:left">
-            <h5> Exercice : 2023 </h5>
-            <h5> Nom de l’agent de recouvrement : ... </h5>
-            <h5> Période du 05/01 Au 14/01</h5>
-
-        </td>
-    </tr>
-    </tbody>
-</table>
 <table >
+    <tr>
+        <td colspan="4"  style="border: none; padding: 2px;text-align: left;">
+            {{$commune->region_name}}
+
+        </td>
+        <td colspan="4"  style="border: none; padding:2px ;text-align: right;">
+            REPUBLIQUE TOGOLAISE
+
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4" style="border: none; margin: 0; padding:2px ;text-align: left;">
+
+            {{$commune->title}}
+        </td>
+        <td colspan="4"  style="border: none; margin: 0 ; padding:2px ; ;text-align: right;">
+
+            Travail-Liberté-Patrie
+        </td>
+    </tr>
+    <tr>
+        <th colspan="8" style="border: none; margin: 0; text-align: center;" class="caption"> LIVRE-JOURNAL DE REGIE</th>
+    </tr>
+    <tr>
+        <td colspan="8" style="border: none; margin: 0;text-align: left;" >Exercice : {{" ".$year->name}}</td>
+    </tr>
+
+
+
+
     <tr>
 
         <td rowspan="2">Date de l’opération</td>
@@ -86,33 +90,36 @@
 
     </tr>
     <tr>
-
         <td colspan="3">Report</td>
-        <td>ligne2 col2</td>
-        <td>ligne2 col3</td>
-        <td>ligne2 col4</td>
-        <td>ligne2 col5</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
 
     </tr>
-    <tr>
+    @foreach($data as $item)
+        <tr>
 
-        <td>ligne 3 col 1</td>
-        <td>ligne3 col2</td>
-        <td>ligne3 col3</td>
-        <td>ligne3 col4</td>
-        <td>ligne3 col5</td>
-        <td>ligne3 col6</td>
-        <td>ligne3 col7</td>
-        <td>ligne3 col8</td>
+            <td>{{$item["DATE"]}}</td>
+            <td>{{$item["DESCRIPTION"]}}</td>
+            <td>{{$item["CODE D'IMPUTATION"]}}</td>
+            <td>{{$item["NUMÉRO DE QUITTANCE"]}}</td>
+            <td>{{$item["MONTANT"]}}</td>
+            <td></td>
+            <td>{{$item["VERSEMENT"]}}</td>
+            <td>{{$item["SOLDE"]}}</td>
 
-    </tr>
+        </tr>
+    @endforeach
+
     <tr>
 
         <td colspan="4">Total à reporter</td>
-        <td>ligne n col2</td>
-        <td>ligne n col3</td>
-        <td>ligne n col4</td>
-        <td>ligne n col5</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
 
     </tr>
 

@@ -301,7 +301,7 @@
                 link.addEventListener('click', function(event) {
                     event.preventDefault();
                     let selectedValue = link.getAttribute('data-type');
-                    let table = document.getElementById("collector_deposits-table_wrapper");
+                    let table = document.getElementById("collector_deposits-table");
                     let dataArray = [];
                     let headers = [];
 
@@ -319,13 +319,13 @@
                         for (let j = 0; j < row.cells.length; j++) {
                             let cellValue = row.cells[j].innerText.trim();
                             let header = headers[j];
-                            rowData[capitalizeFirstLetter(header)] = cellValue;
+                            rowData[header] = cellValue;
                         }
 
                         dataArray.push(rowData);
                     }
 
-
+                    ;
 
                     let r_type = 10;
 

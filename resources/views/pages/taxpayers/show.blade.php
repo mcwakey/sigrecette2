@@ -182,9 +182,7 @@
                         <div class="menu-item px-5">
                             <a href="#" class="menu-link px-5">{{ __('reports et stats') }}</a>
                         </div>
-                        <div class="menu-item px-5">
-                            <a href="#" class="menu-link px-5">{{ __('statement of account') }}</a>
-                        </div>
+
                         <!--end::Menu item-->
 
                         <div class="separator my-3"></div>
