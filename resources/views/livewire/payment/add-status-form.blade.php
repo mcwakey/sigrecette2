@@ -16,7 +16,7 @@
                 <select class="form-select form-select-solid" wire:model="status" name="status"
                         data-placeholder="Select option" data-allow-clear="true">
                     <option></option>
-                    <option value="APROVED">{{ __('APROVED') }}</option>
+                    <option value="APROVED">{{ __('ACCEPTER') }}</option>
                     <option value="REJECTED">{{ __('REJECTED') }}</option>
                 </select>
             @endif
@@ -26,7 +26,7 @@
                 <select class="form-select form-select-solid" wire:model="status" name="status"
                         data-placeholder="Select option" data-allow-clear="true">
                     <option></option>
-                    <option value="APROVED">{{ __('APROVED') }}</option>
+                    <option value="APROVED">{{ __('ACCEPTER') }}</option>
                     <option value="REJECTED">{{ __('REJECTED') }}</option>
                 </select>
         @endif

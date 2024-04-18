@@ -49,3 +49,9 @@ Utilisateurs --> liste le filtre par role ne fonctionne pas
 -- Implémenter le filtre su la géolocalisation d'un contribuable 
 
 -- Tester correctement les role et permissions 
+
+-- Mettre la taxation par defaut en fonction de la periodicite
+
+-> Joseph 
+
+-- Impression recu paiement

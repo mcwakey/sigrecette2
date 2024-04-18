@@ -356,17 +356,9 @@
                 let s_id = this.value;
                 window.LaravelDataTables['invoices-table'].column(1).search(s_id).draw();
             });
-            document.getElementById('mySearchTwo0').addEventListener('keyup', function () {
-                let s_id = document.getElementById('mySearchTwo').value;
-                let end_id = this.value;
-                if(s_id !==""&& end_id!==""){
-                    let url = "{{ route('invoices.index', ['startInvoiceId' => ':s_id', 'endInvoiceId' => ':end_id']) }}";
-                    url = url.replace(':s_id', encodeURIComponent(s_id));
-                    url = url.replace(':end_id', encodeURIComponent(end_id));
-                    window.open(url,'_blank');
-                }
-               // window.LaravelDataTables['invoices-table'].column(1).search(s_id + '-' + end_id).draw();
-            });
+
+
+
             let zone = "zone 1";
             document.getElementById('mySearchFive').addEventListener('change', function () {
                 zone = this.value;
@@ -389,6 +381,7 @@
                 Livewire.on('success', function () {
                     $('#kt_modal_add_invoice').modal('hide');
                     $('#kt_modal_auto_invoice').modal('hide');
+                    $('#kt_modal_add_payment').modal('hide');
                     window.LaravelDataTables['invoices-table'].ajax.reload();
                 });
             });

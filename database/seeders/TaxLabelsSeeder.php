@@ -14,7 +14,55 @@ class TaxLabelsSeeder extends Seeder
     public function run(): void
     {
 
+        $taxLabelNamesZero = [
+            ['name' => "Ventes de produits finis",'code' => "701111",'category' => "CATEGORY 1"],
+            ['name' => "Coupes de bois",'code' => "701211",'category' => "CATEGORY 2"],
+            ['name' => "Redevances d'enlèvement des ordures et des déchets",'code' => "702111",'category' => "CATEGORY 2"],
+            ['name' => "Redevances de vidange et de curage de caniveaux et fosses septiques",'code' => "702211",'category' => "CATEGORY 2"],
+            ['name' => "Taxes de désinfection (services d’hygiène)",'code' => "702311",'category' => "CATEGORY 2"],
+            ['name' => "Autres recettes de prestations de services",'code' => "702911",'category' => "CATEGORY 2"],
+            ['name' => "Variation de stocks de produits",'code' => "703111",'category' => "CATEGORY 1"],
+            ['name' => "Taxe d'abattage d'inspection sanitaire des animaux de boucherie",'code' => "704111",'category' => "CATEGORY 1"],
+            ['name' => "Autres produits de l'abattoir",'code' => "704911",'category' => "CATEGORY 1"],
+            ['name' => "Location de matériels",'code' => "705112",'category' => "CATEGORY 2"],
+            ['name' => "Location de mobiliers",'code' => "705212",'category' => "CATEGORY 2"],
+            ['name' => "Vente de marchandises",'code' => "707111",'category' => "CATEGORY 1"],
+            ['name' => "Autres ventes de produits et services",'code' => "709911",'category' => "CATEGORY 1"],
 
+
+            ['name' => "Concessions et redevances funéraires", 'code' => "721111", 'category' => "CATEGORY 1"],
+            ['name' => "Taxe sur les pompes distributrices de carburant", 'code' => "721211", 'category' => "CATEGORY 1"],
+            ['name' => "Locations de droits de chasse et de pêche", 'code' => "721311", 'category' => "CATEGORY 1"],
+            ['name' => "Taxes de pâturage", 'code' => "721411", 'category' => "CATEGORY 1"],
+            ['name' => "Produits de Location de Terrain (PLT)", 'code' => "721511", 'category' => "CATEGORY 1"],
+            ['name' => "Produits de Location de Boutiques (PLB)", 'code' => "721611", 'category' => "CATEGORY 1"],
+            ['name' => "Taxes sur la publicité", 'code' => "721711", 'category' => "CATEGORY 1"],
+            ['name' => "Autres revenus du domaine", 'code' => "721911", 'category' => "CATEGORY 1"],
+            ['name' => "Droits et frais administratifs", 'code' => "721912", 'category' => "CATEGORY 2"],
+            ['name' => "Taxe d'expédition, d'enregistrement des actes administratifs et d'état civil", 'code' => "722111", 'category' => "CATEGORY 3"], 
+            ['name' => "Redevance d'urbanisme", 'code' => "722211", 'category' => "CATEGORY 3"], 
+            ['name' => "Taxes d'inspection sanitaire des produits alimentaires", 'code' => "722311", 'category' => "CATEGORY 3"], 
+            ['name' => "Taxes d'abattage des essences forestières", 'code' => "722411", 'category' => "CATEGORY 3"], 
+            ['name' => "Taxes d'abattage des palmiers à huile", 'code' => "722511", 'category' => "CATEGORY 3"], 
+            ['name' => "Autres droits et frais administratifs", 'code' => "722911", 'category' => "CATEGORY 3"],
+            ['name' => "Droits de place dans les marchés, foires et marchands ambulants", 'code' => "723111", 'category' => "CATEGORY 4"],
+            ['name' => "Droits de place dans les marchés et foires", 'code' => "723112", 'category' => "CATEGORY 5"], 
+            ['name' => "Droits de place des marchands ambulants", 'code' => "723212", 'category' => "CATEGORY 5"],
+            ['name' => "Produits du sol et du sous-sol", 'code' => "724111", 'category' => "CATEGORY 1"],
+            ['name' => "Produit d'exploitation des carrières", 'code' => "724112", 'category' => "CATEGORY 2"], 
+            ['name' => "Redevance minière", 'code' => "724212", 'category' => "CATEGORY 2"], 
+            ['name' => "Autres Produits du sol et du sous-sol", 'code' => "724912", 'category' => "CATEGORY 2"],
+            ['name' => "Droits de mutations de biens", 'code' => "725111", 'category' => "CATEGORY 1"],
+            ['name' => "Droits de stationnement et d’occupation du domaine public", 'code' => "726111", 'category' => "CATEGORY 1"],
+            ['name' => "Droits de permis de stationnement et de parking", 'code' => "726112", 'category' => "CATEGORY 2"], 
+            ['name' => "Redevance d’occupation du domaine public", 'code' => "726212", 'category' => "CATEGORY 2"],
+            ['name' => "Amendes forfaitaires de police", 'code' => "727111", 'category' => "CATEGORY 1"],
+            ['name' => "Amendes de simple police", 'code' => "727112", 'category' => "CATEGORY 2"], 
+            ['name' => "Autres amendes", 'code' => "727912", 'category' => "CATEGORY 2"],
+            ['name' => "Produits des quêtes et contributions volontaires", 'code' => "728111", 'category' => "CATEGORY 1"],
+            ['name' => "Autres recettes non fiscales", 'code' => "729911", 'category' => "CATEGORY 1"]
+
+        ];
 
 
         $taxLabelNamesZero = [

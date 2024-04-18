@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Invoice;
 
+use Carbon\Carbon;
+
 use App\Models\Canton;
 use App\Models\Erea;
 use App\Models\Gender;
@@ -14,7 +16,6 @@ use App\Models\Town;
 use App\Notifications\InvoiceCreated;
 use App\Notifications\InvoicePaid;
 use App\Traits\DispatchesMessages;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
@@ -153,7 +154,20 @@ class AddInvoiceModal extends Component
 
         //return view('livewire.invoice.add-invoice-modal', ['taxpayer_id' => $this->taxpayer_id]);
 
+        $year= \App\Models\Year::getActiveYear();
+        $months = [];
+        // Obtenez le mois actuel
+        $currentMonth = Carbon::now()->month;
+        $remainingMonths = 12 - $currentMonth;
+    
+        for ($i = $currentMonth + 1; $i <= $currentMonth + $remainingMonths; $i++) {
+            $monthIndex = $i > 12 ? $i - 12 : $i;
+            $monthName = Carbon::createFromFormat('m',$monthIndex)->monthName;
+            $monthNumber = str_pad($monthIndex, 2, '0', STR_PAD_LEFT);
+            $months[$monthNumber] = $monthName;
+        }
 
+        $this->qty = count($months);
 
         return view('livewire.invoice.add-invoice-modal', compact('taxpayers'));
     }

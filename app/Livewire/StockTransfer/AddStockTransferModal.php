@@ -77,7 +77,7 @@ class AddStockTransferModal extends Component
                             ->where('roles.name', 'collecteur')
                             ->get();
 
-        $taxlabel_list = TaxLabel::where('category', 'catégorie 3')
+        $taxlabel_list = TaxLabel::where('category', 'CATEGORY 3')
                             ->get();
 
         return view('livewire.stock_transfer.add-stock-transfer-modal', compact('collectors','taxlabel_list'));

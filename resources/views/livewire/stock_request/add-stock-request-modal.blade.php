@@ -45,7 +45,7 @@
                                 @error('taxlabel_id')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4 d-none">
                                 <!--begin::Label-->
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('batch no') }}</label>
                                 <!--end::Label-->

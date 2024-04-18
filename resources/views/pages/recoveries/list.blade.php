@@ -200,34 +200,34 @@
             });
 
             document.getElementById('mySearchOne').addEventListener('keyup', function() {
-                window.LaravelDataTables['invoices-table'].column(0).search(this.value).draw();
+                window.LaravelDataTables['payments'].column(0).search(this.value).draw();
             });
 
             document.getElementById('mySearchTwo').addEventListener('keyup', function() {
-                window.LaravelDataTables['invoices-table'].column(1).search(this.value).draw();
+                window.LaravelDataTables['payments'].column(1).search(this.value).draw();
             });
 
             document.getElementById('mySearchFive').addEventListener('change', function() {
-                window.LaravelDataTables['invoices-table'].column(4).search(this.value).draw();
+                window.LaravelDataTables['payments'].column(4).search(this.value).draw();
             });
 
             document.getElementById('mySearchEight').addEventListener('change', function() {
-                window.LaravelDataTables['invoices-table'].column(7).search(this.value).draw();
+                window.LaravelDataTables['payments'].column(7).search(this.value).draw();
             });
 
             document.getElementById('mySearchTen').addEventListener('change', function() {
-                window.LaravelDataTables['invoices-table'].column(9).search(this.value).draw();
+                window.LaravelDataTables['payments'].column(9).search(this.value).draw();
             });
 
             document.getElementById('mySearchEleven').addEventListener('change', function() {
-                window.LaravelDataTables['invoices-table'].column(10).search(this.value).draw();
+                window.LaravelDataTables['payments'].column(10).search(this.value).draw();
             });
 
             document.addEventListener('livewire:init', function() {
                 Livewire.on('success', function() {
                     $('#kt_modal_add_invoice').modal('hide');
                     $('#kt_modal_auto_invoice').modal('hide');
-                    window.LaravelDataTables['invoices-table'].ajax.reload();
+                    window.LaravelDataTables['payments'].ajax.reload();
                 });
             });
 
