@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('invoices', function (Blueprint $table) {
-            $table->string('type')->default(\App\Helpers\Constants::$TITRE);
+        Schema::table('taxpayers', function (Blueprint $table) {
+            $table->string('type')->default('TITRE');
         });
     }
 
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('invoices', function (Blueprint $table) {
+        Schema::table('taxpayers', function (Blueprint $table) {
             $table->dropColumn('type');
         });
     }

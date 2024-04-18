@@ -246,6 +246,12 @@ class AddInvoiceModal extends Component
                 //FIX CANCEL INVOICE BUG
                 if ($this->cancel_reduct==Constants::$CANCELED) {
                     $invoiceData['reduce_amount'] = $this->amount_e;
+                    $invoice= Invoice::find($this->invoice_id);
+                    foreach ($invoice->taxpayer_taxables()->get() as $item){
+                        $item->invoice_id=null;
+                        $item->bill_status="NOT BILLED";
+                        $item->save();
+                    }
                 }
                 $invoiceData['status'] = 'DRAFT';
             }

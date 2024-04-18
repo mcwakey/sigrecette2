@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 class Constants
 {
+    public  static $TITRE="TITRE";
     public static $CANCELED="CANCELED";
     public  static $REDUCTION="Réduction";
     public  static $ANNULATION="Annulation";
