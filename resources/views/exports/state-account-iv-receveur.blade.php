@@ -1,3 +1,7 @@
+@php
+$stock_r = \App\Models\StockRequest::find($data[0]);
+ $vv_qty =  0;
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,12 +10,15 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            font-size: 0.75em;
+            padding: 0px;
+            margin: 0 auto;
+            line-height: 1.2;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
         }
 
         table, th, td {
@@ -19,8 +26,7 @@
         }
 
         th, td {
-            padding: 10px;
-            text-align: left;
+            text-align: center;
         }
 
         th {
@@ -36,6 +42,7 @@
     <title>ETAT DE COMPTABILITÉ DES VALEURS INACTIVES DU REGISSEUR </title>
 </head>
 <body>
+
 <table>
     <tr>
         <td colspan="5" style="border: none; margin: 0;text-align: left">{{$commune->region_name}}</td>
@@ -71,13 +78,13 @@
     </tr>
     <tr>
         <td colspan="10" style="border: none; margin: 0;text-align: left">
-            Catégorie de valeur inactive: Timbres d’état civil
+            Catégorie de valeur inactive: {{$stock_r->taxable->name}}
         </td>
 
     </tr>
     <tr>
         <td colspan="10" style="border: none; margin: 0;text-align: left">
-            Valeur faciale : 100</td>
+            Valeur faciale :  {{$stock_r->taxable->tariff}}</td>
 
     </tr>
     <tr>
@@ -115,49 +122,64 @@
 
     </tr>
     <tr>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
+        <td>{{$stock_r->created_at->format('d M Y')}}</td>
+        <td>{{"Demande d’approvisionnement N°".$stock_r->req_no}}</td>
+        <td>{{$stock_r->start_no}}</td>
+        <td>{{$stock_r->end_no}}</td>
+        <td>{{$stock_r->qty}}</td>
+        <td>{{$stock_r->qty* $stock_r->taxable->tariff}}</td>
+        <td></td>
+        <td></td>
+        <td>{{$stock_r->qty}}</td>
+        <td>{{$stock_r->qty* $stock_r->taxable->tariff}}</td>
     </tr>
+    @if($stock_r->req_type==\App\Helpers\Constants::$DEMANDE)
+
+        @else
+        <tr>
+            <td>{{$stock_r->created_at->format('d M Y')}}</td>
+            <td>{{"Etat de comptabilité des VI N°".$stock_r->req_no}}</td>
+            <td>{{$stock_r->start_no}}</td>
+            <td>{{$stock_r->end_no}}</td>
+            <td></td>
+            <td></td>
+            @php
+                if (!$stock_r->pc_qty || !$stock_r->sd_qty) {
+                       $vv_qty =  0;
+                   } else {
+                       $vv_qty = $stock_r->pc_qty - $stock_r->sd_qty;
+
+                   }
+                   $vv_total = ($stock_r->pc_qty - $stock_r->sd_qty) * $stock_r->taxable->tariff;
+
+            @endphp
+            <td>{{$vv_qty}}</td>
+            <td>{{intval($vv_qty)* $stock_r->taxable->tariff}}</td>
+            <td>{{$vv_qty}}</td>
+            <td>{{$vv_total}}</td>
+        </tr>
+    @endif
+
     <tr>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-    </tr>
-    <tr>
-        <th colspan="4" >Totaux et solde à reporter</th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
+        <td colspan="4" >Totaux et solde à reporter</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
     </tr>
     <tr>
         <td colspan="5" style="border: none; margin: 0;text-align: left">
-            Prise en charge par le Régisseur des valeurs inactives   pour un montant de cent mille FCFA</td>
+            Prise en charge par le Régisseur des valeurs inactives   pour un montant de   {{number_to_words($stock_r->qty* $stock_r->taxable->tariff)}} FCFA</td>
         <td colspan="5" style="border: none; margin: 0;text-align: left">
-            Arrêté le montant des valeurs vendues à ……………
-            et le montant des valeurs en stock à ..………………
+            Arrêté le montant des valeurs vendues à {{number_to_words(intval($vv_qty)* $stock_r->taxable->tariff)}}
+            et le montant des valeurs en stock à .. {{number_to_words($vv_total)}}
         </td>
     </tr>
     <tr>
         <td colspan="5" style="border: none; margin: 0;text-align: left">
-            A Agou, le 4 janvier 2023
+            A Agou, le 19 avril 2023
         </td>
         <td colspan="5" style="border: none; margin: 0;text-align: left">
             A ……………….., le ……………..
