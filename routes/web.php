@@ -26,6 +26,7 @@ use App\Http\Controllers\CollectorDepositController;
 use App\Http\Controllers\EreasController;
 use App\Http\Controllers\Geolocation;
 use App\Http\Controllers\LedgerController;
+use App\Http\Controllers\Password;
 use App\Http\Controllers\StockRequestController;
 use App\Http\Controllers\StockTransferController;
 use App\Http\Controllers\TicketController;
@@ -50,6 +51,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', [DashboardController::class, 'index']);
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::post('/password/admin-reset',[Password::class,'adminResetPassword'])->name('password.admin.reset');
 
     Route::name('user-management.')->group(function () {
         Route::resource('/user-management/users', UserManagementController::class);

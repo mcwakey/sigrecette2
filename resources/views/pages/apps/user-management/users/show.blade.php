@@ -113,7 +113,7 @@
                 <!--end:::Tab item-->
                 <!--begin:::Tab item-->
                 <li class="nav-item">
-                    <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab" href="#kt_user_view_overview_security">Sécurité</a>
+                    <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab" href="#kt_user_view_overview_security">Mot de passe</a>
                 </li>
                 <!--end:::Tab item-->
 
@@ -1970,7 +1970,7 @@
                         <div class="card-header border-0">
                             <!--begin::Card title-->
                             <div class="card-title">
-                                <h2>Profile</h2>
+                                <h2>Rénitialisation</h2>
                             </div>
                             <!--end::Card title-->
                         </div>
@@ -1978,9 +1978,40 @@
                         <!--begin::Card body-->
                         <div class="card-body pt-0 pb-5">
                             <!--begin::Table wrapper-->
-                            <div class="table-responsive">
+
+                                <div class="row mb-2">
+                                    <div class="notice d-flex align-items-start rounded py-5  bg-light-danger border-danger border border-dashed">
+                                        <i class="ki-duotone ki-information-5 fs-3x text-danger me-5"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+                                        <!--begin::Description-->
+                                        <div class="text-gray-700 fw-bold fs-6">
+                                         En cliquant sur le bouton rénitialiser le mot de passe, le mot de passe de l'utilisateur sera 
+                                         réinitialisé, ce qui signifie qu'à sa prochaine connexion, il sera invité 
+                                         à le changer. Vos informations en tant qu'administrateur, 
+                                         y compris la date et l'heure de cette action, seront enregistrées dans nos 
+                                         journaux pour des raisons de sécurité et de suivi des activités administratives.
+                                        </div>
+                                        <!--end::Description-->
+                                    </div>
+
+                                    @php
+                                        $passwordResetSuccess = session('success') ? true : (session('error') ? false : null);
+                                    @endphp
+
+                                    <div class="row">
+                                        <form method="post" action="{{route('password.admin.reset')}}" class="col">
+                                            {{ csrf_field() }}
+                                            <input name="user_id" hidden type="text"  value="{{$user->id}}">
+                                            <button  id="search-btn" type="submit" class="btn  btn-primary mt-8"
+                                            style="margin-right: 4px;">
+                                               <span class="indicator-label" wire:loading.remove>{{ __('Rénitialiser le mot de passe') }}</span>
+                                           </button>
+                                        </form>
+                                        <div class="col"></div>
+                                    </div>
+                                </div>
+
                                 <!--begin::Table-->
-                                <table class="table align-middle table-row-dashed gy-5" id="kt_table_users_login_session">
+                                {{-- <table class="table align-middle table-row-dashed gy-5" id="kt_table_users_login_session">
                                     <tbody class="fs-6 fw-semibold text-gray-600">
                                         <tr>
                                             <td>Email</td>
@@ -2019,16 +2050,15 @@
                                             </td>
                                         </tr>
                                     </tbody>
-                                </table>
+                                </table> --}}
                                 <!--end::Table-->
-                            </div>
                             <!--end::Table wrapper-->
                         </div>
                         <!--end::Card body-->
                     </div>
                     <!--end::Card-->
                     <!--begin::Card-->
-                    <div class="card pt-4 mb-6 mb-xl-9">
+                    {{-- <div class="card pt-4 mb-6 mb-xl-9">
                         <!--begin::Card header-->
                         <div class="card-header border-0">
                             <!--begin::Card title-->
@@ -2112,10 +2142,10 @@
                             <!--end::Disclaimer-->
                         </div>
                         <!--end::Card body-->
-                    </div>
+                    </div> --}}
                     <!--end::Card-->
                     <!--begin::Card-->
-                    <div class="card pt-4 mb-6 mb-xl-9">
+                    {{-- <div class="card pt-4 mb-6 mb-xl-9">
                         <!--begin::Card header-->
                         <div class="card-header border-0">
                             <!--begin::Card title-->
@@ -2311,7 +2341,7 @@
                         <!--end::Card body-->
                         <!--begin::Card footer-->
                         <!--end::Card footer-->
-                    </div>
+                    </div> --}}
                     <!--end::Card-->
                 </div>
                 <!--end:::Tab pane-->
@@ -2569,4 +2599,36 @@
     @include('pages/apps/user-management/users/modals/_add-task')
     <!--end::Modal - Add task-->
     <!--end::Modals-->
+
+    @push('scripts')
+        <script>
+            let passwordReset = @json($passwordResetSuccess);
+
+            KTMenu.init();
+
+            // Add click event listener to delete buttons
+            document.querySelectorAll('[data-kt-action="password-reset"]').forEach(function (element) {
+                element.addEventListener('click', function () {
+                    Swal.fire({
+                        text: 'Voulez-vous rénisiatiliser le mot de passe?',
+                        icon: 'warning',
+                        buttonsStyling: false,
+                        showCancelButton: true,
+                        confirmButtonText: 'Oui',
+                        cancelButtonText: 'Non',
+                        customClass: {
+                            confirmButton: 'btn btn-danger',
+                            cancelButton: 'btn btn-secondary',
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.refresh();
+                        }
+                    });
+                });
+            });
+        </script>
+
+    @endpush
+
 </x-default-layout>
