@@ -84,30 +84,53 @@ class Invoice extends Model
             $invoice->uuid = Uuid::uuid4()->toString();
         });
     }
+
     /**
      * Retrieve invoices based on provided UUIDs.
      *
      * @param array $uuids
-     * @return array|bool Returns a collection of invoices if all UUIDs are found,
+     * @param string|null $type
+     * @return array Returns a collection of invoices if all UUIDs are found,
      *                               `false` if any UUID is not found, or an empty array if `$uuids` is empty.
      */
-    public static function retrieveByUUIDs(array $uuids): array|bool
+    public static function retrieveByUUIDs(array $uuids, string|null $type = null): array
     {
         $invoices = [];
+
+        if (empty($uuids)) {
+            return [];
+        }
+
         foreach ($uuids as $uuid) {
-            $invoice = Invoice::where('uuid', $uuid)->first();
-            if ($invoice instanceof Invoice) {
-                $invoices[] = $invoice;
+            $invoice = null;
+
+            if ($type === 'payment') {
+                $payment = Payment::where('uuid', $uuid)->first();
+
+                if ($payment instanceof Payment) {
+                    $invoiceId = $payment->invoice_id;
+
+                    // Vérifiez si cette invoice a déjà été récupérée
+                    if (!isset($invoices[$invoiceId])) {
+                        $invoice = Invoice::find($invoiceId);
+                        if ($invoice instanceof Invoice) {
+                            $invoices[$invoiceId] = $invoice;
+                        }
+                    }
+                }
             } else {
-                return false;
+                $invoice = Invoice::where('uuid', $uuid)->first();
+            }
+
+            if ($invoice instanceof Invoice) {
+                $invoices[$invoice->id] = $invoice;
             }
         }
 
-
-
-
-        return $invoices ?: [];
+        return array_values($invoices); // Réorganise les valeurs pour obtenir un tableau indexé à partir de 0
     }
+
+
 
 
     public static function isuperFunction(array $uuids){

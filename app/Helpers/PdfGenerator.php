@@ -28,8 +28,12 @@ class PdfGenerator  implements PdfGeneratorInterface
     {
 
         //dd($data,$template,$action);
-        $data=Invoice::retrieveByUUIDs($data);
-        if ($this->checkIfCommuneIsNotNull()) {
+        if($action==42){
+            $data=Invoice::retrieveByUUIDs($data,'payment');
+        }else{
+            $data=Invoice::retrieveByUUIDs($data);
+        }
+        if ($this->checkIfCommuneIsNotNull()&& count($data)>0) {
 
             $filename = "Invoice-list-" . Str::random(8) . ".pdf";
             //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);

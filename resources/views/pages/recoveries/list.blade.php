@@ -51,22 +51,14 @@
                     <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4"
                         data-kt-menu="true" id="print-modal">
 
-                        <div class="menu-item px-3">
-                            <a href="#" class="menu-link px-3 print-link" data-type="41" target="_blank">
-                                {{ __('Fiche de recouvrement des avis distribués') }}
-                            </a>
-                        </div>
+
                         <div class="menu-item px-3">
                             <a href="#" class="menu-link px-3 print-link" data-type="5" target="_blank">
                                 {{ __('Journal des avis des sommes à payer confiés par le receveur') }}
                             </a>
                         </div>
 
-                        <div class="menu-item px-3">
-                            <a href="#" class="menu-link px-3 print-link" data-type="4" target="_blank">
-                                {{ __('Fiche de distribution des avis') }}
-                            </a>
-                        </div>
+
                     </div>
 
                 </div>

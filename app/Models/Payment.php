@@ -55,13 +55,15 @@ class Payment extends Model
             $payment->uuid = Uuid::uuid4()->toString();
         });
     }
-    public static function getSumPaymentByCode($code,Invoice $invoice):int{
-        $sum_payment=0;
-        foreach($invoice->payments() as $payment){
-            if($payment->code ==$code){
-                $sum_payment+=$payment->amount;
+    public static function getSumPaymentByCode($code, Invoice $invoice): int
+    {
+        $sum_payment = 0;
+        foreach ($invoice->payments()->get() as $payment) {
+            if ($payment->code == $code) {
+                $sum_payment += $payment->amount;
             }
         }
         return $sum_payment;
     }
+
 }
