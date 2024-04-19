@@ -6,28 +6,28 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            font-size: 0.75em;
+            padding: 2px;
+            margin: 0 auto;
+            line-height: 1.2;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
         }
 
         table, th, td {
             border: 1px solid black;
         }
 
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
+
 
         th {
             background-color: #f2f2f2;
         }
 
-        caption {
+        .caption {
             font-size: 1.2em;
             margin-bottom: 10px;
             font-weight: bold;
@@ -39,51 +39,51 @@
 
 <table>
     <tr>
-        <td  colspan="2"> {{$commune->region_name}} </td>
-        <td  colspan="3">REPUBLIQUE TOGOLAISE</td>
+        <td  colspan="2" style="border: none; padding: 2px;"> {{$commune->region_name}} </td>
+        <td  colspan="3"  style="border: none; padding:2px ;text-align: right;">REPUBLIQUE TOGOLAISE</td>
     </tr>
     <tr>
-        <td colspan="2">  {{$commune->title}}</td>
-        <td colspan="3">Travail-Liberté-Patrie</td>
+        <td colspan="2"  style="border: none; margin: 0; padding:2px ;">  {{$commune->title}}</td>
+        <td colspan="3"  style="border: none; margin: 0 ; padding:2px ; ;text-align: right;">Travail-Liberté-Patrie</td>
     </tr>
     @php
         $year = \App\Models\Year::getActiveYear()
     @endphp
     Exercice : {{$year->name}}
     <tr>
-        <td colspan="5">
+        <td colspan="5"  style="border: none; margin: 0; text-align: center;">
             ETAT DE VERSEMENT DU REGISSEUR DES RECETTES
 
         </td>
 
     </tr>
     <tr>
-        <td colspan="5">
+        <td colspan="5" style="border: none; margin: 0; text-align: center;">
             (Recettes sur titre)
 
         </td>
 
     </tr>
     <tr>
-        <td colspan="5">
+        <td colspan="5" style="border: none; margin: 0; text-align: center;">
             N°001
         </td>
 
     </tr>
     <tr>
-        <td colspan="5">
+        <td colspan="5" style="border: none; margin: 0;" >
             Nom du régisseur :
         </td>
 
     </tr>
     <tr>
-        <td colspan="5">
+        <td colspan="5" style="border: none; margin: 0;" >
             Exercice : {{$year->name}}
         </td>
 
     </tr>
     <tr>
-        <td colspan="5">
+        <td colspan="5" style="border: none; margin: 0;" >
             Période de : 05/01 à 07/01
         </td>
     </tr>

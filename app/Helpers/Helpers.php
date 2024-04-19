@@ -436,14 +436,17 @@ if (!function_exists('getIcon')) {
 }
 
 if (!function_exists('number_to_words')) {
-        function number_to_words($number, $locale = 'fr_FR') {
-            if (!is_numeric($number)) {
-                return '';
-            }
-            $formatter = new NumberFormatter($locale, NumberFormatter::SPELLOUT);
+        function number_to_words($number=null, $locale = 'fr_FR') {
+            if($number!=null){
+                if (!is_numeric($number)) {
+                    return '';
+                }
+                $formatter = new NumberFormatter($locale, NumberFormatter::SPELLOUT);
 
-            // Retourner le résultat de la conversion
-            return ucfirst($formatter->format($number));
+                // Retourner le résultat de la conversion
+                return ucfirst($formatter->format($number));
+            }
+            return "";
         }
 }
 

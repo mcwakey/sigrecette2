@@ -415,31 +415,17 @@
             }
 
             function onSelectedValueChanged(selectedValue) {
-                const array = ['APROVED', 'APROVED-CANCELLATION','CANCELED',"PENDING","REJECTED"];
+                printButton.classList.add('btn-active-light-primary');
+                printButton.classList.remove( "d-none");
                 removePrintMenuItems();
-                if (array.includes(selectedValue)) {
-                    printButton.classList.add('btn-active-light-primary');
-                    printButton.classList.remove( "d-none");
-                    if (selectedValue === 'APROVED' || selectedValue === "CANCELED") {
-                        addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
-                        addPrintMenuItem('{{ __('Journal des avis des sommes à payer confiés par le receveur') }}', '5');
-                        addPrintMenuItem('{{ __('Fiche de distribution des avis') }}', '4');
-                        addPrintMenuItem('{{ __('Registre-journal des avis distribués') }}', '3');
-                        addPrintMenuItem('{{ __('Fiche de recouvrement des avis distribués') }}', '41');
-
-                    } else if (selectedValue === 'APROVED-CANCELLATION') {
-                        addPrintMenuItem('{{ __('Bordereau journal des avis de réduction ou d’annulation') }}', '2');
-                    }else if(selectedValue === "PENDING"|| selectedValue ==="REJECTED"){
-                        addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
-                    }else {
-                        addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
-                    }
-                }
-                else {
-                    printButton.classList.remove('btn-active-light-primary');
-                    printButton.classList.add( "d-none");
-
-                }
+                addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
+                addPrintMenuItem('{{ __('Journal des avis des sommes à payer confiés par le receveur') }}', '5');
+                addPrintMenuItem('{{ __('Fiche de distribution des avis') }}', '4');
+                addPrintMenuItem('{{ __('Registre-journal des avis distribués') }}', '3');
+                addPrintMenuItem('{{ __('Fiche de recouvrement des avis distribués') }}', '41');
+                addPrintMenuItem('{{ __('Bordereau journal des avis de réduction ou d’annulation') }}', '2');
+                addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
+                //const array = ['APROVED', 'APROVED-CANCELLATION','CANCELED',"PENDING","REJECTED"];if (array.includes(selectedValue)) {if (selectedValue === 'APROVED' || selectedValue === "CANCELED") {} else if (selectedValue === 'APROVED-CANCELLATION') {}else if(selectedValue === "PENDING"|| selectedValue ==="REJECTED"){}else addPrintMenuItem('', '1');}}else {printButton.classList.remove('btn-active-light-primary');printButton.classList.add( "d-none");}
             }
 
             const selectElement = document.getElementById('mySearchTen');
