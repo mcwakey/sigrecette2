@@ -45,7 +45,10 @@
                         <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px py-4"
                              data-kt-menu="true" id="print-modal">
                             <div class="menu-item px-3">
-                                <a href="#" class="menu-link px-3 print-link" data-type="1" target="_blank">
+                                @php
+                                    $data = [$user->id];
+                                @endphp
+                                <a href="{{ route('generatePdf', ['data' => json_encode($data),'type' => '6']) }}" class="menu-link px-3 print-link" data-type="1" target="_blank">
                                     {{ __('ETAT DE COMPTABILITE DES VALEURS INACTIVES ') }}
                                 </a>
                             </div>
@@ -290,9 +293,7 @@
                 window.LaravelDataTables['stock_transfers-table'].column(2).search(this.value).draw();
             });
 
-            document.getElementById('mySearchFour').addEventListener('change', function() {
-                window.LaravelDataTables['stock_transfers-table'].column(10).search(this.value).draw();
-            });
+            //document.getElementById('mySearchFour').addEventListener('change', function() {window.LaravelDataTables['stock_transfers-table'].column(10).search(this.value).draw();});
 
             document.getElementById('mySearchFive').addEventListener('change', function() {
                 window.LaravelDataTables['stock_transfers-table'].column(11).search(this.value).draw();
@@ -302,61 +303,6 @@
                 Livewire.on('success', function() {
                     $('#kt_modal_add_stock_transfer').modal('hide');
                     window.LaravelDataTables['stock_transfers-table'].ajax.reload();
-                });
-            });
-            document.querySelectorAll('.print-link').forEach(function(link) {
-
-                function capitalizeFirstLetter(str) {
-                    let array = ["NIC", "GPS"];
-
-                    if (array.includes(str.toUpperCase())) {
-                        return str;
-                    } else {
-                        let words = str.toLowerCase().split(' ');
-                        for (let i = 0; i < words.length; i++) {
-                            words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
-                        }
-                        return words.join(' ');
-                    }
-                }
-                link.addEventListener('click', function(event) {
-                    event.preventDefault();
-                    let selectedValue = link.getAttribute('data-type');
-                    let table = document.getElementById("stock_transfers-table");
-                    let dataArray = [];
-                    let headers = [];
-
-
-                    // for (let i = 1; i < table.rows.length; i++) {let row = table.rows[i];let rowData = [];for (let j = 0; j < row.cells.length; j++) {let cellValue = row.cells[j].innerText.trim();rowData.push(cellValue);}dataArray.push(rowData);}
-
-                    let headerRow = table.getElementsByTagName("thead")[0].getElementsByTagName("tr")[0];
-                    for (let i = 0; i < headerRow.cells.length; i++) {
-                        headers.push(headerRow.cells[i].innerText.trim());
-                    }
-
-                    for (let i = 1; i < table.rows.length; i++) {
-                        let row = table.rows[i];
-                        let rowData = {};
-                        for (let j = 0; j < row.cells.length; j++) {
-                            let cellValue = row.cells[j].innerText.trim();
-                            let header = headers[j];
-                            rowData[capitalizeFirstLetter(header)] = cellValue;
-                        }
-
-                        dataArray.push(rowData);
-                    }
-
-
-
-                    let r_type = 6;
-
-                    let jsonData = JSON.stringify(dataArray);
-                    let url =
-                        "{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type', 'action' => ':selectedValue']) }}";
-                    url = url.replace(':jsonData', encodeURIComponent(jsonData));
-                    url = url.replace(':r_type', encodeURIComponent(r_type));
-                    url = url.replace(':selectedValue', encodeURIComponent(selectedValue));
-                    window.location.href = url;
                 });
             });
 
