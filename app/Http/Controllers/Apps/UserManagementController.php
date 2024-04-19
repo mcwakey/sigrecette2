@@ -41,7 +41,7 @@ class UserManagementController extends Controller
     {
         $userActionLog = UserLogs::where('user_id',$user->id)
         ->orderBy('id', 'desc')
-        ->limit(3)
+        ->limit(15)
         ->get();
         
         return view('pages/apps.user-management.users.show', compact('user','userActionLog'));
