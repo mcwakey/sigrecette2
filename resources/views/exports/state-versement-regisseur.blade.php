@@ -96,13 +96,13 @@
     </tr>
 
     @php
-    ssomme=0;
+    $somme=0;
     @endphp
 
 
     @foreach($data as $item)
         @php
-            ssomme+=$item["MONTANT"];
+            $somme+=$item["MONTANT"];
         @endphp
         <tr>
             <td>{{$item["DATE"]}}</td>
@@ -116,10 +116,10 @@
     <tr>
         <td colspan="3">TOTAL</td>
         <td></td>
-        <td>{{ $ssomme}}</td>
+        <td>{{ $somme}}</td>
     </tr>
     <tr>
-        <td colspan="5">Arrêté le présent état de versement à la somme de e {{number_to_words($ssomme) }} CFA</td>
+        <td colspan="5">Arrêté le présent état de versement à la somme de e {{number_to_words($somme) }} CFA</td>
     </tr>
     <tr>
         <td colspan="3">Le Receveur</td>
