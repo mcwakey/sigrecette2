@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PasswordActionLog;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -26,6 +27,13 @@ class Password extends Controller
         // Réinitialiser le mot de passe en utilisant l'adresse e-mail de l'utilisateur
         $user->password = Hash::make($user->email);
         $user->save();
+
+        PasswordActionLog::create([
+            'admin_name' => auth()->user()->name,
+            'username' => $user->name,
+            'user_id' => $user->id,
+            'admin_ip_adress' => request()->ip(),
+        ]);
 
         // Rediriger avec un message de succès
         return redirect()->back()->with('success', 'Mot de passe réinitialisé avec succès.');

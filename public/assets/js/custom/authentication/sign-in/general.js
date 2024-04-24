@@ -134,7 +134,7 @@ var KTSigninGeneral = (function () {
 
                                 // Show message popup. For more info check the plugin's official documentation: https://sweetalert2.github.io/
                                 Swal.fire({
-                                    text: "You have successfully logged in!",
+                                    text: "Vous vous êtes connecté avec succès!",
                                     icon: "success",
                                     buttonsStyling: false,
                                     confirmButtonText: "Ok, got it!",
@@ -153,7 +153,7 @@ var KTSigninGeneral = (function () {
                             } else {
                                 // Show error popup. For more info check the plugin's official documentation: https://sweetalert2.github.io/
                                 Swal.fire({
-                                    text: "Désolé, il semble que des erreurs aient été détectées, veuillez réessayer.",
+                                    text: "Désolé, réessayer avec des identifiants corrects.",
                                     icon: "error",
                                     buttonsStyling: false,
                                     confirmButtonText: "D'accord",
@@ -190,7 +190,7 @@ var KTSigninGeneral = (function () {
                             }
 
                             Swal.fire({
-                                text: "Désolé, il semble que des erreurs aient été détectées, veuillez réessayer.",
+                                text: "Désolé, réessayer avec des identifiants corrects.",
                                 icon: "error",
                                 buttonsStyling: false,
                                 confirmButtonText: "D'accord",
