@@ -60,14 +60,15 @@
                         @can('peut modifier un utilisateur')
                             <span data-bs-toggle="tooltip" data-bs-trigger="hover">
                                 <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
-                                    data-bs-toggle="modal" data-bs-target="#kt_modal_update_details">Modifier</a>
+                                    data-bs-target="#kt_modal_add_user" data-bs-toggle="modal" data-kt-action="update_row"
+                                    data-kt-user-id="{{ $user->id }}">Modifier</a>
                             </span>
                         @endcan
 
                         @can('peut supprimer un utilisateur')
                             <span data-bs-toggle="tooltip" data-bs-trigger="hover">
                                 <a href="#" class="btn btn-sm btn-light btn-active-light-danger"
-                                    data-bs-toggle="modal" data-bs-target="#kt_modal_update_details">supprimer</a>
+                                    data-kt-user-id="{{ $user->id }}" data-kt-action="delete_row">supprimer</a>
                             </span>
                         @endcan
                     </div>
@@ -2568,6 +2569,10 @@
             <!--end:::Tab content-->
         </div>
         <!--end::Content-->
+
+        <!--begin::Modal-->
+        <livewire:user.add-user-modal></livewire:user.add-user-modal>
+        <!--end::Modal-->
     </div>
     <!--end::Layout-->
     <!--begin::Modals-->
@@ -2622,6 +2627,43 @@
                             window.location.refresh();
                         }
                     });
+                });
+            });
+
+            // Add click event listener to delete buttons
+            document.querySelectorAll('[data-kt-action="delete_row"]').forEach(function(element) {
+                element.addEventListener('click', function() {
+                    Swal.fire({
+                        text: 'Voulez-vous supprimer ce utilisateur?',
+                        icon: 'warning',
+                        buttonsStyling: false,
+                        showCancelButton: true,
+                        confirmButtonText: 'Oui',
+                        cancelButtonText: 'Non',
+                        customClass: {
+                            confirmButton: 'btn btn-danger',
+                            cancelButton: 'btn btn-secondary',
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Livewire.dispatch('delete_user', [this.getAttribute('data-kt-user-id')]);
+                            window.location.href = '/user-management/users/';
+                        }
+                    });
+                });
+            });
+
+            // Add click event listener to update buttons
+            document.querySelectorAll('[data-kt-action="update_row"]').forEach(function(element) {
+                element.addEventListener('click', function() {
+                    Livewire.dispatch('update_user', [this.getAttribute('data-kt-user-id')]);
+                });
+            });
+
+            document.addEventListener('livewire:init', function() {
+                Livewire.on('success', function() {
+                    $('#kt_modal_add_user').modal('hide');
+                    window.location.reload();
                 });
             });
         </script>
