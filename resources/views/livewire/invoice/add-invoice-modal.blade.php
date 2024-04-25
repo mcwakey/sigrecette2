@@ -83,7 +83,7 @@
                                     </button>
                                     <!--end::Decrease control-->
                                     <!--begin::Input control-->
-                                    <input wire:model="qty" name="qty" value="{{count($months)}}" type="text" class="form-control border-0 ps-12" data-kt-dialer-control="input" placeholder="1" readonly="readonly" data-kt-action="load_invoice" />
+                                    <input wire:model="qty" name="qty"  type="text" class="form-control border-0 ps-12" data-kt-dialer-control="input" placeholder="1" readonly="readonly" data-kt-action="load_invoice" />
                                     <!--end::Input control-->
                                     @error('qty')
                                     <span class="text-danger">{{ $message }}</span> @enderror
@@ -118,20 +118,6 @@
                             </div>
 
                         </div>
-
-
-                                @push('scripts')
-                                    <script>
-                                        // let monthDialer = document.getElementById('month-dialer');
-                                        // let totalMounth = @json($months);
-
-                                        // monthDialer.setAttribute('data-kt-dialer-min', totalMounth.length);
-                                        // monthDialer.setAttribute('data-kt-dialer-max', totalMounth.length);
-
-                                        // console.log(monthDialer);
-                                    </script>
-                                @endpush
-
 
                         <div class="separator separator-dashed my-2"></div>
 

@@ -168,7 +168,7 @@ class AddInvoiceModal extends Component
             $months[$monthNumber] = $monthName;
         }
 
-        $this->qty = count($months);
+        //$this->qty = count($months);
 
         return view('livewire.invoice.add-invoice-modal', compact('taxpayers','months'));
     }
