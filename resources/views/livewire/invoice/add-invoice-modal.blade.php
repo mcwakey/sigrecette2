@@ -1,18 +1,6 @@
 @php
     use Carbon\Carbon;
     $year= \App\Models\Year::getActiveYear();
-    $months = [];
-    // Obtenez le mois actuel
-    $currentMonth = Carbon::now()->month;
-    $remainingMonths = 12 - $currentMonth;
-
-    for ($i = $currentMonth + 1; $i <= $currentMonth + $remainingMonths; $i++) {
-        $monthIndex = $i > 12 ? $i - 12 : $i;
-        $monthName = Carbon::createFromFormat('m',$monthIndex)->monthName;
-        $monthNumber = str_pad($monthIndex, 2, '0', STR_PAD_LEFT);
-        $months[$monthNumber] = $monthName;
-    }
-
 @endphp
 <div class="modal fade" id="kt_modal_add_invoice" tabindex="-1" aria-hidden="true" wire:ignore.self>
     <!--begin::Modal dialog-->
@@ -95,7 +83,7 @@
                                     </button>
                                     <!--end::Decrease control-->
                                     <!--begin::Input control-->
-                                    <input wire:model="qty" name="qty" value="{{count($months)}}" type="text" class="form-control border-0 ps-12" data-kt-dialer-control="input" placeholder="1" readonly="readonly" data-kt-action="load_invoice" />
+                                    <input wire:model="qty" name="qty"  type="text" class="form-control border-0 ps-12" data-kt-dialer-control="input" placeholder="1" readonly="readonly" data-kt-action="load_invoice" />
                                     <!--end::Input control-->
                                     @error('qty')
                                     <span class="text-danger">{{ $message }}</span> @enderror
@@ -130,20 +118,6 @@
                             </div>
 
                         </div>
-
-
-                                @push('scripts')
-                                    <script>
-                                        // let monthDialer = document.getElementById('month-dialer');
-                                        // let totalMounth = @json($months);
-
-                                        // monthDialer.setAttribute('data-kt-dialer-min', totalMounth.length);
-                                        // monthDialer.setAttribute('data-kt-dialer-max', totalMounth.length);
-
-                                        // console.log(monthDialer);
-                                    </script>
-                                @endpush
-
 
                         <div class="separator separator-dashed my-2"></div>
 
