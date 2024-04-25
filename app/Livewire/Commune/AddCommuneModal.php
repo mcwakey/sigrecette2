@@ -40,7 +40,7 @@ class AddCommuneModal extends Component
         'address' => 'required|string',
         'treasury_name' => 'required|string',
         'treasury_address' => 'required|string',
-        'treasury_rib' => 'required|string',
+        // 'treasury_rib' => 'required|string',
     ];
 
     protected $listeners = [
@@ -58,7 +58,7 @@ class AddCommuneModal extends Component
     public function submit()
     {
         // Validate the form input data
-        // $this->validate();
+        $this->validate();
         if (!$this->edit_mode) {
             $this->title = "Commune " . $this->title . " " . $this->name;
         }
