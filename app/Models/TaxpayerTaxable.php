@@ -20,6 +20,7 @@ class TaxpayerTaxable extends Model
         'billable',
         'invoice_id',
         'bill_status',
+        'auth_reference'
     ];
 
     public function taxpayer()
