@@ -9,22 +9,22 @@
         <input type="hidden" wire:model="invoice_id" name="invoice_id" class="form-control form-control-solid mb-3 mb-lg-0"
             placeholder="{{ __('invoice_id') }}" />
 
-        @if ($status == 'PENDING')
+        @if ($status ==  App\Enums\InvoiceStatusEnums::PENDING)
             @hasanyrole(['regisseur', 'administrateur_system'])
                 <select class="form-select form-select-solid" wire:model="status" name="status"
                     data-placeholder="Select option" data-allow-clear="true">
                     <option></option>
-                    <option value="APROVED">{{ __('APROVED') }}</option>
-                    <option value="REJECTED">{{ __('REJECTED') }}</option>
+                    <option value="{{App\Enums\InvoiceStatusEnums::APPROVED  }}">{{ __('APROVED') }}</option>
+                    <option value="{{ App\Enums\InvoiceStatusEnums::REJECTED }}">{{ __('REJECTED') }}</option>
                 </select>
             @endhasanyrole
-        @elseif($status == 'DRAFT')
+        @elseif($status == App\Enums\InvoiceStatusEnums::DRAFT)
             @hasanyrole(['agent_delegation', 'administrateur_system'])
             <select class="form-select form-select-solid" wire:model="status" name="status"
                 data-placeholder="Select option" data-allow-clear="true">
                 <option></option>
-                <option value="PENDING">{{ __('ACCEPTED') }}</option>
-                <option value="CANCELED">{{ __('CANCELED') }}</option>
+                <option value="{{App\Enums\InvoiceStatusEnums::PENDING}}">{{ __('ACCEPTED') }}</option>
+                <option value="{{App\Enums\InvoiceStatusEnums::REJECTED}}">{{ __('CANCELED') }}</option>
             </select>
             @endhasanyrole
         @endif

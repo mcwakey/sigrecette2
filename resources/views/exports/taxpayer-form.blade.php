@@ -103,7 +103,7 @@ $cumul_recouvré=0;
 
 
         @if($item instanceof \App\Models\Invoice )
-            @if($item->delivery_date!=null && $item->status!="APROVED-CANCELLATION")
+            @if($item->delivery_date!=null && $item->status!= App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION)
                 @foreach(\App\Models\Invoice::sumAmountsByTaxCode($item) as $code => $tax)
                     <tr>
                         <td>{{$item->delivery_date}}</td>
@@ -122,7 +122,7 @@ $cumul_recouvré=0;
 
             @endif
         @else
-            @if($item->reference!=\App\Helpers\Constants::$REDUCTION && $item->reference!=\App\Helpers\Constants::$ANNULATION )
+            @if($item->reference!=\App\Helpers\Constants::REDUCTION && $item->reference!=\App\Helpers\Constants::ANNULATION )
                 <tr>
                     <td>{{$item->created_at}}</td>
                     <td>Recouvrement Avis {{$item->invoice->invoice_no}}, OR {{$item->reference}},{{\App\Models\TaxLabel::getNameByCode($item->code)}}</td>

@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Contracts\FormatDateInterface;
 use App\Helpers\Constants;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
 
-class Invoice extends Model
+class Invoice extends Model implements FormatDateInterface
 {
     use HasFactory;
 
@@ -155,7 +156,7 @@ class Invoice extends Model
      * @param Invoice $invoice The invoice object.
      * @return array An associative array where keys are tax codes and values are the total amounts.
      */
-    public static function sumAmountsByTaxCode(Invoice $invoice)
+    public static function sumAmountsByTaxCode(Invoice $invoice): array
     {
         $sumsByTaxCode = [];
 
@@ -201,7 +202,7 @@ class Invoice extends Model
             $paidAmounts = [];
             foreach ($sumsByTaxCode as $code => &$totalAmount) {
                 foreach ($last_payments as $index => $payment) {
-                    if (($payment->description !== Constants::$ANNULATION && $payment->description !== Constants::$REDUCTION) && $payment->code == $code) {
+                    if (($payment->description !== Constants::ANNULATION && $payment->description !== Constants::REDUCTION) && $payment->code == $code) {
                         $totalAmount['amount'] -= $payment->amount;
                         $paidAmounts[$index] = $payment->amount;
                     }
@@ -225,7 +226,12 @@ class Invoice extends Model
         return null;
     }
 
-    public static function getRestToPaid(Invoice $invoice):int{
+    /**
+     * @param Invoice $invoice
+     * @return int
+     */
+    public static function getRestToPaid(Invoice $invoice): float|int
+    {
         $s_amount= [];
         $last_payments = Payment::where('invoice_id', $invoice->invoice_no)->get();
         foreach ($last_payments as $index => $payment) {
@@ -238,5 +244,26 @@ class Invoice extends Model
 
     }
 
+    /**
+     * @param Invoice $invoice
+     * @return float|int
+     */
+    public static function getPaid($invoice_id): float|int
+    {
+        $payments= Payment::where('invoice_id', $invoice_id)->get();
+        $s_amount = [];
 
+            foreach ($payments as $index => $payment) {
+                if ($payment->description!= Constants::ANNULATION && $payment->description!=Constants::REDUCTION){
+                    $s_amount[$index] = $payment->amount;
+                }
+            }
+       return array_sum($s_amount) ?? 0;
+
+    }
+
+    public function getCreatedDate(): string
+    {
+        return $this->created_at->format('Y-m-d');
+    }
 }

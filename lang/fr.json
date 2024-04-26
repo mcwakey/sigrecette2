@@ -244,7 +244,7 @@
 
     "PENDING": "EN ATTENTE",
     "DRAFT": "BROUILLON",
-    "APROVED": "PRIS EN CHARGE",
+    "APPROVED": "PRIS EN CHARGE",
     "REJECTED": "REJETÉ",
     "REJECTED-EDIT": "REJETÉ -> ÉDITION",
     "OWING": "PAIEMENT EN ATTENTE",
@@ -341,7 +341,7 @@
     "versement du regisseur title": "Versement du Regisseur au Receveur - Recettes sur titre",
     "versement du regisseur outright": "Versement du Regisseur au Receveur - Recettes au comptant",
     "total": "Total",
-    "REDUCED" : "REDUIT",
+    "APPROVED-REDUCED" : "REDUIT",
 
 
 

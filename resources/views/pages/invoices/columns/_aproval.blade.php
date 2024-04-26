@@ -1,4 +1,4 @@
-    @if($invoice->status == "PENDING" && $invoice->order_no!=null)
+    @if($invoice->status ==  App\Enums\InvoiceStatusEnums::PENDING && $invoice->order_no!=null)
     <div class="badge badge-lg badge-light-primary d-inline">{{ __($invoice->status) }}
         @can('peut prendre en charge un avis')
             <button type="button"
@@ -31,12 +31,12 @@
             </div>
         @endcan
     </div>
-    @elseif($invoice->status=="APROVED" || $invoice->status=="APROVED-CANCELLATION")
+    @elseif( $invoice->status ==  App\Enums\InvoiceStatusEnums::APPROVED || $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION)
     <div class="badge badge-lg badge-light-success d-inline">
         {{ __('APROVED') }}</div>
-    @elseif($invoice->status=="REJECTED")
+    @elseif($invoice->status==  App\Enums\InvoiceStatusEnums::REJECTED)
     <div class="badge badge-lg badge-light-danger d-inline">{{ __('REJECTED') }}</div>
-    @elseif($invoice->status=="DRAFT")
+    @elseif($invoice->status==  App\Enums\InvoiceStatusEnums::DRAFT)
     <div class="badge badge-lg badge-light-secondary d-inline">{{ __('DRAFT')}}
         @can('peut accepter un avis')
             <button type="button"

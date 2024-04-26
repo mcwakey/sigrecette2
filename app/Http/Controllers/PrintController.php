@@ -16,12 +16,10 @@ class PrintController extends Controller
     }
 
 
-
-
-
     /**
      * @param $data
      * @param null $type
+     * @param null $action
      * @return RedirectResponse|Response|mixed
      */
     public function download( $data,$type=null,$action=null)
@@ -53,6 +51,7 @@ class PrintController extends Controller
     {
        // dd($type, $data);
 
+
         switch ($type) {
             case 1:
                 return $this->pdfGenerator->downloadReceipt($data,'payments',$action);
@@ -73,17 +72,22 @@ class PrintController extends Controller
                     return $this->pdfGenerator->generateInvoiceListPdf($data,'invoices-recouvrement',$action);
 
                 }
+                elseif ($action==42){
+                    return $this->pdfGenerator->generateInvoiceListPdf($data,'invoices-recouvrement',$action);
+
+                }
                 else{
                     return $this->pdfGenerator->generateInvoiceListPdf($data,'invoices-list',$action);
                 }
-            case 3:
-                dd($data,$action,'invoices-journal-receveur');
+            //case 3:dd($data,$action,'invoices-journal-receveur');
             //case 4:return 'invoices-distribution';
             //case 5:return 'invoices-recouvrement';
             case 11: return $this->pdfGenerator->generataxpayerFormPdf($data,'taxpayer-form');
             case 6:return $this->pdfGenerator->generateStateValueCollectorPdf($data,'state-account-iv-collector',$action);
             case 7:return $this->pdfGenerator->generateStateValueCollectorPdf($data,'state-account-iv-receveur',$action);
             case 8:return $this->pdfGenerator->generateStateValueCollectorPdf($data,'state-versement-collecteur',$action);
+
+
             case 9:return $this->pdfGenerator->generateStateValueCollectorPdf($data,'state-versement-regisseur',$action);
             case 10:return $this->pdfGenerator->generateStateValueCollectorPdf($data,'livre-journal-regie',$action);
             case 15:return $this->pdfGenerator->generateStateValueCollectorPdf($data,'state-iv-regisseur',$action);

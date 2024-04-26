@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Helpers\Constants;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\Year;
@@ -84,6 +85,7 @@ class RecoveriesDataTable extends DataTable
             ->join('invoices', 'invoices.id', '=', 'payments.invoice_id')
             ->whereNotNull('payments.user_id')
             ->whereBetween('payments.created_at', [$startOfYear, $endOfYear])
+            ->whereNotIn('payments.reference', [Constants::ANNULATION, Constants::REDUCTION])
             ->select('payments.*');
     }
 

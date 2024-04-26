@@ -4,11 +4,13 @@ namespace App\Helpers;
 
 class Constants
 {
-    public static $DEMANDE="DEMANDE";
-    public  static $TITRE="TITRE";
-    public static $CANCELED="CANCELED";
-    public  static $REDUCTION="Réduction";
-    public  static $ANNULATION="Annulation";
-    public static $INVOICE_STATUS_APROVED="APROVED";
-    public static $INVOICE_STATUS_APROVED_CANCELLATON="APROVED-CANCELLATION";
+
+    public  const DEMANDE="DEMANDE";
+    public  const  TITRE="TITRE";
+    public  const  REDUCTION="Réduction";
+    public  const  ANNULATION="Annulation";
+    public  const INVOICE_TYPE_TITRE ="TITRE";
+    const CANCELED = "CANCELED";
+    const REDUCED="REDUCED";
+
 }

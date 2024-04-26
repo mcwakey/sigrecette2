@@ -436,10 +436,10 @@
                                         <tbody class="fs-6 fw-semibold text-gray-600">
                                         @foreach ($taxpayer->invoices as $invoice)
                                             <tr>
-                                                <td>{{ $invoice->created_at->format('Y-m-d') }}</td>
+                                                <td>{{ $invoice->getCreatedDate() }}</td>
                                                 <td>{{ $invoice->invoice_no }}</td>
                                                 <td>
-                                                    @if ( $invoice->order_no == null && $invoice->delivery == 'NOT DELIVERED' &&  $invoice->status!="DRAFT" )
+                                                    @if ( $invoice->order_no == null && $invoice->delivery ==  App\Enums\InvoiceDeliveryEnums::NOT_DELIVERED &&  $invoice->status!= App\Enums\InvoiceStatusEnums::DRAFT &&  $invoice->status != App\Enums\InvoiceStatusEnums::REJECTED )
                                                         @can('peut ajouter le numéro d\'ordre de recette d\'un avis')
                                                         <button type="button"
                                                                 class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
@@ -485,18 +485,18 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    @if ($invoice->status == 'APROVED' || $invoice->status =='APROVED-CANCELLATION')
-                                                        @if ($invoice->pay_status == 'OWING')
+                                                    @if ($invoice->status == App\Enums\InvoiceStatusEnums::APPROVED || $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION)
+                                                        @if ($invoice->pay_status == App\Enums\PaymentStatusEnums::OWING)
                                                             <span
                                                                 class="badge badge-light-danger">{{ __($invoice->pay_status) }}</span>
-                                                        @elseif($invoice->pay_status == 'PART PAID')
+                                                        @elseif($invoice->pay_status == App\Enums\PaymentStatusEnums::PART_PAID)
                                                             <span
                                                                 class="badge badge-light-warning">{{ __($invoice->pay_status) }}</span>
                                                         @else
                                                             <span
                                                                 class="badge badge-light-success">{{ __($invoice->pay_status) }}</span>
                                                         @endif
-                                                    @elseif($invoice->status == 'CANCELED' || $invoice->status =='REDUCED')
+                                                    @elseif($invoice->status ==  App\Enums\InvoiceStatusEnums::CANCELED || $invoice->status == App\Enums\InvoiceStatusEnums::REDUCED|| $invoice->status == App\Enums\InvoiceStatusEnums::REJECTED)
                                                         <span
                                                             class="badge badge-light-warning">{{ "----" }}</span>
                                                     @else
@@ -506,7 +506,7 @@
 
                                                 </td>
                                                 <td>
-                                                    @if ($invoice->delivery == 'NOT DELIVERED')
+                                                    @if ($invoice->delivery == App\Enums\InvoiceDeliveryEnums::NOT_DELIVERED)
                                                         <span
                                                             class="badge badge-light-danger">{{ __('NOT DELIVERED') }}</span>
                                                     @else
@@ -516,8 +516,8 @@
                                                 </td>
 
                                                 <td>
-                                                    @if( $invoice->status != 'REJECTED' && $invoice->status != 'PENDING'&& $invoice->status != 'DRAFT')
-                                                        @if ($invoice->delivery == 'NOT DELIVERED'&& $invoice->order_no !== null)
+                                                    @if( $invoice->status != App\Enums\InvoiceStatusEnums::REJECTED  && $invoice->status !=  App\Enums\InvoiceStatusEnums::PENDING && $invoice->status !=  App\Enums\InvoiceStatusEnums::DRAFT)
+                                                        @if ($invoice->delivery ==  App\Enums\InvoiceDeliveryEnums::NOT_DELIVERED && $invoice->order_no !== null)
                                                             @can('peut ajouter la date de livraison d\'un avis')
                                                                 <button type="button"
                                                                         class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
@@ -557,7 +557,7 @@
                                                             @else
                                                                 {{ __('NOT DELIVERED') }}
                                                             @endcan
-                                                        @elseif($invoice->delivery == 'DELIVERED')
+                                                        @elseif($invoice->delivery == App\Enums\InvoiceDeliveryEnums::DELIVERED)
                                                             {{ date('Y-m-d', strtotime($invoice->delivery_date)) }}
                                                         @endif
                                                     @else
@@ -567,7 +567,7 @@
 
 
                                                 <td>
-                                                    @if ($invoice->status == 'PENDING' && $invoice->order_no !== null)
+                                                    @if ($invoice->status == App\Enums\InvoiceStatusEnums::PENDING && $invoice->order_no !== null)
                                                         <span
                                                             class="badge badge-light-primary">{{ __($invoice->status) }}</span>
                                                         @can('peut prendre en charge un avis')
@@ -587,13 +587,13 @@
                                                                 </i>
                                                             </button>
                                                         @endcan
-                                                    @elseif($invoice->status == 'APROVED' || $invoice->status == 'APROVED-CANCELLATION')
+                                                    @elseif($invoice->status == App\Enums\InvoiceStatusEnums::APPROVED || $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION)
                                                         <span
-                                                            class="badge badge-light-success">{{ __('APROVED') }}</span>
-                                                    @elseif($invoice->status == 'REJECTED')
+                                                            class="badge badge-light-success">{{ __( App\Enums\InvoiceStatusEnums::APPROVED) }}</span>
+                                                    @elseif($invoice->status ==  App\Enums\InvoiceStatusEnums::REJECTED)
                                                         <span
                                                             class="badge badge-light-danger">{{ __('REJECTED') }}</span>
-                                                    @elseif($invoice->status == 'DRAFT')
+                                                    @elseif($invoice->status ==  App\Enums\InvoiceStatusEnums::DRAFT)
                                                         <span
                                                             class="badge badge-light-secondary">{{ __('DRAFT') }}</span>
 
@@ -672,15 +672,12 @@
                                                         </div>
 
 
-                                                        @if ($invoice->status == 'DRAFT')
+                                                        @if ($invoice->status ==  App\Enums\InvoiceStatusEnums::DRAFT)
 
                                                             {{-- Nothing here --}}
                                                         @elseif(
-                                                            $invoice->status == 'APROVED' ||
-                                                             $invoice->status == 'APROVED-CANCELLATION' ||
-                                                                $invoice->status == 'PENDING' ||
-                                                                $invoice->status == 'REDUCED' ||
-                                                                $invoice->status == 'CANCELED')
+                                                                 $invoice->status !=  App\Enums\InvoiceStatusEnums::REJECTED &&
+                                                             $invoice->status != App\Enums\InvoiceStatusEnums::DRAFT)
                                                             <div class="menu-item px-3">
 
 
@@ -693,9 +690,9 @@
                                                                        target="_blank">{{ __('print') }}</a>
 
                                                             </div>
-                                                            @if ($invoice->status != 'REDUCED' )
-                                                                @if ($invoice->status !== 'CANCELED' && $invoice->pay_status != 'PAID')
-                                                                    @if ($invoice->delivery_date!=null &&( $invoice->status == 'APROVED' || $invoice->status =='APROVED-CANCELLATION') )
+                                                            @if ($invoice->status !=  App\Enums\InvoiceStatusEnums::REDUCED )
+                                                                @if ($invoice->status !==  App\Enums\InvoiceStatusEnums::CANCELED && $invoice->pay_status !=  App\Enums\PaymentStatusEnums::PAID)
+                                                                    @if ($invoice->delivery_date!=null &&( $invoice->status ==  App\Enums\InvoiceStatusEnums::APPROVED || $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION) )
                                                                         @can('peut ajouter un paiement')
                                                                             <div class="menu-item px-3">
                                                                                 <a href="#"
@@ -709,7 +706,7 @@
                                                                             </div>
                                                                     @endcan
                                                                 @endif
-                                                                @if($invoice->delivery_date!=null &&   ($invoice->validity == 'VALID' && ($invoice->status == 'APROVED' || $invoice->status =='APROVED-CANCELLATION')) )
+                                                                @if($invoice->delivery_date!=null &&   ($invoice->validity == 'VALID' && ($invoice->status ==  App\Enums\InvoiceStatusEnums::APPROVED || $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION)) )
 
                                                                     @can('peut réduire ou annuler un avis')
                                                                         <!--begin::Menu item-->
@@ -808,7 +805,7 @@
 
 
                                             <td>
-                                                @if ($payment->status == 'PENDING' )
+                                                @if ($payment->status ==  App\Enums\InvoiceStatusEnums::PENDING )
                                                     <span
                                                         class="badge badge-light-primary">{{ __($payment->status) }}</span>
                                                     @can('peut accepter un paiement')
@@ -845,9 +842,9 @@
                                                             <!--end::Form-->
                                                         </div>
                                                     @endcan
-                                                @elseif($payment->status == 'APROVED')
+                                                @elseif($payment->status ==  App\Enums\InvoiceStatusEnums::APPROVED)
                                                     <span
-                                                        class="badge badge-light-success">{{ __('APROVED') }}</span>
+                                                        class="badge badge-light-success">{{ __( App\Enums\InvoiceStatusEnums::APPROVED) }}</span>
                                             @endif
 
 
@@ -1388,11 +1385,11 @@
                 let labels = [
                     '<div class="legend"><strong class="title">Légende : contribuable</strong><div class="hr"></div></div>'
                 ];
-                let status = ['OWING', 'PART PAID', 'PAID', null];
+                let status = [ 'OWING',  'PART PAID', 'PAID', null];
 
 
                 for (let i = 0; i < status.length; i++) {
-                    if (status[i] == 'OWING') {
+                    if (status[i] ==  'OWING') {
                         div.innerHTML += labels.push(
                             `<div class="detail"><img class="img" src="${getTaxpayerIconUrl('taxpayer-red.svg')}"/> <span class="text">Facturé et Non payé</span></div>`
                         );

@@ -2,6 +2,8 @@
 
 namespace App\DataTables;
 
+use App\Enums\InvoiceDeliveryEnums;
+use App\Enums\InvoiceStatusEnums;
 use App\Models\Invoice;
 use App\Models\Year;
 use Carbon\Carbon;
@@ -57,7 +59,20 @@ class InvoicesDataTable extends DataTable
                    return $invoice->amount;
                 //return $invoice->amount;
             })
+            ->editColumn('paid', function (Invoice $invoice) {
 
+                    return $invoice::getPaid($invoice->invoice_no);
+            })
+            ->editColumn('remains_to_be_paid', function (Invoice $invoice) {
+                if($invoice->status== InvoiceStatusEnums::REDUCED|| $invoice->status== InvoiceStatusEnums::CANCELED||  $invoice->status== InvoiceStatusEnums::REJECTED)
+                    return "-";
+                elseif ($invoice->status== InvoiceStatusEnums::APPROVED_CANCELLATION){
+                    $invoice =Invoice::where('invoice_no', $invoice->invoice_no)->first();
+                    return $invoice::getRestToPaid($invoice);
+                }
+                else
+                    return $invoice::getRestToPaid($invoice);
+            })
             ->editColumn('validity', function (Invoice $invoice) {
                 return view('pages/invoices.columns._validity', compact('invoice'));
                 //return ''; // Return empty string
@@ -150,10 +165,11 @@ class InvoicesDataTable extends DataTable
             Column::make('taxpayers.latitude')->title(__('gps'))->visible(false),
             Column::make('tax_labels.code')->title(__('code')),
             Column::make('total')->title(__('amount'))->name('amount'),
+            Column::make('paid')->title(__('Montant payé'))->name('paid'),
+            Column::make('remains_to_be_paid')->title(__('Reste'))->name('remains_to_be_paid'),
             Column::make('status')->title(__('aproval')),
             Column::make('delivery_date')->title( __('delivery date'))->addClass('text-nowrap'),
             //Column::make('from_date')->title( __('from_date'))->addClass('text-nowrap'),
-
             Column::make('to_date')->title( __('expiry date'))->addClass('text-nowrap'),
             Column::make('validity')->title(__('status')),
             Column::computed('action')

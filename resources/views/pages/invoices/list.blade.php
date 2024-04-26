@@ -172,11 +172,11 @@
                             <!--begin::Select-->
                             <select class="form-select" id="mySearchTen">
                                 <option value=""></option>
-                                <option value="APROVED">{{ __('APROVED') }}</option>
-                                <option value="REJECTED">{{ __('REJECTED') }}</option>
-                                <option value="CANCELED">{{ __('CANCELED') }}</option>
-                                <option value="APROVED-CANCELLATION">{{ __("AVIS D'ANNULATION/REDUCTION") }}</option>
-                                <option value="PENDING">{{ __('PENDING') }}</option>
+                                <option value="{{App\Enums\InvoiceStatusEnums::APPROVED}}">{{ __('APROVED') }}</option>
+                                <option value="{{ App\Enums\InvoiceStatusEnums::REJECTED }}">{{ __('REJECTED') }}</option>
+                                <option value="{{  App\Enums\InvoiceStatusEnums::CANCELED }}">{{ __('CANCELED') }}</option>
+                                <option value="{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}">{{ __("AVIS D'ANNULATION/REDUCTION") }}</option>
+                                <option value="{{ App\Enums\InvoiceStatusEnums::PENDING}}">{{ __('PENDING') }}</option>
                             </select>
                             <!--end::Select-->
                             <!--end::Row-->
@@ -370,11 +370,11 @@
             });
 
             document.getElementById('mySearchTen').addEventListener('change', function () {
-                window.LaravelDataTables['invoices-table'].column(9).search(this.value).draw();
+                window.LaravelDataTables['invoices-table'].column(11).search(this.value).draw();
             });
 
             document.getElementById('mySearchEleven').addEventListener('change', function () {
-                window.LaravelDataTables['invoices-table'].column(12).search(this.value).draw();
+                window.LaravelDataTables['invoices-table'].column(14).search(this.value).draw();
             });
 
             document.addEventListener('livewire:init', function () {
@@ -424,7 +424,6 @@
                 addPrintMenuItem('{{ __('Registre-journal des avis distribués') }}', '3');
                 addPrintMenuItem('{{ __('Fiche de recouvrement des avis distribués') }}', '41');
                 addPrintMenuItem('{{ __('Bordereau journal des avis de réduction ou d’annulation') }}', '2');
-                addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
                 //const array = ['APROVED', 'APROVED-CANCELLATION','CANCELED',"PENDING","REJECTED"];if (array.includes(selectedValue)) {if (selectedValue === 'APROVED' || selectedValue === "CANCELED") {} else if (selectedValue === 'APROVED-CANCELLATION') {}else if(selectedValue === "PENDING"|| selectedValue ==="REJECTED"){}else addPrintMenuItem('', '1');}}else {printButton.classList.remove('btn-active-light-primary');printButton.classList.add( "d-none");}
             }
 

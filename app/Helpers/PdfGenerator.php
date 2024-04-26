@@ -186,9 +186,6 @@ class PdfGenerator  implements PdfGeneratorInterface
 
             $filename="Invoice-".Str::random(8).".pdf";
 
-
-
-
             if($action==2 || ( intval($default_invoice->invoice_no) !==$default_invoice->id)){
                 $action=2;
                 $invoice = Invoice::find( $default_invoice->invoice_no);

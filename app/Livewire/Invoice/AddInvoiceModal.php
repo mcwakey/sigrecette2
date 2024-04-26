@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Invoice;
 
+use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
+use App\Models\Year;
 use Carbon\Carbon;
 
 use App\Models\Canton;
@@ -155,7 +157,7 @@ class AddInvoiceModal extends Component
 
         //return view('livewire.invoice.add-invoice-modal', ['taxpayer_id' => $this->taxpayer_id]);
 
-        $year= \App\Models\Year::getActiveYear();
+        $year= Year::getActiveYear();
         $months = [];
         // Obtenez le mois actuel
         $currentMonth = Carbon::now()->month;
@@ -244,7 +246,7 @@ class AddInvoiceModal extends Component
                 $invoiceData['amount'] = $this->amount_e;
                 $invoiceData['reduce_amount'] = $this->reduce_amount;
                 //FIX CANCEL INVOICE BUG
-                if ($this->cancel_reduct==Constants::$CANCELED) {
+                if ($this->cancel_reduct== InvoiceStatusEnums::CANCELED) {
                     $invoiceData['reduce_amount'] = $this->amount_e;
                     $invoice= Invoice::find($this->invoice_id);
                     foreach ($invoice->taxpayer_taxables()->get() as $item){

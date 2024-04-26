@@ -294,18 +294,7 @@ class AddPaymentModal extends Component
 
         $this->qty = $invoice->qty;
         $this->bill = $invoice->amount;
-
-        $payments = Payment::where('invoice_id', $invoice->invoice_no)->get();
-        $this->s_amount = []; // Initialize as an empty array
-
-
-        foreach ($payments as $index => $payment) {
-            if ($payment->description!= Constants::$ANNULATION && $payment->description!=Constants::$REDUCTION){
-                $this->s_amount[$index] = $payment->amount;
-            }
-        }
-
-        $this->paid = array_sum($this->s_amount) ?? 0;
+        $this->paid = Invoice::getPaid( $invoice->invoice_no);
 
 
         //dd(($this->s_amount));
