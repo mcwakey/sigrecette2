@@ -137,7 +137,7 @@ var KTSigninGeneral = (function () {
                                     text: "Vous vous êtes connecté avec succès!",
                                     icon: "success",
                                     buttonsStyling: false,
-                                    confirmButtonText: "Ok, got it!",
+                                    confirmButtonText: "D'accord",
                                     customClass: {
                                         confirmButton: "btn btn-primary",
                                     },

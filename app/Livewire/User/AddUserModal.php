@@ -46,18 +46,6 @@ class AddUserModal extends Component
         $roles = Role::all();
         $zones = Zone::all();
 
-        $roles_description = [
-            'administrator' => 'Best for business owners and company administrators',
-            'developer' => 'Best for developers or people primarily using the API',
-            'analyst' => 'Best for people who need full access to analytics data, but don\'t need to update business settings',
-            'support' => 'Best for employees who regularly refund payments and respond to disputes',
-            'trial' => 'Best for people who need to preview content data, but don\'t need to make any updates',
-        ];
-
-        foreach ($roles as $i => $role) {
-            $roles[$i]->description = $roles_description[$role->name] ?? '';
-        }
-
         return view('livewire.user.add-user-modal', compact('roles', 'zones'));
     }
 
@@ -98,7 +86,7 @@ class AddUserModal extends Component
             $data['zone_id'] = $this->zone_id;
 
             if (!$this->edit_mode && !Gate::forUser(auth()->user())->allows('create-user', User::class)) {
-                $this->dispatch('error', Constants::$NOT_PERMISSION_TO_PERFORM_ACTION);
+                $this->dispatch('error', Constants::NOT_PERMISSION_TO_PERFORM_ACTION);
                 return false;
             }
 
@@ -111,7 +99,7 @@ class AddUserModal extends Component
                 }
                 $user->save();
             } else if ($this->edit_mode) {
-                $this->dispatch('error', Constants::$NOT_PERMISSION_TO_PERFORM_ACTION);
+                $this->dispatch('error', Constants::NOT_PERMISSION_TO_PERFORM_ACTION);
                 return false;
             }
 
@@ -124,9 +112,6 @@ class AddUserModal extends Component
             } else {
                 // Assign selected role for user
                 $user->assignRole($this->role);
-
-                // Send a password reset link to the user's email
-                // Password::sendResetLink($user->only('email'));
 
                 // Emit a success event with a message
                 $this->dispatch('success', __('Utilisateur créer avec succès'));
@@ -141,7 +126,7 @@ class AddUserModal extends Component
     {
 
         if (!Gate::forUser(auth()->user())->allows('delete-user', User::class)) {
-            $this->dispatch('error', Constants::$NOT_PERMISSION_TO_PERFORM_ACTION);
+            $this->dispatch('error', Constants::NOT_PERMISSION_TO_PERFORM_ACTION);
             return false;
         }
 
