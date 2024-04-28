@@ -296,7 +296,7 @@
             <!--begin:Menu item-->
             <!--end:Menu item-->
             <!--begin:Menu item-->
-            @can('peut accedeé aux paramétrages du système')
+            @hasanyrole(['administrateur_system','administrateur'])
 
                 <div class="menu-item pt-5">
                     <!--begin:Menu content-->
@@ -535,7 +535,7 @@
                 </div>
                 <!--end:Menu item-->
 
-            @endcan
+            @endhasanyrole
 
 
         </div>

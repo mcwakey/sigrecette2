@@ -53,7 +53,7 @@
                     </div>
                 </div>
 
-                    @can('peut effectuer un versement')
+                    @can('peut effectuer un versement au receveur')
 
                         <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                             <!--begin::Add user-->

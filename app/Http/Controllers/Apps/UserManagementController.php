@@ -42,7 +42,7 @@ class UserManagementController extends Controller
     {
         $userActionLog = UserLogs::where('user_id', $user->id)
             ->orderBy('id', 'desc')
-            ->limit(15)
+            ->limit(3)
             ->get();
 
         $passwordActionLog = PasswordActionLog::where('user_id', $user->id)->get();

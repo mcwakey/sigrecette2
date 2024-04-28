@@ -41,9 +41,6 @@ class RolesPermissionsSeeder extends Seeder
                 'peut ajouter un paiement',
                 'peut accepter un paiement',
 
-                // Config permissions
-                'peut accedeé aux paramétrages du système',
-
                 // Order no permissions
                 'peut ajouter le numéro d\'ordre de recette d\'un avis',
 
@@ -58,10 +55,13 @@ class RolesPermissionsSeeder extends Seeder
 
                 // Account permissions 
                 'peut voir la comptabilité',
-                'peut effectuer une demande d\'approvisionement',
+                'peut effectuer une demande d\'approvisionement de valeur inactive',
                 'peut effectuer un versement',
+                'peut effectuer un versement au régisseur',
+                'peut effectuer un versement au receveur',
                 'peut effectuer une alimentation des collecteurs',
-                'peut faire un etat de compte',
+                'peut faire un etat de compte du collecteur',
+                'peut faire un etat de compte du régisseur',
 
                 // Print permissions
                 'peut imprimer des fiches',
@@ -120,10 +120,6 @@ class RolesPermissionsSeeder extends Seeder
             ],
 
             'administrateur' => [
-
-                // Config permissions
-                'peut accedeé aux paramétrages du système',
-
                 // User permissions
                 'peut créer un utilisateur',
                 'peut modifier un utilisateur',

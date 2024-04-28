@@ -67,6 +67,10 @@
                     $('#kt_modal_add_user').modal('hide');
                     window.LaravelDataTables['users-table'].ajax.reload();
                 });
+
+                Livewire.on('error', function() {
+                    $('#kt_modal_add_user').modal('hide');
+                });
             });
         </script>
     @endpush

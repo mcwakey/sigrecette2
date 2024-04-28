@@ -2101,7 +2101,7 @@
                                             <tr class="text-start text-muted text-uppercase gs-0">
                                                 <th>Administrateur</th>
                                                 <th>Address IP</th>
-                                                <th class="min-w-125px">MOT DE PASSE</th>
+                                                <th class="min-w-125px">Action</th>
                                                 <th class="min-w-125px">Utilisateur</th>
                                                 <th class="min-w-70px">Date</th>
                                             </tr>
@@ -2664,6 +2664,10 @@
                 Livewire.on('success', function() {
                     $('#kt_modal_add_user').modal('hide');
                     window.location.reload();
+                });
+
+                Livewire.on('error', function() {
+                    $('#kt_modal_add_user').modal('hide');
                 });
             });
         </script>

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\User;
 
+use App\Helpers\Constants;
 use App\Models\User;
 use App\Models\Zone;
 use Livewire\Component;
@@ -9,6 +10,7 @@ use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 
@@ -95,14 +97,22 @@ class AddUserModal extends Component
             $data['email'] = $this->email;
             $data['zone_id'] = $this->zone_id;
 
+            if (!$this->edit_mode && !Gate::forUser(auth()->user())->allows('create-user', User::class)) {
+                $this->dispatch('error', Constants::$NOT_PERMISSION_TO_PERFORM_ACTION);
+                return false;
+            }
+
             // Update or Create a new user record in the database
             $user = User::find($this->user_id) ?? User::create($data);
 
-            if ($this->edit_mode) {
+            if ($this->edit_mode && Gate::forUser(auth()->user())->allows('update-user', $user)) {
                 foreach ($data as $k => $v) {
                     $user->$k = $v;
                 }
                 $user->save();
+            } else if ($this->edit_mode) {
+                $this->dispatch('error', Constants::$NOT_PERMISSION_TO_PERFORM_ACTION);
+                return false;
             }
 
             if ($this->edit_mode) {
@@ -129,6 +139,12 @@ class AddUserModal extends Component
 
     public function deleteUser($id)
     {
+
+        if (!Gate::forUser(auth()->user())->allows('delete-user', User::class)) {
+            $this->dispatch('error', Constants::$NOT_PERMISSION_TO_PERFORM_ACTION);
+            return false;
+        }
+
         // Prevent deletion of current user
         if ($id == Auth::id()) {
             $this->dispatch('error', 'La session courant ne peut etre supprimé.');
