@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Invoice;
 
+use App\Enums\InvoiceStatusEnums;
+use App\Helpers\Constants;
 use App\Models\Canton;
 use App\Models\Erea;
 use App\Models\Gender;
@@ -36,7 +38,7 @@ class AddInvoiceNoTaxpayerModal extends Component
     public $periodicity;
     // public $seize;
     // public $tariff;
-    public $qty;
+    public $qty=1;
     public $start_month;
 
     public $s_amount = [];
@@ -110,6 +112,13 @@ class AddInvoiceNoTaxpayerModal extends Component
 
     //     dd($this->selectedTaxpayerId);
     // }
+    public $fullname;
+    public $gender;
+    public $id_type;
+    public $id_number;
+    public $telephone;
+    public $mobilephone;
+    public $email;
 
     public $cancel_reduct;
 
@@ -163,6 +172,7 @@ class AddInvoiceNoTaxpayerModal extends Component
     // {
     //     $this->taxpayer_id = $taxpayer_id;
     // }
+
 
 
     public function render()
@@ -297,9 +307,25 @@ class AddInvoiceNoTaxpayerModal extends Component
                 'qty' => $this->qty,
                 'from_date' => date('Y-').$this->start_month."-01",
                 'to_date' => date('Y-').$this->start_month + $this->qty."-01",
-                'status' => 'DRAFT',
+                'status' => InvoiceStatusEnums::PENDING,
                 'pay_status' => 'OWING',
+                'type'=> Constants::INVOICE_TYPE_COMPTANT
             ];
+            $taxpayersData = [
+                'name' => $this->fullname,
+                'gender' => $this->gender,
+                'id_type' => $this->id_type,
+                'id_number' => $this->id_number,
+                'mobilephone' => $this->mobilephone,
+                'telephone' => $this->telephone,
+                'email' => $this->email,
+                'type'=>Constants::INVOICE_TYPE_COMPTANT,
+                'password'=>""
+
+
+            ];
+            //dd($taxpayersData);
+           $taxpayers = Taxpayer::create($taxpayersData);
 
             // if ($this->edit_mode) {
             //     $invoiceData['amount'] = $this->amount_e;
@@ -307,6 +333,7 @@ class AddInvoiceNoTaxpayerModal extends Component
             // }
 
             //dd($invoiceData);
+
 
             // Create or update Invoice record
             $invoice = Invoice::create($invoiceData);
@@ -317,6 +344,7 @@ class AddInvoiceNoTaxpayerModal extends Component
             $invoice->nic = '00000'.$invoice->id;
             //$invoice->order_no = $this->order_no;
             $invoice->save();
+            $taxpayers->save();
 
             //$a = $this->invoice_id ?? $invoice->id;
             //$a = ($this->invoice_id ?? $invoice->id);
@@ -405,7 +433,7 @@ class AddInvoiceNoTaxpayerModal extends Component
             // if ($this->edit_mode) {
             //     $this->dispatch('success', __('Invoice updated'));
             // } else {
-            $this->dispatchMessage('Avis');
+            $this->dispatchMessage('Avis au comptant');
             // }
         });
 
@@ -576,53 +604,60 @@ class AddInvoiceNoTaxpayerModal extends Component
 
         //dd( $value, $this->qty, "loadInvoice");
         //$taxpayer = Taxpayer::find($id);
+       // dd($this->tariff, $this->s_tariff);
+        if($this->s_tariff==0){
+            $this->s_tariff = $value;
+        }else{
+            $this->tariff=$this->s_tariff;
+        }
+if($this->taxpayer_taxable_id!=null){
+    $taxable = Taxable::find($this->taxpayer_taxable_id);
 
-        $this->s_tariff = $value;
+    //$this->s_amount[$id] = 10;
+    // $this->name = $taxpayer->name;
+    // $this->tnif = $taxpayer->tnif;
+    // $this->zone = $taxpayer->zone_id;
 
-        $taxable = Taxable::find($this->taxpayer_taxable_id);
+    // foreach ($taxpayer_taxables as $taxable) {
+    //     // Update the values in the component properties
+    //     $this->s_amount[$taxable->id] = 10;
+    // }
+    //foreach ($taxpayer_taxables as $index => $taxable) {
+    // Update the value in the component properties using the loop index as the key
+    // dd($taxable->taxable);
 
-        //$this->s_amount[$id] = 10;
-        // $this->name = $taxpayer->name;
-        // $this->tnif = $taxpayer->tnif;
-        // $this->zone = $taxpayer->zone_id;
+    if ($taxable->periodicity == "Mois"){
+        $period = 1;
+    } elseif ($taxable->periodicity == "Ans") {
+        $period = 0.083333;
+        // }elseif ($taxable->taxable->periodicity == "Jours") {
+        //     $period = 30;
+    } else {
+        $period = 1;
+    }
 
-        // foreach ($taxpayer_taxables as $taxable) {
-        //     // Update the values in the component properties
-        //     $this->s_amount[$taxable->id] = 10;
-        // }
-        //foreach ($taxpayer_taxables as $index => $taxable) {
-            // Update the value in the component properties using the loop index as the key
-            // dd($taxable->taxable);
+    $this->periodicity = $taxable->periodicity;
 
-            if ($taxable->periodicity == "Mois"){
-                $period = 1;
-            } elseif ($taxable->periodicity == "Ans") {
-                $period = 0.083333;
-            // }elseif ($taxable->taxable->periodicity == "Jours") {
-            //     $period = 30;
-            } else {
-                $period = 1;
-            }
+    //$this->taxpayer_taxable_id = $taxable->id;
+    $this->taxpayer_taxable = $this->name;
 
-            $this->periodicity = $taxable->periodicity;
+    $this->s_seize = $this->seize;
+    //$this->s_tariff = $taxable->taxable->tariff;
 
-            //$this->taxpayer_taxable_id = $taxable->id;
-            $this->taxpayer_taxable = $this->name;
+    if ($taxable->tariff_type == "FIXED"){
+        $this->s_amount = $this->s_seize * $this->s_tariff * $this->qty * $period;
+    } else {
+        $this->s_amount = $this->s_seize * $this->s_tariff * $this->qty* $period / 100;
+    }
+    //$this->qty[$index] = $taxable->seize;
+    //$this->taxpayer_taxable_id = $taxable->id;
+    //}
 
-            $this->s_seize = $this->seize;
-            //$this->s_tariff = $taxable->taxable->tariff;
+    $this->amount_ph = $this->s_amount." FCFA";
+    $this->amount = $this->s_amount;
+}
 
-            if ($taxable->tariff_type == "FIXED"){
-                $this->s_amount = $this->s_seize * $this->s_tariff * $this->qty * $period;
-            } else {
-                $this->s_amount = $this->s_seize * $this->s_tariff * $this->qty* $period / 100;
-            }
-            //$this->qty[$index] = $taxable->seize;
-            //$this->taxpayer_taxable_id = $taxable->id;
-        //}
 
-        $this->amount_ph = $this->s_amount." FCFA";
-        $this->amount = $this->s_amount;
     }
 
     public function loadInvoice($value)

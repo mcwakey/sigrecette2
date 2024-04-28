@@ -29,7 +29,7 @@
                 <a href="{{route('generatePdf', ['data' => json_encode($data)]) }}" class="menu-link px-3" target="_blank">{{ __('print') }}</a>
             </div>
         @if ($invoice->status !=  App\Enums\InvoiceStatusEnums::REDUCED )
-            @if ($invoice->status !==  App\Enums\InvoiceStatusEnums::CANCELED && $invoice->pay_status !=  App\Enums\PaymentStatusEnums::PAID)
+            @if ($invoice->status !==  App\Enums\InvoiceStatusEnums::CANCELED && $invoice->pay_status !=  App\Enums\InvoicePayStatusEnums::PAID)
                 @if ($invoice->delivery_date!=null &&( $invoice->status ==  App\Enums\InvoiceStatusEnums::APPROVED || $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION) )
                         @can('peut ajouter un paiement')
                             <div class="menu-item px-3">

@@ -75,7 +75,7 @@
         <td colspan="12" style="border: none; margin: 0;">Zone fiscale : {{$data[0]->taxpayer->zone->name}}</td>
     </tr>
     <tr>
-        <td colspan="12" style="border: none; margin: 0;" >Nom de l’agent de recouvrement : {{\Illuminate\Support\Facades\Auth::user()->name}}</td>
+        <td colspan="12" style="border: none; margin: 0;" >Nom de l’agent de recouvrement : </td>
     </tr>
     <tr>
         <td  colspan="12" style="border: none; margin: 0;" >Période de distribution: .....</td>

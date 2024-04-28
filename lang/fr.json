@@ -244,6 +244,7 @@
 
     "PENDING": "EN ATTENTE",
     "DRAFT": "BROUILLON",
+    "APROVED":  "PRIS EN CHARGE",
     "APPROVED": "PRIS EN CHARGE",
     "REJECTED": "REJETÉ",
     "REJECTED-EDIT": "REJETÉ -> ÉDITION",
@@ -477,5 +478,6 @@
     "collector deposit state" : "Etat de versement du collecteur",
 
     "view manager account state" : "Afficher l'etat de comptabilité du régisseur",
-    "view manager deposit state" : "Afficher l'état de versement du régisseur"
+    "view manager deposit state" : "Afficher l'état de versement du régisseur",
+    "ACCOUNTED": "comptabilisé"
 }

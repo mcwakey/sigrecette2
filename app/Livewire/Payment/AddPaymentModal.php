@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Payment;
 
+use App\Enums\PaymentStatusEnums;
 use App\Helpers\Constants;
 use App\Models\Canton;
 use App\Models\Erea;
@@ -162,10 +163,14 @@ class AddPaymentModal extends Component
                     'user_id'=>  Auth::id(),
 
                 ];
+                $role = Role::where('name', 'regisseur')->first();
+                if ($role) {
+                    $user = auth()->user();
+                    if($user->hasRole('regisseur')){
+                        $paymentData['status']=PaymentStatusEnums::ACCOUNTED;
+                    }
+                }
                 $payments=Invoice::getCode($this->invoice_no,$this->amount,$paymentData);
-                //dd($paymentData);
-
-                // Create or update Payment record
                 $payment = Payment::find($this->payment_id) ;
 
                 if($payment==null){

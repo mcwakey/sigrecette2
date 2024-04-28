@@ -64,7 +64,7 @@ class AddStatusForm extends Component
                 $invoice->$k = $v;
             }
             if ($this->status== InvoiceStatusEnums::APPROVED &&  $invoice->reduce_amount != ''){
-
+//Todo make cascade reduction
                $description_str=$invoice->reduce_amount==$invoice->amount?Constants::ANNULATION:Constants::REDUCTION;
                 $paymentData = [
                     'invoice_id' => $invoice->invoice_no,
@@ -73,7 +73,9 @@ class AddStatusForm extends Component
                     'description' =>$description_str,
                     'user_id'=>  Auth::id(),
                     'reference' =>  $description_str,
-                    'invoice_type'=>$description_str
+                    'invoice_type'=>$description_str,
+                    'status'=>$description_str,
+                    'payment_type'=>$description_str,
 
                 ];
                 $payments=Invoice::getCode($invoice->invoice_no,$invoice->reduce_amount,$paymentData);

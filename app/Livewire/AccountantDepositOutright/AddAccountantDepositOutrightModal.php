@@ -2,6 +2,7 @@
 
 namespace App\Livewire\AccountantDepositOutright;
 
+use App\Helpers\Constants;
 use App\Models\Payment;
 use App\Models\StockRequest;
 use App\Models\StockTransfer;
@@ -135,10 +136,10 @@ class AddAccountantDepositOutrightModal extends Component
 
             $this->start_no = $taxables->first()->last_no ?? "";
             $this->stock_request_id = $taxables->first()->stock_transfers_id ?? "";
-            
+
             // $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'VENDU')->where('to_user_id', $this->collector_id)->get();
             $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('unit', $value)->where('to_user_id', $this->collector_id)->get();
-       
+
         }else{
             $taxables = Taxable::select('taxables.*', 'req_no', 'last_no', 'stock_requests.id AS stock_request_id')
                                     ->join('stock_requests', 'stock_requests.taxable_id', '=', 'taxables.id')
@@ -155,7 +156,7 @@ class AddAccountantDepositOutrightModal extends Component
         }
         // }
         //dd($taxables->first());
-        
+
     }
 
     public function updatedCollectorId($value)
@@ -266,10 +267,10 @@ class AddAccountantDepositOutrightModal extends Component
 
         //   $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('unit', $this->taxlabel_id)->where('to_user_id', $this->collector_id)->get();
         //         $stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('trans_type', 'RECU')->where('unit', $this->taxlabel_id)->where('to_user_id', $this->collector_id)->get();
-       
+
         //         dd($this->edit_mode, $stock_transfers,$this->stock_transfers);
             //$stock_transfers = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
-          
+
                 // $total_sold = 0;
                 // if ($stock_transfers){
 
@@ -287,7 +288,7 @@ class AddAccountantDepositOutrightModal extends Component
 
                     Payment::create($paymentData);
 
-                    $payments_olds = Payment::where('invoice_type', "COMPTANT")->where('status', "APROVED")->get();
+                    $payments_olds = Payment::where('invoice_type', Constants::INVOICE_TYPE_COMPTANT)->where('status', "APROVED")->get();
                      foreach ($payments_olds as $payments_old) {
 
                         // $paymentsData = [
@@ -302,7 +303,7 @@ class AddAccountantDepositOutrightModal extends Component
                         //     // 'by_user_id' => $this->user_id,
                         //     // 'to_user_id' => $stock_transfer->to_user_id,
                         // ];
-        
+
                         // $stock_transfer_new = StockTransfer::create($stockTtransferData);
                         $payments_old->status = 'DONE';
                         $payments_old->save();
@@ -332,13 +333,13 @@ class AddAccountantDepositOutrightModal extends Component
 
                     //     $stock_transfer->type = 'ARCHIVED';
                     //     $stock_transfer->save();
-                        
+
                     //     //dd($stock_transfer->type);
                     // }
 
                     // $payment->amount = $total_sold;
                     // $payment->save();
-                    
+
                     $this->dispatch('success', __('Etat de comptabilité mis a jour avec succès'));
                 }
 
@@ -358,7 +359,7 @@ class AddAccountantDepositOutrightModal extends Component
             //     ];
 
             //     //dd($this->trans_id);
-                
+
             //     if ($this->deposit_mode) {
             //         $data['trans_type'] = 'VENDU';
             //         $data['last_no'] = $this->end_no + 1;
@@ -377,7 +378,7 @@ class AddAccountantDepositOutrightModal extends Component
 
             //     if (!$this->deposit_mode) {
             //         $stock_request = StockRequest::find($this->stock_request_id);
-                    
+
             //         $stock_request->last_no = $this->end_no + 1;
             //         $stock_request->save();
 
@@ -427,7 +428,7 @@ class AddAccountantDepositOutrightModal extends Component
         $this->trans_no = "";
         $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
 
-        
+
         $total_amount = Payment::selectRaw('SUM(amount) AS amount')->where('invoice_type', $type)->where('status', "APROVED")->groupBy('invoice_type')->first();
         $this->total_amount = $total_amount->amount ?? '';
         $this->paid = $this->total_amount;
@@ -468,7 +469,7 @@ class AddAccountantDepositOutrightModal extends Component
 
         $this->edit_mode = true;
         $this->deposit_mode = false;
-        
+
         // dd($this->edit_mode,$this->deposit_mode);
 
         // $taxpayer = Taxpayer::find($id);
@@ -477,7 +478,7 @@ class AddAccountantDepositOutrightModal extends Component
 
         // $this->stock_transfer_id = $id;
         // $this->trans_no = $stock_transfer->trans_no;
-        
+
         // $this->taxlabel_idd = $stock_transfer->taxable->tax_label->id;
         // $this->taxlabel_name = $stock_transfer->taxable->tax_label->name;
 

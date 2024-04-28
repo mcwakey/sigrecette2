@@ -27,13 +27,13 @@ class RecoveriesDataTable extends DataTable
     {
 
         return (new EloquentDataTable($query))
-        ->editColumn('user.name', function (Payment $payment) {
+        ->editColumn('users.name', function (Payment $payment) {
             return $payment->user->name;
             // $user = $payment->user;
             // return view('pages/apps.user-management.users.columns._user', compact('user'));
             //return view('pages/recoveries.columns._user', compact('user'));
         })
-            ->editColumn('no_avis', function (Payment $payment) {
+            ->editColumn('invoices.invoice_no', function (Payment $payment) {
                 return $payment->invoice->invoice_no;
             })
             ->editColumn('reference', function (Payment $payment) {
@@ -41,18 +41,6 @@ class RecoveriesDataTable extends DataTable
             })
             ->editColumn('tax_labels.code', function (Payment $payment) {
                 return $payment->code ?? '';
-            })
-            ->editColumn('nic', function (Payment $payment) {
-                return $payment->invoice->nic;
-            })
-            ->editColumn('zones.name', function (Payment $payment) {
-                return  $payment->invoice->taxpayer->zone->name ?? '-';
-            })
-            ->editColumn('taxpayers.address', function (Payment $payment) {
-                return $payment->invoice->taxpayer->address ?? '-';
-            })
-            ->editColumn('taxpayers.latitude', function (Payment $payment) {
-                return ($payment->invoice->taxpayer->latitude ?? '-').' : '.($payment->invoice->taxpayer->longitude ?? '-');
             })
             ->editColumn('taxpayers.name', function (Payment $payment) {
                 //$invoice = $payment->invoice;
@@ -64,6 +52,7 @@ class RecoveriesDataTable extends DataTable
             ->editColumn('remaining_amount', function (Payment $payment) {
                 return $payment->remaining_amount;
             })
+
             ->editColumn('status', function (Payment $payment) {
                 //return $payment->remaining_amount;
                 return view('pages/recoveries.columns._status', compact('payment'));
@@ -83,10 +72,14 @@ class RecoveriesDataTable extends DataTable
 
         return $model->newQuery()
             ->join('invoices', 'invoices.id', '=', 'payments.invoice_id')
+            ->leftjoin('taxpayers', 'taxpayers.id', '=', 'payments.taxpayer_id')
+            ->leftjoin('users', 'users.id', '=', 'payments.user_id')
+            ->join('tax_labels', 'tax_labels.code', '=', 'payments.code')
             ->whereNotNull('payments.user_id')
-            ->whereBetween('payments.created_at', [$startOfYear, $endOfYear])
             ->whereNotIn('payments.reference', [Constants::ANNULATION, Constants::REDUCTION])
-            ->select('payments.*');
+            ->whereBetween('payments.created_at', [$startOfYear, $endOfYear])
+            ->select('payments.*')
+            ->orderByDesc('payments.created_at');
     }
 
 
@@ -113,16 +106,13 @@ class RecoveriesDataTable extends DataTable
     {
         return [
             Column::make('taxpayers.name')->title(__('taxpayer'))->addClass('d-flex align-items-center'),
-            Column::make('no_avis')->title(__('invoice no'))->name('no_avis'),
+            Column::make('invoices.invoice_no')->title(__('invoice no')),
             Column::make('reference')->title(__("reference no"))->name("reference"),
             Column::make('tax_labels.code')->title(__('code')),
-            Column::make('nic')->title(__('nic'))->visible(false),
-            Column::make('taxpayers.latitude')->title(__('gps'))->visible(false),
-            Column::make('taxpayers.address')->title(__('address'))->visible(false),
             Column::make('amount')->title(__('amount paid')),
             Column::make('remaining_amount')->title(__('balance')),
             Column::make('status')->title(__('status')),
-            Column::make('user.name')->title(__('user'))->addClass('d-flex align-items-center'),
+            Column::make('users.name')->title(__('user'))->addClass('d-flex align-items-center'),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
                 ->exportable(true)

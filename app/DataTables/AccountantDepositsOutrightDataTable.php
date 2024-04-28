@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Helpers\Constants;
 use App\Models\Payment;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
@@ -159,7 +160,7 @@ class AccountantDepositsOutrightDataTable extends DataTable
                     // ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
                     // ->join('users', 'payments.to_user_id', '=', 'users.id')
                     //  ->orWhere('invoice_id', null) // Filter collector_deposits by taxpayer_id
-                    ->where('invoice_type', 'COMPTANT') // Filter collector_deposits by taxpayer_id
+                    ->where('invoice_type', Constants::INVOICE_TYPE_COMPTANT) // Filter collector_deposits by taxpayer_id
                     ->where('status', 'APROVED') // Filter collector_deposits by taxpayer_id
                     // ->select('payments.*')
                     //->orderBy('tax_labels.name')
@@ -192,7 +193,7 @@ class AccountantDepositsOutrightDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('id')->title(__('id'))->exportable(false)->printable(false)->visible(false), 
+            Column::make('id')->title(__('id'))->exportable(false)->printable(false)->visible(false),
             Column::make('payments.created_at')->title(__('date'))->addClass('text-nowrap'),
             Column::make('description')->title(__('description')),
             Column::make('reference')->title(__('reference no')),

@@ -25,7 +25,8 @@ class Invoice extends Model implements FormatDateInterface
         'pay_status',
         'status',
         'uuid',
-        'delivery_date'
+        'delivery_date',
+        'type'
         // 'profile_photo_path',
     ];
 

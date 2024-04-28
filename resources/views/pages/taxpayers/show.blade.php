@@ -486,10 +486,10 @@
                                                 </td>
                                                 <td>
                                                     @if ($invoice->status == App\Enums\InvoiceStatusEnums::APPROVED || $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION)
-                                                        @if ($invoice->pay_status == App\Enums\PaymentStatusEnums::OWING)
+                                                        @if ($invoice->pay_status == App\Enums\InvoicePayStatusEnums::OWING)
                                                             <span
                                                                 class="badge badge-light-danger">{{ __($invoice->pay_status) }}</span>
-                                                        @elseif($invoice->pay_status == App\Enums\PaymentStatusEnums::PART_PAID)
+                                                        @elseif($invoice->pay_status == App\Enums\InvoicePayStatusEnums::PART_PAID)
                                                             <span
                                                                 class="badge badge-light-warning">{{ __($invoice->pay_status) }}</span>
                                                         @else
@@ -691,7 +691,7 @@
 
                                                             </div>
                                                             @if ($invoice->status !=  App\Enums\InvoiceStatusEnums::REDUCED )
-                                                                @if ($invoice->status !==  App\Enums\InvoiceStatusEnums::CANCELED && $invoice->pay_status !=  App\Enums\PaymentStatusEnums::PAID)
+                                                                @if ($invoice->status !==  App\Enums\InvoiceStatusEnums::CANCELED && $invoice->pay_status !=  App\Enums\InvoicePayStatusEnums::PAID)
                                                                     @if ($invoice->delivery_date!=null &&( $invoice->status ==  App\Enums\InvoiceStatusEnums::APPROVED || $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION) )
                                                                         @can('peut ajouter un paiement')
                                                                             <div class="menu-item px-3">
@@ -805,7 +805,7 @@
 
 
                                             <td>
-                                                @if ($payment->status ==  App\Enums\InvoiceStatusEnums::PENDING )
+                                                @if ($payment->status ==  App\Enums\PaymentStatusEnums::PENDING )
                                                     <span
                                                         class="badge badge-light-primary">{{ __($payment->status) }}</span>
                                                     @can('peut accepter un paiement')
@@ -842,19 +842,19 @@
                                                             <!--end::Form-->
                                                         </div>
                                                     @endcan
-                                                @elseif($payment->status ==  App\Enums\InvoiceStatusEnums::APPROVED)
+                                                @elseif($payment->status ==  App\Enums\PaymentStatusEnums::ACCOUNTED)
                                                     <span
-                                                        class="badge badge-light-success">{{ __( App\Enums\InvoiceStatusEnums::APPROVED) }}</span>
-                                            @endif
-
-
-                                            <!--begin::Task menu-->
-
-                                                <!--end::Task menu-->
+                                                        class="badge badge-light-success">{{ __( App\Enums\PaymentStatusEnums::ACCOUNTED) }}</span>
+                                                @else
+                                                        @if($payment->payment_type==App\Helpers\Constants::ANNULATION || $payment->payment_type==App\Helpers\Constants::REDUCTION)<span class="badge badge-light-info"> {{$payment->payment_type}} </span>@endif
+                                                @endif
 
                                             </td>
-                                            <td><a href="#"
+                                            <td>
+                                                @if($payment->payment_type!=App\Helpers\Constants::ANNULATION && $payment->payment_type!=App\Helpers\Constants::REDUCTION)
+                                                <a href="#"
                                                    class="btn btn-light bnt-active-light-success btn-sm">{{ __('view') }}</a>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

@@ -10,6 +10,7 @@ class Constants
     public  const  REDUCTION="Réduction";
     public  const  ANNULATION="Annulation";
     public  const INVOICE_TYPE_TITRE ="TITRE";
+    public  const INVOICE_TYPE_COMPTANT ="COMPTANT";
     const CANCELED = "CANCELED";
     const REDUCED="REDUCED";
 

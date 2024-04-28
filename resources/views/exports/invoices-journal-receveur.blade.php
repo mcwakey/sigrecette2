@@ -128,8 +128,8 @@
                                 <td>{{$item->order_no}}</td>
                                 <td>{{$item->invoice_no}}</td>
                                 <td>{{$item->nic}}</td>
-                                <td>{{$item->taxpayer->name}}</td>
-                                <td>{{$item->taxpayer->longitude,$item->taxpayer->latitude}}</td>
+                                <td>{{$item->taxpayer?->name}}</td>
+                                <td>{{$item->taxpayer?->longitude,$item->taxpayer->latitude}}</td>
                                 <td>{{$code}}</td>
                                 @php
                                     $total_somme+=$tax['amount'];
@@ -156,7 +156,7 @@
                 <td>{{$payment->code}}</td>
                     <td></td>
                     <td>
-                        @if( $payment->reference!=\App\Helpers\Constants::$REDUCTION &&  $payment->reference!=\App\Helpers\Constants::$ANNULATION )
+                        @if( $payment->reference!=\App\Helpers\Constants::REDUCTION &&  $payment->reference!=\App\Helpers\Constants::ANNULATION )
                             {{ $payment->reference}}
                         @else
                         @endif
