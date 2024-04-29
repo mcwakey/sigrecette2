@@ -16,7 +16,9 @@ use App\Models\TaxLabel;
 use App\Models\Taxpayer;
 use App\Models\TaxpayerTaxable;
 use App\Models\Town;
+use App\Models\Year;
 use App\Traits\DispatchesMessages;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
@@ -183,10 +185,22 @@ class AddInvoiceNoTaxpayerModal extends Component
         //$genders = Gender::all();
         //$id_types = IdType::all();
         $taxpayers = Taxpayer::all();
-        $taxlabels = TaxLabel::all();
+        $taxlabels = TaxLabel::whereNot("category","CATEGORY 1")->get();
 
         $genders = Gender::all();
         $id_types = IdType::all();
+        $year= Year::getActiveYear();
+        $months = [];
+        // Obtenez le mois actuel
+        $currentMonth = Carbon::now()->month;
+        $remainingMonths = 12 - $currentMonth;
+
+        for ($i = $currentMonth ; $i <= $currentMonth + $remainingMonths; $i++) {
+            $monthIndex = $i > 12 ? $i - 12 : $i;
+            $monthName = Carbon::createFromFormat('m',$monthIndex)->monthName;
+            $monthNumber = str_pad($monthIndex, 2, '0', STR_PAD_LEFT);
+            $months[$monthNumber] = $monthName;
+        }
         //$taxpayer_taxables = TaxpayerTaxable::all();
 
         //$taxpayer_taxables = $this->taxpayer_id ? TaxpayerTaxable::where('taxpayer_id', $this->taxpayer_id)->where('billable', 1)->get() : collect();
@@ -198,7 +212,7 @@ class AddInvoiceNoTaxpayerModal extends Component
 
         //return view('livewire.invoice.add-invoice-modal', ['taxpayer_id' => $this->taxpayer_id]);
 
-        return view('livewire.invoice.add-invoice-no-taxpayer-modal', compact('taxpayers','taxlabels','genders','id_types'));
+        return view('livewire.invoice.add-invoice-no-taxpayer-modal', compact('taxpayers','taxlabels','genders','id_types','months','year'));
     }
 
     // public function loadDrop($value)
@@ -300,17 +314,6 @@ class AddInvoiceNoTaxpayerModal extends Component
             //     $this->invoice_id = null;
             // }
 
-            // Prepare data for Invoice
-            $invoiceData = [
-                // 'taxpayer_id' => $this->taxpayer_id,
-                'amount' => $this->amount,
-                'qty' => $this->qty,
-                'from_date' => date('Y-').$this->start_month."-01",
-                'to_date' => date('Y-').$this->start_month + $this->qty."-01",
-                'status' => InvoiceStatusEnums::PENDING,
-                'pay_status' => 'OWING',
-                'type'=> Constants::INVOICE_TYPE_COMPTANT
-            ];
             $taxpayersData = [
                 'name' => $this->fullname,
                 'gender' => $this->gender,
@@ -325,7 +328,19 @@ class AddInvoiceNoTaxpayerModal extends Component
 
             ];
             //dd($taxpayersData);
-           $taxpayers = Taxpayer::create($taxpayersData);
+            $taxpayers = Taxpayer::create($taxpayersData);
+            $taxpayers->save();
+            $invoiceData = [
+                'taxpayer_id' => $taxpayers->id,
+                'amount' => $this->amount,
+                'qty' => $this->qty,
+                'from_date' => date('Y-').$this->start_month."-01",
+                'to_date' => date('Y-').$this->start_month + $this->qty."-01",
+                'status' => InvoiceStatusEnums::PENDING,
+                'pay_status' => 'OWING',
+                'type'=> Constants::INVOICE_TYPE_COMPTANT
+            ];
+
 
             // if ($this->edit_mode) {
             //     $invoiceData['amount'] = $this->amount_e;
@@ -344,7 +359,7 @@ class AddInvoiceNoTaxpayerModal extends Component
             $invoice->nic = '00000'.$invoice->id;
             //$invoice->order_no = $this->order_no;
             $invoice->save();
-            $taxpayers->save();
+
 
             //$a = $this->invoice_id ?? $invoice->id;
             //$a = ($this->invoice_id ?? $invoice->id);

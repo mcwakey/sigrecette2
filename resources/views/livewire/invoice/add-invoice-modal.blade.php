@@ -1,7 +1,4 @@
-@php
-    use Carbon\Carbon;
-    $year= \App\Models\Year::getActiveYear();
-@endphp
+
 <div class="modal fade" id="kt_modal_add_invoice" tabindex="-1" aria-hidden="true" wire:ignore.self>
     <!--begin::Modal dialog-->
     <div class="modal-dialog modal-dialog-centered mw-1000px">
@@ -83,7 +80,8 @@
                                     </button>
                                     <!--end::Decrease control-->
                                     <!--begin::Input control-->
-                                    <input wire:model="qty" name="qty"  type="text" class="form-control border-0 ps-12" data-kt-dialer-control="input" placeholder="1" readonly="readonly" data-kt-action="load_invoice" />
+                                    <input wire:model="qty" name="qty"  type="text" class="form-control border-0 ps-12"
+                                           data-kt-dialer-control="input" placeholder="1" readonly="readonly" data-kt-action="load_invoice" />
                                     <!--end::Input control-->
                                     @error('qty')
                                     <span class="text-danger">{{ $message }}</span> @enderror
