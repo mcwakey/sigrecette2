@@ -59,7 +59,7 @@
 
                     </div>
 
-                    @can('peut effectuer un versement')
+                    @can('peut effectuer un versement au régisseur')
                         <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                             <!--begin::Add user-->
                             <button type="button" class="btn btn-light-warning" data-bs-toggle="modal"
@@ -72,7 +72,7 @@
                     @endcan
 
                     <!--begin::Toolbar-->
-                    @can('peut faire un etat de compte')
+                    @can('peut faire un etat de compte du collecteur')
                         <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                             <!--begin::Add user-->
                             <button type="button" class="btn btn-light-danger" data-bs-toggle="modal"
