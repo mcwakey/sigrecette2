@@ -31,10 +31,18 @@
                                 <span class="required">Nom du role</span>
                             </label>
                             <!--end::Label-->
+                            @if ($role?->user_id === 0)
                             <!--begin::Input-->
-                            <input class="form-control form-control" placeholder="Entrer le nom du role"
+                            <input readonly class="form-control form-control" placeholder="Entrer le nom du role"
                                 name="name" wire:model="name" />
                             <!--end::Input-->
+                            @else
+                                <!--begin::Input-->
+                                <input  class="form-control form-control" placeholder="Entrer le nom du role"
+                                name="name" wire:model="name" />
+                            <!--end::Input-->
+                            @endif
+
                             @error('name')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror

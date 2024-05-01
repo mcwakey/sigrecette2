@@ -95,9 +95,12 @@ class RoleModal extends Component
             $this->role->syncPermissions($this->checked_permissions);
             $this->dispatch('success', 'Permissions pour ' . ucwords($this->role->name) . ' mis a jour avec succès');
         } else {
+            /**@var App\Models\User*/
+            $user = auth()->user();
+
             $role = Role::create([
                 'name' => $this->name,
-                'user_id' => auth()->user()->hasRole('administrateur_system') ? auth()->user()->id : null,
+                'user_id' => $user->hasRole('administrateur_system') ? 0 : null,
             ]);
 
             $role->syncPermissions($this->checked_permissions);

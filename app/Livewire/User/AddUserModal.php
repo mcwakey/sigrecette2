@@ -125,7 +125,9 @@ class AddUserModal extends Component
     public function deleteUser($id)
     {
 
-        if (!Gate::forUser(auth()->user())->allows('delete-user', User::class)) {
+        $user = User::find($id);
+
+        if (!Gate::forUser(auth()->user())->allows('delete-user', $user)) {
             $this->dispatch('error', Constants::NOT_PERMISSION_TO_PERFORM_ACTION);
             return false;
         }

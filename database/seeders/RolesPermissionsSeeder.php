@@ -265,7 +265,7 @@ class RolesPermissionsSeeder extends Seeder
             foreach ($permissions as $permission) {
                 $permissions_list[] = $permission;
             }
-            Role::create(['name' => $role, 'user_id' => 1])->syncPermissions($permissions_list);
+            Role::create(['name' => $role, 'user_id' => 0])->syncPermissions($permissions_list);
         }
 
         if (!app()->environment('production')) {
