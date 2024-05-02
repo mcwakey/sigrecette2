@@ -338,7 +338,7 @@ class AddInvoiceNoTaxpayerModal extends Component
             //
             $taxpayers = Taxpayer::create($taxpayersData);
             $taxpayers->save();
-         
+
             $invoiceData = [
                 'taxpayer_id' => $taxpayers->id,
                 'amount' => $this->amount,

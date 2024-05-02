@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Commune extends Model
 {
@@ -30,4 +31,15 @@ class Commune extends Model
     {
         return Commune::orderBy('id')->first();
     }
+    /**
+     * Get the full URL of the image.
+     *
+     * @return string
+     */
+    public function getImageUrlAttribute()
+    {
+        $path = $this->attributes['logo_path'];
+        return Storage::url($path);
+    }
+
 }

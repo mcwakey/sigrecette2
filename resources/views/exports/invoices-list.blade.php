@@ -41,7 +41,17 @@
 <body>
 
 <table>
+    <tr>
+    <td colspan="5"  style="border: none; margin: 0;text-align: left">
 
+        <img src="{{ $commune-> getImageUrlAttribute() }}" alt="Logo" style="width: 100px; height: 100px;">
+
+    </td>
+    <td colspan="6"  style="border: none; margin: 0;text-align: right">
+
+
+    </td>
+    </tr>
 
     <tr>
         <td colspan="5"  style="border: none; margin: 0;text-align: left">
