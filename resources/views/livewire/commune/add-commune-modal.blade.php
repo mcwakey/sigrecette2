@@ -190,6 +190,19 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
+                            <div class="col-md-12 mb-4">
+                                <!--begin::Label-->
+                                <label
+                                    class="fw-semibold fs-6 mb-2">{{ __('Logo de la commune en fichier Image') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="file" wire:model="logo" name="logo" 
+                                       class="fs-6 form-control form-control justify-content-center" />
+                                <!--end::Input-->
+                                @error('logo')
+                                <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
 
                         </div>
                         <div class="separator separator-dashed my-2"></div>

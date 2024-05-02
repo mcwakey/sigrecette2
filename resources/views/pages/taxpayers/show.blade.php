@@ -1445,7 +1445,7 @@
                         console.log('taxpayer_taxable does not have valid latitude or longitude:', taxpayer_taxable);
                     }
                 });
-            } 
+            }
         </script>
 
 

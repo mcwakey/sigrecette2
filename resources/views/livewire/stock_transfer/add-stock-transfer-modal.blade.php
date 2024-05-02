@@ -23,9 +23,9 @@
                     <input type="hidden" wire:model="user_id" name="user_id" value=""/>
                     <!--begin::Scroll-->
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_stock_transfer_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_stock_transfer_header" data-kt-scroll-wrappers="#kt_modal_add_stock_transfer_scroll" data-kt-scroll-offset="300px">
-                        
+
                         <!--begin::Input group-->
-                                
+
                                 <input type="hidden" wire:model="collector_id" name="collector_id" value=""/>
 
                         @if ($edit_mode==false && $deposit_mode==false)
@@ -36,7 +36,7 @@
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('collector') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                                    
+
                                 <select data-kt-action="load_drop" wire:model="collector_id" name="collector_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
                                     <option>{{ __('select an option') }}</option>
                                     @foreach($collectors as $collector)
@@ -54,7 +54,7 @@
                         <div class="separator saperator-dashed my-3"></div>
                         @endif
 
-                        @if (!$edit_mode) 
+                        @if (!$edit_mode)
 
                         <div class="row mb-7">
                             <div class="col-md-8">
@@ -62,31 +62,27 @@
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('tickets') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                    
+
                                 <select data-kt-action="load_drop" wire:model="taxable_id" name="taxable_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
                                     <option>{{ __('select an option') }}</option>
-                                    @foreach($taxables as $taxable)
-                                    <option value="{{ $taxable->id}}">{{ $taxable->name }}</option>
+                                    @foreach($stock_requests as $request)
+                                        <option value="{{ $request->taxable->id}}">{{ $request->taxable->name." ".$request->start_no."-".$request->end_no." "." (".$request->req_no.")" }}</option>
                                     @endforeach
-                                    <!-- <option value="Homme">Homme</option>
-                                    <option value="Femme">Femme</option> -->
                                 </select>
                                 <!--end::Input-->
                                 @error('taxable_id')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div class="col-md-4">
-                                <!--begin::Label-->
+
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('req no') }}</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input data-kt-action="load_drop" type="text" wire:model="trans_no" name="trans_no" class="form-control mb-3 mb-lg-0" placeholder="{{ __('req no') }}" readonly/>
+                                <input  data-kt-action="load_drop" type="text" wire:model="trans_no" name="trans_no" class="form-control mb-3 mb-lg-0" placeholder="{{ __('req no') }}" readonly/>
                                 <!--end::Input-->
                                 @error('trans_no')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>
-                        
+
                         <div class="separator saperator-dashed my-3"></div>
 
                         <div class="row mb-5">
@@ -132,8 +128,8 @@
                             </div>
                         </div>
                         <div class="row mb-7">
-                            
-                            @if ($deposit_mode) 
+
+                            @if ($deposit_mode)
                             <div class="col-md-6">
                                 <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('code') }}</label>
@@ -142,9 +138,7 @@
                                 <!-- <input type="text" wire:model="code" name="code" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('code') }}" data-kt-action="change_qty" /> -->
                                 <select wire:model="code" name="code" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
                                     <option>{{ __('select an option') }}</option>
-                                    @foreach($taxlabel_list as $taxlabel)
-                                    <option value="{{ $taxlabel->code}}">{{ $taxlabel->code." -- ".$taxlabel->name }}</option>
-                                    @endforeach
+                                    @foreach($taxlabel_list as $taxlabel)<option value="{{ $taxlabel->code}}">{{ $taxlabel->code." -- ".$taxlabel->name }}</option>@endforeach
                                     <!-- <option value="Homme">Homme</option>
                                     <option value="Femme">Femme</option> -->
                                 </select>
@@ -158,7 +152,7 @@
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('reference no') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                
+
                                 <input type="text" wire:model="taxlabel_id" name="taxlabel_id" class="form-control mb-3 mb-lg-0" placeholder="{{ __('reference no') }}"/>
 
                                 <!-- <select wire:model="taxlabel_id" name="taxlabel_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
@@ -184,12 +178,12 @@
                                         <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                                     </span>
                                 </button>
-                                
+
                                 <!--end::Input-->
                             </div>
                         </div>
                         @endif
-                        
+
                         <div class="separator separator-content separator-dashed my-3">
                             <span class="w-250px text-gray-500 fw-semibold fs-7">{{ __('request summary') }}</span>
                         </div>
@@ -214,7 +208,7 @@
                                                 {{ $stock_transfer->taxable->tariff }}
                                             </td>
                                             <td>
-                                                {{ $stock_transfer->qty }} 
+                                                {{ $stock_transfer->qty }}
                                             </td>
                                             <td>
                                                 {{ $stock_transfer->qty*$stock_transfer->taxable->tariff }}

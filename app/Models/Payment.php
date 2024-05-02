@@ -2,9 +2,14 @@
 
 namespace App\Models;
 
+use App\Enums\PaymentStatusEnums;
+use App\Enums\PaymentTypeEnums;
+use App\Helpers\Constants;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
+use Illuminate\Database\Eloquent\Collection;
 
 class Payment extends Model
 {
@@ -64,6 +69,18 @@ class Payment extends Model
             }
         }
         return $sum_payment;
+    }
+    public static function getPrintData():Collection{
+        $activeYear = Year::getActiveYear();
+        $startOfYear = Carbon::parse("{$activeYear->name}-01-01 00:00:00");
+        $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
+
+        return Payment::whereNot('status', PaymentStatusEnums::PENDING)
+            ->whereNotIn('payments.reference', [Constants::ANNULATION, Constants::REDUCTION])// Filter collector_deposits by taxpayer_id
+        ->orderBy('created_at', 'asc')
+            ->whereBetween('payments.created_at', [$startOfYear, $endOfYear])
+            ->newQuery()
+            ->get();
     }
 
 }

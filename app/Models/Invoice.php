@@ -3,9 +3,14 @@
 namespace App\Models;
 
 use App\Contracts\FormatDateInterface;
+use App\Enums\InvoiceStatusEnums;
+use App\Enums\PrintNameEnums;
 use App\Helpers\Constants;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 
 class Invoice extends Model implements FormatDateInterface
@@ -26,13 +31,18 @@ class Invoice extends Model implements FormatDateInterface
         'status',
         'uuid',
         'delivery_date',
-        'type'
+        'type',
+        'print_file_id'
         // 'profile_photo_path',
     ];
 
     public function taxpayer()
     {
         return $this->belongsTo(Taxpayer::class);
+    }
+    public function print_file()
+    {
+        return $this->belongsTo(PrintFile::class);
     }
 
     public function taxpayer_taxables()
@@ -266,5 +276,36 @@ class Invoice extends Model implements FormatDateInterface
     public function getCreatedDate(): string
     {
         return $this->created_at->format('Y-m-d');
+    }
+    public static function getPrintData($type):Collection
+    {
+        $activeYear = Year::getActiveYear();
+        $startOfYear = Carbon::parse("{$activeYear->name}-01-01 00:00:00");
+        $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
+        $query= Invoice::where('invoices.status',InvoiceStatusEnums::PENDING)
+            ->whereBetween('invoices.created_at', [$startOfYear, $endOfYear])
+            ->whereNull("invoices.print_file_id");
+            if ($type==PrintNameEnums::BORDEREAU_REDUCTION){
+                $query = $query->whereNot("invoices.reduce_amount" ,"=",'');
+            }else{
+                $query = $query->where("invoices.reduce_amount" ,"=",'');
+
+            }
+            return $query
+            ->newQuery()
+            ->get();
+    }
+    public static function addPrintableToInvoices( $collection,PrintFile $printFile){
+
+
+        DB::transaction(function () use ($collection,$printFile) {
+            foreach ($collection as $item){
+                if($item instanceof Invoice){
+                    $item->print_file_id= $printFile->id;
+                    $item->save();
+                }
+            }
+        });
+        return $printFile;
     }
 }

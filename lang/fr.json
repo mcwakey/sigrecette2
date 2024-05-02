@@ -343,6 +343,7 @@
     "versement du regisseur outright": "Versement du Regisseur au Receveur - Recettes au comptant",
     "total": "Total",
     "APPROVED-REDUCED" : "REDUIT",
+    "prints": "Impression",
 
 
 
@@ -479,5 +480,5 @@
 
     "view manager account state" : "Afficher l'etat de comptabilité du régisseur",
     "view manager deposit state" : "Afficher l'état de versement du régisseur",
-    "ACCOUNTED": "comptabilisé"
+    "ACCOUNTED": "COMPTABILISE"
 }

@@ -72,13 +72,13 @@
         <td colspan="14" style="border: none; margin: 0;" >Exercice : {{" ".$year->name}}</td>
     </tr>
     <tr>
-        <td colspan="14" style="border: none; margin: 0;">Zone fiscale :{{$data[0]->taxpayer->zone->name}}</td>
+        <td colspan="14" style="border: none; margin: 0;">Zone fiscale :}</td>
     </tr>
     <tr>
-        <td colspan="14" style="border: none; margin: 0;" >Nom de l’agent de recouvrement : Agent De recouvrement Fred</td>
+        <td colspan="14" style="border: none; margin: 0;" >Nom de l’agent de recouvrement : </td>
     </tr>
     <tr>
-        <td  colspan="14" style="border: none; margin: 0;" >Période de distribution: 01/04 à 30/04</td>
+        <td  colspan="14" style="border: none; margin: 0;" >Période de distribution: </td>
     </tr>
     <tr>
 

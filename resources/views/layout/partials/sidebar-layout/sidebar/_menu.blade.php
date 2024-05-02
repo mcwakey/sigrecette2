@@ -291,7 +291,15 @@
                 </div>
                 <!--end:Menu sub-->
             </div>
-            <!--end:Menu item-->
+            <div class="menu-item">
+                <!--begin:Menu link-->
+                <a class="menu-link {{ request()->routeIs('prints') ? 'active' : '' }}"
+                   href="{{ route('prints') }}" href="{{ route('prints') }}">
+                    <span class="menu-icon">{!! getIcon('element-11', 'fs-2') !!}</span>
+                    <span class="menu-title">{{ __('Impression') }}</span>
+                </a>
+                <!--end:Menu link-->
+            </div>
 
             <!--begin:Menu item-->
             <!--end:Menu item-->

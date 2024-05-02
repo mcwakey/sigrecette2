@@ -66,19 +66,19 @@
         <th colspan="12" style="border: none; margin: 0; text-align: center;" class="caption">Fiche de distribution des avis</th>
     </tr>
     <tr>
-        <td colspan="12" style="border: none; margin: 0; text-align: center;">N°....</td>
+        <td colspan="12" style="border: none; margin: 0; text-align: center;">N°</td>
     </tr>
     <tr>
         <td colspan="12" style="border: none; margin: 0;" >Exercice : {{" ".$year->name}}</td>
     </tr>
     <tr>
-        <td colspan="12" style="border: none; margin: 0;">Zone fiscale : {{$data[0]->taxpayer->zone->name}}</td>
+        <td colspan="12" style="border: none; margin: 0;">Zone fiscale : </td>
     </tr>
     <tr>
         <td colspan="12" style="border: none; margin: 0;" >Nom de l’agent de recouvrement : </td>
     </tr>
     <tr>
-        <td  colspan="12" style="border: none; margin: 0;" >Période de distribution: .....</td>
+        <td  colspan="12" style="border: none; margin: 0;" >Période de distribution: </td>
     </tr>
     <tr>
         <th>N° Avis</th>

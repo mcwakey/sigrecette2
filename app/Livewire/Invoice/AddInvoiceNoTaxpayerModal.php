@@ -174,7 +174,7 @@ class AddInvoiceNoTaxpayerModal extends Component
     // {
     //     $this->taxpayer_id = $taxpayer_id;
     // }
-
+    private $tarisIsNull=null;
 
 
     public function render()
@@ -185,8 +185,9 @@ class AddInvoiceNoTaxpayerModal extends Component
         //$genders = Gender::all();
         //$id_types = IdType::all();
         $taxpayers = Taxpayer::all();
-        $taxlabels = TaxLabel::whereNot("category","CATEGORY 1")->get();
+        $taxlabels = TaxLabel::where("category","CATEGORY 2")->get();
 
+        //dd($taxlabels);
         $genders = Gender::all();
         $id_types = IdType::all();
         $year= Year::getActiveYear();
@@ -227,7 +228,9 @@ class AddInvoiceNoTaxpayerModal extends Component
         //$this->reset('taxables');
 
         $taxlabels = TaxLabel::find( $value); // Load taxables based on tax label ID
-        //$this->taxable_id = $taxpayer_taxable->taxable_id;
+        $this->taxable_id = null;
+        $this->tariff = null;
+
 
         //$this->taxlabel_name = $taxlabels->name;
 
@@ -253,10 +256,15 @@ class AddInvoiceNoTaxpayerModal extends Component
             if ($taxables->tariff_type != 'FIXED'){
                 $this->tariff_type = '%';
             }
+            if( $taxables->tariff==0){
+                $this->tarisIsNull=true;
+            }else{
+                $this->tarisIsNull=false;
+            }
             $this->taxpayer_taxable_id = $taxables->id;
 
             $this->taxlabel_name = $taxables->name;
-        //}
+       // dd($this->tarisIsNull);
 
     }
 
@@ -327,9 +335,10 @@ class AddInvoiceNoTaxpayerModal extends Component
 
 
             ];
-            //dd($taxpayersData);
+            //
             $taxpayers = Taxpayer::create($taxpayersData);
             $taxpayers->save();
+         
             $invoiceData = [
                 'taxpayer_id' => $taxpayers->id,
                 'amount' => $this->amount,
@@ -620,11 +629,13 @@ class AddInvoiceNoTaxpayerModal extends Component
         //dd( $value, $this->qty, "loadInvoice");
         //$taxpayer = Taxpayer::find($id);
        // dd($this->tariff, $this->s_tariff);
-        if($this->s_tariff==0){
-            $this->s_tariff = $value;
-        }else{
-            $this->tariff=$this->s_tariff;
-        }
+
+
+
+       if($this->tarisIsNull){
+           $this->s_tariff = $this->tariff;
+       }else{
+           $this->tariff=$this->s_tariff;}
 if($this->taxpayer_taxable_id!=null){
     $taxable = Taxable::find($this->taxpayer_taxable_id);
 

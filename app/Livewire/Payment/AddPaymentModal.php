@@ -3,26 +3,14 @@
 namespace App\Livewire\Payment;
 
 use App\Enums\PaymentStatusEnums;
-use App\Helpers\Constants;
-use App\Models\Canton;
-use App\Models\Erea;
-use App\Models\Gender;
-use App\Models\IdType;
 use App\Models\Invoice;
-use App\Models\InvoiceItem;
 use App\Models\Payment;
 use App\Traits\DispatchesMessages;
-use Illuminate\Support\Facades\Notification;
 use App\Models\Taxpayer;
-use App\Models\TaxpayerTaxable;
-use App\Models\Town;
-use App\Notifications\InvoicePaid;
+
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
 use Spatie\Permission\Models\Role;
 
 class AddPaymentModal extends Component
@@ -167,7 +155,7 @@ class AddPaymentModal extends Component
                 if ($role) {
                     $user = auth()->user();
                     if($user->hasRole('regisseur')){
-                        $paymentData['status']=PaymentStatusEnums::ACCOUNTED;
+                        $paymentData['status']= PaymentStatusEnums::ACCOUNTED;
                     }
                 }
                 $payments=Invoice::getCode($this->invoice_no,$this->amount,$paymentData);

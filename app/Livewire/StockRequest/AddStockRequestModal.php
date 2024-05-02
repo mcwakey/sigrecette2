@@ -58,6 +58,7 @@ class AddStockRequestModal extends Component
     {
         $taxlabels = TaxLabel::all();
 
+        //dd($taxlabels);
         $this->user_id = Auth::id();
 
         return view('livewire.stock_request.add-stock-request-modal', compact('taxlabels'));
@@ -183,13 +184,13 @@ class AddStockRequestModal extends Component
 
         $this->stock_request_id = $id;
         $this->req_no = $stock_request->req_no;
-        
+
         //$this->taxlabel_idd = $stock_request->taxable->tax_label->id ?? '';
         $this->taxlabel_name = $stock_request->taxable->unit;
 
         $this->taxable_idd = $stock_request->taxable_id;
         $this->taxable_name = $stock_request->taxable->name;
-        
+
         $this->start_no = $stock_request->last_no;
         $this->end_no = $stock_request->end_no;
         $this->qty =$stock_request->end_no  - $stock_request->last_no + 1;

@@ -80,7 +80,7 @@
     <tr>
         <td colspan="11" style="border: none; margin: 0">
 
-            N°
+            N°{{$print->last_sequence_number}}
 
 
         </td>
@@ -146,11 +146,11 @@
                 @endif</td>
             <td>{{$item->order_no}}</td>
             <td>{{$item->nic}}</td>
-            <td>{{$item->taxpayer->name}}</td>
-            <td>{{$item->taxpayer->mobilephone}}</td>
-            <td>{{$item->taxpayer->zone->name}}</td>
-            <td>{{$item->taxpayer->town->canton->name."-".$item->taxpayer->town->name."-".$item->taxpayer->address}}</td>
-            <td>{{$item->taxpayer->longitude,$item->taxpayer->latitude}}</td>
+            <td>{{$item->taxpayer?->name}}</td>
+            <td>{{$item->taxpayer?->mobilephone}}</td>
+            <td>{{$item->taxpayer?->zone->name}}</td>
+            <td>{{$item->taxpayer?->town->canton->name."-".$item->taxpayer?->town->name."-".$item->taxpayer?->address}}</td>
+            <td>{{$item->taxpayer?->longitude,$item->taxpayer?->latitude}}</td>
             <td>
                 @if($action==2)
                     {{$item->reduce_amount}}
@@ -167,7 +167,7 @@
     <tr>
         <td colspan="9" >{{$titles[11]}} </td>
         <td>{{ $total_somme}}</td>
-        <td rowspan="3"></td>
+        <td rowspan="3">{{$total_last_sequence}}</td>
     </tr>
     <tr>
         <td colspan="9" >{{$titles[12]}} </td>

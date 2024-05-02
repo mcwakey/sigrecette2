@@ -21,6 +21,10 @@ Breadcrumbs::for('dashboard', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
     $trail->push(__('dashboard'), route('dashboard'));
 });
+Breadcrumbs::for('prints', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push(__('prints'), route('prints'));
+});
 
 // Home > Dashboard > User Management
 Breadcrumbs::for('user-management.index', function (BreadcrumbTrail $trail) {

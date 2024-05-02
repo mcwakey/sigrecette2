@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\PrintablesDataTable;
+use App\DataTables\RecoveriesDataTable;
 use App\Helpers\PdfGenerator;
+use App\Models\TaxLabel;
+use App\Models\Zone;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
@@ -15,6 +19,10 @@ class PrintController extends Controller
     {
     }
 
+    public function index(PrintablesDataTable $printablesDataTable)
+    {
+        return $printablesDataTable->render('pages/printables.list',);
+    }
 
     /**
      * @param $data
@@ -73,11 +81,25 @@ class PrintController extends Controller
 
                 }
                 elseif ($action==42){
+
                     return $this->pdfGenerator->generateInvoiceListPdf($data,'invoices-recouvrement',$action);
 
                 }
-                else{
-                    return $this->pdfGenerator->generateInvoiceListPdf($data,'invoices-list',$action);
+                elseif ($action==1){
+                    if(count($data)==1){
+                        return $this->pdfGenerator->generateWithPrintdata('invoices-list',$action,$data);
+                    }else{
+                        return $this->pdfGenerator->generateBordereauListPdf('invoices-list',$action);
+
+                    }
+                }
+                elseif ($action==2){
+                    if(count($data)==1){
+                        return $this->pdfGenerator->generateWithPrintdata('invoices-list',$action,$data);
+                    }else{
+                        return $this->pdfGenerator->generateBordereauListPdf('invoices-list',$action);
+
+                    }
                 }
             //case 3:dd($data,$action,'invoices-journal-receveur');
             //case 4:return 'invoices-distribution';
@@ -89,7 +111,7 @@ class PrintController extends Controller
 
 
             case 9:return $this->pdfGenerator->generateStateValueCollectorPdf($data,'state-versement-regisseur',$action);
-            case 10:return $this->pdfGenerator->generateStateValueCollectorPdf($data,'livre-journal-regie',$action);
+            case 10:return $this->pdfGenerator->generateLedgersPdf('livre-journal-regie');
             case 15:return $this->pdfGenerator->generateStateValueCollectorPdf($data,'state-iv-regisseur',$action);
             case 16:return $this->pdfGenerator->generateStateValueCollectorPdf($data,"state-versement-regisseur-comptant",$action);
 

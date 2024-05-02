@@ -135,9 +135,10 @@
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('invoice no') }}</label>
                             <input type="text" class="form-control" name="tags" id="mySearchTwo"/>
                         </div>
-
-                        <!--end::Col-->
-                        <!--begin::Col-->
+                        <div class="col-xxl-2">
+                            <label class="fs-6 form-label fw-bold text-dark">{{ __('Montant') }}</label>
+                            <input type="text" class="form-control" name="tags" id="mySearchM"/>
+                        </div>
                         <div class="col-xxl-2">
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('zone') }}</label>
                             <!--begin::Select-->
@@ -175,6 +176,7 @@
                                 <option value="{{App\Enums\InvoiceStatusEnums::APPROVED}}">{{ __('APROVED') }}</option>
                                 <option value="{{ App\Enums\InvoiceStatusEnums::REJECTED }}">{{ __('REJECTED') }}</option>
                                 <option value="{{  App\Enums\InvoiceStatusEnums::CANCELED }}">{{ __('CANCELED') }}</option>
+                                <option value="{{  App\Enums\InvoiceStatusEnums::REDUCED }}">{{ __('REDUCED') }}</option>
                                 <option value="{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}">{{ __("AVIS D'ANNULATION/REDUCTION") }}</option>
                                 <option value="{{ App\Enums\InvoiceStatusEnums::PENDING}}">{{ __('PENDING') }}</option>
                             </select>
@@ -356,7 +358,9 @@
                 let s_id = this.value;
                 window.LaravelDataTables['invoices-table'].column(1).search(s_id).draw();
             });
-
+            document.getElementById('mySearchM').addEventListener('keyup', function () {
+                window.LaravelDataTables['invoices-table'].column(8).search(this.value).draw();
+            });
 
 
             let zone = "zone 1";
@@ -413,23 +417,38 @@
                 newMenuItem.appendChild(newLink);
                 printModal.appendChild(newMenuItem);
             }
-
             function onSelectedValueChanged(selectedValue) {
                 printButton.classList.add('btn-active-light-primary');
                 printButton.classList.remove( "d-none");
                 removePrintMenuItems();
-                addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
-                addPrintMenuItem('{{ __('Journal des avis des sommes à payer confiés par le receveur') }}', '5');
-                addPrintMenuItem('{{ __('Fiche de distribution des avis') }}', '4');
-                addPrintMenuItem('{{ __('Registre-journal des avis distribués') }}', '3');
-                addPrintMenuItem('{{ __('Fiche de recouvrement des avis distribués') }}', '41');
-                addPrintMenuItem('{{ __('Bordereau journal des avis de réduction ou d’annulation') }}', '2');
-                //const array = ['APROVED', 'APROVED-CANCELLATION','CANCELED',"PENDING","REJECTED"];if (array.includes(selectedValue)) {if (selectedValue === 'APROVED' || selectedValue === "CANCELED") {} else if (selectedValue === 'APROVED-CANCELLATION') {}else if(selectedValue === "PENDING"|| selectedValue ==="REJECTED"){}else addPrintMenuItem('', '1');}}else {printButton.classList.remove('btn-active-light-primary');printButton.classList.add( "d-none");}
+                const array = ['{{App\Enums\InvoiceStatusEnums::APPROVED}}','{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}','{{  App\Enums\InvoiceStatusEnums::CANCELED }}','{{ App\Enums\InvoiceStatusEnums::PENDING}}',"{{ App\Enums\InvoiceStatusEnums::REJECTED }}",'{{ App\Enums\InvoiceStatusEnums::REDUCED}}'];
+                if (array.includes(selectedValue)) {
+                    printButton.classList.add('btn-active-light-primary');
+                    printButton.classList.remove( "d-none");
+                    const approve_array = ['{{App\Enums\InvoiceStatusEnums::APPROVED}}','{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}','{{  App\Enums\InvoiceStatusEnums::CANCELED }}','{{ App\Enums\InvoiceStatusEnums::REDUCED}}'];
+                    if (
+                        approve_array.includes(selectedValue)
+                    ) {
+                        addPrintMenuItem('{{ __('Fiche de recouvrement des avis distribués') }}', '41');
+                        addPrintMenuItem('{{ __('Fiche de distribution des avis') }}', '4');
+                        addPrintMenuItem('{{ __('Journal des avis des sommes à payer confiés par le receveur') }}', '5');
+                        addPrintMenuItem('{{ __('Registre-journal des avis distribués') }}', '3');
+                    }else if(  selectedValue ==="{{ App\Enums\InvoiceStatusEnums::PENDING}}" ){
+                        addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
+                        addPrintMenuItem('{{ __('Bordereau journal des avis de réduction ou d’annulation') }}', '2');
+                    }else addPrintMenuItem('', '1');
+                }
+
+                else {
+                    printButton.classList.remove('btn-active-light-primary');
+                    printButton.classList.add( "d-none");
+                }
+                printButton.classList.add('btn-active-light-primary');
+                printButton.classList.remove( "d-none");
             }
 
             const selectElement = document.getElementById('mySearchTen');
             selectElement.addEventListener('change', function(event) {
-                console.log(18)
                 const selectedValue = event.target.value;
                 onSelectedValueChanged(selectedValue);
                 document.querySelectorAll('.print-link').forEach(function(link) {

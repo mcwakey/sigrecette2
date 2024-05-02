@@ -125,7 +125,7 @@ $cumul_recouvré=0;
             @if($item->reference!=\App\Helpers\Constants::REDUCTION && $item->reference!=\App\Helpers\Constants::ANNULATION )
                 <tr>
                     <td>{{$item->created_at}}</td>
-                    <td>Recouvrement Avis {{$item->invoice->invoice_no}}, OR {{$item->reference}},{{\App\Models\TaxLabel::getNameByCode($item->code)}}</td>
+                    <td>Recouvrement Avis {{$item->invoice->invoice_no}}, numéro de quittance {{$item->reference}},{{\App\Models\TaxLabel::getNameByCode($item->code)}}</td>
 
                     <td></td>
                     <td></td>
@@ -141,7 +141,7 @@ $cumul_recouvré=0;
                     @if($item->invoice->delivery_date!=null)
                     <tr>
                         <td>{{$item->invoice->delivery_date}}</td>
-                        <td>Distribution Avis {{$item->invoice->invoice_no}}, OR {{$item->invoice->order_no}}, {{\App\Models\TaxLabel::getNameByCode($item->code)}}</td>
+                        <td>Avis de réduction ou d’annulation {{$item->invoice->invoice_no}}, OR {{$item->invoice->order_no}}, {{\App\Models\TaxLabel::getNameByCode($item->code)}}</td>
                         <td></td>
 
                         @php

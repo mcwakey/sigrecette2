@@ -163,9 +163,9 @@
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('payment type') }}</label>
                                 <select wire:model="payment_type" name="payment_type" class="form-select" data-dropdown-parent="#kt_modal_add_payment">
                                     <option></option>
-                                    <option value="CASH">CASH</option>
-                                    <option value="CHEQUE">CHEQUE</option>
-                                    <option value="DIGI">DIGI</option>
+                                    <option value="{{App\Enums\PaymentTypeEnums::CASH}}">CASH</option>
+                                    <option value="{{App\Enums\PaymentTypeEnums::CHEQUE}}">CHEQUE</option>
+                                    <option value="{{App\Enums\PaymentTypeEnums::DIGI}}">DIGI</option>
                                 </select>
                                 @error('payment_type')
                                 <span class="text-danger">{{ $message }}</span> @enderror

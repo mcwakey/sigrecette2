@@ -3,10 +3,15 @@
 namespace App\Helpers;
 
 use App\Contracts\PdfGeneratorInterface;
+use App\Enums\InvoiceStatusEnums;
+use App\Enums\PrintNameEnums;
 use App\Models\Commune;
 use App\Models\Invoice;
+use App\Models\Payment;
+use App\Models\PrintFile;
 use App\Models\Taxpayer;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -236,6 +241,7 @@ class PdfGenerator  implements PdfGeneratorInterface
 
 
 
+
     public function generateStateValueReciepientPdf($data, $template, $action):array
     {
         // if ($this->checkInvoiceListDataUniformity($data,$expectedDataSize)&& $this->checkIfCommuneIsNotNull()) {
@@ -265,6 +271,62 @@ class PdfGenerator  implements PdfGeneratorInterface
             return ['success' => true, 'pdf' => $pdf];
         }
 
+        return ['success' => false, 'message' => 'Invalid data structure.'];
+    }
+    public function generateLedgersPdf( string $template):array
+    {
+
+        $data = Payment::getPrintData();
+        $filename = "Livre-journal_de_Regie". ".pdf";
+        $pdf = PDF::loadView("exports.".$template, ['data' => $data,"commune"=> $this->commune])->setPaper('a4', 'landscape')->stream($filename);
+
+        return ['success' => true, 'pdf' => $pdf];
+        // }
+
+        return ['success' => false, 'message' => 'Invalid data structure.'];
+    }
+
+    public function generateBordereauListPdf( string $templateName, $action)
+    {
+        $type = $action==1?PrintNameEnums::BORDEREAU:PrintNameEnums::BORDEREAU_REDUCTION;
+        $data=Invoice::getPrintData($type);
+        if( count($data)>0){
+            $total=0;
+            foreach ($data as $datum){
+                if($type==PrintNameEnums::BORDEREAU){
+                    $total+=$datum->amount;
+                }else{
+                    $total+=$datum->reduce_amount;
+                }
+            }
+            $last_print = PrintFile::getLastPrintFileByType($type);
+            $print_data = [
+                'name' =>PrintNameEnums::BORDEREAU,
+                'last_sequence_number' => $last_print==null?1:$last_print->last_sequence_number+1,
+                'total_last_sequence' => $total
+            ];
+            $total_last_sequence=$last_print==null?0:$last_print->total_last_sequence;
+            $print= PrintFile::create($print_data);
+
+            //dd($data,$print);
+            $print = Invoice::addPrintableToInvoices($data,$print);
+            $data= Invoice::where("print_file_id",$print->id)->get();
+            if ($this->checkIfCommuneIsNotNull()&& count($data)>0) {
+
+                $filename = $type."-" . Str::random(8) . ".pdf";
+                //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
+                $pdf = PDF::loadView("exports.".$templateName, ['data' => $data,'titles'=>$this->generateTitleWithAction($action),"commune"=> $this->commune,"action"=>$action,'print'=>$print,'total_last_sequence'=>$total_last_sequence])->setPaper('a4', 'landscape')->stream($filename);
+
+                return ['success' => true, 'pdf' => $pdf];
+            }
+
+        }
+
+        return ['success' => false, 'message' => 'Invalid data structure.'];
+    }
+
+    public function generateWithPrintdata(string $string, $action, $data)
+    {
         return ['success' => false, 'message' => 'Invalid data structure.'];
     }
 }
