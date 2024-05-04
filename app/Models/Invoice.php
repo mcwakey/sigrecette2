@@ -283,6 +283,7 @@ class Invoice extends Model implements FormatDateInterface
         $startOfYear = Carbon::parse("{$activeYear->name}-01-01 00:00:00");
         $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
         $query= Invoice::where('invoices.status',InvoiceStatusEnums::PENDING)
+        ->where('invoices.type','=',Constants::INVOICE_TYPE_TITRE)
             ->whereBetween('invoices.created_at', [$startOfYear, $endOfYear])
             ->whereNull("invoices.print_file_id");
             if ($type==PrintNameEnums::BORDEREAU_REDUCTION){

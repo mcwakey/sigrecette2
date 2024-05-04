@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DataTables\PrintablesDataTable;
 use App\DataTables\RecoveriesDataTable;
 use App\Helpers\PdfGenerator;
+use App\Models\PrintFile;
 use App\Models\TaxLabel;
 use App\Models\Zone;
 use Illuminate\Http\RedirectResponse;
@@ -50,6 +51,31 @@ class PrintController extends Controller
     }
 
     /**
+     * @param PrintFile $printFile
+     * @param null $type
+     * @param null $action
+     * @return RedirectResponse|Response|mixed
+     */
+    public function downloadWithPrintData(PrintFile $printFile ,$type=null,$action=null)
+    {
+
+        if (Storage::missing("exports")) {
+            Storage::makeDirectory("exports");
+        }
+        //$data = json_decode($data, true);
+        $result= $this->processType($type,$printFile,$action);
+
+
+        if ($result['success']) {
+            //$this->dispatchMessage("Ficher imprimable");
+            return $result['pdf'];
+        }
+
+        // $this->dispatchMessage("Ficher imprimable","create","error",$result['message']);
+        return back()->with('error', $result['message']);
+    }
+
+    /**
      * @param $type
      * @param $data
      * @param $action
@@ -57,9 +83,6 @@ class PrintController extends Controller
      */
     public function processType($type, $data,$action):array
     {
-       // dd($type, $data);
-
-
         switch ($type) {
             case 1:
                 return $this->pdfGenerator->downloadReceipt($data,'payments',$action);
@@ -85,17 +108,9 @@ class PrintController extends Controller
                     return $this->pdfGenerator->generateInvoiceListPdf($data,'invoices-recouvrement',$action);
 
                 }
-                elseif ($action==1){
-                    if(count($data)==1){
-                        return $this->pdfGenerator->generateWithPrintdata('invoices-list',$action,$data);
-                    }else{
-                        return $this->pdfGenerator->generateBordereauListPdf('invoices-list',$action);
-
-                    }
-                }
-                elseif ($action==2){
-                    if(count($data)==1){
-                        return $this->pdfGenerator->generateWithPrintdata('invoices-list',$action,$data);
+                elseif ($action==1|| $action==2){
+                    if($data instanceof PrintFile){
+                        return $this->pdfGenerator->generateBordereauListPdf('invoices-list',$action,$data);
                     }else{
                         return $this->pdfGenerator->generateBordereauListPdf('invoices-list',$action);
 
@@ -120,6 +135,7 @@ class PrintController extends Controller
                 return$this->pdfGenerator->generateInvoicePdf($data,'invoices',$action);
 
         }
+
     }
 
 

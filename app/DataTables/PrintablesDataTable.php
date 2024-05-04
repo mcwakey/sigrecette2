@@ -33,11 +33,9 @@ class PrintablesDataTable extends DataTable
             ->editColumn('created_at', function (PrintFile $printFile) {
                 return  $printFile->created_at->format('d M Y');
             })
-            ->editColumn('description', function (PrintFile  $printFile) {
+            ->editColumn('name', function (PrintFile  $printFile) {
                 return  $printFile->name;
             })
-
-
 
             ->addColumn('action', function (PrintFile  $printFile) {
                 return view('pages.printables.columns._actions', compact('printFile'));
@@ -59,7 +57,7 @@ class PrintablesDataTable extends DataTable
         return $model
             ->whereBetween('print_files.created_at', [$startOfYear, $endOfYear])
 
-            ->orderBy('created_at', 'asc')
+            ->orderBy('created_at','desc' )
                     ->newQuery();
 
     }
@@ -91,7 +89,7 @@ class PrintablesDataTable extends DataTable
             Column::make('id')->title(__('id'))->exportable(false)->printable(false)->visible(false),
             Column::make('created_at')->title(__('date')),
             Column::make('last_sequence_number')->title(__('Numéro')),
-            Column::make('description')->title(__('description')),
+            Column::make('name')->title(__('description')),
             Column::computed('action')->title(__('action'))
                 ->addClass('text-end text-nowrap')
                 ->exportable(false)

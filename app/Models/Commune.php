@@ -38,8 +38,11 @@ class Commune extends Model
      */
     public function getImageUrlAttribute()
     {
-        $path = $this->attributes['logo_path'];
-        return Storage::url($path);
+
+        if ($this->logo_path) {
+            return './storage/' . $this->logo_path;
+        }
+        return $this->logo_path;
     }
 
 }

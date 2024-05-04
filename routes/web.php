@@ -116,6 +116,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/prints',   [PrintController::class, 'index'])->name("prints");
     Route::get('/generate-pdf/{data}/{type?}/{action?}', [PrintController::class, 'download'])->name("generatePdf");
+    Route::get('/generatepdf/{printFile}/{type?}/{action?}', [PrintController::class, 'downloadWithPrintData'])->name("generateWithPrintData");
     Route::middleware(EnsureIsAdmin::class)->post('/import/taxpayer', [TaxpayerController::class, 'import'])->name('import.process');
     Route::middleware(EnsureIsAdmin::class)->get('/import/taxpayer', [TaxpayerController::class, 'showImportPage'])->name('import-view');
 });

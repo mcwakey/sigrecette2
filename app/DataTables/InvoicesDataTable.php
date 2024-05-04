@@ -117,6 +117,7 @@ class InvoicesDataTable extends DataTable
                         ->select('invoices.*')
                         ->whereBetween('invoices.created_at', [$this->startDate, $this->endDate])
                         ->distinct()
+                ->orderBy('invoices.created_at', 'desc')
                         ->newQuery();
 
 

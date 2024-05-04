@@ -42,19 +42,12 @@
 
 <table>
     <tr>
-    <td colspan="5"  style="border: none; margin: 0;text-align: left">
+        <td colspan="1"  style="border: none; margin: 0;text-align: left">
 
-        <img src="{{ $commune-> getImageUrlAttribute() }}" alt="Logo" style="width: 100px; height: 100px;">
+            <img src="{{ $commune-> getImageUrlAttribute() }}" alt="Logo" style="width: 50px; height: 50px;">
 
-    </td>
-    <td colspan="6"  style="border: none; margin: 0;text-align: right">
-
-
-    </td>
-    </tr>
-
-    <tr>
-        <td colspan="5"  style="border: none; margin: 0;text-align: left">
+        </td>
+        <td colspan="4"  style="border: none; margin: 0;text-align: left">
 
             {{$commune->region_name}}
 
@@ -65,7 +58,9 @@
         </td>
     </tr>
     <tr>
-        <td colspan="5"  style="border: none; margin: 0;text-align: left">
+        <td colspan="1" style="border: none; margin: 0; padding:2px ;text-align: left;">
+        </td>
+        <td colspan="4"  style="border: none; margin: 0;text-align: left">
 
             {{$commune->title}}
         </td>
@@ -158,8 +153,8 @@
             <td>{{$item->nic}}</td>
             <td>{{$item->taxpayer?->name}}</td>
             <td>{{$item->taxpayer?->mobilephone}}</td>
-            <td>{{$item->taxpayer?->zone->name}}</td>
-            <td>{{$item->taxpayer?->town->canton->name."-".$item->taxpayer?->town->name."-".$item->taxpayer?->address}}</td>
+            <td>{{$item->taxpayer?->zone?->name}}</td>
+            <td>{{$item->taxpayer?->town?->canton->name."-".$item->taxpayer?->town?->name."-".$item->taxpayer?->address}}</td>
             <td>{{$item->taxpayer?->longitude,$item->taxpayer?->latitude}}</td>
             <td>
                 @if($action==2)
@@ -177,11 +172,11 @@
     <tr>
         <td colspan="9" >{{$titles[11]}} </td>
         <td>{{ $total_somme}}</td>
-        <td rowspan="3">{{$total_last_sequence}}</td>
+        <td rowspan="3"></td>
     </tr>
     <tr>
         <td colspan="9" >{{$titles[12]}} </td>
-        <td></td>
+        <td>{{$print->total_last_sequence}}</td>
 
     </tr>
     <tr>

@@ -44,18 +44,9 @@
 <body>
 <table >
     <tr>
-        <td colspan="4"  style="border: none; margin: 0;text-align: left">
+        <td colspan="1" style="border: none; margin: 0;padding: 2px; text-align: center;" > <img src="{{$commune->getImageUrlAttribute()}}" alt="Logo" style="width: 50px; height: 50px;"></td>
 
-            <img src="{{asset($commune->getImageUrlAttribute()) }}" alt="Logo" style="width: 100px; height: 100px;">
-
-        </td>
-        <td colspan="5"  style="border: none; margin: 0;text-align: right">
-
-
-        </td>
-    </tr>
-    <tr>
-        <td colspan="4"  style="border: none; padding: 2px;text-align: left;">
+        <td colspan="3"  style="border: none; padding: 2px;text-align: left;">
             {{$commune->region_name}}
 
         </td>
@@ -65,7 +56,9 @@
         </td>
     </tr>
     <tr>
-        <td colspan="4" style="border: none; margin: 0; padding:2px ;text-align: left;">
+        <td colspan="1" style="border: none; margin: 0; padding:2px ;text-align: left;">
+        </td>
+        <td colspan="3" style="border: none; margin: 0; padding:2px ;text-align: left;">
 
             {{$commune->title}}
         </td>

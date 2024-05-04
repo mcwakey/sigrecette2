@@ -2,7 +2,10 @@
 
 namespace App\DataTables;
 
+use App\Helpers\Constants;
 use App\Models\User;
+use Illuminate\Support\Facades\App;
+use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
@@ -44,7 +47,14 @@ class UsersDataTable extends DataTable
      */
     public function query(User $model): QueryBuilder
     {
-        return $model->newQuery();
+        $query= $model->newQuery();
+        if(App::environment('production')){
+            $role = Role::where('name', 'administrateur_system')->first();
+            $roleUsers = $role->users()->pluck('id')->toArray();
+            $query->whereNotIn('users.id', $roleUsers);
+        }
+      return $query;
+
     }
 
     /**

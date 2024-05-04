@@ -278,7 +278,9 @@ class PdfGenerator  implements PdfGeneratorInterface
 
         $data = Payment::getPrintData();
         $filename = "Livre-journal_de_Regie". ".pdf";
-        $pdf = PDF::loadView("exports.".$template, ['data' => $data,"commune"=> $this->commune])->setPaper('a4', 'landscape')->stream($filename);
+
+        //dd($this->commune->getImageUrlAttribute());
+        $pdf = PDF::loadView("exports.".$template, ['data' => $data,"commune"=> $this->commune,'logo_url'=>$this->commune->getImageUrlAttribute()])->setPaper('a4', 'landscape')->stream($filename);
 
         return ['success' => true, 'pdf' => $pdf];
         // }
@@ -286,47 +288,42 @@ class PdfGenerator  implements PdfGeneratorInterface
         return ['success' => false, 'message' => 'Invalid data structure.'];
     }
 
-    public function generateBordereauListPdf( string $templateName, $action)
+    public function generateBordereauListPdf( string $templateName, $action,PrintFile|null $printFile=null)
     {
-        $type = $action==1?PrintNameEnums::BORDEREAU:PrintNameEnums::BORDEREAU_REDUCTION;
-        $data=Invoice::getPrintData($type);
-        if( count($data)>0){
-            $total=0;
-            foreach ($data as $datum){
-                if($type==PrintNameEnums::BORDEREAU){
-                    $total+=$datum->amount;
-                }else{
-                    $total+=$datum->reduce_amount;
+        $type = null;
+        if($action==1){
+            $type=PrintNameEnums::BORDEREAU;
+        }elseif ($action==2){
+            $type=PrintNameEnums::BORDEREAU_REDUCTION;
+        }
+        if($this->checkIfCommuneIsNotNull()&& $type!=null&&$printFile==null){
+            $data=Invoice::getPrintData($type);
+            //dd($printFile,$type,$data);
+            if(count($data)>0){
+                $total=0;
+                foreach ($data as $datum){
+                    if($type==PrintNameEnums::BORDEREAU){
+                        $total+=$datum->amount;
+                    }else{
+                        $total+=$datum->reduce_amount;
+                    }
                 }
-            }
-            $last_print = PrintFile::getLastPrintFileByType($type);
-            $print_data = [
-                'name' =>PrintNameEnums::BORDEREAU,
-                'last_sequence_number' => $last_print==null?1:$last_print->last_sequence_number+1,
-                'total_last_sequence' => $total
-            ];
-            $total_last_sequence=$last_print==null?0:$last_print->total_last_sequence;
-            $print= PrintFile::create($print_data);
-
-            //dd($data,$print);
-            $print = Invoice::addPrintableToInvoices($data,$print);
-            $data= Invoice::where("print_file_id",$print->id)->get();
-            if ($this->checkIfCommuneIsNotNull()&& count($data)>0) {
-
-                $filename = $type."-" . Str::random(8) . ".pdf";
-                //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
-                $pdf = PDF::loadView("exports.".$templateName, ['data' => $data,'titles'=>$this->generateTitleWithAction($action),"commune"=> $this->commune,"action"=>$action,'print'=>$print,'total_last_sequence'=>$total_last_sequence])->setPaper('a4', 'landscape')->stream($filename);
-
-                return ['success' => true, 'pdf' => $pdf];
+                $printFile= PrintFile::createPrintFile($type,$data);
             }
 
         }
+        $data= Invoice::where("print_file_id",$printFile?->id)->get();
+        if ( count($data)>0 && $printFile!=null) {
+            $filename = $type."-" . Str::random(8) . ".pdf";
+            //dd($data);
+            $pdf = PDF::loadView("exports.".$templateName, ['data' => $data,'titles'=>$this->generateTitleWithAction($action),"commune"=> $this->commune,"action"=>$action,'print'=>$printFile])->setPaper('a4', 'landscape')->stream($filename);
+
+            return ['success' => true, 'pdf' => $pdf];
+        }
+
 
         return ['success' => false, 'message' => 'Invalid data structure.'];
     }
 
-    public function generateWithPrintdata(string $string, $action, $data)
-    {
-        return ['success' => false, 'message' => 'Invalid data structure.'];
-    }
+
 }

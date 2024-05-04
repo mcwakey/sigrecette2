@@ -88,7 +88,7 @@ class AddCommuneModal extends Component
                 'longitude' => $this->longitude,
             ];
             if ($this->logo) {
-                $data['logo_path'] = $this->logo->store('logos', 'public');
+                $data['logo_path'] = $this->logo->store('avatars', 'public');
             } else {
                 $data['logo_path'] = null;
             }
