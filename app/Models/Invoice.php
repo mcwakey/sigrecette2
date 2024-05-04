@@ -277,21 +277,24 @@ class Invoice extends Model implements FormatDateInterface
     {
         return $this->created_at->format('Y-m-d');
     }
-    public static function getPrintData($type):Collection
+    public static function getPrintData(array $filterBy,string $type=null):Collection
     {
         $activeYear = Year::getActiveYear();
         $startOfYear = Carbon::parse("{$activeYear->name}-01-01 00:00:00");
         $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
-        $query= Invoice::where('invoices.status',InvoiceStatusEnums::PENDING)
+        $query= Invoice::whereIn('invoices.status',$filterBy)
         ->where('invoices.type','=',Constants::INVOICE_TYPE_TITRE)
             ->whereBetween('invoices.created_at', [$startOfYear, $endOfYear])
             ->whereNull("invoices.print_file_id");
+        if($type!=null){
             if ($type==PrintNameEnums::BORDEREAU_REDUCTION){
                 $query = $query->whereNot("invoices.reduce_amount" ,"=",'');
             }else{
                 $query = $query->where("invoices.reduce_amount" ,"=",'');
 
             }
+        }
+
             return $query
             ->newQuery()
             ->get();

@@ -42,9 +42,13 @@
 
 <table>
 
-
     <tr>
-        <td colspan="5"  style="border: none; margin: 0;text-align: left">
+        <td colspan="1"  style="border: none; margin: 0;text-align: left">
+
+            <img src="{{ $commune-> getImageUrlAttribute() }}" alt="Logo" style="width: 50px; height: 50px;">
+
+        </td>
+        <td colspan="4"  style="border: none; margin: 0;text-align: left">
 
             {{$commune->region_name}}
 
@@ -55,7 +59,9 @@
         </td>
     </tr>
     <tr>
-        <td colspan="5"  style="border: none; margin: 0;text-align: left">
+        <td colspan="1" style="border: none; margin: 0; padding:2px ;text-align: left;">
+        </td>
+        <td colspan="4"  style="border: none; margin: 0;text-align: left">
 
             {{$commune->title}}
         </td>
@@ -63,7 +69,7 @@
 
             Travail-Liberté-Patrie
         </td>
-    </tr>
+    </tr>r>
 
 
 
@@ -74,16 +80,6 @@
 
 
         </th>
-
-
-    </tr>
-    <tr>
-        <td colspan="11" style="border: none; margin: 0">
-
-            N°
-
-
-        </td>
 
 
     </tr>
@@ -129,7 +125,7 @@
                                 <td>{{$item->invoice_no}}</td>
                                 <td>{{$item->nic}}</td>
                                 <td>{{$item->taxpayer?->name}}</td>
-                                <td>{{$item->taxpayer?->longitude,$item->taxpayer->latitude}}</td>
+                                <td>{{$item->taxpayer?->longitude,$item->taxpayer?->latitude}}</td>
                                 <td>{{$code}}</td>
                                 @php
                                     $total_somme+=$tax['amount'];
@@ -145,14 +141,12 @@
 
         @foreach($item->payments()->get() as $payment)
                 <tr>
-                <td>@if($item->delivery_date !=null)
-                        {{date("d-m-Y", strtotime( $item->delivery_date  ))}}
-                    @endif</td>
-                <td></td>
+                <td>{{date("d-m-Y", strtotime( $payment->updated_at))}}</td>
+                <td>{{$item->order_no}}</td>
                 <td>{{$item->invoice_no}}</td>
                 <td>{{$item->nic}}</td>
-                <td>{{$item->taxpayer->name}}</td>
-                <td>{{$item->taxpayer->longitude,$item->taxpayer->latitude}}</td>
+                <td>{{$item->taxpayer?->name}}</td>
+                <td>{{$item->taxpayer?->longitude,$item->taxpayer?->latitude}}</td>
                 <td>{{$payment->code}}</td>
                     <td></td>
                     <td>

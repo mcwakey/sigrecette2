@@ -297,7 +297,7 @@ class PdfGenerator  implements PdfGeneratorInterface
             $type=PrintNameEnums::BORDEREAU_REDUCTION;
         }
         if($this->checkIfCommuneIsNotNull()&& $type!=null&&$printFile==null){
-            $data=Invoice::getPrintData($type);
+            $data=Invoice::getPrintData([InvoiceStatusEnums::PENDING],$type);
             //dd($printFile,$type,$data);
             if(count($data)>0){
                 $total=0;
@@ -324,6 +324,31 @@ class PdfGenerator  implements PdfGeneratorInterface
 
         return ['success' => false, 'message' => 'Invalid data structure.'];
     }
+    /**
+     * @param array $data
+     * @param string $template
+     * @param int|null $action
+     * @return array
+     */
+    public function generateJournalInvoiceListPdf(array $data,string $template,int $action=null):array
+    {
 
+
+        $data=Invoice::getPrintData(
+            [InvoiceStatusEnums::CANCELED,
+                InvoiceStatusEnums::REDUCED,
+                InvoiceStatusEnums::APPROVED,
+                InvoiceStatusEnums::APPROVED_CANCELLATION]);
+
+        if ($this->checkIfCommuneIsNotNull()&& count($data)>0) {
+
+            $filename = "Journal_des_avis_des_sommes_à_payer_confiés_par_le_receveur" .".pdf";
+            $pdf = PDF::loadView("exports.".$template, ['data' => $data,'titles'=>$this->generateTitleWithAction($action),"commune"=> $this->commune,"action"=>$action])->setPaper('a4', 'landscape')->stream($filename);
+
+            return ['success' => true, 'pdf' => $pdf];
+        }
+
+        return ['success' => false, 'message' => 'Invalid data structure.'];
+    }
 
 }
