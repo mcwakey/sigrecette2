@@ -301,34 +301,11 @@
                 link.addEventListener('click', function(event) {
                     event.preventDefault();
                     let selectedValue = link.getAttribute('data-type');
-                    let table = document.getElementById("collector_deposits-table");
                     let dataArray = [];
-                    let headers = [];
 
 
-                    // for (let i = 1; i < table.rows.length; i++) {let row = table.rows[i];let rowData = [];for (let j = 0; j < row.cells.length; j++) {let cellValue = row.cells[j].innerText.trim();rowData.push(cellValue);}dataArray.push(rowData);}
-
-                    let headerRow = table.getElementsByTagName("thead")[0].getElementsByTagName("tr")[0];
-                    for (let i = 0; i < headerRow.cells.length; i++) {
-                        headers.push(headerRow.cells[i].innerText.trim());
-                    }
-
-                    for (let i = 1; i < table.rows.length; i++) {
-                        let row = table.rows[i];
-                        let rowData = {};
-                        for (let j = 0; j < row.cells.length; j++) {
-                            let cellValue = row.cells[j].innerText.trim();
-                            let header = headers[j];
-                            rowData[header] = cellValue;
-                        }
-
-                        dataArray.push(rowData);
-                    }
-
-                    ;
 
                     let r_type = 10;
-
                     let jsonData = JSON.stringify(dataArray);
                     let url =
                         "{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type', 'action' => ':selectedValue']) }}";
