@@ -40,7 +40,12 @@
 
 <table>
     <tr>
-        <td colspan="7"  style="border: none; padding: 2px;">
+        <td colspan="1"  style="border: none; margin: 0;text-align: left">
+
+            <img src="{{ $commune-> getImageUrlAttribute() }}" alt="Logo" style="width: 50px; height: 50px;">
+
+        </td>
+        <td colspan="6"  style="border: none; padding: 2px;">
             {{$commune->region_name}}
 
         </td>
@@ -50,7 +55,8 @@
         </td>
     </tr>
     <tr>
-        <td colspan="7" style="border: none; margin: 0; padding:2px ;">
+        <td colspan="1" style="border: none; margin: 0; padding:2px ;text-align: left;">
+        <td colspan="6" style="border: none; margin: 0; padding:2px ;">
 
             {{$commune->title}}
         </td>
@@ -63,7 +69,7 @@
         <th colspan="14" style="border: none; margin: 0; text-align: center;" class="caption">Fiche de recouvrement des avis distribués</th>
     </tr>
     <tr>
-        <td colspan="14" style="border: none; margin: 0; text-align: center;">N° 4</td>
+        <td colspan="14" style="border: none; margin: 0; text-align: center;">N° {{$print->last_sequence_number}}</td>
     </tr>
     <tr>
         @php
@@ -72,10 +78,10 @@
         <td colspan="14" style="border: none; margin: 0;" >Exercice : {{" ".$year->name}}</td>
     </tr>
     <tr>
-        <td colspan="14" style="border: none; margin: 0;">Zone fiscale :}</td>
+        <td colspan="14" style="border: none; margin: 0;">Zone fiscale :</td>
     </tr>
     <tr>
-        <td colspan="14" style="border: none; margin: 0;" >Nom de l’agent de recouvrement : </td>
+        <td colspan="14" style="border: none; margin: 0;" >Nom de l’agent de recouvrement : {{$agent->name}}</td>
     </tr>
     <tr>
         <td  colspan="14" style="border: none; margin: 0;" >Période de distribution: </td>

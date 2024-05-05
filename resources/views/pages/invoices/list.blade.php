@@ -40,7 +40,16 @@
 
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
-                    <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
+                <div id="agent-div" class="d-flex justify-content-end me-5 d-none" data-kt-invoice-table-toolbar="base">
+                        <select class="form-select" id="r-select">
+                            <option value="">Sélectioner un agent de recouvrement</option>
+                            @foreach ($agent_recouvrements as $agent)
+                                <option value="{{$agent->id }}">{{  $agent->name }}</option>
+                            @endforeach
+                        </select>
+
+                </div>
+                <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
                         <div href="#" id="print-btn" class="btn btn-light  btn-flex btn-center ms-auto me-5 hover-elevate-up pulse pulse-success d-none"
                              data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                             {{ __('print') }}
@@ -389,9 +398,12 @@
                     window.LaravelDataTables['invoices-table'].ajax.reload();
                 });
             });
-
+            let agent;
+            document.getElementById('r-select').addEventListener('change', function () {
+                agent = this.value;
+            });
             const printModal = document.getElementById('print-modal');
-
+            const agentDiv = document.getElementById('agent-div');
             // Sélectionnez le bouton
             const printButton = document.getElementById('print-btn');
 
@@ -418,8 +430,6 @@
                 printModal.appendChild(newMenuItem);
             }
             function onSelectedValueChanged(selectedValue) {
-                printButton.classList.add('btn-active-light-primary');
-                printButton.classList.remove( "d-none");
                 removePrintMenuItems();
                 const array = ['{{App\Enums\InvoiceStatusEnums::APPROVED}}','{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}','{{  App\Enums\InvoiceStatusEnums::CANCELED }}','{{ App\Enums\InvoiceStatusEnums::PENDING}}',"{{ App\Enums\InvoiceStatusEnums::REJECTED }}",'{{ App\Enums\InvoiceStatusEnums::REDUCED}}'];
                 if (array.includes(selectedValue)) {
@@ -429,6 +439,7 @@
                     if (
                         approve_array.includes(selectedValue)
                     ) {
+                        agentDiv.classList.remove( "d-none")
                         addPrintMenuItem('{{ __('Fiche de recouvrement des avis distribués') }}', '41');
                         addPrintMenuItem('{{ __('Fiche de distribution des avis') }}', '4');
                         addPrintMenuItem('{{ __('Journal des avis des sommes à payer confiés par le receveur') }}', '5');
@@ -436,7 +447,9 @@
                     }else if(  selectedValue ==="{{ App\Enums\InvoiceStatusEnums::PENDING}}" ){
                         addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
                         addPrintMenuItem('{{ __('Bordereau journal des avis de réduction ou d’annulation') }}', '2');
+                        agentDiv.classList.add( "d-none")
                     }else addPrintMenuItem('', '1');
+
                 }
 
                 else {
@@ -466,11 +479,13 @@
 
                         let r_type = 2;
                         let jsonData = JSON.stringify(dataArray);
-                        let url = "{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type', 'action' => ':selectedValue']) }}";
+                        let url = "{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type', 'action' => ':selectedValue','id'=>':agent']) }}";
                         url = url.replace(':jsonData', encodeURIComponent(jsonData));
                         url = url.replace(':r_type', encodeURIComponent(r_type));
                         url = url.replace(':selectedValue', encodeURIComponent(selectedValue));
+                        url = url.replace(':agent', encodeURIComponent(agent));
 
+                        console.log(url)
                         window.open(url,'_blank');
                     });
                 });

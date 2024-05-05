@@ -7,6 +7,7 @@ use App\DataTables\RecoveriesDataTable;
 use App\Helpers\PdfGenerator;
 use App\Models\PrintFile;
 use App\Models\TaxLabel;
+use App\Models\User;
 use App\Models\Zone;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
@@ -31,14 +32,14 @@ class PrintController extends Controller
      * @param null $action
      * @return RedirectResponse|Response|mixed
      */
-    public function download( $data,$type=null,$action=null)
+    public function download( $data,$type=null,$action=null,User $id=null)
     {
 
         if (Storage::missing("exports")) {
             Storage::makeDirectory("exports");
         }
         $data = json_decode($data, true);
-        $result= $this->processType($type,$data,$action);
+        $result= $this->processType($type,$data,$action,$id);
 
 
         if ($result['success']) {
@@ -81,9 +82,9 @@ class PrintController extends Controller
      * @param $action
      * @return array
      */
-    public function processType($type, $data,$action):array
+    public function processType($type, $data,$action,User $user=null):array
     {
-         // dd($type,$data,$action);
+          //dd($type,$data,$action);
         switch ($type) {
             case 1:
                 return $this->pdfGenerator->downloadReceipt($data,'payments',$action);
@@ -93,21 +94,18 @@ class PrintController extends Controller
                     return $this->pdfGenerator->generateInvoiceRegistrePdf('invoices-registre',$action);
                 }
                 elseif ($action==4){
-                    return $this->pdfGenerator->generateInvoiceListPdf($data,'invoices-distribution',$action);
+                    return $this->pdfGenerator->generateInvoiceDistribtionOrInvoiceRecouvrementPdf($data,'invoices-distribution',$action,$user);
+                }
+                elseif ($action==41){
+                    return $this->pdfGenerator->generateInvoiceDistribtionOrInvoiceRecouvrementPdf($data,'invoices-recouvrement',$action,$user);
 
                 }
                 elseif ($action==5){
                     return $this->pdfGenerator->generateJournalInvoiceListPdf($data,'invoices-journal-receveur',$action);
 
                 }
-                elseif ($action==41){
-                    return $this->pdfGenerator->generateInvoiceListPdf($data,'invoices-recouvrement',$action);
-
-                }
                 elseif ($action==42){
-
                     return $this->pdfGenerator->generateInvoiceListPdf($data,'invoices-recouvrement',$action);
-
                 }
                 elseif ($action==1|| $action==2){
                     if($data instanceof PrintFile){

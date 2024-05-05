@@ -10,6 +10,7 @@ use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\PrintFile;
 use App\Models\Taxpayer;
+use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -297,7 +298,7 @@ class PdfGenerator  implements PdfGeneratorInterface
             $type=PrintNameEnums::BORDEREAU_REDUCTION;
         }
 
-        if($this->checkIfCommuneIsNotNull()&& $type!=null&&$printFile==null){
+        if( $type!=null&&$printFile==null){
             $data=Invoice::getPrintData([InvoiceStatusEnums::PENDING],$type);
             //dd($data);
            // dd($templateName,$type,$data);
@@ -318,7 +319,7 @@ class PdfGenerator  implements PdfGeneratorInterface
        // $data= Invoice::where("print_data",$printFile?->id)->get();
 
 
-        if($printFile!=null){
+        if($printFile!=null&&$this->checkIfCommuneIsNotNull()){
             $data = $printFile->invoices()->get();
             //
             if ( count($data)>0) {
@@ -360,8 +361,8 @@ class PdfGenerator  implements PdfGeneratorInterface
 
         return ['success' => false, 'message' => 'Invalid data structure.'];
     }
+
     /**
-     * @param array $data
      * @param string $template
      * @param int|null $action
      * @return array
@@ -386,5 +387,40 @@ class PdfGenerator  implements PdfGeneratorInterface
 
         return ['success' => false, 'message' => 'Invalid data structure.'];
     }
+
+    public function generateInvoiceDistribtionOrInvoiceRecouvrementPdf(array|PrintFile $data,string $template,int $action=null,User $user=null): array
+    {
+
+
+        $type = null;
+
+        if($action==4){
+            $type=PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS;
+        }elseif ($action==41){
+            $type=PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES;
+        }
+        if($data instanceof PrintFile){
+            $printFile =$data;
+            $data = $data->invoices()->get();
+        }else{
+            if($user instanceof User){
+                $data=Invoice::retrieveByType($data,$type);
+                if ($type!=null && count($data)>0) {
+                    $printFile= PrintFile::createPrintFile($type,$data,0);
+                }
+            }else{
+                $data=[];
+            }
+
+        }
+
+        if($this->checkIfCommuneIsNotNull() && $printFile!=null&& count($data)>0){
+                $filename = $type."-" . ".pdf";
+                $pdf = PDF::loadView("exports.".$template, ['data' => $data,'titles'=>$this->generateTitleWithAction($action),"commune"=> $this->commune,"action"=>$action,'print'=>$printFile,'agent'=>$user])->setPaper('a4', 'landscape')->stream($filename);
+                return ['success' => true, 'pdf' => $pdf];
+        }
+        return ['success' => false, 'message' => 'Invalid data structure.'];
+    }
+
 
 }

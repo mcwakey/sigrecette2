@@ -139,6 +139,34 @@ class Invoice extends Model implements FormatDateInterface
 
         return array_values($invoices); // Réorganise les valeurs pour obtenir un tableau indexé à partir de 0
     }
+    /**
+     * Retrieve invoices based on provided UUIDs.
+     *
+     * @param array $uuids
+     * @param string|null $type
+     * @return array Returns a collection of invoices if all UUIDs are found,
+     *                               `false` if any UUID is not found, or an empty array if `$uuids` is empty.
+     */
+    public static function retrieveByType(array $uuids, string $type): array
+    {
+        $invoices = [];
+
+        if (empty($uuids)) {
+            return [];
+        }
+
+        foreach ($uuids as $uuid) {
+            $invoice = null;
+            $invoice = Invoice::where('uuid', $uuid)->WhereDoesntHave('printFiles', function ($query) use ($type) {
+                $query->where('name', $type);
+            })->first();
+            if ($invoice instanceof Invoice) {
+                $invoices[$invoice->id] = $invoice;
+            }
+        }
+
+        return array_values($invoices);
+    }
 
 
 
@@ -297,8 +325,8 @@ class Invoice extends Model implements FormatDateInterface
                     });
 
             }else if($type==PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS || $type==PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES){
-                $type=PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS;
-                $query = $query->orWhereDoesntHave('printFiles', function ($query) use ($type) {
+                //$type=PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS;
+                $query = $query->WhereDoesntHave('printFiles', function ($query) use ($type) {
                     $query->where('name', $type);
                 });
             }

@@ -480,5 +480,6 @@
 
     "view manager account state" : "Afficher l'etat de comptabilité du régisseur",
     "view manager deposit state" : "Afficher l'état de versement du régisseur",
-    "ACCOUNTED": "COMPTABILISE"
+    "ACCOUNTED": "COMPTABILISE",
+    "APPROVED-CANCELED": "ANNULÉ"
 }
