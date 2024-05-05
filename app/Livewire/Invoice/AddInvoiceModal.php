@@ -158,19 +158,7 @@ class AddInvoiceModal extends Component
         //return view('livewire.invoice.add-invoice-modal', ['taxpayer_id' => $this->taxpayer_id]);
 
         $year= Year::getActiveYear();
-        $months = [];
-        // Obtenez le mois actuel
-        $currentMonth = Carbon::now()->month;
-        $remainingMonths = 12 - $currentMonth;
-
-        for ($i = $currentMonth ; $i <= $currentMonth + $remainingMonths; $i++) {
-            $monthIndex = $i > 12 ? $i - 12 : $i;
-            $monthName = Carbon::createFromFormat('m',$monthIndex)->monthName;
-            $monthNumber = str_pad($monthIndex, 2, '0', STR_PAD_LEFT);
-            $months[$monthNumber] = $monthName;
-        }
-
-        //$this->qty = count($months);
+        $months = Constants::getMonths();
 
         return view('livewire.invoice.add-invoice-modal', compact('taxpayers','months','year'));
     }

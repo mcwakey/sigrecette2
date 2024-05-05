@@ -436,7 +436,6 @@
                     }else if(  selectedValue ==="{{ App\Enums\InvoiceStatusEnums::PENDING}}" ){
                         addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
                         addPrintMenuItem('{{ __('Bordereau journal des avis de réduction ou d’annulation') }}', '2');
-                        addPrintMenuItem('{{ __('Journal des avis des sommes à payer confiés par le receveur') }}', '5');
                     }else addPrintMenuItem('', '1');
                 }
 

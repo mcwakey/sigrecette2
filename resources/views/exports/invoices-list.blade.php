@@ -128,8 +128,10 @@
 
                 $year = date("Y", strtotime( $item[ __('from_date')])) ;
                 switch ($item->status) {
-                    case "APROVED-CANCELLATION":
-                    case "APROVED":
+                    case App\Enums\InvoiceStatusEnums::APPROVED:
+                    case App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION:
+                         case App\Enums\InvoiceStatusEnums::REDUCED:
+                        case App\Enums\InvoiceStatusEnums::CANCELED:
                         $item->status = "PC";
                         break;
                     case "REJECTED":
@@ -176,7 +178,11 @@
     </tr>
     <tr>
         <td colspan="9" >{{$titles[12]}} </td>
+        @if($print->last_sequence_number!=1)
         <td>{{$print->total_last_sequence}}</td>
+        @else
+            <td>0</td>
+        @endif
 
     </tr>
     <tr>

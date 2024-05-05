@@ -103,6 +103,7 @@
                             <div class="col-md-3">
 
                             <div class="input-group mb-2">
+
                                 <select wire:model="start_month" name="start_month" class="form-select form-control-select" data-dropdown-parent="#kt_modal_add_invoice">
                                     @foreach ($months as $monthNumber => $monthName)
                                         <option value="{{ $monthNumber }}" @if($start_month!=null && $monthNumber==$start_month) selected @endif>{{ $monthName }}</option>

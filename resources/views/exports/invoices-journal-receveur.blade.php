@@ -69,7 +69,7 @@
 
             Travail-Liberté-Patrie
         </td>
-    </tr>r>
+    </tr>
 
 
 

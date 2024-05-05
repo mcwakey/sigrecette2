@@ -296,8 +296,11 @@ class PdfGenerator  implements PdfGeneratorInterface
         }elseif ($action==2){
             $type=PrintNameEnums::BORDEREAU_REDUCTION;
         }
+
         if($this->checkIfCommuneIsNotNull()&& $type!=null&&$printFile==null){
             $data=Invoice::getPrintData([InvoiceStatusEnums::PENDING],$type);
+            //dd($data);
+           // dd($templateName,$type,$data);
             //dd($printFile,$type,$data);
             if(count($data)>0){
                 $total=0;
@@ -308,18 +311,25 @@ class PdfGenerator  implements PdfGeneratorInterface
                         $total+=$datum->reduce_amount;
                     }
                 }
-                $printFile= PrintFile::createPrintFile($type,$data);
+                $printFile= PrintFile::createPrintFile($type,$data,$total);
             }
 
         }
-        $data= Invoice::where("print_file_id",$printFile?->id)->get();
-        if ( count($data)>0 && $printFile!=null) {
-            $filename = $type."-" . Str::random(8) . ".pdf";
-            //dd($data);
-            $pdf = PDF::loadView("exports.".$templateName, ['data' => $data,'titles'=>$this->generateTitleWithAction($action),"commune"=> $this->commune,"action"=>$action,'print'=>$printFile])->setPaper('a4', 'landscape')->stream($filename);
+       // $data= Invoice::where("print_data",$printFile?->id)->get();
 
-            return ['success' => true, 'pdf' => $pdf];
+
+        if($printFile!=null){
+            $data = $printFile->invoices()->get();
+            //
+            if ( count($data)>0) {
+                $filename = $type."-" . Str::random(8) . ".pdf";
+                //dd($data);
+                $pdf = PDF::loadView("exports.".$templateName, ['data' => $data,'titles'=>$this->generateTitleWithAction($action),"commune"=> $this->commune,"action"=>$action,'print'=>$printFile])->setPaper('a4', 'landscape')->stream($filename);
+
+                return ['success' => true, 'pdf' => $pdf];
+            }
         }
+
 
 
         return ['success' => false, 'message' => 'Invalid data structure.'];
@@ -343,6 +353,32 @@ class PdfGenerator  implements PdfGeneratorInterface
         if ($this->checkIfCommuneIsNotNull()&& count($data)>0) {
 
             $filename = "Journal_des_avis_des_sommes_à_payer_confiés_par_le_receveur" .".pdf";
+            $pdf = PDF::loadView("exports.".$template, ['data' => $data,'titles'=>$this->generateTitleWithAction($action),"commune"=> $this->commune,"action"=>$action])->setPaper('a4', 'landscape')->stream($filename);
+
+            return ['success' => true, 'pdf' => $pdf];
+        }
+
+        return ['success' => false, 'message' => 'Invalid data structure.'];
+    }
+    /**
+     * @param array $data
+     * @param string $template
+     * @param int|null $action
+     * @return array
+     */
+    public function generateInvoiceRegistrePdf(string $template,int $action=null):array
+    {
+
+        //dd($data,$template,$action);
+        $data=Invoice::getPrintData(
+            [InvoiceStatusEnums::CANCELED,
+                InvoiceStatusEnums::REDUCED,
+                InvoiceStatusEnums::APPROVED,
+                InvoiceStatusEnums::APPROVED_CANCELLATION]);
+        if ($this->checkIfCommuneIsNotNull()&& count($data)>0) {
+
+            $filename = "Registre-journal-des-avis-distribués" . Str::random(8) . ".pdf";
+            //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
             $pdf = PDF::loadView("exports.".$template, ['data' => $data,'titles'=>$this->generateTitleWithAction($action),"commune"=> $this->commune,"action"=>$action])->setPaper('a4', 'landscape')->stream($filename);
 
             return ['success' => true, 'pdf' => $pdf];

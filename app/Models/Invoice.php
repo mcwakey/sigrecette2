@@ -32,18 +32,19 @@ class Invoice extends Model implements FormatDateInterface
         'uuid',
         'delivery_date',
         'type',
-        'print_file_id'
+
         // 'profile_photo_path',
     ];
 
+    public function printFiles()
+    {
+        return $this->belongsToMany(PrintFile::class);
+    }
     public function taxpayer()
     {
         return $this->belongsTo(Taxpayer::class);
     }
-    public function print_file()
-    {
-        return $this->belongsTo(PrintFile::class);
-    }
+
 
     public function taxpayer_taxables()
     {
@@ -115,14 +116,11 @@ class Invoice extends Model implements FormatDateInterface
 
         foreach ($uuids as $uuid) {
             $invoice = null;
-
             if ($type === 'payment') {
                 $payment = Payment::where('uuid', $uuid)->first();
 
                 if ($payment instanceof Payment) {
                     $invoiceId = $payment->invoice_id;
-
-                    // Vérifiez si cette invoice a déjà été récupérée
                     if (!isset($invoices[$invoiceId])) {
                         $invoice = Invoice::find($invoiceId);
                         if ($invoice instanceof Invoice) {
@@ -284,32 +282,43 @@ class Invoice extends Model implements FormatDateInterface
         $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
         $query= Invoice::whereIn('invoices.status',$filterBy)
         ->where('invoices.type','=',Constants::INVOICE_TYPE_TITRE)
-            ->whereBetween('invoices.created_at', [$startOfYear, $endOfYear])
-            ->whereNull("invoices.print_file_id");
+            ->whereBetween('invoices.created_at', [$startOfYear, $endOfYear]);
+
         if($type!=null){
             if ($type==PrintNameEnums::BORDEREAU_REDUCTION){
-                $query = $query->whereNot("invoices.reduce_amount" ,"=",'');
-            }else{
-                $query = $query->where("invoices.reduce_amount" ,"=",'');
+                $query = $query->whereNot("invoices.reduce_amount" ,"=",'')
+                    ->WhereDoesntHave('printFiles', function ($query) use ($type) {
+                        $query->where('name', $type);
+                    });
+            }else if ($type==PrintNameEnums::BORDEREAU){
+                $query = $query->where("invoices.reduce_amount" ,"=",'')
+                    ->WhereDoesntHave('printFiles', function ($query) use ($type) {
+                        $query->where('name', $type);
+                    });
 
+            }else if($type==PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS || $type==PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES){
+                $type=PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS;
+                $query = $query->orWhereDoesntHave('printFiles', function ($query) use ($type) {
+                    $query->where('name', $type);
+                });
             }
         }
 
             return $query
-            ->newQuery()
             ->get();
     }
     public static function addPrintableToInvoices( $collection,PrintFile $printFile){
 
 
         DB::transaction(function () use ($collection,$printFile) {
-            foreach ($collection as $item){
-                if($item instanceof Invoice){
-                    $item->print_file_id= $printFile->id;
-                    $item->save();
+            foreach ($collection as $invoice){
+                if($invoice instanceof Invoice){
+                    $invoice->printFiles()->sync($printFile->id);
+                    $invoice->save();
                 }
             }
         });
         return $printFile;
     }
+
 }

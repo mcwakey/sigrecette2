@@ -191,18 +191,7 @@ class AddInvoiceNoTaxpayerModal extends Component
         $genders = Gender::all();
         $id_types = IdType::all();
         $year= Year::getActiveYear();
-        $months = [];
-        // Obtenez le mois actuel
-        $currentMonth = Carbon::now()->month;
-        $remainingMonths = 12 - $currentMonth;
-
-        for ($i = $currentMonth ; $i <= $currentMonth + $remainingMonths; $i++) {
-            $monthIndex = $i > 12 ? $i - 12 : $i;
-            $monthName = Carbon::createFromFormat('m',$monthIndex)->monthName;
-            $monthNumber = str_pad($monthIndex, 2, '0', STR_PAD_LEFT);
-            $months[$monthNumber] = $monthName;
-        }
-        //$taxpayer_taxables = TaxpayerTaxable::all();
+        $months = Constants::getMonths();
 
         //$taxpayer_taxables = $this->taxpayer_id ? TaxpayerTaxable::where('taxpayer_id', $this->taxpayer_id)->where('billable', 1)->get() : collect();
         //$taxpayer_id = $this->taxpayer_id;

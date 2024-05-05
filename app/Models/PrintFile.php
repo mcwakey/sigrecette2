@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\PrintNameEnums;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class PrintFile extends Model
 {
@@ -14,6 +15,10 @@ class PrintFile extends Model
         'total_last_sequence',
 
     ];
+    public function invoices()
+    {
+        return $this->belongsToMany(Invoice::class);
+    }
     public static function getLastPrintFileByType($type):PrintFile|null{
         $activeYear = Year::getActiveYear();
         $startOfYear = Carbon::parse("{$activeYear->name}-01-01 00:00:00");
@@ -23,17 +28,29 @@ class PrintFile extends Model
             ->orderBy('created_at','desc')
             ->first();
     }
-    public static function createPrintFile(string $type, $data):PrintFile{
+    public static function createPrintFile(string $type, $data,$total=0):PrintFile{
         $last_print = PrintFile::getLastPrintFileByType($type);
         $print_data = [
             'name' =>$type,
             'last_sequence_number' => $last_print==null?1:$last_print->last_sequence_number+1,
-            'total_last_sequence'=>$last_print==null?0:$last_print->total_last_sequence
+            'total_last_sequence'=>$last_print==null?$total:$last_print->total_last_sequence
         ];
         $print= PrintFile::create($print_data);
-
-        //dd($data,$print);
         return Invoice::addPrintableToInvoices($data,$print);
+    }
+    public static function getPrintTotal(PrintFile $file):int{
+        $data = $file->invoices()->get();
+        $total=0;
+        if($file->name==PrintNameEnums::BORDEREAU_REDUCTION){
+            foreach ($data as $invoice){
+                $total+=$invoice->reduce_amount;
+            }
+        }else{
+            foreach ($data as $invoice){
+                $total+=$invoice->amount;
+            }
+        }
+        return $total;
     }
 
 }

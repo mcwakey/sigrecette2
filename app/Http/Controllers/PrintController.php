@@ -83,14 +83,14 @@ class PrintController extends Controller
      */
     public function processType($type, $data,$action):array
     {
-        //dd($type,$data,$action);
+         // dd($type,$data,$action);
         switch ($type) {
             case 1:
                 return $this->pdfGenerator->downloadReceipt($data,'payments',$action);
             case 2:
 
                 if($action==3){
-                    return $this->pdfGenerator->generateInvoiceListPdf($data,'invoices-registre',$action);
+                    return $this->pdfGenerator->generateInvoiceRegistrePdf('invoices-registre',$action);
                 }
                 elseif ($action==4){
                     return $this->pdfGenerator->generateInvoiceListPdf($data,'invoices-distribution',$action);
