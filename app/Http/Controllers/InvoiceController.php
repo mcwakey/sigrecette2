@@ -28,7 +28,9 @@ class InvoiceController extends Controller
             'endInvoiceId' => 'nullable|integer',
             's_date'=> 'nullable',
             'e_date'=> 'nullable',
+            'aucomptant'=>'nullable|integer'
         ]);
+        $aucomptant =$validatedData['aucomptant']??null;
         $notDelivery = $validatedData['notDelivery'] ?? null;
         $startInvoiceId = $validatedData['startInvoiceId'] ?? null;
         $endInvoiceId = $validatedData['endInvoiceId'] ?? null;
@@ -44,7 +46,8 @@ class InvoiceController extends Controller
                 'startDate' => $startDate,
                 'endDate' => $endDate,
                 'startInvoiceId'=>$startInvoiceId ,
-                'endInvoiceId'=>$endInvoiceId
+                'endInvoiceId'=>$endInvoiceId,
+                'aucomptant'=>$aucomptant
             ]
         )->render('pages/invoices.list', compact('zones', 'tax_labels','agent_recouvrements'));
     }

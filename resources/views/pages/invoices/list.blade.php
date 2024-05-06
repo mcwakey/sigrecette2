@@ -64,32 +64,36 @@
                         </div>
 
                     </div>
-            <!--begin::Toolbar-->
-                @can('peut émettre un avis')
-                    <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
-                        <!--begin::Add user-->
-                    <!-- <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice_no_taxpayer">
-                        {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                    {{ __('create invoice') }}
-                        </button> -->
-
-                        <button type="button" class="btn btn-light-success ms-auto me-5" data-kt-user-id="1"
-                                data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice_no_taxpayer"
-                                data-kt-action="add_no_invoice">
-                            <i class="ki-duotone ki-add-files fs-3">
-                                <span class="path1"></span>
-                                <span class="path2"></span>
-                                <span class="path3"></span>
-                                <span class="path4"></span>
-                                <span class="path5"></span>
-                            </i> {{ __('create invoice') }}
-                        </button>
+                @if(request()->routeIs('invoices.*') &&  request()->has('aucomptant'))
+                    @can('peut émettre un avis')
+                        <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
+                            <!--begin::Add user-->
+                        <!-- <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice_no_taxpayer">
+                            {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                        {{ __('create invoice') }}
+                            </button> -->
 
 
-                        <!--end::Add user-->
-                    </div>
-                @endcan
-                @can('peut générer automatiquement les avis')
+                                <button type="button" class="btn btn-light-success ms-auto me-5" data-kt-user-id="1"
+                                        data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice_no_taxpayer"
+                                        data-kt-action="add_no_invoice">
+                                    <i class="ki-duotone ki-add-files fs-3">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                        <span class="path3"></span>
+                                        <span class="path4"></span>
+                                        <span class="path5"></span>
+                                    </i> {{ __('Ajouter un avis au comptant') }}
+                                </button>
+
+
+
+
+                            <!--end::Add user-->
+                        </div>
+                    @endcan
+                @else
+                    @can('peut générer automatiquement les avis')
                         @if (now()->format('m') === '01' || $app->environment('local'))
                             <div class="d-flex justify-content-end" data-kt-invoice-table-toolbar="base">
                                 <!--begin::Add user-->
@@ -103,9 +107,11 @@
 
                                 <!--end::Add user-->
                             </div>
-                        @endif
+                    @endif
 
-            @endcan
+                @endcan
+                @endif
+
             <!--end::Toolbar-->
 
 
@@ -395,6 +401,7 @@
                     $('#kt_modal_add_invoice').modal('hide');
                     $('#kt_modal_auto_invoice').modal('hide');
                     $('#kt_modal_add_payment').modal('hide');
+                    $('#kt_modal_add_invoice_no_taxpayer').modal('hide');
                     window.LaravelDataTables['invoices-table'].ajax.reload();
                 });
             });

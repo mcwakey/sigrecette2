@@ -15,8 +15,6 @@
                 </div>
                 <!--end::Close-->
             </div>
-            <!--end::Modal header-->
-            <!--begin::Modal body-->
             <div class="modal-body px-5 my-7">
                 <!--begin::Form-->
                 <form id="kt_modal_add_invoice_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">

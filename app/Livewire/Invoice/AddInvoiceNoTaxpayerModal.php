@@ -62,6 +62,8 @@ class AddInvoiceNoTaxpayerModal extends Component
 
     public $amount_ph_e;
     public $amount_e;
+    public $length;
+    public $width;
 
 
 
@@ -175,6 +177,7 @@ class AddInvoiceNoTaxpayerModal extends Component
     //     $this->taxpayer_id = $taxpayer_id;
     // }
     private $tarisIsNull=null;
+    public $option_calculus;
 
 
     public function render()
@@ -191,8 +194,11 @@ class AddInvoiceNoTaxpayerModal extends Component
         $genders = Gender::all();
         $id_types = IdType::all();
         $year= Year::getActiveYear();
-        $months = Constants::getMonths();
-
+        $months = [];//Constants::getMonths();
+        $currentMonth = Carbon::now()->month;
+        $monthName = Carbon::createFromFormat('m',$currentMonth)->monthName;
+        $monthNumber = str_pad($currentMonth, 2, '0', STR_PAD_LEFT);
+        $months[$monthNumber] = $monthName;
         //$taxpayer_taxables = $this->taxpayer_id ? TaxpayerTaxable::where('taxpayer_id', $this->taxpayer_id)->where('billable', 1)->get() : collect();
         //$taxpayer_id = $this->taxpayer_id;
 
@@ -237,7 +243,7 @@ class AddInvoiceNoTaxpayerModal extends Component
         //$this->ereas = Erea::where('town_id', $value)->get(); // Load taxables based on tax label ID
         //dd($taxables);
 
-        // $this->option_calculus = $taxables->unit_type;
+        $this->option_calculus = $taxables->unit_type;
         //if ($taxables)
             $this->tariff = $taxables->tariff;
             $this->s_tariff = $taxables->tariff;
@@ -253,10 +259,19 @@ class AddInvoiceNoTaxpayerModal extends Component
             $this->taxpayer_taxable_id = $taxables->id;
 
             $this->taxlabel_name = $taxables->name;
+            $this->loadInvoice($this->qty);
        // dd($this->tarisIsNull);
 
     }
+    public function updatedLength($value)
+    {
+        $this->seize = intval($this->length) * intval($this->width);
+    }
 
+    public function updatedWidth($value)
+    {
+        $this->seize = intval($this->length) * intval($this->width);
+    }
     // public function submit()
     // {
     //     // Validate the form input data
@@ -302,8 +317,9 @@ class AddInvoiceNoTaxpayerModal extends Component
 
 
         // Validate the form input data
-        $this->validate();
-
+       $this->validate();
+//dd(  $this->amount,$this->s_amount,$this->taxpayer_taxable_id,$this->qty,$this->start_month,$this->validate());
+        //'cancel_reduct' => 'required',
         DB::transaction(function () {
 
             //dd($this->qty,$this->start_month);

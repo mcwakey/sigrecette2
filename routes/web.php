@@ -63,7 +63,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('/taxpayers', TaxpayerController::class);
     Route::resource('/invoices', InvoiceController::class)->parameters([
-        'invoices' => 'invoice:notDelivery?,s_date?,e_date?,startInvoiceId?,endInvoiceId?',
+        'invoices' => 'invoice:notDelivery?,s_date?,e_date?,startInvoiceId?,endInvoiceId?,aucomptant?',
     ]);
 
     Route::resource('/recoveries', RecoveryController::class);

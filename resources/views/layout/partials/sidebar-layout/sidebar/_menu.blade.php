@@ -84,7 +84,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery') ? 'active' : '' }}"
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery') && !request()->has('aucomptant') ? 'active' : '' }}"
                            href="{{ route('invoices.index') }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
@@ -112,6 +112,17 @@
             <span class="bullet bullet-dot"></span>
         </span>
                             <span class="menu-title">Liste des avis distribués</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->has('aucomptant')? 'active' : '' }}"
+                           href="{{ route('invoices.index', ['aucomptant' => true]) }}">
+        <span class="menu-bullet">
+            <span class="bullet bullet-dot"></span>
+        </span>
+                            <span class="menu-title">Liste des avis au comptant</span>
                         </a>
                         <!--end:Menu link-->
                     </div>

@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Enums\PrintNameEnums;
 use App\Enums\InvoiceStatusEnums;
+use App\Helpers\Constants;
 use App\Models\Invoice;
 use App\Models\Year;
 use Carbon\Carbon;
@@ -128,6 +129,11 @@ class InvoicesDataTable extends DataTable
         }
         if ($this->startInvoiceId!== null && $this->endInvoiceId!== null) {
             $query->whereBetween('invoices.id', [$this->startInvoiceId, $this->endInvoiceId]);
+        }
+        if($this->aucomptant){
+            $query->where('invoices.type','=',Constants::INVOICE_TYPE_COMPTANT);
+        }else{
+            $query->where('invoices.type','=',Constants::INVOICE_TYPE_TITRE);
         }
         return $query;
     }
