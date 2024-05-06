@@ -25,7 +25,7 @@ class TaxLabelsDataTable extends DataTable
             //     return view('pages/tax_labels.columns._tax_label', compact('tax_label'));
             // })
             ->editColumn('category', function (TaxLabel $tax_label) {
-                return $tax_label->category;
+                return __($tax_label->category);
             })
             ->editColumn('name', function (TaxLabel $tax_label) {
                 return $tax_label->name;

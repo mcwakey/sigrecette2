@@ -22,7 +22,7 @@
                     <input type="hidden" wire:model="tax_label_id" name="tax_label_id"/>
                     <!--begin::Scroll-->
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_tax_label_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_tax_label_header" data-kt-scroll-wrappers="#kt_modal_add_tax_label_scroll" data-kt-scroll-offset="300px">
-                        
+
                         <!--begin::Input group-->
 
                         <div class="row mb-7">
@@ -34,9 +34,9 @@
                                 <select wire:model="category" name="category" class="form-select"
                                     data-dropdown-parent="#kt_modal_add_tax_label">
                                     <option>{{ __('select an option') }}</option>
-                                    <option value="CATEGORY 1">CATEGORY 1</option>
-                                    <option value="CATEGORY 2">CATEGORY 2</option>
-                                    <option value="CATEGORY 3">CATEGORY 3</option>
+                                    <option value="CATEGORY 1">{{ __('CATEGORY 1') }}</option>
+                                    <option value="CATEGORY 2">{{ __('CATEGORY 2') }}</option>
+                                    <option value="CATEGORY 3">{{ __('CATEGORY 3') }}</option>
                                     <!-- <option value="Homme">Homme</option>
                                     <option value="Femme">Femme</option> -->
                                 </select>
@@ -45,7 +45,7 @@
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>
-                        
+
                         <div class="separator saperator-dashed my-5"></div>
 
                         <div class="row mb-7">
