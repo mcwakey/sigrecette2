@@ -93,23 +93,26 @@
                         </div>
                     @endcan
                 @else
-                    @can('peut générer automatiquement les avis')
-                        @if (now()->format('m') === '01' || $app->environment('local'))
-                            <div class="d-flex justify-content-end" data-kt-invoice-table-toolbar="base">
-                                <!--begin::Add user-->
+                    @if( request()->routeIs('invoices.*') && !request()->has('notDelivery') && !request()->has('aucomptant'))
+                        @can('peut générer automatiquement les avis')
+                            @if (now()->format('m') === '01' || $app->environment('local'))
+                                <div class="d-flex justify-content-end" data-kt-invoice-table-toolbar="base">
+                                    <!--begin::Add user-->
 
 
-                                <button type="button" class="btn btn-light-danger ms-auto me-5"
-                                        data-bs-toggle="modal" data-bs-target="#kt_modal_auto_invoice">
-                                    {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                                    {{ __('create invoice automaticaly') }}
-                                </button>
+                                    <button type="button" class="btn btn-light-danger ms-auto me-5"
+                                            data-bs-toggle="modal" data-bs-target="#kt_modal_auto_invoice">
+                                        {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                                        {{ __('create invoice automaticaly') }}
+                                    </button>
 
-                                <!--end::Add user-->
-                            </div>
-                    @endif
+                                    <!--end::Add user-->
+                                </div>
+                        @endif
 
-                @endcan
+                    @endcan
+
+                @endif
                 @endif
 
             <!--end::Toolbar-->
