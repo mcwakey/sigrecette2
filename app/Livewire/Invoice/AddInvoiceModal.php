@@ -457,7 +457,7 @@ class AddInvoiceModal extends Component
 
         $this->invoice_id = '';
 
-        $this->qty = '1';
+        $this->qty = 12;
 
         // dd($this->edit_mode, 'loadInvoice');
 
@@ -512,15 +512,15 @@ class AddInvoiceModal extends Component
             // Update the value in the component properties using the loop index as the key
             // dd($taxable->taxable);
 
-            if ($taxable->taxable->periodicity == "Mois") {
+            // if ($taxable->taxable->periodicity == "Mois") {
+            //     $period = 1;
+            // } elseif ($taxable->taxable->periodicity == "Ans") {
+            //     $period = 0.083333;
+            //     // }elseif ($taxable->taxable->periodicity == "Jours") {
+            //     //     $period = 30;
+            // } else {
                 $period = 1;
-            } elseif ($taxable->taxable->periodicity == "Ans") {
-                $period = 0.083333;
-                // }elseif ($taxable->taxable->periodicity == "Jours") {
-                //     $period = 30;
-            } else {
-                $period = 1;
-            }
+            // }
 
             $this->periodicity = $taxable->taxable->periodicity;
 
