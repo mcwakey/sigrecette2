@@ -30,9 +30,9 @@ class SearchTaxpayerResource extends JsonResource
             'erea' => $this->erea?->id,
             'zone' => $this->zone?->id,
             'email' => $this->resource->email,
-            'last_login_at' =>  $this->resource->last_login_at,
-            'last_login_ip' =>  $this->resource->last_login_ip,
-            'profile_photo_path' => $this->resource->profile_photo_path,
+            //'last_login_at' =>  $this->resource->last_login_at,
+            //'last_login_ip' =>  $this->resource->last_login_ip,
+            //'profile_photo_path' => $this->resource->profile_photo_path,
         ];
     }
 }
