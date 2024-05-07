@@ -21,7 +21,7 @@ class AuthController extends Controller
         $user = Auth::user();
         if($user->zone==null){
             return response()->json([
-                "message"=>"Your user has not role",
+                "message"=>"Your user has not zone",
             ], 404);
         }
         $token = $user->createToken($user->email . '-AuthToken')->plainTextToken;
