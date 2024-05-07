@@ -15,3 +15,5 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+resources/views/exports/state-account-iv-collectorc.blade.php
+resources/views/exports/state-account-iv-receveurc.blade.php

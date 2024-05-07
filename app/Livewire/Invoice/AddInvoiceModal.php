@@ -2,6 +2,9 @@
 
 namespace App\Livewire\Invoice;
 
+use App\Enums\InvoiceStatusEnums;
+use App\Helpers\Constants;
+use App\Models\Year;
 use Carbon\Carbon;
 
 use App\Models\Canton;
@@ -154,22 +157,10 @@ class AddInvoiceModal extends Component
 
         //return view('livewire.invoice.add-invoice-modal', ['taxpayer_id' => $this->taxpayer_id]);
 
-        $year= \App\Models\Year::getActiveYear();
-        $months = [];
-        // Obtenez le mois actuel
-        $currentMonth = Carbon::now()->month;
-        $remainingMonths = 12 - $currentMonth;
-    
-        for ($i = $currentMonth + 1; $i <= $currentMonth + $remainingMonths; $i++) {
-            $monthIndex = $i > 12 ? $i - 12 : $i;
-            $monthName = Carbon::createFromFormat('m',$monthIndex)->monthName;
-            $monthNumber = str_pad($monthIndex, 2, '0', STR_PAD_LEFT);
-            $months[$monthNumber] = $monthName;
-        }
+        $year= Year::getActiveYear();
+        $months = Constants::getMonths();
 
-        $this->qty = count($months);
-
-        return view('livewire.invoice.add-invoice-modal', compact('taxpayers'));
+        return view('livewire.invoice.add-invoice-modal', compact('taxpayers','months','year'));
     }
 
     // public function submit()
@@ -243,8 +234,14 @@ class AddInvoiceModal extends Component
                 $invoiceData['amount'] = $this->amount_e;
                 $invoiceData['reduce_amount'] = $this->reduce_amount;
                 //FIX CANCEL INVOICE BUG
-                if (intval($this->reduce_amount) === 0) {
+                if ($this->cancel_reduct== InvoiceStatusEnums::CANCELED) {
                     $invoiceData['reduce_amount'] = $this->amount_e;
+                    $invoice= Invoice::find($this->invoice_id);
+                    foreach ($invoice->taxpayer_taxables()->get() as $item){
+                        $item->invoice_id=null;
+                        $item->bill_status="NOT BILLED";
+                        $item->save();
+                    }
                 }
                 $invoiceData['status'] = 'DRAFT';
             }
@@ -460,7 +457,7 @@ class AddInvoiceModal extends Component
 
         $this->invoice_id = '';
 
-        $this->qty = '1';
+        $this->qty = 12;
 
         // dd($this->edit_mode, 'loadInvoice');
 
@@ -515,15 +512,15 @@ class AddInvoiceModal extends Component
             // Update the value in the component properties using the loop index as the key
             // dd($taxable->taxable);
 
-            if ($taxable->taxable->periodicity == "Mois") {
+            // if ($taxable->taxable->periodicity == "Mois") {
+            //     $period = 1;
+            // } elseif ($taxable->taxable->periodicity == "Ans") {
+            //     $period = 0.083333;
+            //     // }elseif ($taxable->taxable->periodicity == "Jours") {
+            //     //     $period = 30;
+            // } else {
                 $period = 1;
-            } elseif ($taxable->taxable->periodicity == "Ans") {
-                $period = 0.083333;
-                // }elseif ($taxable->taxable->periodicity == "Jours") {
-                //     $period = 30;
-            } else {
-                $period = 1;
-            }
+            // }
 
             $this->periodicity = $taxable->taxable->periodicity;
 

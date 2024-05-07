@@ -133,7 +133,7 @@
                 data-td-toggle="datetimepicker">
                 <i class="ki-duotone ki-calendar fs-2"><span class="path1"></span><span class="path2"></span></i>
             </span>
-            <input id="date-picker-input" wire:model="delivery_date" value="" name="delivery_date"
+            <input READONLY id="date-picker-input" wire:model="delivery_date" value="" name="delivery_date"
                 id="kt_td_picker_basic_input" type="text" class="form-control" data-td-target="#kt_td_picker_basic"
                 placeholder="yyyy-MM-dd" />
         </div>

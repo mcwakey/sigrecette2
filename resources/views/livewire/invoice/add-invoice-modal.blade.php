@@ -1,19 +1,4 @@
-@php
-    use Carbon\Carbon;
-    $year= \App\Models\Year::getActiveYear();
-    $months = [];
-    // Obtenez le mois actuel
-    $currentMonth = Carbon::now()->month;
-    $remainingMonths = 12 - $currentMonth;
 
-    for ($i = $currentMonth + 1; $i <= $currentMonth + $remainingMonths; $i++) {
-        $monthIndex = $i > 12 ? $i - 12 : $i;
-        $monthName = Carbon::createFromFormat('m',$monthIndex)->monthName;
-        $monthNumber = str_pad($monthIndex, 2, '0', STR_PAD_LEFT);
-        $months[$monthNumber] = $monthName;
-    }
-
-@endphp
 <div class="modal fade" id="kt_modal_add_invoice" tabindex="-1" aria-hidden="true" wire:ignore.self>
     <!--begin::Modal dialog-->
     <div class="modal-dialog modal-dialog-centered mw-1000px">
@@ -30,8 +15,6 @@
                 </div>
                 <!--end::Close-->
             </div>
-            <!--end::Modal header-->
-            <!--begin::Modal body-->
             <div class="modal-body px-5 my-7">
                 <!--begin::Form-->
                 <form id="kt_modal_add_invoice_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
@@ -95,7 +78,8 @@
                                     </button>
                                     <!--end::Decrease control-->
                                     <!--begin::Input control-->
-                                    <input wire:model="qty" name="qty" value="{{count($months)}}" type="text" class="form-control border-0 ps-12" data-kt-dialer-control="input" placeholder="1" readonly="readonly" data-kt-action="load_invoice" />
+                                    <input wire:model="qty" name="qty"  type="text" class="form-control border-0 ps-12"
+                                           data-kt-dialer-control="input" placeholder="1" readonly="readonly" data-kt-action="load_invoice" />
                                     <!--end::Input control-->
                                     @error('qty')
                                     <span class="text-danger">{{ $message }}</span> @enderror
@@ -117,6 +101,7 @@
                             <div class="col-md-3">
 
                             <div class="input-group mb-2">
+
                                 <select wire:model="start_month" name="start_month" class="form-select form-control-select" data-dropdown-parent="#kt_modal_add_invoice">
                                     @foreach ($months as $monthNumber => $monthName)
                                         <option value="{{ $monthNumber }}" @if($start_month!=null && $monthNumber==$start_month) selected @endif>{{ $monthName }}</option>
@@ -130,20 +115,6 @@
                             </div>
 
                         </div>
-
-
-                                @push('scripts')
-                                    <script>
-                                        // let monthDialer = document.getElementById('month-dialer');
-                                        // let totalMounth = @json($months);
-
-                                        // monthDialer.setAttribute('data-kt-dialer-min', totalMounth.length);
-                                        // monthDialer.setAttribute('data-kt-dialer-max', totalMounth.length);
-
-                                        // console.log(monthDialer);
-                                    </script>
-                                @endpush
-
 
                         <div class="separator separator-dashed my-2"></div>
 
@@ -273,9 +244,9 @@
                                     <select wire:model="cancel_reduct" name="cancel_reduct" class="form-select form-control-select" data-dropdown-parent="#kt_modal_add_invoice">
                                         <option></option>
                                         @if ($reduce_amount > 0)
-                                        <option value="REDUCED">Reduction</option>
+                                        <option value="{{App\Enums\InvoiceStatusEnums::REDUCED }}">Reduction</option>
                                         @endif
-                                        <option value="CANCELED">Annulation</option>
+                                        <option value="{{App\Enums\InvoiceStatusEnums::CANCELED}}">Annulation</option>
                                     </select>
                                     @error('cancel_reduct')
                                     <span class="text-danger">{{ $message }}</span> @enderror

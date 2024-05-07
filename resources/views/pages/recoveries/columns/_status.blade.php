@@ -1,4 +1,4 @@
-@if ($payment->status == 'PENDING' )
+@if ($payment->status ==App\Enums\PaymentStatusEnums::PENDING )
     <span
         class="badge badge-light-primary">{{ __($payment->status) }}</span>
     @can('peut accepter un paiement')
@@ -18,9 +18,9 @@
             </i>
         </button>
     @endcan
-@elseif($payment->status == 'APROVED')
+@elseif($payment->status == App\Enums\PaymentStatusEnums::ACCOUNTED)
     <span
-        class="badge badge-light-success">{{ __('APROVED') }}</span>
+        class="badge badge-light-success">{{ __(App\Enums\PaymentStatusEnums::ACCOUNTED) }}</span>
 @endif
 
 

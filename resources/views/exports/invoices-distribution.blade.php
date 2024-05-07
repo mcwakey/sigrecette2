@@ -43,7 +43,12 @@
 
 <table>
     <tr>
-        <td colspan="6"  style="border: none; padding: 2px;">
+        <td colspan="1"  style="border: none; margin: 0;text-align: left">
+
+            <img src="{{ $commune-> getImageUrlAttribute() }}" alt="Logo" style="width: 50px; height: 50px;">
+
+        </td>
+        <td colspan="5"  style="border: none; padding: 2px;">
             {{$commune->region_name}}
 
         </td>
@@ -53,7 +58,9 @@
         </td>
     </tr>
     <tr>
-        <td colspan="6" style="border: none; margin: 0; padding:2px ;">
+        <td colspan="1" style="border: none; margin: 0; padding:2px ;text-align: left;">
+        </td>
+        <td colspan="5" style="border: none; margin: 0; padding:2px ;">
 
             {{$commune->title}}
         </td>
@@ -66,19 +73,19 @@
         <th colspan="12" style="border: none; margin: 0; text-align: center;" class="caption">Fiche de distribution des avis</th>
     </tr>
     <tr>
-        <td colspan="12" style="border: none; margin: 0; text-align: center;">N°....</td>
+        <td colspan="12" style="border: none; margin: 0; text-align: center;">N°{{$print->last_sequence_number}}</td>
     </tr>
     <tr>
         <td colspan="12" style="border: none; margin: 0;" >Exercice : {{" ".$year->name}}</td>
     </tr>
     <tr>
-        <td colspan="12" style="border: none; margin: 0;">Zone fiscale : {{$data[0]->taxpayer->zone->name}}</td>
+        <td colspan="12" style="border: none; margin: 0;">Zone fiscale : </td>
     </tr>
     <tr>
-        <td colspan="12" style="border: none; margin: 0;" >Nom de l’agent de recouvrement : {{\Illuminate\Support\Facades\Auth::user()->name}}</td>
+        <td colspan="12" style="border: none; margin: 0;" >Nom de l’agent de recouvrement : {{$agent->name}} </td>
     </tr>
     <tr>
-        <td  colspan="12" style="border: none; margin: 0;" >Période de distribution: .....</td>
+        <td  colspan="12" style="border: none; margin: 0;" >Période de distribution: </td>
     </tr>
     <tr>
         <th>N° Avis</th>
@@ -109,12 +116,12 @@
         <td style="text-align: center">{{$item->invoice_no}}</td>
         <td style="text-align: center">{{$item->order_no}}</td>
         <td style="text-align: center">{{$item->nic}}</td>
-        <td style="text-align: center">{{$item->taxpayer->name}}</td>
-        <td style="text-align: center">{{$item->taxpayer->mobilephone}}</td>
-        <td style="text-align: center">{{$item->taxpayer->town->canton->name}}</td>
-        <td style="text-align: center">{{$item->taxpayer->town->name}}</td>
-        <td style="text-align: center">{{$item->taxpayer->address}}</td>
-        <td style="text-align: center">{{$item->taxpayer->longitude,$item->taxpayer->latitude}}</td>
+        <td style="text-align: center">{{$item->taxpayer?->name}}</td>
+        <td style="text-align: center">{{$item->taxpayer?->mobilephone}}</td>
+        <td style="text-align: center">{{$item->taxpayer?->town->canton->name}}</td>
+        <td style="text-align: center">{{$item->taxpayer?->town->name}}</td>
+        <td style="text-align: center">{{$item->taxpayer?->address}}</td>
+        <td style="text-align: center">{{$item->taxpayer?->longitude,$item->taxpayer?->latitude}}</td>
         <td style="text-align: center">{{$item->amount}}</td>
         @if ($item->delivery_date != null)
         <td style="text-align: center">

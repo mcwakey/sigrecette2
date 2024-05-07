@@ -40,7 +40,16 @@
 
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
-                    <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
+                <div id="agent-div" class="d-flex justify-content-end me-5 d-none" data-kt-invoice-table-toolbar="base">
+                        <select class="form-select" id="r-select">
+                            <option value="">Sélectioner un agent de recouvrement</option>
+                            @foreach ($agent_recouvrements as $agent)
+                                <option value="{{$agent->id }}">{{  $agent->name }}</option>
+                            @endforeach
+                        </select>
+
+                </div>
+                <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
                         <div href="#" id="print-btn" class="btn btn-light  btn-flex btn-center ms-auto me-5 hover-elevate-up pulse pulse-success d-none"
                              data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                             {{ __('print') }}
@@ -55,48 +64,57 @@
                         </div>
 
                     </div>
-            <!--begin::Toolbar-->
-                @can('peut émettre un avis')
-                    <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
-                        <!--begin::Add user-->
-                    <!-- <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice_no_taxpayer">
-                        {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                    {{ __('create invoice') }}
-                        </button> -->
-
-                        <button type="button" class="btn btn-light-success ms-auto me-5" data-kt-user-id="1"
-                                data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice_no_taxpayer"
-                                data-kt-action="add_no_invoice">
-                            <i class="ki-duotone ki-add-files fs-3">
-                                <span class="path1"></span>
-                                <span class="path2"></span>
-                                <span class="path3"></span>
-                                <span class="path4"></span>
-                                <span class="path5"></span>
-                            </i> {{ __('create invoice') }}
-                        </button>
+                @if(request()->routeIs('invoices.*') &&  request()->has('aucomptant'))
+                    @can('peut émettre un avis')
+                        <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
+                            <!--begin::Add user-->
+                        <!-- <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice_no_taxpayer">
+                            {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                        {{ __('create invoice') }}
+                            </button> -->
 
 
-                        <!--end::Add user-->
-                    </div>
-                @endcan
-                @can('peut générer automatiquement les avis')
-                        @if (now()->format('m') === '01' || $app->environment('local'))
-                            <div class="d-flex justify-content-end" data-kt-invoice-table-toolbar="base">
-                                <!--begin::Add user-->
-
-
-                                <button type="button" class="btn btn-light-danger ms-auto me-5"
-                                        data-bs-toggle="modal" data-bs-target="#kt_modal_auto_invoice">
-                                    {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                                    {{ __('create invoice automaticaly') }}
+                                <button type="button" class="btn btn-light-success ms-auto me-5" data-kt-user-id="1"
+                                        data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice_no_taxpayer"
+                                        data-kt-action="add_no_invoice">
+                                    <i class="ki-duotone ki-add-files fs-3">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                        <span class="path3"></span>
+                                        <span class="path4"></span>
+                                        <span class="path5"></span>
+                                    </i> {{ __('Ajouter un avis au comptant') }}
                                 </button>
 
-                                <!--end::Add user-->
-                            </div>
+
+
+
+                            <!--end::Add user-->
+                        </div>
+                    @endcan
+                @else
+                    @if( request()->routeIs('invoices.*') && !request()->has('notDelivery') && !request()->has('aucomptant'))
+                        @can('peut générer automatiquement les avis')
+                            @if (now()->format('m') === '01' || $app->environment('local'))
+                                <div class="d-flex justify-content-end" data-kt-invoice-table-toolbar="base">
+                                    <!--begin::Add user-->
+
+
+                                    <button type="button" class="btn btn-light-danger ms-auto me-5"
+                                            data-bs-toggle="modal" data-bs-target="#kt_modal_auto_invoice">
+                                        {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                                        {{ __('create invoice automaticaly') }}
+                                    </button>
+
+                                    <!--end::Add user-->
+                                </div>
                         @endif
 
-            @endcan
+                    @endcan
+
+                @endif
+                @endif
+
             <!--end::Toolbar-->
 
 
@@ -135,9 +153,10 @@
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('invoice no') }}</label>
                             <input type="text" class="form-control" name="tags" id="mySearchTwo"/>
                         </div>
-
-                        <!--end::Col-->
-                        <!--begin::Col-->
+                        <div class="col-xxl-2">
+                            <label class="fs-6 form-label fw-bold text-dark">{{ __('Montant') }}</label>
+                            <input type="text" class="form-control" name="tags" id="mySearchM"/>
+                        </div>
                         <div class="col-xxl-2">
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('zone') }}</label>
                             <!--begin::Select-->
@@ -172,11 +191,12 @@
                             <!--begin::Select-->
                             <select class="form-select" id="mySearchTen">
                                 <option value=""></option>
-                                <option value="APROVED">{{ __('APROVED') }}</option>
-                                <option value="REJECTED">{{ __('REJECTED') }}</option>
-                                <option value="CANCELED">{{ __('CANCELED') }}</option>
-                                <option value="APROVED-CANCELLATION">{{ __("AVIS D'ANNULATION/REDUCTION") }}</option>
-                                <option value="PENDING">{{ __('PENDING') }}</option>
+                                <option value="{{App\Enums\InvoiceStatusEnums::APPROVED}}">{{ __('APROVED') }}</option>
+                                <option value="{{ App\Enums\InvoiceStatusEnums::REJECTED }}">{{ __('REJECTED') }}</option>
+                                <option value="{{  App\Enums\InvoiceStatusEnums::CANCELED }}">{{ __('CANCELED') }}</option>
+                                <option value="{{  App\Enums\InvoiceStatusEnums::REDUCED }}">{{ __('REDUCED') }}</option>
+                                <option value="{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}">{{ __("AVIS D'ANNULATION/REDUCTION") }}</option>
+                                <option value="{{ App\Enums\InvoiceStatusEnums::PENDING}}">{{ __('PENDING') }}</option>
                             </select>
                             <!--end::Select-->
                             <!--end::Row-->
@@ -356,7 +376,9 @@
                 let s_id = this.value;
                 window.LaravelDataTables['invoices-table'].column(1).search(s_id).draw();
             });
-
+            document.getElementById('mySearchM').addEventListener('keyup', function () {
+                window.LaravelDataTables['invoices-table'].column(8).search(this.value).draw();
+            });
 
 
             let zone = "zone 1";
@@ -370,11 +392,11 @@
             });
 
             document.getElementById('mySearchTen').addEventListener('change', function () {
-                window.LaravelDataTables['invoices-table'].column(9).search(this.value).draw();
+                window.LaravelDataTables['invoices-table'].column(11).search(this.value).draw();
             });
 
             document.getElementById('mySearchEleven').addEventListener('change', function () {
-                window.LaravelDataTables['invoices-table'].column(12).search(this.value).draw();
+                window.LaravelDataTables['invoices-table'].column(14).search(this.value).draw();
             });
 
             document.addEventListener('livewire:init', function () {
@@ -382,12 +404,16 @@
                     $('#kt_modal_add_invoice').modal('hide');
                     $('#kt_modal_auto_invoice').modal('hide');
                     $('#kt_modal_add_payment').modal('hide');
+                    $('#kt_modal_add_invoice_no_taxpayer').modal('hide');
                     window.LaravelDataTables['invoices-table'].ajax.reload();
                 });
             });
-
+            let agent;
+            document.getElementById('r-select').addEventListener('change', function () {
+                agent = this.value;
+            });
             const printModal = document.getElementById('print-modal');
-
+            const agentDiv = document.getElementById('agent-div');
             // Sélectionnez le bouton
             const printButton = document.getElementById('print-btn');
 
@@ -413,38 +439,39 @@
                 newMenuItem.appendChild(newLink);
                 printModal.appendChild(newMenuItem);
             }
-
             function onSelectedValueChanged(selectedValue) {
-                const array = ['APROVED', 'APROVED-CANCELLATION','CANCELED',"PENDING","REJECTED"];
                 removePrintMenuItems();
+                const array = ['{{App\Enums\InvoiceStatusEnums::APPROVED}}','{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}','{{  App\Enums\InvoiceStatusEnums::CANCELED }}','{{ App\Enums\InvoiceStatusEnums::PENDING}}',"{{ App\Enums\InvoiceStatusEnums::REJECTED }}",'{{ App\Enums\InvoiceStatusEnums::REDUCED}}'];
                 if (array.includes(selectedValue)) {
                     printButton.classList.add('btn-active-light-primary');
                     printButton.classList.remove( "d-none");
-                    if (selectedValue === 'APROVED' || selectedValue === "CANCELED") {
-                        addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
-                        addPrintMenuItem('{{ __('Journal des avis des sommes à payer confiés par le receveur') }}', '5');
-                        addPrintMenuItem('{{ __('Fiche de distribution des avis') }}', '4');
-                        addPrintMenuItem('{{ __('Registre-journal des avis distribués') }}', '3');
+                    const approve_array = ['{{App\Enums\InvoiceStatusEnums::APPROVED}}','{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}','{{  App\Enums\InvoiceStatusEnums::CANCELED }}','{{ App\Enums\InvoiceStatusEnums::REDUCED}}'];
+                    if (
+                        approve_array.includes(selectedValue)
+                    ) {
+                        agentDiv.classList.remove( "d-none")
                         addPrintMenuItem('{{ __('Fiche de recouvrement des avis distribués') }}', '41');
-
-                    } else if (selectedValue === 'APROVED-CANCELLATION') {
+                        addPrintMenuItem('{{ __('Fiche de distribution des avis') }}', '4');
+                        addPrintMenuItem('{{ __('Journal des avis des sommes à payer confiés par le receveur') }}', '5');
+                        addPrintMenuItem('{{ __('Registre-journal des avis distribués') }}', '3');
+                    }else if(  selectedValue ==="{{ App\Enums\InvoiceStatusEnums::PENDING}}" ){
+                        addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
                         addPrintMenuItem('{{ __('Bordereau journal des avis de réduction ou d’annulation') }}', '2');
-                    }else if(selectedValue === "PENDING"|| selectedValue ==="REJECTED"){
-                        addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
-                    }else {
-                        addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
-                    }
+                        agentDiv.classList.add( "d-none")
+                    }else addPrintMenuItem('', '1');
+
                 }
+
                 else {
                     printButton.classList.remove('btn-active-light-primary');
                     printButton.classList.add( "d-none");
-
                 }
+                printButton.classList.add('btn-active-light-primary');
+                printButton.classList.remove( "d-none");
             }
 
             const selectElement = document.getElementById('mySearchTen');
             selectElement.addEventListener('change', function(event) {
-                console.log(18)
                 const selectedValue = event.target.value;
                 onSelectedValueChanged(selectedValue);
                 document.querySelectorAll('.print-link').forEach(function(link) {
@@ -460,12 +487,24 @@
                             dataArray.push(id);
                         }
 
+
                         let r_type = 2;
                         let jsonData = JSON.stringify(dataArray);
-                        let url = "{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type', 'action' => ':selectedValue']) }}";
-                        url = url.replace(':jsonData', encodeURIComponent(jsonData));
-                        url = url.replace(':r_type', encodeURIComponent(r_type));
-                        url = url.replace(':selectedValue', encodeURIComponent(selectedValue));
+                        var url;
+                        if (agent != null) {
+                            url = "{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type', 'action' => ':selectedValue','id'=>':agent']) }}";
+                            url = url.replace(':jsonData', encodeURIComponent(jsonData));
+                            url = url.replace(':r_type', encodeURIComponent(r_type));
+                            url = url.replace(':selectedValue', encodeURIComponent(selectedValue));
+                            url = url.replace(':agent', encodeURIComponent(agent));
+                        }
+                        else{
+                            url = "{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type', 'action' => ':selectedValue']) }}";
+                            url = url.replace(':jsonData', encodeURIComponent(jsonData));
+                            url = url.replace(':r_type', encodeURIComponent(r_type));
+                            url = url.replace(':selectedValue', encodeURIComponent(selectedValue));
+                        }
+
 
                         window.open(url,'_blank');
                     });

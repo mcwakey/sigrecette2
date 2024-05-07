@@ -2,7 +2,12 @@
 
 namespace App\DataTables;
 
+use App\Enums\PaymentStatusEnums;
+use App\Enums\PaymentTypeEnums;
+use App\Helpers\Constants;
 use App\Models\Payment;
+use App\Models\Year;
+use Carbon\Carbon;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
@@ -25,7 +30,7 @@ class LedgersDataTable extends DataTable
 
         return (new EloquentDataTable($query))
             ->rawColumns(['status'])
-            
+
             ->editColumn('payments.created_at', function (Payment $payment) {
                 return $payment->created_at->format('d M Y');
             })
@@ -38,11 +43,11 @@ class LedgersDataTable extends DataTable
             ->editColumn('amount', function (Payment $payment) {
                 return $payment->amount;
             })
-            
+
         ->editColumn('newAmount', function (Payment $payment) use (&$newAmount) {
             // Add the amount of the current row to the accumulated amount
             $newAmount += $payment->amount - $payment->deposit;
-            
+
             // Return the accumulated amount
             return $newAmount;
         })
@@ -63,24 +68,21 @@ class LedgersDataTable extends DataTable
     // public function query(): QueryBuilder // Remove $request parameter
     public function query(Payment $model): QueryBuilder
     {
-        // return $model->join('taxables', 'payments.taxable_id', '=', 'taxables.id')
-        //             // ->with('taxable.tax_label')
-        //             ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
-        //             ->join('users', 'payments.to_user_id', '=', 'users.id')
-        //             ->where('payments.trans_type', 'VENDU') // Filter collector_deposits by taxpayer_id
-        //             ->select('payments.*')
-        //             //->orderBy('tax_labels.name')
-        //             ->newQuery();
+        $activeYear = Year::getActiveYear();
+        $startOfYear = Carbon::parse("{$activeYear->name}-01-01 00:00:00");
+        $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
+
 
         return $model
         // ->join('taxables', 'payments.taxable_id', '=', 'taxables.id')
                     // ->with('taxable.tax_label')
                     // ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
                     // ->join('users', 'payments.to_user_id', '=', 'users.id')
-                     ->whereNot('status', 'PENDING') // Filter collector_deposits by taxpayer_id
-                    //  ->orWhere('taxpayer_id', null) // Filter collector_deposits by taxpayer_id
-                    // ->select('payments.*')
-                    ->orderBy('created_at', 'asc')
+                     ->whereNot('status', PaymentStatusEnums::PENDING) // Filter collector_deposits by taxpayer_id
+            ->whereNotIn('payments.reference', [Constants::ANNULATION, Constants::REDUCTION])
+            ->whereBetween('payments.created_at', [$startOfYear, $endOfYear])
+
+            ->orderBy('created_at', 'asc')
                     ->newQuery();
 
         // return Payment::where('taxpayer_id', $this->id); // Filter collector_deposits by taxpayer_id
@@ -99,8 +101,8 @@ class LedgersDataTable extends DataTable
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0, 'desc')
-            //->pageLength(3) // Set the default number of rows per page to 3
-            //->lengthMenu([[3, 10, 25, 50, -1], [3, 10, 25, 50, "All"]]) // Define options for the number of rows per page
+            ->pageLength(100) // Set the default number of rows per page to 3
+            ->lengthMenu([[100,300, 500,  -1], [100,300, 500, "All"]]) // Define options for the number of rows per page
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/ledgers/columns/_draw-scripts.js')) . "}");
     }
 
@@ -110,7 +112,7 @@ class LedgersDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('id')->title(__('id'))->exportable(false)->printable(false)->visible(false), 
+            Column::make('id')->title(__('id'))->exportable(false)->printable(false)->visible(false),
             Column::make('payments.created_at')->title(__('date'))->addClass('text-nowrap'),
             //Column::make('trans_desc')->title(__('trans_desc')),
             Column::make('description')->title(__('description')),

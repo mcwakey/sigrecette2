@@ -244,7 +244,8 @@
 
     "PENDING": "EN ATTENTE",
     "DRAFT": "BROUILLON",
-    "APROVED": "PRIS EN CHARGE",
+    "APROVED":  "PRIS EN CHARGE",
+    "APPROVED": "PRIS EN CHARGE",
     "REJECTED": "REJETÉ",
     "REJECTED-EDIT": "REJETÉ -> ÉDITION",
     "OWING": "PAIEMENT EN ATTENTE",
@@ -341,7 +342,8 @@
     "versement du regisseur title": "Versement du Regisseur au Receveur - Recettes sur titre",
     "versement du regisseur outright": "Versement du Regisseur au Receveur - Recettes au comptant",
     "total": "Total",
-    "REDUCED" : "REDUIT",
+    "APPROVED-REDUCED" : "REDUIT",
+    "prints": "Impression",
 
 
 
@@ -477,5 +479,10 @@
     "collector deposit state" : "Etat de versement du collecteur",
 
     "view manager account state" : "Afficher l'etat de comptabilité du régisseur",
-    "view manager deposit state" : "Afficher l'état de versement du régisseur"
+    "view manager deposit state" : "Afficher l'état de versement du régisseur",
+    "ACCOUNTED": "COMPTABILISE",
+    "APPROVED-CANCELED": "ANNULÉ",
+    "CATEGORY 1":"CATEGORIE 1",
+    "CATEGORY 2":"CATEGORIE 2",
+    "CATEGORY 3":"CATEGORIE 3"
 }

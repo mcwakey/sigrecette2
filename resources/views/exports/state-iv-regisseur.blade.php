@@ -37,62 +37,56 @@
             margin-top: 10px;
         }
     </style>
-    <title>ETAT DE COMPTABILITÉ DES VALEURS INACTIVES DU REGISSEUR </title>
+    <title>ETAT DE COMPTABILITÉ DES VALEURS INACTIVES DU REGISSEUR</title>
 </head>
 <body>
 
 @php
-    $data= \App\Models\StockRequest::find($data[0]);
-$taxable = \App\Models\Taxable::find($data->taxable_id);
-
-
+    $data = \App\Models\StockRequest::find($data[0]);
+    if ($data == null) {
+        $data = \App\Models\StockTransfer::find($data[0]);
+        $taxable = \App\Models\Taxable::find($data->taxable_id);
+    } else {
+        $taxable = \App\Models\Taxable::find($data->taxable_id);
+    }
 @endphp
+
 <table>
     <tr>
-        <td colspan="5" style="border: none; margin: 0;text-align: left"> {{$commune->region_name}}</td>
+        <td colspan="5" style="border: none; margin: 0;text-align: left">{{$commune->region_name}}</td>
         <td colspan="5" style="border: none; margin: 0;text-align: left">REPUBLIQUE TOGOLAISE</td>
     </tr>
     <tr>
-        <td colspan="5" style="border: none; margin: 0;text-align: right">  {{$commune->title}}</td>
+        <td colspan="5" style="border: none; margin: 0;text-align: right">{{$commune->title}}</td>
         <td colspan="5" style="border: none; margin: 0;text-align: right">Travail-Liberté-Patrie</td>
     </tr>
     <tr>
-        <td colspan="10" style="border: none; margin: 0;">ETAT DE COMPTABILITÉ DES VALEURS INACTIVES DU REGISSEUR </td>
-
+        <td colspan="10" style="border: none; margin: 0;">ETAT DE COMPTABILITÉ DES VALEURS INACTIVES DU REGISSEUR</td>
     </tr>
     <tr>
         <td colspan="10" style="border: none; margin: 0">{{"N".$data->req_no}}</td>
-
     </tr>
     <tr>
         <td colspan="10">Nom du Régisseur : Kwassi</td>
-
     </tr>
     <tr>
         <td colspan="10">Période de recouvrement : 04 au 31 janvier 2023</td>
-
     </tr>
     <tr>
-        <td colspan="10">Catégorie de valeur inactive:{{$taxable->name}}</td>
-
+        <td colspan="10">Catégorie de valeur inactive: {{$taxable->name}}</td>
     </tr>
     <tr>
-        <td colspan="10">Valeur faciale : :{{ $taxable-> unit. "". $taxable->tariff}}</td>
-
-    </tr>
-
-
+        <td colspan="10">Valeur faciale : {{ $taxable->unit }} {{ $taxable->tariff }}</td>
     </tr>
     <tr>
         <th rowspan="2">Date</th>
         <th rowspan="2">Pièces justificatives</th>
         <th colspan="2">Numéro</th>
-        <th  colspan="2">Valeurs prises en  charge</th>
-        <th  colspan="2">Valeurs vendues</th>
-        <th  colspan="2">Solde des valeurs en stock</th>
+        <th colspan="2">Valeurs prises en charge</th>
+        <th colspan="2">Valeurs vendues</th>
+        <th colspan="2">Solde des valeurs en stock</th>
     </tr>
     <tr>
-
         <th>Début</th>
         <th>Fin</th>
         <th>Nombre</th>
@@ -101,33 +95,30 @@ $taxable = \App\Models\Taxable::find($data->taxable_id);
         <th>Montant</th>
         <th>Nombre</th>
         <th>Montant</th>
-
     </tr>
     <tr>
-
         <th colspan="4">Report</th>
-        <th ></th>
-        <th ></th>
         <th></th>
-        <th ></th>
         <th></th>
-        <th ></th>
-
-
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
     </tr>
-
-    <tr>
-        <th>{{$data->created_at}}</th>
-        <th>{{$data->req_desc}}</th>
-        <th>{{$data->start_no}}</th>
-        <th>{{$data->end_no}}</th>
-        <th>{{$data->qty}}</th>
-        <th>{{$taxable->tariff*$data->qty}}</th>
-        <th></th>
-        <th></th>
-        <th>{{$data->qty}}</th>
-        <th>{{$taxable->tariff*$data->qty}}</th>
-    </tr>
+    @if($data instanceof App\Models\StockRequest)
+        <tr>
+            <td>{{ $data->created_at }}</td>
+            <td>{{ $data->req_desc }}</td>
+            <td>{{ $data->start_no }}</td>
+            <td>{{ $data->end_no }}</td>
+            <td>{{ $data->qty }}</td>
+            <td>{{ $taxable->tariff * $data->qty }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ $data->qty }}</td>
+            <td>{{ $taxable->tariff * $data->qty }}</td>
+        </tr>
+    @endif
     <tr>
         <th colspan="4">Totaux et solde à reporter</th>
         <th></th>
@@ -138,24 +129,18 @@ $taxable = \App\Models\Taxable::find($data->taxable_id);
         <th></th>
     </tr>
     <tr>
-        <td colspan="5">Prise en charge par le Régisseur des valeurs inactives   pour un montant de {{number_to_words($taxable->tarif*$data->qty) }}FCFA</td>
-        <td colspan="5">Arrêté le montant des valeurs vendues à ……………
-            et le montant des valeurs en stock à ..………………
-        </td>
+        <td colspan="5">Prise en charge par le Régisseur des valeurs inactives pour un montant de {{ number_to_words($taxable->tariff * $data->qty) }} FCFA</td>
+        <td colspan="5">Arrêté le montant des valeurs vendues à … et le montant des valeurs en stock à …</td>
     </tr>
     <tr>
         <td colspan="5">A Agou, le 4 janvier 2023</td>
-        <td colspan="5">A ……………….., le ……………..</td>
+        <td colspan="5">A …, le …</td>
     </tr>
     <tr>
         <td colspan="5">Le Régisseur</td>
         <td colspan="5">Le Régisseur</td>
     </tr>
-
 </table>
-
-
-
 
 </body>
 </html>

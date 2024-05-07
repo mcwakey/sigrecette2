@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Apps;
 use App\Models\User;
 use App\Models\UserLogs;
 use Illuminate\Http\Request;
+use App\Models\PasswordActionLog;
 use App\DataTables\UsersDataTable;
 use App\Http\Controllers\Controller;
 
@@ -39,12 +40,14 @@ class UserManagementController extends Controller
      */
     public function show(User $user)
     {
-        $userActionLog = UserLogs::where('user_id',$user->id)
-        ->orderBy('id', 'desc')
-        ->limit(3)
-        ->get();
-        
-        return view('pages/apps.user-management.users.show', compact('user','userActionLog'));
+        $userActionLog = UserLogs::where('user_id', $user->id)
+            ->orderBy('id', 'desc')
+            ->limit(3)
+            ->get();
+
+        $passwordActionLog = PasswordActionLog::where('user_id', $user->id)->get();
+
+        return view('pages/apps.user-management.users.show', compact('user', 'userActionLog', 'passwordActionLog'));
     }
 
     /**

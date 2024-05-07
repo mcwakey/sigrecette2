@@ -3,10 +3,16 @@
 namespace App\Helpers;
 
 use App\Contracts\PdfGeneratorInterface;
+use App\Enums\InvoiceStatusEnums;
+use App\Enums\PrintNameEnums;
 use App\Models\Commune;
 use App\Models\Invoice;
+use App\Models\Payment;
+use App\Models\PrintFile;
 use App\Models\Taxpayer;
+use App\Models\User;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -28,8 +34,12 @@ class PdfGenerator  implements PdfGeneratorInterface
     {
 
         //dd($data,$template,$action);
-        $data=Invoice::retrieveByUUIDs($data);
-        if ($this->checkIfCommuneIsNotNull()) {
+        if($action==42){
+            $data=Invoice::retrieveByUUIDs($data,'payment');
+        }else{
+            $data=Invoice::retrieveByUUIDs($data);
+        }
+        if ($this->checkIfCommuneIsNotNull()&& count($data)>0) {
 
             $filename = "Invoice-list-" . Str::random(8) . ".pdf";
             //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
@@ -182,9 +192,6 @@ class PdfGenerator  implements PdfGeneratorInterface
 
             $filename="Invoice-".Str::random(8).".pdf";
 
-
-
-
             if($action==2 || ( intval($default_invoice->invoice_no) !==$default_invoice->id)){
                 $action=2;
                 $invoice = Invoice::find( $default_invoice->invoice_no);
@@ -235,6 +242,7 @@ class PdfGenerator  implements PdfGeneratorInterface
 
 
 
+
     public function generateStateValueReciepientPdf($data, $template, $action):array
     {
         // if ($this->checkInvoiceListDataUniformity($data,$expectedDataSize)&& $this->checkIfCommuneIsNotNull()) {
@@ -266,4 +274,153 @@ class PdfGenerator  implements PdfGeneratorInterface
 
         return ['success' => false, 'message' => 'Invalid data structure.'];
     }
+    public function generateLedgersPdf( string $template):array
+    {
+
+        $data = Payment::getPrintData();
+        $filename = "Livre-journal_de_Regie". ".pdf";
+
+        //dd($this->commune->getImageUrlAttribute());
+        $pdf = PDF::loadView("exports.".$template, ['data' => $data,"commune"=> $this->commune,'logo_url'=>$this->commune->getImageUrlAttribute()])->setPaper('a4', 'landscape')->stream($filename);
+
+        return ['success' => true, 'pdf' => $pdf];
+        // }
+
+        return ['success' => false, 'message' => 'Invalid data structure.'];
+    }
+
+    public function generateBordereauListPdf( string $templateName, $action,PrintFile|null $printFile=null)
+    {
+        $type = null;
+        if($action==1){
+            $type=PrintNameEnums::BORDEREAU;
+        }elseif ($action==2){
+            $type=PrintNameEnums::BORDEREAU_REDUCTION;
+        }
+
+        if( $type!=null&&$printFile==null){
+            $data=Invoice::getPrintData([InvoiceStatusEnums::PENDING],$type);
+            //dd($data);
+           // dd($templateName,$type,$data);
+            //dd($printFile,$type,$data);
+            if(count($data)>0){
+                $total=0;
+                foreach ($data as $datum){
+                    if($type==PrintNameEnums::BORDEREAU){
+                        $total+=$datum->amount;
+                    }else{
+                        $total+=$datum->reduce_amount;
+                    }
+                }
+                $printFile= PrintFile::createPrintFile($type,$data,$total);
+            }
+
+        }
+       // $data= Invoice::where("print_data",$printFile?->id)->get();
+
+
+        if($printFile!=null&&$this->checkIfCommuneIsNotNull()){
+            $data = $printFile->invoices()->get();
+            //
+            if ( count($data)>0) {
+                $filename = $type."-" . Str::random(8) . ".pdf";
+                //dd($data);
+                $pdf = PDF::loadView("exports.".$templateName, ['data' => $data,'titles'=>$this->generateTitleWithAction($action),"commune"=> $this->commune,"action"=>$action,'print'=>$printFile])->setPaper('a4', 'landscape')->stream($filename);
+
+                return ['success' => true, 'pdf' => $pdf];
+            }
+        }
+
+
+
+        return ['success' => false, 'message' => 'Invalid data structure.'];
+    }
+    /**
+     * @param array $data
+     * @param string $template
+     * @param int|null $action
+     * @return array
+     */
+    public function generateJournalInvoiceListPdf(array $data,string $template,int $action=null):array
+    {
+
+
+        $data=Invoice::getPrintData(
+            [InvoiceStatusEnums::CANCELED,
+                InvoiceStatusEnums::REDUCED,
+                InvoiceStatusEnums::APPROVED,
+                InvoiceStatusEnums::APPROVED_CANCELLATION]);
+
+        if ($this->checkIfCommuneIsNotNull()&& count($data)>0) {
+
+            $filename = "Journal_des_avis_des_sommes_à_payer_confiés_par_le_receveur" .".pdf";
+            $pdf = PDF::loadView("exports.".$template, ['data' => $data,'titles'=>$this->generateTitleWithAction($action),"commune"=> $this->commune,"action"=>$action])->setPaper('a4', 'landscape')->stream($filename);
+
+            return ['success' => true, 'pdf' => $pdf];
+        }
+
+        return ['success' => false, 'message' => 'Invalid data structure.'];
+    }
+
+    /**
+     * @param string $template
+     * @param int|null $action
+     * @return array
+     */
+    public function generateInvoiceRegistrePdf(string $template,int $action=null):array
+    {
+
+        //dd($data,$template,$action);
+        $data=Invoice::getPrintData(
+            [InvoiceStatusEnums::CANCELED,
+                InvoiceStatusEnums::REDUCED,
+                InvoiceStatusEnums::APPROVED,
+                InvoiceStatusEnums::APPROVED_CANCELLATION]);
+        if ($this->checkIfCommuneIsNotNull()&& count($data)>0) {
+
+            $filename = "Registre-journal-des-avis-distribués" . Str::random(8) . ".pdf";
+            //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
+            $pdf = PDF::loadView("exports.".$template, ['data' => $data,'titles'=>$this->generateTitleWithAction($action),"commune"=> $this->commune,"action"=>$action])->setPaper('a4', 'landscape')->stream($filename);
+
+            return ['success' => true, 'pdf' => $pdf];
+        }
+
+        return ['success' => false, 'message' => 'Invalid data structure.'];
+    }
+
+    public function generateInvoiceDistribtionOrInvoiceRecouvrementPdf(array|PrintFile $data,string $template,int $action=null,User $user=null): array
+    {
+
+
+        $type = null;
+
+        if($action==4){
+            $type=PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS;
+        }elseif ($action==41){
+            $type=PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES;
+        }
+        if($data instanceof PrintFile){
+            $printFile =$data;
+            $data = $data->invoices()->get();
+        }else{
+            if($user instanceof User){
+                $data=Invoice::retrieveByType($data,$type);
+                if ($type!=null && count($data)>0) {
+                    $printFile= PrintFile::createPrintFile($type,$data,0);
+                }
+            }else{
+                $data=[];
+            }
+
+        }
+
+        if($this->checkIfCommuneIsNotNull() && $printFile!=null&& count($data)>0){
+                $filename = $type."-" . ".pdf";
+                $pdf = PDF::loadView("exports.".$template, ['data' => $data,'titles'=>$this->generateTitleWithAction($action),"commune"=> $this->commune,"action"=>$action,'print'=>$printFile,'agent'=>$user])->setPaper('a4', 'landscape')->stream($filename);
+                return ['success' => true, 'pdf' => $pdf];
+        }
+        return ['success' => false, 'message' => 'Invalid data structure.'];
+    }
+
+
 }

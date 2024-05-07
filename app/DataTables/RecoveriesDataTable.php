@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Helpers\Constants;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\Year;
@@ -26,32 +27,20 @@ class RecoveriesDataTable extends DataTable
     {
 
         return (new EloquentDataTable($query))
-        ->editColumn('user.name', function (Payment $payment) {
+        ->editColumn('users.name', function (Payment $payment) {
             return $payment->user->name;
             // $user = $payment->user;
             // return view('pages/apps.user-management.users.columns._user', compact('user'));
             //return view('pages/recoveries.columns._user', compact('user'));
         })
-            ->editColumn('no_avis', function (Payment $payment) {
+            ->editColumn('invoices.invoice_no', function (Payment $payment) {
                 return $payment->invoice->invoice_no;
             })
             ->editColumn('reference', function (Payment $payment) {
                 return $payment->reference;
             })
-            ->editColumn('tax_labels.id', function (Payment $payment) {
+            ->editColumn('tax_labels.code', function (Payment $payment) {
                 return $payment->code ?? '';
-            })
-            ->editColumn('nic', function (Payment $payment) {
-                return $payment->invoice->nic;
-            })
-            ->editColumn('zones.name', function (Payment $payment) {
-                return  $payment->invoice->taxpayer->zone->name ?? '-';
-            })
-            ->editColumn('taxpayers.address', function (Payment $payment) {
-                return $payment->invoice->taxpayer->address ?? '-';
-            })
-            ->editColumn('taxpayers.latitude', function (Payment $payment) {
-                return ($payment->invoice->taxpayer->latitude ?? '-').' : '.($payment->invoice->taxpayer->longitude ?? '-');
             })
             ->editColumn('taxpayers.name', function (Payment $payment) {
                 //$invoice = $payment->invoice;
@@ -63,6 +52,7 @@ class RecoveriesDataTable extends DataTable
             ->editColumn('remaining_amount', function (Payment $payment) {
                 return $payment->remaining_amount;
             })
+
             ->editColumn('status', function (Payment $payment) {
                 //return $payment->remaining_amount;
                 return view('pages/recoveries.columns._status', compact('payment'));
@@ -82,9 +72,14 @@ class RecoveriesDataTable extends DataTable
 
         return $model->newQuery()
             ->join('invoices', 'invoices.id', '=', 'payments.invoice_id')
+            ->leftjoin('taxpayers', 'taxpayers.id', '=', 'payments.taxpayer_id')
+            ->leftjoin('users', 'users.id', '=', 'payments.user_id')
+            ->join('tax_labels', 'tax_labels.code', '=', 'payments.code')
             ->whereNotNull('payments.user_id')
+            ->whereNotIn('payments.reference', [Constants::ANNULATION, Constants::REDUCTION])
             ->whereBetween('payments.created_at', [$startOfYear, $endOfYear])
-            ->select('payments.*');
+            ->select('payments.*')
+            ->orderByDesc('payments.created_at');
     }
 
 
@@ -101,6 +96,8 @@ class RecoveriesDataTable extends DataTable
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(8)
+            ->pageLength(100) // Set the default number of rows per page to 3
+            ->lengthMenu([[100,300, 500,  -1], [100,300, 500, "All"]]) // Define options for the number of rows per page
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/recoveries/columns/_draw-scripts.js')) . "}");
     }
 
@@ -111,16 +108,13 @@ class RecoveriesDataTable extends DataTable
     {
         return [
             Column::make('taxpayers.name')->title(__('taxpayer'))->addClass('d-flex align-items-center'),
-            Column::make('no_avis')->title(__('invoice no'))->name('no_avis'),
+            Column::make('invoices.invoice_no')->title(__('invoice no')),
             Column::make('reference')->title(__("reference no"))->name("reference"),
-            Column::make('tax_labels.id')->title(__('taxlabel')),
-            Column::make('nic')->title(__('nic')),
-            Column::make('taxpayers.latitude')->title(__('gps')),
-            Column::make('taxpayers.address')->title(__('address')),
+            Column::make('tax_labels.code')->title(__('code')),
             Column::make('amount')->title(__('amount paid')),
             Column::make('remaining_amount')->title(__('balance')),
             Column::make('status')->title(__('status')),
-            Column::make('user.name')->title(__('user'))->addClass('d-flex align-items-center'),
+            Column::make('users.name')->title(__('user'))->addClass('d-flex align-items-center'),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
                 ->exportable(true)

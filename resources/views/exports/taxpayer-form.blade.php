@@ -41,37 +41,48 @@
 </head>
 <body>
 
-
 <table>
-    <caption>{{$commune->region_name}} - {{$commune->title}} - REPUBLIQUE TOGOLAISE</caption>
     <tr>
-        <td>Travail-Liberté-Patrie</td>
-    </tr>
-    <tr>
-        <td>FICHE DU CONTRIBUABLE</td>
-    </tr>
-    <tr>
-        <td>NIC : 00012</td>
-    </tr>
-    <tr>
-        <td>Nom / Raison sociale : {{$data[0]->name}}   </td>
-    </tr>
-    <tr>
-        <td>N° Téléphone :{{$data[0]->mobilephone}}  </td>
-    </tr>
-    <tr>
-        <td>Zone fiscale : {{$data[0]->zone->name}}</td>
-    </tr>
-    <tr>
-        <td>Adresse complète : {{$data[0]->address}}</td>
-    </tr>
-    <tr>
-        <td>Coordonnées GPS : {{$data[0]->longitude,$data[0]->latitude}}</td>
-    </tr>
-</table>
+        <td colspan="4"  style="border: none; padding: 2px;">
+            {{$commune->region_name}}
 
-<table>
-    <thead>
+        </td>
+        <td colspan="4"  style="border: none; padding:2px ;text-align: right;">
+            REPUBLIQUE TOGOLAISE
+
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4" style="border: none; margin: 0; padding:2px ;">
+
+            {{$commune->title}}
+        </td>
+        <td colspan="4"  style="border: none; margin: 0 ; padding:2px ; ;text-align: right;">
+
+            Travail-Liberté-Patrie
+        </td>
+    </tr>
+    <tr>
+        <th colspan="8" style="border: none; margin: 0; text-align: center;" class="caption">FICHE DU CONTRIBUABLE</th>
+    </tr>
+    <tr>
+        <td colspan="8" style="border: none; margin: 0; text-align: center;">NIC :  {{$data[0]->nif}} </td>
+    </tr>
+    <tr>
+        <td colspan="8" style="border: none; margin: 0; text-align: center;">Nom / Raison sociale : {{$data[0]->name}}   </td>
+    </tr>
+    <tr>
+        <td colspan="8" style="border: none; margin: 0; text-align: center;">N° Téléphone :{{$data[0]->mobilephone}}  </td>
+    </tr>
+    <tr>
+        <td colspan="8" style="border: none; margin: 0; text-align: center;">Zone fiscale : {{$data[0]->zone->name}}</td>
+    </tr>
+    <tr>
+        <td colspan="8" style="border: none; margin: 0; text-align: center;">Adresse complète : {{$data[0]->address}}</td>
+    </tr>
+    <tr>
+        <td colspan="8" style="border: none; margin: 0; text-align: center;">Coordonnées GPS : {{$data[0]->longitude,$data[0]->latitude}}</td>
+    </tr>
     <tr>
         <th>Date</th>
         <th>Motif</th>
@@ -82,7 +93,7 @@
         <th>Cumul recouvré</th>
         <th>Reste à recouvrer</th>
     </tr>
-    </thead>
+
     <tbody>
     @php
     $cumul_plus=0;
@@ -92,7 +103,7 @@ $cumul_recouvré=0;
 
 
         @if($item instanceof \App\Models\Invoice )
-            @if($item->delivery_date!=null && $item->status!="APROVED-CANCELLATION")
+            @if($item->delivery_date!=null && $item->status!= App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION)
                 @foreach(\App\Models\Invoice::sumAmountsByTaxCode($item) as $code => $tax)
                     <tr>
                         <td>{{$item->delivery_date}}</td>
@@ -111,10 +122,10 @@ $cumul_recouvré=0;
 
             @endif
         @else
-            @if($item->reference!=\App\Helpers\Constants::$REDUCTION && $item->reference!=\App\Helpers\Constants::$ANNULATION )
+            @if($item->reference!=\App\Helpers\Constants::REDUCTION && $item->reference!=\App\Helpers\Constants::ANNULATION )
                 <tr>
                     <td>{{$item->created_at}}</td>
-                    <td>Recouvrement Avis {{$item->invoice->invoice_no}}, OR {{$item->reference}},{{\App\Models\TaxLabel::getNameByCode($item->code)}}</td>
+                    <td>Recouvrement Avis {{$item->invoice->invoice_no}}, numéro de quittance {{$item->reference}},{{\App\Models\TaxLabel::getNameByCode($item->code)}}</td>
 
                     <td></td>
                     <td></td>
@@ -130,7 +141,7 @@ $cumul_recouvré=0;
                     @if($item->invoice->delivery_date!=null)
                     <tr>
                         <td>{{$item->invoice->delivery_date}}</td>
-                        <td>Distribution Avis {{$item->invoice->invoice_no}}, OR {{$item->invoice->order_no}}, {{\App\Models\TaxLabel::getNameByCode($item->code)}}</td>
+                        <td>Avis de réduction ou d’annulation {{$item->invoice->invoice_no}}, OR {{$item->invoice->order_no}}, {{\App\Models\TaxLabel::getNameByCode($item->code)}}</td>
                         <td></td>
 
                         @php

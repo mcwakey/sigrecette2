@@ -16,14 +16,11 @@
     </div>
 
 
-    @if($invoice->status == 'DRAFT')
+    @if($invoice->status == App\Enums\InvoiceStatusEnums::DRAFT)
         {{-- Anything here --}}
     @elseif(
-                                                            $invoice->status == 'APROVED' ||
-                                                             $invoice->status == 'APROVED-CANCELLATION' ||
-                                                                $invoice->status == 'PENDING' ||
-                                                                $invoice->status == 'REDUCED' ||
-                                                                $invoice->status == 'CANCELED')
+    $invoice->status !=  App\Enums\InvoiceStatusEnums::REJECTED &&
+    $invoice->status != App\Enums\InvoiceStatusEnums::DRAFT)
             @php
                 $data = [$invoice->uuid];
             @endphp
@@ -31,23 +28,24 @@
             <div class="menu-item px-3">
                 <a href="{{route('generatePdf', ['data' => json_encode($data)]) }}" class="menu-link px-3" target="_blank">{{ __('print') }}</a>
             </div>
-        @if ($invoice->status != 'REDUCED')
-                @if ($invoice->status != 'CANCELED' && $invoice->pay_status != 'PAID' )
-                    @if ($invoice->delivery_date!=null &&( $invoice->status == 'APROVED' || $invoice->status =='APROVED-CANCELLATION') )
+        @if ($invoice->status !=  App\Enums\InvoiceStatusEnums::REDUCED )
+            @if ($invoice->status !==  App\Enums\InvoiceStatusEnums::CANCELED && $invoice->pay_status !=  App\Enums\InvoicePayStatusEnums::PAID)
+                @if($invoice->delivery_date!=null  ||$invoice->type== App\Helpers\Constants::INVOICE_TYPE_COMPTANT)
+                    @if ( $invoice->status ==  App\Enums\InvoiceStatusEnums::APPROVED || $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION) )
                         @can('peut ajouter un paiement')
                             <div class="menu-item px-3">
                                 <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->invoice_no }}"
-                                    data-bs-toggle="modal" data-bs-target="#kt_modal_add_payment" data-kt-action="update_payment">
+                                   data-bs-toggle="modal" data-bs-target="#kt_modal_add_payment" data-kt-action="update_payment">
                                     {{ __('create payment') }}
                                 </a>
                             </div>
                         @endcan
                     @endif
-                    @if (
-   $invoice->delivery_date!=null && ( ($invoice->validity == 'VALID'&& $invoice->status != 'CANCELED') && ($invoice->status == 'APROVED'||  $invoice->status=="APROVED-CANCELLATION"))
+                @endif
 
-    )
-                            @can('peut réduire ou annuler un avis')
+                    @if($invoice->delivery_date!=null &&   ($invoice->validity == 'VALID' && ($invoice->status ==  App\Enums\InvoiceStatusEnums::APPROVED || $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION)) )
+
+                    @can('peut réduire ou annuler un avis')
                                 <div class="menu-item px-3">
                                     <a href="#" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{ $invoice->id }}"
                                        data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice" data-kt-action="update_invoice">

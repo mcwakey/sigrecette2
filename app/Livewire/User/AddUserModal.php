@@ -2,6 +2,7 @@
 
 namespace App\Livewire\User;
 
+use App\Helpers\Constants;
 use App\Models\User;
 use App\Models\Zone;
 use Livewire\Component;
@@ -9,6 +10,7 @@ use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 
@@ -43,18 +45,6 @@ class AddUserModal extends Component
     {
         $roles = Role::all();
         $zones = Zone::all();
-
-        $roles_description = [
-            'administrator' => 'Best for business owners and company administrators',
-            'developer' => 'Best for developers or people primarily using the API',
-            'analyst' => 'Best for people who need full access to analytics data, but don\'t need to update business settings',
-            'support' => 'Best for employees who regularly refund payments and respond to disputes',
-            'trial' => 'Best for people who need to preview content data, but don\'t need to make any updates',
-        ];
-
-        foreach ($roles as $i => $role) {
-            $roles[$i]->description = $roles_description[$role->name] ?? '';
-        }
 
         return view('livewire.user.add-user-modal', compact('roles', 'zones'));
     }
@@ -95,14 +85,22 @@ class AddUserModal extends Component
             $data['email'] = $this->email;
             $data['zone_id'] = $this->zone_id;
 
+            if (!$this->edit_mode && !Gate::forUser(auth()->user())->allows('create-user', User::class)) {
+                $this->dispatch('error', Constants::NOT_PERMISSION_TO_PERFORM_ACTION);
+                return false;
+            }
+
             // Update or Create a new user record in the database
             $user = User::find($this->user_id) ?? User::create($data);
 
-            if ($this->edit_mode) {
+            if ($this->edit_mode && Gate::forUser(auth()->user())->allows('update-user', $user)) {
                 foreach ($data as $k => $v) {
                     $user->$k = $v;
                 }
                 $user->save();
+            } else if ($this->edit_mode) {
+                $this->dispatch('error', Constants::NOT_PERMISSION_TO_PERFORM_ACTION);
+                return false;
             }
 
             if ($this->edit_mode) {
@@ -115,9 +113,6 @@ class AddUserModal extends Component
                 // Assign selected role for user
                 $user->assignRole($this->role);
 
-                // Send a password reset link to the user's email
-                // Password::sendResetLink($user->only('email'));
-
                 // Emit a success event with a message
                 $this->dispatch('success', __('Utilisateur créer avec succès'));
             }
@@ -129,6 +124,14 @@ class AddUserModal extends Component
 
     public function deleteUser($id)
     {
+
+        $user = User::find($id);
+
+        if (!Gate::forUser(auth()->user())->allows('delete-user', $user)) {
+            $this->dispatch('error', Constants::NOT_PERMISSION_TO_PERFORM_ACTION);
+            return false;
+        }
+
         // Prevent deletion of current user
         if ($id == Auth::id()) {
             $this->dispatch('error', 'La session courant ne peut etre supprimé.');

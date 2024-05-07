@@ -30,13 +30,7 @@ document.querySelectorAll('[data-kt-action="update_row"]').forEach(function (ele
     });
 });
 
-// Add click event listener to update buttons
-document.querySelectorAll('[data-kt-action="auto_invoice"]').forEach(function (element) {
-    element.addEventListener('change', function () {
-        console.log(this.value);
-        Livewire.dispatch('auto_invoice', [this.value]);
-    });
-});
+
 document.querySelectorAll('[data-kt-action="update_payment_status"]').forEach(function (element) {
     element.addEventListener('click', function () {
         Livewire.dispatch('update_payment_status', [this.getAttribute('data-kt-user-id')]);
@@ -46,5 +40,5 @@ document.querySelectorAll('[data-kt-action="update_payment_status"]').forEach(fu
 // Listen for 'success' event emitted by Livewire
 Livewire.on('success', (message) => {
     // Reload the users-table datatable
-    LaravelDataTables['payments'].ajax.reload();
+    LaravelDataTables['recoveries-table'].ajax.reload();
 });

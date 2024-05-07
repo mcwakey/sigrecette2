@@ -47,7 +47,12 @@ class StockRequestsDataTable extends DataTable
                 return $stock_request->req_desc;
             })
             ->editColumn('taxables.tariff', function (StockRequest $stock_request) {
-                return $stock_request->taxable->tariff;
+               if ($stock_request->taxable->tariff > 0) {
+                $tariff = number_format($stock_request->taxable->tariff);
+               }else{
+                $tariff = "";
+               }
+                return $tariff;
             })
             // ->editColumn('stock_request', function (StockRequest $stock_request) {
             //     return view('pages.stock_requests.columns._label', compact('stock_request'));
@@ -56,7 +61,15 @@ class StockRequestsDataTable extends DataTable
             //     return $stock_request->;
             // })
             ->editColumn('stock_requests.start_no', function (StockRequest $stock_request) {
-                return $stock_request->start_no. " - ". $stock_request->end_no;
+                if($stock_request->start_no > 0 || $stock_request->end_no > 0) {
+                    $start_no = $stock_request->start_no;
+                    $end_no = $stock_request->end_no;
+                }else{
+                    $start_no = "";
+                    $end_no = "";
+                }
+
+                return $start_no. " - ". $end_no;
                 // return view('pages.stock_requests.columns._seize', compact('stock_request'));
             })
             ->editColumn('pc_qty', function (StockRequest $stock_request) {
@@ -70,10 +83,15 @@ class StockRequestsDataTable extends DataTable
             })
             ->editColumn('pc_total', function (StockRequest $stock_request) {
                 // if ($stock_request->req_type == "DEMANDE") {
-                    $pc_total = $stock_request->pc_qty * $stock_request->taxable->tariff; ;
+                    $pc_total = $stock_request->pc_qty * $stock_request->taxable?->tariff; ;
                 // } else {
                 //     $total =  "";
                 // }
+                if ($pc_total > 0) {
+                    $pc_total = number_format($pc_total, 2);
+                }else{
+                    $pc_total = "";
+                }
 
                 return $pc_total;
             })

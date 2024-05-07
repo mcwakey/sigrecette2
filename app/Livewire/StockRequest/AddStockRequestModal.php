@@ -39,8 +39,8 @@ class AddStockRequestModal extends Component
     protected $rules = [
         'req_no' => 'required|string',
         'qty' => 'required|numeric',
-        'start_no' =>'required|numeric',
-        'end_no' => 'required|numeric',
+        // 'start_no' =>'required|numeric',
+        // 'end_no' => 'required|numeric',
         //'taxlabel_id' => 'required|numeric',
         //'taxable_id' => 'required|numeric',
         //'user_id' => 'required|numeric',
@@ -58,6 +58,7 @@ class AddStockRequestModal extends Component
     {
         $taxlabels = TaxLabel::all();
 
+        //dd($taxlabels);
         $this->user_id = Auth::id();
 
         return view('livewire.stock_request.add-stock-request-modal', compact('taxlabels'));
@@ -115,9 +116,9 @@ class AddStockRequestModal extends Component
                 //'req_id' => $this->seize,
                 'req_desc' => 'Demande d’approvisionnement N°'.$this->req_no,
                 'qty' => $this->qty,
-                'start_no' => $this->start_no,
-                'last_no' => $this->start_no,
-                'end_no' => $this->end_no,
+                'start_no' => $this->start_no ,
+                'last_no' => $this->start_no ,
+                'end_no' => $this->end_no ,
                 'taxable_id' => $this->taxable_id,
                 'req_type' => 'DEMANDE',
                 'user_id' => Auth::id(),
@@ -143,8 +144,8 @@ class AddStockRequestModal extends Component
 
             //$this->req_no = "";
             $this->qty = "";
-            $this->start_no = "";
-            $this->end_no = "";
+            $this->start_no = null;
+            $this->end_no = null;
 
             if ($this->edit_mode) {
                 // Emit a success event with a message
@@ -183,13 +184,13 @@ class AddStockRequestModal extends Component
 
         $this->stock_request_id = $id;
         $this->req_no = $stock_request->req_no;
-        
+
         //$this->taxlabel_idd = $stock_request->taxable->tax_label->id ?? '';
         $this->taxlabel_name = $stock_request->taxable->unit;
 
         $this->taxable_idd = $stock_request->taxable_id;
         $this->taxable_name = $stock_request->taxable->name;
-        
+
         $this->start_no = $stock_request->last_no;
         $this->end_no = $stock_request->end_no;
         $this->qty =$stock_request->end_no  - $stock_request->last_no + 1;

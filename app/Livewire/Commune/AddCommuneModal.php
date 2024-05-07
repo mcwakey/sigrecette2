@@ -30,7 +30,8 @@ class AddCommuneModal extends Component
 
     public $edit_mode = false;
 
-
+    public $logo;
+    public $saved_logo;
     protected $rules = [
         "title" => 'required|string',
         'name' => 'required|string',
@@ -40,7 +41,8 @@ class AddCommuneModal extends Component
         'address' => 'required|string',
         'treasury_name' => 'required|string',
         'treasury_address' => 'required|string',
-        'treasury_rib' => 'required|string',
+        'logo' => 'nullable|sometimes|image|mimes:jpeg,png,jpg|max:1024',
+        'treasury_rib' => 'nullable|sometimes|string',
     ];
 
     protected $listeners = [
@@ -58,7 +60,7 @@ class AddCommuneModal extends Component
     public function submit()
     {
         // Validate the form input data
-        // $this->validate();
+        $this->validate();
         if (!$this->edit_mode) {
             $this->title = "Commune " . $this->title . " " . $this->name;
         }
@@ -85,7 +87,11 @@ class AddCommuneModal extends Component
                 'latitude' => $this->latitude,
                 'longitude' => $this->longitude,
             ];
-
+            if ($this->logo) {
+                $data['logo_path'] = $this->logo->store('avatars', 'public');
+            } else {
+                $data['logo_path'] = null;
+            }
             if ($this->limit_json) {
                 $data['limit_json'] = json_encode($string_data['geometry']['coordinates'][0][0]);
             }
@@ -125,6 +131,7 @@ class AddCommuneModal extends Component
         $this->edit_mode = true;
 
         $commune = Commune::find($id);
+        $this->saved_logo = $commune->logo_path;
 
         $this->commune_id = $commune->id;
         $this->name = $commune->name;

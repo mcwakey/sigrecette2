@@ -314,7 +314,7 @@
     "vv qty": "",
     "vv total": "",
     "req desc": "Pièces justificatives",
-    
+
     "rc qty": "",
     "rc total": "",
     "rd qty": "",
@@ -444,5 +444,6 @@
     "collector deposit state" : "Etat de versement du collecteur",
 
     "view manager account state" : "Afficher l'etat de comptabilité du régisseur",
-    "view manager deposit state" : "Afficher l'état de versement du régisseur"
+    "view manager deposit state" : "Afficher l'état de versement du régisseur",
+
 }

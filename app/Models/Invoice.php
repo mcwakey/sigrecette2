@@ -2,12 +2,18 @@
 
 namespace App\Models;
 
+use App\Contracts\FormatDateInterface;
+use App\Enums\InvoiceStatusEnums;
+use App\Enums\PrintNameEnums;
 use App\Helpers\Constants;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 
-class Invoice extends Model
+class Invoice extends Model implements FormatDateInterface
 {
     use HasFactory;
 
@@ -24,14 +30,21 @@ class Invoice extends Model
         'pay_status',
         'status',
         'uuid',
-        'delivery_date'
+        'delivery_date',
+        'type',
+
         // 'profile_photo_path',
     ];
 
+    public function printFiles()
+    {
+        return $this->belongsToMany(PrintFile::class);
+    }
     public function taxpayer()
     {
         return $this->belongsTo(Taxpayer::class);
     }
+
 
     public function taxpayer_taxables()
     {
@@ -84,30 +97,78 @@ class Invoice extends Model
             $invoice->uuid = Uuid::uuid4()->toString();
         });
     }
+
     /**
      * Retrieve invoices based on provided UUIDs.
      *
      * @param array $uuids
-     * @return array|bool Returns a collection of invoices if all UUIDs are found,
+     * @param string|null $type
+     * @return array Returns a collection of invoices if all UUIDs are found,
      *                               `false` if any UUID is not found, or an empty array if `$uuids` is empty.
      */
-    public static function retrieveByUUIDs(array $uuids): array|bool
+    public static function retrieveByUUIDs(array $uuids, string|null $type = null): array
     {
         $invoices = [];
+
+        if (empty($uuids)) {
+            return [];
+        }
+
         foreach ($uuids as $uuid) {
-            $invoice = Invoice::where('uuid', $uuid)->first();
-            if ($invoice instanceof Invoice) {
-                $invoices[] = $invoice;
+            $invoice = null;
+            if ($type === 'payment') {
+                $payment = Payment::where('uuid', $uuid)->first();
+
+                if ($payment instanceof Payment) {
+                    $invoiceId = $payment->invoice_id;
+                    if (!isset($invoices[$invoiceId])) {
+                        $invoice = Invoice::find($invoiceId);
+                        if ($invoice instanceof Invoice) {
+                            $invoices[$invoiceId] = $invoice;
+                        }
+                    }
+                }
             } else {
-                return false;
+                $invoice = Invoice::where('uuid', $uuid)->first();
+            }
+
+            if ($invoice instanceof Invoice) {
+                $invoices[$invoice->id] = $invoice;
             }
         }
 
-
-
-
-        return $invoices ?: [];
+        return array_values($invoices); // Réorganise les valeurs pour obtenir un tableau indexé à partir de 0
     }
+    /**
+     * Retrieve invoices based on provided UUIDs.
+     *
+     * @param array $uuids
+     * @param string|null $type
+     * @return array Returns a collection of invoices if all UUIDs are found,
+     *                               `false` if any UUID is not found, or an empty array if `$uuids` is empty.
+     */
+    public static function retrieveByType(array $uuids, string $type): array
+    {
+        $invoices = [];
+
+        if (empty($uuids)) {
+            return [];
+        }
+
+        foreach ($uuids as $uuid) {
+            $invoice = null;
+            $invoice = Invoice::where('uuid', $uuid)->WhereDoesntHave('printFiles', function ($query) use ($type) {
+                $query->where('name', $type);
+            })->first();
+            if ($invoice instanceof Invoice) {
+                $invoices[$invoice->id] = $invoice;
+            }
+        }
+
+        return array_values($invoices);
+    }
+
+
 
 
     public static function isuperFunction(array $uuids){
@@ -132,7 +193,7 @@ class Invoice extends Model
      * @param Invoice $invoice The invoice object.
      * @return array An associative array where keys are tax codes and values are the total amounts.
      */
-    public static function sumAmountsByTaxCode(Invoice $invoice)
+    public static function sumAmountsByTaxCode(Invoice $invoice): array
     {
         $sumsByTaxCode = [];
 
@@ -178,7 +239,7 @@ class Invoice extends Model
             $paidAmounts = [];
             foreach ($sumsByTaxCode as $code => &$totalAmount) {
                 foreach ($last_payments as $index => $payment) {
-                    if (($payment->description !== Constants::$ANNULATION && $payment->description !== Constants::$REDUCTION) && $payment->code == $code) {
+                    if (($payment->description !== Constants::ANNULATION && $payment->description !== Constants::REDUCTION) && $payment->code == $code) {
                         $totalAmount['amount'] -= $payment->amount;
                         $paidAmounts[$index] = $payment->amount;
                     }
@@ -202,7 +263,12 @@ class Invoice extends Model
         return null;
     }
 
-    public static function getRestToPaid(Invoice $invoice):int{
+    /**
+     * @param Invoice $invoice
+     * @return int
+     */
+    public static function getRestToPaid(Invoice $invoice): float|int
+    {
         $s_amount= [];
         $last_payments = Payment::where('invoice_id', $invoice->invoice_no)->get();
         foreach ($last_payments as $index => $payment) {
@@ -215,5 +281,72 @@ class Invoice extends Model
 
     }
 
+    /**
+     * @param Invoice $invoice
+     * @return float|int
+     */
+    public static function getPaid($invoice_id): float|int
+    {
+        $payments= Payment::where('invoice_id', $invoice_id)->get();
+        $s_amount = [];
+
+            foreach ($payments as $index => $payment) {
+                if ($payment->description!= Constants::ANNULATION && $payment->description!=Constants::REDUCTION){
+                    $s_amount[$index] = $payment->amount;
+                }
+            }
+       return array_sum($s_amount) ?? 0;
+
+    }
+
+    public function getCreatedDate(): string
+    {
+        return $this->created_at->format('Y-m-d');
+    }
+    public static function getPrintData(array $filterBy,string $type=null):Collection
+    {
+        $activeYear = Year::getActiveYear();
+        $startOfYear = Carbon::parse("{$activeYear->name}-01-01 00:00:00");
+        $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
+        $query= Invoice::whereIn('invoices.status',$filterBy)
+        ->where('invoices.type','=',Constants::INVOICE_TYPE_TITRE)
+            ->whereBetween('invoices.created_at', [$startOfYear, $endOfYear]);
+
+        if($type!=null){
+            if ($type==PrintNameEnums::BORDEREAU_REDUCTION){
+                $query = $query->whereNot("invoices.reduce_amount" ,"=",'')
+                    ->WhereDoesntHave('printFiles', function ($query) use ($type) {
+                        $query->where('name', $type);
+                    });
+            }else if ($type==PrintNameEnums::BORDEREAU){
+                $query = $query->where("invoices.reduce_amount" ,"=",'')
+                    ->WhereDoesntHave('printFiles', function ($query) use ($type) {
+                        $query->where('name', $type);
+                    });
+
+            }else if($type==PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS || $type==PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES){
+                //$type=PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS;
+                $query = $query->WhereDoesntHave('printFiles', function ($query) use ($type) {
+                    $query->where('name', $type);
+                });
+            }
+        }
+
+            return $query
+            ->get();
+    }
+    public static function addPrintableToInvoices( $collection,PrintFile $printFile){
+
+
+        DB::transaction(function () use ($collection,$printFile) {
+            foreach ($collection as $invoice){
+                if($invoice instanceof Invoice){
+                    $invoice->printFiles()->sync($printFile->id);
+                    $invoice->save();
+                }
+            }
+        });
+        return $printFile;
+    }
 
 }

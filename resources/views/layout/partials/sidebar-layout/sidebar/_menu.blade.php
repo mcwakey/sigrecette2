@@ -71,7 +71,7 @@
 
             <!--begin:Menu item-->
             <div data-kt-menu-trigger="click"
-                class="menu-item menu-accordion {{ request()->routeIs('invoices') ? 'here show' : '' }}">
+                class="menu-item menu-accordion {{ request()->routeIs('invoices.*') ? 'here show' : '' }}">
                 <!--begin:Menu link-->
                 <span class="menu-link">
                     <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
@@ -84,7 +84,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery') ? 'active' : '' }}"
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery') && !request()->has('aucomptant') ? 'active' : '' }}"
                            href="{{ route('invoices.index') }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
@@ -112,6 +112,17 @@
             <span class="bullet bullet-dot"></span>
         </span>
                             <span class="menu-title">Liste des avis distribués</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->has('aucomptant')? 'active' : '' }}"
+                           href="{{ route('invoices.index', ['aucomptant' => true]) }}">
+        <span class="menu-bullet">
+            <span class="bullet bullet-dot"></span>
+        </span>
+                            <span class="menu-title">Liste des avis au comptant</span>
                         </a>
                         <!--end:Menu link-->
                     </div>
@@ -291,12 +302,20 @@
                 </div>
                 <!--end:Menu sub-->
             </div>
-            <!--end:Menu item-->
+            <div class="menu-item">
+                <!--begin:Menu link-->
+                <a class="menu-link {{ request()->routeIs('prints') ? 'active' : '' }}"
+                   href="{{ route('prints') }}" href="{{ route('prints') }}">
+                    <span class="menu-icon">{!! getIcon('element-11', 'fs-2') !!}</span>
+                    <span class="menu-title">{{ __('Impression') }}</span>
+                </a>
+                <!--end:Menu link-->
+            </div>
 
             <!--begin:Menu item-->
             <!--end:Menu item-->
             <!--begin:Menu item-->
-            @can('peut accedeé aux paramétrages du système')
+            @hasanyrole(['administrateur_system','administrateur'])
 
                 <div class="menu-item pt-5">
                     <!--begin:Menu content-->
@@ -535,7 +554,7 @@
                 </div>
                 <!--end:Menu item-->
 
-            @endcan
+            @endhasanyrole
 
 
         </div>

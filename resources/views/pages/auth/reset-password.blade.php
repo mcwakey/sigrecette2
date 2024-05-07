@@ -67,17 +67,7 @@
         <!--end::Input group--->
 
         <!--begin::Input group--->
-        <div class="fv-row mb-10">
-            <div class="form-check form-check-custom form-check-solid form-check-inline">
-                <input class="form-check-input" type="checkbox" name="toc" value="1"/>
-
-                <label class="form-check-label fw-semibold text-gray-700 fs-6">
-                {{ __('agree') }}
-
-                    <a href="#" class="ms-1 link-primary">{{ __('terms and conditions') }}</a>.
-                </label>
-            </div>
-        </div>
+        <input hidden class="form-check-input" type="checkbox" name="toc" value="1" checked="true"/>
         <!--end::Input group--->
 
         <!--begin::Actions-->

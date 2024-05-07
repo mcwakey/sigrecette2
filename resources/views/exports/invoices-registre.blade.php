@@ -41,21 +41,29 @@
 
 <table>
     <tr>
-        <td colspan="5" style="border: none; padding: 2px;">
+        <td colspan="1"  style="border: none; margin: 0;text-align: left">
+
+            <img src="{{ $commune-> getImageUrlAttribute() }}" alt="Logo" style="width: 50px; height: 50px;">
+
+        </td>
+        <td colspan="4"  style="border: none; margin: 0;text-align: left">
+
             {{$commune->region_name}}
 
         </td>
-        <td colspan="4" style="border: none; padding:2px ;text-align: right;">
+        <td colspan="4"  style="border: none; margin: 0;text-align: right">
             REPUBLIQUE TOGOLAISE
 
         </td>
     </tr>
     <tr>
-        <td colspan="5" style="border: none; margin: 0; padding:2px ;">
+        <td colspan="1" style="border: none; margin: 0; padding:2px ;text-align: left;">
+        </td>
+        <td colspan="4"  style="border: none; margin: 0;text-align: left">
 
             {{$commune->title}}
         </td>
-        <td colspan="4" style="border: none; margin: 0 ; padding:2px ; ;text-align: right;">
+        <td colspan="4"  style="border: none; margin: 0;text-align: right">
 
             Travail-Liberté-Patrie
         </td>
@@ -66,7 +74,7 @@
         </th>
     </tr>
     <tr>
-        <td colspan="9" style="border: none; margin: 0;">@php
+        <td colspan="9" style="margin-left: 2px;text-align:left;padding:4px ">@php
                 $year = \App\Models\Year::getActiveYear()
             @endphp
             Exercice : {{$year->name}}</td>

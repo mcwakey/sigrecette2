@@ -1,4 +1,4 @@
-@if ($invoice->status != 'REJECTED'&& $invoice->status != 'PENDING'&& $invoice->status != 'DRAFT')
+@if ($invoice->status != App\Enums\InvoiceStatusEnums::REJECTED && $invoice->status != App\Enums\InvoiceStatusEnums::PENDING && $invoice->status != App\Enums\InvoiceStatusEnums::DRAFT)
     @if ($invoice->delivery_date == null && $invoice->order_no !== null)
         {{ __('NOT DELIVERED') }}
         @can('peut ajouter la date de livraison d\'un avis')
@@ -38,7 +38,7 @@
         @else
             {{ __('NOT DELIVERED') }}
         @endcan
-    @elseif($invoice->delivery == 'DELIVERED')
+    @elseif($invoice->delivery_date!=null)
         {{ date('Y-m-d', strtotime($invoice->delivery_date)) }}
     @endif
 @else

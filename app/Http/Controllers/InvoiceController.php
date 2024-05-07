@@ -10,6 +10,7 @@ use App\Models\Year;
 use App\Models\Zone;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class InvoiceController extends Controller
 {
@@ -27,7 +28,9 @@ class InvoiceController extends Controller
             'endInvoiceId' => 'nullable|integer',
             's_date'=> 'nullable',
             'e_date'=> 'nullable',
+            'aucomptant'=>'nullable|integer'
         ]);
+        $aucomptant =$validatedData['aucomptant']??null;
         $notDelivery = $validatedData['notDelivery'] ?? null;
         $startInvoiceId = $validatedData['startInvoiceId'] ?? null;
         $endInvoiceId = $validatedData['endInvoiceId'] ?? null;
@@ -35,16 +38,18 @@ class InvoiceController extends Controller
         $endDate = $validatedData['e_date'] ?? Carbon::parse("{$year}-12-31 23:59:59");
         $zones = Zone::all();
         $tax_labels = TaxLabel::all();
-
+        $role = Role::where('name', 'agent_recouvrement')->first();
+        $agent_recouvrements = $role->users()->get();
         return $dataTable->with(
             [
                 'notDelivery' => $notDelivery,
                 'startDate' => $startDate,
                 'endDate' => $endDate,
                 'startInvoiceId'=>$startInvoiceId ,
-                'endInvoiceId'=>$endInvoiceId
+                'endInvoiceId'=>$endInvoiceId,
+                'aucomptant'=>$aucomptant
             ]
-        )->render('pages/invoices.list', compact('zones', 'tax_labels'));
+        )->render('pages/invoices.list', compact('zones', 'tax_labels','agent_recouvrements'));
     }
 
     /**

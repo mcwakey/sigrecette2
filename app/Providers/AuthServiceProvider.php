@@ -3,7 +3,13 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+
+use App\Models\User;
+use App\Policies\RolePolicy;
+use App\Policies\UserPolicy;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Spatie\Permission\Models\Role;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -13,7 +19,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+       User::class => UserPolicy::class,
+       Role::class => RolePolicy::class,
     ];
 
     /**
@@ -23,6 +30,15 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->registerPolicies();
+
+        Gate::define('update-user', [UserPolicy::class, 'update']);
+        Gate::define('create-user', [UserPolicy::class, 'create']);
+        Gate::define('delete-user', [UserPolicy::class, 'delete']);
+
+
+        Gate::define('update-role', [UserPolicy::class, 'update']);
+        Gate::define('create-role', [UserPolicy::class, 'create']);
+        Gate::define('delete-role', [UserPolicy::class, 'delete']);
     }
 }

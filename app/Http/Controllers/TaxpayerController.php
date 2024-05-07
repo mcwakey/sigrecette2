@@ -178,7 +178,6 @@ class TaxpayerController extends Controller
     public function import(Request $request)
     {
 
-        //dd($request->file('file')->store('files'));
         if($request->file('file')){
             Excel::queueImport(new TaxpayerImport,
                 $request->file('file')->store('files'));
@@ -192,6 +191,6 @@ class TaxpayerController extends Controller
             Excel::queueImport(new TaxpayerImport, $filePath);
         }
 
-        return redirect('/')->with('success', 'All good!');
+        return redirect()->back();
     }
 }

@@ -75,7 +75,6 @@ class TaxLabelsSeeder extends Seeder
             ['name' => "Les droits de place dans les marchés", 'code' => "723111",'category'=>"CATEGORY 1"],
         ];
 
-
         $taxLabelNamesZwei = [
             ['name' => "Les produits de location de matériels", 'code' => "705111",'category'=>"CATEGORY 2"],
             ['name' => "Les produits de location de mobiliers", 'code' => "705112",'category'=>"CATEGORY 2"],
@@ -107,6 +106,7 @@ class TaxLabelsSeeder extends Seeder
             TaxLabel::create($item);
             }
         }
+        
         $taxLabelNames=[
             'Taxe sur les spectacles et autres manifestations publiques',
             'Taxe de voirie',

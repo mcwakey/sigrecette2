@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Helpers\Constants;
 use App\Models\Taxpayer;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
@@ -98,7 +99,8 @@ class TaxpayersDataTable extends DataTable
                   //  ->join('ereas', 'taxpayers.erea_id', '=', 'ereas.id')
                     ->with('zone')
                     ->join('zones', 'taxpayers.zone_id', '=', 'zones.id')
-                    ->select('taxpayers.*') // Select columns from taxpayers table
+            ->where('taxpayers.type', '=',Constants::TITRE)
+            ->select('taxpayers.*') // Select columns from taxpayers table
                     ->newQuery();
     }
 

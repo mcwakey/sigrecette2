@@ -156,7 +156,16 @@ return [
         'id_number'                => 'no d\'identifiant',
         'category_id'              => 'catégorie d\'activité',
         'activity_id'              => 'activité principale',
-
+        'category'                 => 'catégorie',
+        'unit'                     => 'unité',
+        'periodicity'              => 'périodicité',
+        'tariff'                   => 'tarif',
+        'status'                   => 'statut',
+        'mayor_name'               => 'nom du maire',
+        'phone_number'             => 'numéro de téléphone',
+        'treasury_name'            => 'nom de la trésorerie',
+        'treasury_address'            => 'adresse de la trésorerie',
+        'region_name'               => 'nom de la région',
 
 
         'address'                  => 'adresse',

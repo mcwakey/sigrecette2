@@ -35,11 +35,17 @@
     </style>
     <title>Fiche de recouvrement des avis distribués</title>
 </head>
+
 <body>
 
 <table>
     <tr>
-        <td colspan="7"  style="border: none; padding: 2px;">
+        <td colspan="1"  style="border: none; margin: 0;text-align: left">
+
+            <img src="{{ $commune-> getImageUrlAttribute() }}" alt="Logo" style="width: 50px; height: 50px;">
+
+        </td>
+        <td colspan="6"  style="border: none; padding: 2px;">
             {{$commune->region_name}}
 
         </td>
@@ -49,7 +55,8 @@
         </td>
     </tr>
     <tr>
-        <td colspan="7" style="border: none; margin: 0; padding:2px ;">
+        <td colspan="1" style="border: none; margin: 0; padding:2px ;text-align: left;">
+        <td colspan="6" style="border: none; margin: 0; padding:2px ;">
 
             {{$commune->title}}
         </td>
@@ -62,7 +69,7 @@
         <th colspan="14" style="border: none; margin: 0; text-align: center;" class="caption">Fiche de recouvrement des avis distribués</th>
     </tr>
     <tr>
-        <td colspan="14" style="border: none; margin: 0; text-align: center;">N°....</td>
+        <td colspan="14" style="border: none; margin: 0; text-align: center;">N° {{$print->last_sequence_number}}</td>
     </tr>
     <tr>
         @php
@@ -71,13 +78,13 @@
         <td colspan="14" style="border: none; margin: 0;" >Exercice : {{" ".$year->name}}</td>
     </tr>
     <tr>
-        <td colspan="14" style="border: none; margin: 0;">Zone fiscale :{{$data[0]->taxpayer->zone->name}}</td>
+        <td colspan="14" style="border: none; margin: 0;">Zone fiscale :</td>
     </tr>
     <tr>
-        <td colspan="14" style="border: none; margin: 0;" >Nom de l’agent de recouvrement : {{\Illuminate\Support\Facades\Auth::user()->name}}</td>
+        <td colspan="14" style="border: none; margin: 0;" >Nom de l’agent de recouvrement : {{$agent->name}}</td>
     </tr>
     <tr>
-        <td  colspan="14" style="border: none; margin: 0;" >Période de distribution: ........</td>
+        <td  colspan="14" style="border: none; margin: 0;" >Période de distribution: </td>
     </tr>
     <tr>
 
@@ -102,32 +109,35 @@
         <td>Somme recouvrée</td>
         <td>N° quittance</td>
     </tr>
+
     @foreach($data as $index => $item)
-        @foreach(\App\Models\Invoice::sumAmountsByTaxCode($item) as $code => $tax)
+        @if($item instanceof \App\Models\Invoice)
+            @foreach(\App\Models\Invoice::sumAmountsByTaxCode($item) as $code => $tax)
 
-            @php
-            $paid = \App\Models\Payment::getSumPaymentByCode($code,$item);
-                @endphp
-            <tr>
+                @php
+                $paid = \App\Models\Payment::getSumPaymentByCode($code,$item);
+                    @endphp
+                <tr>
 
-                <td>{{$item->invoice_no}}</td>
-                <td>{{$item->order_no}}</td>
-                <td>{{\App\Models\TaxLabel::getNameByCode($code)}}</td>
-                <td>{{$code}}</td>
-                <td>{{$item->nic}}</td>
-                <td>{{$item->taxpayer->name}}</td>
-                <td>{{$item->taxpayer->longitude,$item->taxpayer->latitude}}</td>
-                <td>{{$item->taxpayer->address}}</td>
-                <td>{{$tax['amount']}}</td>
-                <td>{{$paid}}</td>
-                <td>{{$tax['amount']-$paid}}</td>
+                    <td>{{$item->invoice_no}}</td>
+                    <td>{{$item->order_no}}</td>
+                    <td>{{\App\Models\TaxLabel::getNameByCode($code)}}</td>
+                    <td>{{$code}}</td>
+                    <td>{{$item->nic}}</td>
+                    <td>{{$item->taxpayer->name}}</td>
+                    <td>{{$item->taxpayer->longitude,$item->taxpayer->latitude}}</td>
+                    <td>{{$item->taxpayer->address}}</td>
+                    <td>{{$tax['amount']}}</td>
+                    <td>{{$paid}}</td>
+                    <td>{{$tax['amount']-$paid}}</td>
 
 
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        @endforeach
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            @endforeach
+        @endif
     @endforeach
 
 

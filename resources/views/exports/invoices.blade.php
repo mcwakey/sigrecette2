@@ -292,7 +292,6 @@
                 paiements mensualisés.</p>
             @else
 
-                <p>N.B. Somme Total Nouveau décompte: {{ $invoice->amount -$data->amount }} Francs CFA (Sauf erreur ou omission).</p>
         @endif
         <table>
             <tr class="text-start">

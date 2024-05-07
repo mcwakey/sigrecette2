@@ -43,14 +43,6 @@ var KTAuthNewPassword = (function () {
                         },
                     },
                 },
-                toc: {
-                    validators: {
-                        notEmpty: {
-                            message:
-                                "Vous devez accepter les termes et conditions.",
-                        },
-                    },
-                },
             },
             plugins: {
                 trigger: new FormValidation.plugins.Trigger({

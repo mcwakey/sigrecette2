@@ -80,9 +80,10 @@ document.querySelectorAll('[data-kt-action="load_invoice"]').forEach(function (e
 
 // Add click event listener to update buttons
 document.querySelectorAll('[data-kt-action="load_drop"]').forEach(function (element) {
-    element.addEventListener('change', function () {
-        console.log('load_taxables', this.value);
-        Livewire.dispatch('load_drop', [this.value]);
+    element.addEventListener('input', function () {
+        if(this.value && !isNaN(parseFloat(this.value))){
+            Livewire.dispatch('load_drop', [this.value]);
+        }
     });
 });
 
@@ -90,9 +91,11 @@ document.querySelectorAll('[data-kt-action="load_drop"]').forEach(function (elem
 
 // Add click event listener to update buttons
 document.querySelectorAll('[data-kt-action="change_tarrif"]').forEach(function (element) {
-    element.addEventListener('change', function () {
-        console.log('change_tarrif', this.value);
-        Livewire.dispatch('change_tarrif', [this.value]);
+    element.addEventListener('input', function () {
+        console.log(this.value)
+        if(this.value && !isNaN(parseFloat(this.value))){
+            Livewire.dispatch('change_tarrif', [this.value]);
+        }
     });
 });
 
@@ -111,7 +114,7 @@ document.querySelectorAll('[data-kt-action="update_checkbox"]').forEach(function
         // Get the value of the checkbox
         //var value = this.checked;
 
-        
+
         //dd(this.checked);
         // Dispatch a Livewire event with the checkbox value
         Livewire.dispatch('update_checkbox', [this.getAttribute('data-kt-user-id')]);

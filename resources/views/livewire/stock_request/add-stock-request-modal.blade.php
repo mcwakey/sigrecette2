@@ -6,7 +6,7 @@
             <!--begin::Modal header-->
             <div class="modal-header" id="kt_modal_add_stock_request_header">
                 <!--begin::Modal title-->
-                <h2 class="fw-bold">{{ __('stock requests') }}</h2>
+                <h2 class="fw-bold">{{ __('new stock request') }}</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
@@ -23,7 +23,7 @@
                     <input type="hidden" wire:model="user_id" name="user_id" value=""/>
                     <!--begin::Scroll-->
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_stock_request_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_stock_request_header" data-kt-scroll-wrappers="#kt_modal_add_stock_request_scroll" data-kt-scroll-offset="300px">
-                        
+
                         <!--begin::Input group-->
 
                         <div class="row mb-7">
@@ -34,11 +34,12 @@
                                 <!--begin::Input-->
                                     @if ($edit_mode == 'true')
                                     <input type="text" wire:model="taxlabel_name" name="taxlabel_name" class="form-control form-control- mb-3 mb-lg-0" readonly/>
-                                    @else                     
+                                    @else
                                 <select data-kt-action="load_drop" wire:model="taxlabel_id" name="taxlabel_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_request">
                                     <option>{{ __('select an option') }}</option>
                                     <option value="TICKET">TICKET</option>
                                     <option value="TIMBRE">TIMBRE</option>
+                                    <option value="AUTRE">AUTRE</option>
                                 </select>
                                     @endif
                                 <!--end::Input-->
@@ -93,13 +94,13 @@
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>
-                        
+
                         <div class="separator saperator-dashed my-3"></div>
 
                         <div class="row mb-7">
                             <div class="col-md-3">
                                 <!--begin::Label-->
-                                <label class="required fs-6 fw-semibold mb-2">{{ __('start no') }}</label>
+                                <label class="fs-6 fw-semibold mb-2">{{ __('start no') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input data-kt-action="load_drop" -->
                                 <input type="text" wire:model="start_no" name="start_no" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('start no') }}" data-kt-action="change_qty" />
@@ -143,7 +144,7 @@
                                         <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                                     </span>
                                 </button>
-                                
+
                                 <!--end::Input-->
                             </div>
                             @endif
@@ -174,10 +175,10 @@
                                                 {{ $stock_request->taxable->tariff }}
                                             </td>
                                             <td>
-                                                {{ $stock_request->qty }} 
+                                                {{ $stock_request->qty }}
                                             </td>
                                             <td>
-                                                {{ $stock_request->qty*$stock_request->taxable->tariff }}
+                                                {{ $stock_request->qty*$stock_request->taxable?->tariff }}
                                             </td>
                                             <td>
                                                 {{ $stock_request->start_no." - ".$stock_request->end_no }}
@@ -187,7 +188,7 @@
                                         </tbody>
                             </table>
 
-                          @endif  
+                          @endif
 
 
 
@@ -210,7 +211,7 @@
                     <!--begin::Actions-->
                     <div class="text-center pt-15">
                     <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal" aria-label="Close" wire:loading.attr="disabled">{{ __('close') }}</button>
-                        
+
                     </div>
                     <!--end::Actions-->
                 </form>
