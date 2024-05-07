@@ -28,7 +28,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/v1/auth', [AuthController::class, 'auth']);
 
 Route::post('/v1/check', [CheckIpAddress::class, 'check']);
-Route::Post('/search/taxpayers', [SearchTaxpayerController::class, 'search']);
+Route::Post('/v1/search/taxpayers', [SearchTaxpayerController::class, 'search']);
 
 Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
