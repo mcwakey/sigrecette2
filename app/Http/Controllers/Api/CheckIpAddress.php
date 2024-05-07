@@ -13,6 +13,11 @@ class CheckIpAddress extends Controller
         $commune  = Commune::getFirstCommune();
         $serverip = $request->input('serverip');
 
+        if($commune==null){
+            return response()->json([
+                'message' => "commune not find",
+            ],404);
+        }
         return response()->json([
             'commune' =>  $commune?->name,
             'serverip' => $serverip,
