@@ -19,7 +19,7 @@ class CheckIpAddress extends Controller
             ],404);
         }
         return response()->json([
-            'commune' =>  $commune?->name,
+            'commune' =>  $commune->name,
             'serverip' => $serverip,
         ],200);
     }
