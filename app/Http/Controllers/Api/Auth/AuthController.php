@@ -29,7 +29,7 @@ class AuthController extends Controller
             'access_token' => $token,
             'user_id' => $user->id,
             'name' => $user->name,
-            'email', $user->email,
+            'email'=> $user->email,
             'role' => $user->getRoleNames()->first(),
             'zone' => $user->zone->name,
         ], 200);
