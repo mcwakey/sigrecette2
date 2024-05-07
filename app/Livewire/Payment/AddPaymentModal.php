@@ -3,6 +3,7 @@
 namespace App\Livewire\Payment;
 
 use App\Enums\PaymentStatusEnums;
+use App\Helpers\Constants;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Traits\DispatchesMessages;
@@ -88,6 +89,10 @@ class AddPaymentModal extends Component
 
         //return view('livewire.payment.add-payment-modal', ['taxpayer_id' => $this->taxpayer_id]);
         //dd($invoiceitems,$this->invoice_id);
+        $invoice = Invoice::find($this->invoice_id);
+        if($invoice !=null && $invoice->type==Constants::INVOICE_TYPE_COMPTANT){
+            $this->amount = $invoice->amount;
+        }
 
         return view('livewire.payment.add-payment-modal', compact('taxpayers'));
     }
@@ -138,6 +143,7 @@ class AddPaymentModal extends Component
         DB::transaction(function () {
 
             $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
+
             if(($this->paid+$this->amount)<= $invoice->amount){
                 $paymentData = [
                     // 'invoice_id' => $this->invoice_id,
