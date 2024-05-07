@@ -487,15 +487,25 @@
                             dataArray.push(id);
                         }
 
+
                         let r_type = 2;
                         let jsonData = JSON.stringify(dataArray);
-                        let url = "{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type', 'action' => ':selectedValue','id'=>':agent']) }}";
-                        url = url.replace(':jsonData', encodeURIComponent(jsonData));
-                        url = url.replace(':r_type', encodeURIComponent(r_type));
-                        url = url.replace(':selectedValue', encodeURIComponent(selectedValue));
-                        url = url.replace(':agent', encodeURIComponent(agent));
+                        var url;
+                        if (agent != null) {
+                            url = "{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type', 'action' => ':selectedValue','id'=>':agent']) }}";
+                            url = url.replace(':jsonData', encodeURIComponent(jsonData));
+                            url = url.replace(':r_type', encodeURIComponent(r_type));
+                            url = url.replace(':selectedValue', encodeURIComponent(selectedValue));
+                            url = url.replace(':agent', encodeURIComponent(agent));
+                        }
+                        else{
+                            url = "{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type', 'action' => ':selectedValue']) }}";
+                            url = url.replace(':jsonData', encodeURIComponent(jsonData));
+                            url = url.replace(':r_type', encodeURIComponent(r_type));
+                            url = url.replace(':selectedValue', encodeURIComponent(selectedValue));
+                        }
 
-                        console.log(url)
+
                         window.open(url,'_blank');
                     });
                 });
