@@ -38,7 +38,7 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         'store',
     ]);
 
-    Route::get('/search/taxpayers', [SearchTaxpayerController::class, 'search']);
+    Route::Post('/search/taxpayers', [SearchTaxpayerController::class, 'search']);
 });
 
 
