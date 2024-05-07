@@ -4,6 +4,7 @@ use App\Actions\SamplePermissionApi;
 use App\Actions\SampleRoleApi;
 use App\Actions\SampleUserApi;
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\CheckIpAddress;
 use App\Http\Controllers\Api\SearchTaxpayerController;
 use App\Http\Controllers\Api\TaxpayerController;
 use Illuminate\Http\Request;
@@ -25,6 +26,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/v1/auth', [AuthController::class, 'auth']);
+
+Route::post('/v1/check', [CheckIpAddress::class, 'check']);
 
 Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);

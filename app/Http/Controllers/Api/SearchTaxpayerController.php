@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Zone;
 use App\Models\Taxpayer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -11,10 +12,10 @@ class SearchTaxpayerController extends Controller
 {
     public function search(Request $request)
     {
-        $taxpayerName = $request->input('name', null);
+        $taxpayerName = $request->input('name', null); 
         $mobilePhone = $request->input('mobilephone', null);
         $town = $request->input('town', null);
-        $zone = $request->input('zone', null);
+        $zoneName = $request->input('zone', null);
 
         $query = Taxpayer::query();
 
@@ -22,16 +23,19 @@ class SearchTaxpayerController extends Controller
             $query->where('name', 'like', '%' . $taxpayerName . '%');
         }
 
-        if ($zone) {
-            $query->where('zone', $zone);
+        if ($mobilePhone) {
+            $query->where('mobilephone', $mobilePhone);
         }
 
         if ($town) {
-            $query->where('zone', $town);
+            $query->where('town', $town);
         }
 
-        if ($mobilePhone) {
-            $query->where('mobilephone', $mobilePhone);
+        if ($zoneName) {
+            $zone = Zone::where('name', 'like', '%' . $zoneName . '%')->first();
+            if ($zone) {
+                $query->where('zone_id', $zone->id);
+            }
         }
 
         return  SearchTaxpayerResource::collection($query->get());
