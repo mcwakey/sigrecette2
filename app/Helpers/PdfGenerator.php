@@ -457,7 +457,7 @@ class PdfGenerator  implements PdfGeneratorInterface
 
             $data=Invoice::whereBetween('created_at', [$startOfYear, $endOfYear])
             ->where('type','=',Constants::INVOICE_TYPE_COMPTANT)
-            ->where('status','=',InvoiceStatusEnums::APPROVED);
+            ->where('status','=',InvoiceStatusEnums::APPROVED)->get();
 
         if ($this->checkIfCommuneIsNotNull()&& count($data)>0) {
             $filename = "Invoice-list-" . Str::random(8) . ".pdf";
