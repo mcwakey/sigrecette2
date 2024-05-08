@@ -1,5 +1,5 @@
     @if($invoice->status ==  App\Enums\InvoiceStatusEnums::PENDING )
-        @if($invoice->order_no!=null ||$invoice->type== App\Helpers\Constants::INVOICE_TYPE_COMPTANT)
+        @if($invoice->order_no!=null || $invoice->type== App\Helpers\Constants::INVOICE_TYPE_COMPTANT)
             <div class="badge badge-lg badge-light-primary d-inline">{{ __($invoice->status) }}
                 @can('peut prendre en charge un avis')
                     <button type="button"

@@ -398,15 +398,15 @@ class AddInvoiceModal extends Component
             // Update the value in the component properties using the loop index as the key
             //dd($taxable->taxable);
 
-            if ($invoice_item->taxpayer_taxable->taxable->periodicity == "Mois") {
+            // if ($invoice_item->taxpayer_taxable->taxable->periodicity == "Mois") {
+            //     $period = 1;
+            // } elseif ($invoice_item->taxpayer_taxable->taxable->periodicity == "Ans") {
+            //     $period = 0.083333;
+            //     // }elseif ($taxable->taxable->periodicity == "Jours") {
+            //     //     $period = 30;
+            // } else {
                 $period = 1;
-            } elseif ($invoice_item->taxpayer_taxable->taxable->periodicity == "Ans") {
-                $period = 0.083333;
-                // }elseif ($taxable->taxable->periodicity == "Jours") {
-                //     $period = 30;
-            } else {
-                $period = 1;
-            }
+            // }
 
             //dd($taxable->taxpayer_taxable->taxable->tax_label->name);
             $this->periodicity = $invoice_item->taxpayer_taxable->taxable->periodicity;
