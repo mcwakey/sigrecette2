@@ -155,7 +155,7 @@ class AddPaymentModal extends Component
                     'description' =>  $invoice->type==Constants::INVOICE_TYPE_COMPTANT?"Avis ".$this->invoice_no:"Avis ".$this->invoice_no.", OR " .$this->order_no,
                     'remaining_amount' =>$this->bill-($this->amount + $this->paid),
                     'user_id'=>  Auth::id(),
-                    'type'=>$invoice->type
+                    'invoice_type'=>$invoice->type
 
                 ];
                 $role = Role::where('name', 'regisseur')->first();
