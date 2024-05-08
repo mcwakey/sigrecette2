@@ -220,7 +220,11 @@
                         </div>
 
                     </div>
-                    <!--end::Row-->
+                    @php
+                        $aucomptant =  request()->routeIs('invoices.*') &&  request()->has('aucomptant');
+                    @endphp
+                    <input type="hidden" value="{{$aucomptant }}" name="accounted_state" id="accounted_state" />
+
 
                     <div class="separator separator-dashed mt-5 mb-5"></div>
                 </div>
@@ -414,6 +418,7 @@
             });
             const printModal = document.getElementById('print-modal');
             const agentDiv = document.getElementById('agent-div');
+            const aucomptant =  document.getElementById('accounted_state').value;
             // Sélectionnez le bouton
             const printButton = document.getElementById('print-btn');
 
@@ -449,14 +454,25 @@
                     if (
                         approve_array.includes(selectedValue)
                     ) {
-                        agentDiv.classList.remove( "d-none")
-                        addPrintMenuItem('{{ __('Fiche de recouvrement des avis distribués') }}', '41');
-                        addPrintMenuItem('{{ __('Fiche de distribution des avis') }}', '4');
-                        addPrintMenuItem('{{ __('Journal des avis des sommes à payer confiés par le receveur') }}', '5');
-                        addPrintMenuItem('{{ __('Registre-journal des avis distribués') }}', '3');
+
+
+                        if( aucomptant){
+                            addPrintMenuItem('{{ __('Registre-journal des déclarations préalables des usagers') }}', '77');
+                        }else {
+                            agentDiv.classList.remove( "d-none")
+                            addPrintMenuItem('{{ __('Fiche de recouvrement des avis distribués') }}', '41');
+                            addPrintMenuItem('{{ __('Fiche de distribution des avis') }}', '4');
+                            addPrintMenuItem('{{ __('Journal des avis des sommes à payer confiés par le receveur') }}', '5');
+                            addPrintMenuItem('{{ __('Registre-journal des avis distribués') }}', '3');
+                        }
                     }else if(  selectedValue ==="{{ App\Enums\InvoiceStatusEnums::PENDING}}" ){
-                        addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
-                        addPrintMenuItem('{{ __('Bordereau journal des avis de réduction ou d’annulation') }}', '2');
+                        if(aucomptant){
+                            addPrintMenuItem('{{ __('Registre-journal des déclarations préalables des usagers') }}', '77');
+
+                        }else {
+                            addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
+                            addPrintMenuItem('{{ __('Bordereau journal des avis de réduction ou d’annulation') }}', '2');
+                        }
                         agentDiv.classList.add( "d-none")
                     }else addPrintMenuItem('', '1');
 
