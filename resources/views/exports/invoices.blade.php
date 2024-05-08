@@ -165,9 +165,9 @@
             <span>Téléphone :{{$data->taxpayer->mobilephone}}</span>
         </p>
         <p>
-            <span class="write">Canton :{{$data->taxpayer->town->canton->name}},</span>
-            <span class="write">Quartier/Village: {{$data->taxpayer->town->name}},</span>
-            <span class="write"> Zone fiscale :{{$data->taxpayer->zone->name}}</span>
+            <span class="write">Canton :{{$data->taxpayer->town?->canton->name}},</span>
+            <span class="write">Quartier/Village: {{$data->taxpayer->town?->name}},</span>
+            <span class="write"> Zone fiscale :{{$data->taxpayer->zone?->name}}</span>
         </p>
         <p>
             <span class="write">Adresse complète :{{$data->taxpayer->address}}</span>

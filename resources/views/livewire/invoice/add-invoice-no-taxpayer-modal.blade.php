@@ -210,21 +210,7 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                            @if ($option_calculus == "Type" || $option_calculus == "Nombre" || $option_calculus == "Volume")
-                            <div class="col-md-4">
-                                <!--begin::Label-->
-                                <label class="required fs-6 fw-semibold mb-2">{{ __('seize') }}</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" wire:model="seize" name="seize"
-                                    class="form-control mb-3 mb-lg-0" placeholder="{{ __('seize') }}"
-                                     data-kt-action="load_invoice"/>
-                                <!--end::Input-->
-                                @error('seize')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            @else
+                            @if ($option_calculus == "surface")
                                 <div class="row mb-7">
                                     <div class="col-md-3">
                                         <!--begin::Label-->
@@ -246,17 +232,22 @@
                                         @error('width')
                                         <span class="text-danger">{{ $message }}</span> @enderror
                                     </div>
-                                    <div class="col-md-3">
-                                        <!--begin::Label-->
-                                        <label class="required fw-semibold fs-6 mb-2">{{'Surface' }}</label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <input type="text" wire:model="seize" name="seize" class="form-control mb-3 mb-lg-0" placeholder="{{ __('seize') }}" data-kt-action="load_invoice"/>
-                                        <!--end::Input-->
-                                        @error('seize')
-                                        <span class="text-danger">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div class="col-md-3">
+                                </div>
+                            @endif
+                            <div class="col-md-3">
+                                <!--begin::Label-->
+                                <label class="required fs-6 fw-semibold mb-2">{{ __('seize') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" wire:model="seize" name="seize"
+                                    class="form-control mb-3 mb-lg-0" placeholder="{{ __('seize') }}"
+                                       data-kt-action="change_tarrif"/>
+                                <!--end::Input-->
+                                @error('seize')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                                    <div class="col-md-1">
                                         <!--begin::Label-->
                                         <label class="fs-6 fw-semibold mb-2">{{ __('unit') }}</label>
                                         <!--end::Label-->
@@ -266,8 +257,6 @@
                                         @error('taxable_id')
                                         <span class="text-danger">{{ $message }}</span> @enderror
                                     </div>
-                                </div>
-                            @endif
                         </div>
 
 
@@ -277,35 +266,29 @@
 
                         <div class="row mb-2">
                             <div class="col-md-3">
-                                <input type="text" class="required form-control form-control-flush text-end"
+                                <input type="hidden" class="required form-control form-control-flush text-end"
                                     placeholder="{{ __('Nombre de taxation') }}" readonly />
                                 @error('qty')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="col-md-2">
-                                <input wire:model="qty" name="qty" type="text"
+                                <input wire:model="qty" name="qty" type="hidden"
                                        class="form-control border-0 ps-12" data-kt-dialer-control="input"
                                        placeholder="1"  readonly="readonly" data-kt-action="load_invoice" />
                             </div>
-                            <div class="col-md-2">
-                                <input type="text" value="Mois" class="required form-control form-control-flush"
-                                    readonly />
-                            </div>
-                            <div class="col-md-2">
-                                <input type="text" class="required form-control form-control-flush text-end"
-                                    placeholder="{{ __('A compter de') }}" readonly />
-                            </div>
+                            
+                            
+                            
                             <div class="col-md-3">
                                 <div class="input-group mb-2">
                                     @foreach ($months as $monthNumber => $monthName)
-                                    <input READONLY type="text" wire:model="start_month" name="start_month" class="form-control mb-3 mb-lg-0" placeholder="{{ $monthName}}" data-kt-action="load_invoice" value="{{ $monthNumber}}"/>
+                                    <input  type="text" wire:model="start_month" name="start_month" class="form-control mb-3 mb-lg-0" placeholder="{{ $monthName}}" data-kt-action="load_invoice" value="{{ $monthNumber}}"/>
                                     @endforeach
                                     <span class="input-group-text" id="basic-addon1">{{" ".$year->name}}</span>
                                 </div>
 
                             </div>
-
                         </div>
 
                         <div class="separator separator-dashed my-2"></div>
@@ -332,7 +315,7 @@
                                                 name="taxpayer_taxable_id" name="taxpayer_taxable_id"
                                                 class="form-control form-control-solid mb-2" />
 
-                                            <div class="form-floating">
+                                            <div class="form-floating  overflow-hidden">
                                                 <input type="text" wire:model="taxpayer_taxable"
                                                     name="taxpayer_taxable" id="taxpayer_taxable"
                                                     class="form-control form-control-solid" readonly />

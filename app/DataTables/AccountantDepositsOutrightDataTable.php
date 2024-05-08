@@ -161,7 +161,7 @@ class AccountantDepositsOutrightDataTable extends DataTable
                     // ->join('users', 'payments.to_user_id', '=', 'users.id')
                     //  ->orWhere('invoice_id', null) // Filter collector_deposits by taxpayer_id
                     ->where('invoice_type', Constants::INVOICE_TYPE_COMPTANT) // Filter collector_deposits by taxpayer_id
-                    ->where('status', 'APROVED') // Filter collector_deposits by taxpayer_id
+                    ->where('status', 'ACCOUNTED') // Filter collector_deposits by taxpayer_id
                     // ->select('payments.*')
                     //->orderBy('tax_labels.name')
                     ->newQuery();
@@ -199,7 +199,7 @@ class AccountantDepositsOutrightDataTable extends DataTable
             Column::make('reference')->title(__('reference no')),
             Column::make('amount')->title(__('amount')),
             Column::make('code')->title(__('code')),
-            Column::make('order_no')->title(__('order no')),
+            Column::make('order_no')->title(__('reg order no')),
             //Column::make('tariff')->title(__('tariff'))->addClass('text-nowrap')->name('tax_labels.name'),
             //Column::make('tax_type')->title(__('tax_type')),
             // Column::make('stock_transfers.code')->title(__('code')),

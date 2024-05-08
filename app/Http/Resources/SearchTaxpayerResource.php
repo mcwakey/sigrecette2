@@ -24,15 +24,23 @@ class SearchTaxpayerResource extends JsonResource
             'gender' => $this->resource->gender,
             'mobilephone' => $this->resource->mobilephone,
             'telephone' => $this->resource->telephone,
+            'email' => $this->resource->email,
             'longitude' => $this->resource->longitude,
             'latitude' => $this->resource->latitude,
-            'town' => new TownResource($this->town),
-            'erea' => new EreaResource($this->erea),
-            'zone' => new ZoneResource($this->zone),
-            'email' => $this->resource->email,
-            'last_login_at' =>  $this->resource->last_login_at,
-            'last_login_ip' =>  $this->resource->last_login_ip,
-            'profile_photo_path' => $this->resource->profile_photo_path,
+           'address' => $this->resource->resource->address,
+            'idType '=> $this->resource->id_type,
+            'idNumber' =>  $this->resource->id_number,
+            'categoryId' => $this->resource->category_id,
+            'activityId' =>$this->resource->activity_id,
+            'otherWork' => $this->resource->other_work,
+                'fileNo' =>$this->resource->file_no,
+            'authorisation' =>$this->resource->authorisation,
+            'authReference' => $this->resource->auth_reference,
+        'nif' =>  $this->resource->nif,
+            'townId' =>$this->resource->town?->id,
+            'ereaId' =>$this->resource->erea?->id,
+            'zoneId' => $this->resource->zone?->id
+
         ];
     }
 }

@@ -13,6 +13,7 @@ class PrintFile extends Model
         'name',
         'last_sequence_number',
         'total_last_sequence',
+        'user_id',
 
     ];
     public function invoices()
@@ -28,12 +29,13 @@ class PrintFile extends Model
             ->orderBy('created_at','desc')
             ->first();
     }
-    public static function createPrintFile(string $type, $data,$total=0):PrintFile{
+    public static function createPrintFile(string $type, $data,$total=0,User $user=null):PrintFile{
         $last_print = PrintFile::getLastPrintFileByType($type);
         $print_data = [
             'name' =>$type,
             'last_sequence_number' => $last_print==null?1:$last_print->last_sequence_number+1,
-            'total_last_sequence'=>$last_print==null?$total:$last_print->total_last_sequence
+            'total_last_sequence'=>$last_print==null?$total:$last_print->total_last_sequence,
+            'user_id'=>$user
         ];
         $print= PrintFile::create($print_data);
         return Invoice::addPrintableToInvoices($data,$print);

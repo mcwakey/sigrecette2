@@ -140,7 +140,7 @@ class AddInvoiceNoTaxpayerModal extends Component
         "s_amount" => 'required|numeric',
         "taxpayer_taxable_id" => "required|int",
         "qty" => "required|numeric",
-        "start_month" => "required|string",
+        "fullname" => "required|string",
 
         // 'taxpayer_id' => 'required',
         'amount' => 'required|numeric',
@@ -199,6 +199,7 @@ class AddInvoiceNoTaxpayerModal extends Component
         $monthName = Carbon::createFromFormat('m',$currentMonth)->monthName;
         $monthNumber = str_pad($currentMonth, 2, '0', STR_PAD_LEFT);
         $months[$monthNumber] = $monthName;
+        $this->start_month = $monthNumber;
         //$taxpayer_taxables = $this->taxpayer_id ? TaxpayerTaxable::where('taxpayer_id', $this->taxpayer_id)->where('billable', 1)->get() : collect();
         //$taxpayer_id = $this->taxpayer_id;
 

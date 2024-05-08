@@ -149,12 +149,13 @@ class AddPaymentModal extends Component
                     // 'invoice_id' => $this->invoice_id,
                     'invoice_id' => $this->invoice_no,
                     'taxpayer_id' => ($this->taxpayer_id === "") ? null : $this->taxpayer_id,
-                    'amount' => $this->amount,
+                    'amount' => $invoice->type==Constants::INVOICE_TYPE_COMPTANT?$invoice->amount: $this->amount,
                     'payment_type' => $this->payment_type,
                     'reference' => $this->reference,
-                    'description' => "Avis ".$this->invoice_no.", OR " .$this->order_no,
+                    'description' =>  $invoice->type==Constants::INVOICE_TYPE_COMPTANT?"Avis ".$this->invoice_no:"Avis ".$this->invoice_no.", OR " .$this->order_no,
                     'remaining_amount' =>$this->bill-($this->amount + $this->paid),
                     'user_id'=>  Auth::id(),
+                    'type'=>$invoice->type
 
                 ];
                 $role = Role::where('name', 'regisseur')->first();

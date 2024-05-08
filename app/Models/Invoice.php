@@ -147,25 +147,20 @@ class Invoice extends Model implements FormatDateInterface
      * @return array Returns a collection of invoices if all UUIDs are found,
      *                               `false` if any UUID is not found, or an empty array if `$uuids` is empty.
      */
-    public static function retrieveByType(array $uuids, string $type): array
+    public static function filterByType(array $invoices, string $type): array
     {
-        $invoices = [];
+        $invoices_return = [];
 
-        if (empty($uuids)) {
-            return [];
-        }
+        foreach ($invoices as $invoice) {
 
-        foreach ($uuids as $uuid) {
-            $invoice = null;
-            $invoice = Invoice::where('uuid', $uuid)->WhereDoesntHave('printFiles', function ($query) use ($type) {
-                $query->where('name', $type);
-            })->first();
-            if ($invoice instanceof Invoice) {
-                $invoices[$invoice->id] = $invoice;
+            if($type==PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS && $invoice->ondistributionprint==false){
+                $invoices_return[] = $invoice;
+            }
+            else if($type==PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES&& $invoice->onrecoveryprint==false){
+                $invoices_return[] = $invoice;
             }
         }
-
-        return array_values($invoices);
+        return array_values( $invoices_return);
     }
 
 
@@ -324,11 +319,15 @@ class Invoice extends Model implements FormatDateInterface
                         $query->where('name', $type);
                     });
 
-            }else if($type==PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS || $type==PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES){
-                //$type=PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS;
-                $query = $query->WhereDoesntHave('printFiles', function ($query) use ($type) {
+            }else if($type==PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS){
+                $query = $query->whereNot("invoices.ondistributionprint" ,"=",false)->WhereDoesntHave('printFiles', function ($query) use ($type) {
                     $query->where('name', $type);
                 });
+            }
+            else if($type==PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES){
+                    $query =$query->whereNot("invoices.onrecoveryprint" ,"=",false)->WhereDoesntHave('printFiles', function ($query) use ($type) {
+                        $query->where('name', $type);
+                    });
             }
         }
 

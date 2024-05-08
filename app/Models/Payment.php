@@ -29,7 +29,8 @@ class Payment extends Model
         'status',
         'uuid',
         'code',
-        'deposit'
+        'deposit',
+        'type'
     ];
 
     public function invoice()

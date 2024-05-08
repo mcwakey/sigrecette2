@@ -11,6 +11,8 @@ use App\Models\Payment;
 use App\Models\PrintFile;
 use App\Models\Taxpayer;
 use App\Models\User;
+use App\Models\Year;
+use Carbon\Carbon;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -403,10 +405,29 @@ class PdfGenerator  implements PdfGeneratorInterface
             $printFile =$data;
             $data = $data->invoices()->get();
         }else{
-            if($user instanceof User){
-                $data=Invoice::retrieveByType($data,$type);
-                if ($type!=null && count($data)>0) {
-                    $printFile= PrintFile::createPrintFile($type,$data,0);
+
+            if($type!=null &&$user instanceof User){
+
+                $data=Invoice::filterByType(Invoice::retrieveByUUIDs($data),$type);
+                if (count($data)>0) {
+                    $printFile= PrintFile::createPrintFile($type,$data,0,$user);
+
+                    if($type==PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS){
+                        DB::transaction(function () use ($data) {
+                            foreach ($data as $item){
+                                $item->ondistributionprint= true;
+                                $item->save();
+                            }
+                        });
+                    }
+                    else{
+                        DB::transaction(function () use ($data) {
+                            foreach ($data as $item){
+                                $item->onrecoveryprint= true;
+                                $item->save();
+                            }
+                        });
+                    }
                 }
             }else{
                 $data=[];
@@ -414,13 +435,39 @@ class PdfGenerator  implements PdfGeneratorInterface
 
         }
 
-        if($this->checkIfCommuneIsNotNull() && $printFile!=null&& count($data)>0){
+        if($this->checkIfCommuneIsNotNull() &&  isset($printFile)&& count($data)>0){
                 $filename = $type."-" . ".pdf";
                 $pdf = PDF::loadView("exports.".$template, ['data' => $data,'titles'=>$this->generateTitleWithAction($action),"commune"=> $this->commune,"action"=>$action,'print'=>$printFile,'agent'=>$user])->setPaper('a4', 'landscape')->stream($filename);
                 return ['success' => true, 'pdf' => $pdf];
         }
         return ['success' => false, 'message' => 'Invalid data structure.'];
     }
+    /**
+     * @param array $data
+     * @param string $template
+     * @param int|null $action
+     * @return array
+     */
+    public function generateInvoiceTypeTwoListPdf(array $data,string $template,int $action=null):array
+    {
 
+        $activeYear = Year::getActiveYear();
+        $startOfYear = Carbon::parse("{$activeYear->name}-01-01 00:00:00");
+        $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
+
+            $data=Invoice::whereBetween('created_at', [$startOfYear, $endOfYear])
+            ->where('type','=',Constants::INVOICE_TYPE_COMPTANT)
+            ->where('status','=',InvoiceStatusEnums::APPROVED)->get();
+
+        if ($this->checkIfCommuneIsNotNull()&& count($data)>0) {
+            $filename = "Invoice-list-" . Str::random(8) . ".pdf";
+            //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
+            $pdf = PDF::loadView("exports.".$template, ['data' => $data,'titles'=>$this->generateTitleWithAction($action),"commune"=> $this->commune,"action"=>$action])->setPaper('a4', 'landscape')->stream($filename);
+
+            return ['success' => true, 'pdf' => $pdf];
+        }
+
+        return ['success' => false, 'message' => 'Invalid data structure.'];
+    }
 
 }
