@@ -36,11 +36,24 @@ class Commune extends Model
      *
      * @return string
      */
+    public function getImageUrlAttributeDirect()
+    {
+
+        if ($this->logo_path) {
+            return asset( 'storage/' . $this->logo_path);
+        }
+        return $this->logo_path;
+    }
+    /**
+     * Get the full URL of the image.
+     *
+     * @return string
+     */
     public function getImageUrlAttribute()
     {
 
         if ($this->logo_path) {
-            return './storage/' . $this->logo_path;
+            return 'storage/' . $this->logo_path;
         }
         return $this->logo_path;
     }

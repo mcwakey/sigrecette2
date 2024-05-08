@@ -13,6 +13,12 @@
         case App\Enums\PrintNameEnums::BORDEREAU_REDUCTION:
             $r_url=route('generateWithPrintData', ['printFile' => $printFile->id, 'type' => 2, 'action' => 2]);
             break;
+            case App\Enums\PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES:
+            $r_url=route('generateWithPrintData', ['printFile' => $printFile->id, 'type' => 2, 'action' => 41]);
+            break;
+             case App\Enums\PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS:
+            $r_url=route('generateWithPrintData', ['printFile' => $printFile->id, 'type' => 2, 'action' => 4]);
+            break;
         default:
             $r_url="#";
     }

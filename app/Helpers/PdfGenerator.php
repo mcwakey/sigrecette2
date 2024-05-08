@@ -408,7 +408,7 @@ class PdfGenerator  implements PdfGeneratorInterface
 
                 $data=Invoice::filterByType(Invoice::retrieveByUUIDs($data),$type);
                 if (count($data)>0) {
-                    $printFile= PrintFile::createPrintFile($type,$data,0);
+                    $printFile= PrintFile::createPrintFile($type,$data,0,$user);
 
                     if($type==PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS){
                         DB::transaction(function () use ($data) {
