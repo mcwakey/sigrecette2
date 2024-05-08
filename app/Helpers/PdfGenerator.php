@@ -403,10 +403,29 @@ class PdfGenerator  implements PdfGeneratorInterface
             $printFile =$data;
             $data = $data->invoices()->get();
         }else{
-            if($user instanceof User){
-                $data=Invoice::retrieveByType($data,$type);
-                if ($type!=null && count($data)>0) {
+
+            if($type!=null &&$user instanceof User){
+
+                $data=Invoice::filterByType(Invoice::retrieveByUUIDs($data),$type);
+                if (count($data)>0) {
                     $printFile= PrintFile::createPrintFile($type,$data,0);
+
+                    if($type==PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS){
+                        DB::transaction(function () use ($data) {
+                            foreach ($data as $item){
+                                $item->ondistributionprint= true;
+                                $item->save();
+                            }
+                        });
+                    }
+                    else{
+                        DB::transaction(function () use ($data) {
+                            foreach ($data as $item){
+                                $item->onrecoveryprint= true;
+                                $item->save();
+                            }
+                        });
+                    }
                 }
             }else{
                 $data=[];
@@ -414,7 +433,7 @@ class PdfGenerator  implements PdfGeneratorInterface
 
         }
 
-        if($this->checkIfCommuneIsNotNull() && $printFile!=null&& count($data)>0){
+        if($this->checkIfCommuneIsNotNull() &&  isset($printFile)&& count($data)>0){
                 $filename = $type."-" . ".pdf";
                 $pdf = PDF::loadView("exports.".$template, ['data' => $data,'titles'=>$this->generateTitleWithAction($action),"commune"=> $this->commune,"action"=>$action,'print'=>$printFile,'agent'=>$user])->setPaper('a4', 'landscape')->stream($filename);
                 return ['success' => true, 'pdf' => $pdf];
