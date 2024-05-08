@@ -107,6 +107,9 @@ class PrintController extends Controller
                 elseif ($action==42){
                     return $this->pdfGenerator->generateInvoiceListPdf($data,'invoices-recouvrement',$action);
                 }
+                elseif ($action==77){
+                    return $this->pdfGenerator->generateInvoiceTypeTwoListPdf($data,'registre-journal-des-declarations-prealables-des-usagers.blade.php',$action);
+                }
                 elseif ($action==1|| $action==2){
                     if($data instanceof PrintFile){
                         return $this->pdfGenerator->generateBordereauListPdf('invoices-list',$action,$data);

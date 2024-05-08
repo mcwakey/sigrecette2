@@ -11,6 +11,8 @@ use App\Models\Payment;
 use App\Models\PrintFile;
 use App\Models\Taxpayer;
 use App\Models\User;
+use App\Models\Year;
+use Carbon\Carbon;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -440,6 +442,32 @@ class PdfGenerator  implements PdfGeneratorInterface
         }
         return ['success' => false, 'message' => 'Invalid data structure.'];
     }
+    /**
+     * @param array $data
+     * @param string $template
+     * @param int|null $action
+     * @return array
+     */
+    public function generateInvoiceTypeTwoListPdf(array $data,string $template,int $action=null):array
+    {
 
+        $activeYear = Year::getActiveYear();
+        $startOfYear = Carbon::parse("{$activeYear->name}-01-01 00:00:00");
+        $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
+
+            $data=Invoice::whereBetween('created_at', [$startOfYear, $endOfYear])
+            ->where('type','=',Constants::INVOICE_TYPE_COMPTANT)
+            ->where('status','=',InvoiceStatusEnums::APPROVED);
+
+        if ($this->checkIfCommuneIsNotNull()&& count($data)>0) {
+            $filename = "Invoice-list-" . Str::random(8) . ".pdf";
+            //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
+            $pdf = PDF::loadView("exports.".$template, ['data' => $data,'titles'=>$this->generateTitleWithAction($action),"commune"=> $this->commune,"action"=>$action])->setPaper('a4', 'landscape')->stream($filename);
+
+            return ['success' => true, 'pdf' => $pdf];
+        }
+
+        return ['success' => false, 'message' => 'Invalid data structure.'];
+    }
 
 }
