@@ -322,8 +322,8 @@
         </td>
     </tr>
     <tr>
-        <td colspan="7" style="border: none; margin: 0;text-align: left">A {{$commune->title}}, le 19 Avril 2024</td>
-        <td colspan="7" style="border: none; margin: 0;text-align: left">A {{$commune->title}}, le 19 Avril 2024.</td>
+        <td colspan="7" style="border: none; margin: 0;text-align: left">A {{$commune->title}}, le 8 Mai 2024</td>
+        <td colspan="7" style="border: none; margin: 0;text-align: left">A {{$commune->title}}, le 8 Mai 2024.</td>
     </tr>
     <tr>
         <td colspan="7" style="border: none; margin: 0;text-align: left">Le Collecteur</td>
