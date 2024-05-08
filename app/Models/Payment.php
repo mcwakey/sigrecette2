@@ -30,7 +30,7 @@ class Payment extends Model
         'uuid',
         'code',
         'deposit',
-        'type'
+        'invoice_type'
     ];
 
     public function invoice()
