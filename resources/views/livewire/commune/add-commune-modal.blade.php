@@ -6,8 +6,11 @@
         <div class="modal-content">
             <!--begin::Modal header-->
             <div class="modal-header" id="kt_modal_add_commune_header">
-                <!--begin::Modal title-->
+                @if(!$edit_mode)
                 <h2 class="fw-bold">{{ __('create commune') }}</h2>
+            @else
+                    <h2 class="fw-bold">{{ __('Mettre à jour les informations de la commune') }}</h2>
+                @endif
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">

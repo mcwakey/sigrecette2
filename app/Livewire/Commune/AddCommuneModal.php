@@ -87,10 +87,7 @@ class AddCommuneModal extends Component
 
             if ($this->logo) {
                 $data['logo_path'] = $this->logo->store('avatars', 'public');
-            } else {
-                $data['logo_path'] = null;
             }
-
             if ($this->limit_json) {
                 $data['limit_json'] = json_encode($string_data['geometry']['coordinates'][0][0]);
             }
