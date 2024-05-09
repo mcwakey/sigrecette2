@@ -81,7 +81,7 @@
     </tr>
     <tr>
         <td colspan="14" style="border: none; margin: 0;text-align: left">
-            Nom du collecteur : Collecteur 1
+            Nom du collecteur : Collecteur
 
     </tr>
     <tr>
@@ -119,8 +119,8 @@
 
     <tr>
         <td>Tickets</td>
-        <td>500</td>
-        <td>05001
+        <td>5001</td>
+        <td>5080
         <td>05300</td>
         <td>300</td>
         <td>150 000</td>

@@ -35,7 +35,7 @@ class PrintFile extends Model
             'name' =>$type,
             'last_sequence_number' => $last_print==null?1:$last_print->last_sequence_number+1,
             'total_last_sequence'=>$last_print==null?$total:$last_print->total_last_sequence,
-            'user_id'=>$user
+            'user_id'=>$user->id
         ];
         $print= PrintFile::create($print_data);
         return Invoice::addPrintableToInvoices($data,$print);
@@ -53,6 +53,10 @@ class PrintFile extends Model
             }
         }
         return $total;
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
 }

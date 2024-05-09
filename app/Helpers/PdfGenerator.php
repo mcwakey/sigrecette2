@@ -392,10 +392,7 @@ class PdfGenerator  implements PdfGeneratorInterface
 
     public function generateInvoiceDistribtionOrInvoiceRecouvrementPdf(array|PrintFile $data,string $template,int $action=null,User $user=null): array
     {
-
-
         $type = null;
-
         if($action==4){
             $type=PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS;
         }elseif ($action==41){
@@ -405,7 +402,6 @@ class PdfGenerator  implements PdfGeneratorInterface
             $printFile =$data;
             $data = $data->invoices()->get();
         }else{
-
             if($type!=null &&$user instanceof User){
 
                 $data=Invoice::filterByType(Invoice::retrieveByUUIDs($data),$type);
@@ -458,7 +454,6 @@ class PdfGenerator  implements PdfGeneratorInterface
             $data=Invoice::whereBetween('created_at', [$startOfYear, $endOfYear])
             ->where('type','=',Constants::INVOICE_TYPE_COMPTANT)
             ->where('status','=',InvoiceStatusEnums::APPROVED)->get();
-
         if ($this->checkIfCommuneIsNotNull()&& count($data)>0) {
             $filename = "Invoice-list-" . Str::random(8) . ".pdf";
             //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
