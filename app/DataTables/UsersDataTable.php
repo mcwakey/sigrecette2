@@ -48,11 +48,11 @@ class UsersDataTable extends DataTable
     public function query(User $model): QueryBuilder
     {
         $query= $model->newQuery();
-        if(App::environment('production')){
+
             $role = Role::where('name', 'administrateur_system')->first();
             $roleUsers = $role->users()->pluck('id')->toArray();
             $query->whereNotIn('users.id', $roleUsers);
-        }
+
       return $query;
 
     }

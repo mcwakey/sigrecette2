@@ -17,7 +17,7 @@
                         @if( $commune!=null)
                             <img src="{{ $commune->getImageUrlAttributeDirect() }}" alt="Logo" style="width: 50px; height: 50px;">
                     </span>
-                  {{$commune->name}} -- 
+                  {{$commune->name}} --
                         @endif
                          <span class="text-gray-500 text-hover-primary"></span> Année d'exercice:{{" ".$year->name}}, Mois:{{" ".$month}}</span>
 				<span class="menu-arrow d-lg-none"></span>
