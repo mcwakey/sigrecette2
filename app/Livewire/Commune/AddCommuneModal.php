@@ -84,17 +84,17 @@ class AddCommuneModal extends Component
                 'latitude' => $this->latitude,
                 'longitude' => $this->longitude,
             ];
+
             if ($this->logo) {
                 $data['logo_path'] = $this->logo->store('avatars', 'public');
             } else {
                 $data['logo_path'] = null;
             }
+
             if ($this->limit_json) {
                 $data['limit_json'] = json_encode($string_data['geometry']['coordinates'][0][0]);
             }
-
             $commune = Commune::find($this->commune_id) ?? Commune::getFirstCommune() ?? Commune::create($data);
-
             if ($this->edit_mode) {
                 foreach ($data as $k => $v) {
                     $commune->$k = $v;
