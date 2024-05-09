@@ -21,7 +21,7 @@ class AddCommuneModal extends Component
     public $treasury_name;
     public $treasury_address;
     public $treasury_rib;
-    public $title;
+    public $t_title;
     public $name;
     public $region_name;
     public $latitude;
@@ -33,7 +33,7 @@ class AddCommuneModal extends Component
     public $logo;
     public $saved_logo;
     protected $rules = [
-        "title" => 'required|string',
+        "t_title" => 'required|string',
         'name' => 'required|string',
         'region_name' => 'required|string',
         'mayor_name' => 'required|string',
@@ -61,11 +61,8 @@ class AddCommuneModal extends Component
     {
         // Validate the form input data
         $this->validate();
-        if (!$this->edit_mode) {
-            $this->title = "Commune " . $this->title . " " . $this->name;
-        }
-
         DB::transaction(function () {
+            $title = $this->t_title . " " . $this->name;
             $string_data = null;
 
             if ($this->limit_json) {
@@ -75,7 +72,7 @@ class AddCommuneModal extends Component
 
             // Prepare the data for creating a new Taxable
             $data = [
-                "title" => $this->title,
+                "title" => $title,
                 'name' => $this->name,
                 'region_name' => $this->region_name,
                 'mayor_name' => $this->mayor_name,
@@ -136,7 +133,6 @@ class AddCommuneModal extends Component
         $this->commune_id = $commune->id;
         $this->name = $commune->name;
         $this->region_name = $commune->region_name;
-        $this->title = $commune->title;
 
         $this->mayor_name = $commune->mayor_name;
         $this->phone_number = $commune->phone_number;

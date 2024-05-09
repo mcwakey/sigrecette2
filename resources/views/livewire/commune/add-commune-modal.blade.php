@@ -35,14 +35,14 @@
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('commune_title') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <select wire:model="title" name="title" class="form-select mb-3 mb-lg-0"
+                                <select wire:model="t_title" name="t_title" class="form-select mb-3 mb-lg-0"
                                     data-dropdown-parent="#kt_modal_add_commune">
                                     <option value="">Sélectionnez le préfixe :</option>
-                                    <option value="de">{{ __('Commune de') }}</option>
-                                    <option value="d'">{{ __("Commune d'") }}</option>
+                                    <option value="Commune de">{{ __('Commune de') }}</option>
+                                    <option value="Commune d">{{ __("Commune d'") }}</option>
                                 </select>
                                 <!--end::Input-->
-                                @error('title')
+                                @error('t_title')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -196,7 +196,7 @@
                                     class="fw-semibold fs-6 mb-2">{{ __('Logo de la commune en fichier Image') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="file" wire:model="logo" name="logo" 
+                                <input type="file" wire:model="logo" name="logo"
                                        class="fs-6 form-control form-control justify-content-center" />
                                 <!--end::Input-->
                                 @error('logo')
