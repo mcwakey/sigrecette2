@@ -152,7 +152,7 @@
                     <!--end::Action-->
                 </div>
                 <div class="text-center pb-15 px-5">
-                   
+
                     <img src="" alt="" class="mw-100 h-200px h-sm-325px">
                 </div>
                 <!--end::Illustration-->

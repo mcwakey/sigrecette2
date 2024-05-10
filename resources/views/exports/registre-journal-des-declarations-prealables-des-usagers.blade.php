@@ -44,7 +44,7 @@
         <tr>
             <td colspan="1"  style="border: none; margin: 0;text-align: left">
 
-                <img src="{{ $commune-> getImageUrlAttribute() }}" alt="Logo" style="width: 50px; height: 50px;">
+                <img src="{{ $commune->getImageUrlAttribute() }}" alt="Logo" style="width: 50px; height: 50px;">
 
             </td>
             <td colspan="6"  style="border: none; margin: 0;text-align: left">
@@ -119,8 +119,8 @@
                 <td>{{$item->taxpayer?->mobilephone}}</td>
                 <td>{{$item->taxpayer?->town?->canton->name."-".$item->taxpayer?->town?->name."-".$item->taxpayer?->address}}</td>
                 <td></td>
-                @foreach($item->taxpayer->taxpyer_taxables as $t_item)
-                    <td> {{$t_item->tax_label->code}}</td>
+                @foreach($item->invoiceitems as $t_item)
+                    <td> {{$t_item->taxpayer_taxable->taxable->tax_label->code}}</td>
                     <td>{{$t_item->ii_tariff}}</td>
                     <td>{{$t_item->ii_seize}}</td>
                 @endforeach

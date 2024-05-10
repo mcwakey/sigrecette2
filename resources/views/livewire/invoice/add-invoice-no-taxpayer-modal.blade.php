@@ -260,9 +260,7 @@
                         </div>
 
 
-                        <div class="separator separator-content mb-3">
-                            <span class="w-200px text-gray-500 fw-semibold fs-7">{{ __('invoice info') }}</span>
-                        </div>
+
 
                         <div class="row mb-2">
                             <div class="col-md-3">
@@ -277,15 +275,14 @@
                                        class="form-control border-0 ps-12" data-kt-dialer-control="input"
                                        placeholder="1"  readonly="readonly" data-kt-action="load_invoice" />
                             </div>
-                            
-                            
-                            
+
+
+
                             <div class="col-md-3">
                                 <div class="input-group mb-2">
                                     @foreach ($months as $monthNumber => $monthName)
-                                    <input  type="text" wire:model="start_month" name="start_month" class="form-control mb-3 mb-lg-0" placeholder="{{ $monthName}}" data-kt-action="load_invoice" value="{{ $monthNumber}}"/>
+                                    <input  type="hidden" wire:model="start_month" name="start_month" class="form-control mb-3 mb-lg-0" placeholder="{{ $monthName}}" data-kt-action="load_invoice" value="{{ $monthNumber}}"/>
                                     @endforeach
-                                    <span class="input-group-text" id="basic-addon1">{{" ".$year->name}}</span>
                                 </div>
 
                             </div>
