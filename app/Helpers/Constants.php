@@ -15,6 +15,7 @@ class Constants
     const CANCELED = "CANCELED";
     const REDUCED="REDUCED";
     const NOT_PERMISSION_TO_PERFORM_ACTION ="Vous n'avez pas la permission pour effectuer cette action.";
+    const DEFAULT_ROLE_CAN_NOT_DELETE = "Ce role par défaut ne peut etre supprimé.";
 
     public static function getMonths():array{
         $months = [];
