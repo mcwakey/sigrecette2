@@ -12,10 +12,10 @@
 		<div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item here show menu-here-bg menu-lg-down-accordion me-0 me-lg-2">
 			<!--begin:Menu link-->
 			<span class="menu-link">
-			 <span>
+				<span class="menu-title">
+                    <span>
                         @if( $commune!=null)
-                            @if( $commune!=null)
-                     <img src="{{ $commune->getImageUrlAttributeDirect() }}" alt="Logo" style="width: 50px; height: 50px;">
+                            <img src="{{ $commune->getImageUrlAttributeDirect() }}" alt="Logo" style="width: 50px; height: 50px;">
                     </span>
                   {{$commune->name}} --
                         @endif
