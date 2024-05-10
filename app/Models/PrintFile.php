@@ -54,5 +54,9 @@ class PrintFile extends Model
         }
         return $total;
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
 }

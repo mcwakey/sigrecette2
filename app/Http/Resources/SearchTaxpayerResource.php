@@ -20,6 +20,7 @@ class SearchTaxpayerResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id'=>$this->resource->id,
             'name' => $this->resource->name,
             'gender' => $this->resource->gender,
             'mobilephone' => $this->resource->mobilephone,
@@ -27,7 +28,7 @@ class SearchTaxpayerResource extends JsonResource
             'email' => $this->resource->email,
             'longitude' => $this->resource->longitude,
             'latitude' => $this->resource->latitude,
-           'address' => $this->resource->resource->address,
+           'address' => $this->resource->address,
             'idType '=> $this->resource->id_type,
             'idNumber' =>  $this->resource->id_number,
             'categoryId' => $this->resource->category_id,

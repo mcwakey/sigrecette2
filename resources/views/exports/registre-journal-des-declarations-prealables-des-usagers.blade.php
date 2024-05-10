@@ -44,7 +44,7 @@
         <tr>
             <td colspan="1"  style="border: none; margin: 0;text-align: left">
 
-                <img src="{{ $commune-> getImageUrlAttribute() }}" alt="Logo" style="width: 50px; height: 50px;">
+                <img src="{{ $commune->getImageUrlAttribute() }}" alt="Logo" style="width: 50px; height: 50px;">
 
             </td>
             <td colspan="6"  style="border: none; margin: 0;text-align: left">
@@ -112,18 +112,20 @@
             </tr>
         @foreach($data   as $index => $item)
             <tr>
-                <td>{{$index}}</td>
+                <td>{{$index+1}}</td>
                 <td>{{date("d-m-Y", strtotime( $item->created_at )) }}</td>
                 <td>{{$item->description}}</td>
                 <td>{{$item->taxpayer?->name}}</td>
                 <td>{{$item->taxpayer?->mobilephone}}</td>
                 <td>{{$item->taxpayer?->town?->canton->name."-".$item->taxpayer?->town?->name."-".$item->taxpayer?->address}}</td>
                 <td></td>
-                <td> {{$item->taxpayer_taxable->taxable->tax_label->code}}</td>
-                <td>{{$item->ii_tariff}}</td>
-                <td>{{$item->ii_seize}}</td>
+                @foreach($item->invoiceitems as $t_item)
+                    <td> {{$t_item->taxpayer_taxable->taxable->tax_label->code}}</td>
+                    <td>{{$t_item->ii_tariff}}</td>
+                    <td>{{$t_item->ii_seize}}</td>
+                @endforeach
                 <td>{{$item->amount}}</td>
-                <td>{{$data->invoice_no}}</td>
+                <td>{{$item->invoice_no}}</td>
                 <td></td>
                 <td>{{$item->amount}}</td>
                 <td>{{$item->order_no}}</td>

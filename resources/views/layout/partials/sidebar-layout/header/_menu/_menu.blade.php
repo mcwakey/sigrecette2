@@ -12,11 +12,13 @@
 		<div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item here show menu-here-bg menu-lg-down-accordion me-0 me-lg-2">
 			<!--begin:Menu link-->
 			<span class="menu-link">
-				<span class="menu-title">
-                    <span>
-                        <img src="{{ $commune->getImageUrlAttributeDirect() }}" alt="Logo" style="width: 50px; height: 50px;">
+			 <span>
+                        @if( $commune!=null)
+                     <img src="{{ $commune->getImageUrlAttributeDirect() }}" alt="Logo" style="width: 50px; height: 50px;">
                     </span>
-                  {{$commune->name}} --   <span class="text-gray-500 text-hover-primary"></span> Année d'exercice:{{" ".$year->name}}, Mois:{{" ".$month}}</span>
+                  {{$commune->name}} --
+                        @endif
+                         <span class="text-gray-500 text-hover-primary"></span> Année d'exercice:{{" ".$year->name}}, Mois:{{" ".$month}}</span>
 				<span class="menu-arrow d-lg-none"></span>
 			</span>
 			<!--end:Menu link-->

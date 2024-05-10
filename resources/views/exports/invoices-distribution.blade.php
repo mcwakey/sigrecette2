@@ -82,7 +82,7 @@
         <td colspan="12" style="border: none; margin: 0;">Zone fiscale : </td>
     </tr>
     <tr>
-        <td colspan="12" style="border: none; margin: 0;" >Nom de l’agent de recouvrement : {{$agent->name}} </td>
+        <td colspan="12" style="border: none; margin: 0;" >Nom de l’agent de recouvrement : {{$print->user->name}} </td>
     </tr>
     <tr>
         <td  colspan="12" style="border: none; margin: 0;" >Période de distribution: </td>
