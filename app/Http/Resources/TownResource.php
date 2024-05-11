@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Town;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,6 +20,7 @@ class TownResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id'=> $this->resource->id,
             'name' => $this->resource->name,
             'status' =>  $this->resource->status,
             'canton' => new CantonResource($this->canton),

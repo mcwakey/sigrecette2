@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Activity;
+use App\Models\Category;
 use App\Models\Taxpayer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -20,6 +22,7 @@ class SearchTaxpayerResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id'=>$this->resource->id,
             'name' => $this->resource->name,
             'gender' => $this->resource->gender,
             'mobilephone' => $this->resource->mobilephone,
@@ -30,16 +33,16 @@ class SearchTaxpayerResource extends JsonResource
            'address' => $this->resource->address,
             'idType '=> $this->resource->id_type,
             'idNumber' =>  $this->resource->id_number,
-            'categoryId' => $this->resource->category_id,
-            'activityId' =>$this->resource->activity_id,
+            'category' => $this->resource->category!=null? new CategoryResource($this->resource->category) :null,
+            'activity' => $this->resource->activity!=null?new ActivityResource($this->resource->activity) :null,
             'otherWork' => $this->resource->other_work,
                 'fileNo' =>$this->resource->file_no,
             'authorisation' =>$this->resource->authorisation,
             'authReference' => $this->resource->auth_reference,
-        'nif' =>  $this->resource->nif,
-            'townId' =>$this->resource->town?->id,
-            'ereaId' =>$this->resource->erea?->id,
-            'zoneId' => $this->resource->zone?->id
+        '     nif' =>  $this->resource->nif,
+            'town' => $this->resource->town!=null?new TownResource($this->resource->town):null,
+            'erea' => $this->resource->erea!=null?new EreaResource( $this->resource->erea)  :null,
+            'zone' => $this->resource->zone!=null?new ZoneResource($this->resource->zone):null,
 
         ];
     }

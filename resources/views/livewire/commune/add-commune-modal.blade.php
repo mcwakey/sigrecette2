@@ -6,8 +6,11 @@
         <div class="modal-content">
             <!--begin::Modal header-->
             <div class="modal-header" id="kt_modal_add_commune_header">
-                <!--begin::Modal title-->
+                @if(!$edit_mode)
                 <h2 class="fw-bold">{{ __('create commune') }}</h2>
+            @else
+                    <h2 class="fw-bold">{{ __('Mettre à jour les informations de la commune') }}</h2>
+                @endif
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
@@ -35,14 +38,14 @@
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('commune_title') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <select wire:model="title" name="title" class="form-select mb-3 mb-lg-0"
+                                <select wire:model="t_title" name="t_title" class="form-select mb-3 mb-lg-0"
                                     data-dropdown-parent="#kt_modal_add_commune">
                                     <option value="">Sélectionnez le préfixe :</option>
-                                    <option value="de">{{ __('Commune de') }}</option>
-                                    <option value="d'">{{ __("Commune d'") }}</option>
+                                    <option value="Commune de">{{ __('Commune de') }}</option>
+                                    <option value="Commune d">{{ __("Commune d'") }}</option>
                                 </select>
                                 <!--end::Input-->
-                                @error('title')
+                                @error('t_title')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -139,7 +142,7 @@
                             </div>
                             <div class="col-md-12 mb-4">
                                 <!--begin::Label-->
-                                <label class="required fw-semibold fs-6 mb-2">{{ __('treasury_rib') }}</label>
+                                <label class=" fw-semibold fs-6 mb-2">{{ __('treasury_rib') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="text" wire:model="treasury_rib" name="treasury_rib"
@@ -191,14 +194,8 @@
                                 @enderror
                             </div>
                             <div class="col-md-12 mb-4">
-                                <!--begin::Label-->
-                                <label
-                                    class="fw-semibold fs-6 mb-2">{{ __('Logo de la commune en fichier Image') }}</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="file" wire:model="logo" name="logo" 
-                                       class="fs-6 form-control form-control justify-content-center" />
-                                <!--end::Input-->
+                                <label class="fw-semibold fs-6 mb-2">{{ __('Logo de la commune') }}</label>
+                                <input type="file" wire:model="logo" name="logo" class="fs-6 form-control form-control justify-content-center" />
                                 @error('logo')
                                 <span class="text-danger">{{ $message }}</span>
                                 @enderror

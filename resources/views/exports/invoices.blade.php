@@ -133,7 +133,11 @@
                 </div>
             </td>
             <td class="center-image">
-                <img src="{{public_path('assets/media/images_exports/image3.jpg')}}" alt="..." class="img-thumbnail">
+                @if($commune->getImageUrlAttribute()!=null)
+                <img src="{{$commune->getImageUrlAttribute()}}" alt="..." class="img-thumbnail">
+                @else
+                    <img src="{{public_path('assets/media/images_exports/image3.jpg')}}" alt="..." class="img-thumbnail">
+                @endif
             </td>
             <td class="boder-div-red">
                 <img src="{{public_path('assets/media/images_exports/image2.png')}}" class="img-fluid" alt="...">

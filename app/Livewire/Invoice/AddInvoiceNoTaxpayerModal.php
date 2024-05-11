@@ -333,7 +333,7 @@ class AddInvoiceNoTaxpayerModal extends Component
                 'gender' => $this->gender,
                 'id_type' => $this->id_type,
                 'id_number' => $this->id_number,
-                'mobilephone' => $this->mobilephone,
+                'mobilephone' => $this->mobilephone==null?0000:$this->mobilephone,
                 'telephone' => $this->telephone,
                 'email' => $this->email,
                 'type'=>Constants::INVOICE_TYPE_COMPTANT,
@@ -342,11 +342,11 @@ class AddInvoiceNoTaxpayerModal extends Component
 
             ];
             //
-            $taxpayers = Taxpayer::create($taxpayersData);
-            $taxpayers->save();
+            $taxpayer = Taxpayer::create($taxpayersData);
+            $taxpayer->save();
 
             $invoiceData = [
-                'taxpayer_id' => $taxpayers->id,
+                'taxpayer_id' => $taxpayer->id,
                 'amount' => $this->amount,
                 'qty' => $this->qty,
                 'from_date' => date('Y-').$this->start_month."-01",
@@ -387,6 +387,8 @@ class AddInvoiceNoTaxpayerModal extends Component
                 'taxable_id' => $this->taxpayer_taxable_id,
                 'invoice_id' => $invoice->id,
                 'bill_status' => 'BILLED',
+                'taxpayer_id'=>$taxpayer->id
+
             ];
 
             $taxpayerTaxables = TaxpayerTaxable::create($taxpayerTaxableData);

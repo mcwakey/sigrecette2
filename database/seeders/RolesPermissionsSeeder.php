@@ -204,9 +204,6 @@ class RolesPermissionsSeeder extends Seeder
             'agent_delegation' => [
                 // Invoice permissions
                 'peut accepter un avis',
-
-                // Order no permissions
-                'peut ajouter le numéro d\'ordre de recette d\'un avis',
             ],
 
             'regisseur' => [
@@ -251,6 +248,17 @@ class RolesPermissionsSeeder extends Seeder
 
                 // Date permissions
                 'peut ajouter la date de livraison d\'un avis',
+            ],
+
+            'agent_de_recette' => [
+                // Order no permissions
+                'peut ajouter le numéro d\'ordre de recette d\'un avis',
+            ],
+
+            'agent_de_delegation_du_receveur' => [
+                // Invoice permissions
+                'peut accepter un avis',
+                'peut rejeter un avis',
             ],
 
             'collecteur' =>  [],
