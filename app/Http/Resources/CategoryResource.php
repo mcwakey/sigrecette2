@@ -2,22 +2,20 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Erea;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @property Erea $resource
+ *  @property Category $resource
  */
-
-
-class EreaResource extends JsonResource
+class CategoryResource extends  JsonResource
 {
     /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
+ * Transform the resource into an array.
+ *
+ * @return array<string, mixed>
+ */
     public function toArray(Request $request): array
     {
         return [

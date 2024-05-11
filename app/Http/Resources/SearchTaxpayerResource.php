@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Activity;
+use App\Models\Category;
 use App\Models\Taxpayer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -31,16 +33,16 @@ class SearchTaxpayerResource extends JsonResource
            'address' => $this->resource->address,
             'idType '=> $this->resource->id_type,
             'idNumber' =>  $this->resource->id_number,
-            'categoryId' => $this->resource->category_id,
-            'activityId' =>$this->resource->activity_id,
+            'categoryId' => new CategoryResource($this->resource->category_id) ,
+            'activityId' =>new ActivityResource($this->resource->activity_id) ,
             'otherWork' => $this->resource->other_work,
                 'fileNo' =>$this->resource->file_no,
             'authorisation' =>$this->resource->authorisation,
             'authReference' => $this->resource->auth_reference,
         'nif' =>  $this->resource->nif,
-            'townId' =>$this->resource->town?->id,
-            'ereaId' =>$this->resource->erea?->id,
-            'zoneId' => $this->resource->zone?->id
+            'townId' => new TownResource($this->town?->id),
+            'ereaId' => new EreaResource( $this->resource->erea?->id)  ,
+            'zoneId' => new ZoneResource($this->resource->zone?->id)
 
         ];
     }
