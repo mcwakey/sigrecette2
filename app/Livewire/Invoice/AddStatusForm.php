@@ -92,13 +92,19 @@ class AddStatusForm extends Component
             $invoice->save();
             //$this->dispatch('success', __('Avis mis à jour'));
             $this->dispatchMessage('Avis', 'update');
-            if($this->status=="PENDING"){
+            if($this->status==InvoiceStatusEnums::PENDING){
                 $role = Role::where('name', 'regisseur')->first();
                 if ($role) {
                     $users = $role->users()->get();
                     Notification::send($users, new InvoiceCreated($invoice ,Auth::user(),"regisseur"));
 
                 }
+            }
+            elseif ($this->status==InvoiceStatusEnums::APPROVED){
+
+            }
+            elseif($this->status==InvoiceStatusEnums::REJECTED){
+
             }
 
         });
