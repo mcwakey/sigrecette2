@@ -33,16 +33,16 @@ class SearchTaxpayerResource extends JsonResource
            'address' => $this->resource->address,
             'idType '=> $this->resource->id_type,
             'idNumber' =>  $this->resource->id_number,
-            'category' => new CategoryResource($this->resource->category_id) ,
-            'activity' =>new ActivityResource($this->resource->activity_id) ,
+            //'category' => $this->resource->category!=null? new CategoryResource($this->resource->category) :null,
+            //'activity' => $this->resource->activity!=null?new ActivityResource($this->resource->activity) :null,
             'otherWork' => $this->resource->other_work,
                 'fileNo' =>$this->resource->file_no,
             'authorisation' =>$this->resource->authorisation,
             'authReference' => $this->resource->auth_reference,
-        'nif' =>  $this->resource->nif,
-            'town' => $this->town!=null?new TownResource($this->town?->id):null,
-            'erea' => $this->resource->erea!=null?new EreaResource( $this->resource->erea?->id)  :null,
-            'zone' => $this->resource->zone!=null?new ZoneResource($this->resource->zone?->id):null,
+        '     nif' =>  $this->resource->nif,
+            'town' => $this->resource->town!=null?new TownResource($this->resource->town):null,
+            'erea' => $this->resource->erea!=null?new EreaResource( $this->resource->erea)  :null,
+            'zone' => $this->resource->zone!=null?new ZoneResource($this->resource->zone):null,
 
         ];
     }

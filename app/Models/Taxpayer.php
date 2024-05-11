@@ -77,6 +77,7 @@ class Taxpayer extends Model
         return $this->profile_photo_path;
     }
 
+
     public function addresses()
     {
         return $this->hasMany(Address::class);
@@ -120,6 +121,10 @@ class Taxpayer extends Model
     public function activity()
     {
         return $this->hasOne(Activity::class);
+    }
+    public function category()
+    {
+        return $this->hasOne(Category::class);
     }
 
     public static function countTaxpayers(){
