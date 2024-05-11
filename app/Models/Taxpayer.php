@@ -120,11 +120,11 @@ class Taxpayer extends Model
 
     public function activity()
     {
-        return $this->hasOne(Activity::class);
+        return $this->belongsTo(Activity::class);
     }
     public function category()
     {
-        return $this->hasOne(Category::class);
+        return $this->belongsTo(Category::class);
     }
 
     public static function countTaxpayers(){
