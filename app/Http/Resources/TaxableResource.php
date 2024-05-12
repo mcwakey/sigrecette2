@@ -29,7 +29,7 @@ class TaxableResource extends JsonResource
             'periodicity'=> $this->resource->periodicity,
             'penalty'=> $this->resource->penalty,
 'penalty_type'=> $this->resource->penalty_type,
-            'tax_label_id'=> $this->resource->tax_label_id
+            'taxlabel'=>  new TaxLabelResource($this->resource->tax_label)
         ];
     }
 

@@ -6,6 +6,7 @@ use App\Actions\SampleUserApi;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\CheckIpAddress;
 use App\Http\Controllers\Api\SearchInvoiceController;
+use App\Http\Controllers\Api\SearchTaxLabelController;
 use App\Http\Controllers\Api\SearchTaxpayerController;
 use App\Http\Controllers\Api\SearchTaxpayerTaxableController;
 use App\Http\Controllers\Api\TaxpayerController;
