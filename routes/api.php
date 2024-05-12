@@ -5,7 +5,7 @@ use App\Actions\SampleRoleApi;
 use App\Actions\SampleUserApi;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\CheckIpAddress;
-use App\Http\Controllers\Api\SearchInvoiceAndTaxpayerTaxableController;
+use App\Http\Controllers\Api\SearchTaxpayersAndInvoiceAndTaxpayerTaxableController;
 use App\Http\Controllers\Api\SearchInvoiceController;
 use App\Http\Controllers\Api\SearchTaxLabelController;
 use App\Http\Controllers\Api\SearchTaxpayerController;
@@ -35,7 +35,7 @@ Route::post('/v1/check', [CheckIpAddress::class, 'check']);
 Route::Post('/v1/search/taxpayers', [SearchTaxpayerController::class, 'search']);
 Route::Post('/v1/search/taxpayerstaxables', [SearchTaxpayerTaxableController::class, 'search']);
 Route::Post('/v1/search/invoices', [SearchInvoiceController::class, 'search']);
-Route::Post('/v1/synchronisation/out', [ SearchInvoiceAndTaxpayerTaxableController::class, 'search']);
+Route::Post('/v1/synchronisation/out', [ SearchTaxpayersAndInvoiceAndTaxpayerTaxableController::class, 'search']);
 
 Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
