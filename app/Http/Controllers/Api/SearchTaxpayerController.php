@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\SearchTaxpayerResource;
 use App\Models\Zone;
 use App\Models\Taxpayer;
 use Illuminate\Http\Request;
@@ -38,6 +39,6 @@ class SearchTaxpayerController extends Controller
             }
         }
 
-        return  SearchInvoiceResource::collection($query->get());
+        return  SearchTaxpayerResource::collection($query->get());
     }
 }
