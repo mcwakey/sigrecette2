@@ -1,16 +1,17 @@
 <div class="menu menu-sub menu-sub-dropdown menu-column w-350px w-lg-375px" data-kt-menu="true" id="kt_menu_notifications">
     <!--begin::Heading-->
 
-	<div style="opacity: 0;pointer-events:none;">
-		<audio id="notif-sound">
-			<source src="/assets/media/audio/notif.wav" >
-		</audio>
-	</div>
+    <div style="opacity: 0;pointer-events:none;">
+        <audio id="notif-sound">
+            <source src="/assets/media/audio/notif.wav">
+        </audio>
+    </div>
 
     <div class="d-flex flex-column bgi-no-repeat rounded-top">
         <!--begin::Title-->
         <h3 class=" fw-semibold px-9 mt-10 -mb-4">Notifications
-            <span class="fs-8 opacity-75 ps-3 badge badge-light-danger" id="notif-counter">{{ count(Auth::user()->unreadNotifications) }}</span>
+            <span class="fs-8 opacity-75 ps-3 badge badge-light-danger"
+                id="notif-counter">{{ count(Auth::user()->unreadNotifications) }}</span>
         </h3>
         <!--end::Title-->
         <!--begin::Tabs-->
@@ -21,8 +22,8 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link opacity-state-100 pb-4 " data-bs-toggle="tab" href="#kt_topbar_notifications_2">
-					Déja consulté
-				</a>
+                    Déjà consulté
+                </a>
             </li>
             {{-- <li class="nav-item">
 				<a class="nav-link text-white opacity-75 opacity-state-100 pb-4" data-bs-toggle="tab" href="#kt_topbar_notifications_3">Logs</a>
@@ -59,11 +60,11 @@
                                     @if ($notification->data['type'] === 'invoice_paid')
                                         <div class="mb-0 me-2">
 
-											<a data-notif="true"
+                                            <a data-notif="true"
                                                 href="/taxpayers/{{ $taxpayer->id }}/?&invoice_tab=true&notif_id={{ $notification->id }}"
                                                 class="fs-6 text-gray-800 text-hover-primary fw-bold">
-                                                    Paiement : {{ $notification->data['invoice_id'] }} - ajouté
-                                          
+                                                Paiement : {{ $notification->data['invoice_id'] }} - ajouté
+
                                             </a>
                                             <div class="text-gray-500 fs-7">
                                                 {{ 'Montant :' . $notification->data['amount'] . ' FCFA - ' . $notification->created_at->diffForHumans() }}
@@ -144,7 +145,7 @@
                                             <a data-notif="true"
                                                 href="/taxpayers/{{ $taxpayer->id }}/?&invoice_tab=true&notif_id={{ $notification->id }}"
                                                 class="fs-6 text-gray-800 text-hover-primary fw-bold">
-                                                    Paiement : {{ $notification->data['invoice_id'] }} - ajouté
+                                                Paiement : {{ $notification->data['invoice_id'] }} - ajouté
                                             </a>
                                             <div class="text-gray-500 fs-7">
                                                 {{ 'montant :' . $notification->data['amount'] . ' FCFA - ' . $notification->created_at->diffForHumans() }}
@@ -435,14 +436,14 @@
         let firstNotifTemplateDiv = document.getElementById('first-notif-template');
         let globalNotif = document.querySelector('[data-globalnotif="true"]');
         let notifSpan = globalNotif.querySelector('span');
-		
-		let notifSound = document.getElementById('notif-sound');
 
-		if(!localStorage.getItem('notifSize')){
-			localStorage.setItem('notifSize', 0);
-		}
+        let notifSound = document.getElementById('notif-sound');
 
-		let notifCounter = document.getElementById('notif-counter');
+        if (!localStorage.getItem('notifSize')) {
+            localStorage.setItem('notifSize', 0);
+        }
+
+        let notifCounter = document.getElementById('notif-counter');
 
         function getTitleByNotifType(type, id) {
 
@@ -489,9 +490,9 @@
                 notifTemplateDiv.innerHTML = html;
 
                 notifSpan.classList.remove('d-none');
-				if(notNotif){
-					notNotif.innerHTML = '';
-				}
+                if (notNotif) {
+                    notNotif.innerHTML = '';
+                }
             } else if (size == 0 && !firstNotifTemplateDiv) {
                 notNotif.innerHTML = 'Aucune notification.';
 
@@ -507,11 +508,11 @@
                 size
             } = notifData[0];
 
-			if(parseInt(localStorage.getItem('notifSize')) < size){
-				localStorage.setItem('notifSize',size);
-				notifCounter.innerHTML = size;
-				notifSound.play();
-			}
+            if (parseInt(localStorage.getItem('notifSize')) < size) {
+                localStorage.setItem('notifSize', size);
+                notifCounter.innerHTML = size;
+                notifSound.play();
+            }
 
             createNotifTemplate(data, size);
         }
@@ -538,7 +539,44 @@
         }
 
         setInterval(async () => {
-           await makeNotifRequest()
+            await makeNotifRequest()
         }, 5000);
+
+
+        // Vérifie si le navigateur prend en charge l'API MediaDevices
+        if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+            // Vérifie si l'utilisateur a déjà accordé les permissions pour le microphone
+            navigator.mediaDevices.enumerateDevices()
+                .then(function(devices) {
+                    const hasMicrophone = devices.some(function(device) {
+                        return device.kind === 'audioinput';
+                    });
+
+                    if (!hasMicrophone) {
+                        // Demande l'autorisation d'accéder au microphone
+                        navigator.mediaDevices.getUserMedia({
+                                audio: true
+                            })
+                            .then(function(stream) {
+                                // L'utilisateur a autorisé l'accès au microphone
+                                console.log('Accès au microphone autorisé !');
+                            })
+                            .catch(function(error) {
+                                // L'utilisateur a refusé l'accès au microphone ou une erreur est survenue
+                                console.error('Accès au microphone refusé ou erreur : ', error);
+                            });
+                    } else {
+                        // L'utilisateur a déjà accordé les permissions pour le microphone
+                        console.log('L\'utilisateur a déjà accordé les permissions pour le microphone.');
+                    }
+                })
+                .catch(function(error) {
+                    // Une erreur est survenue lors de la vérification des périphériques
+                    console.error('Erreur lors de la vérification des périphériques : ', error);
+                });
+        } else {
+            // Le navigateur ne prend pas en charge l'API MediaDevices
+            console.log("Votre navigateur ne prend pas en charge l'API MediaDevices.");
+        }
     </script>
 @endpush
