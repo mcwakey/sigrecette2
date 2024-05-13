@@ -22,7 +22,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link opacity-state-100 pb-4 " data-bs-toggle="tab" href="#kt_topbar_notifications_2">
-                    Déja consulté
+                    Déjà consulté
                 </a>
             </li>
             {{-- <li class="nav-item">
