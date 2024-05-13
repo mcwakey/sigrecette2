@@ -61,10 +61,13 @@ class AddOrdernoForm extends Component
 
             if ($invoice->order_no === null) {
                 $role = Role::where('name', 'agent_delegation_du_receveur')->first();
-
+                $role_a = Role::where('name', 'agent_assiette')->first();
                 if ($role) {
                     $users = $role->users()->get();
+                    $users_agent_assiette= $role_a->users()->get();
                     Notification::send($users, new InvoiceAccepted($invoice, Auth::user(), "agent_delegation_du_receveur"));
+                    Notification::send($users_agent_assiette, new InvoiceAccepted($invoice, Auth::user(), "agent_assiette"));
+
                 }
             }
 
