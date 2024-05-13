@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\SearchTaxLabelController;
 use App\Http\Controllers\Api\SearchTaxpayerController;
 use App\Http\Controllers\Api\SearchTaxpayerTaxableController;
 use App\Http\Controllers\Api\TaxpayerController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -35,7 +36,10 @@ Route::post('/v1/check', [CheckIpAddress::class, 'check']);
 Route::Post('/v1/search/taxpayers', [SearchTaxpayerController::class, 'search']);
 Route::Post('/v1/search/taxpayerstaxables', [SearchTaxpayerTaxableController::class, 'search']);
 Route::Post('/v1/search/invoices', [SearchInvoiceController::class, 'search']);
-Route::Post('/v1/synchronisation/out', [ SearchTaxpayersAndInvoiceAndTaxpayerTaxableController::class, 'search']);
+Route::Post('/v1/synchronisation/out', [SearchTaxpayersAndInvoiceAndTaxpayerTaxableController::class, 'search']);
+
+Route::post('/v1/user/notifications', [NotificationController::class, 'notifications']);
+Route::post('/v1/user/notification/update', [NotificationController::class, 'updateNotification']);
 
 Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);

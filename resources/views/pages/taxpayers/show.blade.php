@@ -140,14 +140,14 @@
             <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-semibold mb-8">
                 <!--begin:::Tab item-->
                 <li class="nav-item">
-                    <a class="nav-link text-active-success pb-4 active" data-bs-toggle="tab"
+                    <a class="nav-link text-active-success pb-4 active" data-bs-toggle="tab" id="overview"
                         href="#kt_user_view_overview_tab">{{ __('overview') }}</a>
                 </li>
                 <!--end:::Tab item-->
 
                 <li class="nav-item">
                     <a class="nav-link text-active-success pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab"
-                        href="#kt_user_view_overview_security">{{ __('invoices payments') }}</a>
+                        href="#kt_user_view_overview_security" id="invoices_payments">{{ __('invoices payments') }}</a>
                 </li>
 
                 <!--end:::Tab item-->
@@ -203,7 +203,8 @@
             <!--begin:::Tab content-->
             <div class="tab-content" id="myTabContent">
                 <!--begin:::Tab pane-->
-                <div class="tab-pane fade show active" id="kt_user_view_overview_tab" role="tabpanel">
+                <div class="tab-pane fade show active" data-id="overview_tab_content" id="kt_user_view_overview_tab"
+                    role="tabpanel">
                     <!--begin::Card-->
                     <div class="card card-flush mb-6 mb-xl-9">
                         <!--begin::Card header-->
@@ -378,7 +379,8 @@
 
                 <!--end:::Tab pane-->
                 <!--begin:::Tab pane-->
-                <div class="tab-pane fade" id="kt_user_view_overview_security" role="tabpanel">
+                <div class="tab-pane fade" data-id="invoice_payments_tab_content" id="kt_user_view_overview_security"
+                    role="tabpanel">
                     <!--begin::Card-->
                     <div class="card pt-4 mb-6 mb-xl-9">
                         <!--begin::Card header-->
@@ -433,20 +435,24 @@
                                             </tr>
                                         </thead>
                                         <tbody class="fs-6 fw-semibold text-gray-600">
-                                        @foreach ($taxpayer->invoices as $invoice)
-                                            <tr>
-                                                <td>{{ $invoice->getCreatedDate() }}</td>
-                                                <td>{{ $invoice->invoice_no }}</td>
-                                                <td>
-                                                    @if ( $invoice->order_no == null && $invoice->delivery ==  App\Enums\InvoiceDeliveryEnums::NOT_DELIVERED &&  $invoice->status!= App\Enums\InvoiceStatusEnums::DRAFT &&  $invoice->status != App\Enums\InvoiceStatusEnums::REJECTED )
-                                                        @can('peut ajouter le numéro d\'ordre de recette d\'un avis')
-                                                        <button type="button"
-                                                                class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
-                                                                data-kt-user-id="{{ $invoice->id }}"
-                                                                data-bs-target="#kt_modal_add_orderno"
-                                                                data-kt-menu-trigger="click"
-                                                                data-kt-menu-placement="bottom-end"
-                                                                data-kt-action="update_invoice">
+                                            @foreach ($taxpayer->invoices as $invoice)
+                                                <tr>
+                                                    <td>{{ $invoice->getCreatedDate() }}</td>
+                                                    <td>{{ $invoice->invoice_no }}</td>
+                                                    <td>
+                                                        @if (
+                                                            $invoice->order_no == null &&
+                                                                $invoice->delivery == App\Enums\InvoiceDeliveryEnums::NOT_DELIVERED &&
+                                                                $invoice->status != App\Enums\InvoiceStatusEnums::DRAFT &&
+                                                                $invoice->status != App\Enums\InvoiceStatusEnums::REJECTED)
+                                                            @can('peut ajouter le numéro d\'ordre de recette d\'un avis')
+                                                                <button type="button"
+                                                                    class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
+                                                                    data-kt-user-id="{{ $invoice->id }}"
+                                                                    data-bs-target="#kt_modal_add_orderno"
+                                                                    data-kt-menu-trigger="click"
+                                                                    data-kt-menu-placement="bottom-end"
+                                                                    data-kt-action="update_invoice">
 
                                                                     <i class="ki-duotone ki-pencil fs-3">
                                                                         <span class="path1"></span>
@@ -473,51 +479,59 @@
                                                         @endif
 
 
-                                                </td>
-                                                <td>{{ $invoice->nic }}</td>
-                                                <td>
-                                                    @if ($invoice->reduce_amount != '')
-                                                        {{ '-' . $invoice->reduce_amount }}
-                                                    @else
-                                                        {{ $invoice->amount }}
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if ($invoice->status == App\Enums\InvoiceStatusEnums::APPROVED || $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION)
-                                                        @if ($invoice->pay_status == App\Enums\InvoicePayStatusEnums::OWING)
+                                                    </td>
+                                                    <td>{{ $invoice->nic }}</td>
+                                                    <td>
+                                                        @if ($invoice->reduce_amount != '')
+                                                            {{ '-' . $invoice->reduce_amount }}
+                                                        @else
+                                                            {{ $invoice->amount }}
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if (
+                                                            $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED ||
+                                                                $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION)
+                                                            @if ($invoice->pay_status == App\Enums\InvoicePayStatusEnums::OWING)
+                                                                <span
+                                                                    class="badge badge-light-danger">{{ __($invoice->pay_status) }}</span>
+                                                            @elseif($invoice->pay_status == App\Enums\InvoicePayStatusEnums::PART_PAID)
+                                                                <span
+                                                                    class="badge badge-light-warning">{{ __($invoice->pay_status) }}</span>
+                                                            @else
+                                                                <span
+                                                                    class="badge badge-light-success">{{ __($invoice->pay_status) }}</span>
+                                                            @endif
+                                                        @elseif(
+                                                            $invoice->status == App\Enums\InvoiceStatusEnums::CANCELED ||
+                                                                $invoice->status == App\Enums\InvoiceStatusEnums::REDUCED ||
+                                                                $invoice->status == App\Enums\InvoiceStatusEnums::REJECTED)
                                                             <span
-                                                                class="badge badge-light-danger">{{ __($invoice->pay_status) }}</span>
-                                                        @elseif($invoice->pay_status == App\Enums\InvoicePayStatusEnums::PART_PAID)
-                                                            <span
-                                                                class="badge badge-light-warning">{{ __($invoice->pay_status) }}</span>
+                                                                class="badge badge-light-warning">{{ '----' }}</span>
                                                         @else
                                                             <span
-                                                                class="badge badge-light-success">{{ __($invoice->pay_status) }}</span>
+                                                                class="badge badge-light-primary">{{ __('EN ATTENTE DE VALIDATION') }}</span>
                                                         @endif
-                                                    @elseif($invoice->status ==  App\Enums\InvoiceStatusEnums::CANCELED || $invoice->status == App\Enums\InvoiceStatusEnums::REDUCED|| $invoice->status == App\Enums\InvoiceStatusEnums::REJECTED)
-                                                        <span
-                                                            class="badge badge-light-warning">{{ "----" }}</span>
-                                                    @else
-                                                        <span
-                                                            class="badge badge-light-primary">{{ __('EN ATTENTE DE VALIDATION') }}</span>
-                                                    @endif
 
-                                                </td>
-                                                <td>
-                                                    @if ($invoice->delivery == App\Enums\InvoiceDeliveryEnums::NOT_DELIVERED)
-                                                        <span
-                                                            class="badge badge-light-danger">{{ __('NOT DELIVERED') }}</span>
-                                                    @else
-                                                        <span
-                                                            class="badge badge-light-success">{{ __('DELIVERED') }}</span>
-                                                    @endif
-                                                </td>
+                                                    </td>
+                                                    <td>
+                                                        @if ($invoice->delivery == App\Enums\InvoiceDeliveryEnums::NOT_DELIVERED)
+                                                            <span
+                                                                class="badge badge-light-danger">{{ __('NOT DELIVERED') }}</span>
+                                                        @else
+                                                            <span
+                                                                class="badge badge-light-success">{{ __('DELIVERED') }}</span>
+                                                        @endif
+                                                    </td>
 
-                                                <td>
-                                                    @if( $invoice->status != App\Enums\InvoiceStatusEnums::REJECTED  && $invoice->status !=  App\Enums\InvoiceStatusEnums::PENDING && $invoice->status !=  App\Enums\InvoiceStatusEnums::DRAFT)
-                                                        @if ($invoice->delivery ==  App\Enums\InvoiceDeliveryEnums::NOT_DELIVERED && $invoice->order_no !== null)
-                                                            @can('peut ajouter la date de livraison d\'un avis')
-                                                                <button type="button"
+                                                    <td>
+                                                        @if (
+                                                            $invoice->status != App\Enums\InvoiceStatusEnums::REJECTED &&
+                                                                $invoice->status != App\Enums\InvoiceStatusEnums::PENDING &&
+                                                                $invoice->status != App\Enums\InvoiceStatusEnums::DRAFT)
+                                                            @if ($invoice->delivery == App\Enums\InvoiceDeliveryEnums::NOT_DELIVERED && $invoice->order_no !== null)
+                                                                @can('peut ajouter la date de livraison d\'un avis')
+                                                                    <button type="button"
                                                                         class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
                                                                         data-kt-user-id="{{ $invoice->id }}"
                                                                         data-kt-menu-target="#kt_modal_add_delivery"
@@ -548,51 +562,53 @@
                                                                         <!--begin::Form-->
                                                                         <livewire:invoice.add-delivery-form />
 
-                                                                    <!--end::Form-->
-                                                                </div>
-                                                                <!--end::Task menu-->
-                                                            @else
-                                                                {{ __('NOT DELIVERED') }}
-                                                            @endcan
-                                                        @elseif($invoice->delivery == App\Enums\InvoiceDeliveryEnums::DELIVERED)
-                                                            {{ date('Y-m-d', strtotime($invoice->delivery_date)) }}
+                                                                        <!--end::Form-->
+                                                                    </div>
+                                                                    <!--end::Task menu-->
+                                                                @else
+                                                                    {{ __('NOT DELIVERED') }}
+                                                                @endcan
+                                                            @elseif($invoice->delivery == App\Enums\InvoiceDeliveryEnums::DELIVERED)
+                                                                {{ date('Y-m-d', strtotime($invoice->delivery_date)) }}
+                                                            @endif
+                                                        @else
+                                                            -
                                                         @endif
-                                                    @else
-                                                        -
-                                                    @endif
-                                                </td>
+                                                    </td>
 
 
-                                                <td>
-                                                    @if ($invoice->status == App\Enums\InvoiceStatusEnums::PENDING && $invoice->order_no !== null)
-                                                        <span
-                                                            class="badge badge-light-primary">{{ __($invoice->status) }}</span>
-                                                        @can('peut prendre en charge un avis')
-                                                            <button type="button"
+                                                    <td>
+                                                        @if ($invoice->status == App\Enums\InvoiceStatusEnums::PENDING && $invoice->order_no !== null)
+                                                            <span
+                                                                class="badge badge-light-primary">{{ __($invoice->status) }}</span>
+                                                            @can('peut prendre en charge un avis')
+                                                                <button type="button"
                                                                     class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
                                                                     data-kt-user-id="{{ $invoice->id }}"
                                                                     data-kt-menu-target="#kt_modal_add_status"
                                                                     data-kt-menu-trigger="click"
                                                                     data-kt-menu-placement="bottom-end"
                                                                     data-kt-action="update_status">
-                                                                <i class="ki-duotone ki-setting-3 fs-3">
-                                                                    <span class="path1"></span>
-                                                                    <span class="path2"></span>
-                                                                    <span class="path3"></span>
-                                                                    <span class="path4"></span>
-                                                                    <span class="path5"></span>
-                                                                </i>
-                                                            </button>
-                                                        @endcan
-                                                    @elseif($invoice->status == App\Enums\InvoiceStatusEnums::APPROVED || $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION)
-                                                        <span
-                                                            class="badge badge-light-success">{{ __( App\Enums\InvoiceStatusEnums::APPROVED) }}</span>
-                                                    @elseif($invoice->status ==  App\Enums\InvoiceStatusEnums::REJECTED)
-                                                        <span
-                                                            class="badge badge-light-danger">{{ __('REJECTED') }}</span>
-                                                    @elseif($invoice->status ==  App\Enums\InvoiceStatusEnums::DRAFT)
-                                                        <span
-                                                            class="badge badge-light-secondary">{{ __('DRAFT') }}</span>
+                                                                    <i class="ki-duotone ki-setting-3 fs-3">
+                                                                        <span class="path1"></span>
+                                                                        <span class="path2"></span>
+                                                                        <span class="path3"></span>
+                                                                        <span class="path4"></span>
+                                                                        <span class="path5"></span>
+                                                                    </i>
+                                                                </button>
+                                                            @endcan
+                                                        @elseif(
+                                                            $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED ||
+                                                                $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION)
+                                                            <span
+                                                                class="badge badge-light-success">{{ __(App\Enums\InvoiceStatusEnums::APPROVED) }}</span>
+                                                        @elseif($invoice->status == App\Enums\InvoiceStatusEnums::REJECTED)
+                                                            <span
+                                                                class="badge badge-light-danger">{{ __('REJECTED') }}</span>
+                                                        @elseif($invoice->status == App\Enums\InvoiceStatusEnums::DRAFT)
+                                                            <span
+                                                                class="badge badge-light-secondary">{{ __('DRAFT') }}</span>
 
                                                             @can('peut accepter un avis')
                                                                 <button type="button"
@@ -668,13 +684,13 @@
                                                             </div>
 
 
-                                                        @if ($invoice->status ==  App\Enums\InvoiceStatusEnums::DRAFT)
+                                                            @if ($invoice->status == App\Enums\InvoiceStatusEnums::DRAFT)
 
-                                                            {{-- Nothing here --}}
-                                                        @elseif(
-                                                                 $invoice->status !=  App\Enums\InvoiceStatusEnums::REJECTED &&
-                                                             $invoice->status != App\Enums\InvoiceStatusEnums::DRAFT)
-                                                            <div class="menu-item px-3">
+                                                                {{-- Nothing here --}}
+                                                            @elseif(
+                                                                $invoice->status != App\Enums\InvoiceStatusEnums::REJECTED &&
+                                                                    $invoice->status != App\Enums\InvoiceStatusEnums::DRAFT)
+                                                                <div class="menu-item px-3">
 
 
                                                                     @php
@@ -685,40 +701,49 @@
                                                                         class="menu-link px-3"
                                                                         target="_blank">{{ __('print') }}</a>
 
-                                                            </div>
-                                                            @if ($invoice->status !=  App\Enums\InvoiceStatusEnums::REDUCED )
-                                                                @if ($invoice->status !==  App\Enums\InvoiceStatusEnums::CANCELED && $invoice->pay_status !=  App\Enums\InvoicePayStatusEnums::PAID)
-                                                                    @if ($invoice->delivery_date!=null &&( $invoice->status ==  App\Enums\InvoiceStatusEnums::APPROVED || $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION) )
-                                                                        @can('peut ajouter un paiement')
-                                                                            <div class="menu-item px-3">
-                                                                                <a href="#"
-                                                                                   class="menu-link px-3"
-                                                                                   data-kt-user-id="{{ $invoice->invoice_no }}"
-                                                                                   data-bs-toggle="modal"
-                                                                                   data-bs-target="#kt_modal_add_payment"
-                                                                                   data-kt-action="update_payment">
-                                                                                    {{ __('create payment') }}
-                                                                                </a>
-                                                                            </div>
-                                                                    @endcan
+                                                                </div>
+                                                                @if ($invoice->status != App\Enums\InvoiceStatusEnums::REDUCED)
+                                                                    @if (
+                                                                        $invoice->status !== App\Enums\InvoiceStatusEnums::CANCELED &&
+                                                                            $invoice->pay_status != App\Enums\InvoicePayStatusEnums::PAID)
+                                                                        @if (
+                                                                            $invoice->delivery_date != null &&
+                                                                                ($invoice->status == App\Enums\InvoiceStatusEnums::APPROVED ||
+                                                                                    $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION))
+                                                                            @can('peut ajouter un paiement')
+                                                                                <div class="menu-item px-3">
+                                                                                    <a href="#"
+                                                                                        class="menu-link px-3"
+                                                                                        data-kt-user-id="{{ $invoice->invoice_no }}"
+                                                                                        data-bs-toggle="modal"
+                                                                                        data-bs-target="#kt_modal_add_payment"
+                                                                                        data-kt-action="update_payment">
+                                                                                        {{ __('create payment') }}
+                                                                                    </a>
+                                                                                </div>
+                                                                            @endcan
+                                                                        @endif
+                                                                        @if (
+                                                                            $invoice->delivery_date != null &&
+                                                                                ($invoice->validity == 'VALID' &&
+                                                                                    ($invoice->status == App\Enums\InvoiceStatusEnums::APPROVED ||
+                                                                                        $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION)))
+                                                                            @can('peut réduire ou annuler un avis')
+                                                                                <!--begin::Menu item-->
+                                                                                <div class="menu-item px-3">
+                                                                                    <a href="#"
+                                                                                        class="menu-link px-3"
+                                                                                        data-kt-user-id="{{ $invoice->id }}"
+                                                                                        data-bs-toggle="modal"
+                                                                                        data-bs-target="#kt_modal_add_invoice"
+                                                                                        data-kt-action="update_invoice">
+                                                                                        {{ __('reduction cancelation') }}
+                                                                                    </a>
+                                                                                </div>
+                                                                            @endcan
+                                                                        @endif
+                                                                    @endif
                                                                 @endif
-                                                                @if($invoice->delivery_date!=null &&   ($invoice->validity == 'VALID' && ($invoice->status ==  App\Enums\InvoiceStatusEnums::APPROVED || $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION)) )
-
-                                                                    @can('peut réduire ou annuler un avis')
-                                                                        <!--begin::Menu item-->
-                                                                            <div class="menu-item px-3">
-                                                                                <a href="#" class="menu-link px-3"
-                                                                                   data-kt-user-id="{{ $invoice->id }}"
-                                                                                   data-bs-toggle="modal"
-                                                                                   data-bs-target="#kt_modal_add_invoice"
-                                                                                   data-kt-action="update_invoice">
-                                                                                    {{ __('reduction cancelation') }}
-                                                                                </a>
-                                                                            </div>
-                                                                    @endcan
-                                                                @endif
-                                                            @endif
-                                                        @endif
 
                                                             @endif
                                                             <!--end::Menu item-->
@@ -789,8 +814,6 @@
                                                 <td>{{ $payment->reference }}</td>
                                                 <td>{{ $payment->code }}</td>
                                                 <td>
-
-
                                                     {{ $payment->amount }}
                                                 </td>
 
@@ -800,12 +823,12 @@
 
 
 
-                                            <td>
-                                                @if ($payment->status ==  App\Enums\PaymentStatusEnums::PENDING )
-                                                    <span
-                                                        class="badge badge-light-primary">{{ __($payment->status) }}</span>
-                                                    @can('peut accepter un paiement')
-                                                        <button type="button"
+                                                <td>
+                                                    @if ($payment->status == App\Enums\PaymentStatusEnums::PENDING)
+                                                        <span
+                                                            class="badge badge-light-primary">{{ __($payment->status) }}</span>
+                                                        @can('peut accepter un paiement')
+                                                            <button type="button"
                                                                 class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
                                                                 data-kt-user-id="{{ $payment->id }}"
                                                                 data-kt-menu-target="#kt_payment_modal_add_status"
@@ -835,25 +858,32 @@
                                                                 <!--begin::Form-->
                                                                 <livewire:payment.add-status-form />
 
-                                                            <!--end::Form-->
-                                                        </div>
-                                                    @endcan
-                                                @elseif($payment->status ==  App\Enums\PaymentStatusEnums::ACCOUNTED)
-                                                    <span
-                                                        class="badge badge-light-success">{{ __( App\Enums\PaymentStatusEnums::ACCOUNTED) }}</span>
-                                                @else
-                                                        @if($payment->payment_type==App\Helpers\Constants::ANNULATION || $payment->payment_type==App\Helpers\Constants::REDUCTION)<span class="badge badge-light-info"> {{$payment->payment_type}} </span>@endif
-                                                @endif
+                                                                <!--end::Form-->
+                                                            </div>
+                                                        @endcan
+                                                    @elseif($payment->status == App\Enums\PaymentStatusEnums::ACCOUNTED)
+                                                        <span
+                                                            class="badge badge-light-success">{{ __(App\Enums\PaymentStatusEnums::ACCOUNTED) }}</span>
+                                                    @else
+                                                        @if (
+                                                            $payment->payment_type == App\Helpers\Constants::ANNULATION ||
+                                                                $payment->payment_type == App\Helpers\Constants::REDUCTION)
+                                                            <span class="badge badge-light-info">
+                                                                {{ $payment->payment_type }} </span>
+                                                        @endif
+                                                    @endif
 
-                                            </td>
-                                            <td>
-                                                @if($payment->payment_type!=App\Helpers\Constants::ANNULATION && $payment->payment_type!=App\Helpers\Constants::REDUCTION)
-                                                <a href="#"
-                                                   class="btn btn-light bnt-active-light-success btn-sm">{{ __('view') }}</a>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                                </td>
+                                                <td>
+                                                    @if (
+                                                        $payment->payment_type != App\Helpers\Constants::ANNULATION &&
+                                                            $payment->payment_type != App\Helpers\Constants::REDUCTION)
+                                                        <a href="#"
+                                                            class="btn btn-light bnt-active-light-success btn-sm">{{ __('view') }}</a>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                                 <!--end::Table-->
@@ -1237,7 +1267,7 @@
         </script>
 
         <script type="text/javascript">
-            const getTaxpayerIconUrl = (icon) => `http://127.0.0.1:8000/assets/media/icons/${icon}`;
+            const getTaxpayerIconUrl = (icon) => `/assets/media/icons/${icon}`;
 
             let taxpayerGreen = L.icon({
                 iconUrl: getTaxpayerIconUrl('taxpayer-green.svg'),
@@ -1380,11 +1410,11 @@
                 let labels = [
                     '<div class="legend"><strong class="title">Légende : contribuable</strong><div class="hr"></div></div>'
                 ];
-                let status = [ 'OWING',  'PART PAID', 'PAID', null];
+                let status = ['OWING', 'PART PAID', 'PAID', null];
 
 
                 for (let i = 0; i < status.length; i++) {
-                    if (status[i] ==  'OWING') {
+                    if (status[i] == 'OWING') {
                         div.innerHTML += labels.push(
                             `<div class="detail"><img class="img" src="${getTaxpayerIconUrl('taxpayer-red.svg')}"/> <span class="text">Facturé et Non payé</span></div>`
                         );
@@ -1498,16 +1528,53 @@
             // });
         </script>
 
-        <!-- <script>
-            document.getElementById('mySearchInput').addEventListener('keyup', function() {
-                window.LaravelDataTables['taxpayer_invoices-table'].search(this.value).draw();
-            });
-            document.addEventListener('livewire:init', function() {
-                Livewire.on('success', function() {
-                    $('#kt_modal_add_invoice').modal('hide');
-                    window.LaravelDataTables['taxpayer_invoices-table'].ajax.reload();
+        <script>
+            let invoicesPaymentsTab = document.getElementById('invoices_payments');
+            let invoicesPaymentsTabContent = document.querySelector('[data-id="invoice_payments_tab_content"]');
+
+            let overviewTab = document.getElementById('overview');
+            let overviewTabContent = document.querySelector('[data-id="overview_tab_content"]');
+
+            const currentHref = window.location.href;
+
+            if (currentHref.match(/[?&]invoice_tab=([^&]*)/)) {
+                overviewTab.classList.remove('active');
+                invoicesPaymentsTab.classList.add('active');
+
+                overviewTabContent.classList.remove('active');
+                overviewTabContent.classList.remove('show');
+
+                invoicesPaymentsTabContent.classList.add('active');
+                invoicesPaymentsTabContent.classList.add('show');
+            }
+
+            if (currentHref.match(/[?&]notif_id=([^&]*)/)) {
+                let notifId = currentHref.match(/[?&]notif_id=([^&]*)/)[1];
+                let request = new Request('/api/v1/user/notification/update', {
+                    method: "POST",
+                    body: JSON.stringify({
+                        notif_id: notifId
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
                 });
-            });
-        </script> -->
+
+                fetch(request)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            return response.json();
+                        } else {
+                            throw new Error("Something went wrong on API server!");
+                        }
+                    })
+                    .then((response) => {
+                        localStorage.setItem('notifSize',response.size);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            }
+        </script>
     @endpush
 </x-default-layout>
