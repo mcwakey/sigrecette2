@@ -48,3 +48,4 @@ class InvoicePaid extends Notification
         ];
     }
 }
+

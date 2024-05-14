@@ -1,9 +1,9 @@
 <!--begin::Navbar-->
 <div class="app-navbar flex-shrink-0">
     <!--begin::Search-->
-    <div class="app-navbar-item align-items-stretch ms-1 ms-md-3">
+    {{-- <div class="app-navbar-item align-items-stretch ms-1 ms-md-3">
         @include(config('settings.KT_THEME_LAYOUT_DIR').'/partials/sidebar-layout/search/_dropdown')
-    </div>
+    </div> --}}
     <!--end::Search-->
     <!--begin::Activities-->
 	<!-- <div class="app-navbar-item ms-1 ms-md-4"> -->
@@ -15,7 +15,14 @@
     <!--begin::Notifications-->
 	<div class="app-navbar-item ms-1 ms-md-4">
         <!--begin::Menu- wrapper-->
-		<div class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end" id="kt_menu_item_wow">{!! getIcon('notification-status', 'fs-2') !!}</div>
+        {{-- <a href="#" class="btn btn-icon btn-custom  pulse pulse-danger mr-5 data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end" id="kt_menu_item_wow"">
+            {!! getIcon('notification-status', 'fs-2') !!}
+            <span class="pulse-ring"></span>
+        </a> --}}
+		<div data-globalnotif="true" class="btn btn-icon btn-custom btn-icon-muted pulse pulse-danger btn-active-light btn-active-color-primary w-35px h-35px" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end" id="kt_menu_item_wow">
+            <span  class="pulse-ring d-none"></span>
+            {!! getIcon('notification-status', 'fs-2') !!}
+        </div>
         @include('partials/menus/_notifications-menu')
         <!--end::Menu wrapper-->
     </div>

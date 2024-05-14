@@ -2,16 +2,14 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Canton;
+use App\Models\Activity;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @property Canton $resource
+ * @property Activity $resource
  */
-
-
-class CantonResource extends JsonResource
+class ActivityResource extends  JsonResource
 {
     /**
      * Transform the resource into an array.

@@ -164,7 +164,7 @@
 
             let markerCluster = new L.markerClusterGroup();
 
-            const getTaxpayerIconUrl = (icon) => `http://127.0.0.1:8000/assets/media/icons/${icon}`;
+            const getTaxpayerIconUrl = (icon) => `/assets/media/icons/${icon}`;
 
             let taxpayerGreen = L.icon({
                 iconUrl: getTaxpayerIconUrl('taxpayer-green.svg'),

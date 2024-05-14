@@ -2,17 +2,20 @@
 
 namespace App\Livewire\Payment;
 
-use App\Enums\PaymentStatusEnums;
-use App\Helpers\Constants;
 use App\Models\Invoice;
 use App\Models\Payment;
-use App\Traits\DispatchesMessages;
-use App\Models\Taxpayer;
-
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use App\Models\Taxpayer;
+use App\Helpers\Constants;
+use App\Enums\PaymentStatusEnums;
+use App\Models\User;
+use App\Notifications\InvoicePaid;
+use App\Traits\DispatchesMessages;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
+
 
 class AddPaymentModal extends Component
 {
@@ -36,7 +39,7 @@ class AddPaymentModal extends Component
 
     public $paid;
     public $balance;
-    public $s_amount =[];
+    public $s_amount = [];
 
     public $amount;
     public $payment_type;
@@ -90,7 +93,7 @@ class AddPaymentModal extends Component
         //return view('livewire.payment.add-payment-modal', ['taxpayer_id' => $this->taxpayer_id]);
         //dd($invoiceitems,$this->invoice_id);
         $invoice = Invoice::find($this->invoice_id);
-        if($invoice !=null && $invoice->type==Constants::INVOICE_TYPE_COMPTANT){
+        if ($invoice != null && $invoice->type == Constants::INVOICE_TYPE_COMPTANT) {
             $this->amount = $invoice->amount;
         }
 
@@ -144,33 +147,44 @@ class AddPaymentModal extends Component
 
             $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
 
-            if(($this->paid+$this->amount)<= $invoice->amount){
+            if (($this->paid + $this->amount) <= $invoice->amount) {
                 $paymentData = [
                     // 'invoice_id' => $this->invoice_id,
                     'invoice_id' => $this->invoice_no,
                     'taxpayer_id' => ($this->taxpayer_id === "") ? null : $this->taxpayer_id,
-                    'amount' => $invoice->type==Constants::INVOICE_TYPE_COMPTANT?$invoice->amount: $this->amount,
+                    'amount' => $invoice->type == Constants::INVOICE_TYPE_COMPTANT ? $invoice->amount : $this->amount,
                     'payment_type' => $this->payment_type,
                     'reference' => $this->reference,
-                    'description' =>  $invoice->type==Constants::INVOICE_TYPE_COMPTANT?"Avis ".$this->invoice_no:"Avis ".$this->invoice_no.", OR " .$this->order_no,
-                    'remaining_amount' =>$this->bill-($this->amount + $this->paid),
-                    'user_id'=>  Auth::id(),
-                    'invoice_type'=>$invoice->type
+                    'description' =>  $invoice->type == Constants::INVOICE_TYPE_COMPTANT ? "Avis " . $this->invoice_no : "Avis " . $this->invoice_no . ", OR " . $this->order_no,
+                    'remaining_amount' => $this->bill - ($this->amount + $this->paid),
+                    'user_id' =>  Auth::id(),
+                    'invoice_type' => $invoice->type
 
                 ];
+                
                 $role = Role::where('name', 'regisseur')->first();
                 if ($role) {
+                    /**@var App\Models\User $user  */
                     $user = auth()->user();
-                    if($user->hasRole('regisseur')){
-                        $paymentData['status']= PaymentStatusEnums::ACCOUNTED;
+                    if ($user->hasRole('regisseur')) {
+                        $paymentData['status'] = PaymentStatusEnums::ACCOUNTED;
                     }
                 }
-                $payments=Invoice::getCode($this->invoice_no,$this->amount,$paymentData);
-                $payment = Payment::find($this->payment_id) ;
 
-                if($payment==null){
-                    foreach ($payments as $payment){
-                        Payment::create($payment);
+                $payments = Invoice::getCode($this->invoice_no, $this->amount, $paymentData);
+                $payment = Payment::find($this->payment_id);
+
+                if ($payment == null) {
+                    foreach ($payments as $payment) {
+                        $tempPay = Payment::create($payment);
+
+                        /**@var App\Models\User $user  */
+                        $user = auth()->user();
+
+                        if ($role && !$user->hasRole('regisseur')) {
+                            $users = $role->users()->get();
+                            Notification::send($users, new InvoicePaid($tempPay , Auth::user()));
+                        }
                     }
                 }
 
@@ -182,9 +196,9 @@ class AddPaymentModal extends Component
                 // $invoice = Invoice::find($this->invoice_id);
                 //dd($this->bill,$this->amount);
 
-                if ($this->amount + $this->paid >= $this->bill){
+                if ($this->amount + $this->paid >= $this->bill) {
                     $paystatus = "PAID";
-                }else{
+                } else {
                     $paystatus = "PART PAID";
                 }
                 $data = [
@@ -226,23 +240,23 @@ class AddPaymentModal extends Component
                 //     ]);
                 // }
 
-                $role = Role::where('name', 'regisseur')->first();
 
-                if ($role) {
-                    $users = $role->users()->get();
-                    // Notification::send($users, new InvoicePaid($payment,Auth::user()));
+                // $role = Role::where('name', 'regisseur')->first();
+                // /**@var App\Models\User $user  */
+                // $user = auth()->user();
 
-                }
+                // if ($role && !$user->hasRole('regisseur')) {
+                //     $users = $role->users()->get();
+                //     Notification::send($users, new InvoicePaid($payment, Auth::user()));
+                // }
 
                 if ($this->edit_mode) {
                     $this->dispatchMessage('Paiement', 'update');
                 } else {
                     $this->dispatchMessage('Paiement');
                 }
-            }
-            else{
-                $this->dispatchMessage('Paiment','update','error',"Erreur lors de la mise à jour du paiement,Vous avez saisi des données de paiement incorrectes.");
-
+            } else {
+                $this->dispatchMessage('Paiment', 'update', 'error', "Erreur lors de la mise à jour du paiement,Vous avez saisi des données de paiement incorrectes.");
             }
         });
 
@@ -263,7 +277,7 @@ class AddPaymentModal extends Component
         Payment::destroy($id);
 
         // Emit a success event with a message
-       // $this->dispatch('success', 'Payment successfully deleted');
+        // $this->dispatch('success', 'Payment successfully deleted');
         $this->dispatchMessage('Paiement', 'delete');
     }
 
@@ -274,11 +288,11 @@ class AddPaymentModal extends Component
         $this->edit_mode = true;
 
         $invoice = Invoice::where('invoice_no', $id)
-                    ->where('validity', 'VALID')
-                    ->first();
+            ->where('validity', 'VALID')
+            ->first();
 
 
-                            //dd($invoice);
+        //dd($invoice);
 
         $this->invoice_id = $invoice->id;
 
@@ -294,7 +308,7 @@ class AddPaymentModal extends Component
 
         $this->qty = $invoice->qty;
         $this->bill = $invoice->amount;
-        $this->paid = Invoice::getPaid( $invoice->invoice_no);
+        $this->paid = Invoice::getPaid($invoice->invoice_no);
 
 
         //dd(($this->s_amount));

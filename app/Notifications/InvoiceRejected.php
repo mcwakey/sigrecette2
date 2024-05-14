@@ -2,21 +2,21 @@
 
 namespace App\Notifications;
 
-use App\Models\Invoice;
 use App\Models\User;
+use App\Models\Invoice;
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
 
-class InvoiceCreated extends Notification
+class InvoiceRejected extends Notification
 {
     use Queueable;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(private Invoice $invoice,private User $user,private string $type="regisseur")
+    public function __construct(private Invoice $invoice, private User $user, private string $type = "agent_assiette")
     {
         //
     }
@@ -37,10 +37,10 @@ class InvoiceCreated extends Notification
      *
      * @return array<string, mixed>
      */
-    public function toArray($notifiable): array
+    public function toArray(object $notifiable): array
     {
         return [
-            'type' => 'invoice_created',
+            'type' => 'invoice_rejected',
             'user_id' => $this->user->id,
             'invoice_id' => $this->invoice->id,
             'taxpayer_id' => $this->invoice->taxpayer_id,

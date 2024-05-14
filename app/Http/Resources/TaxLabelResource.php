@@ -2,16 +2,14 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Canton;
-use Illuminate\Http\Request;
+use App\Models\Taxable;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
 
 /**
- * @property Canton $resource
+ * @property Taxable $resource
  */
-
-
-class CantonResource extends JsonResource
+class TaxLabelResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -21,9 +19,11 @@ class CantonResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'=> $this->resource->id,
+            'id'=>$this->resource->id,
             'name' => $this->resource->name,
-            'status' => $this->resource->status,
+            'category' => $this->resource->category,
+            'code' => $this->resource->code,
         ];
     }
+
 }

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Permission;
 
+use App\Helpers\Constants;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -111,6 +112,12 @@ class RoleModal extends Component
     public function deleteRole($id)
     {
         $role = Role::find($id);
+        
+        if($role->user_id === 0){
+            $this->dispatch('error',Constants::DEFAULT_ROLE_CAN_NOT_DELETE);
+            return false;
+        }
+
         $name = $role?->name;
         $role->delete();
         $this->dispatch('success', 'Role ' . ucwords($name) . ' supprimé avec succès');
