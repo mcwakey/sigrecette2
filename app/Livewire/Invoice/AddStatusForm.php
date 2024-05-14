@@ -117,13 +117,11 @@ class AddStatusForm extends Component
                     $users = $role->users()->get();
                     Notification::send($users, new InvoiceRejected($invoice, Auth::user(), "agent_assiette"));
                 }
-            } elseif ($this->status ==InvoiceStatusEnums::REJECTED_BY_OR){
                 $taxpayerTaxables = $invoice->taxpayer_taxables->get();
                 foreach ($taxpayerTaxables as $taxpayerTaxable){
                     $taxpayerTaxable->billable ='0';
                     $taxpayerTaxable->bill_status ="NOT BILLED";
                 }
-
             }
         });
 
