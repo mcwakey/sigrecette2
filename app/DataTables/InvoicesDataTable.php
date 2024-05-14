@@ -116,6 +116,7 @@ class InvoicesDataTable extends DataTable
                         // ->where('taxables.tax_label_id', 'LIKE', '%' . ($this->taxlabel ?? '') . '%')
                         // ->where('invoices.validity', 'EXPIRED')
                         ->select('invoices.*')
+                ->where('invoices.status','!=',InvoiceStatusEnums::REJECTED_BY_OR)
                         ->whereBetween('invoices.created_at', [$this->startDate, $this->endDate])
                         ->distinct()
                 ->orderBy('invoices.created_at', 'desc')
