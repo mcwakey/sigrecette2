@@ -197,6 +197,7 @@
                                 <option value="{{  App\Enums\InvoiceStatusEnums::REDUCED }}">{{ __('REDUCED') }}</option>
                                 <option value="{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}">{{ __("AVIS D'ANNULATION/REDUCTION") }}</option>
                                 <option value="{{ App\Enums\InvoiceStatusEnums::PENDING}}">{{ __('PENDING') }}</option>
+                                <option value="{{ App\Enums\InvoiceStatusEnums::DRAFT}}">{{ __('DRAFT') }}</option>
                             </select>
                             <!--end::Select-->
                             <!--end::Row-->
