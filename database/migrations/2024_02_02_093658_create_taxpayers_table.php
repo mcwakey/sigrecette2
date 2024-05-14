@@ -31,7 +31,7 @@ return new class extends Migration
             $table->unsignedBigInteger('category_id')->nullable();
             $table->unsignedBigInteger('activity_id')->nullable();
             $table->string('other_work')->nullable();
-            
+
             $table->string('file_no')->nullable();
             $table->string('authorisation')->default("NO");
             $table->string('auth_reference')->nullable();
@@ -46,7 +46,7 @@ return new class extends Migration
             $table->unsignedBigInteger('zone_id')->nullable();
             $table->foreign('zone_id')->references('id')->on('zones');
 
-            $table->string('email')->unique()->nullable();
+            $table->string('email')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('avatar')->nullable();
