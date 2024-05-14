@@ -34,7 +34,7 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
     public function model(array $row)
     {
         $faker =  fake();
-        if (!isset($row['nom']) || !isset($row['prenoms'])
+        if (!isset($row['nom'])
             || !isset($row['adresse']  ) || !isset($row['canton'])
             || !isset($row['ville_village']  ) || !isset($row['zone'])
             || !isset($row['quartier']) || !isset($row["categ_activite"])
@@ -60,7 +60,7 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
         // Créer le modèle Taxpayer
         $taxpayer = new Taxpayer([
             'tnif' => fake()->randomNumber(3, 1, 10) . Str::random(5) . fake()->randomNumber(3, 0, 9),
-            'name' => $row['nom'] . " " . $row['prenoms'],
+            'name' => $row['nom'] . " " .isset($row['prenoms'])?$row['prenoms']:"",
             'email' => $row['email'],
             'email_verified_at' => now(),
             'gender' => $row["sexe"] ?: $faker->randomElement(['Homme', 'Femme']),
@@ -80,6 +80,7 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
             "other_work"=>$row["autre_activite"],
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
+            'social_work'=>isset($row["raison sociale"])??$row["raison sociale"],
         ]);
 
         return $taxpayer;

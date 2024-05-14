@@ -74,7 +74,8 @@
                                     <!--begin::Row-->
                                     <tr>
                                         <td class="text-gray-500">Logo:</td>
-                                        <td class="text-gray-800">                     <img src="{{ $commune->getImageUrlAttributeDirect() }}" alt="Logo" style="width: 50px; height: 50px;">
+                                        <td class="text-gray-800">
+                                            <img src="{{ $commune->getImageUrlAttributeDirect() }}" alt="Logo" style="width: 70px; height: 70px;">
                                         </td>
                                     </tr>
                                     <!--end::Row-->

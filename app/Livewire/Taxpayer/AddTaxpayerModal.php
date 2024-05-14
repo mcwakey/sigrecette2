@@ -118,7 +118,7 @@ class AddTaxpayerModal extends Component
 
     public function render()
     {
-        $cantons = Canton::all();
+        $cantons = Canton::where('status',"ACTIVE")->get();
         $genders = Gender::all();
         $id_types = IdType::all();
         $zones = Zone::all();
@@ -201,7 +201,7 @@ class AddTaxpayerModal extends Component
 
     public function updatedCanton($value)
     {
-        $this->towns = Town::where('canton_id', $value)->get();
+        $this->towns = Town::where('canton_id', $value)->where('status',"ACTIVE")->get();
     }
 
     public function updatedCategoryId($value)
