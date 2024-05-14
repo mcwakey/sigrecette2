@@ -23,9 +23,7 @@ class CantonsSeeder extends Seeder
         ];
 
         foreach ($cantonNames as $name) {
-            if (!app()->environment('production')) {
-                Canton::create(['name' => $name]);
-            }
+            Canton::create(['name' => $name]);
         }
     }
 }

@@ -25,9 +25,7 @@ class EreasSeeder extends Seeder
         ];
 
         foreach ($townNameOne as $name) {
-            if (!app()->environment('production')) {
-                Erea::create(['name' => $name], ['Town_id' => 1]);
-            }
+            Erea::create(['name' => $name], ['Town_id' => 1]);
         }
     }
 }

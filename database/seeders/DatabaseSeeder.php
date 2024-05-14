@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
     {
         $seedersArray = [];
 
-
+        if (!app()->environment('production')) {
             array_push(
                 $seedersArray,
                 UsersSeeder::class,
@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
                 TaxablesSeeder::class,
                 ZonesSeeder::class,
             );
-
+        }
 
         array_push(
             $seedersArray,
