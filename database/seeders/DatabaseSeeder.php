@@ -35,14 +35,15 @@ class DatabaseSeeder extends Seeder
                 //CantonsSeeder::class,
                 //TownsSeeder::class,
                 //EreasSeeder::class,
-                //TaxLabelsSeeder::class,
-                //TaxablesSeeder::class,
+
                 //ZonesSeeder::class,
             );
         }
 
         array_push(
             $seedersArray,
+            TaxLabelsSeeder::class,
+            TaxablesSeeder::class,
             UsersSeeder::class,
             RolesPermissionsSeeder::class,
             GendersSeeder::class,
