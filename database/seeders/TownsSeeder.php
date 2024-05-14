@@ -14,7 +14,7 @@ class TownsSeeder extends Seeder
     public function run(): void
     {
         //Adjouyiko, Adougba, Ahonga-Kopé, Anokoui-Komékopé, Anokoui-Ahokopé, Anomegblé, Anomegblé, Anonkui-Nogo, Apenyigbi, Démakpoè, Djingble, Fiovi, Gbonvié-Anomé, Gnamassigan, Kitidjan, Klévé-Apégnigbi, Klévé-Assiyéyé, Kové, Logope-Agbanyokopé, Logopé-Atsanvé, Logopé-Houmbigblé, Logopé-Kpatefi, Netimé, Nyavimé-Aveyimé, Sogbossito, Sogbossito- Apelebuimé, Sogbossito-Aziasikopé, Télessou-Adokpokopé, Télessou-Agbodekakopé, Togomé, Totsi-Nyivémé, Totsi-Kpatefi-Cacavéli, Zogbégan,
-        
+
         $cantonNameOne = [
             'Adjouyiko',
             'Adougba',
@@ -65,7 +65,9 @@ class TownsSeeder extends Seeder
         ];
 
         foreach ($cantonNameTwo as $name) {
-            Town::create(['name' => $name], ['canton_id' => 2]);
+            if (!app()->environment('production')) {
+                Town::create(['name' => $name], ['canton_id' => 2]);
+            }
         }
     }
 }
