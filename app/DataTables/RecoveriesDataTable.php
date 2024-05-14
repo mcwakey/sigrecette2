@@ -71,6 +71,7 @@ class RecoveriesDataTable extends DataTable
         $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
 
         return $model->newQuery()
+            ->distinct()
             ->join('invoices', 'invoices.id', '=', 'payments.invoice_id')
             ->leftjoin('taxpayers', 'taxpayers.id', '=', 'payments.taxpayer_id')
             ->leftjoin('users', 'users.id', '=', 'payments.user_id')
