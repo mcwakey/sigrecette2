@@ -35,7 +35,7 @@ class SearchInvoiceResource extends JsonResource
             'status'=> $this->resource->status,
             'delivery_date'=> $this->resource->delivery_date,
             'type'=> $this->resource->type,
-            'invoiceitems'=> InvoiceItemResource::collection($this->invoiceitems)
+            // 'invoiceitems'=> InvoiceItemResource::collection($this->invoiceitems)
 
         ];
     }
