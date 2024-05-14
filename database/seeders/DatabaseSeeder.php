@@ -31,10 +31,13 @@ class DatabaseSeeder extends Seeder
         if (!app()->environment('production')) {
             array_push(
                 $seedersArray,
-                CantonsSeeder::class,
-                TownsSeeder::class,
-                EreasSeeder::class,
-                ZonesSeeder::class,
+
+                //CantonsSeeder::class,
+                //TownsSeeder::class,
+                //EreasSeeder::class,
+                //TaxLabelsSeeder::class,
+                //TaxablesSeeder::class,
+                //ZonesSeeder::class,
             );
         }
 
@@ -42,8 +45,6 @@ class DatabaseSeeder extends Seeder
             $seedersArray,
             UsersSeeder::class,
             RolesPermissionsSeeder::class,
-            TaxLabelsSeeder::class,
-            TaxablesSeeder::class,
             GendersSeeder::class,
             IdTypesSeeder::class,
         );
