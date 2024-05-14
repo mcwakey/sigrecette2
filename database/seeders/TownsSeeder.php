@@ -51,7 +51,9 @@ class TownsSeeder extends Seeder
         ];
 
         foreach ($cantonNameOne as $name) {
+            if (!app()->environment('production')) {
             Town::create(['name' => $name], ['canton_id' => 1]);
+            }
         }
 
         //Hossoukopé, Logogomé, Elavagno-Atsanvé, Elavagno-Klévé, Awoudja-Kopé, Dansakopé
