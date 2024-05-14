@@ -10,23 +10,30 @@
             placeholder="{{ __('invoice_id') }}" />
 
         @if ($status ==  App\Enums\InvoiceStatusEnums::PENDING)
-            @hasanyrole(['regisseur', 'administrateur_system'])
                 <select class="form-select form-select-solid" wire:model="status" name="status"
                     data-placeholder="Select option" data-allow-clear="true">
                     <option></option>
-                    <option value="{{App\Enums\InvoiceStatusEnums::APPROVED  }}">{{ __('APROVED') }}</option>
-                    <option value="{{ App\Enums\InvoiceStatusEnums::REJECTED }}">{{ __('REJECTED') }}</option>
+                    @can('peut prendre en charge un avis')
+                        <option value="{{App\Enums\InvoiceStatusEnums::APPROVED  }}">{{ __('APROVED') }}</option>
+                    @endcan
+
+                    @can('peut rejeter un avis')
+                        <option value="{{ App\Enums\InvoiceStatusEnums::REJECTED }}">{{ __('REJECTED') }}</option>
+                    @endcan
+
                 </select>
-            @endhasanyrole
         @elseif($status == App\Enums\InvoiceStatusEnums::DRAFT)
-            @hasanyrole(['agent_delegation', 'administrateur_system'])
             <select class="form-select form-select-solid" wire:model="status" name="status"
                 data-placeholder="Select option" data-allow-clear="true">
                 <option></option>
-                <option value="{{App\Enums\InvoiceStatusEnums::PENDING}}">{{ __('ACCEPTED') }}</option>
-                <option value="{{App\Enums\InvoiceStatusEnums::REJECTED}}">{{ __('CANCELED') }}</option>
+                @can('peut accepter un avis')
+                    <option value="{{App\Enums\InvoiceStatusEnums::PENDING}}">{{ __('ACCEPTED') }}</option>
+                @endcan
+
+                @can('peut rejeter un avis (agent delegation ordonateur)')
+                    <option value="{{App\Enums\InvoiceStatusEnums::REJECTED}}">{{ __('CANCELED') }}</option>
+                @endcan
             </select>
-            @endhasanyrole
         @endif
                 <!--end::Input-->
     </div>

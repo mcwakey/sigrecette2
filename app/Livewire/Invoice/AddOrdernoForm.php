@@ -3,9 +3,14 @@
 namespace App\Livewire\Invoice;
 
 use App\Models\Invoice;
-use App\Traits\DispatchesMessages;
 use Livewire\Component;
+use App\Traits\DispatchesMessages;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
+use App\Notifications\InvoiceAccepted;
+use Illuminate\Support\Facades\Notification;
+
 
 class AddOrdernoForm extends Component
 {
@@ -19,7 +24,7 @@ class AddOrdernoForm extends Component
     public $edit_mode = false;
 
     protected $rules = [
-        "orderno" =>"required",
+        "orderno" => "required",
     ];
 
     protected $listeners = [
@@ -33,38 +38,49 @@ class AddOrdernoForm extends Component
     }
 
     public function submit()
-{
-    //dd($this->validate());
+    {
+        //dd($this->validate());
 
-    // Validate the form input data
-    $this->validate();
+        // Validate the form input data
+        $this->validate();
 
-    DB::transaction(function () {
+        DB::transaction(function () {
 
-        // Prepare data for Invoice
-        $data = [
-            'order_no' => $this->orderno,
-        ];
+            // Prepare data for Invoice
+            $data = [
+                'order_no' => $this->orderno,
+            ];
 
-        //dd($invoiceData);
+            //dd($invoiceData);
 
-        // Create or update Invoice record
-        $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
+            // Create or update Invoice record
+            $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
 
 
-        $this->invoice_id = $invoice->id;
+            $this->invoice_id = $invoice->id;
 
-        foreach ($data as $k => $v) {
-            $invoice->$k = $v;
-        }
-        $invoice->save();
-        $this->dispatchMessage('Avis', 'update');
+            if ($invoice->order_no === null) {
+                $role = Role::where('name', 'agent_delegation_du_receveur')->first();
+                $role_a = Role::where('name', 'agent_assiette')->first();
+                if ($role) {
+                    $users = $role->users()->get();
+                    $users_agent_assiette= $role_a->users()->get();
+                    Notification::send($users, new InvoiceAccepted($invoice, Auth::user(), "agent_delegation_du_receveur"));
+                    Notification::send($users_agent_assiette, new InvoiceAccepted($invoice, Auth::user(), "agent_assiette"));
 
-    });
+                }
+            }
 
-    // Reset form fields after successful submission
-    $this->reset();
-}
+            foreach ($data as $k => $v) {
+                $invoice->$k = $v;
+            }
+            $invoice->save();
+            $this->dispatchMessage('Avis', 'update');
+        });
+
+        // Reset form fields after successful submission
+        $this->reset();
+    }
 
     public function updateInvoice($id)
     {
@@ -77,4 +93,3 @@ class AddOrdernoForm extends Component
         $this->resetValidation();
     }
 }
-

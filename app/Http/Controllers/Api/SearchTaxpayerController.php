@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\SearchTaxpayerResource;
 use App\Models\Zone;
 use App\Models\Taxpayer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\SearchTaxpayerResource;
+use App\Http\Resources\SearchInvoiceResource;
 
 class SearchTaxpayerController extends Controller
 {
     public function search(Request $request)
     {
-        $taxpayerName = $request->input('name', null); 
+        $taxpayerName = $request->input('name', null);
         $mobilePhone = $request->input('mobilephone', null);
         $town = $request->input('town', null);
         $zoneName = $request->input('zone', null);

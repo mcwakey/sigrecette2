@@ -205,15 +205,10 @@ class AddInvoiceModal extends Component
     {
 
 
-
-
         // Validate the form input data
 
-
-        //$this->validate();
         DB::transaction(function () {
 
-            //dd($this->qty,$this->start_month);
             if (!$this->edit_mode) {
                 $this->invoice_id = null;
             }
@@ -249,7 +244,6 @@ class AddInvoiceModal extends Component
             //dd($invoiceData);
 
             // Create or update Invoice record
-            //dd($invoiceData,$this);
             $invoice = Invoice::create($invoiceData);
 
             // Save the invoice ID into the invoice_no column
@@ -322,12 +316,11 @@ class AddInvoiceModal extends Component
             $invoice->pay_status = $invoice_old->pay_status;
             $invoice->save();
 
-            if($this->edit_mode!=false){
+            if(!$this->edit_mode){
                 $role = Role::where('name', 'agent_delegation')->first();
                 if ($role) {
                     $users = $role->users()->get();
                     Notification::send($users, new InvoiceCreated($invoice,Auth::user(),'agent_delegation'));
-
                 }
             }
 

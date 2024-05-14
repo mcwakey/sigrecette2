@@ -6,7 +6,10 @@ use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
 use App\Models\Invoice;
 use App\Models\Payment;
+use App\Notifications\InvoiceAccepted;
+use App\Notifications\InvoiceApproved;
 use App\Notifications\InvoiceCreated;
+use App\Notifications\InvoiceRejected;
 use App\Traits\DispatchesMessages;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
@@ -25,7 +28,7 @@ class AddStatusForm extends Component
     public $edit_mode = false;
 
     protected $rules = [
-        "status" =>"required",
+        "status" => "required",
     ];
 
     protected $listeners = [
@@ -63,44 +66,57 @@ class AddStatusForm extends Component
             foreach ($data as $k => $v) {
                 $invoice->$k = $v;
             }
-            if ($this->status== InvoiceStatusEnums::APPROVED &&  $invoice->reduce_amount != ''){
-//Todo make cascade reduction
-               $description_str=$invoice->reduce_amount==$invoice->amount?Constants::ANNULATION:Constants::REDUCTION;
+            if ($this->status == InvoiceStatusEnums::APPROVED &&  $invoice->reduce_amount != '') {
+                //Todo make cascade reduction
+                $description_str = $invoice->reduce_amount == $invoice->amount ? Constants::ANNULATION : Constants::REDUCTION;
                 $paymentData = [
                     'invoice_id' => $invoice->invoice_no,
                     'taxpayer_id' =>  $invoice->taxpayer_id,
                     'amount' => $invoice->reduce_amount,
-                    'description' =>$description_str,
-                    'user_id'=>  Auth::id(),
+                    'description' => $description_str,
+                    'user_id' =>  Auth::id(),
                     'reference' =>  $description_str,
-                    'invoice_type'=>$description_str,
-                    'status'=>$description_str,
-                    'payment_type'=>$description_str,
+                    'invoice_type' => $description_str,
+                    'status' => $description_str,
+                    'payment_type' => $description_str,
 
                 ];
-                $payments=Invoice::getCode($invoice->invoice_no,$invoice->reduce_amount,$paymentData);
-                foreach ($payments as $payment){
+                $payments = Invoice::getCode($invoice->invoice_no, $invoice->reduce_amount, $paymentData);
+                foreach ($payments as $payment) {
                     Payment::create($payment);
                 }
-                if ($invoice->reduce_amount==$invoice->amount){
-                    $invoice->pay_status="PAID";
-                }else{
-                    $invoice->pay_status="PART PAID";
+                if ($invoice->reduce_amount == $invoice->amount) {
+                    $invoice->pay_status = "PAID";
+                } else {
+                    $invoice->pay_status = "PART PAID";
                 }
-               $invoice->status= InvoiceStatusEnums::APPROVED_CANCELLATION;
+                $invoice->status = InvoiceStatusEnums::APPROVED_CANCELLATION;
             }
+
             $invoice->save();
-            //$this->dispatch('success', __('Avis mis à jour'));
             $this->dispatchMessage('Avis', 'update');
-            if($this->status=="PENDING"){
+
+
+            if ($this->status == InvoiceStatusEnums::PENDING) {
+                $role = Role::where('name', 'agent_recette')->first();
+ 
+                if ($role) {
+                    $users = $role->users()->get();
+                    Notification::send($users, new InvoiceAccepted($invoice, Auth::user(), "agent_recette"));
+                }
+            } elseif ($this->status == InvoiceStatusEnums::APPROVED) {
                 $role = Role::where('name', 'regisseur')->first();
                 if ($role) {
                     $users = $role->users()->get();
-                    Notification::send($users, new InvoiceCreated($invoice ,Auth::user(),"regisseur"));
-
+                    Notification::send($users, new InvoiceApproved($invoice, Auth::user(), "regisseur"));
+                }
+            } elseif ($this->status == InvoiceStatusEnums::REJECTED) {
+                $role = Role::where('name', 'agent_assiette')->first();
+                if ($role) {
+                    $users = $role->users()->get();
+                    Notification::send($users, new InvoiceRejected($invoice, Auth::user(), "agent_assiette"));
                 }
             }
-
         });
 
 
@@ -108,14 +124,14 @@ class AddStatusForm extends Component
         $this->reset();
     }
 
-// public function updateInvoice($id)
-// {
-//     $this->edit_mode = true;
+    // public function updateInvoice($id)
+    // {
+    //     $this->edit_mode = true;
 
-//     $this->invoice_id = $invoice->id;
-//     $this->tnif = $invoice->taxpayer->tnif;
-//     $this->zone = $invoice->taxpayer->zone_id;
-// }
+    //     $this->invoice_id = $invoice->id;
+    //     $this->tnif = $invoice->taxpayer->tnif;
+    //     $this->zone = $invoice->taxpayer->zone_id;
+    // }
 
     public function updateStatus($id)
     {
@@ -137,4 +153,3 @@ class AddStatusForm extends Component
         $this->resetValidation();
     }
 }
-

@@ -26,6 +26,7 @@ class RolesPermissionsSeeder extends Seeder
                 'peut accepter un avis',
                 'peut prendre en charge un avis',
                 'peut rejeter un avis',
+                'peut rejeter un avis (agent delegation ordonateur)',
                 'peut réduire ou annuler un avis',
                 'peut générer automatiquement les avis',
 
@@ -204,9 +205,7 @@ class RolesPermissionsSeeder extends Seeder
             'agent_delegation' => [
                 // Invoice permissions
                 'peut accepter un avis',
-
-                // Order no permissions
-                'peut ajouter le numéro d\'ordre de recette d\'un avis',
+                'peut rejeter un avis (agent delegation ordonateur)',
             ],
 
             'regisseur' => [
@@ -221,10 +220,6 @@ class RolesPermissionsSeeder extends Seeder
 
                 // Recovery permissions
                 'peut voir le recouvrement',
-
-                // Invoice permissions
-                'peut prendre en charge un avis',
-                'peut rejeter un avis',
 
                 // Payment permissions
                 'peut ajouter un paiement',
@@ -254,6 +249,18 @@ class RolesPermissionsSeeder extends Seeder
             ],
 
             'collecteur' =>  [],
+
+
+            'agent_delegation_du_receveur' => [
+                // Invoice permissions
+                'peut prendre en charge un avis',
+                'peut rejeter un avis',
+            ],
+
+            'agent_recette' => [
+                // Order no permissions
+                'peut ajouter le numéro d\'ordre de recette d\'un avis',
+            ],
         ];
 
         foreach ($permissions_by_role['administrateur_system'] as $permission) {
@@ -277,6 +284,8 @@ class RolesPermissionsSeeder extends Seeder
             User::find(6)->assignRole('regisseur');
             User::find(7)->assignRole('agent_recouvrement');
             User::find(8)->assignRole('collecteur');
+            User::find(9)->assignRole('agent_delegation_du_receveur');
+            User::find(10)->assignRole('agent_recette');
         }
     }
 }
