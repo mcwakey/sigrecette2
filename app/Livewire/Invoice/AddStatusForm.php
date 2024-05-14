@@ -120,6 +120,7 @@ class AddStatusForm extends Component
                 foreach ( $invoice->taxpayer_taxables as $taxpayerTaxable){
                     $taxpayerTaxable->billable ='0';
                     $taxpayerTaxable->bill_status ="NOT BILLED";
+                    $taxpayerTaxable->invoice_id = null;
                     $taxpayerTaxable->save();
                 }
             }
