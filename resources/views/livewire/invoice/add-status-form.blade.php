@@ -31,7 +31,7 @@
                 @endcan
 
                 @can('peut rejeter un avis (agent delegation ordonateur)')
-                    <option value="{{App\Enums\InvoiceStatusEnums::REJECTED}}">{{ __('CANCELED') }}</option>
+                    <option value="{{App\Enums\InvoiceStatusEnums::REJECTED_BY_OR}}">{{ __('CANCELED') }}</option>
                 @endcan
             </select>
         @endif

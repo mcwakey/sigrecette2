@@ -6,6 +6,7 @@ use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
 use App\Models\Invoice;
 use App\Models\Payment;
+use App\Models\TaxpayerTaxable;
 use App\Notifications\InvoiceAccepted;
 use App\Notifications\InvoiceApproved;
 use App\Notifications\InvoiceCreated;
@@ -99,7 +100,7 @@ class AddStatusForm extends Component
 
             if ($this->status == InvoiceStatusEnums::PENDING) {
                 $role = Role::where('name', 'agent_recette')->first();
- 
+
                 if ($role) {
                     $users = $role->users()->get();
                     Notification::send($users, new InvoiceAccepted($invoice, Auth::user(), "agent_recette"));
@@ -110,12 +111,19 @@ class AddStatusForm extends Component
                     $users = $role->users()->get();
                     Notification::send($users, new InvoiceApproved($invoice, Auth::user(), "regisseur"));
                 }
-            } elseif ($this->status == InvoiceStatusEnums::REJECTED) {
+            } elseif ($this->status == InvoiceStatusEnums::REJECTED_BY_OR) {
                 $role = Role::where('name', 'agent_assiette')->first();
                 if ($role) {
                     $users = $role->users()->get();
                     Notification::send($users, new InvoiceRejected($invoice, Auth::user(), "agent_assiette"));
                 }
+            } elseif ($this->status ==InvoiceStatusEnums::REJECTED_BY_OR){
+                $taxpayerTaxables = $invoice->taxpayer_taxables->get();
+                foreach ($taxpayerTaxables as $taxpayerTaxable){
+                    $taxpayerTaxable->billable ='0';
+                    $taxpayerTaxable->bill_status ="NOT BILLED";
+                }
+
             }
         });
 
