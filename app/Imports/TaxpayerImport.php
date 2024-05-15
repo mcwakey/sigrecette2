@@ -33,38 +33,44 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
      */
     public function model(array $row)
     {
+        //dd(  );
         $faker =  fake();
         if (!isset($row['nom'])
-            || !isset($row['adresse']  ) || !isset($row['canton'])
-            || !isset($row['ville_village']  ) || !isset($row['zone'])
-            || !isset($row['quartier']) || !isset($row["categ_activite"])
+            || !isset($row['adresse']  )
+            //|| !isset($row['canton'])
+           // || !isset($row['ville_village']  )
+            || !isset($row['zone'])
+            || !isset($row['quartier'])
             || !isset($row['activite'])
         ) {
             return null;
         }
-        $existingTaxpayer = Taxpayer::where('name', $row['nom'] . " " . $row['prenoms'])
+        $existingTaxpayer = Taxpayer::where(
+            'name', $row['nom'] . " "
+        )
             ->where('address', $row["adresse"])
             ->first();
 
         if ($existingTaxpayer) {
             return null;
         }
-        $canton = Canton::firstOrCreate(['name' => $row['canton']]);
-        $town = Town::firstOrCreate(['name' => $row['ville_village']."/". $row['quartier'], 'canton_id' => $canton->id]);
+        $canton = isset($row['canton'])?Canton::firstOrCreate(['name' =>  $row['canton']]): Canton::firstOrCreate(['name' => "Aneho"]);
+        $town = Town::firstOrCreate(['name' =>
+            isset($row['ville_village'])?$row['ville_village']."/": "".
+            $row['quartier'], 'canton_id' => $canton->id]);
         //$erea = Erea::firstOrCreate(['name' => $row['quartier'], 'town_id' => $town->id]);
         $zone = Zone::firstOrCreate(['name' => $row['zone']]);
-        $category = Category::firstOrCreate(['name' => $row['categ_activite']]);
+        $category =  isset($row['categ_activite'])?Category::firstOrCreate(['name' => $row['categ_activite']]): Category::firstOrCreate(['name' => 'Non défini']);
         $activity= Activity::firstOrCreate(['name' => $row["activite"], 'category_id' => $category->id]);
 
        // dump($category,$activity);
         // Créer le modèle Taxpayer
         $taxpayer = new Taxpayer([
-            'tnif' => fake()->randomNumber(3, 1, 10) . Str::random(5) . fake()->randomNumber(3, 0, 9),
-            'name' => $row['nom'] . " " .isset($row['prenoms'])?$row['prenoms']:"",
-            'email' => $row['email'],
+            'tnif' => $row['n°'] ?? fake()->randomNumber(3, 1, 10) . Str::random(5) . fake()->randomNumber(3, 0, 9),
+            'name' => $row['nom'] . " " ,
+            'email' => isset($row['email'])?$row['email']:"",
             'email_verified_at' => now(),
-            'gender' => $row["sexe"] ?: $faker->randomElement(['Homme', 'Femme']),
-            //todo end
+            'gender' => $row["sexe"] ?? $faker->randomElement(['Homme', 'Femme']),
             'id_type' => $faker->randomElement(['CNI', 'PASSPORT', 'PERMIS DE CONDUIRE', 'CARTE D\'ELECTEUR', 'CARTE DE SEJOUR']),
             'id_number' => $row["num_identification"] ?? $row["num_carte_electeur"] ?? random_int(1000000, 6000000),
             'mobilephone' => $row["telephone_1"] ?? " ",
@@ -77,7 +83,7 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
             'zone_id' => $zone->id,
             'category_id'=>$category->id,
             'activity_id'=>$activity->id,
-            "other_work"=>$row["autre_activite"],
+            "other_work"=>isset($row["autre_activite"])?$row["autre_activite"]:"" ,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
             'social_work'=>isset($row["raison sociale"])??$row["raison sociale"],
