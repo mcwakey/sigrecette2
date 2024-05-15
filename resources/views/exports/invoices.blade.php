@@ -142,8 +142,8 @@
             <td class="boder-div-red">
                 <img src="{{public_path('assets/media/images_exports/image2.png')}}" class="img-fluid" alt="...">
                 <div class="details">
-                    <h6>TRESORERIE DE : <span class="write"> {{$commune->address}}</span></h6>
-                    <h6>Adresse :<span class="write"> {{$commune->name}}</span></h6>
+                    <h6>TRESORERIE DE : <span class="write"> {{$commune->treasury_name}}</span></h6>
+                    <h6>Adresse :<span class="write"> {{$commune->treasury_address}}</span></h6>
                 </div>
             </td>
         </tr>
