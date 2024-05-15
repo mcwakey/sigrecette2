@@ -487,5 +487,6 @@
     "APPROVED-CANCELED": "ANNULÉ",
     "CATEGORY 1":"CATEGORIE 1",
     "CATEGORY 2":"CATEGORIE 2",
-    "CATEGORY 3":"CATEGORIE 3"
+    "CATEGORY 3":"CATEGORIE 3",
+    "REJECTED_BY_OR": "Annulé par l'agent par délégation"
 }
