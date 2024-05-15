@@ -98,12 +98,18 @@ class AddStatusForm extends Component
             $this->dispatchMessage('Avis', 'update');
 
 
+
+           // agenst
             if ($this->status == InvoiceStatusEnums::PENDING) {
                 $role = Role::where('name', 'agent_recette')->first();
-
                 if ($role) {
                     $users = $role->users()->get();
                     Notification::send($users, new InvoiceAccepted($invoice, Auth::user(), "agent_recette"));
+                }
+                $role_assiette = Role::where('name', 'agent_assiette')->first();
+                if($role_assiette){
+                    $users =  $role_assiette->users()->get();
+                    Notification::send($users, new InvoiceAccepted($invoice, Auth::user(), "agent_assiette"));
                 }
             } elseif ($this->status == InvoiceStatusEnums::APPROVED) {
                 $role = Role::where('name', 'regisseur')->first();
