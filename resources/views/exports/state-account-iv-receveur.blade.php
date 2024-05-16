@@ -66,13 +66,13 @@ $stock_r = \App\Models\StockRequest::find($data[0]);
     </tr>
     <tr>
         <td colspan="10" style="border: none; margin: 0;text-align: left">
-            Nom du Régisseur : Kwassi
+            Nom du Régisseur : {{\App\Models\User::getRegisseurName()}}
         </td>
 
     </tr>
     <tr>
         <td colspan="10" style="border: none; margin: 0;text-align: left">
-            Période de recouvrement : 04 au 31 janvier 2023
+            Période de recouvrement :
         </td>
 
     </tr>
@@ -133,7 +133,7 @@ $stock_r = \App\Models\StockRequest::find($data[0]);
         <td>{{$stock_r->qty}}</td>
         <td>{{$stock_r->qty* $stock_r->taxable->tariff}}</td>
     </tr>
-    @if($stock_r->req_type==\App\Helpers\Constants::$DEMANDE)
+    @if($stock_r->req_type==\App\Helpers\Constants::DEMANDE)
 
         @else
         <tr>

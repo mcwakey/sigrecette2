@@ -111,6 +111,7 @@
                 <th>N° quittance</th>
             </tr>
         @foreach($data   as $index => $item)
+            @if(count($item->payments)==1)
             <tr>
                 <td>{{$index+1}}</td>
                 <td>{{date("d-m-Y", strtotime( $item->created_at )) }}</td>
@@ -128,7 +129,10 @@
                 <td>{{$item->invoice_no}}</td>
                 <td></td>
                 <td>{{$item->amount}}</td>
-                <td>{{$item->order_no}}</td>
+                @foreach($item->payments as $item_p)
+                <td>{{ $item_p->reference}}</td>
+                @endforeach
+                @endif
             </tr>
         @endforeach
     </table>
