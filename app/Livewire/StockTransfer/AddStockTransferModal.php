@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Stmt\Return_;
 
 class AddStockTransferModal extends Component
 {
@@ -53,11 +54,21 @@ class AddStockTransferModal extends Component
     public $deposit_mode;
     public $option_calculus;
 
-    protected $rules = [
-        'collector_id' => 'required',
-        //'code' => 'required',
-        //'taxlabel_id' => 'required',
-    ];
+    protected function rules()
+    {
+        $rules = [
+            'collector_id' => 'required',
+            //'code' => 'required',
+            //'taxlabel_id' => 'required',
+        ];
+
+        if($this->deposit_mode){
+            $rules['code'] = 'required';
+            $rules['taxlabel_id'] = 'required';
+        }
+
+        return $rules;
+    }
 
     protected $listeners = [
         'delete_taxpayer' => 'deleteUser',
@@ -177,9 +188,9 @@ class AddStockTransferModal extends Component
 
     public function updatedCollectorId($value)
     {
-        // $this->taxlabel_id = "";
-        $this->taxable_id = "";
-        $this->trans_no = "";
+        $this->taxlabel_id = null;
+        $this->taxable_id = null;
+        $this->trans_no = null;
         $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
 
         //  //dd($this->deposit_mode);
@@ -383,7 +394,7 @@ class AddStockTransferModal extends Component
                         'code' => $this->code,
                         'invoice_type' => Constants::INVOICE_TYPE_COMPTANT,
                         'payment_type' => 'CASH',
-                        'status' => "APROVED",
+                        'status' => "ACCOUNTED",
                         'description' => "Etat de versement collecteur N°".$this->collector_id,
                         'user_id' => $this->user_id,
                         'r_user_id' => $this->collector_id,
@@ -447,11 +458,12 @@ class AddStockTransferModal extends Component
         // Reset the form fields after successful submission
         //$this->reset();
         //$this->collector_id = "";
-        //$this->taxlabel_id = "";
-        //$this->taxable_id = "";
-        //$this->trans_no = "";
+        $this->taxlabel_id = null;
+        $this->code = null;
+        $this->taxable_id = null;
+        $this->trans_no = null;
         $this->end_no = null;
-        $this->qty = "";
+        $this->qty = null;
     }
 
     public function deleteUser($id)
@@ -465,10 +477,11 @@ class AddStockTransferModal extends Component
 
     public function addTrnasfer($id)
     {
-        $this->collector_id = "";
-        $this->taxlabel_id = "";
-        $this->taxable_id = "";
-        $this->trans_no = "";
+        $this->collector_id = null;
+        $this->taxlabel_id = null;
+        $this->code = null;
+        $this->taxable_id = null;
+        $this->trans_no = null;
         $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
 
         // $this->stock_transfer_id = '';
@@ -483,9 +496,10 @@ class AddStockTransferModal extends Component
     {
         //dd($id);
         $this->collector_id = $id;
-        $this->taxlabel_id = "";
-        $this->taxable_id = "";
-        $this->trans_no = "";
+        $this->taxlabel_id = null;
+        $this->code = null;
+        $this->taxable_id = null;
+        $this->trans_no = null;
         $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
 
     //     $this->edit_mode = false;
@@ -529,9 +543,10 @@ class AddStockTransferModal extends Component
     public function updateTransfer($id)
     {
         $this->collector_id = $id;
-        $this->taxlabel_id = "";
-        $this->taxable_id = "";
-        $this->trans_no = "";
+        $this->taxlabel_id = null;
+        $this->code = null;
+        $this->taxable_id = null;
+        $this->trans_no = null;
         $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
 
         $this->edit_mode = true;

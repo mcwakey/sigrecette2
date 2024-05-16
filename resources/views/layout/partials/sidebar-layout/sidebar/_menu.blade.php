@@ -200,13 +200,13 @@
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">{{ __('Etat de versement du regisseur - Recettes sur titre') }} </span>
+                                <span class="menu-title">{{ __('Etat de versement du regisseur') }} </span>
                             </a>
                         </div>
                         <!--end:Menu item-->
 
                         <!--begin:Menu item-->
-                        <div class="menu-item">
+                        <!-- <div class="menu-item">
                             <a class="menu-link {{ request()->routeIs('accounts.accountant-deposits-outright.*') ? 'active' : '' }}"
                                 href="{{ route('accounts.accountant-deposits-outright.index') }}">
                                 <span class="menu-bullet">
@@ -214,7 +214,7 @@
                                 </span>
                                 <span class="menu-title">{{ __('Etat de versement du regisseur - Recettes au comptant') }} </span>
                             </a>
-                        </div>
+                        </div> -->
                         <!--end:Menu item-->
 
 

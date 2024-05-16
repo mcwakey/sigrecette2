@@ -93,7 +93,11 @@
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                <label class="form-control form-control-flush"> Mois</label>
+                                
+
+                            <div class="input-group mb-2">
+                                <span class="input-group-text" id="basic-addon1"> / {{ $periodicity }}</span>
+                            </div>
                             </div>
                             <div class="col-md-2">
                                 <label  class="required form-control form-control-flush text-end">{{ __('A compter de') }} </label>
@@ -126,9 +130,9 @@
                                 <!--begin::Table head-->
                                 <thead>
                                     <tr class="border-bottom fs-7 fw-bolder text-gray-700 text-uppercase">
-                                        <th class="min-w-300px w-450px">Item</th>
-                                        <th class="min-w-150px w-150px">Dimensions</th>
-                                        <th class="min-w-150px w-150px">Price</th>
+                                        <th class="min-w-300px w-450px">{{ __("taxable") }}</th>
+                                        <th class="min-w-150px w-150px">{{ __("seize") }}</th>
+                                        <th class="min-w-150px w-150px">{{ __("tariff") }}</th>
                                         <!-- <th class="min-w-100px w-100px">period</th> -->
                                         <th class="min-w-100px text-end">Total</th>
                                         <!-- <th class="min-w-50px w-50px text-end"></th> -->
@@ -270,7 +274,8 @@
                             </div>
 
                         </div>
-                        @else
+                        @endif
+                        @if ($edit_mode)
                         <div class="separator separator-content separator-dashed mt-3">
                             <span class="w-250px text-gray-500 fw-semibold fs-7">{{ __('payment history') }}</span>
                         </div>

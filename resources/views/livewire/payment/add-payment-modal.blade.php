@@ -102,7 +102,9 @@
                                 <input wire:model="qty" name="qty" class="form-control form-control-flush mb-2" type="text" readonly />
                             </div>
                             <div class="col-md-2">
-                                <input type="text" wire:model="periodicity" name="periodicity" class="required form-control form-control-flush" placeholder="{{ __('amount') }}" readonly />
+                                    <div class="input-group mb-2">
+                                        <span class="input-group-text" id="basic-addon1">{{ $periodicity }}</span>
+                                    </div>
                             </div>
                             <div class="col-md-3">
                                 <input type="text" class="required form-control form-control-flush text-end" placeholder="{{ __('amount') }}" readonly />
@@ -150,7 +152,11 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('amount paid') }}</label>
-                                <input wire:model="amount" name="amount" class="form-control mb-2 text-end" type="text" />
+                                @if ($amount > 0)
+                                    <input wire:model="amount" name="amount" class="form-control mb-2 text-end" type="text" readonly/>
+                                @else
+                                    <input wire:model="amount" name="amount" class="form-control mb-2 text-end" type="text" />
+                                @endif
                                 @error('amount')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
@@ -163,9 +169,9 @@
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('payment type') }}</label>
                                 <select wire:model="payment_type" name="payment_type" class="form-select" data-dropdown-parent="#kt_modal_add_payment">
                                     <option></option>
-                                    <option value="{{App\Enums\PaymentTypeEnums::CASH}}">CASH</option>
+                                    <option value="{{App\Enums\PaymentTypeEnums::CASH}}">ESPECE</option>
                                     <option value="{{App\Enums\PaymentTypeEnums::CHEQUE}}">CHEQUE</option>
-                                    <option value="{{App\Enums\PaymentTypeEnums::DIGI}}">DIGI</option>
+                                    <option value="{{App\Enums\PaymentTypeEnums::DIGI}}">DIGITAL</option>
                                 </select>
                                 @error('payment_type')
                                 <span class="text-danger">{{ $message }}</span> @enderror

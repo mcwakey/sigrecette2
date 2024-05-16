@@ -26,7 +26,7 @@ class StockTransfersDataTable extends DataTable
             //         $query->where('tax_labels.name', 'like', '%' . request('search.value') . '%')
             //         ->orWhere('taxables.name', 'like', '%' . request('search.value') . '%')
             //         ->orWhere('tax_labels.code', 'like', '%' . request('search.value') . '%')
-            //         ->orWhere('bill_status', 'like', '%' . request('search.value') . '%');
+            //         ->orWhere('type', 'like', '%' . request('search.value') . '%');
             //         // Add additional search conditions as needed for other columns
             //     }
             // })
@@ -181,6 +181,7 @@ class StockTransfersDataTable extends DataTable
                             DB::raw('MAX(stock_transfers.created_at) AS created_at'),
                             DB::raw('MAX(stock_transfers.taxable_id) AS taxable_id'))
                     ->where('stock_transfers.to_user_id', $this->id) 
+                    // ->where('stock_transfers.type', 'ACTIVE') 
                     ->groupBy('stock_transfers.trans_id')
                     ->orderBy('trans_id', 'desc');
 
