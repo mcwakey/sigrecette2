@@ -248,11 +248,18 @@ class Invoice extends Model implements FormatDateInterface
                 if ($amount > 0 && $code_amount['amount'] > 0) {
                     $paymentData["code"] = $code;
                     $paymentData['amount'] = min($amount, $code_amount['amount']);
-                    $paymentData['remaining_amount'] = $invoice->amount - ($paidTotal + $paymentData['amount'])-p;
+                    //dd(end($paymentArray));
+                    if(count( $paymentArray)>0){
+                        $paymentData['remaining_amount'] = $invoice->amount - ($paidTotal + $paymentData['amount'])+end($paymentArray)['amount'];
+
+                    }else{
+                        $paymentData['remaining_amount'] = $invoice->amount - ($paidTotal + $paymentData['amount']);
+                    }
                     $paymentArray[] = $paymentData;
                     $amount -= $paymentData['amount'];
                 }
             }
+
             return $paymentArray;
         }
         return null;
