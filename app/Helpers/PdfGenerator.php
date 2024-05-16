@@ -9,6 +9,7 @@ use App\Models\Commune;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\PrintFile;
+use App\Models\StockTransfer;
 use App\Models\Taxpayer;
 use App\Models\User;
 use App\Models\Year;
@@ -450,7 +451,6 @@ class PdfGenerator  implements PdfGeneratorInterface
         $activeYear = Year::getActiveYear();
         $startOfYear = Carbon::parse("{$activeYear->name}-01-01 00:00:00");
         $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
-
             $data=Invoice::whereBetween('created_at', [$startOfYear, $endOfYear])
             ->where('type','=',Constants::INVOICE_TYPE_COMPTANT)
             ->where('status','=',InvoiceStatusEnums::APPROVED)->get();
@@ -464,5 +464,29 @@ class PdfGenerator  implements PdfGeneratorInterface
 
         return ['success' => false, 'message' => 'Invalid data structure.'];
     }
+
+
+    public function generateStateAcountIvCollectorPdf($data, string $template, $action):array
+    {
+        //dd($data);
+        // if ($this->checkInvoiceListDataUniformity($data,$expectedDataSize)&& $this->checkIfCommuneIsNotNull()) {
+
+        $user = User::find($data[0]);
+       //*$ dd($user,$data[0]);
+        $data = StockTransfer::buildAndGetStockTransferWithQuery($data[0]);
+        $filename = "StateValueCollector" . Str::random(8) . ".pdf";
+
+
+
+        //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
+        $pdf = PDF::loadView("exports.".$template, ['data' => $data,"commune"=> $this->commune,'user'=>$user])->setPaper('a4', 'landscape')->stream($filename);
+
+        return ['success' => true, 'pdf' => $pdf];
+        // }
+
+        return ['success' => false, 'message' => 'Invalid data structure.'];
+    }
+
+
 
 }

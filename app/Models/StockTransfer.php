@@ -40,7 +40,7 @@ class StockTransfer extends Model
     {
         return $this->belongsTo(Payment::class);
     }
-    public static function buildAndGetStockRequestWithQuery($id)
+    public static function buildAndGetStockTransferWithQuery($id)
     {
         $builder= StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')
             ->join('users', 'stock_transfers.to_user_id', '=', 'users.id')

@@ -84,7 +84,7 @@ class PrintController extends Controller
      */
     public function processType($type, $data,$action,User $user=null):array
     {
-          //dd($type,$data,$action);
+         // dd($type,$data,$action);
         switch ($type) {
             case 1:
                 return $this->pdfGenerator->downloadReceipt($data,'payments',$action);
@@ -122,7 +122,7 @@ class PrintController extends Controller
             //case 4:return 'invoices-distribution';
             //case 5:return 'invoices-recouvrement';
             case 11: return $this->pdfGenerator->generataxpayerFormPdf($data,'taxpayer-form');
-            case 6:return $this->pdfGenerator->generateStateValueCollectorPdf($data,'state-account-iv-collector',$action);
+            case 6:return $this->pdfGenerator->generateStateAcountIvCollectorPdf($data,'state-account-iv-collectorc',$action);
             case 7:return $this->pdfGenerator->generateStateValueCollectorPdf($data,'state-account-iv-receveur',$action);
             case 8:return $this->pdfGenerator->generateStateValueCollectorPdf($data,'state-versement-collecteur',$action);
 

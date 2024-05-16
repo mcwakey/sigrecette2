@@ -113,7 +113,7 @@ class RecoveriesDataTable extends DataTable
             Column::make('reference')->title(__("reference no"))->name("reference"),
             Column::make('tax_labels.code')->title(__('code')),
             Column::make('amount')->title(__('amount paid')),
-            Column::make('remaining_amount')->title(__('balance')),
+           # Column::make('remaining_amount')->title(__('balance')),
             Column::make('status')->title(__('status')),
             Column::make('users.name')->title(__('user'))->addClass('d-flex align-items-center'),
             Column::computed('action')
