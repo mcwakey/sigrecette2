@@ -9,6 +9,7 @@ use App\DataTables\TaxpayerInvoicesDataTable;
 use App\DataTables\TaxpayerTaxablesDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\UserLogs;
+use App\Models\Zone;
 use Illuminate\Http\Request;
 use App\Imports\TaxpayerImport;
 use Illuminate\Support\Facades\Storage;
@@ -21,7 +22,8 @@ class TaxpayerController extends Controller
      */
     public function index(TaxpayersDataTable $dataTable)
     {
-        return $dataTable->render('pages/taxpayers.list');
+        $zones = Zone::all();
+        return $dataTable->render('pages/taxpayers.list', compact('zones'));
     }
 
     // public function index()
