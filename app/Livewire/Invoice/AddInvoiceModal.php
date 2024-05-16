@@ -450,7 +450,11 @@ class AddInvoiceModal extends Component
 
         $this->invoice_id = '';
 
-        $this->qty = 12;
+        if ($this->periodicity == "Mois") {
+            $this->qty = 12;
+        }else {
+            $this->qty = 1; 
+        }
 
         // dd($this->edit_mode, 'loadInvoice');
 
@@ -460,6 +464,9 @@ class AddInvoiceModal extends Component
         //dd($taxpayer_taxables);
 
         foreach ($taxpayer_taxables as $index => $taxable) {
+            
+            $this->unit_type = $taxable->taxable->unit_type;
+            
             $this->taxpayer_taxable_id[$index] = $taxable->id;
             $this->taxpayer_taxable[$index] = $taxable->name;
             $this->s_seize[$index] = $taxable->seize;
@@ -516,6 +523,7 @@ class AddInvoiceModal extends Component
             // }
 
             $this->periodicity = $taxable->taxable->periodicity;
+            $this->unit_type = $taxable->taxable->unit_type;
 
             $this->taxpayer_taxable_id[$index] = $taxable->id;
             $this->taxpayer_taxable[$index] = $taxable->name;

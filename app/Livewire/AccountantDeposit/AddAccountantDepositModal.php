@@ -428,7 +428,7 @@ class AddAccountantDepositModal extends Component
         $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
 
         
-        $total_amount = Payment::selectRaw('SUM(amount) AS amount')->where('invoice_type', $type)->where('status', "APROVED")->groupBy('invoice_type')->first();
+        $total_amount = Payment::selectRaw('SUM(amount) AS amount')->where('status', "ACCOUNTED")->groupBy('status')->first();
         $this->total_amount = $total_amount->amount ?? '';
         $this->paid = $this->total_amount;
         //dd($this->total_amount);
