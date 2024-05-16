@@ -47,6 +47,8 @@ class AddPaymentModal extends Component
     public $remaining_amount;
     public $edit_mode = false;
 
+    public $periodicity;
+
     protected $rules = [
 
         "amount" => "required|numeric",
@@ -310,6 +312,11 @@ class AddPaymentModal extends Component
         $this->bill = $invoice->amount;
         $this->paid = Invoice::getPaid($invoice->invoice_no);
 
+
+
+        $this->periodicity = ' / '.$invoice->taxpayer->taxpayer_taxables->first()->taxable->periodicity;
+
+        // dd($this->periodicity);
 
         //dd(($this->s_amount));
 

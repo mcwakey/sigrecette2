@@ -170,8 +170,8 @@
                             <select class="form-select" id="mySearchFive">
                                 <option value=""></option>
                                 <option value="ACTIVE">ACTIVE</option>
-                                <option value="DONE">COMPTABILISE</option>
-                                <option value="ARCHIVE">COMPTE RENDU</option>
+                                <option value="ARCHIVED">COMPTABILISE</option>
+                                <option value="ACCOUNTED">COMPTE RENDU</option>
 
                                 <!-- <option value="RECU">RECU</option>
                                 <option value="VENDU">VENDU</option>
@@ -296,7 +296,7 @@
             //document.getElementById('mySearchFour').addEventListener('change', function() {window.LaravelDataTables['stock_transfers-table'].column(10).search(this.value).draw();});
 
             document.getElementById('mySearchFive').addEventListener('change', function() {
-                window.LaravelDataTables['stock_transfers-table'].column(11).search(this.value).draw();
+                window.LaravelDataTables['stock_transfers-table'].column(10).search(this.value).draw();
             });
 
             document.addEventListener('livewire:init', function() {

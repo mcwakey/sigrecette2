@@ -63,7 +63,7 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 
-                                <input type="text" wire:model="paid" name="paid" class="form-control mb-3 mb-lg-0" placeholder="{{ __('deposit') }}"/>
+                                <input type="text" wire:model="paid" name="paid" class="form-control mb-3 mb-lg-0" placeholder="{{ __('deposit') }}" readonly/>
                                 <!--end::Input-->
                                 @error('paid')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -76,7 +76,7 @@
                                                     
                                 <select wire:model="payment_type" name="payment_type" class="form-select" data-dropdown-parent="#kt_modal_add_accountant_deposit">
                                     <option>{{ __('select an option') }}</option>
-                                    <option value="CASH">CASH</option>
+                                    <option value="CASH">ESPECE</option>
                                     <option value="CHEQUE">CHEQUE</option>
                                 </select>
 
