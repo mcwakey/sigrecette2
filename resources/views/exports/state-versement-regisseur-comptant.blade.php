@@ -72,7 +72,7 @@
     </tr>
     <tr>
         <td colspan="8">
-            Nom du régisseur :
+            Nom du Régisseur : {{\App\Models\User::getRegisseurName()}}
         </td>
 
     </tr>
@@ -84,7 +84,7 @@
     </tr>
     <tr>
         <td colspan="8">
-            Période de : 05/01 à 07/01
+            Période de :
         </td>
     </tr>
     <tr>

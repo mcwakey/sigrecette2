@@ -137,6 +137,7 @@ class AddInvoiceNoTaxpayerModal extends Component
         // 'nic' => 'required',
         // 'status' => 'required|string',
 
+        "name"=> "required|string",
         "s_amount" => 'required|numeric',
         "taxpayer_taxable_id" => "required|int",
         "qty" => "required|numeric",
@@ -313,7 +314,6 @@ class AddInvoiceNoTaxpayerModal extends Component
 
     public function submit()
     {
-
 
 
 

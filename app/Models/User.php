@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use App\Notifications\InvoiceRejected;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -79,4 +83,12 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(UserLogs::class);
     }
+    public static function getRegisseurName():string{
+        $role = Role::where('name', 'regisseur')->first();
+        if ($role) {
+            $user = $role->users()->first();
+           return $user->name;
+        }
+        return "";
+}
 }
