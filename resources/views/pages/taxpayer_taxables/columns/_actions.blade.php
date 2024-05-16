@@ -36,7 +36,7 @@
         @can('peut supprimer une taxation')
         <div class="menu-item px-3">
             <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer_taxable->id }}"
-                data-kt-action="delete_taxpayer">
+                data-kt-action="delete_row">
                 {{ __('delete') }}
             </a>
         </div>

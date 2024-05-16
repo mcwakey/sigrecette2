@@ -243,6 +243,7 @@ class AddTaxpayerTaxableModal extends Component
 
     public function deleteUser($id)
     {
+
         // Prevent deletion of current Taxable
         // if ($id == Auth::id()) {
         //     $this->dispatch('error', 'Taxable cannot be deleted');
