@@ -38,7 +38,7 @@
                 </div>
             </div>
 
-                
+
 
             <div class="card-toolbar">
 
@@ -57,7 +57,7 @@
 
             <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
                 <!--begin::Add user-->
-                <a href="#" class="ms-5 mt-1" data-bs-toggle="collapse" data-bs-target="#kt_tutorial_form"> 
+                <a href="#" class="ms-5 mt-1" data-bs-toggle="collapse" data-bs-target="#kt_tutorial_form">
                     <span>
                         <i class="ki-outline ki-information fs-2tx text-warning"></i>
                     </span>
@@ -130,9 +130,9 @@
                             <!--begin::Select-->
                             <select class="form-select" id="mySearchEight">
                                 <option value=""></option>
-                                <option value="Zone 1">Zone 1</option>
-                                <option value="Zone 2">Zone 2</option>
-                                <option value="Zone 3">Zone 3</option>
+                                @foreach ($zones as $zone)
+                                    <option value="{{ $zone->id }}">{{ $zone->name }}</option>
+                                @endforeach
                             </select>
                             <!--end::Select-->
                         </div>
@@ -156,7 +156,7 @@
                             <div class="fw-semibold">
                                 <h4 class="text-gray-900 fw-bold">Tutoriel sur <a class="fw-bold" href="#"> {{ __('taxpayers') }}</a></h4>
                                 <div class="fs-6 text-gray-700">
-                                   -> clicker ici 
+                                   -> clicker ici
                                         <a href="#" id="kt_horizontal_search_advanced_link" data-kt-rotate="true" class="btn btn-outline btn-outline-dashed bg-light-secondary btn-outline-secondary btn-active-light-secondary mx-1 rotate"
                                             data-bs-toggle="collapse" data-bs-target="#kt_advanced_search_form">
                                             {{ __('advanced search') }} <i
@@ -164,7 +164,7 @@
                                                     class="path1"></span><span class="path2"></span></i></a> pour afficher le formulaire de recherche avancée.
                                 <!-- </div>
                                 <div class="fs-6 text-gray-700"> -->
-                                   -> clicker ici 
+                                   -> clicker ici
 
                                         <!--begin::Add user-->
                                         <button type="button" class="btn btn-light-success h-45px ms-auto" data-bs-toggle="modal"
@@ -206,13 +206,13 @@
                                                                 </a>
                                                             </div>
                                                         </div>
-                                    pour plus de controle sur le tableau en dessous selon vos permissions. -> vous pouvez clicker sur le <code>Nom du Contribuable</code> ou sur 
-                                                                <a href="#" class="btn btn-outline-success btn-light btn-active-light-primary btn-sm">{{ __('view') }}</a> pour acceder a la page de detail du contribuable. 
+                                    pour plus de controle sur le tableau en dessous selon vos permissions. -> vous pouvez clicker sur le <code>Nom du Contribuable</code> ou sur
+                                                                <a href="#" class="btn btn-outline-success btn-light btn-active-light-primary btn-sm">{{ __('view') }}</a> pour acceder a la page de detail du contribuable.
                                 <!-- </div>
                                 <div class="fs-6 text-gray-700 mt-2"> -->
                                 </div>
                                 <div class="fs-6 text-gray-700 mt-2">
-                                                                -> clicker sur <a href="#" class="btn btn-outline-success btn-light btn-active-light-primary btn-flex btn-center btn-sm">{{ __('edit') }}</a>  
+                                                                -> clicker sur <a href="#" class="btn btn-outline-success btn-light btn-active-light-primary btn-flex btn-center btn-sm">{{ __('edit') }}</a>
                                                                 <a href="#" class="btn btn-outline-success btn-light btn-active-light-primary btn-flex btn-center btn-sm">{{ __('delete') }}</a> ou pour
                                                                 pouvoir modifié ou supprimer le contribuable selon vos permissions.
                                 </div>
@@ -332,9 +332,9 @@
             // const mobilePhoneFieldCheckBox = document.getElementById('mobilephone');
 
             // /**
-            //  * Toggles the visibility of DOM elements with a given class name 
+            //  * Toggles the visibility of DOM elements with a given class name
             //  * based on the checked state of a checkbox input.
-            //  * 
+            //  *
             //  * @param {HTMLInputElement} fieldCheckBoxInput - The checkbox input element.
             //  */
             // function toggleField(fieldCheckBoxInput) {
