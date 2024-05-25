@@ -489,5 +489,6 @@
     "CATEGORY 2":"CATEGORIE 2",
     "CATEGORY 3":"CATEGORIE 3",
     "REJECTED_BY_OR": "Annulé par l'agent par délégation",
-    "disable": "désactiver"
+    "disable": "Désactiver",
+    "Reactive": "Activer"
 }

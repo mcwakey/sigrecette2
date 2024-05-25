@@ -25,8 +25,8 @@
     @can('peut supprimer un contribuable')
         <!--begin::Menu item-->
             <div class="menu-item px-3">
-                <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer->id }}" data-kt-action="active_taxpayer">
-                    {{ __('active') }}
+                <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer->id }}" data-kt-action="restore_taxpayer">
+                    {{ __('Reactive') }}
                 </a>
             </div>
             <!--end::Menu item-->
