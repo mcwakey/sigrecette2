@@ -135,12 +135,13 @@ class AddTaxpayerTaxableModal extends Component
 
     public function updatedLength($value)
     {
-        $this->seize = intval($this->length) * intval($this->width);
+        //TODO fix this calcul ignore les virgurles
+        $this->seize = doubleval($this->length) * doubleval($this->width);
     }
 
     public function updatedWidth($value)
     {
-        $this->seize = intval($this->length) * intval($this->width);
+        $this->seize =doubleval($this->length) *doubleval($this->width);
     }
 
     public function updateCheckbox($id)
