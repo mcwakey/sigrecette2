@@ -54,13 +54,20 @@
                             </span>
                         @endcan
 
-                        <a class="menu-link {{ request()->routeIs('taxpayers.*') ? 'active' : '' }}"
+                        <a class="menu-link {{ request()->routeIs('taxpayers.*')  && !request()->has('disable') ? 'active' : '' }}"
                             href="{{ route('taxpayers.index') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
                             <span class="menu-title">Liste des contribuables</span>
                         </a>
+                            <a class="menu-link {{ request()->routeIs('taxpayers.*') && request()->has('disable')  ? 'active' : '' }}"
+                               href="{{ route('taxpayers.index', ['disable' => true]) }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                                <span class="menu-title">Liste des contribuables   {{ __('disable') }}</span>
+                            </a>
                         <!--end:Menu link-->
                     </div>
                     <!--end:Menu item-->

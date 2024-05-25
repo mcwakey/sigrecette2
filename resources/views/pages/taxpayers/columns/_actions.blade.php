@@ -21,14 +21,28 @@
     <!--end::Menu item-->
     @endcan
 
+@if(request()->has('disable'))
     @can('peut supprimer un contribuable')
         <!--begin::Menu item-->
-        <div class="menu-item px-3">
-            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer->id }}" data-kt-action="delete_taxpayer">
-            {{ __('delete') }}
-            </a>
-        </div>
-        <!--end::Menu item-->
+            <div class="menu-item px-3">
+                <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer->id }}" data-kt-action="active_taxpayer">
+                    {{ __('active') }}
+                </a>
+            </div>
+            <!--end::Menu item-->
     @endcan
+@else
+    @can('peut supprimer un contribuable')
+        <!--begin::Menu item-->
+            <div class="menu-item px-3">
+                <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer->id }}" data-kt-action="delete_taxpayer">
+                    {{ __('disable') }}
+                </a>
+            </div>
+            <!--end::Menu item-->
+        @endcan
+@endif
+
+
 </div>
 <!--end::Menu-->

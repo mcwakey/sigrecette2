@@ -212,10 +212,15 @@ class AddTaxpayerModal extends Component
     public function deleteUser($id)
     {
         // Delete the taxpayer record with the specified ID
-        Taxpayer::destroy($id);
+        //Taxpayer::delete($id);
+        //dd( Taxpayer::find($id));
+        $taxpayer = Taxpayer::find($id);
+        if($taxpayer!=null){
+            $taxpayer->delete();
+            // Emit a success event with a message
+            $this->dispatchMessage('Contribuable', 'delete');
+        }
 
-        // Emit a success event with a message
-        $this->dispatchMessage('Contribuable', 'delete');
     }
 
     public function updateTaxPayer($id)
