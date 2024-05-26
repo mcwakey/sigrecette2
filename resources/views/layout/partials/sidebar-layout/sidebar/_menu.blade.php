@@ -162,7 +162,7 @@
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">Liste des recouvrements</span>
+                                <span class="menu-title">{{ __('Liste des recouvrements') }}</span>
                             </a>
                             <!--end:Menu link-->
                         </div>
