@@ -50,7 +50,7 @@
                                     <span class="bullet bullet-dot"></span>
                                 </span>
                                 <span class="menu-title" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_add_taxpayer">{{ __('new taxpayer') }}</span>
+                                    data-bs-target="#kt_modal_add_taxpayer">{{ __('Nouveau contribuable') }}</span>
                             </span>
                         @endcan
 
@@ -66,7 +66,7 @@
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
-                                <span class="menu-title">Liste des contribuables   {{ __('disable') }}</span>
+                                <span class="menu-title">Liste des contribuables   {{ __('désactiver') }}</span>
                             </a>
                         <!--end:Menu link-->
                     </div>
@@ -518,16 +518,31 @@
                         <!--begin:Menu item-->
                         <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('user-management.users.*') ? 'active' : '' }}"
+                            <a class="menu-link {{ request()->routeIs('user-management.users.*') && !request()->has('disable')   ? 'active' : ''}}"
                                 href="{{ route('user-management.users.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">{{ __('users') }}</span>
+                                <span class="menu-title">{{ __('Liste des utilisateurs') }}</span>
                             </a>
                             <!--end:Menu link-->
                         </div>
                         <!--end:Menu item-->
+
+                                 <!--begin:Menu item-->
+                                 <div class="menu-item">
+                                    <!--begin:Menu link-->
+                                    <a class="menu-link {{ request()->routeIs('user-management.users.*') && request()->has('disable')  ? 'active' : '' }}"
+                                        href="{{ route('user-management.users.index',['disable' => true]) }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">{{ __('Liste des utilisateurs désactivé') }}</span>
+                                    </a>
+                                    <!--end:Menu link-->
+                                </div>
+                                <!--end:Menu item-->
+
                         <!--begin:Menu item-->
                         <div class="menu-item">
                             <!--begin:Menu link-->
@@ -536,7 +551,7 @@
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">{{ __('roles') }}</span>
+                                <span class="menu-title">{{ __('Liste des roles') }}</span>
                             </a>
                             <!--end:Menu link-->
                         </div>
@@ -551,7 +566,7 @@
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">{{ __('permissions') }}</span>
+                                <span class="menu-title">{{ __('Liste des permissions') }}</span>
                             </a>
                             <!--end:Menu link-->
                         </div>

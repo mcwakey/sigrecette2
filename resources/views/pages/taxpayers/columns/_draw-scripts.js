@@ -5,7 +5,7 @@ KTMenu.init();
 document.querySelectorAll('[data-kt-action="delete_taxpayer"]').forEach(function (element) {
     element.addEventListener('click', function () {
         Swal.fire({
-            text: 'Êtes-vous sûr de vouloir supprimer ce contribuable?',
+            text: 'Êtes-vous sûr de vouloir désactiver ce contribuable?',
             icon: 'warning',
             buttonsStyling: false,
             showCancelButton: true,

@@ -14,9 +14,17 @@ class UserManagementController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(UsersDataTable $dataTable)
+    public function index(Request $request, UsersDataTable $dataTable)
     {
-        return $dataTable->render('pages/apps.user-management.users.list');
+        $validatedData = $request->validate([
+            'disable' => 'nullable|integer',
+        ]);
+
+        $disable = $validatedData['disable'] ?? null;
+
+        return $dataTable->with([
+            'disable' => $disable,
+        ])->render('pages/apps.user-management.users.list');
     }
 
     /**

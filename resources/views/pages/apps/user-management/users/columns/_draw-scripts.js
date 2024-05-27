@@ -23,6 +23,50 @@ document.querySelectorAll('[data-kt-action="delete_row"]').forEach(function (ele
     });
 });
 
+
+document.querySelectorAll('[data-kt-action="disabeld_row"]').forEach(function (element) {
+    element.addEventListener('click', function () {
+        Swal.fire({
+            text: 'Voulez-vous désactiver ce utilisateur?',
+            icon: 'warning',
+            buttonsStyling: false,
+            showCancelButton: true,
+            confirmButtonText: 'Oui',
+            cancelButtonText: 'Non',
+            customClass: {
+                confirmButton: 'btn btn-danger',
+                cancelButton: 'btn btn-secondary',
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Livewire.dispatch('disabeld_row', [this.getAttribute('data-kt-user-id')]);
+            }
+        });
+    });
+});
+
+
+document.querySelectorAll('[data-kt-action="restore_row"]').forEach(function (element) {
+    element.addEventListener('click', function () {
+        Swal.fire({
+            text: 'Voulez-vous activer ce utilisateur?',
+            icon: 'warning',
+            buttonsStyling: false,
+            showCancelButton: true,
+            confirmButtonText: 'Oui',
+            cancelButtonText: 'Non',
+            customClass: {
+                confirmButton: 'btn btn-danger',
+                cancelButton: 'btn btn-secondary',
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Livewire.dispatch('restore_row', [this.getAttribute('data-kt-user-id')]);
+            }
+        });
+    });
+});
+
 // Add click event listener to update buttons
 document.querySelectorAll('[data-kt-action="update_row"]').forEach(function (element) {
     element.addEventListener('click', function () {
