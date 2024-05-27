@@ -77,7 +77,7 @@
                             <div class="table-responsive">
                                 <!--begin::Table-->
 
-                                <div class="d-flex w-100 mb-4">
+                                <div class="d-flex w-100 mb-4" id="select-all">
                                     <label class="form-check my-4 form-check-sm form-check-custom form-check me-9">
                                         <input class="form-check-input" type="checkbox" id="kt_roles_select_all"
                                             wire:model="check_all" wire:change="checkAll" />
@@ -169,6 +169,7 @@
         let permissions = Object.keys(permissionsByGroup);
         let autoCompleteBox = document.getElementById('auto-complete');
         let autoCompleteInput = document.getElementById('auto-complete-input');
+        let selectAll = document.getElementById('select-all');
 
         autoCompleteInput.addEventListener('input', (e) => {
             e.preventDefault();
@@ -182,6 +183,11 @@
                     ); // Ajouter la permission au tableau des résultats si elle correspond à la valeur de recherche et n'est pas déjà présente
                 }
             });
+
+            if (!value) {
+                selectAll.classList.replace('d-none', 'd-flex');
+                autoCompleteBox.classList.remove('mt-4');
+            }
 
             autoCompleteBox.innerHTML = '';
 
@@ -204,12 +210,17 @@
                         </div>
             `;
                     autoCompleteBox.innerHTML += template;
+                    if (value) {
+                        selectAll.classList.replace('d-flex', 'd-none');
+                        autoCompleteBox.classList.add('mt-4');
+                    }
                 });
+
+
             } else {
                 // S'il n'y a pas de résultats, afficher "Aucun résultat"
                 autoCompleteBox.innerHTML = "<p class='fw-bolder'>Aucun résultat</p>";
             }
-
 
         });
     </script>
