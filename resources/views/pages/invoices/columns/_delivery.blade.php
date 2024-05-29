@@ -1,9 +1,12 @@
 
-
+@if($invoice->delivery_date!=null)
+    {{ date('Y-m-d', strtotime($invoice->delivery_date)) }}
+@else
+    -{{ __('NOT DELIVERED') }}
+@endif
 
 @if ($invoice->can("submit_for_reduced"))
-    @if ($invoice->delivery_date == null && $invoice->order_no !== null)
-        {{ __('NOT DELIVERED') }}
+    @if ( request()->routeIs('invoices.*') && request()->input('notDelivery') == 1 &&$invoice->delivery_date == null && $invoice->order_no !== null)
         @can('peut ajouter la date de livraison d\'un avis')
             <button type="button"
                 class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto  pulse pulse-warning"
@@ -39,12 +42,7 @@
 
                 <!--end::Form-->
             </div>
-        @else
-            {{ __('NOT DELIVERED') }}
+
         @endcan
-    @elseif($invoice->delivery_date!=null)
-        {{ date('Y-m-d', strtotime($invoice->delivery_date)) }}
     @endif
-@else
--{{ __('NOT DELIVERED') }}
 @endif

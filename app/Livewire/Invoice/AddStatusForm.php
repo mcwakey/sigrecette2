@@ -52,7 +52,7 @@ class AddStatusForm extends Component
         DB::transaction(function () {
 
             //  comment after
-            $data = ['status' => $this->status];
+            //$data = ['status' => $this->status];
 
             //dd($invoiceData);
 
@@ -62,8 +62,7 @@ class AddStatusForm extends Component
 
             $this->invoice_id = $invoice->id;
 
-            //  comment after
-            foreach ($data as $k => $v) {$invoice->$k = $v;}
+            //foreach ($data as $k => $v) {$invoice->$k = $v;}
             //dd($invoice->getAvailableTransitions());
             if ($this->status == InvoiceStatusEnums::APPROVED &&  $invoice->reduce_amount != '') {
                 //Todo make cascade reduction
@@ -89,44 +88,38 @@ class AddStatusForm extends Component
                 } else {
                     $invoice->pay_status = "PART PAID";
                 }
-                $invoice->status = InvoiceStatusEnums::APPROVED_CANCELLATION;
+                $this->status = InvoiceStatusEnums::APPROVED_CANCELLATION;
             }
 
             $invoice->save();
             $this->dispatchMessage('Avis', 'update');
+            switch($this->status){
+                case InvoiceStatusEnums::ACCEPTED:
+                    $invoice->submitToState("submit_for_accepted");
+                    break;
+                case InvoiceStatusEnums::REJECTED_BY_OR:
+                    $invoice->submitToState("submit_for_reject_by_ord");
 
-
-
-           // agenst
-            if ($this->status == InvoiceStatusEnums::PENDING) {
-                $role = Role::where('name', 'agent_recette')->first();
-                if ($role) {
-                    $users = $role->users()->get();
-                    Notification::send($users, new InvoiceAccepted($invoice, Auth::user(), "agent_recette"));
-                }
-                $role_assiette = Role::where('name', 'agent_assiette')->first();
-                if($role_assiette){
-                    $users =  $role_assiette->users()->get();
-                    Notification::send($users, new InvoiceAccepted($invoice, Auth::user(), "agent_assiette"));
-                }
-            } elseif ($this->status == InvoiceStatusEnums::APPROVED) {
-                $role = Role::where('name', 'regisseur')->first();
-                if ($role) {
-                    $users = $role->users()->get();
-                    Notification::send($users, new InvoiceApproved($invoice, Auth::user(), "regisseur"));
-                }
-            } elseif ($this->status == InvoiceStatusEnums::REJECTED_BY_OR) {
-                $role = Role::where('name', 'agent_assiette')->first();
-                if ($role) {
-                    $users = $role->users()->get();
-                    Notification::send($users, new InvoiceRejected($invoice, Auth::user(), "agent_assiette"));
-                }
-                foreach ( $invoice->taxpayer_taxables as $taxpayerTaxable){
-                    $taxpayerTaxable->billable ='0';
-                    $taxpayerTaxable->bill_status ="NOT BILLED";
-                    $taxpayerTaxable->invoice_id = null;
-                    $taxpayerTaxable->save();
-                }
+                    break;
+                case  InvoiceStatusEnums::PENDING:
+                    $invoice->submitToState("submit_for_pending");
+                    break;
+                case   InvoiceStatusEnums::APPROVED:
+                case     InvoiceStatusEnums::APPROVED_CANCELLATION:
+                        if($this->status==InvoiceStatusEnums::APPROVED){
+                            $invoice->submitToState( "submit_for_approved");
+                        }else{
+                            $invoice->submitToState("submit_for_approved_cancellation");
+                        }
+                    break;
+                case InvoiceStatusEnums::CANCELED:
+                    //dump(InvoiceStatusEnums::CANCELED);
+                    break;
+                case InvoiceStatusEnums::REDUCED:
+                    //dump(InvoiceStatusEnums::REDUCED);
+                    break;
+                default :
+                    // dump($place);
             }
         });
 

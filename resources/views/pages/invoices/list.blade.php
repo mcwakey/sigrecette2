@@ -1,7 +1,17 @@
 <x-default-layout>
 
     @section('title')
-        {{ __('invoices') }}
+
+        @if(request()->routeIs('invoices.*') &&  request()->has('aucomptant'))
+            {{__('Liste des avis au comptant')}}
+        @elseif( request()->routeIs('invoices.*') && request()->input('notDelivery') == 1)
+            {{__('Liste des avis non distribués')}}
+        @elseif( request()->routeIs('invoices.*') &&  request()->has('notDelivery')&& request()->input('notDelivery') == 0 )
+            {{__('Liste des avis distribués')}}
+        @else
+            {{ "Liste des ".__('invoices')." sur titre" }}
+        @endif
+
     @endsection
 
     @section('breadcrumbs')

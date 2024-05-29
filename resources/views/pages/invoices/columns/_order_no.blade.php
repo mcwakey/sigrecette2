@@ -1,5 +1,6 @@
 
-@if ($invoice->can("submit_for_pending"))
+
+@if ( request()->routeIs('invoices.*') && request()->input('notDelivery') == 1&&$invoice->can("submit_for_pending"))
     @can('peut ajouter le numéro d\'ordre de recette d\'un avis')
         <button type="button"
             class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto pulse pulse-warning"

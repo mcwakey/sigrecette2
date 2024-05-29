@@ -24,7 +24,11 @@ return [
         'transitions' => [
             "submit_for_accepted"=> [
                 'from' => [InvoiceStatusEnums::DRAFT],
-                'to' => [InvoiceStatusEnums::ACCEPTED, InvoiceStatusEnums::REJECTED_BY_OR],
+                'to' => [InvoiceStatusEnums::ACCEPTED],
+            ],
+            "submit_for_reject_by_ord"=> [
+                'from' => [InvoiceStatusEnums::DRAFT],
+                'to' => [ InvoiceStatusEnums::REJECTED_BY_OR],
             ],
             "submit_for_pending"=> [
                 'from' => [InvoiceStatusEnums::ACCEPTED],
@@ -33,12 +37,26 @@ return [
             ],
             "submit_for_approved" => [
                 'from' => [InvoiceStatusEnums::PENDING],
-                'to' => [InvoiceStatusEnums::APPROVED,InvoiceStatusEnums::APPROVED_CANCELLATION, InvoiceStatusEnums::REJECTED],
+                'to' => [InvoiceStatusEnums::APPROVED],
+
+            ],
+            "submit_for_approved_cancellation" => [
+                'from' => [InvoiceStatusEnums::PENDING],
+                'to' => [InvoiceStatusEnums::APPROVED_CANCELLATION],
+
+            ],
+            "submit_for_rejected" => [
+                'from' => [InvoiceStatusEnums::PENDING],
+                'to' => [ InvoiceStatusEnums::REJECTED],
 
             ],
             "submit_for_reduced"=> [
                 'from' => [InvoiceStatusEnums::APPROVED,InvoiceStatusEnums::APPROVED_CANCELLATION],
-                'to' => [InvoiceStatusEnums::CANCELED, InvoiceStatusEnums::REDUCED],
+                'to' => [ InvoiceStatusEnums::REDUCED],
+            ],
+            "submit_for_canceled"=> [
+                'from' => [InvoiceStatusEnums::APPROVED,InvoiceStatusEnums::APPROVED_CANCELLATION],
+                'to' => [InvoiceStatusEnums::CANCELED],
             ],
         ],
     ],

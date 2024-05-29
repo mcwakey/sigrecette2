@@ -13,7 +13,6 @@
             {{ __('view') }}
         </a>
     </div>
-
     @if($invoice->canPrint())
         @php
             $data = [$invoice->uuid];
@@ -24,7 +23,7 @@
         </div>
     @endif
 
-    @if($invoice->can( "submit_for_reduced"))
+    @if( $invoice->can( "submit_for_reduced") ||  $invoice->can("submit_for_canceled") && $invoice->validity == 'VALID')
         @if( $invoice->canGetPayment())
 
                 @can('peut ajouter un paiement')
