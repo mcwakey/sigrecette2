@@ -81,9 +81,9 @@
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('description') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="name" name="name" class="form-control mb-3 mb-lg-0" placeholder="{{ __('description') }}"/>
+                                <input type="text" wire:model="description" name="description" class="form-control mb-3 mb-lg-0" placeholder="{{ __('description') }}"/>
                                 <!--end::Input-->
-                                @error('name')
+                                @error('description')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>

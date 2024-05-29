@@ -71,6 +71,7 @@ class AddOrdernoForm extends Component
                 }
             }
 
+            $invoice->submitToState("submit_for_pending");
             foreach ($data as $k => $v) {
                 $invoice->$k = $v;
             }

@@ -1,7 +1,8 @@
-@if ($invoice->order_no == null && $invoice->delivery_date==null &&  $invoice->status!= App\Enums\InvoiceStatusEnums::DRAFT && $invoice->status !=  App\Enums\InvoiceStatusEnums::REJECTED)
+
+@if ($invoice->can("submit_for_pending"))
     @can('peut ajouter le numéro d\'ordre de recette d\'un avis')
         <button type="button"
-            class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
+            class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto pulse pulse-warning"
             data-kt-user-id="{{ $invoice->id }}"
             data-bs-target="#kt_modal_add_orderno"
             data-kt-menu-trigger="click"
@@ -11,7 +12,10 @@
             <i class="ki-duotone ki-pencil fs-3">
                 <span class="path1"></span>
                 <span class="path2"></span>
+
             </i>
+            <span class="pulse-ring"></span>
+
         </button>
     @endcan
 

@@ -51,10 +51,8 @@ class AddStatusForm extends Component
 
         DB::transaction(function () {
 
-            // Prepare data for Invoice
-            $data = [
-                'status' => $this->status,
-            ];
+            //  comment after
+            $data = ['status' => $this->status];
 
             //dd($invoiceData);
 
@@ -64,9 +62,9 @@ class AddStatusForm extends Component
 
             $this->invoice_id = $invoice->id;
 
-            foreach ($data as $k => $v) {
-                $invoice->$k = $v;
-            }
+            //  comment after
+            foreach ($data as $k => $v) {$invoice->$k = $v;}
+            //dd($invoice->getAvailableTransitions());
             if ($this->status == InvoiceStatusEnums::APPROVED &&  $invoice->reduce_amount != '') {
                 //Todo make cascade reduction
                 $description_str = $invoice->reduce_amount == $invoice->amount ? Constants::ANNULATION : Constants::REDUCTION;

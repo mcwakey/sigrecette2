@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\FormatDateInterface;
+use App\Enums\InvoicePayStatusEnums;
 use App\Enums\InvoiceStatusEnums;
 use App\Enums\PrintNameEnums;
 use App\Helpers\Constants;
@@ -12,11 +13,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\Workflow\Workflow;
+use ZeroDaHero\LaravelWorkflow\Traits\WorkflowTrait;
 
 class Invoice extends Model implements FormatDateInterface
 {
     use HasFactory;
-
+    use WorkflowTrait;
     protected $fillable = [
         'invoice_id',
         'taxpayer_id',
@@ -35,7 +38,54 @@ class Invoice extends Model implements FormatDateInterface
 
         // 'profile_photo_path',
     ];
+    protected $attributes = [
+        'status' => \App\Enums\InvoiceStatusEnums::DRAFT,
+    ];
+    public function can(string $state)
+    {
+        $workflow = $this->workflow_get();
+        return$workflow->can($this, $state);
+    }
 
+    public function submitToState(string $state)
+    {
+        $workflow = $this->workflow_get();
+
+        if ($this->can( $state)) {
+            $workflow->apply($this, $state);
+            $this->save();
+            return true;
+        }
+
+        return false;
+    }
+    public function canGetPayment():bool{
+        return ( $this->status != InvoiceStatusEnums::CANCELED &&
+            $this->status != InvoiceStatusEnums::REDUCED &&
+            $this->pay_status !=  InvoicePayStatusEnums::PAID)
+            &&($this->delivery_date!=null  ||$this->type== Constants::INVOICE_TYPE_COMPTANT)
+            ;
+    }
+    public function canPrint():bool{
+        return $this->can( "submit_for_pending")  ||
+            ($this->type== Constants::INVOICE_TYPE_COMPTANT && $this->can( "submit_for_approved")) ;
+
+    }
+    public function getAvailableTransitions(): array
+    {
+        $workflow = $this->workflow_get();
+
+        $enabledTransitions = $workflow->getEnabledTransitions($this);
+
+        $transitions = [];
+
+        foreach ($enabledTransitions as $transition) {
+           // $transitions[] = ['name' => $transition->getName(), 'from' => $transition->getFroms(), 'to' => $transition->getTos(),];
+            $transition[] =$transition->getName();
+        }
+
+        return $transitions;
+    }
     public function printFiles()
     {
         return $this->belongsToMany(PrintFile::class);

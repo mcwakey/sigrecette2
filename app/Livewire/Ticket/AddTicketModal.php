@@ -9,6 +9,7 @@ use App\Models\IdType;
 use App\Models\Taxable;
 use App\Models\TaxLabel;
 use App\Models\Town;
+use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
@@ -18,6 +19,8 @@ use Illuminate\Support\Facades\Password;
 class AddTicketModal extends Component
 {
     use WithFileUploads;
+    use DispatchesMessages;
+
 
     public $taxable_id;
     public $name;
@@ -45,7 +48,7 @@ class AddTicketModal extends Component
 
     protected $rules = [
         'name' => 'required',
-        'tariff' => 'required',
+        'tariff' => 'required|numeric',
         //'tariff_type' => 'required',
         'unit' => 'required',
         //'unit_type' => 'required',
@@ -190,7 +193,7 @@ class AddTicketModal extends Component
         // $this->periodicity = $taxable->periodicity;
         // $this->penalty = $taxable->penalty;
         // $this->penalty_type = $taxable->penalty_type;
-        
+
         //$this->tax_label = $taxable->tax_labels?->first()->name ?? '';
 
         // $this->mobilephone = $taxable->mobilephone;

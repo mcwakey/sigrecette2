@@ -180,7 +180,7 @@ class InvoicesDataTable extends DataTable
             Column::make('status')->title(__('aproval')),
             Column::make('delivery_date')->title( __('delivery date'))->addClass('text-nowrap'),
             //Column::make('from_date')->title( __('from_date'))->addClass('text-nowrap'),
-            Column::make('to_date')->title( __('expiry date'))->addClass('text-nowrap'),
+            Column::make('to_date')->title( __('expiry date'))->addClass('text-nowrap')->visible(false),
             Column::make('validity')->title(__('status')),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')

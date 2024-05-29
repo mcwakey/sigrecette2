@@ -197,7 +197,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
+        ZeroDaHero\LaravelWorkflow\WorkflowServiceProvider::class,
     ],
 
     /*
@@ -212,7 +212,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        // 'ExampleClass' => App\Example\ExampleClass::class,
+        'Workflow' => ZeroDaHero\LaravelWorkflow\Facades\WorkflowFacade::class,
     ])->toArray(),
 
 ];
