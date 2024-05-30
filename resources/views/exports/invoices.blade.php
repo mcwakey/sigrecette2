@@ -189,7 +189,7 @@
             du  {{date("d/m/Y", strtotime( $data->from_date))}} est réduit suivant les détails ci-après :
         @endif
         <p>N° d’ordre de recette :<span
-                class="write">{{$data->order_no}}/</span> {{date("Y", strtotime( $data->from_date))}}</p>
+                class="write">{{$data->order_no}}</p>
 
 
         <table border="1">
