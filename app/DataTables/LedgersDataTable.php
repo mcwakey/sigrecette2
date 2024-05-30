@@ -132,11 +132,7 @@ class LedgersDataTable extends DataTable
             // Column::make('tax_labels.code')->title(__('code')),
             // Column::make('users.name')->title(__('collector')),
             // Column::make('payments.type')->title(__('status')),
-            Column::computed('action')->title(__('action'))
-                ->addClass('text-end text-nowrap')
-                ->exportable(false)
-                ->printable(false)
-                ->width(60)
+            //Column::computed('action')->title(__('action'))->addClass('text-end text-nowrap')->exportable(false)->printable(false)->width(60)
         ];
     }
 
