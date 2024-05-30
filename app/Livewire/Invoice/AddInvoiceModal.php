@@ -310,6 +310,9 @@ class AddInvoiceModal extends Component
                 //$invoice_old->status = "CANCELED";
                 $invoice_old->validity = "CANCELED";
                 $invoice->type=$invoice_old->type;
+               if($invoice_old->type==Constants::INVOICE_TYPE_COMPTANT){
+                   $invoice->status= InvoiceStatusEnums::PENDING;
+               }
                 $invoice_old->save();
             }
 

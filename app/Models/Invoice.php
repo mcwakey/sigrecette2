@@ -263,6 +263,23 @@ class Invoice extends Model implements FormatDateInterface
     }
 
 
+    public static function returnPaidAndSumByCode(Invoice $invoice):array{
+        $last_payments = Payment::where('invoice_id', $invoice->invoice_no)->get();
+        $sumsByTaxCode = Invoice::sumAmountsByTaxCode($invoice);
+        $paidAmounts = [];
+        foreach ($sumsByTaxCode as $code => &$totalAmount) {
+            foreach ($last_payments as $index => $payment) {
+                if (($payment->description !== Constants::ANNULATION && $payment->description !== Constants::REDUCTION) && $payment->code == $code) {
+                    $totalAmount['amount'] -= $payment->amount;
+                    $paidAmounts[$index] = $payment->amount;
+                }
+            }
+            if ($totalAmount['amount'] <= 0) {
+                unset($sumsByTaxCode[$code]);
+            }
+        }
+        return [$sumsByTaxCode,$paidAmounts];
+    }
     /**
      * Get payment codes for a given invoice based on the specified amount.
      *
@@ -279,26 +296,15 @@ class Invoice extends Model implements FormatDateInterface
 
         if ($invoice instanceof Invoice) {
             $paymentArray = [];
-            $last_payments = Payment::where('invoice_id', $invoice->invoice_no)->get();
-            $sumsByTaxCode = Invoice::sumAmountsByTaxCode($invoice);
-            $paidAmounts = [];
-            foreach ($sumsByTaxCode as $code => &$totalAmount) {
-                foreach ($last_payments as $index => $payment) {
-                    if (($payment->description !== Constants::ANNULATION && $payment->description !== Constants::REDUCTION) && $payment->code == $code) {
-                        $totalAmount['amount'] -= $payment->amount;
-                        $paidAmounts[$index] = $payment->amount;
-                    }
-                }
-                if ($totalAmount['amount'] <= 0) {
-                    unset($sumsByTaxCode[$code]);
-                }
-            }
+            [$sumsByTaxCode, $paidAmounts] = Invoice::returnPaidAndSumByCode($invoice);
             $paidTotal = array_sum($paidAmounts) ?? 0;
             foreach ($sumsByTaxCode as $code => $code_amount) {
                 if ($amount > 0 && $code_amount['amount'] > 0) {
-                    $paymentData["code"] = $code;
+                    if(  $paymentData["code"]==null)
+                    {
+                        $paymentData["code"] = $code;
+                    }//elseif ($amount> $sumsByTaxCode[ $paymentData["code"] ]['amount']){$amount=$sumsByTaxCode[$paymentData["code"]]['amount'];}
                     $paymentData['amount'] = min($amount, $code_amount['amount']);
-                    //dd(end($paymentArray));
                     if(count( $paymentArray)>0){
                         $paymentData['remaining_amount'] = $invoice->amount - ($paidTotal + $paymentData['amount'])+end($paymentArray)['amount'];
 

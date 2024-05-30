@@ -183,6 +183,7 @@ class AddInvoiceNoTaxpayerModal extends Component
 
     public function render()
     {
+        //TODO set by default develery at delivery and delevery date
         //$cantons = Canton::all();
         //$towns = Town::all();
         //$ereas = Erea::all();
