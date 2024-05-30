@@ -39,32 +39,18 @@ class AddOrdernoForm extends Component
 
     public function submit()
     {
-        //dd($this->validate());
-
-        // Validate the form input data
         $this->validate();
 
         DB::transaction(function () {
 
-            // Prepare data for Invoice
-            $data = [
-                'order_no' => $this->orderno,
-            ];
-
-            //dd($invoiceData);
-
-            // Create or update Invoice record
             $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
 
 
             $this->invoice_id = $invoice->id;
-
+            $invoice->order_no =$this->orderno;
 
 
             $invoice->submitToState("submit_for_pending");
-            foreach ($data as $k => $v) {
-                $invoice->$k = $v;
-            }
             $invoice->save();
             $this->dispatchMessage('Avis', 'update');
         });

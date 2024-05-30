@@ -192,7 +192,7 @@ class AccountantDepositsDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('id')->title(__('id'))->exportable(false)->printable(false)->visible(false), 
+            Column::make('id')->title(__('id'))->exportable(false)->printable(false)->visible(false),
             Column::make('payments.created_at')->title(__('date'))->addClass('text-nowrap'),
             Column::make('description')->title(__('description')),
             Column::make('invoice_no')->title(__('invoice no')),
@@ -200,7 +200,7 @@ class AccountantDepositsDataTable extends DataTable
             Column::make('reference')->title(__('reference no')),
             //Column::make('tariff')->title(__('tariff'))->addClass('text-nowrap')->name('tax_labels.name'),
             Column::make('amount')->title(__('amount')),
-            //Column::make('tax_type')->title(__('tax_type')),
+            Column::make('invoice_type')->title(__('invoice_type')),
             // Column::make('stock_transfers.code')->title(__('code')),
             // //Column::make('qty')->title(__('rc qty'))->addClass('text-nowrap'),
             // Column::make('r_user_id')->title(__('Date')),

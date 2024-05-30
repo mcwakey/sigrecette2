@@ -20,7 +20,14 @@
                         class="form-control w-250px ps-13" placeholder="{{ __('search') }} "
                         id="mySearchInput" />
                 </div>
-                <!--end::Search-->
+                <div class="d-flex align-items-center ms-5">
+                    <select class="form-select" id="mySearchThree">
+                        <option value="">{{ __("Type de recettes") }}</option>
+                        <option value="{{App\Helpers\Constants::INVOICE_TYPE_TITRE}}">{{__('Recettes sur titre')}}</option>
+                        <option value="{{App\Helpers\Constants::INVOICE_TYPE_COMPTANT}}">{{__('Recettes au comptant')}}</option>
+
+                    </select>
+                </div>
                 <div class="d-flex align-items-center ms-5">
                         <a href="#" id="kt_horizontal_search_advanced_link" data-kt-rotate="true" class="btn btn-outline btn-outline-dashed btn-outline-secondary btn-active-light-secondary me-5 rotate"
                             data-bs-toggle="collapse" data-bs-target="#kt_advanced_search_form">
@@ -273,7 +280,9 @@
             document.getElementById('mySearchZero').addEventListener('keyup', function() {
                 window.LaravelDataTables['collector_deposits-table'].column(1).search(this.value).draw();
             });
-
+            document.getElementById('mySearchThree').addEventListener('change', function() {
+                window.LaravelDataTables['collector_deposits-table'].column(7).search(this.value).draw();
+            });
             // document.getElementById('mySearchOne').addEventListener('change', function() {
             //     window.LaravelDataTables['collector_deposits-table'].column(2).search(this.value).draw();
             // });
