@@ -177,7 +177,7 @@ class AddPaymentModal extends Component
             $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
 
             if (($this->paid + $this->amount) <= $invoice->amount ) {
-                //dd($this->code);
+
                 if($this->code!=null){
                     if ($this->amount>=$this->paidAndCodeArray[ $this->code ]['amount']){
                         $this->amount=$this->paidAndCodeArray[ $this->code ]['amount'];
@@ -373,6 +373,7 @@ class AddPaymentModal extends Component
     }
 
     public function updatePaymentAmount($code){
+        dump($code);
         if($code){
             $this->amount = $this->paidAndCodeArray[$code]['amount'];
         }

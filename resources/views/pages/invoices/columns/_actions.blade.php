@@ -23,7 +23,8 @@
         </div>
     @endif
 
-    @if( request()->routeIs('invoices.*') && request()->input('notDelivery') == 1)
+
+    @if( request()->routeIs('invoices.*') &&  request()->has('notDelivery')&& request()->input('notDelivery') == 0)
         @if( $invoice->can( "submit_for_reduced") ||  $invoice->can("submit_for_canceled") && $invoice->validity == 'VALID')
             @if( $invoice->canGetPayment())
 

@@ -294,6 +294,7 @@ class Invoice extends Model implements FormatDateInterface
     public static function getCode($id, float $amount, array $paymentData): ?array {
         $invoice = Invoice::find($id);
 
+        ///dd($paymentData["code"]);
         if ($invoice instanceof Invoice) {
             $paymentArray = [];
             [$sumsByTaxCode, $paidAmounts] = Invoice::returnPaidAndSumByCode($invoice);
