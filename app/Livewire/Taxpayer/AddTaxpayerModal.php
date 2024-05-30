@@ -111,6 +111,7 @@ class AddTaxpayerModal extends Component
 
     protected $listeners = [
         'delete_taxpayer' => 'deleteUser',
+        'restore_taxpayer' => 'restoreUser',
         'update_taxpayer' => 'updateTaxPayer',
         'load_drop' => 'loadDrop',
     ];
@@ -211,12 +212,26 @@ class AddTaxpayerModal extends Component
 
     public function deleteUser($id)
     {
-        // Delete the taxpayer record with the specified ID
-        Taxpayer::destroy($id);
+        $taxpayer = Taxpayer::find($id);
 
-        // Emit a success event with a message
-        $this->dispatchMessage('Contribuable', 'delete');
+
+            if ($taxpayer &&!$taxpayer->trashed()) {
+                $taxpayer->delete();
+                $this->dispatchMessage('Contribuable', 'delete');
+
+            }
+
     }
+    public function restoreUser($id)
+    {
+        $taxpayer = Taxpayer::onlyTrashed()->find($id);
+
+        if ($taxpayer) {
+            $taxpayer->restore();
+            $this->dispatchMessage('Contribuable', 'restore');
+        }
+    }
+
 
     public function updateTaxPayer($id)
     {

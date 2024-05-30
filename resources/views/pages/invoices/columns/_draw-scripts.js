@@ -36,6 +36,12 @@ document.querySelectorAll('[data-kt-action="auto_invoice"]').forEach(function (e
         Livewire.dispatch('auto_invoice', [this.value]);
     });
 });
+document.querySelectorAll('[data-kt-action="update_payment_amount"]').forEach(function (element) {
+    element.addEventListener('change', function () {
+            Livewire.dispatch('update_payment_amount', [this.value]);
+
+    });
+});
 
 // Listen for 'success' event emitted by Livewire
 Livewire.on('success', (message) => {

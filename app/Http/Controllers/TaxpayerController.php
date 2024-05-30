@@ -20,10 +20,19 @@ class TaxpayerController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(TaxpayersDataTable $dataTable)
+    public function index(Request $request,TaxpayersDataTable $dataTable)
     {
+        $validatedData = $request->validate([
+            'disable'=>'nullable|integer',
+        ]);
+        $disable =$validatedData['disable']??null;
         $zones = Zone::all();
-        return $dataTable->render('pages/taxpayers.list', compact('zones'));
+
+        return $dataTable->with(
+            [
+                'disable' => $disable,
+            ]
+        )->render('pages/taxpayers.list', compact('zones'));
     }
 
     // public function index()

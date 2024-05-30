@@ -190,7 +190,7 @@
 
                                 />
                                 <!--end::Input-->
-                                @error('name')
+                                @error('tariff')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>

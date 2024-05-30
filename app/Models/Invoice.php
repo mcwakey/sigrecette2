@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\FormatDateInterface;
+use App\Enums\InvoicePayStatusEnums;
 use App\Enums\InvoiceStatusEnums;
 use App\Enums\PrintNameEnums;
 use App\Helpers\Constants;
@@ -12,11 +13,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\Workflow\Workflow;
+use ZeroDaHero\LaravelWorkflow\Traits\WorkflowTrait;
 
 class Invoice extends Model implements FormatDateInterface
 {
     use HasFactory;
-
+    use WorkflowTrait;
     protected $fillable = [
         'invoice_id',
         'taxpayer_id',
@@ -35,7 +38,54 @@ class Invoice extends Model implements FormatDateInterface
 
         // 'profile_photo_path',
     ];
+    protected $attributes = [
+        'status' => \App\Enums\InvoiceStatusEnums::DRAFT,
+    ];
+    public function can(string $state)
+    {
+        $workflow = $this->workflow_get();
+        return$workflow->can($this, $state);
+    }
 
+    public function submitToState(string $state)
+    {
+        $workflow = $this->workflow_get();
+
+        if ($this->can( $state)) {
+            $workflow->apply($this, $state);
+            $this->save();
+            return true;
+        }
+
+        return false;
+    }
+    public function canGetPayment():bool{
+        return ( $this->status != InvoiceStatusEnums::CANCELED &&
+            $this->status != InvoiceStatusEnums::REDUCED &&
+            $this->pay_status !=  InvoicePayStatusEnums::PAID)
+            &&($this->delivery_date!=null  ||$this->type== Constants::INVOICE_TYPE_COMPTANT)
+            ;
+    }
+    public function canPrint():bool{
+        return $this->can( "submit_for_pending")  ||
+            ($this->type== Constants::INVOICE_TYPE_COMPTANT && $this->can( "submit_for_approved")) ;
+
+    }
+    public function getAvailableTransitions(): array
+    {
+        $workflow = $this->workflow_get();
+
+        $enabledTransitions = $workflow->getEnabledTransitions($this);
+
+        $transitions = [];
+
+        foreach ($enabledTransitions as $transition) {
+           // $transitions[] = ['name' => $transition->getName(), 'from' => $transition->getFroms(), 'to' => $transition->getTos(),];
+            $transition[] =$transition->getName();
+        }
+
+        return $transitions;
+    }
     public function printFiles()
     {
         return $this->belongsToMany(PrintFile::class);
@@ -213,6 +263,23 @@ class Invoice extends Model implements FormatDateInterface
     }
 
 
+    public static function returnPaidAndSumByCode(Invoice $invoice):array{
+        $last_payments = Payment::where('invoice_id', $invoice->invoice_no)->get();
+        $sumsByTaxCode = Invoice::sumAmountsByTaxCode($invoice);
+        $paidAmounts = [];
+        foreach ($sumsByTaxCode as $code => &$totalAmount) {
+            foreach ($last_payments as $index => $payment) {
+                if (($payment->description !== Constants::ANNULATION && $payment->description !== Constants::REDUCTION) && $payment->code == $code) {
+                    $totalAmount['amount'] -= $payment->amount;
+                    $paidAmounts[$index] = $payment->amount;
+                }
+            }
+            if ($totalAmount['amount'] <= 0) {
+                unset($sumsByTaxCode[$code]);
+            }
+        }
+        return [$sumsByTaxCode,$paidAmounts];
+    }
     /**
      * Get payment codes for a given invoice based on the specified amount.
      *
@@ -229,26 +296,15 @@ class Invoice extends Model implements FormatDateInterface
 
         if ($invoice instanceof Invoice) {
             $paymentArray = [];
-            $last_payments = Payment::where('invoice_id', $invoice->invoice_no)->get();
-            $sumsByTaxCode = Invoice::sumAmountsByTaxCode($invoice);
-            $paidAmounts = [];
-            foreach ($sumsByTaxCode as $code => &$totalAmount) {
-                foreach ($last_payments as $index => $payment) {
-                    if (($payment->description !== Constants::ANNULATION && $payment->description !== Constants::REDUCTION) && $payment->code == $code) {
-                        $totalAmount['amount'] -= $payment->amount;
-                        $paidAmounts[$index] = $payment->amount;
-                    }
-                }
-                if ($totalAmount['amount'] <= 0) {
-                    unset($sumsByTaxCode[$code]);
-                }
-            }
+            [$sumsByTaxCode, $paidAmounts] = Invoice::returnPaidAndSumByCode($invoice);
             $paidTotal = array_sum($paidAmounts) ?? 0;
             foreach ($sumsByTaxCode as $code => $code_amount) {
                 if ($amount > 0 && $code_amount['amount'] > 0) {
-                    $paymentData["code"] = $code;
+                    if(  $paymentData["code"]==null)
+                    {
+                        $paymentData["code"] = $code;
+                    }//elseif ($amount> $sumsByTaxCode[ $paymentData["code"] ]['amount']){$amount=$sumsByTaxCode[$paymentData["code"]]['amount'];}
                     $paymentData['amount'] = min($amount, $code_amount['amount']);
-                    //dd(end($paymentArray));
                     if(count( $paymentArray)>0){
                         $paymentData['remaining_amount'] = $invoice->amount - ($paidTotal + $paymentData['amount'])+end($paymentArray)['amount'];
 

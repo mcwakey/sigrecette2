@@ -27,7 +27,7 @@
                 data-placeholder="Select option" data-allow-clear="true">
                 <option></option>
                 @can('peut accepter un avis')
-                    <option value="{{App\Enums\InvoiceStatusEnums::PENDING}}">{{ __('ACCEPTED') }}</option>
+                    <option value="{{App\Enums\InvoiceStatusEnums::ACCEPTED}}">{{ __('ACCEPTED') }}</option>
                 @endcan
 
                 @can('peut rejeter un avis (agent delegation ordonateur)')

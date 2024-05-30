@@ -53,7 +53,13 @@ class UsersDataTable extends DataTable
             $roleUsers = $role->users()->pluck('id')->toArray();
             $query->whereNotIn('users.id', $roleUsers);
 
-      return $query;
+        
+        if($this->disable !== null && $this->disable){
+            $query->onlyTrashed();
+        }
+
+       return $query;
+
 
     }
 

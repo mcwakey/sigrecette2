@@ -123,11 +123,7 @@ class InvoicesDataTable extends DataTable
                         ->newQuery();
 
 
-        if ($this->notDelivery!==null && $this->notDelivery) {
-            $query->whereNull('delivery_date');
-        }elseif ($this->notDelivery!==null && !$this->notDelivery)  {
-            $query->whereNotNull('delivery_date');
-        }
+
         if ($this->startInvoiceId!== null && $this->endInvoiceId!== null) {
             $query->whereBetween('invoices.id', [$this->startInvoiceId, $this->endInvoiceId]);
         }
@@ -135,6 +131,13 @@ class InvoicesDataTable extends DataTable
             $query->where('invoices.type','=',Constants::INVOICE_TYPE_COMPTANT);
         }else{
             $query->where('invoices.type','=',Constants::INVOICE_TYPE_TITRE);
+        }
+        if ($this->notDelivery!==null && $this->notDelivery) {
+            $query->whereNull('delivery_date');
+        }elseif ($this->notDelivery!==null && !$this->notDelivery)  {
+            $query->whereNotNull('delivery_date')
+            ;
+
         }
         return $query;
     }
@@ -180,7 +183,7 @@ class InvoicesDataTable extends DataTable
             Column::make('status')->title(__('aproval')),
             Column::make('delivery_date')->title( __('delivery date'))->addClass('text-nowrap'),
             //Column::make('from_date')->title( __('from_date'))->addClass('text-nowrap'),
-            Column::make('to_date')->title( __('expiry date'))->addClass('text-nowrap'),
+            Column::make('to_date')->title( __('expiry date'))->addClass('text-nowrap')->visible(false),
             Column::make('validity')->title(__('status')),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')

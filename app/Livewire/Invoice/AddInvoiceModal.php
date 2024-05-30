@@ -309,6 +309,10 @@ class AddInvoiceModal extends Component
                 $invoice_old->status = $this->cancel_reduct;
                 //$invoice_old->status = "CANCELED";
                 $invoice_old->validity = "CANCELED";
+                $invoice->type=$invoice_old->type;
+               if($invoice_old->type==Constants::INVOICE_TYPE_COMPTANT){
+                   $invoice->status= InvoiceStatusEnums::PENDING;
+               }
                 $invoice_old->save();
             }
 
@@ -361,6 +365,7 @@ class AddInvoiceModal extends Component
     public function updateInvoice($id)
     {
         $this->view_mode = true;
+        $this->edit_mode = true;
         $this->edit_mode = true;
         $this->button_mode = true;
         $invoice = Invoice::find($id);
@@ -453,7 +458,7 @@ class AddInvoiceModal extends Component
         if ($this->periodicity == "Mois") {
             $this->qty = 12;
         }else {
-            $this->qty = 1; 
+            $this->qty = 1;
         }
 
         // dd($this->edit_mode, 'loadInvoice');
@@ -464,9 +469,9 @@ class AddInvoiceModal extends Component
         //dd($taxpayer_taxables);
 
         foreach ($taxpayer_taxables as $index => $taxable) {
-            
+
             $this->unit_type = $taxable->taxable->unit_type;
-            
+
             $this->taxpayer_taxable_id[$index] = $taxable->id;
             $this->taxpayer_taxable[$index] = $taxable->name;
             $this->s_seize[$index] = $taxable->seize;

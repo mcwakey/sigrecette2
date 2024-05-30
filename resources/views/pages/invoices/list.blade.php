@@ -1,7 +1,17 @@
 <x-default-layout>
 
     @section('title')
-        {{ __('invoices') }}
+
+        @if(request()->routeIs('invoices.*') &&  request()->has('aucomptant'))
+            {{__('Liste des avis au comptant')}}
+        @elseif( request()->routeIs('invoices.*') && request()->input('notDelivery') == 1)
+            {{__('Liste des avis non distribués')}}
+        @elseif( request()->routeIs('invoices.*') &&  request()->has('notDelivery')&& request()->input('notDelivery') == 0 )
+            {{__('Liste des avis distribués')}}
+        @else
+            {{ "Liste des ".__('invoices')." sur titre" }}
+        @endif
+
     @endsection
 
     @section('breadcrumbs')
@@ -197,6 +207,7 @@
                                 <option value="{{  App\Enums\InvoiceStatusEnums::REDUCED }}">{{ __('REDUCED') }}</option>
                                 <option value="{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}">{{ __("AVIS D'ANNULATION/REDUCTION") }}</option>
                                 <option value="{{ App\Enums\InvoiceStatusEnums::PENDING}}">{{ __('PENDING') }}</option>
+                                <option value="{{ App\Enums\InvoiceStatusEnums::ACCEPTED}}">{{ __('ACCEPTED') }}</option>
                                 <option value="{{ App\Enums\InvoiceStatusEnums::DRAFT}}">{{ __('DRAFT') }}</option>
                             </select>
                             <!--end::Select-->

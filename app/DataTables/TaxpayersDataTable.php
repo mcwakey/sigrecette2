@@ -91,7 +91,7 @@ class TaxpayersDataTable extends DataTable
 
     public function query(Taxpayer $model): QueryBuilder
     {
-        return $model->with('town')
+       $query= $model->with('town')
                     ->join('towns', 'taxpayers.town_id', '=', 'towns.id')
                     ->with('town.canton')
                     ->join('cantons', 'towns.canton_id', '=', 'cantons.id')
@@ -99,9 +99,14 @@ class TaxpayersDataTable extends DataTable
                   //  ->join('ereas', 'taxpayers.erea_id', '=', 'ereas.id')
                     ->with('zone')
                     ->join('zones', 'taxpayers.zone_id', '=', 'zones.id')
-            ->where('taxpayers.type', '=',Constants::TITRE)
-            ->select('taxpayers.*') // Select columns from taxpayers table
-                    ->newQuery();
+            ->where('taxpayers.type', '=',Constants::TITRE)->select('taxpayers.*') // Select columns from taxpayers table
+           ->newQuery();
+
+        if ($this->disable!==null && $this->disable) {
+            $query->onlyTrashed();
+        }
+
+        return $query;
     }
 
 

@@ -39,6 +39,8 @@ class AddUserModal extends Component
     protected $listeners = [
         'delete_user' => 'deleteUser',
         'update_user' => 'updateUser',
+        'disabeld_row' => 'disabeldUser',
+        'restore_row' => 'restoreUser',
     ];
 
     public function render()
@@ -139,7 +141,7 @@ class AddUserModal extends Component
         }
 
         // Delete the user record with the specified ID
-        User::destroy($id);
+        $user = User::destroy($id);
 
         // Emit a success event with a message
         $this->dispatch('success', 'Utilisateur supprimer avec succès');
@@ -157,6 +159,28 @@ class AddUserModal extends Component
         $this->name = $user->name;
         $this->email = $user->email;
         $this->role = $user->roles?->first()->name ?? '';
+    }
+
+    public function disabeldUser($id)
+    {
+        $user = User::find($id);
+
+        if ($user && !$user ->trashed()) {
+            $user->delete();
+            $this->dispatch('success', 'Utilisateur désactiver avec succès');
+            return true;
+        }
+
+    }
+
+    public function restoreUser($id)
+    {
+        $user = User::onlyTrashed()->find($id);
+
+        if ($user) {
+            $user->restore();
+            $this->dispatch('success', 'Utilisateur activer avec succès');
+        }
     }
 
     public function hydrate()

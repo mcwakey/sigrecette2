@@ -24,7 +24,7 @@ class AddTaxpayerTaxableModal extends Component
     use DispatchesMessages;
 
     public $taxpayer_taxable_id;
-    public $name;
+    public $description;
     public $seize;
     public $location;
     public $longitude;
@@ -61,7 +61,7 @@ class AddTaxpayerTaxableModal extends Component
     public $option_calculus;
 
     protected $rules = [
-        'name' => 'required|string',
+        'description' => 'required|string',
         'seize' => 'required|numeric',
         //'location' => 'required',
         'taxable_id' => 'required|int',
@@ -135,12 +135,13 @@ class AddTaxpayerTaxableModal extends Component
 
     public function updatedLength($value)
     {
-        $this->seize = intval($this->length) * intval($this->width);
+        //TODO fix this calcul ignore les virgurles
+        $this->seize = doubleval($this->length) * doubleval($this->width);
     }
 
     public function updatedWidth($value)
     {
-        $this->seize = intval($this->length) * intval($this->width);
+        $this->seize =doubleval($this->length) *doubleval($this->width);
     }
 
     public function updateCheckbox($id)
@@ -176,7 +177,7 @@ class AddTaxpayerTaxableModal extends Component
         DB::transaction(function () {
             // Prepare the data for creating a new Taxable
             $data = [
-                'name' => $this->name,
+                'name' => $this->description,
                 'seize' => $this->seize,
                 'location' => $this->location,
                 'taxpayer_id' => $this->taxpayer_id,
@@ -265,7 +266,7 @@ class AddTaxpayerTaxableModal extends Component
         $taxpayer_taxable = TaxpayerTaxable::find($id);
 
         $this->taxpayer_taxable_id = $taxpayer_taxable->id;
-        $this->name = $taxpayer_taxable->name;
+        $this->description = $taxpayer_taxable->name;
         $this->seize = $taxpayer_taxable->seize;
         $this->location = $taxpayer_taxable->location;
         $this->longitude = $taxpayer_taxable->longitude;

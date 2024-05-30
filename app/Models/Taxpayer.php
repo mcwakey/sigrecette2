@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use function Symfony\Component\Translation\t;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Taxpayer extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+
 
     /**
      * The attributes that are mass assignable.

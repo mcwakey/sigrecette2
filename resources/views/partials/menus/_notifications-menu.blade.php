@@ -61,7 +61,7 @@
                                         <div class="mb-0 me-2">
 
                                             <a data-notif="true"
-                                                href="/taxpayers/{{ $taxpayer->id }}/?&invoice_tab=true&notif_id={{ $notification->id }}"
+                                                href="/taxpayers/{{ $taxpayer->id ?? null }}/?&invoice_tab=true&notif_id={{ $notification->id }}"
                                                 class="fs-6 text-gray-800 text-hover-primary fw-bold">
                                                 Paiement : {{ $notification->data['invoice_id'] }} - ajouté
 
@@ -74,7 +74,7 @@
                                     @else
                                         <div class="mb-0 me-2">
                                             <a data-notif="true"
-                                                href="/taxpayers/{{ $taxpayer->id }}/?&invoice_tab=true&notif_id={{ $notification->id }}"
+                                                href="/taxpayers/{{ $taxpayer->id ?? null }}/?&invoice_tab=true&notif_id={{ $notification->id }}"
                                                 class="fs-6 text-gray-800 text-hover-primary fw-bold">
                                                 @if ($notification->data['type'] === 'invoice_created')
                                                     Avis : {{ $notification->data['invoice_id'] }} - créer

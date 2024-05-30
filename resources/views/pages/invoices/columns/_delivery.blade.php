@@ -1,9 +1,15 @@
-@if ($invoice->status != App\Enums\InvoiceStatusEnums::REJECTED && $invoice->status != App\Enums\InvoiceStatusEnums::PENDING && $invoice->status != App\Enums\InvoiceStatusEnums::DRAFT)
-    @if ($invoice->delivery_date == null && $invoice->order_no !== null)
-        {{ __('NOT DELIVERED') }}
+
+@if($invoice->delivery_date!=null)
+    {{ date('Y-m-d', strtotime($invoice->delivery_date)) }}
+@else
+    -{{ __('NOT DELIVERED') }}
+@endif
+
+@if ($invoice->can("submit_for_reduced"))
+    @if ( request()->routeIs('invoices.*') && request()->input('notDelivery') == 1 &&$invoice->delivery_date == null && $invoice->order_no !== null)
         @can('peut ajouter la date de livraison d\'un avis')
             <button type="button"
-                class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
+                class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto  pulse pulse-warning"
                 data-kt-user-id="{{ $invoice->id }}"
                 data-kt-menu-target="#kt_modal_add_delivery"
                 data-kt-menu-trigger="click"
@@ -16,6 +22,7 @@
                     <span class="path4"></span>
                     <span class="path5"></span>
                 </i>
+                <span class="pulse-ring"></span>
             </button>
             <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px"
                  data-kt-menu="true"
@@ -35,12 +42,7 @@
 
                 <!--end::Form-->
             </div>
-        @else
-            {{ __('NOT DELIVERED') }}
+
         @endcan
-    @elseif($invoice->delivery_date!=null)
-        {{ date('Y-m-d', strtotime($invoice->delivery_date)) }}
     @endif
-@else
--{{ __('NOT DELIVERED') }}
 @endif

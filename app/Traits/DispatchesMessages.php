@@ -12,6 +12,7 @@ trait DispatchesMessages
      * @param string $resourceName
      * @param string $eventType
      * @param string $type
+     * @param string|null $custom_message
      * @return void
      */
     protected function dispatchMessage(string $resourceName, string $eventType = "create", string $type = "success",string $custom_message=null)
@@ -22,6 +23,9 @@ trait DispatchesMessages
                 break;
             case 'delete':
                 $message = __(':resource supprimé', ['resource' => $resourceName]);
+                break;
+            case 'restore':
+                $message = __(':resource restoré', ['resource' => $resourceName]);
                 break;
             default:
                 $message = __(':resource créé', ['resource' => $resourceName]);

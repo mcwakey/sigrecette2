@@ -1,7 +1,12 @@
 <x-default-layout>
 
     @section('title')
-        {{ __('taxpayers') }}
+
+        @if(request()->routeIs('taxpayers.*')  && !request()->has('disable') )
+            {{ "Liste des contribuables ".__('taxpayers') }}
+        @else
+            {{ "Liste des contribuables ".__('désactiver') }}
+        @endif
     @endsection
 
     @section('breadcrumbs')
@@ -42,30 +47,32 @@
 
             <div class="card-toolbar">
 
-            <!--begin::Toolbar-->
-            @can('peut créer un contribuable')
-            <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
-                <!--begin::Add user-->
-                <button type="button" class="btn btn-light-success h-45px ms-auto" data-bs-toggle="modal"
-                    data-bs-target="#kt_modal_add_taxpayer">
-                    {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                    {{ __('new taxpayer') }}
-                </button>
-                <!--end::Add user-->
-            </div>
-            @endcan
+                @if(!request()->has('disable'))
 
-            <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
-                <!--begin::Add user-->
-                <a href="#" class="ms-5 mt-1" data-bs-toggle="collapse" data-bs-target="#kt_tutorial_form">
-                    <span>
-                        <i class="ki-outline ki-information fs-2tx text-warning"></i>
-                    </span>
-                </a>
-                <!--end::Add user-->
-            </div>
-            <!--end::Toolbar-->
-            </div>
+                        @can('peut créer un contribuable')
+                        <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
+                            <!--begin::Add user-->
+                            <button type="button" class="btn btn-light-success h-45px ms-auto" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_add_taxpayer">
+                                {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                                {{ __('new taxpayer') }}
+                            </button>
+                            <!--end::Add user-->
+                        </div>
+                        @endcan
+
+                        <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
+                            <!--begin::Add user-->
+                            <a href="#" class="ms-5 mt-1" data-bs-toggle="collapse" data-bs-target="#kt_tutorial_form">
+                                <span>
+                                    <i class="ki-outline ki-information fs-2tx text-warning"></i>
+                                </span>
+                            </a>
+                            <!--end::Add user-->
+                        </div>
+                        <!--end::Toolbar-->
+                        </div>
+            @endif
 
         </div>
 

@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
-
+use Illuminate\Validation\Rule;
 
 class AddPaymentModal extends Component
 {
@@ -48,20 +48,38 @@ class AddPaymentModal extends Component
     public $edit_mode = false;
 
     public $periodicity;
+    public $code;
+    public  $paidAndCodeArray;
+    public $validCodes;
 
-    protected $rules = [
+    public $edit_amount =true;
+    protected function rules(){
+        $rules = [
 
-        "amount" => "required|numeric",
-        "payment_type" => "required",
-        "reference" => "required",
+            "amount" => "required|numeric",
+            "payment_type" => "required",
+            "reference" => "required",
+            'code'=>[
+                'nullable',
+                'sometimes',
+                'numeric'
+            ],
 
-        //'taxpayer_id' => 'required',
-        'invoice_id' => 'required',
-    ];
+
+            //'taxpayer_id' => 'required',
+            'invoice_id' => 'required',
+        ];
+        if($this->code!=null){
+            $rules['code']=Rule::in($this->validCodes);
+        }
+        return $rules;
+    }
+
 
     protected $listeners = [
         'delete_user' => 'deleteUser',
         'update_payment' => 'updatePayment',
+        'update_payment_amount'=>'updatePaymentAmount'
         //'add_invoice' => 'addPayment',
         //'load_invoice' => 'loadPayment',
     ];
@@ -95,11 +113,20 @@ class AddPaymentModal extends Component
         //return view('livewire.payment.add-payment-modal', ['taxpayer_id' => $this->taxpayer_id]);
         //dd($invoiceitems,$this->invoice_id);
         $invoice = Invoice::find($this->invoice_id);
-        if ($invoice != null && $invoice->type == Constants::INVOICE_TYPE_COMPTANT) {
-            $this->amount = $invoice->amount;
+
+        if ($invoice != null) {
+            if( $invoice->type == Constants::INVOICE_TYPE_COMPTANT){
+                $this->amount = $invoice->amount;
+                $this->edit_amount=false;
+            }
+            $this->paidAndCodeArray=Invoice::returnPaidAndSumByCode($invoice)[0];
+            $this->validCodes = array_keys($this->paidAndCodeArray);
         }
 
-        return view('livewire.payment.add-payment-modal', compact('taxpayers'));
+        $paidAndCodeArray =$this->paidAndCodeArray;
+
+
+        return view('livewire.payment.add-payment-modal', compact('taxpayers','paidAndCodeArray'));
     }
 
     // public function submit()
@@ -149,7 +176,13 @@ class AddPaymentModal extends Component
 
             $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
 
-            if (($this->paid + $this->amount) <= $invoice->amount) {
+            if (($this->paid + $this->amount) <= $invoice->amount ) {
+                //dd($this->code);
+                if($this->code!=null){
+                    if ($this->amount>=$this->paidAndCodeArray[ $this->code ]['amount']){
+                        $this->amount=$this->paidAndCodeArray[ $this->code ]['amount'];
+                    }
+                }
                 $paymentData = [
                     // 'invoice_id' => $this->invoice_id,
                     'invoice_id' => $this->invoice_no,
@@ -157,13 +190,14 @@ class AddPaymentModal extends Component
                     'amount' => $invoice->type == Constants::INVOICE_TYPE_COMPTANT ? $invoice->amount : $this->amount,
                     'payment_type' => $this->payment_type,
                     'reference' => $this->reference,
+                    'code'=>$this->code,
                     'description' =>  $invoice->type == Constants::INVOICE_TYPE_COMPTANT ? "Avis " . $this->invoice_no : "Avis " . $this->invoice_no . ", OR " . $this->order_no,
                     'remaining_amount' => $this->bill - ($this->amount + $this->paid),
                     'user_id' =>  Auth::id(),
                     'invoice_type' => $invoice->type
 
                 ];
-                
+
                 $role = Role::where('name', 'regisseur')->first();
                 if ($role) {
                     /**@var App\Models\User $user  */
@@ -338,6 +372,12 @@ class AddPaymentModal extends Component
         // }
     }
 
+    public function updatePaymentAmount($code){
+        if($code){
+            $this->amount = $this->paidAndCodeArray[$code]['amount'];
+        }
+
+    }
     public function hydrate()
     {
         $this->resetErrorBag();
