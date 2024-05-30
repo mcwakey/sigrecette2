@@ -22,6 +22,7 @@ class Commune extends Model
         'limit_json',
         'logo_path'
     ];
+    //TODO Site web,et addresse email
 
     /**
      * Get the first commune.
