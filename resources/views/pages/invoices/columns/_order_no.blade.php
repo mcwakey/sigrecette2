@@ -1,7 +1,9 @@
 
-
-@if (( request()->routeIs('invoices.*') && request()->input('notDelivery') == 1 )|| ( request()->routeIs('invoices.*') &&  request()->has('aucomptant')))
-    @if($invoice->type==App\Helpers\Constants::INVOICE_TYPE_COMPTANT || $invoice->can("submit_for_pending") && $invoice->orderno==null)
+@if (
+    ( request()->routeIs('invoices.*') && request()->input('notDelivery') == 1 )|| ( request()->routeIs('invoices.*') ||  request()->has('aucomptant'))
+ )
+    @if($invoice->type==App\Helpers\Constants::INVOICE_TYPE_COMPTANT || $invoice->can("submit_for_pending"))
+        @if($invoice->order_no==null)
         @can('peut ajouter le numéro d\'ordre de recette d\'un avis')
             <button type="button"
                     class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto pulse pulse-warning"
@@ -20,6 +22,7 @@
 
             </button>
         @endcan
+        @endif
     @endif
 
 
@@ -36,6 +39,7 @@
         <div class="separator border-gray-200"></div>
         <livewire:invoice.add-orderno-form />
     </div>
-@else
+@endif
+@if($invoice->order_no)
     {{ $invoice->order_no }}
 @endif
