@@ -63,6 +63,10 @@ php artisan serve
 ```
 
 Your Laravel application should now be running at [http://localhost:8000](http://localhost:8000).
+## CHANGELOG
+
+ Project changelog [CHANGELOG](CHANGELOG.md).
+
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The Laravel framework is open-sourced software licensed under the [license](LICENSE.md).
