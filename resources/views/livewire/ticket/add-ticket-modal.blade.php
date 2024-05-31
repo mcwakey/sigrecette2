@@ -1,4 +1,4 @@
-<div class="modal fade" id="kt_modal_add_ticket" tabindex="-1" aria-hidden="true" wire:ignore.self>
+<div class="modal fade" id="kt_modal_add_ticket" tabindex="-1" aria-hidden="true" wire:ignore.self data-bs-backdrop='static'>
     <!--begin::Modal dialog-->
     <div class="modal-dialog modal-dialog-centered mw-800px">
         <!--begin::Modal content-->
@@ -24,7 +24,7 @@
 
                     <!--begin::Scroll-->
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_ticket_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_ticket_header" data-kt-scroll-wrappers="#kt_modal_add_ticket_scroll" data-kt-scroll-offset="300px">
-                    
+
 
                         <div class="row mb-7">
                             <div class="col-md-3">

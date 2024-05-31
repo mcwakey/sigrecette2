@@ -2,7 +2,7 @@
     $status = isset($status) ? $status : (isset($payment) ? $payment->status : null);
 @endphp
 
-<form id="kt_payment_modal_add_status" wire:submit.prevent="submit" class="form px-7 py-5" data-kt-menu-id="kt_payment_modal_add_status">
+<form id="kt_payment_modal_add_status" wire:submit.prevent="submit" class="form px-7 py-5" data-kt-menu-id="kt_payment_modal_add_status" data-bs-backdrop='static'>
     <!--begin::Input group-->
     <div class="fv-row mb-5">
         <!--begin::Label-->

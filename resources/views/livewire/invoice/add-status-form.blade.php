@@ -1,4 +1,4 @@
-<form id="kt_modal_add_status" wire:submit.prevent="submit" class="form px-7 py-5" data-kt-menu-id="kt_modal_add_status">
+<form id="kt_modal_add_status" wire:submit.prevent="submit" class="form px-7 py-5" data-kt-menu-id="kt_modal_add_status" >
     <!--begin::Input group-->
     <div class="fv-row mb-5">
         <!--begin::Label-->

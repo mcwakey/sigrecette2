@@ -1,4 +1,4 @@
-<div class="modal fade" id="kt_modal_add_user" tabindex="-1" aria-hidden="true" wire:ignore.self>
+<div class="modal fade" id="kt_modal_add_user" tabindex="-1" aria-hidden="true" wire:ignore.self data-bs-backdrop='static'>
     <!--begin::Modal dialog-->
     <div class="modal-dialog modal-dialog-centered mw-650px">
         <!--begin::Modal content-->
@@ -138,10 +138,10 @@
                                                 </div>
                                             </label>
                                             <!--end::Label-->
-                                        
+
                                         @endif
 
-                                        
+
                                     </div>
                                     <!--end::Radio-->
                                 </div>
@@ -152,7 +152,7 @@
                             @endforeach
                             <!--end::Roles-->
 
-                            
+
                             <div class="fv-row mt-7">
                                 <!--begin::Label-->
                                 <label class="fw-semibold fs-6 mb-2">{{ __('Zone') }}</label>
@@ -166,10 +166,10 @@
                                 </select>
                                 <!--end::Input-->
                                 @error('zone_id')
-                                <span class="text-danger">{{ $message }}</span> 
+                                <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                            
+
                         </div>
                         <!--end::Input group-->
                     </div>
