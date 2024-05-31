@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [8.3.1](https://github.com/mcwakey/sigrecette2/compare/v8.3.0...v8.3.1) (2024-05-31)
+
 ## 8.3.0 (2024-05-31)
 
 
