@@ -80,18 +80,7 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="col-md-12 mb-4">
-                                <!--begin::Label-->
-                                <label class="required fw-semibold fs-6 mb-2">{{ __('mayor_name') }}</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" wire:model="mayor_name" name="mayor_name"
-                                    class="form-control  mb-3 mb-lg-0" placeholder="{{ __('mayor_name') }}" />
-                                <!--end::Input-->
-                                @error('mayor_name')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
+
                             <div class="row w-100 mb-4">
                                 <div class="col-md-4">
                                     <!--begin::Label-->
@@ -131,6 +120,7 @@
                                 </div>
 
                             </div>
+                            <div class="separator separator-dashed my-2"></div>
                             <div class="row w-100 mb-4">
                                 <div class="col-md-4">
                                     <!--begin::Label-->
@@ -169,7 +159,19 @@
                                     @enderror
                                 </div>
                             </div>
-
+                            <div class="separator separator-dashed my-2"></div>
+                            <div class="col-md-12 mb-4">
+                                <!--begin::Label-->
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('mayor_name') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" wire:model="mayor_name" name="mayor_name"
+                                       class="form-control  mb-3 mb-lg-0" placeholder="{{ __('mayor_name') }}" />
+                                <!--end::Input-->
+                                @error('mayor_name')
+                                <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
 
                             <div class="separator separator-dashed my-2"></div>
                             <div class="row w-100 mb-4">
