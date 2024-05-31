@@ -85,12 +85,17 @@
                     <span class="menu-title">{{ __('invoice') }}</span>
                     <span class="menu-arrow"></span>
                 </span>
-                <!--end:Menu link-->
-                <!--begin:Menu sub-->
                 <div class="menu-sub menu-sub-accordion">
-                    <!--begin:Menu item-->
                     <div class="menu-item">
-                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery') && !request()->has('aucomptant') ? 'active' : '' }}"
+                           href="{{ route('invoices.index') }}">
+        <span class="menu-bullet">
+            <span class="bullet bullet-dot"></span>
+        </span>
+                            <span class="menu-title">{{__("Enregistrer un paiement")}}</span>
+                        </a>
+                    </div>
+                    <div class="menu-item">
                         <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery') && !request()->has('aucomptant') ? 'active' : '' }}"
                            href="{{ route('invoices.index') }}">
         <span class="menu-bullet">
@@ -98,7 +103,6 @@
         </span>
                             <span class="menu-title">Liste des avis</span>
                         </a>
-                        <!--end:Menu link-->
                     </div>
                     <div class="menu-item">
                         <!--begin:Menu link-->
