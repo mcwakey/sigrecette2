@@ -4,6 +4,7 @@ namespace App\Livewire\Commune;
 
 use App\Models\Commune;
 use App\Traits\DispatchesMessages;
+use http\Url;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +31,8 @@ class AddCommuneModal extends Component
 
     public $edit_mode = false;
 
+    public $url;
+    public $email;
     public $logo;
     public $saved_logo;
     protected $rules = [
@@ -83,6 +86,8 @@ class AddCommuneModal extends Component
                 'treasury_rib' => $this->treasury_rib,
                 'latitude' => $this->latitude,
                 'longitude' => $this->longitude,
+                'email'=>$this->email,
+                'url'=>$this->url
             ];
 
             if ($this->logo) {
@@ -129,6 +134,8 @@ class AddCommuneModal extends Component
 
         $this->commune_id = $commune->id;
         $this->name = $commune->name;
+        $t_title = str_replace($this->name, '',  $commune->title);
+        $this->t_title = trim($t_title);
         $this->region_name = $commune->region_name;
 
         $this->mayor_name = $commune->mayor_name;

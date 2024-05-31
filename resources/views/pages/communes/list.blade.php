@@ -71,13 +71,15 @@
                                         <td class="text-gray-500">TéléPhone:</td>
                                         <td class="text-gray-800">{{$commune->phone_number}}</td>
                                     </tr>
-                                    <!--begin::Row-->
                                     <tr>
-                                        <td class="text-gray-500">Logo:</td>
-                                        <td class="text-gray-800">
-                                            <img src="{{ $commune->getImageUrlAttributeDirect() }}" alt="Logo" style="width: 70px; height: 70px;">
-                                        </td>
+                                        <td class="text-gray-500">Email:</td>
+                                        <td class="text-gray-800">{{$commune->email}}</td>
                                     </tr>
+                                    <tr>
+                                        <td class="text-gray-500">Website url:</td>
+                                        <td class="text-gray-800">{{$commune->url}}</td>
+                                    </tr>
+
                                     <!--end::Row-->
                                     </tbody></table>
                                 <!--end::Details-->
@@ -124,7 +126,13 @@
                                         <td class="text-gray-500">Limite:</td>
                                         <td class="text-gray-800">{{$commune->latitude.",".$commune->longitude}}</td>
                                     </tr>
-                                    <!--end::Row-->
+                                    <!--begin::Row-->
+                                    <tr>
+                                        <td class="text-gray-500">Logo:</td>
+                                        <td class="text-gray-800">
+                                            <img src="{{ $commune->getImageUrlAttributeDirect() }}" alt="Logo" style="width: 70px; height: 70px;">
+                                        </td>
+                                    </tr>
                                     </tbody></table>
                                 <!--end::Details-->
                             </div>

@@ -20,7 +20,9 @@ class Commune extends Model
         'longitude',
         'latitude',
         'limit_json',
-        'logo_path'
+        'logo_path',
+        'email',
+        'url'
     ];
     //TODO Site web,et addresse email
 
