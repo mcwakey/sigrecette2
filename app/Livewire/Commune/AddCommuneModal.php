@@ -147,6 +147,8 @@ class AddCommuneModal extends Component
 
         $this->latitude = $commune->latitude;
         $this->longitude = $commune->longitude;
+        $this->url = $commune->url;
+        $this->email = $commune->email;
     }
 
     public function hydrate()
