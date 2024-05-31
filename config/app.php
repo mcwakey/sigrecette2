@@ -198,6 +198,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         ZeroDaHero\LaravelWorkflow\WorkflowServiceProvider::class,
+        App\Providers\VersionServiceProvider::class,
     ],
 
     /*
