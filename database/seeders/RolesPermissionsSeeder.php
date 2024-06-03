@@ -22,9 +22,11 @@ class RolesPermissionsSeeder extends Seeder
                 'peut supprimer une taxation',
 
                 // Invoice permissions
+                'peut émettre un avis (au comptant)',
                 'peut émettre un avis',
                 'peut accepter un avis',
                 'peut prendre en charge un avis',
+                'peut valider un avis (au comptant)',
                 'peut rejeter un avis',
                 'peut rejeter un avis (agent delegation ordonateur)',
                 'peut réduire ou annuler un avis',
