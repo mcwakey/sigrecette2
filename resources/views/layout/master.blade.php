@@ -79,6 +79,8 @@
 @stack('scripts')
 <!--end::Javascript-->
 
+<livewire:taxpayer.add-taxpayer-modal></livewire:taxpayer.add-taxpayer-modal>
+
 <script>
     document.addEventListener('livewire:init', () => {
         Livewire.on('success', (message) => {
@@ -107,7 +109,8 @@
         });
     });
 </script>
-<livewire:taxpayer.add-taxpayer-modal></livewire:taxpayer.add-taxpayer-modal>
+
+<script src="/livewire/add-taxpayer-modal.js"></script>
 
 @livewireScripts
 </body>
