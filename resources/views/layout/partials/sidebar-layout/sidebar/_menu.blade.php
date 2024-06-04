@@ -78,10 +78,10 @@
 
             <!--begin:Menu item-->
             <div data-kt-menu-trigger="click"
-                class="menu-item menu-accordion {{ request()->routeIs('invoices.*') ? 'here show' : '' }}">
+                 class="menu-item menu-accordion {{ request()->routeIs('invoices.*') ? 'here show' : '' }}">
                 <!--begin:Menu link-->
                 <span class="menu-link">
-                    <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
+                    <span class="menu-icon">{!! getIcon('abstract-10', 'fs-2') !!}</span>
                     <span class="menu-title">{{ __('invoice') }}</span>
                     <span class="menu-arrow"></span>
                 </span>
@@ -92,7 +92,7 @@
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
-                            <span class="menu-title">{{__("Enregistrer un paiement")}}</span>
+                            <span class="menu-title">{{__("Nouveau avis sur titre")}}</span>
                         </a>
                     </div>
                     <div class="menu-item">
@@ -101,9 +101,51 @@
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
-                            <span class="menu-title">Liste des avis</span>
+                            <span class="menu-title">{{__("Nouveau avis au comptant")}}</span>
                         </a>
                     </div>
+                </div>
+                <!--end:Menu sub-->
+            </div>
+            <div data-kt-menu-trigger="click"
+                class="menu-item menu-accordion {{ request()->routeIs('invoices.*') ? 'here show' : '' }}">
+                <!--begin:Menu link-->
+                <span class="menu-link">
+                    <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
+                    <span class="menu-title">{{ __('Gestion des avis') }}</span>
+                    <span class="menu-arrow"></span>
+                </span>
+                <div class="menu-sub menu-sub-accordion">
+
+
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery') && !request()->has('aucomptant') ? 'active' : '' }}"
+                           href="{{ route('invoices.index') }}">
+        <span class="menu-bullet">
+            <span class="bullet bullet-dot"></span>
+        </span>
+                            <span class="menu-title">Liste des avis en état de brouillon</span>
+                        </a>
+                    </div>
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery') && !request()->has('aucomptant') ? 'active' : '' }}"
+                           href="{{ route('invoices.index') }}">
+        <span class="menu-bullet">
+            <span class="bullet bullet-dot"></span>
+        </span>
+                            <span class="menu-title">Liste des avis en attente de N° d'ordre de recette</span>
+                        </a>
+                    </div>
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery') && !request()->has('aucomptant') ? 'active' : '' }}"
+                           href="{{ route('invoices.index') }}">
+        <span class="menu-bullet">
+            <span class="bullet bullet-dot"></span>
+        </span>
+                            <span class="menu-title">Liste des avis à prendre en charge/Rejeté</span>
+                        </a>
+                    </div>
+
                     <div class="menu-item">
                         <!--begin:Menu link-->
                         <a class="menu-link {{ request()->routeIs('invoices.*') && request()->input('notDelivery') == 1 ? 'active' : '' }}"
@@ -125,6 +167,15 @@
                             <span class="menu-title">Liste des avis distribués</span>
                         </a>
                         <!--end:Menu link-->
+                    </div>
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery') && !request()->has('aucomptant') ? 'active' : '' }}"
+                           href="{{ route('invoices.index') }}">
+        <span class="menu-bullet">
+            <span class="bullet bullet-dot"></span>
+        </span>
+                            <span class="menu-title">Liste des avis sur titre</span>
+                        </a>
                     </div>
                     <div class="menu-item">
                         <!--begin:Menu link-->
@@ -159,6 +210,15 @@
                     <!--begin:Menu sub-->
                     <div class="menu-sub menu-sub-accordion">
                         <!--begin:Menu item-->
+                        <div class="menu-item">
+                            <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery') && !request()->has('aucomptant') ? 'active' : '' }}"
+                               href="{{ route('invoices.index') }}">
+        <span class="menu-bullet">
+            <span class="bullet bullet-dot"></span>
+        </span>
+                                <span class="menu-title">{{__("Enregistrer un paiement")}}</span>
+                            </a>
+                        </div>
                         <div class="menu-item">
                             <!--begin:Menu link-->
                             <a class="menu-link {{ request()->routeIs('recoveries.*') ? 'active' : '' }}"
@@ -471,7 +531,7 @@
                 <div data-kt-menu-trigger="click"
                     class="menu-item menu-accordion {{ request()->routeIs('settings.*') ? 'here show' : '' }}">
                     <span class="menu-link">
-                        <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
+                        <span class="menu-icon">{!! getIcon('information-4', 'fs-2') !!}</span>
                         <span class="menu-title">{{ __('Informations commune') }}</span>
                         <span class="menu-arrow"></span>
                     </span>
@@ -495,9 +555,7 @@
                         <!--begin:Menu link-->
                         <a class="menu-link {{ request()->routeIs('import-view') ? 'active' : '' }}"
                             href="{{ route('import-view') }}">
-                            <span class="menu-bullet">
-                                <span class="menu-icon">{!! getIcon('user', 'fs-2') !!}</span>
-                            </span>
+                            <span class="menu-icon">{!! getIcon('user', 'fs-2') !!}</span>
                             <span class="menu-title">{{ __('Importer des contribuables') }}</span>
                         </a>
                         <!--end:Menu link-->
