@@ -67,6 +67,7 @@ class Invoice extends Model implements FormatDateInterface
             ;
     }
     public function canPrint():bool{
+        return true;
         return $this->can( "submit_for_pending")  ||
             ($this->type== Constants::INVOICE_TYPE_COMPTANT && $this->can( "submit_for_approved")) ;
 

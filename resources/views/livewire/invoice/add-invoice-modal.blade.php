@@ -147,7 +147,10 @@
 
                                             <div class="form-floating">
                                                 <input type="text" wire:model="taxpayer_taxable.{{ $loop->index }}" name="taxpayer_taxable[]" id="taxpayer_taxable" class="form-control form-control-solid" readonly />
-                                                <label for="taxpayer_taxable">{{ $taxpayer_taxable->taxable->tax_label->name ?? '' }} {{ $taxpayer_taxable->taxpayer_taxable->taxable->tax_label->name ?? '' }}</label>
+                                                <label for="taxpayer_taxable">{{ $taxpayer_taxable->taxable->tax_label->name ?? '' }} {{ $taxpayer_taxable->taxpayer_taxable->taxable->tax_label->name ?? '' }}
+                                                @if($taxpayer_taxable?->taxable->use_second_formula)
+                                                   <span class="text-info"> {{"( ". __("seize")." ignoré"." )"}}</span>
+                                                    @endif</label>
                                             </div>
 
                                         </td>

@@ -24,6 +24,7 @@ class Commune extends Model
         'email',
         'url'
     ];
+
     //TODO Site web,et addresse email
 
     /**
