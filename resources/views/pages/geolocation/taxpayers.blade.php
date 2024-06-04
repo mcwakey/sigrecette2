@@ -206,15 +206,15 @@
             let commune = @json($commune);
 
             const createZonePolygonCoordinates = (zone) => {
-                if(zone){
+                if (zone) {
                     zone = JSON.parse(zone);
-    
+
                     let coordinates = [];
-    
+
                     for (let i = 0; i < zone.length; i++) {
                         coordinates.push([zone[i][1], zone[i][0]]);
                     }
-    
+
                     return coordinates;
                 }
 
@@ -345,16 +345,22 @@
 
             legend.addTo(mapRender);
 
-            let coordinates = createZonePolygonCoordinates(commune.limit_json);
+            console.log(commune);
 
-            L.polygon(coordinates, {
-                color: 'blue'
-            }).addTo(mapRender);
+            if (commune?.limit_json) {
+                let coordinates = createZonePolygonCoordinates(commune?.limit_json);
 
-            mapRender.flyTo([commune.longitude, commune.latitude], 11, {
-                duration: 8, // Animation duration in seconds
-                easeLinearity: 0.5, // Animation easing factor (0.5 for a smooth effect)
-            });
+                L.polygon(coordinates, {
+                    color: 'blue'
+                }).addTo(mapRender);
+            }
+
+            if (commune?.longitude && commune?.latitude) {
+                mapRender.flyTo([commune?.longitude, commune?.latitude], 11, {
+                    duration: 8, // Animation duration in seconds
+                    easeLinearity: 0.5, // Animation easing factor (0.5 for a smooth effect)
+                });
+            }
 
             let searchBtn = document.getElementById('search-btn');
             let zones = document.getElementById('zones');
