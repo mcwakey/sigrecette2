@@ -172,7 +172,7 @@
                         <!--TODO Fiche du contribuable-->
                         <div class="menu-item px-5">
                             <a href="{{ route('generatePdf', ['data' => json_encode([$taxpayer->id]), 'type' => '11']) }}"
-                                class="menu-link px-5">{{ __('Fiche du contribuable') }}</a>
+                                class="menu-link px-5" target="_blank">{{ __('Fiche du contribuable') }}</a>
                         </div>
 
 
