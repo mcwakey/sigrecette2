@@ -3,6 +3,7 @@
 namespace App\Livewire\Invoice;
 
 use App\DataTables\TaxpayersDataTable;
+use App\DataTables\TaxpayerTaxablesDataTable;
 use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
 use App\Models\Canton;
@@ -33,6 +34,7 @@ class AddInvoiceGeneralModal extends Component
     public $taxpayers;
     public $taxpayer;
     public $search = '';
+    public $is_set_taxpayer=false;
     protected $rules = [
 
 
@@ -49,11 +51,17 @@ class AddInvoiceGeneralModal extends Component
 
     }
 
-    public function render()
+    public function render( )
     {
 
         $this->taxpayers = Taxpayer::search($this->search)->take(10)->get();
+        if(count($this->taxpayers )==1){
+            $this->taxpayer=$this->taxpayers[0];
+            $this->is_set_taxpayer=true;
 
+        }else{
+            $this->is_set_taxpayer=false;
+        }
         return view('livewire.invoice.add-invoice-general-modal',
         [
 
@@ -84,8 +92,10 @@ class AddInvoiceGeneralModal extends Component
        $this->taxpayer= Taxpayer::find($value);
        if($this->taxpayer){
            $this->search = '';
+           $this->is_set_taxpayer=true;
        }
     }
+
 
     public function hydrate()
     {
