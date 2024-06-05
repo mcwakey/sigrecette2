@@ -21,11 +21,10 @@
                 });
               "
     >
-        <button type="submit"
-                x-ref="exportBtn"
-                :disabled="$wire.exporting"
-                class="{{ $class }}"
-        >Export
+        <button type="submit" class="btn btn-light-primary" data-kt-menu-trigger="click"   x-ref="exportBtn"
+                :disabled="$wire.exporting">
+            <i class="ki-duotone ki-exit-down fs-2"><span class="path1"></span><span class="path2"></span></i>
+           {{__('Export')}}
         </button>
     </form>
 
@@ -34,18 +33,18 @@
     @endif
 
     @if($exporting && !$exportFinished)
-        <div class="d-inline" wire:poll="updateExportProgress">Exporting...please wait.</div>
+        <div class="d-inline" wire:poll="updateExportProgress">{{__('Exporting...please wait.')}}</div>
     @endif
 
     @if($exportFinished && !$exportFailed && !$autoDownload)
-        <span>Done. Download file <a href="#" class="text-primary" wire:click.prevent="downloadExport">here</a></span>
+        <span>{{__('Done. Download file')}} <a href="#" class="text-primary" wire:click.prevent="downloadExport">{{__('Here')}}</a></span>
     @endif
 
     @if($exportFinished && !$exportFailed && $autoDownload && $downloaded)
-        <span>Done. File has been downloaded.</span>
+        <span>{{__('Done. File has been downloaded.')}}</span>
     @endif
 
     @if($exportFailed)
-        <span>Export failed, please try again later.</span>
+        <span>{{__('Export failed, please try again later.')}}</span>
     @endif
 </div>

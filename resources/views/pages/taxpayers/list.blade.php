@@ -64,8 +64,9 @@
                         <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
 
                             <div class=" ms-5 mt-1 me-5">
-                                <livewire:export-button :table-id="$dataTable->getTableId()" auto-download="true" type="xlsx" buttonName="Export Excel"/>
+                                <livewire:export-button :table-id="$dataTable->getTableId()" auto-download="true" type="xlsx"  buttonName="Export Excel"/>
                             </div>
+
 
                         </div>
                         <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
