@@ -1165,7 +1165,6 @@
         <!--end::Content-->
     </div>
 
-    <livewire:taxpayer_taxable.add-taxpayer-taxable-modal />
 
     <!--begin::Modal-->
     <livewire:payment.add-payment-modal />
@@ -1176,7 +1175,6 @@
     <!--end::Modal-->
 
     <!--begin::Modal-->
-    <livewire:invoice.add-invoice-modal />
     <!--end::Modal-->
 
     <!--begin::Modal-->

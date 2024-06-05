@@ -2,32 +2,13 @@
 
 namespace App\Livewire\Invoice;
 
-use App\DataTables\TaxpayersDataTable;
-use App\DataTables\TaxpayerTaxablesDataTable;
-use App\Enums\InvoiceStatusEnums;
-use App\Helpers\Constants;
-use App\Models\Canton;
-use App\Models\Erea;
-use App\Models\Gender;
-use App\Models\IdType;
-use App\Models\Invoice;
-use App\Models\InvoiceItem;
-use App\Models\Payment;
-use App\Models\Taxable;
-use App\Models\TaxLabel;
+;
 use App\Models\Taxpayer;
 use App\Models\TaxpayerTaxable;
-use App\Models\Town;
-use App\Models\Year;
-use App\Traits\DispatchesMessages;
-use Carbon\Carbon;
-use Livewire\Component;
-use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
-use Spatie\Permission\Models\Permission;
 
+use App\Traits\DispatchesMessages;
+use Livewire\Component;
+use Illuminate\Support\Facades\DB;
 class AddInvoiceGeneralModal extends Component
 {
     use DispatchesMessages;
@@ -35,6 +16,8 @@ class AddInvoiceGeneralModal extends Component
     public $taxpayer;
     public $search = '';
     public $is_set_taxpayer=false;
+    public $taxpayer_id;
+    public $taxpayer_taxables;
     protected $rules = [
 
 
@@ -42,14 +25,11 @@ class AddInvoiceGeneralModal extends Component
 
     protected $listeners = [
         'load_drop' => 'loadDrop',
+
     ];
 
 
-    public function mount()
-    {
 
-
-    }
 
     public function render( )
     {
@@ -58,7 +38,14 @@ class AddInvoiceGeneralModal extends Component
         if(count($this->taxpayers )==1){
             $this->taxpayer=$this->taxpayers[0];
             $this->is_set_taxpayer=true;
-
+            $this->taxpayer_id =  $this->taxpayer->id;
+            $this->taxpayer_taxables =$this->taxpayer->taxpayer_taxables;
+            $this->dispatch('updateSharedTaxpayerId', id:  $this->taxpayer_id);
+        }elseif (  $this->taxpayer){
+            $this->is_set_taxpayer=true;
+            $this->taxpayer_id =  $this->taxpayer->id;
+            $this->taxpayer_taxables =$this->taxpayer->taxpayer_taxables;
+            $this->dispatch('updateSharedTaxpayerId', id:  $this->taxpayer_id);
         }else{
             $this->is_set_taxpayer=false;
         }
@@ -66,6 +53,17 @@ class AddInvoiceGeneralModal extends Component
         [
 
         ]);
+    }
+    public function updateCheckbox($taxpayerTaxableId, $value)
+    {
+        foreach ($this->taxpayer_taxables as &$taxpayer_taxable) {
+            if ($taxpayer_taxable['id'] == $taxpayerTaxableId) {
+                $taxpayer_taxable['billable'] = $value;
+                break;
+            }
+        }
+
+        TaxpayerTaxable::where('id', $taxpayerTaxableId)->update(['billable' => $value]);
     }
 
     public function submit()
@@ -92,6 +90,7 @@ class AddInvoiceGeneralModal extends Component
        $this->taxpayer= Taxpayer::find($value);
        if($this->taxpayer){
            $this->search = '';
+           $this->taxpayer_id = $this->taxpayer->id;
            $this->is_set_taxpayer=true;
        }
     }

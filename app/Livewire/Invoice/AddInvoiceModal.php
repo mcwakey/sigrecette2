@@ -21,6 +21,7 @@ use App\Notifications\InvoicePaid;
 use App\Traits\DispatchesMessages;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
@@ -556,7 +557,16 @@ class AddInvoiceModal extends Component
         $this->amount_ph = array_sum($this->s_amount) . " FCFA";
         $this->amount = array_sum($this->s_amount);
     }
+    #[On('updateSharedTaxpayerId')]
+    public function updateSharedTaxpayerId($id){
+        $taxpayer = Taxpayer::findOrFail($id);
 
+        if($taxpayer!=null){
+            $this->taxpayer_id = $taxpayer->id;
+            $this->addInvoice($id);
+        }
+
+    }
     public function hydrate()
     {
         $this->resetErrorBag();
