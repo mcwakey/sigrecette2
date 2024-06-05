@@ -87,22 +87,23 @@
                 </span>
                 <div class="menu-sub menu-sub-accordion">
                     <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery') && !request()->has('aucomptant') ? 'active' : '' }}"
-                           href="{{ route('invoices.index') }}">
-        <span class="menu-bullet">
-            <span class="bullet bullet-dot"></span>
-        </span>
-                            <span class="menu-title">{{__("Nouveau avis sur titre")}}</span>
-                        </a>
+
+                        <span class="menu-link ">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title" data-bs-toggle="modal"
+                                      data-bs-target="#kt_modal_add_invoice_general">{{__("Nouveau avis sur titre")}}</span>
+                            </span>
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery') && !request()->has('aucomptant') ? 'active' : '' }}"
-                           href="{{ route('invoices.index') }}">
-        <span class="menu-bullet">
-            <span class="bullet bullet-dot"></span>
-        </span>
-                            <span class="menu-title">{{__("Nouveau avis au comptant")}}</span>
-                        </a>
+                          <span class="menu-link ">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title" data-bs-toggle="modal"
+                                      data-bs-target="#kt_modal_add_invoice_no_taxpayer">{{__("Nouveau avis au comptant")}}</span>
+                            </span>
                     </div>
                 </div>
                 <!--end:Menu sub-->
