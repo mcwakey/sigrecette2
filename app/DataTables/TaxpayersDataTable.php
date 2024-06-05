@@ -10,9 +10,11 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\Html\Button;
+use Yajra\DataTables\WithExportQueue;
 
 class TaxpayersDataTable extends DataTable
 {
+    use WithExportQueue;
     /**
      * Build the DataTable class.
      *

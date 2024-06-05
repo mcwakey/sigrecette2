@@ -236,6 +236,7 @@
     "file no": "No de Fiche",
     "Files": "Des dossiers",
     "fixed": "MONTANT FIXE",
+    "FIXED": "Fixe",
     "Forbidden": "Interdit",
     "forgetpass": "Mot de passe oublié",
     "Forgot your password?": "Mot de passe oublié ?",
@@ -658,6 +659,5 @@
     "your social campaigns": "Vos identifiants sur les réseaux sociaux",
     "zone": "Zone fiscale",
     "zone geolocation": "Géolocalisation d'une zone",
-    "zones": "Zones Fiscales",
-    "FIXED": "Fixe"
+    "zones": "Zones Fiscales"
 }

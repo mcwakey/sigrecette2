@@ -37,30 +37,37 @@
                                     class="path1"></span><span class="path2"></span></i></a>
                     </div>
 
-                    <!--end:Action-->
 
-
-                </div>
             </div>
 
 
+
+
+
+        </div>
 
             <div class="card-toolbar">
 
                 @if(!request()->has('disable'))
 
-                        @can('peut créer un contribuable')
+                    @can('peut créer un contribuable')
                         <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
                             <!--begin::Add user-->
                             <button type="button" class="btn btn-light-success h-45px ms-auto" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_add_taxpayer">
+                                    data-bs-target="#kt_modal_add_taxpayer">
                                 {!! getIcon('plus', 'fs-2', '', 'i') !!}
                                 {{ __('new taxpayer') }}
                             </button>
                             <!--end::Add user-->
                         </div>
-                        @endcan
+                @endcan
+                        <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
 
+                            <div class=" ms-5 mt-1 me-5">
+                                <livewire:export-button :table-id="$dataTable->getTableId()" auto-download="true" type="xlsx" buttonName="Export Excel"/>
+                            </div>
+
+                        </div>
                         <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
                             <!--begin::Add user-->
                             <a href="#" class="ms-5 mt-1" data-bs-toggle="collapse" data-bs-target="#kt_tutorial_form">
@@ -70,13 +77,12 @@
                             </a>
                             <!--end::Add user-->
                         </div>
-                        <!--end::Toolbar-->
-                        </div>
-            @endif
+                @endif
 
-        </div>
+            </div>
 
-        <!--begin::Card body-->
+
+
         <div class="card-body py-4">
 
             <form action="#">

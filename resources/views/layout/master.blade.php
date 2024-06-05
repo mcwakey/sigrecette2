@@ -112,7 +112,7 @@
 </script>
 
 <script src="/livewire/add-taxpayer-modal.js"></script>
-
+<script src="/livewire/add-invoice-modal.js"></script>
 @livewireScripts
 </body>
 <!--end::Body-->
