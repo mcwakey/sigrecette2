@@ -68,4 +68,4 @@ Your Laravel application should now be running at [http://localhost:8000](http:/
  Project changelog [CHANGELOG](CHANGELOG.md).
 
 
-The Laravel framework is open-sourced software licensed under the [license](LICENSE.md).
+The Project  is  licensed under the [license](LICENSE.md).
