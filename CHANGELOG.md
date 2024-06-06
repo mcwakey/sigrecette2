@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.8.7](https://github.com/mcwakey/sigrecette2/compare/v8.3.1...v0.8.7) (2024-06-06)
+
+
+### Features
+
+*  add new item in app menu ([2913bf2](https://github.com/mcwakey/sigrecette2/commit/2913bf290a5d98d288fd83148dca73680788d1b0))
+* add email and site url to commune info ([94e0abe](https://github.com/mcwakey/sigrecette2/commit/94e0abe20c3a245751a742557432fd2560430310))
+* add export to datatable implementation whitout customization ([b9af866](https://github.com/mcwakey/sigrecette2/commit/b9af866e8784e3a513dddf59a8784ded3b59853c))
+* add invoice from the  sidebar partial implementation add taxable not work and add incoice not work yet ([6688d02](https://github.com/mcwakey/sigrecette2/commit/6688d02749298f41d002e8a8157ecd9bf7a59d69))
+* add new invoice permissions ([da12a92](https://github.com/mcwakey/sigrecette2/commit/da12a92b8f35ebd3c530388ae6c87e2fef1635b5))
+* add payement in sidebard ([e6d5c46](https://github.com/mcwakey/sigrecette2/commit/e6d5c46bf00ea54bdca42d00f623a574a9de223e))
+* customise invoices display when state is defenied ([a1ac394](https://github.com/mcwakey/sigrecette2/commit/a1ac394a9588b8b642e9b3817a87e8ae28932c04))
+* ignore taxation dimenssion when it enable ([77ed378](https://github.com/mcwakey/sigrecette2/commit/77ed3784d638655b7e0fc1a092684d148af52a59))
+* not finish add invoice from sidebar ([d73be0e](https://github.com/mcwakey/sigrecette2/commit/d73be0e9fdba28815e024d77f622ac43ef730314))
+
+
+### Bug Fixes
+
+* bad traduction taxation tariff_type ([7c9cfa7](https://github.com/mcwakey/sigrecette2/commit/7c9cfa7a3a61f5f903862773141f781b517c2b60))
+* commune modal not return last email and url ([13ba11f](https://github.com/mcwakey/sigrecette2/commit/13ba11f5941499bbac647c4dd3bb6d4517a6bd79))
+* fatal crash cause use_second_formula ([63829ae](https://github.com/mcwakey/sigrecette2/commit/63829aedd0d13bf5e44d81c89756d3b9554cc2be))
+* taxable unique name send message not error 500 ([ce4f23e](https://github.com/mcwakey/sigrecette2/commit/ce4f23ed7a493a899f72bb4e5af21601f10a8f21))
+* taxpayer modal load data ([1da9163](https://github.com/mcwakey/sigrecette2/commit/1da916308a93c151e673bd0a398cdb50f8202379))
+
 ### [8.3.1](https://github.com/mcwakey/sigrecette2/compare/v8.3.0...v8.3.1) (2024-05-31)
 
 ## 8.3.0 (2024-05-31)
