@@ -121,7 +121,7 @@
 
                     <div class="menu-item">
                         <a class="menu-link {{ request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Enums\InvoiceStatusEnums::DRAFT ? 'active' : '' }}"
-                           href="{{ route('invoices.index', ['state' => App\Enums\InvoiceStatusEnums::DRAFT]) }}">
+                           href="{{ route('invoices.index', ['state' => App\Enums\InvoiceStatusEnums::DRAFT,]) }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
@@ -130,7 +130,7 @@
                     </div>
                     <div class="menu-item">
                         <a class="menu-link {{ request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Enums\InvoiceStatusEnums::ACCEPTED ? 'active' : '' }}"
-                           href="{{ route('invoices.index', ['state' => App\Enums\InvoiceStatusEnums::ACCEPTED])}}">
+                           href="{{ route('invoices.index', ['state' => App\Enums\InvoiceStatusEnums::ACCEPTED,])}}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
@@ -150,7 +150,7 @@
                     <div class="menu-item">
                         <!--begin:Menu link-->
                         <a class="menu-link {{ request()->routeIs('invoices.*') && request()->input('notDelivery') == 1 ? 'active' : '' }}"
-                           href="{{ route('invoices.index', ['notDelivery' => true]) }}">
+                           href="{{ route('invoices.index', ['notDelivery' => true,]) }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
@@ -170,8 +170,8 @@
                         <!--end:Menu link-->
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery')&&!request()->has('state') && !request()->has('aucomptant') ? 'active' : '' }}"
-                           href="{{ route('invoices.index') }}">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery')&&!request()->has('state') && request()->input('aucomptant') == 0 ? 'active' : '' }}"
+                           href="{{ route('invoices.index' ,['aucomptant' => false]) }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
@@ -180,7 +180,7 @@
                     </div>
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->has('aucomptant')? 'active' : '' }}"
+                        <a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->input('aucomptant') == 1? 'active' : '' }}"
                            href="{{ route('invoices.index', ['aucomptant' => true]) }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
@@ -221,7 +221,18 @@
                         </div>
                         <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('recoveries.*') ? 'active' : '' }}"
+                            <a class="menu-link {{ request()->routeIs('recoveries.*') &&  request()->has('notDelivery')&& request()->input('notDelivery') == 0 ? 'active' : '' }}"
+                               href="{{ route('recoveries.index', ['notDelivery' => false]) }}">
+        <span class="menu-bullet">
+            <span class="bullet bullet-dot"></span>
+        </span>
+                                <span class="menu-title">Liste des avis  à recouvrer</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->routeIs('recoveries.*') &&  !request()->has('notDelivery') ? 'active' : '' }}"
                                 href="{{ route('recoveries.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>

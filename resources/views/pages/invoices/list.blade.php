@@ -14,6 +14,8 @@
             {{ "Liste des ".__('invoices')." sur titre  en attente de N° d'ordre de recette" }}
         @elseif(request()->has('state') && request()->input('state') == App\Enums\InvoiceStatusEnums::PENDING)
             {{ "Liste des ".__('invoices')." sur titre à prendre en charge/Rejeté" }}
+        @elseif(request()->routeIs('recoveries.*') &&  request()->has('notDelivery')&& request()->input('notDelivery') == 0)
+            {{"Liste des ".__('invoices')." à recouvrer"}}
         @else
             {{ "Liste des ".__('invoices')." sur titre" }}
         @endif

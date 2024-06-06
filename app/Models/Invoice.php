@@ -36,6 +36,7 @@ class Invoice extends Model implements FormatDateInterface
         'uuid',
         'delivery_date',
         'type',
+        'delivery'
 
         // 'profile_photo_path',
     ];

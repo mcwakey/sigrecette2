@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Enums\InvoicePayStatusEnums;
 use App\Enums\PrintNameEnums;
 use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
@@ -126,10 +127,8 @@ class InvoicesDataTable extends DataTable
             $query->where('invoices.status','=',$this->state);
 
         }
-        if($this->aucomptant){
-            $query->where('invoices.type','=',Constants::INVOICE_TYPE_COMPTANT);
-        }else{
-            $query->where('invoices.type','=',Constants::INVOICE_TYPE_TITRE);
+        if($this->type!=null){
+            $query->where('invoices.type','=',$this->type);
         }
         if ($this->notDelivery!==null && $this->notDelivery) {
             $query->whereNull('delivery_date');
@@ -137,6 +136,10 @@ class InvoicesDataTable extends DataTable
             $query->whereNotNull('delivery_date')
             ;
 
+        }
+        if($this->to_paid && !$this->notDelivery){
+            $query->where('invoices.pay_status','!=',InvoicePayStatusEnums::PAID)
+            ->whereIn('invoices.status',[InvoiceStatusEnums::APPROVED,InvoiceStatusEnums::APPROVED_CANCELLATION]);
         }
         return $query;
     }

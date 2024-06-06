@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\InvoicesDataTable;
+use App\Helpers\Constants;
 use App\Models\Taxpayer;
 use App\Models\Invoice;
 use App\Models\TaxLabel;
@@ -43,6 +44,14 @@ class InvoiceController extends Controller
         $tax_labels = TaxLabel::all();
         $role = Role::where('name', 'agent_recouvrement')->first();
         $agent_recouvrements = $role->users()->get();
+        if($aucomptant==null)
+        {
+            $type=null;
+        }elseif ($aucomptant==true){
+            $type=Constants::INVOICE_TYPE_COMPTANT;
+        }else{
+            $type=Constants::INVOICE_TYPE_TITRE;
+        }
         return $dataTable->with(
             [
                 'notDelivery' => $notDelivery,
@@ -50,7 +59,7 @@ class InvoiceController extends Controller
                 'endDate' => $endDate,
                 'startInvoiceId'=>$startInvoiceId ,
                 'endInvoiceId'=>$endInvoiceId,
-                'aucomptant'=>$aucomptant,
+                'type'=>$type,
                 'state'=>$state
             ]
         )->render('pages/invoices.list', compact('zones', 'tax_labels','agent_recouvrements'));
