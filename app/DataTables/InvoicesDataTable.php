@@ -122,6 +122,10 @@ class InvoicesDataTable extends DataTable
         if ($this->startInvoiceId!== null && $this->endInvoiceId!== null) {
             $query->whereBetween('invoices.id', [$this->startInvoiceId, $this->endInvoiceId]);
         }
+        if($this->state!=null){
+            $query->where('invoices.status','=',$this->state);
+
+        }
         if($this->aucomptant){
             $query->where('invoices.type','=',Constants::INVOICE_TYPE_COMPTANT);
         }else{
@@ -158,12 +162,9 @@ class InvoicesDataTable extends DataTable
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/taxpayer_taxables/columns/_draw-scripts.js')) . "}");
     }
 
-    /**
-     * Get the dataTable columns definition.
-     */
     public function getColumns(): array
     {
-        return [
+        $columns = [
             Column::make('taxpayers.name')->title(__('taxpayer'))->addClass('d-flex align-items-center'),
             Column::make('invoice_no')->title(__('invoice no')),
             Column::make('order_no')->title(__('order no')),
@@ -176,9 +177,9 @@ class InvoicesDataTable extends DataTable
             Column::make('paid')->title(__('Montant payé'))->name('paid'),
             Column::make('remains_to_be_paid')->title(__('Reste'))->name('remains_to_be_paid'),
             Column::make('status')->title(__('aproval')),
-            Column::make('delivery_date')->title( __('delivery date'))->addClass('text-nowrap'),
-            //Column::make('from_date')->title( __('from_date'))->addClass('text-nowrap'),
-            Column::make('to_date')->title( __('expiry date'))->addClass('text-nowrap')->visible(false),
+            Column::make('delivery_date')->title(__('delivery date'))->addClass('text-nowrap'),
+            Column::make('from_date')->title(__('from_date'))->addClass('text-nowrap'),
+            Column::make('to_date')->title(__('expiry date'))->addClass('text-nowrap')->visible(false),
             Column::make('validity')->title(__('status')),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
@@ -186,7 +187,29 @@ class InvoicesDataTable extends DataTable
                 ->printable(true)
                 ->width(60)
         ];
+
+        if ($this->state != null) {
+            $columns = array_map(function ($column) {
+                if ($this->state == InvoiceStatusEnums::DRAFT) {
+                    if (in_array($column->name, ['order_no', 'paid', 'remains_to_be_paid', 'delivery_date', 'to_date', 'validity'])) {
+                        $column->visible(false);
+                    }
+                } elseif ($this->state == InvoiceStatusEnums::ACCEPTED) {
+                    if (in_array($column->name, ['paid', 'remains_to_be_paid', 'delivery_date', 'validity', 'to_date'])) {
+                        $column->visible(false);
+                    }
+                } elseif ($this->state == InvoiceStatusEnums::PENDING) {
+                    if (in_array($column->name, ['paid', 'remains_to_be_paid', 'to_date', 'validity'])) {
+                        $column->visible(false);
+                    }
+                }
+                return $column;
+            }, $columns);
+        }
+
+        return $columns;
     }
+
 
     /**
      * Get the filename for export.

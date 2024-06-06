@@ -120,8 +120,8 @@
 
 
                     <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery') && !request()->has('aucomptant') ? 'active' : '' }}"
-                           href="{{ route('invoices.index') }}">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Enums\InvoiceStatusEnums::DRAFT ? 'active' : '' }}"
+                           href="{{ route('invoices.index', ['state' => App\Enums\InvoiceStatusEnums::DRAFT]) }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
@@ -129,8 +129,8 @@
                         </a>
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery') && !request()->has('aucomptant') ? 'active' : '' }}"
-                           href="{{ route('invoices.index') }}">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Enums\InvoiceStatusEnums::ACCEPTED ? 'active' : '' }}"
+                           href="{{ route('invoices.index', ['state' => App\Enums\InvoiceStatusEnums::ACCEPTED])}}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
@@ -138,8 +138,8 @@
                         </a>
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery') && !request()->has('aucomptant') ? 'active' : '' }}"
-                           href="{{ route('invoices.index') }}">
+                        <a class="menu-link {{request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Enums\InvoiceStatusEnums::PENDING ? 'active' : '' }}"
+                           href="{{  route('invoices.index', ['state' => App\Enums\InvoiceStatusEnums::PENDING]) }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
@@ -170,7 +170,7 @@
                         <!--end:Menu link-->
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery') && !request()->has('aucomptant') ? 'active' : '' }}"
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery')&&!request()->has('state') && !request()->has('aucomptant') ? 'active' : '' }}"
                            href="{{ route('invoices.index') }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
