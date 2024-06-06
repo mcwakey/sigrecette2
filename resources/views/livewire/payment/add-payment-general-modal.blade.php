@@ -97,22 +97,26 @@
                                         <div class="card-header">
                                             <h3 class="card-title">{{$invoice->invoice_no}}</h3>
                                             <div class="card-toolbar">
-                                                @can('peut ajouter un paiement')
-                                                    <button type="button" class="btn  btn-sm  btn-light-success ms-auto me-5"
-                                                            data-kt-user-id="{{$invoice_id }}" data-bs-toggle="modal"
-                                                            data-bs-target="#kt_modal_add_payment" data-kt-action="update_payment">
-                                                        <i class="ki-duotone ki-add-files fs-3">
-                                                            <span class="path1"></span>
-                                                            <span class="path2"></span>
-                                                            <span class="path3"></span>
-                                                            <span class="path4"></span>
-                                                            <span class="path5"></span>
-                                                        </i> {{ __('create payment') }}
-                                                    </button>
+                                                @if( $invoice->can( "submit_for_reduced") ||  $invoice->can("submit_for_canceled") && $invoice->validity == 'VALID')
+                                                    @if( $invoice->canGetPayment())
+                                                        @can('peut ajouter un paiement')
+                                                        <button type="button" class="btn  btn-sm  btn-light-success ms-auto me-5"
+                                                                data-kt-user-id="{{$invoice_id }}" data-bs-toggle="modal"
+                                                                data-bs-target="#kt_modal_add_payment" data-kt-action="update_payment">
+                                                            <i class="ki-duotone ki-add-files fs-3">
+                                                                <span class="path1"></span>
+                                                                <span class="path2"></span>
+                                                                <span class="path3"></span>
+                                                                <span class="path4"></span>
+                                                                <span class="path5"></span>
+                                                            </i> {{ __('create payment') }}
+                                                        </button>
 
 
-                                                @endcan
-                                                @can('peut émettre un avis')
+
+                                                    @endcan
+                                                    @endif
+                                                @can('peut réduire ou annuler un avis')
                                                     <button type="button" class="btn  btn-sm  btn-light-danger ms-auto"
                                                             data-kt-user-id="{{ $invoice_id }}" data-bs-toggle="modal"
                                                             data-bs-target="#kt_modal_add_invoice" data-kt-action="update_invoice"
@@ -126,6 +130,7 @@
                                                         </i> {{ __('reduction cancelation') }}
                                                     </button>
                                                 @endcan
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="card-body">
