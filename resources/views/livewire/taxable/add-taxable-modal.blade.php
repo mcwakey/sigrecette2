@@ -92,12 +92,14 @@
                                     <option value="Femme">Femme</option>
                                 </select> -->
 
+                                {{--
+                                 <option value="Volume">{{ __('volume') }}</option>
+                                  <option value="Type">{{ __('type') }}</option>
+                                --}}
                                 <select wire:model="unit_type" name="unit_type" class="form-select" data-dropdown-parent="#kt_modal_add_taxable">
                                     <option>{{ __('select an option') }}</option>
-                                    <option value="Type">{{ __('type') }}</option>
-                                    <option value="Nombre">{{ __('number') }}</option>
                                     <option value="Superficie">{{ __('surface') }}</option>
-                                    <option value="Volume">{{ __('volume') }}</option>
+                                    <option value="Nombre">{{ __('Autre') }}</option>
                                 </select>
                                 <!--end::Input-->
                                 @error('unit')
