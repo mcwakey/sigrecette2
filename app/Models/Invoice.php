@@ -8,6 +8,7 @@ use App\Enums\InvoiceStatusEnums;
 use App\Enums\PrintNameEnums;
 use App\Helpers\Constants;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -58,6 +59,16 @@ class Invoice extends Model implements FormatDateInterface
         }
 
         return false;
+    }
+    public function get_remains_to_be_paid(){
+        if($this->status== InvoiceStatusEnums::REDUCED|| $this->status== InvoiceStatusEnums::CANCELED||  $this->status== InvoiceStatusEnums::REJECTED)
+            return "-";
+        elseif ($this->status== InvoiceStatusEnums::APPROVED_CANCELLATION){
+            $invoice =Invoice::where('invoice_no', $this->invoice_no)->first();
+            return $invoice::getRestToPaid($invoice);
+        }
+        else
+            return Invoice::getRestToPaid($this);
     }
     public function canGetPayment():bool{
         return ( $this->status != InvoiceStatusEnums::CANCELED &&
@@ -413,4 +424,29 @@ class Invoice extends Model implements FormatDateInterface
         return $printFile;
     }
 
+    /**
+     * Search for a given value in multiple columns.
+     *
+     * @param string $value
+     * @return QueryBuilder
+     */
+    public static function search(string $value): QueryBuilder
+    {
+        if (strlen($value) < 3) {
+            return self::query()->whereRaw('1 = 0');
+        }
+
+        $columns = [
+            'id',
+            'invoice_no'
+        ];
+
+        $query = self::query();
+
+        foreach ($columns as $column) {
+            $query->orWhere($column, 'like', "%{$value}%");
+        }
+
+        return $query;
+    }
 }

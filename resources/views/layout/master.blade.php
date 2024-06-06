@@ -82,6 +82,7 @@
 <livewire:taxpayer.add-taxpayer-modal />
 <livewire:invoice.add-invoice-no-taxpayer-modal/>
 <livewire:invoice.add-invoice-general-modal/>
+<livewire:payment.add-payment-general-modal/>
 <livewire:taxpayer_taxable.add-taxpayer-taxable-modal/>
 <livewire:invoice.add-invoice-modal />
 <livewire:payment.add-payment-modal />

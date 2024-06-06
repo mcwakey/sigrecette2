@@ -210,15 +210,14 @@
                     <!--end:Menu link-->
                     <!--begin:Menu sub-->
                     <div class="menu-sub menu-sub-accordion">
-                        <!--begin:Menu item-->
                         <div class="menu-item">
-                            <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery') && !request()->has('aucomptant') ? 'active' : '' }}"
-                               href="{{ route('invoices.index') }}">
-        <span class="menu-bullet">
-            <span class="bullet bullet-dot"></span>
-        </span>
-                                <span class="menu-title">{{__("Enregistrer un paiement")}}</span>
-                            </a>
+                          <span class="menu-link ">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title" data-bs-toggle="modal"
+                                      data-bs-target="#kt_modal_add_payment_general">{{__("Enregistrer un paiement")}}</span>
+                            </span>
                         </div>
                         <div class="menu-item">
                             <!--begin:Menu link-->

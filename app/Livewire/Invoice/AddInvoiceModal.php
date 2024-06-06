@@ -567,6 +567,11 @@ class AddInvoiceModal extends Component
         }
 
     }
+    #[On('updateSharedInvoiceId')]
+    public function updateSharedInvoiceId($id){
+        $this->updateInvoice($id);
+
+    }
     public function hydrate()
     {
         $this->resetErrorBag();

@@ -67,14 +67,7 @@ class InvoicesDataTable extends DataTable
                     return $invoice::getPaid($invoice->invoice_no);
             })
             ->editColumn('remains_to_be_paid', function (Invoice $invoice) {
-                if($invoice->status== InvoiceStatusEnums::REDUCED|| $invoice->status== InvoiceStatusEnums::CANCELED||  $invoice->status== InvoiceStatusEnums::REJECTED)
-                    return "-";
-                elseif ($invoice->status== InvoiceStatusEnums::APPROVED_CANCELLATION){
-                    $invoice =Invoice::where('invoice_no', $invoice->invoice_no)->first();
-                    return $invoice::getRestToPaid($invoice);
-                }
-                else
-                    return $invoice::getRestToPaid($invoice);
+                    return $invoice->get_remains_to_be_paid();
             })
             ->editColumn('validity', function (Invoice $invoice) {
                 return view('pages/invoices.columns._validity', compact('invoice'));

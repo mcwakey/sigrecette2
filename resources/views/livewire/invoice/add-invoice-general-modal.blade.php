@@ -6,7 +6,7 @@
                 <!--begin::Modal header-->
                 <div class="modal-header">
                     <!--begin::Modal title-->
-                    <h2 class="fw-bold"> </h2>
+                    <h2 class="fw-bold">{{__("Nouveau avis sur titre")}} </h2>
                     <!--end::Modal title-->
                     <!--begin::Close-->
                     <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
@@ -32,7 +32,7 @@
                                 <div class="d-flex align-items-center position-relative my-1">
                                     {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
                                     <input type="text" data-kt-taxpayer-table-filter="search" class="form-control ps-13" wire:model.live="search"
-                                           placeholder="{{ __('search')." un contribuables" }}" id="mySearchInput" />
+                                           placeholder="{{ __('search')." un contribuable" }}" id="mySearchInput" />
                                 </div>
                                 <!--end::Label-->
                                 <!--begin::Table wrapper-->
@@ -53,15 +53,9 @@
                                                 <tr wire:key="{{ $taxpayer->id }}" wire:click="select_taxpayer({{ $taxpayer->id }})">
                                                     <td class="d-flex align-items-center text-uppercase">
                                                         <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
-                                                            @if($taxpayer->profile_photo_url)
-                                                                <div class="symbol-label">
-                                                                    <img src="{{ $taxpayer->profile_photo_url }}" class="w-100"/>
-                                                                </div>
-                                                            @else
-                                                                <div class="symbol-label fs-3 {{ app(\App\Actions\GetThemeType::class)->handle('bg-light-? text-?', $taxpayer->name) }}">
-                                                                    {{ substr($taxpayer->name, 0, 1) }}
-                                                                </div>
-                                                            @endif
+                                                            <div class="symbol-label fs-3 {{ app(\App\Actions\GetThemeType::class)->handle('bg-light-? text-?', $taxpayer->name) }}">
+                                                                {{ substr($taxpayer->name, 0, 1) }}
+                                                            </div>
                                                         </div>
                                                         <!--end::Avatar-->
                                                         <!--begin::User details-->
