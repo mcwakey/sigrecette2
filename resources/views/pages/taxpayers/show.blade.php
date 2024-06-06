@@ -168,31 +168,16 @@
                     <!--begin::Menu-->
                     <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold py-4 w-250px fs-6"
                         data-kt-menu="true">
-                        <div class="menu-item px-5">
-                            <div class="menu-content text-muted pb-2 px-5 fs-7 text-uppercase">{{ __('account') }}
-                            </div>
-                        </div>
                         <!--end::Menu item-->
                         <!--TODO Fiche du contribuable-->
                         <div class="menu-item px-5">
                             <a href="{{ route('generatePdf', ['data' => json_encode([$taxpayer->id]), 'type' => '11']) }}"
-                                class="menu-link px-5">{{ __('Fiche du contribuable') }}</a>
+                                class="menu-link px-5" target="_blank">{{ __('Fiche du contribuable') }}</a>
                         </div>
-                        <div class="menu-item px-5">
-                            <a href="#" class="menu-link px-5">{{ __('reports et stats') }}</a>
-                        </div>
+
 
                         <!--end::Menu item-->
 
-                        <div class="separator my-3"></div>
-
-                        @can('peut supprimer un contribuable')
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-5">
-                                <a href="#" class="menu-link text-danger px-5">{{ __('delete taxpayer') }}</a>
-                            </div>
-                            <!--end::Menu item-->
-                        @endcan
                     </div>
                     <!--end::Menu-->
                     <!--end::Menu-->
@@ -1180,7 +1165,6 @@
         <!--end::Content-->
     </div>
 
-    <livewire:taxpayer_taxable.add-taxpayer-taxable-modal />
 
     <!--begin::Modal-->
     <livewire:payment.add-payment-modal />
@@ -1191,7 +1175,6 @@
     <!--end::Modal-->
 
     <!--begin::Modal-->
-    <livewire:invoice.add-invoice-modal />
     <!--end::Modal-->
 
     <!--begin::Modal-->

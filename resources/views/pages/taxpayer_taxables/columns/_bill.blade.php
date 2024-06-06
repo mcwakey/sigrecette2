@@ -1,4 +1,3 @@
-<!--begin::User details-->
 <div class="d-flex flex-column">
     <form class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
         @if($taxpayer_taxable->invoice_id == null)
@@ -12,4 +11,3 @@
         @endif
     </form>
 </div>
-<!--begin::User details-->

@@ -24,7 +24,7 @@ public $query = false;
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
-        
+
         //dump($query);
 
         return (new EloquentDataTable($query))
@@ -60,7 +60,7 @@ public $query = false;
             //     return $taxable->name;
             // })
             ->editColumn('tariff_type', function (Taxable $taxable) {
-                return $taxable->tariff_type;
+                return __($taxable->tariff_type);
             })
             ->editColumn('tariff', function (Taxable $taxable) {
                 return $taxable->tariff;
@@ -148,7 +148,7 @@ public $query = false;
             Column::make('periodicity')->title(__('periodicity')),
             // Column::make('modality')->title(__('modality')),
             // Column::make('penalty')->title(__('penalty')),
-            Column::make('created_at')->title(__('created at'))->addClass('text-nowrap'),
+            Column::make('created_at')->title(__('created at'))->addClass('text-nowrap')->visible(false),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
                 ->exportable(true)

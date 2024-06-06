@@ -1,4 +1,4 @@
-<div class="modal fade" id="kt_modal_add_invoice_no_taxpayer" tabindex="-1" aria-hidden="true" wire:ignore.self>
+<div class="modal fade" id="kt_modal_add_invoice_no_taxpayer" tabindex="-1" aria-hidden="true" wire:ignore.self data-bs-backdrop='static'>
     <div class="modal-dialog modal-dialog-centered mw-1000px">
         <div class="modal-content">
             <div class="modal-header" id="kt_modal_add_invoice_no_taxpayer_header">

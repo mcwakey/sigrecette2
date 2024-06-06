@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Helpers\Constants;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -78,6 +80,7 @@ class Taxpayer extends Model
 
         return $this->profile_photo_path;
     }
+
 
 
     public function addresses()
@@ -246,5 +249,37 @@ class Taxpayer extends Model
         return $result;
     }
 
+    /**
+     * Search for a given value in multiple columns.
+     *
+     * @param string $value
+     * @return QueryBuilder
+     */
+    public static function search(string $value): QueryBuilder
+    {
+        if (strlen($value) < 3) {
+            return self::query()->whereRaw('1 = 0');
+        }
 
+        $columns = [
+            'tnif',
+            'name',
+            'id_number',
+            'mobilephone',
+            'telephone',
+            'address',
+            'authorisation',
+            'auth_reference',
+            'nif',
+            'email'
+        ];
+
+        $query = self::query();
+
+        foreach ($columns as $column) {
+            $query->orWhere($column, 'like', "%{$value}%");
+        }
+
+        return $query;
+    }
 }

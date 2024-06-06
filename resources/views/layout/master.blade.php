@@ -79,6 +79,13 @@
 @stack('scripts')
 <!--end::Javascript-->
 
+<livewire:taxpayer.add-taxpayer-modal />
+<livewire:invoice.add-invoice-no-taxpayer-modal/>
+<livewire:invoice.add-invoice-general-modal/>
+<livewire:payment.add-payment-general-modal/>
+<livewire:taxpayer_taxable.add-taxpayer-taxable-modal/>
+<livewire:invoice.add-invoice-modal />
+<livewire:payment.add-payment-modal />
 <script>
     document.addEventListener('livewire:init', () => {
         Livewire.on('success', (message) => {
@@ -107,8 +114,9 @@
         });
     });
 </script>
-<livewire:taxpayer.add-taxpayer-modal></livewire:taxpayer.add-taxpayer-modal>
 
+<script src="/livewire/add-taxpayer-modal.js"></script>
+<script src="/livewire/add-invoice-modal.js"></script>
 @livewireScripts
 </body>
 <!--end::Body-->

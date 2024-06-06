@@ -14,10 +14,12 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
+use Yajra\DataTables\WithExportQueue;
 
 class LedgersDataTable extends DataTable
 {
 
+    use WithExportQueue;
     /**
      * Build the DataTable class.
      *

@@ -1,5 +1,5 @@
-<form id="kt_modal_add_delivery" wire:submit.prevent="submit" class="form px-7 py-5" data-kt-menu-id="kt_modal_add_delivery"
-    style="position: relative">
+<form id="kt_modal_add_delivery" wire:submit.prevent="submit" class="form px-7 py-5" data-kt-menu-id="kt_modal_add_delivery "
+    style="position: relative" data-bs-backdrop='static'>
 
     <style>
         .wrapper {

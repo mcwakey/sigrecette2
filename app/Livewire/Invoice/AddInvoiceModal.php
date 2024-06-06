@@ -21,6 +21,7 @@ use App\Notifications\InvoicePaid;
 use App\Traits\DispatchesMessages;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
@@ -366,7 +367,6 @@ class AddInvoiceModal extends Component
     {
         $this->view_mode = true;
         $this->edit_mode = true;
-        $this->edit_mode = true;
         $this->button_mode = true;
         $invoice = Invoice::find($id);
 
@@ -422,12 +422,16 @@ class AddInvoiceModal extends Component
             //$this->s_tariff_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff. ' %';
             $this->s_tariff_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff;
 
+            $temp_seize =$invoice_item->taxpayer_taxable->seize;
+            if($invoice_item->taxpayer_taxable->taxable->use_second_formula){
+                $temp_seize =1;
+            }
             if ($invoice_item->taxpayer_taxable->taxable->tariff_type == "FIXED") {
                 $this->s_amount[$index] = $invoice_item->amount;
-                $this->s_amount_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff * $invoice_item->taxpayer_taxable->seize * $this->qty * $period;
+                $this->s_amount_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff *  $temp_seize  * $this->qty * $period;
             } else {
                 $this->s_amount[$index] = $invoice_item->amount / 100;
-                $this->s_amount_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff * $invoice_item->taxpayer_taxable->seize * $this->qty * $period / 100;
+                $this->s_amount_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff *  $temp_seize * $this->qty * $period / 100;
             }
 
             // } else {
@@ -533,13 +537,18 @@ class AddInvoiceModal extends Component
             $this->taxpayer_taxable_id[$index] = $taxable->id;
             $this->taxpayer_taxable[$index] = $taxable->name;
 
+
             $this->s_seize[$index] = $taxable->seize;
             $this->s_tariff[$index] = $taxable->taxable->tariff;
 
+            $temp_seize =$taxable->seize;
+            if($taxable->taxable->use_second_formula){
+                $temp_seize =1;
+            }
             if ($taxable->taxable->tariff_type == "FIXED") {
-                $this->s_amount[$index] = $taxable->seize * $taxable->taxable->tariff * $this->qty * $period;
+                $this->s_amount[$index] =$temp_seize * $taxable->taxable->tariff * $this->qty * $period;
             } else {
-                $this->s_amount[$index] = $taxable->seize * $taxable->taxable->tariff * $this->qty * $period / 100;
+                $this->s_amount[$index] = $temp_seize * $taxable->taxable->tariff * $this->qty * $period / 100;
             }
             //$this->qty[$index] = $taxable->seize;
             $this->taxpayer_taxable_id[$index] = $taxable->id;
@@ -548,7 +557,21 @@ class AddInvoiceModal extends Component
         $this->amount_ph = array_sum($this->s_amount) . " FCFA";
         $this->amount = array_sum($this->s_amount);
     }
+    #[On('updateSharedTaxpayerId')]
+    public function updateSharedTaxpayerId($id){
+        $taxpayer = Taxpayer::findOrFail($id);
 
+        if($taxpayer!=null){
+            $this->taxpayer_id = $taxpayer->id;
+            $this->addInvoice($id);
+        }
+
+    }
+    #[On('updateSharedInvoiceId')]
+    public function updateSharedInvoiceId($id){
+        $this->updateInvoice($id);
+
+    }
     public function hydrate()
     {
         $this->resetErrorBag();

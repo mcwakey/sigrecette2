@@ -1,5 +1,5 @@
 
-<div class="modal fade" id="kt_modal_add_invoice" tabindex="-1" aria-hidden="true" wire:ignore.self>
+<div class="modal fade" id="kt_modal_add_invoice" tabindex="-1" aria-hidden="true" wire:ignore.self data-bs-backdrop='static'>
     <!--begin::Modal dialog-->
     <div class="modal-dialog modal-dialog-centered mw-1000px">
         <!--begin::Modal content-->
@@ -38,7 +38,7 @@
                             </div>
                             <div class="col-md-4">
                                 <!--begin::Label-->
-                                <label class="required fw-semibold fs-6 mb-2">{{ __('account id') }}</label>
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('NIC') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="text" wire:model="tnif" name="tnif" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('tnif') }}"  readonly/>
@@ -93,7 +93,7 @@
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                
+
 
                             <div class="input-group mb-2">
                                 <span class="input-group-text" id="basic-addon1"> / {{ $periodicity }}</span>
@@ -147,7 +147,10 @@
 
                                             <div class="form-floating">
                                                 <input type="text" wire:model="taxpayer_taxable.{{ $loop->index }}" name="taxpayer_taxable[]" id="taxpayer_taxable" class="form-control form-control-solid" readonly />
-                                                <label for="taxpayer_taxable">{{ $taxpayer_taxable->taxable->tax_label->name ?? '' }} {{ $taxpayer_taxable->taxpayer_taxable->taxable->tax_label->name ?? '' }}</label>
+                                                <label for="taxpayer_taxable">{{ $taxpayer_taxable->taxable->tax_label->name ?? '' }} {{ $taxpayer_taxable->taxpayer_taxable->taxable->tax_label->name ?? '' }}
+                                                @if( $taxpayer_taxable?->taxpayer_taxable?->taxable->use_second_formula)
+                                                   <span class="text-info"> {{"( ". __("seize")." ignoré"." )"}}</span>
+                                                    @endif</label>
                                             </div>
 
                                         </td>

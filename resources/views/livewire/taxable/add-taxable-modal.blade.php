@@ -1,4 +1,4 @@
-<div class="modal fade" id="kt_modal_add_taxable" tabindex="-1" aria-hidden="true" wire:ignore.self>
+<div class="modal fade" id="kt_modal_add_taxable" tabindex="-1" aria-hidden="true" wire:ignore.self data-bs-backdrop='static'>
     <!--begin::Modal dialog-->
     <div class="modal-dialog modal-dialog-centered mw-800px">
         <!--begin::Modal content-->
@@ -51,23 +51,26 @@
                         <div class="separator saperator-dashed my-5"></div>
 
                         <div class="row mb-7">
-                            <div class="col-md-8">
+                            <div class="col-md-12">
                                 <!--begin::Label-->
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('taxable') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="name" name="name" class="form-control mb-3 mb-lg-0" placeholder="{{ __('taxable') }}"/>
+                                <input type="text" wire:model="name" name="name" class="form-control " placeholder="{{  'Nom de la '.__('taxable') }}"/>
                                 <!--end::Input-->
                                 @error('name')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col-md-4">
+
+                        </div>
+                        <div class="row mb-7">
+                            <div class="col-md-6">
                                 <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('periodicity') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <select wire:model="periodicity" name="periodicity" class="form-select"
-                                    data-dropdown-parent="#kt_modal_add_taxable">
+                                        data-dropdown-parent="#kt_modal_add_taxable">
                                     <option>{{ __('select an option') }}</option>
                                     <option value="Jours">Jours</option>
                                     <option value="Mois">Mois</option>
@@ -78,8 +81,6 @@
                                 @error('periodicity')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                        </div>
-                        <div class="row mb-7">
                             <div class="col-md-3">
                                 <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('unit type') }}</label>
@@ -91,12 +92,14 @@
                                     <option value="Femme">Femme</option>
                                 </select> -->
 
+                                {{--
+                                 <option value="Volume">{{ __('volume') }}</option>
+                                  <option value="Type">{{ __('type') }}</option>
+                                --}}
                                 <select wire:model="unit_type" name="unit_type" class="form-select" data-dropdown-parent="#kt_modal_add_taxable">
                                     <option>{{ __('select an option') }}</option>
-                                    <option value="Type">{{ __('type') }}</option>
-                                    <option value="Nombre">{{ __('number') }}</option>
                                     <option value="Superficie">{{ __('surface') }}</option>
-                                    <option value="Volume">{{ __('volume') }}</option>
+                                    <option value="Nombre">{{ __('Autre') }}</option>
                                 </select>
                                 <!--end::Input-->
                                 @error('unit')
@@ -117,6 +120,9 @@
                                 @error('unit')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
+                        </div>
+                        <div class="row mb-7">
+
                             <div class="col-md-3">
                                 <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('tariff type') }}</label>
@@ -131,7 +137,7 @@
                                 @error('periodicity')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-3 ">
                                 <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('tariff') }}</label>
                                 <!--end::Label-->
@@ -140,6 +146,16 @@
                                 <!--end::Input-->
                                 @error('tariff')
                                 <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-3">
+                                <label class=" fw-semibold fs-6 mb-2 mb-7"></label>
+                                <div class="form-control form-check form-switch form-check-custom form-check-solid"  style="border: none;">
+                                    <input class="form-check-input" type="checkbox"  id="flexSwitchDefault"  wire:model="use_second_formula" name="use_second_formula" value="{{$use_second_formula}}"  @if($use_second_formula) checked="checked" @endif/>
+                                    <label class="form-check-label text-nowrap" for="flexSwitchDefault">
+                                        {{__("Ignorer la valeur d'assiète")}}
+                                    </label>
+                                </div>
+
                             </div>
                         </div>
                         <!--end::Input group-->
@@ -166,3 +182,8 @@
     </div>
     <!--end::Modal dialog-->
 </div>
+@push('scripts')
+    <script>
+
+    </script>
+@endpush

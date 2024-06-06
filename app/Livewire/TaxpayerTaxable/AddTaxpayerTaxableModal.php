@@ -12,6 +12,7 @@ use App\Models\Taxpayer;
 use App\Models\TaxpayerTaxable;
 use App\Models\Town;
 use App\Traits\DispatchesMessages;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +31,7 @@ class AddTaxpayerTaxableModal extends Component
     public $longitude;
     public $latitude;
     public $taxable_id;
-    public $taxpayer_id;
+
 
     public $authorisation;
     public $auth_reference;
@@ -90,6 +91,8 @@ class AddTaxpayerTaxableModal extends Component
         'load_drop' => 'load_drop',
         //'loadTaxable' => 'loadTaxable',
     ];
+    public $taxpayer_id;
+
 
     public function render()
     {
@@ -299,7 +302,15 @@ class AddTaxpayerTaxableModal extends Component
 
     //     return $this->taxlabel ? Taxable::where('taxlabel_id', $this->taxlabel)->get() : collect();
     // }
+    #[On('updateSharedTaxpayerId')]
+    public function updateSharedTaxpayerId($id){
 
+        $taxpayer = Taxpayer::findOrFail($id);
+        if($taxpayer!=null){
+            $this->taxpayer_id = $taxpayer->id;
+        }
+
+    }
     public function hydrate()
     {
         $this->resetErrorBag();

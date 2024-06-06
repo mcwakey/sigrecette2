@@ -8,6 +8,14 @@
             {{__('Liste des avis non distribués')}}
         @elseif( request()->routeIs('invoices.*') &&  request()->has('notDelivery')&& request()->input('notDelivery') == 0 )
             {{__('Liste des avis distribués')}}
+        @elseif(request()->has('state') && request()->input('state') == App\Enums\InvoiceStatusEnums::DRAFT)
+            {{ "Liste des ".__('invoices')." sur titre en état de brouillon" }}
+        @elseif(request()->has('state') && request()->input('state') == App\Enums\InvoiceStatusEnums::ACCEPTED)
+            {{ "Liste des ".__('invoices')." sur titre  en attente de N° d'ordre de recette" }}
+        @elseif(request()->has('state') && request()->input('state') == App\Enums\InvoiceStatusEnums::PENDING)
+            {{ "Liste des ".__('invoices')." sur titre à prendre en charge/Rejeté" }}
+        @elseif(request()->routeIs('recoveries.*') &&  request()->has('notDelivery')&& request()->input('notDelivery') == 0)
+            {{"Liste des ".__('invoices')." à recouvrer"}}
         @else
             {{ "Liste des ".__('invoices')." sur titre" }}
         @endif
@@ -74,6 +82,7 @@
                         </div>
 
                     </div>
+
                 @if(request()->routeIs('invoices.*') &&  request()->has('aucomptant'))
                     @can('peut émettre un avis')
                         <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
@@ -103,7 +112,7 @@
                         </div>
                     @endcan
                 @else
-                    @if( request()->routeIs('invoices.*') && !request()->has('notDelivery') && !request()->has('aucomptant'))
+                    @if( request()->routeIs('invoices.*') && !request()->has('notDelivery')  && !request()->has('state') && !request()->has('aucomptant'))
                         @can('peut générer automatiquement les avis')
                             @if (now()->format('m') === '01' || $app->environment('local'))
                                 <div class="d-flex justify-content-end" data-kt-invoice-table-toolbar="base">
@@ -121,7 +130,13 @@
                         @endif
 
                     @endcan
+                            <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
 
+                                <div class=" ms-5 mt-1 me-5">
+                                    <livewire:export-button :table-id="$dataTable->getTableId()" auto-download="true" type="xlsx" buttonName="Export Excel"/>
+                                </div>
+
+                            </div>
                 @endif
                 @endif
 

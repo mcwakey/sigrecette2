@@ -43,17 +43,6 @@
                         </button>
                     </div> -->
                 <!--end::Toolbar-->
-
-                    <!--begin::Toolbar-->
-                    <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
-                        <!--begin::Add user-->
-                        <a href="#" class="ms-5 mt-1" data-bs-toggle="collapse" data-bs-target="#kt_tutorial_form">
-                            <span data-bs-toggle="tooltip" title="Onglet tutoriel">
-                                <i class="ki-outline ki-information fs-2tx text-warning"></i>
-                            </span>
-                        </a>
-                        <!--end::Add user-->
-                    </div>
                 <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
 
                     <div href="#" class="btn btn-light btn-active-light-primary btn-flex btn-center ms-auto me-5"
@@ -72,6 +61,23 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
+
+                    <div class=" ms-5 mt-1 me-5">
+                        <livewire:export-button :table-id="$dataTable->getTableId()" auto-download="true" type="xlsx" buttonName="Export Excel"/>
+                    </div>
+
+                </div>
+                    <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
+                        <!--begin::Add user-->
+                        <a href="#" class="ms-5 mt-1" data-bs-toggle="collapse" data-bs-target="#kt_tutorial_form">
+                            <span data-bs-toggle="tooltip" title="Onglet tutoriel">
+                                <i class="ki-outline ki-information fs-2tx text-warning"></i>
+                            </span>
+                        </a>
+                        <!--end::Add user-->
+                    </div>
 
             </div>
 

@@ -4,6 +4,7 @@ namespace App\Livewire\Payment;
 
 use App\Models\Invoice;
 use App\Models\Payment;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\Taxpayer;
 use App\Helpers\Constants;
@@ -177,7 +178,7 @@ class AddPaymentModal extends Component
             $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
 
             if (($this->paid + $this->amount) <= $invoice->amount ) {
-                //dd($this->code);
+
                 if($this->code!=null){
                     if ($this->amount>=$this->paidAndCodeArray[ $this->code ]['amount']){
                         $this->amount=$this->paidAndCodeArray[ $this->code ]['amount'];
@@ -373,10 +374,15 @@ class AddPaymentModal extends Component
     }
 
     public function updatePaymentAmount($code){
+
         if($code){
             $this->amount = $this->paidAndCodeArray[$code]['amount'];
         }
 
+    }
+    #[On('updateSharedInvoiceId')]
+    public function updateSharedTaxpayerId($id){
+        $this->updatePayment($id);
     }
     public function hydrate()
     {

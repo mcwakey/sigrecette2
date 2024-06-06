@@ -23,7 +23,22 @@
         </div>
     @endif
 
-    @if( request()->routeIs('invoices.*') && request()->input('notDelivery') == 1)
+
+    @if( request()->routeIs('invoices.*') &&  request()->has('notDelivery')&& request()->input('notDelivery') == 0)
+        @if( $invoice->can( "submit_for_reduced") ||  $invoice->can("submit_for_canceled") && $invoice->validity == 'VALID')
+            @can('peut réduire ou annuler un avis')
+                <div class="menu-item px-3">
+                    <a href="#" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{ $invoice->id }}"
+                       data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice" data-kt-action="update_invoice">
+                        {{ __('reduction cancelation') }}
+                    </a>
+                </div>
+            @endcan
+
+        @endif
+
+    @endif
+    @if( request()->routeIs('recoveries.*') &&  request()->has('notDelivery')&& request()->input('notDelivery') == 0)
         @if( $invoice->can( "submit_for_reduced") ||  $invoice->can("submit_for_canceled") && $invoice->validity == 'VALID')
             @if( $invoice->canGetPayment())
 
@@ -36,14 +51,6 @@
                     </div>
                 @endcan
             @endif
-            @can('peut réduire ou annuler un avis')
-                <div class="menu-item px-3">
-                    <a href="#" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{ $invoice->id }}"
-                       data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice" data-kt-action="update_invoice">
-                        {{ __('reduction cancelation') }}
-                    </a>
-                </div>
-            @endcan
 
         @endif
 

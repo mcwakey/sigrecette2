@@ -106,6 +106,11 @@ class AddStatusForm extends Component
                     break;
                 case   InvoiceStatusEnums::APPROVED:
                 case     InvoiceStatusEnums::APPROVED_CANCELLATION:
+                        if($invoice->type==Constants::INVOICE_TYPE_COMPTANT){
+                            $invoice->delivery="DELIVERED";
+                            $invoice->delivery_date=now();
+                            $invoice->save();
+                        }
                         if($this->status==InvoiceStatusEnums::APPROVED){
                             $invoice->submitToState( "submit_for_approved");
                         }else{

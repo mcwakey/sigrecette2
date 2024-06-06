@@ -78,32 +78,79 @@
 
             <!--begin:Menu item-->
             <div data-kt-menu-trigger="click"
+                 class="menu-item menu-accordion {{ request()->routeIs('invoices.*') ? 'here show' : '' }}">
+                <!--begin:Menu link-->
+                <span class="menu-link">
+                    <span class="menu-icon">{!! getIcon('abstract-10', 'fs-2') !!}</span>
+                    <span class="menu-title">{{ __('invoice') }}</span>
+                    <span class="menu-arrow"></span>
+                </span>
+                <div class="menu-sub menu-sub-accordion">
+                    <div class="menu-item">
+
+                        <span class="menu-link ">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title" data-bs-toggle="modal"
+                                      data-bs-target="#kt_modal_add_invoice_general">{{__("Nouveau avis sur titre")}}</span>
+                            </span>
+                    </div>
+                    <div class="menu-item">
+                          <span class="menu-link ">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title" data-bs-toggle="modal"
+                                      data-bs-target="#kt_modal_add_invoice_no_taxpayer">{{__("Nouveau avis au comptant")}}</span>
+                            </span>
+                    </div>
+                </div>
+                <!--end:Menu sub-->
+            </div>
+            <div data-kt-menu-trigger="click"
                 class="menu-item menu-accordion {{ request()->routeIs('invoices.*') ? 'here show' : '' }}">
                 <!--begin:Menu link-->
                 <span class="menu-link">
                     <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
-                    <span class="menu-title">{{ __('invoice') }}</span>
+                    <span class="menu-title">{{ __('Gestion des avis') }}</span>
                     <span class="menu-arrow"></span>
                 </span>
-                <!--end:Menu link-->
-                <!--begin:Menu sub-->
                 <div class="menu-sub menu-sub-accordion">
-                    <!--begin:Menu item-->
+
+
                     <div class="menu-item">
-                        <!--begin:Menu link-->
-                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery') && !request()->has('aucomptant') ? 'active' : '' }}"
-                           href="{{ route('invoices.index') }}">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Enums\InvoiceStatusEnums::DRAFT ? 'active' : '' }}"
+                           href="{{ route('invoices.index', ['state' => App\Enums\InvoiceStatusEnums::DRAFT,]) }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
-                            <span class="menu-title">Liste des avis</span>
+                            <span class="menu-title">Liste des avis en état de brouillon</span>
                         </a>
-                        <!--end:Menu link-->
                     </div>
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Enums\InvoiceStatusEnums::ACCEPTED ? 'active' : '' }}"
+                           href="{{ route('invoices.index', ['state' => App\Enums\InvoiceStatusEnums::ACCEPTED,])}}">
+        <span class="menu-bullet">
+            <span class="bullet bullet-dot"></span>
+        </span>
+                            <span class="menu-title">Liste des avis en attente de N° d'ordre de recette</span>
+                        </a>
+                    </div>
+                    <div class="menu-item">
+                        <a class="menu-link {{request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Enums\InvoiceStatusEnums::PENDING ? 'active' : '' }}"
+                           href="{{  route('invoices.index', ['state' => App\Enums\InvoiceStatusEnums::PENDING]) }}">
+        <span class="menu-bullet">
+            <span class="bullet bullet-dot"></span>
+        </span>
+                            <span class="menu-title">Liste des avis à prendre en charge/Rejeté</span>
+                        </a>
+                    </div>
+
                     <div class="menu-item">
                         <!--begin:Menu link-->
                         <a class="menu-link {{ request()->routeIs('invoices.*') && request()->input('notDelivery') == 1 ? 'active' : '' }}"
-                           href="{{ route('invoices.index', ['notDelivery' => true]) }}">
+                           href="{{ route('invoices.index', ['notDelivery' => true,]) }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
@@ -123,8 +170,17 @@
                         <!--end:Menu link-->
                     </div>
                     <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery')&&!request()->has('state') && request()->input('aucomptant') == 0 ? 'active' : '' }}"
+                           href="{{ route('invoices.index' ,['aucomptant' => false]) }}">
+        <span class="menu-bullet">
+            <span class="bullet bullet-dot"></span>
+        </span>
+                            <span class="menu-title">Liste des avis sur titre</span>
+                        </a>
+                    </div>
+                    <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->has('aucomptant')? 'active' : '' }}"
+                        <a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->input('aucomptant') == 1? 'active' : '' }}"
                            href="{{ route('invoices.index', ['aucomptant' => true]) }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
@@ -154,10 +210,29 @@
                     <!--end:Menu link-->
                     <!--begin:Menu sub-->
                     <div class="menu-sub menu-sub-accordion">
-                        <!--begin:Menu item-->
+                        <div class="menu-item">
+                          <span class="menu-link ">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title" data-bs-toggle="modal"
+                                      data-bs-target="#kt_modal_add_payment_general">{{__("Enregistrer un paiement")}}</span>
+                            </span>
+                        </div>
                         <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('recoveries.*') ? 'active' : '' }}"
+                            <a class="menu-link {{ request()->routeIs('recoveries.*') &&  request()->has('notDelivery')&& request()->input('notDelivery') == 0 ? 'active' : '' }}"
+                               href="{{ route('recoveries.index', ['notDelivery' => false]) }}">
+        <span class="menu-bullet">
+            <span class="bullet bullet-dot"></span>
+        </span>
+                                <span class="menu-title">Liste des avis  à recouvrer</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->routeIs('recoveries.*') &&  !request()->has('notDelivery') ? 'active' : '' }}"
                                 href="{{ route('recoveries.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
@@ -467,7 +542,7 @@
                 <div data-kt-menu-trigger="click"
                     class="menu-item menu-accordion {{ request()->routeIs('settings.*') ? 'here show' : '' }}">
                     <span class="menu-link">
-                        <span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
+                        <span class="menu-icon">{!! getIcon('information-4', 'fs-2') !!}</span>
                         <span class="menu-title">{{ __('Informations commune') }}</span>
                         <span class="menu-arrow"></span>
                     </span>
@@ -491,9 +566,7 @@
                         <!--begin:Menu link-->
                         <a class="menu-link {{ request()->routeIs('import-view') ? 'active' : '' }}"
                             href="{{ route('import-view') }}">
-                            <span class="menu-bullet">
-                                <span class="menu-icon">{!! getIcon('user', 'fs-2') !!}</span>
-                            </span>
+                            <span class="menu-icon">{!! getIcon('user', 'fs-2') !!}</span>
                             <span class="menu-title">{{ __('Importer des contribuables') }}</span>
                         </a>
                         <!--end:Menu link-->

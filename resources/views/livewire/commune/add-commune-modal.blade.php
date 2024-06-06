@@ -1,5 +1,5 @@
 <!--begin::Modal content-->
-<div class="modal fade" id="kt_modal_add_commune" tabindex="-1" aria-hidden="true" wire:ignore.self>
+<div class="modal fade" id="kt_modal_add_commune" tabindex="-1" aria-hidden="true" wire:ignore.self data-bs-backdrop='static'>
     <!--begin::Modal dialog-->
     <div class="modal-dialog modal-dialog-centered mw-950px">
         <!--begin::Modal content-->
@@ -80,79 +80,100 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
+
+                            <div class="row w-100 mb-4">
+                                <div class="col-md-4">
+                                    <!--begin::Label-->
+                                    <label class="required fw-semibold fs-6 mb-2">{{ __('address') }}</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" wire:model="address" name="address"
+                                           class="form-control  mb-3 mb-lg-0" placeholder="{{ __('address') }}" />
+                                    <!--end::Input-->
+                                    @error('address')
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="col-md-4">
+                                    <!--begin::Label-->
+                                    <label class="required fw-semibold fs-6 mb-2">{{ __('phone_number') }}</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" wire:model="phone_number" name="phone_number"
+                                        class="form-control  mb-3 mb-lg-0" placeholder="{{ __('phone_number') }}" />
+                                    <!--end::Input-->
+                                    @error('phone_number')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="fw-semibold fs-6 mb-2">{{ __('email') }}</label>
+                                    <div class="input-group input-group-solid mb-5">
+
+                                        <input type="text"
+                                               wire:model="email" name="email"
+                                               class="form-control" placeholder=" {{__('email')}}" aria-label="email" aria-describedby="basic-addon1"/>
+                                        @error('email')
+                                        <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="separator separator-dashed my-2"></div>
+                            <div class="row w-100 mb-4">
+                                <div class="col-md-4">
+                                    <!--begin::Label-->
+                                    <label class="required fw-semibold fs-6 mb-2">{{ __('treasury_name') }}</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" wire:model="treasury_name" name="treasury_name"
+                                           class="form-control  mb-3 mb-lg-0" placeholder="{{ __('treasury_name') }}" />
+                                    <!--end::Input-->
+                                    @error('treasury_name')
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="col-md-4">
+                                    <!--begin::Label-->
+                                    <label class="required fw-semibold fs-6 mb-2">{{ __('treasury_address') }}</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" wire:model="treasury_address" name="treasury_address"
+                                           class="form-control  mb-3 mb-lg-0" placeholder="{{ __('treasury_address') }}" />
+                                    <!--end::Input-->
+                                    @error('treasury_address')
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="col-md-4">
+                                    <!--begin::Label-->
+                                    <label class=" fw-semibold fs-6 mb-2">{{ __('treasury_rib') }}</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" wire:model="treasury_rib" name="treasury_rib"
+                                           class="form-control  mb-3 mb-lg-0" placeholder="{{ __('treasury_rib') }}" />
+                                    <!--end::Input-->
+                                    @error('treasury_rib')
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="separator separator-dashed my-2"></div>
                             <div class="col-md-12 mb-4">
                                 <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('mayor_name') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="text" wire:model="mayor_name" name="mayor_name"
-                                    class="form-control  mb-3 mb-lg-0" placeholder="{{ __('mayor_name') }}" />
+                                       class="form-control  mb-3 mb-lg-0" placeholder="{{ __('mayor_name') }}" />
                                 <!--end::Input-->
                                 @error('mayor_name')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="col-md-12 mb-4">
-                                <!--begin::Label-->
-                                <label class="required fw-semibold fs-6 mb-2">{{ __('phone_number') }}</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" wire:model="phone_number" name="phone_number"
-                                    class="form-control  mb-3 mb-lg-0" placeholder="{{ __('phone_number') }}" />
-                                <!--end::Input-->
-                                @error('phone_number')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="col-md-12 mb-4">
-                                <!--begin::Label-->
-                                <label class="required fw-semibold fs-6 mb-2">{{ __('address') }}</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" wire:model="address" name="address"
-                                    class="form-control  mb-3 mb-lg-0" placeholder="{{ __('address') }}" />
-                                <!--end::Input-->
-                                @error('address')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="col-md-12 mb-4">
-                                <!--begin::Label-->
-                                <label class="required fw-semibold fs-6 mb-2">{{ __('treasury_name') }}</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" wire:model="treasury_name" name="treasury_name"
-                                    class="form-control  mb-3 mb-lg-0" placeholder="{{ __('treasury_name') }}" />
-                                <!--end::Input-->
-                                @error('treasury_name')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="col-md-12 mb-4">
-                                <!--begin::Label-->
-                                <label class="required fw-semibold fs-6 mb-2">{{ __('treasury_address') }}</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" wire:model="treasury_address" name="treasury_address"
-                                    class="form-control  mb-3 mb-lg-0" placeholder="{{ __('treasury_address') }}" />
-                                <!--end::Input-->
-                                @error('treasury_address')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="col-md-12 mb-4">
-                                <!--begin::Label-->
-                                <label class=" fw-semibold fs-6 mb-2">{{ __('treasury_rib') }}</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" wire:model="treasury_rib" name="treasury_rib"
-                                    class="form-control  mb-3 mb-lg-0" placeholder="{{ __('treasury_rib') }}" />
-                                <!--end::Input-->
-                                @error('treasury_rib')
-                                    <span class="text-danger">{{ $message }}</span>
+                                <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
 
+                            <div class="separator separator-dashed my-2"></div>
                             <div class="row w-100 mb-4">
                                 <div class="col">
                                     <!--begin::Label-->
@@ -179,30 +200,45 @@
                                     @enderror
                                 </div>
                             </div>
+                            <div class="row w-100 mb-4">
+                                <div class="col">
+                                    <!--begin::Label-->
+                                    <label
+                                        class="fw-semibold fs-6 mb-2">{{ __('Limite de la commune en fichier JSON') }}</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="file" wire:model="limit_json" name="limit_json" accept=".json"
+                                           class="fs-6 form-control form-control justify-content-center" />
+                                    <!--end::Input-->
+                                    @error('limit_json')
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="col">
+                                    <label class="fw-semibold fs-6 mb-2">{{ __('Logo de la commune') }}</label>
+                                    <input type="file" wire:model="logo" name="logo" class="fs-6 form-control form-control justify-content-center" />
+                                    @error('logo')
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
 
                             <div class="col-md-12 mb-4">
-                                <!--begin::Label-->
-                                <label
-                                    class="fw-semibold fs-6 mb-2">{{ __('Limite de la commune en fichier JSON') }}</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="file" wire:model="limit_json" name="limit_json" accept=".json"
-                                    class="fs-6 form-control form-control justify-content-center" />
-                                <!--end::Input-->
-                                @error('limit_json')
+                                <label class="fw-semibold fs-6 mb-2">{{ __('Website URL') }}</label>
+                                <div class="input-group mb-5">
+                                    <span class="input-group-text" id="basic-addon3">
+                                    <i class="ki-duotone ki-wallet fs-1"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="basic-url"  placeholder="{{ __('Website URL') }}" aria-describedby="basic-addon3"
+                                           wire:model="url" name="url"/>
+                                    @error('url')
                                     <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="col-md-12 mb-4">
-                                <label class="fw-semibold fs-6 mb-2">{{ __('Logo de la commune') }}</label>
-                                <input type="file" wire:model="logo" name="logo" class="fs-6 form-control form-control justify-content-center" />
-                                @error('logo')
-                                <span class="text-danger">{{ $message }}</span>
-                                @enderror
+                                    @enderror
+                                </div>
                             </div>
 
                         </div>
-                        <div class="separator separator-dashed my-2"></div>
+
                         <!--end::Input group-->
                         <!--end::Scroll-->
                         <!--begin::Actions-->

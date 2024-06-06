@@ -10,9 +10,11 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\Html\Button;
+use Yajra\DataTables\WithExportQueue;
 
 class TaxpayersDataTable extends DataTable
 {
+    use WithExportQueue;
     /**
      * Build the DataTable class.
      *
@@ -127,7 +129,8 @@ class TaxpayersDataTable extends DataTable
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0)
             // ->buttons(['print','excel','csv','pdf',])
-            ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/taxpayers/columns/_draw-scripts.js')) . "}");
+            ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/taxpayers/columns/_draw-scripts.js')) . "}")
+            ;
     }
 
     /**

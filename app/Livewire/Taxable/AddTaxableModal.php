@@ -32,6 +32,7 @@ class AddTaxableModal extends Component
     public $penalty;
     public $penalty_type;
     public $tax_label_id;
+    public $use_second_formula=false;
 
     // public $longitude;
     // public $latitude;
@@ -46,26 +47,14 @@ class AddTaxableModal extends Component
     public $edit_mode = false;
 
     protected $rules = [
-        'name' => 'required|string',
+        'name' => 'required|string|unique:taxables,name,',
         'tariff' => 'required|numeric',
         'tariff_type' => 'required|string',
         'unit' => 'required|string',
         'unit_type' => 'required|string',
-        //'modality' => 'required',
         'periodicity' => 'required|string',
-        //'penalty' => 'nullable',
-        //'penalty_type' => 'nullable',
-        //'tax_label' => 'required',
         'tax_label_id' => 'required|int',
 
-        // 'longitude' => 'nullable',
-        // 'latitude' => 'nullable',
-        // 'canton' => 'required',
-        // 'town' => 'required',
-        // 'erea' => 'required',
-        // 'address' => 'required|string',
-        // 'zone_id' => 'required',
-        // 'avatar' => 'nullable|sometimes|image|max:1024',
     ];
 
     protected $listeners = [
@@ -82,20 +71,30 @@ class AddTaxableModal extends Component
         //$id_types = IdType::all();
         $tax_labels = TaxLabel::all();
 
-        // Assuming you have a public property $canton in your Livewire component
-        //$towns = $this->canton ? Town::where('canton_id', $this->canton)->get() : collect();
-        //$ereas = $this->town ? Erea::where('town_id', $this->town)->get() : collect();
+
+
+
+
+
 
         return view('livewire.taxable.add-taxable-modal', compact('tax_labels'));
     }
+    public function mount()
 
+    {
+        if($this->edit_mode){
+            $taxable = Taxable::find($this->taxable_id);
+
+            if($taxable){
+                $this->use_second_formula =(bool)$taxable->use_second_formula;
+            }
+        }
+    }
     public function submit()
     {
         // Validate the form input data
         $this->validate();
-
         DB::transaction(function () {
-            // Prepare the data for creating a new Taxable
             $data = [
                 'name' => $this->name,
                 'tariff' => $this->tariff,
@@ -107,7 +106,7 @@ class AddTaxableModal extends Component
                 'penalty' => $this->penalty,
                 'penalty_type' => $this->penalty_type,
                 'tax_label_id' => $this->tax_label_id,
-
+                'use_second_formula'=>$this->use_second_formula
                 // 'latitude' => $this->latitude,
                 // 'canton' => $this->canton,
                 // 'town' => $this->town,
@@ -172,7 +171,7 @@ class AddTaxableModal extends Component
         $taxable = Taxable::find($id);
 
         $this->taxable_id = $taxable->id;
-        //$this->saved_avatar = $taxable->profile_photo_url;
+        $this->use_second_formula = $taxable->use_second_formula;
         $this->tax_label_id = $taxable->tax_label_id;
         $this->name = $taxable->name;
         $this->tariff = $taxable->tariff;
@@ -183,6 +182,7 @@ class AddTaxableModal extends Component
         $this->periodicity = $taxable->periodicity;
         $this->penalty = $taxable->penalty;
         $this->penalty_type = $taxable->penalty_type;
+
 
         //$this->tax_label = $taxable->tax_labels?->first()->name ?? '';
 
@@ -195,8 +195,15 @@ class AddTaxableModal extends Component
         // $this->erea = $taxable->erea;
         // $this->address = $taxable->address;
         // $this->zone_id = $taxable->zone_id;
-    }
 
+    }
+    public function rendering($view, $data)
+    {
+        // Runs BEFORE the provided view is rendered...
+        //
+        // $view: The view about to be rendered
+        // $data: The data provided to the view
+    }
     public function hydrate()
     {
         $this->resetErrorBag();
