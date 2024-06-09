@@ -79,7 +79,7 @@
                                                             <span>{{ $taxpayer->email }}</span>
                                                         </div>
                                                     </td>
-                                                    <td>{{ $taxpayer->town->canton->name }}</td>
+                                                    <td>{{ $taxpayer->town?->canton?->name }}</td>
                                                     <td>{{ $taxpayer->address }}</td>
                                                 </tr>
                                             @endforeach
@@ -120,20 +120,20 @@
 
 
                                                 @endcan
-                                                    @can('peut émettre un avis')
-                                                        <button type="button" class="btn  btn-sm  btn-light-danger ms-auto"
-                                                                data-kt-user-id="{{ $taxpayer_id }}" data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_add_invoice" data-kt-action="add_invoice"
-                                                                data-kt-stepper-action="submit">
-                                                            <i class="ki-duotone ki-add-files fs-3">
-                                                                <span class="path1"></span>
-                                                                <span class="path2"></span>
-                                                                <span class="path3"></span>
-                                                                <span class="path4"></span>
-                                                                <span class="path5"></span>
-                                                            </i>{{ __('create invoice') }}
-                                                        </button>
-                                                    @endcan
+                                                @can('peut émettre un avis')
+                                                    <button type="button" class="btn  btn-sm  btn-light-danger ms-auto"
+                                                            data-kt-user-id="{{ $taxpayer_id }}" data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_add_invoice" data-kt-action="add_invoice"
+                                                            data-kt-stepper-action="submit">
+                                                        <i class="ki-duotone ki-add-files fs-3">
+                                                            <span class="path1"></span>
+                                                            <span class="path2"></span>
+                                                            <span class="path3"></span>
+                                                            <span class="path4"></span>
+                                                            <span class="path5"></span>
+                                                        </i>{{ __('create invoice') }}
+                                                    </button>
+                                                @endcan
                                             </div>
                                         </div>
                                         <div class="card-body">
@@ -147,50 +147,53 @@
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    @foreach ($taxpayer_taxables as $taxpayer_taxable)
-                                                        @if($taxpayer_taxable->bill_status == "NOT BILLED")
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="d-flex flex-column">
+                                                    @if($taxpayer_taxables && count($taxpayer_taxables)>0)
+                                                        @foreach ($taxpayer_taxables as $taxpayer_taxable)
+                                                            @if($taxpayer_taxable->bill_status == "NOT BILLED")
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="d-flex flex-column">
 
-                                                                        @if($taxpayer_taxable->invoice_id == null)
-                                                                            <input
-                                                                                name="billable"
-                                                                                class="form-check-input"
-                                                                                type="checkbox"
-                                                                                value="{{ $taxpayer_taxable->billable }}"
-                                                                                data-kt-user-id="{{ $taxpayer_taxable->id }}"
-                                                                                wire:change="updateCheckbox({{ $taxpayer_taxable->id }}, $event.target.checked)"
-                                                                                @if($taxpayer_taxable->billable) checked @endif
-                                                                            />
-                                                                        @else
-                                                                            <input
-                                                                                name="billable"
-                                                                                class="form-check-input"
-                                                                                type="checkbox"
-                                                                                value="{{ $taxpayer_taxable->billable }}"
-                                                                                data-kt-user-id="{{ $taxpayer_taxable->id }}"
-                                                                                disabled
-                                                                                @if($taxpayer_taxable->billable) checked @endif
-                                                                            />
-                                                                        @endif
-                                                                    </div>
+                                                                            @if($taxpayer_taxable->invoice_id == null)
+                                                                                <input
+                                                                                    name="billable"
+                                                                                    class="form-check-input"
+                                                                                    type="checkbox"
+                                                                                    value="{{ $taxpayer_taxable->billable }}"
+                                                                                    data-kt-user-id="{{ $taxpayer_taxable->id }}"
+                                                                                    wire:change="updateCheckbox({{ $taxpayer_taxable->id }}, $event.target.checked)"
+                                                                                    @if($taxpayer_taxable->billable) checked @endif
+                                                                                />
+                                                                            @else
+                                                                                <input
+                                                                                    name="billable"
+                                                                                    class="form-check-input"
+                                                                                    type="checkbox"
+                                                                                    value="{{ $taxpayer_taxable->billable }}"
+                                                                                    data-kt-user-id="{{ $taxpayer_taxable->id }}"
+                                                                                    disabled
+                                                                                    @if($taxpayer_taxable->billable) checked @endif
+                                                                                />
+                                                                            @endif
+                                                                        </div>
 
-                                                                </td>
-                                                                <td>
-                                                                    <div class="d-flex flex-column">
-                                                                        <header class="text-gray-800 mb-1">
-                                                                            {{ $taxpayer_taxable->taxable->name }}
-                                                                        </header>
-                                                                        <span>{{ $taxpayer_taxable->taxable->tax_label->code }} -- {{ $taxpayer_taxable->taxable->tax_label->name }}</span>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <span class="form-check-label">{{$taxpayer_taxable->seize. " ". $taxpayer_taxable->taxable->unit }}</span>
-                                                                </td>
-                                                            </tr>
-                                                        @endif
-                                                    @endforeach
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="d-flex flex-column">
+                                                                            <header class="text-gray-800 mb-1">
+                                                                                {{ $taxpayer_taxable->taxable->name }}
+                                                                            </header>
+                                                                            <span>{{ $taxpayer_taxable->taxable->tax_label->code }} -- {{ $taxpayer_taxable->taxable->tax_label->name }}</span>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span class="form-check-label">{{$taxpayer_taxable->seize. " ". $taxpayer_taxable->taxable->unit }}</span>
+                                                                    </td>
+                                                                </tr>
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -211,23 +214,23 @@
 
 
 
-                        <!--end::Permissions-->
+                            <!--end::Permissions-->
+                        </div>
+                        <!--end::Scroll-->
+                        <!--begin::Actions-->
+                        <div class="text-center pt-6 pb-8">
+                            <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal" aria-label="Close"
+                                    wire:loading.attr="disabled">{{ __('cancel') }}</button>
+                        </div>
+                        <!--end::Actions-->
+                    </form>
+                    <!--end::Form-->
                 </div>
-                <!--end::Scroll-->
-                <!--begin::Actions-->
-                <div class="text-center pt-6 pb-8">
-                    <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal" aria-label="Close"
-                            wire:loading.attr="disabled">{{ __('cancel') }}</button>
-                </div>
-                <!--end::Actions-->
-                </form>
-                <!--end::Form-->
+                <!--end::Modal body-->
             </div>
-            <!--end::Modal body-->
         </div>
-    </div>
 
-</div>
+    </div>
 </div>
 @push('scripts')
     <script>
