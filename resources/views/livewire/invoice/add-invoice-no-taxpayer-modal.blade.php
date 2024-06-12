@@ -273,7 +273,7 @@
                             <div class="col-md-2">
                                 <input wire:model="qty" name="qty" type="hidden"
                                        class="form-control border-0 ps-12" data-kt-dialer-control="input"
-                                       placeholder="1"  readonly="readonly" data-kt-action="load_invoice" />
+                                       placeholder="1"  readonly="readonly" data-kt-action="load_invoice_comptant" />
                             </div>
 
 
@@ -281,7 +281,7 @@
                             <div class="col-md-3">
                                 <div class="input-group mb-2">
                                     @foreach ($months as $monthNumber => $monthName)
-                                    <input  type="hidden" wire:model="start_month" name="start_month" class="form-control mb-3 mb-lg-0" placeholder="{{ $monthName}}" data-kt-action="load_invoice" value="{{ $monthNumber}}"/>
+                                    <input  type="hidden" wire:model="start_month" name="start_month" class="form-control mb-3 mb-lg-0" placeholder="{{ $monthName}}" data-kt-action="load_invoice_comptant" value="{{ $monthNumber}}"/>
                                     @endforeach
                                 </div>
 
@@ -343,7 +343,7 @@
                                             </div>
                                         </td>
                                         <!-- <td>
-                                            <input wire:model="qty" name="qty" class="form-control form-control-solid mb-2" type="number" min="1" placeholder="1" value=""  data-kt-action="load_invoice"/>
+                                            <input wire:model="qty" name="qty" class="form-control form-control-solid mb-2" type="number" min="1" placeholder="1" value=""  data-kt-action="load_invoice_comptant"/>
                                         </td> -->
                                         <td>
                                             <input wire:model="s_amount" name="s_amount" type="text"

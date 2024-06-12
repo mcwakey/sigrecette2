@@ -164,7 +164,7 @@ class AddInvoiceNoTaxpayerModal extends Component
         'add_no_invoice' => 'addInvoice',
 
         'change_tarrif' => 'changeTarrif',
-        'load_invoice' => 'loadInvoice',
+        'load_invoice_comptant' => 'loadInvoice',
 
         'add_taxable' => 'addTaxable',
         'load_drop' => 'loadDrop',
