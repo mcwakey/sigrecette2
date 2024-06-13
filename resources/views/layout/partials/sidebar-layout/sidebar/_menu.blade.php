@@ -93,7 +93,7 @@
                                     <span class="bullet bullet-dot"></span>
                                 </span>
                                 <span class="menu-title" data-bs-toggle="modal"
-                                      data-bs-target="#kt_modal_add_invoice_general">{{__("Nouveau avis sur titre")}}</span>
+                                      data-bs-target="#kt_modal_add_invoice_general">{{__("Nouvel avis sur titre")}}</span>
                             </span>
                     </div>
                     <div class="menu-item">
@@ -102,7 +102,7 @@
                                     <span class="bullet bullet-dot"></span>
                                 </span>
                                 <span class="menu-title" data-bs-toggle="modal"
-                                      data-bs-target="#kt_modal_add_invoice_no_taxpayer">{{__("Nouveau avis au comptant")}}</span>
+                                      data-bs-target="#kt_modal_add_invoice_no_taxpayer">{{__("Nouvel avis au comptant")}}</span>
                             </span>
                     </div>
                 </div>
