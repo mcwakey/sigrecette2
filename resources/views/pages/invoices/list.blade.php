@@ -2,18 +2,20 @@
 
     @section('title')
 
-        @if(request()->routeIs('invoices.*') &&  request()->has('aucomptant'))
-            {{__('Liste des avis au comptant')}}
+        @if(request()->routeIs('invoices.*') && request()->has('aucomptant') &&  request()->input('aucomptant') == 1)
+            {{__('Liste des ' .__('invoices'). ' au comptant')}}
+        @elseif( request()->routeIs('invoices.*') && request()->has('aucomptant') &&  request()->input('aucomptant') == 0)
+            {{__('Liste des ' .__('invoices'). ' sur titre')}}
         @elseif( request()->routeIs('invoices.*') && request()->input('notDelivery') == 1)
-            {{__('Liste des avis non distribués')}}
+            {{__('Liste des ' .__('invoices'). ' sur titre non distribués')}}
         @elseif( request()->routeIs('invoices.*') &&  request()->has('notDelivery')&& request()->input('notDelivery') == 0 )
-            {{__('Liste des avis distribués')}}
+            {{__('Liste des ' .__('invoices'). ' sur titre distribués')}}
         @elseif(request()->has('state') && request()->input('state') == App\Enums\InvoiceStatusEnums::DRAFT)
             {{ "Liste des ".__('invoices')." sur titre en état de brouillon" }}
         @elseif(request()->has('state') && request()->input('state') == App\Enums\InvoiceStatusEnums::ACCEPTED)
-            {{ "Liste des ".__('invoices')." sur titre  en attente de N° d'ordre de recette" }}
+            {{ "Liste des ".__('invoices')." sur titre en attente de N° d'ordre de recette" }}
         @elseif(request()->has('state') && request()->input('state') == App\Enums\InvoiceStatusEnums::PENDING)
-            {{ "Liste des ".__('invoices')." sur titre à prendre en charge/Rejeté" }}
+            {{ "Liste des ".__('invoices')." sur titre à prendre en Charge/Rejeté" }}
         @elseif(request()->routeIs('recoveries.*') &&  request()->has('notDelivery')&& request()->input('notDelivery') == 0)
             {{"Liste des ".__('invoices')." à recouvrer"}}
         @else
@@ -83,16 +85,26 @@
 
                     </div>
 
-                @if(request()->routeIs('invoices.*') &&  request()->has('aucomptant'))
-                    @can('peut émettre un avis')
-                        <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
-                            <!--begin::Add user-->
-                        <!-- <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice_no_taxpayer">
-                            {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        {{ __('create invoice') }}
-                            </button> -->
-
-
+                @if(request()->routeIs('invoices.*'))
+                <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
+                        @can('peut émettre un avis sur titre')
+                            @if(request()->input('aucomptant') == 0)
+                                {{-- <button type="button" class="btn btn-light-success ms-auto me-5" data-kt-user-id="1"
+                                        data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice"
+                                        data-kt-action="add_no_invoice">
+                                    <i class="ki-duotone ki-add-files fs-3">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                        <span class="path3"></span>
+                                        <span class="path4"></span>
+                                        <span class="path5"></span>
+                                    </i> 
+                                        {{ __('Ajouter un avis sur titre') }}
+                                </button> --}}
+                            @endif
+                        @endcan
+                        @can('peut émettre un avis au comptant')
+                            @if(request()->input('aucomptant') == 1)
                                 <button type="button" class="btn btn-light-success ms-auto me-5" data-kt-user-id="1"
                                         data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice_no_taxpayer"
                                         data-kt-action="add_no_invoice">
@@ -102,18 +114,15 @@
                                         <span class="path3"></span>
                                         <span class="path4"></span>
                                         <span class="path5"></span>
-                                    </i> {{ __('Ajouter un avis au comptant') }}
+                                    </i> 
+                                        {{ __('Ajouter un avis au comptant') }}
                                 </button>
-
-
-
-
-                            <!--end::Add user-->
+                            @endif
+                        @endcan
                         </div>
-                    @endcan
                 @else
                     @if( request()->routeIs('invoices.*') && !request()->has('notDelivery')  && !request()->has('state') && !request()->has('aucomptant'))
-                        @can('peut générer automatiquement les avis')
+                        @can('peut générer automatiquement les avis sur titre')
                             @if (now()->format('m') === '01' || $app->environment('local'))
                                 <div class="d-flex justify-content-end" data-kt-invoice-table-toolbar="base">
                                     <!--begin::Add user-->
