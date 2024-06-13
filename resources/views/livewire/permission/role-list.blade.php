@@ -15,7 +15,7 @@
                         class="mw-100 mh-150px mb-7" />
                     <!--end::Illustration-->
                     <!--begin::Label-->
-                    <div class="fw-bold fs-3 text-gray-600 text-hover-primary">Créer un role</div>
+                    <div class="fw-bold fs-3 text-gray-600 text-hover-primary">Créer un rôle</div>
                     <!--end::Label-->
                 </button>
                 <!--begin::Button-->

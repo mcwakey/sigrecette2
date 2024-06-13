@@ -624,7 +624,7 @@
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">{{ __('Liste des roles') }}</span>
+                                <span class="menu-title">{{ __('Liste des rôles') }}</span>
                             </a>
                             <!--end:Menu link-->
                         </div>

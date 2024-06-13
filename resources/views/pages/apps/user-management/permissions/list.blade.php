@@ -1,7 +1,7 @@
 <x-default-layout>
 
     @section('title')
-        Permissions
+        Liste des permissions
     @endsection
 
     @section('breadcrumbs')
