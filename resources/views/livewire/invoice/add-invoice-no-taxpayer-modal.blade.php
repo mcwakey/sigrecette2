@@ -1,5 +1,5 @@
 <div class="modal fade" id="kt_modal_add_invoice_no_taxpayer" tabindex="-1" aria-hidden="true" wire:ignore.self data-bs-backdrop='static'>
-    <div class="modal-dialog modal-dialog-centered mw-1000px">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:calc(1000px - 20px)!important;">
         <div class="modal-content">
             <div class="modal-header" id="kt_modal_add_invoice_no_taxpayer_header">
                 <h2 class="fw-bold">{{ __('invoices') }}</h2>
@@ -16,7 +16,7 @@
                     <!--begin::Scroll-->
 
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_invoice_no_taxpayer_scroll"
-                        data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto"
+                        data-kt-scroll="false" data-kt-scroll-activate="false" data-kt-scroll-max-height="auto"
                         data-kt-scroll-dependencies="#kt_modal_add_invoice_no_taxpayer_header"
                         data-kt-scroll-wrappers="#kt_modal_add_invoice_no_taxpayer_scroll"
                         data-kt-scroll-offset="300px">
