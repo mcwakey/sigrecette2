@@ -1,7 +1,7 @@
 <div class="modal fade" id="kt_modal_add_taxpayer" tabindex="-1" aria-hidden="true" wire:ignore.self data-bs-backdrop='static'>
     <!--begin::Modal dialog-->
     <!-- <div class="modal-dialog  mw-1800px"> -->
-        <div class="modal-dialog modal-dialog-centered modal-fullscreen ">
+        <div class="modal-dialog modal-dialog-centered" style="max-width:calc(100vw - 20px)!important;">
             <div class="col-md-1"></div>
             <div class="col-md-10">
                 <!--begin::Modal content-->
