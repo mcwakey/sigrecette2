@@ -11,10 +11,26 @@ use App\Models\TaxpayerTaxable;
 use App\Models\Zone;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\SearchActivityResource;
+use App\Http\Resources\SearchCategoryResource;
+use App\Http\Resources\SearchEreaResource;
+use App\Http\Resources\SearchGenderResource;
+use App\Http\Resources\SearchIdTypeResource;
+use App\Http\Resources\SearchPaymentResource;
 use App\Http\Resources\SearchTaxableResource;
 use App\Http\Resources\SearchTaxlabelResource;
+use App\Http\Resources\SearchTownResource;
+use App\Http\Resources\SearchZoneResource;
+use App\Models\Activity;
+use App\Models\Canton;
+use App\Models\Category;
+use App\Models\Erea;
+use App\Models\Gender;
+use App\Models\IdType;
+use App\Models\Payment;
 use App\Models\Taxable;
 use App\Models\TaxLabel;
+use App\Models\Town;
 
 class SearchTaxpayersAndInvoiceAndTaxpayerTaxableController extends Controller
 {
@@ -32,15 +48,29 @@ class SearchTaxpayersAndInvoiceAndTaxpayerTaxableController extends Controller
 
             if ($zone) {
 
-                $queryTaxlabel = TaxLabel::where('category', 'CATEGORY 1');
+                $queryZones = Zone::select('zones.*');
 
-                $queryTaxable = Taxable::join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
+                $queryActivities = Activity::select('activities.*');
+
+                $queryCategories = Category::select('categories.*');
+
+                $queryEreas = Canton::select('cantons.*');
+
+                $queryTowns = Town::select('towns.*');
+
+                $queryGenders = Gender::select('genders.*');
+
+                $queryIdTypes = IdType::select('id_types.*');
+
+                $queryTaxlabels = TaxLabel::where('category', 'CATEGORY 1');
+
+                $queryTaxables = Taxable::join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
                                         ->where('category', 'CATEGORY 1')
                                         ->select('taxables.*');
 
-                $queryTaxpayer = Taxpayer::where('zone_id', $zone->id);
+                $queryTaxpayers = Taxpayer::where('zone_id', $zone->id);
                 
-                $queryTaxpayerTaxable = TaxpayerTaxable::join('taxpayers', 'taxpayer_taxables.taxpayer_id', '=', 'taxpayers.id')
+                $queryTaxpayerTaxables = TaxpayerTaxable::join('taxpayers', 'taxpayer_taxables.taxpayer_id', '=', 'taxpayers.id')
                                                         ->where('taxpayers.zone_id', $zone->id)
                                                         ->select('taxpayer_taxables.*');
 
@@ -48,9 +78,13 @@ class SearchTaxpayersAndInvoiceAndTaxpayerTaxableController extends Controller
                 //     $query->where('zone_id', $zone->id);
                 // });
 
-                $queryInvoice = Invoice::join('taxpayers', 'invoices.taxpayer_id', '=', 'taxpayers.id')
+                $queryInvoices = Invoice::join('taxpayers', 'invoices.taxpayer_id', '=', 'taxpayers.id')
                                         ->where('taxpayers.zone_id', $zone->id)
                                         ->select('invoices.*');
+
+                $queryPayments = Payment::join('taxpayers', 'payments.taxpayer_id', '=', 'taxpayers.id')
+                                        ->where('taxpayers.zone_id', $zone->id)
+                                        ->select('payments.*');
 
                 // $queryInvoice->whereHas('taxpayer', function ($query) use ($zone) {
                 //     $query->where('zone_id', $zone->id);
@@ -69,12 +103,22 @@ class SearchTaxpayersAndInvoiceAndTaxpayerTaxableController extends Controller
         }
 
         return [
-            'taxlabels'=> SearchTaxlabelResource::collection( $queryTaxlabel->get()),
-            'taxables'=> SearchTaxableResource::collection( $queryTaxable->get()),
+            'zones'=> SearchZoneResource::collection( $queryZones->get()),
+            'activities'=> SearchActivityResource::collection( $queryActivities->get()),
+            'categories'=> SearchCategoryResource::collection( $queryCategories->get()),
+            'ereas'=> SearchEreaResource::collection( $queryEreas->get()),
+            'towns'=> SearchTownResource::collection( $queryTowns->get()),
+            'genders'=> SearchGenderResource::collection( $queryGenders->get()),
+            'id_types'=> SearchIdTypeResource::collection( $queryIdTypes->get()),
 
-            'taxpayers'=> SearchTaxpayerResource::collection( $queryTaxpayer->get()),
-            'taxpayer_taxables' => SearchTaxpayerTaxableResource::collection($queryTaxpayerTaxable->get()),
-            'invoices' => SearchInvoiceResource::collection($queryInvoice->get()),
+            'taxlabels'=> SearchTaxlabelResource::collection( $queryTaxlabels->get()),
+            'taxables'=> SearchTaxableResource::collection( $queryTaxables->get()),
+
+            'taxpayers'=> SearchTaxpayerResource::collection( $queryTaxpayers->get()),
+            'taxpayer_taxables' => SearchTaxpayerTaxableResource::collection($queryTaxpayerTaxables->get()),
+            'invoices' => SearchInvoiceResource::collection($queryInvoices->get()),
+
+            'payments' => SearchPaymentResource::collection($queryPayments->get()),
         ];
     }
 }
