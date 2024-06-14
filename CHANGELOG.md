@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.8.8](https://github.com/mcwakey/sigrecette2/compare/v0.8.7...v0.8.8) (2024-06-14)
+
+
+### Features
+
+* add liste invoice ""Liste des ".__('invoices')." à recouvrer" ([33f0d9b](https://github.com/mcwakey/sigrecette2/commit/33f0d9ba02609c0dbd5f54391b86b4c0919b0bd8))
+* create new permissions ([069e104](https://github.com/mcwakey/sigrecette2/commit/069e104ddad232d710a9550040eb466c8a29599b))
+
+
+### Bug Fixes
+
+*  no invoice modal scroll ([261e895](https://github.com/mcwakey/sigrecette2/commit/261e8953143e85708ac286ab3743c9fd7c162f82))
+* invoice no taxable error when we use dialer-control buton ([c9cdfaf](https://github.com/mcwakey/sigrecette2/commit/c9cdfafb873e3512ce7b2ff50b4871898215cafc))
+* invoice sidebar title ([2d892de](https://github.com/mcwakey/sigrecette2/commit/2d892def778a4bf390287f6d809328845e291c88))
+* payment and reduced can add whithout true permission ([8b0c49e](https://github.com/mcwakey/sigrecette2/commit/8b0c49ef7fb833e718c37a69dc183d5648cefb1b))
+* taxpayer disable ([4a0b8b7](https://github.com/mcwakey/sigrecette2/commit/4a0b8b7097ba1f92bb4fef2ad943618c5e8d9f9d))
+* taxpayer disable action ([facd2ff](https://github.com/mcwakey/sigrecette2/commit/facd2ffe4230eadde451b5de215c0be7ff770b4f))
+* taxpayer modal on full screen ([1d397a3](https://github.com/mcwakey/sigrecette2/commit/1d397a3d9f0b35a5ab2f239bd5d9ee11b887dcf1))
+* try to fix error 500 on search ([c329c57](https://github.com/mcwakey/sigrecette2/commit/c329c5717c8e4d1cfbc9d5c3f0b98a6cee7b04f0))
+
 ### [0.8.7](https://github.com/mcwakey/sigrecette2/compare/v8.3.1...v0.8.7) (2024-06-06)
 
 
