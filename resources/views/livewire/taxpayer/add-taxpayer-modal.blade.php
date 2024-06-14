@@ -1,7 +1,7 @@
 <div class="modal fade" id="kt_modal_add_taxpayer" tabindex="-1" aria-hidden="true" wire:ignore.self data-bs-backdrop='static'>
     <!--begin::Modal dialog-->
     <!-- <div class="modal-dialog  mw-1800px"> -->
-        <div class="modal-dialog modal-dialog-centered modal-fullscreen ">
+        <div class="modal-dialog modal-dialog-centered" style="max-width:calc(100vw - 20px)!important;">
             <div class="col-md-1"></div>
             <div class="col-md-10">
                 <!--begin::Modal content-->
@@ -39,7 +39,7 @@
                         <form id="kt_modal_add_taxpayer_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
                             <input type="hidden" type="text" wire:model="taxpayer_id" name="taxpayer_id" />
                             <!--begin::Scroll-->
-                            <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_taxpayer_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_taxpayer_header" data-kt-scroll-wrappers="#kt_modal_add_taxpayer_scroll" data-kt-scroll-offset="300px">
+                            <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_taxpayer_scroll" data-kt-scroll="false" data-kt-scroll-activate="false" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_taxpayer_header" data-kt-scroll-wrappers="#kt_modal_add_taxpayer_scroll" data-kt-scroll-offset="300px">
                                 <!--begin::Input group-->
                                 {{--
                                 <div class="fv-row mb-7">

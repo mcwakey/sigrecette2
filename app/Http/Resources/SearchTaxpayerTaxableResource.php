@@ -29,12 +29,12 @@ class SearchTaxpayerTaxableResource extends JsonResource
             'longitude' => $this->resource->longitude,
             'latitude' => $this->resource->latitude,
             'authorisation'=> $this->resource->authorisation,
-            'auth_reference'=> $this->resource->auth_reference,
-            'taxable_id' => $this->resource->taxable_id,
-            'invoice_id' => $this->resource->invoice_id,
-            'bill_status' => $this->resource->bill_status,
+            'authReference'=> $this->resource->auth_reference,
+            'taxableId' => $this->resource->taxable_id,
+            'invoiceId' => $this->resource->invoice_id,
+            'billStatus' => $this->resource->bill_status,
 
-            'taxpayer_id' => $this->resource->taxpayer_id,
+            'taxpayerId' => $this->resource->taxpayer_id,
             // 'taxable'=> new TaxableResource($this->resource->taxable),
         ];
     }

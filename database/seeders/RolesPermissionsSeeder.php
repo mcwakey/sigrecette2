@@ -22,15 +22,18 @@ class RolesPermissionsSeeder extends Seeder
                 'peut supprimer une taxation',
 
                 // Invoice permissions
-                'peut émettre un avis (au comptant)',
-                'peut émettre un avis',
-                'peut accepter un avis',
-                'peut prendre en charge un avis',
-                'peut valider un avis (au comptant)',
-                'peut rejeter un avis',
-                'peut rejeter un avis (agent delegation ordonateur)',
-                'peut réduire ou annuler un avis',
-                'peut générer automatiquement les avis',
+                'peut émettre un avis au comptant',
+                'peut émettre un avis sur titre',
+                'peut accepter un avis sur titre',
+                'peut prendre en charge un avis sur titre',
+                'peut valider un avis au comptant',
+                'peut rejeter un avis sur titre (agent par délégation de l\'ordonateur)',
+                'peut rejeter un avis sur titre (agent par délégation du receveur)',
+                'peut annuler un avis sur titre',
+                'peut réduire un avis sur titre',
+                'peut annuler un avis au comptant',
+                'peut réduire un avis au comptant',
+                'peut générer automatiquement les avis sur titre',
 
                 // Date permissions
                 'peut ajouter la date de livraison d\'un avis',
@@ -196,9 +199,10 @@ class RolesPermissionsSeeder extends Seeder
                 'peut supprimer une taxation',
 
                 // Invoice permissions
-                'peut émettre un avis',
-                'peut réduire ou annuler un avis',
-                'peut générer automatiquement les avis',
+                'peut émettre un avis sur titre',
+                'peut annuler un avis sur titre',
+                'peut réduire un avis sur titre',
+                'peut générer automatiquement les avis sur titre',
 
                 // Geolocatoion permissions
                 'peut voir la geolocalisation d\'un contribuable',
@@ -206,8 +210,8 @@ class RolesPermissionsSeeder extends Seeder
 
             'agent_delegation' => [
                 // Invoice permissions
-                'peut accepter un avis',
-                'peut rejeter un avis (agent delegation ordonateur)',
+                'peut accepter un avis sur titre',
+                'peut rejeter un avis sur titre (agent par délégation de l\'ordonateur)',
             ],
 
             'regisseur' => [
@@ -255,8 +259,8 @@ class RolesPermissionsSeeder extends Seeder
 
             'agent_delegation_du_receveur' => [
                 // Invoice permissions
-                'peut prendre en charge un avis',
-                'peut rejeter un avis',
+                'peut prendre en charge un avis sur titre',
+                'peut rejeter un avis sur titre (agent par délégation du receveur)',
             ],
 
             'agent_recette' => [

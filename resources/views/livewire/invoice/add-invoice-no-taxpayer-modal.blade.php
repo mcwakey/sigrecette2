@@ -1,5 +1,5 @@
 <div class="modal fade" id="kt_modal_add_invoice_no_taxpayer" tabindex="-1" aria-hidden="true" wire:ignore.self data-bs-backdrop='static'>
-    <div class="modal-dialog modal-dialog-centered mw-1000px">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:calc(1000px - 20px)!important;">
         <div class="modal-content">
             <div class="modal-header" id="kt_modal_add_invoice_no_taxpayer_header">
                 <h2 class="fw-bold">{{ __('invoices') }}</h2>
@@ -16,7 +16,7 @@
                     <!--begin::Scroll-->
 
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_invoice_no_taxpayer_scroll"
-                        data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto"
+                        data-kt-scroll="false" data-kt-scroll-activate="false" data-kt-scroll-max-height="auto"
                         data-kt-scroll-dependencies="#kt_modal_add_invoice_no_taxpayer_header"
                         data-kt-scroll-wrappers="#kt_modal_add_invoice_no_taxpayer_scroll"
                         data-kt-scroll-offset="300px">
@@ -273,7 +273,7 @@
                             <div class="col-md-2">
                                 <input wire:model="qty" name="qty" type="hidden"
                                        class="form-control border-0 ps-12" data-kt-dialer-control="input"
-                                       placeholder="1"  readonly="readonly" data-kt-action="load_invoice" />
+                                       placeholder="1"  readonly="readonly" data-kt-action="load_invoice_comptant" />
                             </div>
 
 
@@ -281,7 +281,7 @@
                             <div class="col-md-3">
                                 <div class="input-group mb-2">
                                     @foreach ($months as $monthNumber => $monthName)
-                                    <input  type="hidden" wire:model="start_month" name="start_month" class="form-control mb-3 mb-lg-0" placeholder="{{ $monthName}}" data-kt-action="load_invoice" value="{{ $monthNumber}}"/>
+                                    <input  type="hidden" wire:model="start_month" name="start_month" class="form-control mb-3 mb-lg-0" placeholder="{{ $monthName}}" data-kt-action="load_invoice_comptant" value="{{ $monthNumber}}"/>
                                     @endforeach
                                 </div>
 
@@ -343,7 +343,7 @@
                                             </div>
                                         </td>
                                         <!-- <td>
-                                            <input wire:model="qty" name="qty" class="form-control form-control-solid mb-2" type="number" min="1" placeholder="1" value=""  data-kt-action="load_invoice"/>
+                                            <input wire:model="qty" name="qty" class="form-control form-control-solid mb-2" type="number" min="1" placeholder="1" value=""  data-kt-action="load_invoice_comptant"/>
                                         </td> -->
                                         <td>
                                             <input wire:model="s_amount" name="s_amount" type="text"

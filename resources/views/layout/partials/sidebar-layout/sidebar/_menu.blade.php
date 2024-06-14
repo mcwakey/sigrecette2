@@ -93,7 +93,7 @@
                                     <span class="bullet bullet-dot"></span>
                                 </span>
                                 <span class="menu-title" data-bs-toggle="modal"
-                                      data-bs-target="#kt_modal_add_invoice_general">{{__("Nouveau avis sur titre")}}</span>
+                                      data-bs-target="#kt_modal_add_invoice_general">{{__("Nouvel avis sur titre")}}</span>
                             </span>
                     </div>
                     <div class="menu-item">
@@ -102,7 +102,7 @@
                                     <span class="bullet bullet-dot"></span>
                                 </span>
                                 <span class="menu-title" data-bs-toggle="modal"
-                                      data-bs-target="#kt_modal_add_invoice_no_taxpayer">{{__("Nouveau avis au comptant")}}</span>
+                                      data-bs-target="#kt_modal_add_invoice_no_taxpayer">{{__("Nouvel avis au comptant")}}</span>
                             </span>
                     </div>
                 </div>
@@ -125,7 +125,7 @@
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
-                            <span class="menu-title">Liste des avis en état de brouillon</span>
+                            <span class="menu-title">Liste des avis sur titre en état de brouillon</span>
                         </a>
                     </div>
                     <div class="menu-item">
@@ -134,7 +134,7 @@
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
-                            <span class="menu-title">Liste des avis en attente de N° d'ordre de recette</span>
+                            <span class="menu-title">Liste des avis sur titre en attente de N° d'ordre de recette</span>
                         </a>
                     </div>
                     <div class="menu-item">
@@ -143,7 +143,7 @@
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
-                            <span class="menu-title">Liste des avis à prendre en charge/Rejeté</span>
+                            <span class="menu-title">Liste des avis sur titre à prendre en Charge/Rejeté</span>
                         </a>
                     </div>
 
@@ -154,7 +154,7 @@
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
-                            <span class="menu-title">Liste des avis non distribués</span>
+                            <span class="menu-title">Liste des avis sur titre non distribués</span>
                         </a>
                         <!--end:Menu link-->
                     </div>
@@ -165,7 +165,7 @@
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
-                            <span class="menu-title">Liste des avis distribués</span>
+                            <span class="menu-title">Liste des avis sur titre distribués</span>
                         </a>
                         <!--end:Menu link-->
                     </div>
@@ -624,7 +624,7 @@
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">{{ __('Liste des roles') }}</span>
+                                <span class="menu-title">{{ __('Liste des rôles') }}</span>
                             </a>
                             <!--end:Menu link-->
                         </div>

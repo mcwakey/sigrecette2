@@ -1,7 +1,7 @@
 <x-default-layout>
 
     @section('title')
-        Roles
+        Liste des rôles
     @endsection
 
     @section('breadcrumbs')
