@@ -10265,10 +10265,10 @@ directive("offline", ({ el, directive: directive2, cleanup }) => {
 });
 
 // js/directives/wire-loading.js
-directive("loading", ({ el, directive: directive2, component }) => {
+directive("loading", ({ el, directive: directive2, component, cleanup }) => {
   let { targets, inverted } = getTargets(el);
   let [delay, abortDelay] = applyDelay(directive2);
-  whenTargetsArePartOfRequest(component, targets, inverted, [
+  let cleanupA = whenTargetsArePartOfRequest(component, targets, inverted, [
     () => delay(() => toggleBooleanStateDirective(el, directive2, true)),
     () => abortDelay(() => toggleBooleanStateDirective(el, directive2, false))
   ]);
@@ -10320,7 +10320,7 @@ function applyDelay(directive2) {
   ];
 }
 function whenTargetsArePartOfRequest(component, targets, inverted, [startLoading, endLoading]) {
-  on("commit", ({ component: iComponent, commit: payload, respond }) => {
+  return on("commit", ({ component: iComponent, commit: payload, respond }) => {
     if (iComponent !== component)
       return;
     if (targets.length > 0 && containsTargets(payload, targets) === inverted)
