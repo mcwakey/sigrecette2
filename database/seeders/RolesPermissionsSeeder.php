@@ -29,9 +29,7 @@ class RolesPermissionsSeeder extends Seeder
                 'peut valider un avis au comptant',
                 'peut rejeter un avis sur titre (agent par délégation de l\'ordonateur)',
                 'peut rejeter un avis sur titre (agent par délégation du receveur)',
-                'peut annuler un avis sur titre',
                 'peut réduire un avis sur titre',
-                'peut annuler un avis au comptant',
                 'peut réduire un avis au comptant',
                 'peut générer automatiquement les avis sur titre',
 
@@ -46,6 +44,7 @@ class RolesPermissionsSeeder extends Seeder
                 // Payment permissions
                 'peut ajouter un paiement',
                 'peut accepter un paiement',
+                'peut comptabiliser un paiement',
 
                 // Order no permissions
                 'peut ajouter le numéro d\'ordre de recette d\'un avis',
@@ -200,7 +199,6 @@ class RolesPermissionsSeeder extends Seeder
 
                 // Invoice permissions
                 'peut émettre un avis sur titre',
-                'peut annuler un avis sur titre',
                 'peut réduire un avis sur titre',
                 'peut générer automatiquement les avis sur titre',
 
@@ -230,6 +228,7 @@ class RolesPermissionsSeeder extends Seeder
                 // Payment permissions
                 'peut ajouter un paiement',
                 'peut accepter un paiement',
+                'peut comptabiliser un paiement',
 
                 // Geolocatoion permissions
                 'peut voir la geolocalisation d\'un contribuable',
