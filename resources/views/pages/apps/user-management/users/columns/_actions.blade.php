@@ -26,18 +26,22 @@
     @endif
 
     @if ($user->deleted_at)
-        <div class="menu-item px-3">
-            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $user->id }}" data-kt-action="restore_row">
-                {{ __('Activer') }}
-            </a>
-        </div>
+        @can('peut activer un utilisateur')
+            <div class="menu-item px-3">
+                <a href="#" class="menu-link px-3" data-kt-user-id="{{ $user->id }}" data-kt-action="restore_row">
+                    {{ __('Activer') }}
+                </a>
+            </div>
+        @endcan
     @else
-        <div class="menu-item px-3">
-            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $user->id }}"
-                data-kt-action="disabeld_row">
-                {{ __('Désactiver') }}
-            </a>
-        </div>
+        @can('peut désactiver un utilisateur')
+            <div class="menu-item px-3">
+                <a href="#" class="menu-link px-3" data-kt-user-id="{{ $user->id }}"
+                    data-kt-action="disabeld_row">
+                    {{ __('Désactiver') }}
+                </a>
+            </div>
+        @endcan
     @endif
 
 </div>

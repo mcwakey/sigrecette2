@@ -27,7 +27,7 @@
     @endif
 
     @if (request()->has('disable'))
-        @can('peut supprimer un contribuable')
+        @can('peut activer un contribuable')
             <!--begin::Menu item-->
             <div class="menu-item px-3">
                 <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer->id }}"
@@ -38,7 +38,7 @@
             <!--end::Menu item-->
         @endcan
     @else
-        @can('peut supprimer un contribuable')
+        @can('peut désactiver un contribuable')
             <!--begin::Menu item-->
             <div class="menu-item px-3">
                 <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxpayer->id }}"

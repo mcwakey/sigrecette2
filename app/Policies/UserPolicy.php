@@ -44,7 +44,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        return $user->hasPermissionTo('peut supprimer un utilisateur') || $user->id == $model->id;
+        return $user->hasPermissionTo('peut désactiver un utilisateur') || $user->id == $model->id;
     }
 
     /**
