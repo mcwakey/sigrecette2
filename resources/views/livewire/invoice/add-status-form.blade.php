@@ -13,11 +13,11 @@
                 <select class="form-select form-select-solid" wire:model="status" name="status"
                     data-placeholder="Select option" data-allow-clear="true">
                     <option></option>
-                    @can('peut prendre en charge un avis')
+                    @can('peut prendre en charge un avis sur titre')
                         <option value="{{App\Enums\InvoiceStatusEnums::APPROVED  }}">{{ __('APROVED') }}</option>
                     @endcan
 
-                    @can('peut rejeter un avis')
+                    @can('peut rejeter un avis sur titre (agent par délégation du receveur)')
                         <option value="{{ App\Enums\InvoiceStatusEnums::REJECTED }}">{{ __('REJECTED') }}</option>
                     @endcan
 
@@ -26,11 +26,11 @@
             <select class="form-select form-select-solid" wire:model="status" name="status"
                 data-placeholder="Select option" data-allow-clear="true">
                 <option></option>
-                @can('peut accepter un avis')
+                @can('peut accepter un avis sur titre')
                     <option value="{{App\Enums\InvoiceStatusEnums::ACCEPTED}}">{{ __('ACCEPTED') }}</option>
                 @endcan
 
-                @can('peut rejeter un avis (agent delegation ordonateur)')
+                @can('peut rejeter un avis sur titre (agent par délégation de l\'ordonateur)')
                     <option value="{{App\Enums\InvoiceStatusEnums::REJECTED_BY_OR}}">{{ __('CANCELED') }}</option>
                 @endcan
             </select>

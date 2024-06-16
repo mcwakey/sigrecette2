@@ -16,7 +16,9 @@
                 <select class="form-select form-select-solid" wire:model="status" name="status"
                         data-placeholder="Select option" data-allow-clear="true">
                     <option></option>
-                    <option value="{{App\Enums\PaymentStatusEnums::ACCOUNTED}}">{{ __('ACCOUNTED') }}</option>
+                    @can('peut comptabiliser un paiement')
+                        <option value="{{App\Enums\PaymentStatusEnums::ACCOUNTED}}">{{ __('ACCOUNTED') }}</option>
+                    @endcan
                 </select>
             @endif
 

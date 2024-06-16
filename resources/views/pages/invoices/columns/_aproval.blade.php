@@ -2,7 +2,7 @@
 
         @if($invoice->can("submit_for_approved"))
             <div class="badge badge-lg badge-light-primary d-inline">{{ __($invoice->status) }}
-                @can('peut prendre en charge un avis')
+                @can('peut prendre en charge un avis sur titre')
                     <button type="button"
                             class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto  pulse pulse-warning"
                             data-kt-user-id="{{ $invoice->id }}"
@@ -43,7 +43,7 @@
     <div class="badge badge-lg badge-light-danger d-inline">{{ __('REJECTED') }}</div>
     @elseif($invoice->can( "submit_for_accepted"))
     <div class="badge badge-lg badge-light-secondary d-inline">{{ __('DRAFT')}}
-        @can('peut accepter un avis')
+        @can('peut accepter un avis sur titre')
             <button type="button"
                     class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto pulse pulse-warning"
                     data-kt-user-id="{{ $invoice->id }}"
