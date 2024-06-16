@@ -14,7 +14,7 @@
 			<span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{$count_invoices["NOEXPIRED"]}}</span>
 			<!--end::Amount-->
 			<!--begin::Subtitle-->
-			<span class="text-white opacity-75 pt-1 fw-semibold fs-6">Active Invoices</span>
+			<span class="text-white opacity-75 pt-1 fw-semibold fs-6">Avis</span>
 
 			<!--end::Subtitle-->
 		</div>
@@ -25,7 +25,7 @@
 	<!--end::Header-->
 
 	<!--begin::Card body-->
-	<div class="card-body d-flex align-items-end pt-0">
+	<div class="card-body d-flex align-items-end pt-0" style="height: 100%">
 
 
 		<div class="d-flex align-items-center flex-column mt-3 w-100">
@@ -42,7 +42,7 @@
             </div>
 			@if(isset($count_invoices['Pending'], $count_invoices['NOEXPIRED']) && intval($count_invoices["NOEXPIRED"])>0 )
 			<div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-				<span> {{$count_invoices["Pending"]}} Not delivery</span>
+				<span> {{$count_invoices["Pending"]}} Non délivré</span>
                 <span>{{ round( ($count_invoices["Pending"] *100)/$count_invoices["NOEXPIRED"]) }}%</span>
             </div>
 			@endif
