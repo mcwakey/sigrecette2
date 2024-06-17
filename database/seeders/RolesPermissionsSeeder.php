@@ -29,9 +29,7 @@ class RolesPermissionsSeeder extends Seeder
                 'peut valider un avis au comptant',
                 'peut rejeter un avis sur titre (agent par délégation de l\'ordonateur)',
                 'peut rejeter un avis sur titre (agent par délégation du receveur)',
-                'peut annuler un avis sur titre',
                 'peut réduire un avis sur titre',
-                'peut annuler un avis au comptant',
                 'peut réduire un avis au comptant',
                 'peut générer automatiquement les avis sur titre',
 
@@ -41,11 +39,13 @@ class RolesPermissionsSeeder extends Seeder
                 // Taxpayer permissions
                 'peut créer un contribuable',
                 'peut modifier un contribuable',
-                'peut supprimer un contribuable',
+                'peut activer un contribuable',
+                'peut désactiver un contribuable',
 
                 // Payment permissions
                 'peut ajouter un paiement',
                 'peut accepter un paiement',
+                'peut comptabiliser un paiement',
 
                 // Order no permissions
                 'peut ajouter le numéro d\'ordre de recette d\'un avis',
@@ -53,7 +53,8 @@ class RolesPermissionsSeeder extends Seeder
                 // User permissions
                 'peut créer un utilisateur',
                 'peut modifier un utilisateur',
-                'peut supprimer un utilisateur',
+                'peut activer un utilisateur',
+                'peut désactiver un utilisateur',
 
                 // Geolocatoion permissions
                 'peut voir la geolocalisation d\'un utilisateur',
@@ -128,7 +129,8 @@ class RolesPermissionsSeeder extends Seeder
                 // User permissions
                 'peut créer un utilisateur',
                 'peut modifier un utilisateur',
-                'peut supprimer un utilisateur',
+                'peut activer un utilisateur',
+                'peut désactiver un utilisateur',
 
                 // Role permissions
                 'peut créer un rôle',
@@ -200,7 +202,6 @@ class RolesPermissionsSeeder extends Seeder
 
                 // Invoice permissions
                 'peut émettre un avis sur titre',
-                'peut annuler un avis sur titre',
                 'peut réduire un avis sur titre',
                 'peut générer automatiquement les avis sur titre',
 
@@ -230,6 +231,7 @@ class RolesPermissionsSeeder extends Seeder
                 // Payment permissions
                 'peut ajouter un paiement',
                 'peut accepter un paiement',
+                'peut comptabiliser un paiement',
 
                 // Geolocatoion permissions
                 'peut voir la geolocalisation d\'un contribuable',
@@ -239,7 +241,8 @@ class RolesPermissionsSeeder extends Seeder
                 // Taxpayer permissions
                 'peut créer un contribuable',
                 'peut modifier un contribuable',
-                'peut supprimer un contribuable',
+                'peut activer un contribuable',
+                'peut désactiver un contribuable',
 
                 // Payment permissions
                 'peut ajouter un paiement',

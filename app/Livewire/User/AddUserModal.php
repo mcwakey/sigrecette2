@@ -179,7 +179,7 @@ class AddUserModal extends Component
 
         if ($user) {
             $user->restore();
-            $this->dispatch('success', 'Utilisateur activer avec succès');
+            $this->dispatch('success', 'Utilisateur restorer avec succès');
         }
     }
 

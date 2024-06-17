@@ -65,7 +65,7 @@
                             </span>
                         @endcan
 
-                        @can('peut supprimer un utilisateur')
+                        @can('peut désactiver un utilisateur')
                             <span data-bs-toggle="tooltip" data-bs-trigger="hover">
                                 <a href="#" class="btn btn-sm btn-light btn-active-light-danger"
                                     data-kt-user-id="{{ $user->id }}" data-kt-action="delete_row">supprimer</a>

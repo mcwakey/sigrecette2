@@ -368,16 +368,6 @@
                                 <span class="menu-title">{{ __('taxpayers') }}</span>
                             </a>
                         @endcan
-
-                        @can('peut voir la geolocalisation d\'un utilisateur')
-                            <a class="menu-link {{ request()->routeIs('geolocation.users') ? 'active' : '' }}"
-                                href="{{ route('geolocation.users') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">{{ __('users') }}</span>
-                            </a>
-                        @endcan
                         <!--end:Menu link-->
                     </div>
                     <!--end:Menu item-->

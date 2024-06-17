@@ -218,7 +218,7 @@
                                     </button>
                                 @endcan
 
-                                @can('peut émettre un avis')
+                                @can('peut émettre un avis sur titre')
                                     <button type="button" class="btn btn-light-danger ms-auto"
                                         data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal"
                                         data-bs-target="#kt_modal_add_invoice" data-kt-action="add_invoice">
@@ -389,7 +389,7 @@
                                         {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
                                         <input type="text" data-kt-taxpayer_invoices-table-filter="search"
                                             class="form-control form-control-solid w-250px ps-13"
-                                            placeholder="Search Invoice" id="mySearchInput" />
+                                            placeholder="Rechercher un avis" id="mySearchInput" />
                                     </div>
                                     <!--end::Search-->
                                 </div>
@@ -559,7 +559,7 @@
                                                         @if ($invoice->can("submit_for_approved"))
                                                             <span
                                                                 class="badge badge-light-primary">{{ __($invoice->status) }}</span>
-                                                            @can('peut prendre en charge un avis')
+                                                            @can('peut prendre en charge un avis sur titre')
                                                                 <button type="button"
                                                                     class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
                                                                     data-kt-user-id="{{ $invoice->id }}"
@@ -588,7 +588,7 @@
                                                             <span
                                                                 class="badge badge-light-secondary">{{ __('DRAFT') }}</span>
 
-                                                            @can('peut accepter un avis')
+                                                            @can('peut accepter un avis sur titre')
                                                                 <button type="button"
                                                                     class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
                                                                     data-kt-user-id="{{ $invoice->id }}"
@@ -688,7 +688,7 @@
                                                                 @endcan
 
                                                                     @endif
-                                                                @can('peut réduire ou annuler un avis')
+                                                                @can('peut réduire un avis sur titre')
                                                                     <!--begin::Menu item-->
                                                                         <div class="menu-item px-3">
                                                                             <a href="#"
@@ -784,7 +784,7 @@
                                                     @if ($payment->status == App\Enums\PaymentStatusEnums::PENDING)
                                                         <span
                                                             class="badge badge-light-primary">{{ __($payment->status) }}</span>
-                                                        @can('peut accepter un paiement')
+                                                        @can('peut comptabiliser un paiement')
                                                             <button type="button"
                                                                 class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
                                                                 data-kt-user-id="{{ $payment->id }}"
