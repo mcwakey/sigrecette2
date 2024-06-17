@@ -1,4 +1,4 @@
-<div class="card menu-column" style="background-color: white;height:calc(100% - 10px);width:100%;" >
+<div class="card menu-column" style="height:calc(100% - 10px);width:100%;" >
     <!--begin::Heading-->
 
     <div style="opacity: 0;pointer-events:none;">
