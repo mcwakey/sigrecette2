@@ -1,15 +1,12 @@
-<div class="modal fade" id="kt_modal_add_stock_transfer" tabindex="-1" aria-hidden="true" wire:ignore.self>
+<div class="modal fade" id="kt_modal_add_stock_transfer-deposit" tabindex="-1" aria-hidden="true" wire:ignore.self>
     <!--begin::Modal dialog-->
     <div class="modal-dialog modal-dialog-centered mw-1000px">
         <!--begin::Modal content-->
         <div class="modal-content">
             <!--begin::Modal header-->
-            <div class="modal-header" id="kt_modal_add_stock_transfer_header">
-                @if ($edit_mode==false && $deposit_mode==false)
-                    <h2 class="fw-bold">{{ __('Nouvelle alimentation') }}</h2>
-            @else
-                    <h2 class="fw-bold">{{ __('account state') }}</h2>
-                 @endif
+            <div class="modal-header" id="kt_modal_add_stock_transfer-deposit_header">
+                <!--begin::Modal title-->
+                <h2 class="fw-bold">{{ __('stock transfers') }}</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
@@ -21,42 +18,16 @@
             <!--begin::Modal body-->
             <div class="modal-body px-5 my-7">
                 <!--begin::Form-->
-                <form id="kt_modal_add_stock_transfer_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
+                <form id="kt_modal_add_stock_transfer-deposit_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
                     <input type="hidden" wire:model="stock_transfer_id" name="stock_transfer_id"  value=""/>
                     <input type="hidden" wire:model="user_id" name="user_id" value=""/>
                     <!--begin::Scroll-->
-                    <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_stock_transfer_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_stock_transfer_header" data-kt-scroll-wrappers="#kt_modal_add_stock_transfer_scroll" data-kt-scroll-offset="300px">
+                    <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_stock_transfer-deposit_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_stock_transfer-deposit_header" data-kt-scroll-wrappers="#kt_modal_add_stock_transfer-deposit_scroll" data-kt-scroll-offset="300px">
 
                         <!--begin::Input group-->
 
                                 <input type="hidden" wire:model="collector_id" name="collector_id" value=""/>
 
-                        @if ($edit_mode==false && $deposit_mode==false)
-                        <div class="row mb-7">
-                            <div class="col-md-6">
-
-                                <!--begin::Label-->
-                                <label class="required fs-6 fw-semibold mb-2">{{ __('collector') }}</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-
-                                <select data-kt-action="load_drop" wire:model="collector_id" name="collector_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
-                                    <option>{{ __('select an option') }}</option>
-                                    @foreach($collectors as $collector)
-                                    <option value="{{ $collector->id}}">{{ $collector->user_name}}</option>
-                                    @endforeach
-                                </select>
-
-
-                                <!--end::Input-->
-                                @error('collector_id')
-                                <span class="text-danger">{{ $message }}</span> @enderror
-                            </div>
-                        </div>
-
-
-                        @endif
-                        <div class="separator saperator-dashed my-3"></div>
                         @if (!$edit_mode)
 
                         <div class="row mb-7">
@@ -66,10 +37,10 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
 
-                                <select data-kt-action="load_drop" wire:model="stock_request_id" name="stock_request_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
+                                <select data-kt-action="load_drop" wire:model="stock_transfer_id" name="stock_transfer_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer-deposit">
                                     <option>{{ __('select an option') }}</option>
-                                    @foreach($stock_requests as $request)
-                                        <option value="{{ $request->id}}">{{ $request->taxable->name." ".$request->start_no."-".$request->end_no." "." (".$request->req_no.")" }}</option>
+                                    @foreach($stock_transfers as $stock_transfer)
+                                        <option value="{{  $stock_transfer->id}}">{{  $stock_transfer->taxable->name." ". $stock_transfer->start_no."-". $stock_transfer->end_no." "." (". $stock_transfer->stock_request->req_no.")" }}</option>
                                     @endforeach
                                 </select>
 
@@ -143,7 +114,7 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <!-- <input type="text" wire:model="code" name="code" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('code') }}" data-kt-action="change_qty" /> -->
-                                <select wire:model="code" name="code" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
+                                <select wire:model="code" name="code" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer-deposit">
                                     <option>{{ __('select an option') }}</option>
                                     @foreach($taxlabel_list as $taxlabel)<option value="{{ $taxlabel->code}}">{{ $taxlabel->code." -- ".$taxlabel->name }}</option>@endforeach
 
@@ -161,7 +132,7 @@
 
                                 <input type="text" wire:model="taxlabel_id" name="taxlabel_id" class="form-control mb-3 mb-lg-0" placeholder="{{ __('reference no') }}"/>
 
-                                <!-- <select wire:model="taxlabel_id" name="taxlabel_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
+                                <!-- <select wire:model="taxlabel_id" name="taxlabel_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer-deposit">
                                     <option>{{ __('select an option') }}</option>
                                     <option value="TICKET">TICKET</option>
                                     <option value="TIMBRE">TIMBRE</option>
@@ -191,7 +162,7 @@
                         @endif
 
                         <div class="separator separator-content separator-dashed my-3">
-                            <span class="w-250px text-gray-500 fw-semibold fs-7">{{ __('request summary') }}</span>
+                            <span class="w-250px text-gray-500 fw-semibold fs-7">{{ __('Résumé du stock') }}</span>
                         </div>
 
                         <table class="table g-5 gs-0 mb-0 fw-bolder text-gray-700" data-kt-element="items">
@@ -205,25 +176,28 @@
                                             </tr>
                                         </thead>
                                         <tbody class="fs-6 fw-semibold text-gray-600">
-                                        @foreach($stock_transfers as $stock_transfer)
-                                        <tr class="border-bottom border-bottom-dashed" data-kt-element="item">
-                                            <td>
-                                                {{ $stock_transfer->taxable->name }}
-                                            </td>
-                                            <td class="ps-0">
-                                                {{ $stock_transfer->taxable->tariff }}
-                                            </td>
-                                            <td>
-                                                {{ $stock_transfer->qty }}
-                                            </td>
-                                            <td>
-                                                {{ $stock_transfer->qty*$stock_transfer->taxable->tariff }}
-                                            </td>
-                                            <td>
-                                                {{ $stock_transfer->start_no." - ".$stock_transfer->end_no }}
-                                            </td>
-                                        </tr>
-                                        @endforeach
+                                        @if( $stock_transfers_v)
+                                            @foreach( $stock_transfers_v as $stock_transfer)
+                                                <tr class="border-bottom border-bottom-dashed" data-kt-element="item">
+                                                    <td>
+                                                        {{ $stock_transfer->taxable->name }}
+                                                    </td>
+                                                    <td class="ps-0">
+                                                        {{ $stock_transfer->taxable->tariff }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $stock_transfer->qty }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $stock_transfer->qty*$stock_transfer->taxable->tariff }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $stock_transfer->start_no." - ".$stock_transfer->end_no }}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+
                                         </tbody>
                             </table>
 

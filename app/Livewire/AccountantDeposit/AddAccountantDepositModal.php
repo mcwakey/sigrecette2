@@ -2,6 +2,9 @@
 
 namespace App\Livewire\AccountantDeposit;
 
+use App\Enums\InvoiceStatusEnums;
+use App\Enums\PaymentStatusEnums;
+use App\Helpers\Constants;
 use App\Models\Payment;
 use App\Models\StockRequest;
 use App\Models\StockTransfer;
@@ -63,7 +66,7 @@ class AddAccountantDepositModal extends Component
         'delete_taxpayer' => 'deleteUser',
         'change_qty' => 'changeQty',
         'load_drop' => 'loadDrop',
-        'add_accountant_deposit' => 'addAccountaantDeposit',
+        'add_accountant_deposit' => 'addAccountantDeposit',
         'update_transfer' => 'updateTransfer',
         'add_deposit' => 'addDeposit',
     ];
@@ -81,179 +84,7 @@ class AddAccountantDepositModal extends Component
         return view('livewire.accountant_deposit.add-accountant-deposit-modal', compact('collectors'));
     }
 
-    // public function updatedTaxlabelId($value)
-    // {
-        // $this->taxable_id = "";
-        // $this->trans_no = "";
 
-        // if ($this->deposit_mode) {
-        //     $this->taxables = Taxable::select('taxables.*')
-        //                                 ->join('stock_transfers', 'stock_transfers.taxable_id', '=', 'taxables.id')
-        //                                 ->where('tax_label_id', null)
-        //                                 ->where('unit', $value)
-        //                                 ->where('type', 'ACTIVE')
-        //                                 ->where('to_user_id', $this->collector_id)
-        //                                 ->distinct()
-        //                                 ->get();
-        // }else{
-        //     $this->taxables = Taxable::select('taxables.*')
-        //                                 ->join('stock_requests', 'stock_requests.taxable_id', '=', 'taxables.id')
-        //                                 ->where('tax_label_id', null)
-        //                                 ->where('unit', $value)
-        //                                 ->get();
-
-        // }
-
-        // // $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('unit', $value)->where('to_user_id', $this->collector_id)->get();
-        // $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
-
-        // if ($this->edit_mode == true) {
-        //      //$this->stock_transfers = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
-        //     $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('unit', $value)->where('to_user_id', $this->collector_id)->get();
-        // }
-    // }
-
-    public function updatedTaxableId($value)
-    {
-        // Debugging to ensure $value is valid
-        //dd($value);
-
-        // Assuming $value is valid, fetch taxables based on tax label ID
-        // if ($this->deposit_mode == false) {
-
-        if ($this->deposit_mode) {
-            $taxables = Taxable::select('taxables.*', 'trans_no', 'trans_id', 'last_no', 'stock_transfers.id AS stock_transfers_id')
-                                    ->join('stock_transfers', 'stock_transfers.taxable_id', '=', 'taxables.id')
-                                    ->where('taxables.id', $value)
-                                    ->orderBy('stock_transfers.id', 'DESC')
-                                    ->get();
-
-            $this->trans_no = $taxables->first()->trans_no ?? "";
-            $this->trans_id = $taxables->first()->trans_id ?? "";
-
-            //dd($taxables->first());
-
-            $this->start_no = $taxables->first()->last_no ?? "";
-            $this->stock_request_id = $taxables->first()->stock_transfers_id ?? "";
-            
-            // $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'VENDU')->where('to_user_id', $this->collector_id)->get();
-            $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('unit', $value)->where('to_user_id', $this->collector_id)->get();
-       
-        }else{
-            $taxables = Taxable::select('taxables.*', 'req_no', 'last_no', 'stock_requests.id AS stock_request_id')
-                                    ->join('stock_requests', 'stock_requests.taxable_id', '=', 'taxables.id')
-                                    ->where('taxables.id', $value)
-                                    ->get();
-
-            $this->trans_no = $taxables->first()->req_no ?? "";
-            // $this->trans_id = $taxables->first()->trans_id ?? "";
-
-            $this->start_no = $taxables->first()->last_no ?? "";
-            $this->stock_request_id = $taxables->first()->stock_request_id ?? "";
-
-            $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
-        }
-        // }
-        //dd($taxables->first());
-        
-    }
-
-    public function updatedCollectorId($value)
-    {
-        // $this->taxlabel_id = "";
-        $this->taxable_id = "";
-        $this->trans_no = "";
-        $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
-
-        //  //dd($this->deposit_mode);
-        //     $this->taxlabels = TaxLabel::select('tax_labels.*')
-        //                         ->join('taxables', 'taxables.tax_label_id', '=', 'tax_labels.id')
-        //                         ->join('stock_requests', 'stock_requests.taxable_id', '=', 'taxables.id')
-        //                         ->distinct()
-        //                         ->get();
-
-        // if ($this->edit_mode) {
-        //     $this->taxlabels = TaxLabel::select('tax_labels.*')
-        //                         ->join('taxables', 'taxables.tax_label_id', '=', 'tax_labels.id')
-        //                         ->join('stock_transfers', 'stock_transfers.taxable_id', '=', 'taxables.id')
-        //                         ->where('to_user_id', $value)
-        //                         ->distinct()
-        //                         ->get();
-        // }
-
-        // if ($this->deposit_mode) {
-        //     $this->taxlabels = TaxLabel::select('tax_labels.*')
-        //                         ->join('taxables', 'taxables.tax_label_id', '=', 'tax_labels.id')
-        //                         ->join('stock_transfers', 'stock_transfers.taxable_id', '=', 'taxables.id')
-        //                         ->where('to_user_id', $value)
-        //                         ->distinct()
-        //                         ->get();
-
-        // //dd($this->deposit_mode, $this->taxlabels);
-        // }
-
-        // // if ($this->deposit_mode) {
-        // //     $this->taxables = Taxable::select('taxables.*')
-        // //                             ->join('stock_transfers', 'stock_transfers.taxable_id', '=', 'taxables.id')
-        // //                             ->where('tax_label_id', $this->taxlabel_id)
-        // //                             ->where('to_user_id', $value)
-        // //                             ->where('trans_type', "RECU")
-        // //                             ->get();
-        // // }
-
-        // $this->taxable_id = "";
-        // $this->trans_no = "";
-
-        if ($this->deposit_mode) {
-            $this->taxables = Taxable::select('taxables.*')
-                                        ->join('stock_transfers', 'stock_transfers.taxable_id', '=', 'taxables.id')
-                                        ->where('tax_label_id', null)
-                                        //->where('unit', $value)
-                                        ->where('type', 'ACTIVE')
-                                        ->where('to_user_id', $this->collector_id)
-                                        ->distinct()
-                                        ->get();
-        }else{
-            $this->taxables = Taxable::select('taxables.*')
-                                        ->join('stock_requests', 'stock_requests.taxable_id', '=', 'taxables.id')
-                                        ->where('tax_label_id', null)
-                                        //->where('unit', $value)
-                                        ->get();
-
-        }
-
-        // $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('unit', $value)->where('to_user_id', $this->collector_id)->get();
-        $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
-
-        if ($this->edit_mode == true) {
-             //$this->stock_transfers = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
-            $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
-        }
-    }
-
-    public function updatedEndNo($value)
-    {
-        //dd($this->start_no,$this->end_no);
-
-        if ($this->start_no !== "" && $this->end_no !== "")
-        {
-            $this->qty = $this->end_no - $this->start_no + 1;
-        }
-    }
-
-    public function updatedStartNo($value)
-    {
-        //dd($this->start_no,$this->end_no);
-
-        if ($this->start_no !== "" && $this->end_no !== "")
-        {
-            $this->qty = $this->end_no - $this->start_no + 1;
-        }
-    }
-
-    public function updatedTransNo($value)
-    {
-    }
 
     public function submit()
     {
@@ -266,16 +97,16 @@ class AddAccountantDepositModal extends Component
 
         //   $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('unit', $this->taxlabel_id)->where('to_user_id', $this->collector_id)->get();
         //         $stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('trans_type', 'RECU')->where('unit', $this->taxlabel_id)->where('to_user_id', $this->collector_id)->get();
-       
+
         //         dd($this->edit_mode, $stock_transfers,$this->stock_transfers);
             //$stock_transfers = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
-          
+
                 // $total_sold = 0;
                 // if ($stock_transfers){
 
                     $paymentData = [
                         'deposit' => $this->paid,
-                        'status' => "DONE",
+                        'status' => 'DONE',
                         'payment_type' => $this->payment_type,
                         'description' => "Versement",
                         'user_id' => Auth::id(),
@@ -287,7 +118,7 @@ class AddAccountantDepositModal extends Component
 
                     Payment::create($paymentData);
 
-                    $payments_olds = Payment::where('invoice_type', "TITRE")->where('status', "APROVED")->get();
+                    $payments_olds = Payment::whereIn('invoice_type', [Constants::INVOICE_TYPE_COMPTANT,Constants::INVOICE_TYPE_TITRE])->where('status',PaymentStatusEnums::ACCOUNTED )->get();
                      foreach ($payments_olds as $payments_old) {
 
                         // $paymentsData = [
@@ -302,7 +133,7 @@ class AddAccountantDepositModal extends Component
                         //     // 'by_user_id' => $this->user_id,
                         //     // 'to_user_id' => $stock_transfer->to_user_id,
                         // ];
-        
+
                         // $stock_transfer_new = StockTransfer::create($stockTtransferData);
                         $payments_old->status = 'DONE';
                         $payments_old->save();
@@ -332,13 +163,13 @@ class AddAccountantDepositModal extends Component
 
                     //     $stock_transfer->type = 'ARCHIVED';
                     //     $stock_transfer->save();
-                        
+
                     //     //dd($stock_transfer->type);
                     // }
 
                     // $payment->amount = $total_sold;
                     // $payment->save();
-                    
+
                     $this->dispatch('success', __('Etat de comptabilité mis a jour avec succès'));
                 }
 
@@ -358,7 +189,7 @@ class AddAccountantDepositModal extends Component
             //     ];
 
             //     //dd($this->trans_id);
-                
+
             //     if ($this->deposit_mode) {
             //         $data['trans_type'] = 'VENDU';
             //         $data['last_no'] = $this->end_no + 1;
@@ -377,7 +208,7 @@ class AddAccountantDepositModal extends Component
 
             //     if (!$this->deposit_mode) {
             //         $stock_request = StockRequest::find($this->stock_request_id);
-                    
+
             //         $stock_request->last_no = $this->end_no + 1;
             //         $stock_request->save();
 
@@ -419,7 +250,7 @@ class AddAccountantDepositModal extends Component
         $this->dispatch('success', 'Asset successfully deleted');
     }
 
-    public function addAccountaantDeposit($type)
+    public function addAccountantDeposit($type)
     {
         $this->collector_id = "";
         $this->taxlabel_id = "";
@@ -427,7 +258,7 @@ class AddAccountantDepositModal extends Component
         $this->trans_no = "";
         $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
 
-        
+
         $total_amount = Payment::selectRaw('SUM(amount) AS amount')->where('status', "ACCOUNTED")->groupBy('status')->first();
         $this->total_amount = $total_amount->amount ?? '';
         $this->paid = $this->total_amount;
@@ -440,54 +271,7 @@ class AddAccountantDepositModal extends Component
         //   dd($this->edit_mode,$this->deposit_mode);
     }
 
-    public function addDeposit($id)
-    {
-        $this->collector_id = "";
-        $this->taxlabel_id = "";
-        $this->taxable_id = "";
-        $this->trans_no = "";
-        $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
 
-    //     $this->edit_mode = false;
-
-    //     //$this->updateRequest($id);
-    //     //$this->addRequest($id);
-        $this->deposit_mode = true;
-        $this->edit_mode = false;
-
-        // dd($this->edit_mode,$this->deposit_mode);
-    }
-
-    public function updateTransfer($id)
-    {
-        $this->collector_id = "";
-        $this->taxlabel_id = "";
-        $this->taxable_id = "";
-        $this->trans_no = "";
-        $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
-
-        $this->edit_mode = true;
-        $this->deposit_mode = false;
-        
-        // dd($this->edit_mode,$this->deposit_mode);
-
-        // $taxpayer = Taxpayer::find($id);
-        // $stock_transfer = StockTransfer::find($id);
-        // //dd($stock_transfer->taxable->tax_label);
-
-        // $this->stock_transfer_id = $id;
-        // $this->trans_no = $stock_transfer->trans_no;
-        
-        // $this->taxlabel_idd = $stock_transfer->taxable->tax_label->id;
-        // $this->taxlabel_name = $stock_transfer->taxable->tax_label->name;
-
-        // $this->taxable_idd = $stock_transfer->taxable_id;
-        // $this->taxable_name = $stock_transfer->taxable->name;
-
-        // $this->collector_idd = $stock_transfer->to_user_id;
-        // //dd($stock_transfer);
-        // $this->collector_name = $stock_transfer->user->name;
-    }
 
     public function hydrate()
     {

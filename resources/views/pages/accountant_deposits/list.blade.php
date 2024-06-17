@@ -20,6 +20,14 @@
                         class="form-control w-250px ps-13" placeholder="{{ __('search') }} "
                         id="mySearchInput" />
                 </div>
+
+                <div class="d-flex align-items-center ms-5">
+                        <a href="#" id="kt_horizontal_search_advanced_link" data-kt-rotate="true" class="btn btn-outline btn-outline-dashed btn-outline-secondary btn-active-light-secondary me-5 rotate"
+                            data-bs-toggle="collapse" data-bs-target="#kt_advanced_search_form">
+                            {{ __('advanced search') }} <i
+                                class="ki-duotone ki-black-right-line fs-2 rotate-270 ms-3"><span
+                                    class="path1"></span><span class="path2"></span></i></a>
+                    </div>
                 <div class="d-flex align-items-center ms-5">
                     <select class="form-select" id="mySearchThree">
                         <option value="">{{ __("Type de recettes") }}</option>
@@ -28,14 +36,6 @@
 
                     </select>
                 </div>
-                <div class="d-flex align-items-center ms-5">
-                        <a href="#" id="kt_horizontal_search_advanced_link" data-kt-rotate="true" class="btn btn-outline btn-outline-dashed btn-outline-secondary btn-active-light-secondary me-5 rotate"
-                            data-bs-toggle="collapse" data-bs-target="#kt_advanced_search_form">
-                            {{ __('advanced search') }} <i
-                                class="ki-duotone ki-black-right-line fs-2 rotate-270 ms-3"><span
-                                    class="path1"></span><span class="path2"></span></i></a>
-                    </div>
-
             </div>
             <!--begin::Card title-->
 

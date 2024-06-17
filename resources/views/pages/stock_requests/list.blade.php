@@ -1,7 +1,7 @@
 <x-default-layout>
 
     @section('title')
-    {{ __('comptabilite des valeurs inactives du regisseur') }}
+    {{ __('Comptabilité des valeurs inactives du regisseur') }}
     @endsection
 
     @section('breadcrumbs')

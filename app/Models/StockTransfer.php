@@ -24,12 +24,18 @@ class StockTransfer extends Model
         'by_user_id',
         'to_user_id',
         'payment_id',
+        'stock_request_id'
     ];
 
     public function taxable()
     {
         return $this->belongsTo(Taxable::class);
     }
+    public function stock_request()
+    {
+        return $this->belongsTo(StockRequest::class);
+    }
+
 
     public function user()
     {

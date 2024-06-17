@@ -123,7 +123,7 @@
                                 <label class="fw-semibold fs-6 mb-2">{{ __('qty') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="qty" name="qty" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('auth reference') }}" />
+                                <input type="text" wire:model="qty" name="qty" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('qty') }}" />
                                 <!--end::Input-->
                                 @error('qty')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -163,6 +163,7 @@
                                                 <th class="min-w-50px">{{ __('qty') }}</th>
                                                 <th class="min-w-50px">{{ __('amount') }}</th>
                                                 <th class="min-w-50px">{{ __('num') }}</th>
+                                                <th class="min-w-50px">{{ __('action') }}</th>
                                             </tr>
                                         </thead>
                                         <tbody class="fs-6 fw-semibold text-gray-600">
@@ -182,6 +183,15 @@
                                             </td>
                                             <td>
                                                 {{ $stock_request->start_no." - ".$stock_request->end_no }}
+                                            </td>
+                                            <td>
+                                                <button type="button" wire:click="deleteStockRequest({{ $stock_request->id }})"  class="btn btn-sm btn-danger " >
+                                                    <span class="indicator-label" wire:loading.remove>{{ __('remove') }}</span>
+                                                    <span class="indicator-progress" wire:loading >
+                                    {{ __('chargenment ...') }}
+                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                                </button>
                                             </td>
                                         </tr>
                                         @endforeach
