@@ -215,7 +215,7 @@
     </div>
 
                 <!--begin::Modal-->
-                <livewire:stock_request.add-stock-request-modal/>
+
                 <!--end::Modal-->
 
     @push('scripts')

@@ -247,8 +247,67 @@
                 <!--end:Menu item-->
             @endcan
 
+            <div data-kt-menu-trigger="click"
+                 class="menu-item menu-accordion {{ request()->routeIs('accounts.*') ? 'here show' : '' }}">
+                <!--begin:Menu link-->
+                <span class="menu-link">
+                        <span class="menu-icon">{!! getIcon('abstract-7', 'fs-2') !!}</span>
+                        <span class="menu-title">{{ __('Gestion des valeurs inactives') }}</span>
+                        <span class="menu-arrow"></span>
+                    </span>
+                <!--end:Menu link-->
+                <!--begin:Menu sub-->
+                <div class="menu-sub menu-sub-accordion">
+
+                    <div class="menu-item">
+                          <span class="menu-link ">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title" data-bs-toggle="modal"
+                                      data-bs-target="#kt_modal_add_stock_request"  data-kt-action="add_request">{{ __('new stock request') }}</span>
+                            </span>
+                    </div>
+                    <div class="menu-item">
+                          <span class="menu-link ">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title" data-bs-toggle="modal"
+                                      data-bs-target="#kt_modal_add_stock_transfer" data-kt-action="add_transfer"> {{ __('new supply') }}</span>
+                            </span>
+                    </div>
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('accounts.stock-requests.*') ? 'active' : '' }}"
+                           href="{{ route('accounts.stock-requests.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                            <span class="menu-title">{{ __('Comptabilité des valeurs inactives du regisseur') }}
+                                </span>
+                        </a>
+                    </div>
+
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('accounts.stock-transfers.*') ? 'active' : '' }}"
+                           href="{{ route('accounts.stock-transfers.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                            <span class="menu-title">{{ __('Comptabilité des valeurs inactives du collecteur') }}
+                                </span>
+                        </a>
+                    </div>
+                    <!--end:Menu item-->
+
+
+                    <!--begin:Menu item-->
+
+                </div>
+                <!--end:Menu sub-->
+            </div>
             @can('peut voir la comptabilité')
-                <!--end:Menu item-->
                 <div data-kt-menu-trigger="click"
                     class="menu-item menu-accordion {{ request()->routeIs('accounts.*') ? 'here show' : '' }}">
                     <!--begin:Menu link-->
@@ -261,21 +320,17 @@
                     <!--begin:Menu sub-->
                     <div class="menu-sub menu-sub-accordion">
 
-                        <!--begin:Menu item-->
+
+
                         <div class="menu-item">
-                            <a class="menu-link {{ request()->routeIs('accounts.stock-requests.*') ? 'active' : '' }}"
-                                href="{{ route('accounts.stock-requests.index') }}">
+                          <span class="menu-link ">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">{{ __('Comptabilité des valeurs inactives du regisseur') }}
-                                </span>
-                            </a>
+                                <span class="menu-title" data-bs-toggle="modal"
+                                      data-bs-target="#kt_modal_add_accountant_deposit" data-kt-user-id="TITRE" data-kt-action="add_accountant_deposit">    {{ __('new deposit') }}</span>
+                            </span>
                         </div>
-                        <!--end:Menu item-->
-                        <!--end:Menu item-->
-
-                        <!--begin:Menu item-->
                         <div class="menu-item">
                             <a class="menu-link {{ request()->routeIs('accounts.accountant-deposits-title.*') ? 'active' : '' }}"
                                 href="{{ route('accounts.accountant-deposits-title.index') }}">
@@ -301,16 +356,7 @@
 
 
                         <!--begin:Menu item-->
-                        <div class="menu-item">
-                            <a class="menu-link {{ request()->routeIs('accounts.stock-transfers.*') ? 'active' : '' }}"
-                                href="{{ route('accounts.stock-transfers.index') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">{{ __('Comptabilité des valeurs inactives du collecteur') }}
-                                </span>
-                            </a>
-                        </div>
+
                         <!--end:Menu item-->
 
 
@@ -341,7 +387,6 @@
                     </div>
                     <!--end:Menu sub-->
                 </div>
-                <!--end:Menu item-->
             @endcan
 
 

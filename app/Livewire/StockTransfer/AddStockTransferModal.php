@@ -135,7 +135,7 @@ class AddStockTransferModal extends Component
     {
 
         $request= StockRequest::find($value);
-        $this->trans_no = $request->req_no;
+        //$this->trans_no = $request->req_no;
         $this->taxable_id =$request->taxable->id;
         $value= $request->taxable->id;
         $this->tariff = $request->taxable->tariff;
@@ -154,7 +154,7 @@ class AddStockTransferModal extends Component
                                     ->orderBy('stock_transfers.id', 'DESC')
                                     ->get();
 
-           // $this->trans_no = $taxables->first()->trans_no ?? "";
+           $this->trans_no = $taxables->first()->trans_no ?? "";
             $this->trans_id = $taxables->first()->trans_id ?? "";
 
             //dd($taxables->first());
@@ -175,8 +175,8 @@ class AddStockTransferModal extends Component
                                     ->whereNot('unit', 'AUTRE')
                                     ->get();
 
-          //  $this->trans_no = $taxables->first()->req_no ?? "";
-            // $this->trans_id = $taxables->first()->trans_id ?? "";
+           $this->trans_no = $taxables->first()->req_no ?? "";
+            $this->trans_id = $taxables->first()->trans_id ?? "";
 
             $this->start_no = $taxables->first()->last_no ?? "";
             if (!$this->start_no > 0) {
