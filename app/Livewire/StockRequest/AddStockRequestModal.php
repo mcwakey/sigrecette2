@@ -6,6 +6,7 @@ use App\Models\StockRequest;
 use App\Models\Taxable;
 use App\Models\TaxLabel;
 use App\Models\TaxpayerTaxable;
+use App\Traits\DispatchesMessages;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 class AddStockRequestModal extends Component
 {
     use WithFileUploads;
-
+    use DispatchesMessages;
     public $stock_request_id;
     public $user_id;
     public $tariff;
@@ -60,7 +61,7 @@ class AddStockRequestModal extends Component
 
         //dd($taxlabels);
         $this->user_id = Auth::id();
-
+        $this->stock_requests = StockRequest::where('req_no', $this->req_no)->where('req_type', 'DEMANDE')->get();
         return view('livewire.stock_request.add-stock-request-modal', compact('taxlabels'));
     }
 
@@ -158,13 +159,11 @@ class AddStockRequestModal extends Component
         //$this->reset();
     }
 
-    public function deleteUser($id)
+    public function deleteStockRequest($id)
     {
-        // Delete the user record with the specified ID
-        TaxpayerTaxable::destroy($id);
+        StockRequest::destroy($id);
 
-        // Emit a success event with a message
-        $this->dispatch('success', 'Asset successfully deleted');
+       // $this->dispatchMessage('line', 'delete');
     }
 
     public function addRequest($id)

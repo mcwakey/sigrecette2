@@ -23,14 +23,14 @@
                     <input type="hidden" wire:model="user_id" name="user_id" value=""/>
                     <!--begin::Scroll-->
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_accountant_deposit_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_accountant_deposit_header" data-kt-scroll-wrappers="#kt_modal_add_accountant_deposit_scroll" data-kt-scroll-offset="300px">
-                        
+
                         <!--begin::Input group-->
                         <div class="row mb-7">
                             <div class="col-md-3">
                                 <!--begin::Label-->
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                
+
                                 <input type="text" class="form-control form-control-flush mb-3 mb-lg-0" placeholder="{{ __('Montant total a verser') }}" readonly/>
 
                                 <!--end::Input-->
@@ -62,7 +62,7 @@
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('deposit') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                
+
                                 <input type="text" wire:model="paid" name="paid" class="form-control mb-3 mb-lg-0" placeholder="{{ __('deposit') }}" readonly/>
                                 <!--end::Input-->
                                 @error('paid')
@@ -73,7 +73,7 @@
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('Type de payment') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                                    
+
                                 <select wire:model="payment_type" name="payment_type" class="form-select" data-dropdown-parent="#kt_modal_add_accountant_deposit">
                                     <option>{{ __('select an option') }}</option>
                                     <option value="CASH">ESPECE</option>
@@ -94,7 +94,7 @@
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('reference no') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                
+
                                 <input type="text" wire:model="reference" name="reference" class="form-control mb-3 mb-lg-0" placeholder="{{ __('reference no') }}"/>
 
                                 <!-- <select wire:model="taxlabel_id" name="taxlabel_id" class="form-select" data-dropdown-parent="#kt_modal_add_accountant_deposit">
@@ -108,13 +108,13 @@
                             </div>
                         </div>
 
-                        
-                        
+
+
                     <!--end::Scroll-->
                     <!--begin::Actions-->
                     <div class="text-center pt-5">
                     <button type="reset" class="btn btn-light me-5" data-bs-dismiss="modal" aria-label="Close" wire:loading.attr="disabled">{{ __('close') }}</button>
-                     
+
     <button type="submit" class="btn btn-danger" data-kt-taxpayer-taxables-modal-action="submit">
         <span class="indicator-label" wire:loading.remove>{{ __('Finaliser le versement') }}</span>
         <span class="indicator-progress" wire:loading wire:target="submit">

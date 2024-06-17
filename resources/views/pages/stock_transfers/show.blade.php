@@ -63,7 +63,7 @@
                         <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                             <!--begin::Add user-->
                             <button type="button" class="btn btn-light-warning" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_add_stock_transfer" data-kt-user-id="{{ $user->id }}" data-kt-action="add_deposit">
+                                data-bs-target="#kt_modal_add_stock_transfer-deposit" data-kt-user-id="{{ $user->id }}" data-kt-action="add_deposit">
                                 {!! getIcon('plus', 'fs-2', '', 'i') !!}
                                 {{ __('new deposit') }}
                             </button>
@@ -76,7 +76,7 @@
                         <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                             <!--begin::Add user-->
                             <button type="button" class="btn btn-light-danger" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_add_stock_transfer" data-kt-user-id="{{ $user->id }}" data-kt-action="update_transfer">
+                                data-bs-target="#kt_modal_add_stock_transfer-state" data-kt-user-id="{{ $user->id }}" data-kt-action="update_transfer">
                                 {!! getIcon('plus', 'fs-2', '', 'i') !!}
                                 {{ __('account state') }}
                             </button>
@@ -87,7 +87,7 @@
                     <!--begin::Toolbar-->
                     <!-- <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                         <button type="button" class="btn btn-light-success" data-bs-toggle="modal"
-                            data-bs-target="#kt_modal_add_stock_transfer" data-kt-action="add_transfer">
+                            data-bs-target="#kt_modal_add_stock_transfer-deposit" data-kt-action="add_transfer">
                             {!! getIcon('plus', 'fs-2', '', 'i') !!}
                             {{ __('new supply') }}
                         </button>
@@ -269,8 +269,10 @@
         </div>
         <!--end::Card body-->
     </div>
-    <livewire:stock_transfer.add-stock-transfer-modal />
-    <livewire:stock_request.add-stock-request-modal />
+    <livewire:stock_transfer.add-stock-transfer-deposit-modal :id="$user->id" />
+        <livewire:stock_transfer.add-stock-transfer-state-modal :id="$user->id" />
+
+        <livewire:stock_request.add-stock-request-modal />
 
     @push('scripts')
         {{ $dataTable->scripts() }}
@@ -301,7 +303,7 @@
 
             document.addEventListener('livewire:init', function() {
                 Livewire.on('success', function() {
-                    $('#kt_modal_add_stock_transfer').modal('hide');
+                    $('#kt_modal_add_stock_transfer-deposit').modal('hide');
                     window.LaravelDataTables['stock_transfers-table'].ajax.reload();
                 });
             });

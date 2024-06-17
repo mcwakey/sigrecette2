@@ -29,6 +29,12 @@ class AddInvoiceGeneralModal extends Component
     ];
 
 
+    public function rules()
+    {
+        return [
+
+        ];
+    }
 
 
     public function render( )

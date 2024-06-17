@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Enums\PaymentStatusEnums;
 use App\Models\Payment;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
@@ -160,7 +161,7 @@ class AccountantDepositsDataTable extends DataTable
                     // ->join('users', 'payments.to_user_id', '=', 'users.id')
                     //  ->orWhere('invoice_id', null) // Filter collector_deposits by taxpayer_id
                     // ->where('invoice_type', 'TITRE') // Filter collector_deposits by taxpayer_id
-                    ->where('status', 'ACCOUNTED') // Filter collector_deposits by taxpayer_id
+                    ->where('status',PaymentStatusEnums::ACCOUNTED) // Filter collector_deposits by taxpayer_id
                     // ->select('payments.*')
                     //->orderBy('tax_labels.name')
                     ->newQuery();

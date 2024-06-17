@@ -84,7 +84,7 @@ class AddTaxpayerTaxableModal extends Component
     ];
 
     protected $listeners = [
-        'delete_taxpayer' => 'deleteUser',
+        'delete_taxpayer_taxable' => 'deleteTaxpayerTaxable',
         'update_taxable' => 'updateTaxpayerTaxable',
         'add_taxpayer_taxable' => 'addTaxpayerTaxable',
         'update_checkbox' => 'updateCheckbox',
@@ -245,7 +245,7 @@ class AddTaxpayerTaxableModal extends Component
         $this->reset();
     }
 
-    public function deleteUser($id)
+    public function deleteTaxpayerTaxable($id)
     {
 
         // Prevent deletion of current Taxable

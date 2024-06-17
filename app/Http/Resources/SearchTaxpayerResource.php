@@ -30,7 +30,7 @@ class SearchTaxpayerResource extends JsonResource
             'longitude' => $this->resource->longitude,
             'latitude' => $this->resource->latitude,
             'address' => $this->resource->address,
-            'idType '=> $this->resource->id_type,
+            'idType'=> $this->resource->id_type,
             'idNumber' =>  $this->resource->id_number,
 
             'categoryId' => $this->resource->category_id,

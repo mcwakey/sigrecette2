@@ -39,7 +39,8 @@ class RolesPermissionsSeeder extends Seeder
                 // Taxpayer permissions
                 'peut créer un contribuable',
                 'peut modifier un contribuable',
-                'peut supprimer un contribuable',
+                'peut activer un contribuable',
+                'peut désactiver un contribuable',
 
                 // Payment permissions
                 'peut ajouter un paiement',
@@ -52,7 +53,8 @@ class RolesPermissionsSeeder extends Seeder
                 // User permissions
                 'peut créer un utilisateur',
                 'peut modifier un utilisateur',
-                'peut supprimer un utilisateur',
+                'peut activer un utilisateur',
+                'peut désactiver un utilisateur',
 
                 // Geolocatoion permissions
                 'peut voir la geolocalisation d\'un utilisateur',
@@ -127,7 +129,8 @@ class RolesPermissionsSeeder extends Seeder
                 // User permissions
                 'peut créer un utilisateur',
                 'peut modifier un utilisateur',
-                'peut supprimer un utilisateur',
+                'peut activer un utilisateur',
+                'peut désactiver un utilisateur',
 
                 // Role permissions
                 'peut créer un rôle',
@@ -238,7 +241,8 @@ class RolesPermissionsSeeder extends Seeder
                 // Taxpayer permissions
                 'peut créer un contribuable',
                 'peut modifier un contribuable',
-                'peut supprimer un contribuable',
+                'peut activer un contribuable',
+                'peut désactiver un contribuable',
 
                 // Payment permissions
                 'peut ajouter un paiement',

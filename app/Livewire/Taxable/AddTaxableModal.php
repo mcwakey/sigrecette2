@@ -138,6 +138,7 @@ class AddTaxableModal extends Component
 
 
             if ($this->edit_mode) {
+
                 $this->dispatchMessage('Matière Taxable', 'update');
             } else {
                 $this->dispatchMessage('Matière Taxable');
@@ -156,7 +157,7 @@ class AddTaxableModal extends Component
         //     return;
         // }
 
-        // Delete the user record with the specified ID
+
         Taxable::destroy($id);
 
         // Emit a success event with a message

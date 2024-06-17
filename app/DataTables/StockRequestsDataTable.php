@@ -48,6 +48,7 @@ class StockRequestsDataTable extends DataTable
             })
             ->editColumn('taxables.tariff', function (StockRequest $stock_request) {
                if ($stock_request->taxable->tariff > 0) {
+                   //Todo format all tarif in app
                 $tariff = number_format($stock_request->taxable->tariff);
                }else{
                 $tariff = "";
@@ -108,7 +109,7 @@ class StockRequestsDataTable extends DataTable
                 if (!$stock_request->pc_qty || !$stock_request->sd_qty) {
                     $vv_total =  "";
                 } else {
-                    $vv_total = ($stock_request->pc_qty - $stock_request->sd_qty) * $stock_request->taxable->tariff; 
+                    $vv_total = ($stock_request->pc_qty - $stock_request->sd_qty) * $stock_request->taxable->tariff;
                 }
 
                 return $vv_total;
@@ -153,7 +154,7 @@ class StockRequestsDataTable extends DataTable
     {
         // return $model->join('taxables', 'stock_requests.taxable_id', '=', 'taxables.id')
         //             ->join('users', 'stock_requests.user_id', '=', 'users.id')
-        //             ->select('stock_requests.req_id', 
+        //             ->select('stock_requests.req_id',
         //                     \DB::raw('MAX(CASE WHEN req_type = "DEMANDE" THEN qty END) AS pc_qty'),
         //                     \DB::raw('MAX(CASE WHEN req_type = "COMPTABILITE" THEN qty END) AS vv_qty'))
         //             ->groupBy('req_id')
@@ -177,9 +178,9 @@ class StockRequestsDataTable extends DataTable
                  DB::raw('MAX(stock_requests.taxable_id) AS taxable_id'))
         ->groupBy('stock_requests.req_id')
         ->orderBy('req_id', 'desc');
-   
 
-   
+
+
 
         // return StockRequest::where('taxpayer_id', $this->id); // Filter stock_requests by taxpayer_id
     }
@@ -208,7 +209,7 @@ class StockRequestsDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            // Column::make('req_id')->title(__('id'))->exportable(false)->printable(false)->visible(false), 
+            // Column::make('req_id')->title(__('id'))->exportable(false)->printable(false)->visible(false),
             Column::make('stock_requests.created_at')->title(__('date'))->addClass('text-nowrap'),
             // Column::make('req_desc')->title(__('req desc')),
             Column::make('taxables.name')->title(__('ticket')),

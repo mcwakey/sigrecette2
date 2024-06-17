@@ -2,6 +2,7 @@
 
 namespace App\Livewire\StockTransfer;
 
+use App\Enums\PaymentStatusEnums;
 use App\Helpers\Constants;
 use App\Models\Payment;
 use App\Models\StockRequest;
@@ -16,7 +17,7 @@ use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Stmt\Return_;
 
-class AddStockTransferModal extends Component
+class AddStockTransferDepositModal extends Component
 {
     use WithFileUploads;
 
@@ -54,6 +55,7 @@ class AddStockTransferModal extends Component
     public $deposit_mode;
     public $remaining_qty=0;
     public $option_calculus;
+    public $stock_transfers_v;
 
     protected function rules()
     {
@@ -80,23 +82,29 @@ class AddStockTransferModal extends Component
         'update_transfer' => 'updateTransfer',
         'add_deposit' => 'addDeposit',
     ];
+    public function mount($id){
+       $this->collector_id =$id;
+    }
 
     public function render()
     {
+
         $this->user_id = Auth::id();
 
-        $collectors = User::select('users.id', 'users.name as user_name', 'roles.name as role_name')
-                            ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                            ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                            ->where('roles.name', 'collecteur')
-                            ->get();
 
        $taxlabel_list = TaxLabel::where('category', 'CATEGORY 3')->get();
         $stock_requests= StockRequest::where('req_type','DEMANDE')->where('type','ACTIVE')->get();
 
+        $this->stock_transfers = StockTransfer::
+        where('trans_type', 'RECU')
+            ->where('to_user_id', $this->collector_id)
+            ->where('type','ACTIVE')->get();
+        $this->stock_transfers_v = StockTransfer::
+        where('trans_type', 'VENDU')
+            ->where('type','ACTIVE')
+            ->where('to_user_id', $this->collector_id)->get();
 
-       // dd($taxlabel_list);
-        return view('livewire.stock_transfer.add-stock-transfer-modal', compact('collectors','stock_requests','taxlabel_list'));
+        return view('livewire.stock_transfer.add-stock-transfer-deposit-modal', compact('stock_requests','taxlabel_list'));
     }
 
     // public function updatedTaxlabelId($value)
@@ -131,20 +139,38 @@ class AddStockTransferModal extends Component
         // }
     // }
 
-    public function updatedStockRequestId($value)
+    public function updatedStockTransferId($value)
     {
 
-        $request= StockRequest::find($value);
-        $this->trans_no = $request->req_no;
-        $this->taxable_id =$request->taxable->id;
-        $value= $request->taxable->id;
-        $this->tariff = $request->taxable->tariff;
-        $qty=0;
-        $stock_transfers = StockTransfer::where("stock_request_id", $request->id)->where('type', 'ACTIVE')->whereIn('trans_type',[ 'RECU','RENDU'])->get();
-        foreach ($stock_transfers as $transfer){
-            $qty+=$transfer->qty;
+        if($value==null){
+            return;
         }
-        $this->remaining_qty =  $request->qty -$qty;
+        $select_transfer= StockTransfer::find($value);
+        $this->trans_no =  $select_transfer?->stock_request->req_no;
+        $this->stock_request_id=  $select_transfer?->stock_request->id;
+        $this->taxable_id= $select_transfer?->taxable->id;
+        $value= $select_transfer?->taxable->id;
+        $this->tariff = $select_transfer?->taxable->tariff;
+
+        $qty=0;
+        $qty_r=0;
+        $stock_transfers_r = StockTransfer::
+        where("stock_request_id", $select_transfer?->stock_request->id)
+            ->where('type', 'ACTIVE')
+            ->where('trans_type', 'RECU')
+            ->where('to_user_id', $this->collector_id)->get();
+        foreach ($stock_transfers_r as $transfer){
+            $qty_r+=$transfer->qty;
+        }
+        $stock_transfers_v = StockTransfer::
+        where("stock_request_id", $select_transfer?->stock_request->id)
+            ->where('type', 'ACTIVE')
+            ->where('trans_type', 'VENDU')
+            ->where('to_user_id', $this->collector_id)->get();
+       foreach ($stock_transfers_v as $transfer){
+           $qty+=$transfer->qty;
+       }
+        $this->remaining_qty =  $qty_r -$qty;
        // dd($qty, $request->id);
         if ($this->deposit_mode) {
             $taxables = Taxable::select('taxables.*', 'trans_no', 'trans_id', 'last_no', 'stock_transfers.id AS stock_transfers_id')
@@ -404,7 +430,7 @@ class AddStockTransferModal extends Component
                         'code' => $this->code,
                         'invoice_type' => Constants::INVOICE_TYPE_COMPTANT,
                         'payment_type' => 'CASH',
-                        'status' => "ACCOUNTED",
+                        'status' => PaymentStatusEnums::ACCOUNTED,
                         'description' => "Etat de versement collecteur N°".$this->collector_id,
                         'user_id' => $this->user_id,
                         'r_user_id' => $this->collector_id,

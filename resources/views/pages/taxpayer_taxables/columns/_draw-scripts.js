@@ -17,7 +17,7 @@ document.querySelectorAll('[data-kt-action="delete_row"]').forEach(function (ele
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                Livewire.dispatch('delete_taxpayer', [this.getAttribute('data-kt-user-id')]);
+                Livewire.dispatch('delete_taxpayer_taxable', [this.getAttribute('data-kt-user-id')]);
             }
         });
     });
