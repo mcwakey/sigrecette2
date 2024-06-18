@@ -116,7 +116,7 @@
 
                                                     @endcan
                                                     @endif
-                                                @can('peut réduire ou annuler un avis')
+                                                @can('peut réduire un avis sur titre')
                                                     <button type="button" class="btn  btn-sm  btn-light-danger ms-auto"
                                                             data-kt-user-id="{{ $invoice_id }}" data-bs-toggle="modal"
                                                             data-bs-target="#kt_modal_add_invoice" data-kt-action="update_invoice"
