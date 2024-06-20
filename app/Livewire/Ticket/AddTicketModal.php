@@ -47,7 +47,7 @@ class AddTicketModal extends Component
     public $edit_mode = false;
 
     protected $rules = [
-        'name' => 'required',
+        'name' => 'required|unique:taxables,name,',
         'tariff' => 'required|numeric',
         //'tariff_type' => 'required',
         'unit' => 'required',
