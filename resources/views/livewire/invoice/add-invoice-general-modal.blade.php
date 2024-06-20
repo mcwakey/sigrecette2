@@ -120,7 +120,7 @@
 
 
                                                 @endcan
-                                                @can('peut émettre un avis sur titre')
+                                                @can('peut émettre un avis')
                                                     <button type="button" class="btn  btn-sm  btn-light-danger ms-auto"
                                                             data-kt-user-id="{{ $taxpayer_id }}" data-bs-toggle="modal"
                                                             data-bs-target="#kt_modal_add_invoice" data-kt-action="add_invoice"

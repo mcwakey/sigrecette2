@@ -268,6 +268,7 @@
 </div>
         <!--end::Card body-->
     </div>
+                <livewire:accountant_deposit.add-accountant-deposit-modal/>
 
     @push('scripts')
         {{ $dataTable->scripts() }}

@@ -271,6 +271,8 @@
         </div>
         <!--end::Card body-->
     </div>
+    <livewire:stock_transfer.add-stock-transfer-modal />
+    <livewire:stock_request.add-stock-request-modal />
 
     @push('scripts')
         {{ $dataTable->scripts() }}
