@@ -55,9 +55,9 @@ class AddCommuneModal extends Component
 
     public function render()
     {
-        $communes = Commune::all();
 
-        return view('livewire.commune.add-commune-modal', compact('communes'));
+
+        return view('livewire.commune.add-commune-modal');
     }
 
     public function submit()
@@ -91,7 +91,7 @@ class AddCommuneModal extends Component
             ];
 
             if ($this->logo) {
-                $data['logo_path'] = $this->logo->store('avatars', 'public');
+                $data['logo_path'] = $this->logo->store('logo', 'public');
             }
             if ($this->limit_json) {
                 $data['limit_json'] = json_encode($string_data['geometry']['coordinates'][0][0]);
