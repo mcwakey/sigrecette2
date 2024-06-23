@@ -120,8 +120,8 @@
 
 
                     <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Enums\InvoiceStatusEnums::DRAFT ? 'active' : '' }}"
-                           href="{{ route('invoices.index', ['state' => App\Enums\InvoiceStatusEnums::DRAFT,]) }}">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == 'br' ? 'active' : '' }}"
+                           href="{{ route('invoices.index', ['state' => 'br',]) }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
@@ -129,8 +129,8 @@
                         </a>
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Enums\InvoiceStatusEnums::ACCEPTED ? 'active' : '' }}"
-                           href="{{ route('invoices.index', ['state' => App\Enums\InvoiceStatusEnums::ACCEPTED,])}}">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == 'ac' ? 'active' : '' }}"
+                           href="{{ route('invoices.index', ['state' => 'ac',])}}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
@@ -138,8 +138,8 @@
                         </a>
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link {{request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Enums\InvoiceStatusEnums::PENDING ? 'active' : '' }}"
-                           href="{{  route('invoices.index', ['state' => App\Enums\InvoiceStatusEnums::PENDING]) }}">
+                        <a class="menu-link {{request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') ==  'at' ? 'active' : '' }}"
+                           href="{{  route('invoices.index', ['state' => 'at']) }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
@@ -149,8 +149,8 @@
 
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link {{ request()->routeIs('invoices.*') && request()->input('notDelivery') == 1 ? 'active' : '' }}"
-                           href="{{ route('invoices.index', ['notDelivery' => true,]) }}">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && request()->input('notDelivery') == 'nonliv' ? 'active' : '' }}"
+                           href="{{ route('invoices.index', ['notDelivery' => 'nonliv'  ]) }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
@@ -160,8 +160,8 @@
                     </div>
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->has('notDelivery')&& request()->input('notDelivery') == 0 ? 'active' : '' }}"
-                           href="{{ route('invoices.index', ['notDelivery' => false]) }}">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->has('notDelivery')&& request()->input('notDelivery') == 'liv' ? 'active' : '' }}"
+                           href="{{ route('invoices.index', ['notDelivery' =>'liv',]) }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
@@ -170,8 +170,8 @@
                         <!--end:Menu link-->
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery')&&!request()->has('state') && request()->input('aucomptant') == 0 ? 'active' : '' }}"
-                           href="{{ route('invoices.index' ,['aucomptant' => false]) }}">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery')&&!request()->has('state') && request()->input('aucomptant') == 'titre'  ? 'active' : '' }}"
+                           href="{{ route('invoices.index' ,['aucomptant' => 'titre' ]) }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
@@ -180,8 +180,8 @@
                     </div>
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->input('aucomptant') == 1? 'active' : '' }}"
-                           href="{{ route('invoices.index', ['aucomptant' => true]) }}">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->input('aucomptant') ==   'comptant'? 'active' : '' }}"
+                           href="{{ route('invoices.index', ['aucomptant' =>   'comptant']) }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
@@ -221,8 +221,8 @@
                         </div>
                         <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('recoveries.*') &&  request()->has('notDelivery')&& request()->input('notDelivery') == 0 ? 'active' : '' }}"
-                               href="{{ route('recoveries.index', ['notDelivery' => false]) }}">
+                            <a class="menu-link {{ request()->routeIs('recoveries.*') &&  request()->has('notDelivery')&& request()->input('notDelivery') ==  'liv' ? 'active' : '' }}"
+                               href="{{ route('recoveries.index', ['notDelivery' =>  'liv']) }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>

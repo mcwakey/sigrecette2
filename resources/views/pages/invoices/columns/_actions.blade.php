@@ -24,7 +24,7 @@
     @endif
 
 
-    @if( request()->routeIs('invoices.*') &&  request()->has('notDelivery')&& request()->input('notDelivery') == 0)
+    @if( request()->routeIs('invoices.*') &&  request()->has('notDelivery')&& request()->input('notDelivery')=='liv')
         @if( $invoice->can( "submit_for_reduced") ||  $invoice->can("submit_for_canceled") && $invoice->validity == 'VALID')
             @can('peut réduire ou annuler un avis')
                 <div class="menu-item px-3">
@@ -38,7 +38,7 @@
         @endif
 
     @endif
-    @if( request()->routeIs('recoveries.*') &&  request()->has('notDelivery')&& request()->input('notDelivery') == 0)
+    @if( request()->routeIs('recoveries.*') &&  request()->has('notDelivery')&& request()->input('notDelivery')=='liv')
         @if( $invoice->can( "submit_for_reduced") ||  $invoice->can("submit_for_canceled") && $invoice->validity == 'VALID')
             @if( $invoice->canGetPayment())
 
