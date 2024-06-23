@@ -41,7 +41,7 @@ class Invoice extends Model implements FormatDateInterface
         // 'profile_photo_path',
     ];
     protected $attributes = [
-        'status' => \App\Enums\InvoiceStatusEnums::DRAFT,
+        'status' => InvoiceStatusEnums::DRAFT,
     ];
     public function can(string $state)
     {
@@ -202,11 +202,12 @@ class Invoice extends Model implements FormatDateInterface
 
         return array_values($invoices); // Réorganise les valeurs pour obtenir un tableau indexé à partir de 0
     }
+
     /**
      * Retrieve invoices based on provided UUIDs.
      *
-     * @param array $uuids
-     * @param string|null $type
+     * @param array $invoices
+     * @param string $type
      * @return array Returns a collection of invoices if all UUIDs are found,
      *                               `false` if any UUID is not found, or an empty array if `$uuids` is empty.
      */

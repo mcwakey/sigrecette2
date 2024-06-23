@@ -7,7 +7,7 @@
 
         <div class="menu-item px-3">
             <a href="#" class="menu-link px-3" data-kt-export="pdf">
-                {{__('Export')."en PDF"}}
+                {{__('Export')." en PDF"}}
             </a>
         </div>
         <div class="menu-item px-3" x-data>
@@ -36,7 +36,7 @@
                 <div class="d-grid gap-2">
                     <button type="submit" class="btn btn-link  btn-lg" x-ref="exportBtn" :disabled="$wire.exporting">
                         <span class="menu-link px-3">
-                        {{__('Export')."en XLSX"}}
+                        {{__('Export')." en XLSX"}}
                         </span>
                     </button>
                    </div>

@@ -46,16 +46,25 @@ class AddTaxableModal extends Component
 
     public $edit_mode = false;
 
-    protected $rules = [
-        'name' => 'required|string|unique:taxables,name,',
-        'tariff' => 'required|numeric',
-        'tariff_type' => 'required|string',
-        'unit' => 'required|string',
-        'unit_type' => 'required|string',
-        'periodicity' => 'required|string',
-        'tax_label_id' => 'required|int',
+    protected function rules(){
+        $rules = [
+            'name' => 'required|string|unique:taxables,name,' . ($this->edit_mode ?  $this->taxable_id : ''),
+            'tariff' => 'required|numeric',
+            'tariff_type' => 'required|string',
+            'unit' => 'required|string',
+            'unit_type' => 'required|string',
+            'periodicity' => 'required|string',
+            'tax_label_id' => 'required|int',
+        ];
 
-    ];
+        if ($this->edit_mode) {
+            // En mode d'édition, nous ignorons l'ID actuel pour la validation d'unicité
+            $rules['name'] = 'required|string|unique:taxables,name,' . $this->taxable_id;
+        }
+
+        return $rules;
+    }
+
 
     protected $listeners = [
         'delete_user' => 'deleteUser',

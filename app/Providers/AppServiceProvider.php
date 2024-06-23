@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Core\KTBootstrap;
+use App\Models\Commune;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,10 +28,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Update defaultStringLength
         Builder::defaultStringLength(191);
         Blade::directive('numberToWords', function ($number) {
             return "";
+        });
+        View::composer('*', function ($view) {
+            $view->with('commune', Commune::getFirstCommune());
         });
         KTBootstrap::init();
     }

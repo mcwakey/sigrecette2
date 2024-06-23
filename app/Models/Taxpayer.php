@@ -257,11 +257,9 @@ class Taxpayer extends Model
      */
     public static function search(string $value): QueryBuilder
     {
-        if (strlen($value) < 3) {
-            return self::query()->whereRaw('1 = 0');
-        }
 
         $columns = [
+            'id',
             'tnif',
             'name',
             'id_number',

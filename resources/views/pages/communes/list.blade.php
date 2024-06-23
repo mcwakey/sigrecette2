@@ -1,7 +1,5 @@
 <x-default-layout>
-    @php
-        $commune= \App\Models\Commune::getFirstCommune();
-    @endphp
+
     @section('title')
     {{ __('info commune') }}
     @endsection

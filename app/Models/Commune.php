@@ -25,8 +25,6 @@ class Commune extends Model
         'url'
     ];
 
-    //TODO Site web,et addresse email
-
     /**
      * Get the first commune.
      *
@@ -44,10 +42,9 @@ class Commune extends Model
     public function getImageUrlAttributeDirect()
     {
 
-        if ($this->logo_path) {
-            return asset( 'storage/' . $this->logo_path);
-        }
-        return $this->logo_path;
+
+        //dump();
+        return $this->logo_path!=null?asset("storage/".$this->logo_path):null;
     }
     /**
      * Get the full URL of the image.

@@ -99,7 +99,7 @@
                                 <select wire:model="unit_type" name="unit_type" class="form-select" data-dropdown-parent="#kt_modal_add_taxable">
                                     <option>{{ __('select an option') }}</option>
                                     <option value="Superficie">{{ __('surface') }}</option>
-                                    <option value="Nombre">{{ __('Autre') }}</option>
+                                    <option value="Nombre">{{ __('Nombre') }}</option>
                                 </select>
                                 <!--end::Input-->
                                 @error('unit')

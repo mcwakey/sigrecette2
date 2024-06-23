@@ -6,7 +6,7 @@
 @endif
 
 @if ($invoice->can("submit_for_reduced"))
-    @if ( request()->routeIs('invoices.*') && request()->input('notDelivery') == 1 &&$invoice->delivery_date == null && $invoice->order_no !== null)
+    @if ( request()->routeIs('invoices.*') && request()->input('notDelivery') ==  'nonliv' &&$invoice->delivery_date == null && $invoice->order_no !== null)
         @can('peut ajouter la date de livraison d\'un avis')
             <button type="button"
                 class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto  pulse pulse-warning"
