@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\InvoicesDataTable;
+use App\DataTables\RecoveriesDataTable;
+use App\DataTables\TaxpayerInvoicesDataTableDataTableHtml;
 use App\Models\Taxpayer;
 use App\DataTables\TaxpayersDataTable;
 use App\DataTables\TaxpayerInvoicesDataTable;
@@ -73,7 +75,7 @@ class TaxpayerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Taxpayer $taxpayer, TaxpayerInvoicesDataTable $invoicesDataTable, TaxpayerTaxablesDataTable $taxablesDataTable)
+    public function show(Taxpayer $taxpayer, InvoicesDataTable $invoicesDataTable,RecoveriesDataTable $recoveriesDataTable, TaxpayerTaxablesDataTable $taxablesDataTable)
     {
         // Assuming you want to pass the $taxpayer to the show view
         // return view('pages.taxpayers.show', compact('taxpayer'))
@@ -86,8 +88,14 @@ class TaxpayerController extends Controller
         ->limit(10)
         ->get();
 
+
         return $taxablesDataTable->with('id', $taxpayer->id)
-                ->render('pages/taxpayers.show', compact('taxpayer','taxpayerActionLog'));
+                ->render('pages/taxpayers.show', [
+                    'taxpayer'=>$taxpayer,
+                    'taxpayerActionLog'=>$taxpayerActionLog,
+                    'invoicesDataTable'=>$invoicesDataTable->with('id', $taxpayer->id)->html(),
+                    'recoveriesDataTable'=> $recoveriesDataTable->with('id', $taxpayer->id)->html(),
+                ]);
     }
 
     /**

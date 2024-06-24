@@ -94,7 +94,7 @@ class RecoveriesDataTable extends DataTable
         return $this->builder()
             ->setTableId('recoveries-table')
             ->columns($this->getColumns())
-            ->minifiedAjax()
+            ->minifiedAjax(route('recoveries.index'))
             ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
@@ -118,6 +118,7 @@ class RecoveriesDataTable extends DataTable
             Column::make('remaining_amount')->title(__('balance')),
             Column::make('status')->title(__('status')),
             Column::make('users.name')->title(__('user'))->addClass('d-flex align-items-center'),
+            Column::make('taxpayer_id')->visible(false),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
                 ->exportable(true)

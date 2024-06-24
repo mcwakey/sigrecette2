@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Models\Taxpayer;
 use App\Models\TaxpayerTaxable;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
@@ -46,6 +47,7 @@ class TaxpayerTaxablesDataTable extends DataTable
             //     return $taxpayer_taxable->;
             // })
             ->editColumn('seize', function (TaxpayerTaxable $taxpayer_taxable) {
+               // return $this->id;
                 return $taxpayer_taxable->seize. " ". $taxpayer_taxable->taxable->unit;
                 // return view('pages.taxpayer_taxables.columns._seize', compact('taxpayer_taxable'));
             })
@@ -90,7 +92,7 @@ class TaxpayerTaxablesDataTable extends DataTable
         return $this->builder()
             ->setTableId('taxpayer_taxables-table')
             ->columns($this->getColumns())
-            ->minifiedAjax()
+            ->minifiedAjax(route("taxpayers.show",Taxpayer::find($this->id)))
             ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
@@ -106,7 +108,7 @@ class TaxpayerTaxablesDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            //Column::make('id')->title(__('id'))->exportable(false)->printable(false)->visible(false), 
+            //Column::make('id')->title(__('id'))->exportable(false)->printable(false)->visible(false),
             Column::make('billable')->title(__('empty'))->addClass('text-nowrap'),
             Column::make('name')->title(__('asset name'))->width(600),
             Column::make('taxpayer_taxable')->title(__('taxable'))->addClass('text-nowrap')->name('tax_labels.name'),
@@ -117,6 +119,7 @@ class TaxpayerTaxablesDataTable extends DataTable
             Column::make('bill_status')->title(__('status')),
             //Column::make('location')->title(__('location'))->addClass('text-nowrap'),
             Column::make('created_at')->title(__('created at'))->addClass('text-nowrap')->width(150),
+            Column::make('taxpayer_id')->visible(false),
             Column::computed('action')->title(__('action'))
                 ->addClass('text-end text-nowrap')
                 ->exportable(false)
