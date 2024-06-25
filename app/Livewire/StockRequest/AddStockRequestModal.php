@@ -33,6 +33,7 @@ class AddStockRequestModal extends Component
     public $taxlabel_name;
     public $taxable_idd;
     public $taxlabel_idd;
+    public $remaining_qty;
 
     public $edit_mode = false;
     //public $option_calculus;
@@ -70,15 +71,15 @@ class AddStockRequestModal extends Component
         $this->taxables = Taxable::where('tax_label_id', null)->where('unit', $value)->get();
     }
 
-    // public function updatedTaxableId($value)
-    // {
-    //     $taxables = Taxable::find($value);
+    public function updatedTaxableId($value)
+    {
+        $taxables = Taxable::find($value);
 
-    //     //$this->option_calculus = $taxables->unit_type ?? "";
-    //     $this->unit = $taxables->unit ?? "";
-    //     $this->tariff = $taxables->tariff ?? "";
-    //     //$this->start_no = $taxables->tariff ?? "";
-    // }
+        //$this->option_calculus = $taxables->unit_type ?? "";
+        // $this->unit = $taxables->unit ?? "";
+        $this->remaining_qty = $taxables->tariff ?? "";
+        //$this->start_no = $taxables->tariff ?? "";
+    }
 
     public function updatedEndNo($value)
     {
@@ -144,7 +145,7 @@ class AddStockRequestModal extends Component
             $this->stock_requests = StockRequest::where('req_no', $this->req_no)->where('req_type', 'DEMANDE')->get();
 
             //$this->req_no = "";
-            $this->qty = "";
+            $this->qty = null;
             $this->start_no = null;
             $this->end_no = null;
 
@@ -169,8 +170,8 @@ class AddStockRequestModal extends Component
     public function addRequest($id)
     {
         $this->edit_mode = false;
-        $this->stock_request_id = '';
-        $this->req_no = '';
+        $this->stock_request_id = null;
+        $this->req_no = null;
     }
 
     public function updateRequest($id)

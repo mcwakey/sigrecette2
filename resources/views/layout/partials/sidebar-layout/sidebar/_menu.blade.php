@@ -248,7 +248,7 @@
             @endcan
 
             <div data-kt-menu-trigger="click"
-                 class="menu-item menu-accordion {{ request()->routeIs('accounts.*') ? 'here show' : '' }}">
+                 class="menu-item menu-accordion {{ request()->routeIs('ticket.*') ? 'here show' : '' }}">
                 <!--begin:Menu link-->
                 <span class="menu-link">
                         <span class="menu-icon">{!! getIcon('abstract-7', 'fs-2') !!}</span>
@@ -269,6 +269,16 @@
                             </span>
                     </div>
                     <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('ticket.stock-requests.*') ? 'active' : '' }}"
+                           href="{{ route('ticket.stock-requests.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                            <span class="menu-title">{{ __('Comptabilité des valeurs inactives du regisseur') }}
+                                </span>
+                        </a>
+                    </div>
+                    <div class="menu-item">
                           <span class="menu-link ">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
@@ -277,21 +287,11 @@
                                       data-bs-target="#kt_modal_add_stock_transfer" data-kt-action="add_transfer"> {{ __('new supply') }}</span>
                             </span>
                     </div>
-                    <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('accounts.stock-requests.*') ? 'active' : '' }}"
-                           href="{{ route('accounts.stock-requests.index') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                            <span class="menu-title">{{ __('Comptabilité des valeurs inactives du regisseur') }}
-                                </span>
-                        </a>
-                    </div>
 
                     <!--begin:Menu item-->
                     <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('accounts.stock-transfers.*') ? 'active' : '' }}"
-                           href="{{ route('accounts.stock-transfers.index') }}">
+                        <a class="menu-link {{ request()->routeIs('ticket.stock-transfers.*') ? 'active' : '' }}"
+                           href="{{ route('ticket.stock-transfers.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -319,27 +319,6 @@
                     <!--end:Menu link-->
                     <!--begin:Menu sub-->
                     <div class="menu-sub menu-sub-accordion">
-
-
-
-                        <div class="menu-item">
-                          <span class="menu-link ">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title" data-bs-toggle="modal"
-                                      data-bs-target="#kt_modal_add_accountant_deposit" data-kt-user-id="TITRE" data-kt-action="add_accountant_deposit">    {{ __('new deposit') }}</span>
-                            </span>
-                        </div>
-                        <div class="menu-item">
-                            <a class="menu-link {{ request()->routeIs('accounts.accountant-deposits-title.*') ? 'active' : '' }}"
-                               href="{{ route('accounts.accountant-deposits-title.index') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">{{ __('Etat de versement du regisseur') }} </span>
-                            </a>
-                        </div>
                         <!--end:Menu item-->
 
                         <!--begin:Menu item-->
@@ -361,6 +340,16 @@
 
 
                         <!--begin:Menu item-->
+
+                        <div class="menu-item">
+                          <span class="menu-link ">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title" data-bs-toggle="modal"
+                                      data-bs-target="#kt_modal_add_accountant_deposit" data-kt-user-id="TITRE" data-kt-action="add_accountant_deposit">    {{ __('new deposit') }}</span>
+                            </span>
+                        </div>
                         <div class="menu-item">
                             <a class="menu-link {{ request()->routeIs('accounts.collector-deposits.*') ? 'active' : '' }}"
                                href="{{ route('accounts.collector-deposits.index') }}">
@@ -372,6 +361,27 @@
                         </div>
                         <!--end:Menu item-->
 
+
+
+
+                        <div class="menu-item">
+                          <span class="menu-link ">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title" data-bs-toggle="modal"
+                                      data-bs-target="#kt_modal_add_accountant_deposit" data-kt-user-id="TITRE" data-kt-action="add_accountant_deposit">    {{ __('new deposit') }}</span>
+                            </span>
+                        </div>
+                        <div class="menu-item">
+                            <a class="menu-link {{ request()->routeIs('accounts.accountant-deposits-title.*') ? 'active' : '' }}"
+                               href="{{ route('accounts.accountant-deposits-title.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">{{ __('Etat de versement du regisseur') }} </span>
+                            </a>
+                        </div>
                         <!--begin:Menu item-->
                         <div class="menu-item">
                             <!--begin:Menu link-->

@@ -75,9 +75,19 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/geolocation/zone', [Geolocation::class, 'setZoneGeolocation'])->name('zone');
     });
 
+    Route::name('ticket.')->group(function () {
+        Route::resource('/ticket/stock-requests', StockRequestController::class);
+        Route::resource('/ticket/stock-transfers', StockTransferController::class);
+        Route::resource('/accounts/collector-deposits', CollectorDepositController::class);
+        // Route::resource('/accounts/collector-deposits/{id}', CollectorDepositController::class);
+        Route::resource('/accounts/accountant-deposits-title', AccountantDepositController::class);
+        Route::resource('/accounts/accountant-deposits-outright', AccountantDepositOutrightController::class);
+        Route::resource('/accounts/ledgers', LedgerController::class);
+    });
+
     Route::name('accounts.')->group(function () {
-        Route::resource('/accounts/stock-requests', StockRequestController::class);
-        Route::resource('/accounts/stock-transfers', StockTransferController::class);
+        // Route::resource('/accounts/stock-requests', StockRequestController::class);
+        // Route::resource('/accounts/stock-transfers', StockTransferController::class);
         Route::resource('/accounts/collector-deposits', CollectorDepositController::class);
         // Route::resource('/accounts/collector-deposits/{id}', CollectorDepositController::class);
         Route::resource('/accounts/accountant-deposits-title', AccountantDepositController::class);

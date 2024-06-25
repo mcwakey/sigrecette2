@@ -1,6 +1,6 @@
 <div class="modal fade" id="kt_modal_add_stock_request" tabindex="-1" aria-hidden="true" wire:ignore.self>
     <!--begin::Modal dialog-->
-    <div class="modal-dialog modal-dialog-centered mw-800px">
+    <div class="modal-dialog modal-dialog-centered mw-900px">
         <!--begin::Modal content-->
         <div class="modal-content">
             <!--begin::Modal header-->
@@ -27,7 +27,7 @@
                         <!--begin::Input group-->
 
                         <div class="row mb-7">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <!--begin::Label-->
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('type') }}</label>
                                 <!--end::Label-->
@@ -46,9 +46,9 @@
                                 @error('taxlabel_id')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col-md-4 d-none">
+                            <div class="col-md-3">
                                 <!--begin::Label-->
-                                <label class="required fs-6 fw-semibold mb-2">{{ __('batch no') }}</label>
+                                <label class="required fs-6 fw-semibold mb-2">{{ __('req no') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input data-kt-action="load_drop" type="text" wire:model="req_no" name="req_no" class="form-control mb-3 mb-lg-0" placeholder="{{ __('req no') }}"/>
@@ -61,7 +61,7 @@
                         <div class="separator saperator-dashed my-3"></div>
 
                         <div class="row mb-7">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <!--begin::Label-->
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('tickets') }}</label>
                                 <!--end::Label-->
@@ -83,15 +83,9 @@
                                 @error('taxable_id')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col-md-4">
-                                <!--begin::Label-->
-                                <label class="required fs-6 fw-semibold mb-2">{{ __('req no') }}</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input data-kt-action="load_drop" type="text" wire:model="req_no" name="req_no" class="form-control mb-3 mb-lg-0" placeholder="{{ __('req no') }}"/>
-                                <!--end::Input-->
-                                @error('req_no')
-                                <span class="text-danger">{{ $message }}</span> @enderror
+                            <div class="col-md-3">
+                                <label  class="required fs-6 fw-semibold mb-2">{{ __('Valeur') }} </label>
+                                <input  data-kt-action="load_drop" type="text" wire:model.live="remaining_qty" name="remaining_qty" class="form-control mb-3 mb-lg-0" placeholder="{{ __('0') }}" readonly/>
                             </div>
                         </div>
 
@@ -186,11 +180,11 @@
                                             </td>
                                             <td>
                                                 <button type="button" wire:click="deleteStockRequest({{ $stock_request->id }})"  class="btn btn-sm btn-danger " >
-                                                    <span class="indicator-label" wire:loading.remove>{{ __('remove') }}</span>
-                                                    <span class="indicator-progress" wire:loading >
-                                    {{ __('chargenment ...') }}
-                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                    </span>
+                                                    <span class="indicator-label">{{ __('remove') }}</span>
+                                                    <!-- <span class="indicator-progress" wire:loading >
+                                    {{ __('chargenment ...') }} -->
+                                        <!-- <span class="spinner-border spinner-border-sm align-middle ms-2"></span> -->
+                                    <!-- </span> -->
                                                 </button>
                                             </td>
                                         </tr>
