@@ -1,5 +1,5 @@
 <div class="modal fade" id="kt_modal_add_invoice_general" tabindex="-1" aria-hidden="true" wire:ignore.self data-bs-backdrop='static'>
-    <div class="modal-dialog modal-dialog-centered modal-fullscreen">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:calc(1600px - 20px)!important;">
         <div class="col-md-1"></div>
         <div class="col-md-10">
             <div class="modal-content">
