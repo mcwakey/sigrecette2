@@ -120,17 +120,17 @@
 
 
                     <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == 'br' ? 'active' : '' }}"
-                           href="{{ route('invoices.index', ['state' => 'br',]) }}">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Helpers\Constants::INVOICE_STATE_DRAFT_KEY ? 'active' : '' }}"
+                           href="{{ route('invoices.index', ['state' =>  App\Helpers\Constants::INVOICE_STATE_DRAFT_KEY,'type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY]) }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
-                            <span class="menu-title">Liste des avis sur titre en état de brouillon</span>
+                            <span class="menu-title">Liste des avis sur titre en attente de validation</span>
                         </a>
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == 'ac' ? 'active' : '' }}"
-                           href="{{ route('invoices.index', ['state' => 'ac',])}}">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Helpers\Constants::INVOICE_STATE_ACCEPTED_KEY ? 'active' : '' }}"
+                           href="{{ route('invoices.index', ['state' =>  App\Helpers\Constants::INVOICE_STATE_ACCEPTED_KEY,'type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY])}}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
@@ -138,8 +138,8 @@
                         </a>
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link {{request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') ==  'at' ? 'active' : '' }}"
-                           href="{{  route('invoices.index', ['state' => 'at']) }}">
+                        <a class="menu-link {{request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') ==   App\Helpers\Constants::INVOICE_STATE_PENDING_KEY ? 'active' : '' }}"
+                           href="{{  route('invoices.index', ['state' =>  App\Helpers\Constants::INVOICE_STATE_PENDING_KEY,'type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY]) }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
@@ -149,8 +149,8 @@
 
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link {{ request()->routeIs('invoices.*') && request()->input('notDelivery') == 'nonliv' ? 'active' : '' }}"
-                           href="{{ route('invoices.index', ['notDelivery' => 'nonliv'  ]) }}">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && request()->input('delivery') == App\Helpers\Constants::INVOICE_DELIVERY_NON_LIV_KEY ? 'active' : '' }}"
+                           href="{{ route('invoices.index', ['delivery' => App\Helpers\Constants::INVOICE_DELIVERY_NON_LIV_KEY,'type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY  ]) }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
@@ -160,8 +160,8 @@
                     </div>
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->has('notDelivery')&& request()->input('notDelivery') == 'liv' ? 'active' : '' }}"
-                           href="{{ route('invoices.index', ['notDelivery' =>'liv',]) }}">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->has('delivery')&& request()->input('delivery') ==  App\Helpers\Constants::INVOICE_DELIVERY_LIV_KEY ? 'active' : '' }}"
+                           href="{{ route('invoices.index', ['delivery' =>App\Helpers\Constants::INVOICE_DELIVERY_LIV_KEY,'type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY]) }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
@@ -170,18 +170,27 @@
                         <!--end:Menu link-->
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('notDelivery')&&!request()->has('state') && request()->input('aucomptant') == 'titre'  ? 'active' : '' }}"
-                           href="{{ route('invoices.index' ,['aucomptant' => 'titre' ]) }}">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('delivery')&&!request()->has('state') && request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY  ? 'active' : '' }}"
+                           href="{{ route('invoices.index' ,['type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY ]) }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
-                            <span class="menu-title">Liste des avis sur titre</span>
+                            <span class="menu-title">Liste générale des avis sur titre </span>
+                        </a>
+                    </div>
+                    <div class="menu-item">
+                        <a class="menu-link {{request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Helpers\Constants::INVOICE_STATE_REJECT_KEY ? 'active' : ''  }}"
+                           href="{{ route('invoices.index' ,['state'=>App\Helpers\Constants::INVOICE_STATE_REJECT_KEY,'type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY ]) }}">
+        <span class="menu-bullet">
+            <span class="bullet bullet-dot"></span>
+        </span>
+                            <span class="menu-title">Liste des avis rejetés </span>
                         </a>
                     </div>
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->input('aucomptant') ==   'comptant'? 'active' : '' }}"
-                           href="{{ route('invoices.index', ['aucomptant' =>   'comptant']) }}">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->input('type') ==    App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY? 'active' : '' }}"
+                           href="{{ route('invoices.index', ['type' =>   App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY]) }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
@@ -211,18 +220,9 @@
                     <!--begin:Menu sub-->
                     <div class="menu-sub menu-sub-accordion">
                         <div class="menu-item">
-                          <span class="menu-link ">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title" data-bs-toggle="modal"
-                                      data-bs-target="#kt_modal_add_payment_general">{{__("Enregistrer un paiement")}}</span>
-                            </span>
-                        </div>
-                        <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('recoveries.*') &&  request()->has('notDelivery')&& request()->input('notDelivery') ==  'liv' ? 'active' : '' }}"
-                               href="{{ route('recoveries.index', ['notDelivery' =>  'liv']) }}">
+                            <a class="menu-link {{ request()->routeIs('recoveries.*') &&  request()->has('delivery')&& request()->input('delivery') ==  App\Helpers\Constants::INVOICE_DELIVERY_LIV_KEY ? 'active' : '' }}"
+                               href="{{ route('recoveries.index', ['delivery' =>  App\Helpers\Constants::INVOICE_DELIVERY_LIV_KEY,'to_paid'=>1]) }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
@@ -232,7 +232,7 @@
                         </div>
                         <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('recoveries.*') &&  !request()->has('notDelivery') ? 'active' : '' }}"
+                            <a class="menu-link {{ request()->routeIs('recoveries.*') &&  !request()->has('delivery') ? 'active' : '' }}"
                                href="{{ route('recoveries.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
@@ -364,15 +364,7 @@
 
 
 
-                        <div class="menu-item">
-                          <span class="menu-link ">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title" data-bs-toggle="modal"
-                                      data-bs-target="#kt_modal_add_accountant_deposit" data-kt-user-id="TITRE" data-kt-action="add_accountant_deposit">    {{ __('new deposit') }}</span>
-                            </span>
-                        </div>
+
                         <div class="menu-item">
                             <a class="menu-link {{ request()->routeIs('accounts.accountant-deposits-title.*') ? 'active' : '' }}"
                                href="{{ route('accounts.accountant-deposits-title.index') }}">

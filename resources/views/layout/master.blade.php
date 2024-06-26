@@ -86,6 +86,9 @@
 <livewire:taxpayer_taxable.add-taxpayer-taxable-modal/>
 <livewire:invoice.add-invoice-modal />
 <livewire:payment.add-payment-modal />
+<livewire:stock_request.add-stock-request-modal/>
+<livewire:stock_transfer.add-stock-transfer-modal />
+<livewire:accountant_deposit.add-accountant-deposit-modal/>
 <script>
     document.addEventListener('livewire:init', () => {
         Livewire.on('success', (message) => {

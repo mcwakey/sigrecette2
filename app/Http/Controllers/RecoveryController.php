@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\DataTables\InvoicesDataTable;
 use App\DataTables\RecoveriesDataTable;
+use App\Helpers\Constants;
 use App\Models\Invoice;
 use App\Models\TaxLabel;
 use App\Models\Year;
 use App\Models\Zone;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
 
 class RecoveryController extends Controller
@@ -18,12 +20,14 @@ class RecoveryController extends Controller
     {
 
         $validatedData = $request->validate([
-            'notDelivery'=>'nullable|integer'
+            'delivery' => ['nullable', 'string', Rule::in(Constants::INVOICE_DELIVERY_STATE_VALIDATION_MAP)],
+            'to_paid' =>['nullable', 'integer', Rule::in([0,1])]
         ]);
-        $notDelivery = $validatedData['notDelivery'] ?? null;
+        $delivery = isset($validatedData['delivery']) ? $validatedData['delivery']: null;
+        $to_paid = isset($validatedData['to_paid']) ? $validatedData['to_paid']: null;
         $zones = Zone::all();
         $tax_labels = TaxLabel::all();
-        if($notDelivery==null){
+        if($delivery==null){
             return $dataTable->render('pages/recoveries.list', compact('zones', 'tax_labels'));
 
         }else{
@@ -32,15 +36,16 @@ class RecoveryController extends Controller
             $endDate = $validatedData['e_date'] ?? Carbon::parse("{$year}-12-31 23:59:59");
             $role = Role::where('name', 'agent_recouvrement')->first();
             $agent_recouvrements = $role->users()->get();
+
             return $invoicesDataTable->with(
                 [
-                    'notDelivery' => $notDelivery,
+                    'delivery' => $delivery,
                     'startDate' => $startDate,
                     'endDate' => $endDate,
                     'startInvoiceId'=>null ,
                     'endInvoiceId'=>null,
                     'type'=>null,
-                    'to_paid'=>true,
+                    'to_paid'=>$to_paid,
                 ]
             )->render('pages/invoices.list', compact('zones', 'tax_labels','agent_recouvrements'));
         }

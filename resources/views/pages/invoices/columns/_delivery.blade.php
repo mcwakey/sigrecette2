@@ -1,4 +1,6 @@
-
+@php
+    $actions = App\Helpers\Constants::getInvoiceActionsBasedOnRouteNameAndStatut();
+@endphp
 @if($invoice->delivery_date!=null)
     {{ date('Y-m-d', strtotime($invoice->delivery_date)) }}
 @else
@@ -6,7 +8,7 @@
 @endif
 
 @if ($invoice->can("submit_for_reduced"))
-    @if ( request()->routeIs('invoices.*') && request()->input('notDelivery') ==  'nonliv' &&$invoice->delivery_date == null && $invoice->order_no !== null)
+    @if (in_array(App\Enums\InvoiceActionsEnums::ADDDELIVERY,$actions))
         @can('peut ajouter la date de livraison d\'un avis')
             <button type="button"
                 class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto  pulse pulse-warning"

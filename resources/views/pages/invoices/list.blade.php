@@ -2,24 +2,22 @@
 
     @section('title')
 
-        @if(request()->routeIs('invoices.*') && request()->has('aucomptant') &&  request()->input('aucomptant') == 1)
+        @if(request()->routeIs('invoices.*') && request()->has('type') &&  request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY)
             {{__('Liste des ' .__('invoices'). ' au comptant')}}
-        @elseif( request()->routeIs('invoices.*') && request()->has('aucomptant') &&  request()->input('aucomptant') == 0)
-            {{__('Liste des ' .__('invoices'). ' sur titre')}}
-        @elseif( request()->routeIs('invoices.*') && request()->input('notDelivery') == 1)
+        @elseif( request()->routeIs('invoices.*') && request()->input('delivery') ==  App\Helpers\Constants::INVOICE_DELIVERY_NON_LIV_KEY &&  request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY )
             {{__('Liste des ' .__('invoices'). ' sur titre non distribués')}}
-        @elseif( request()->routeIs('invoices.*') &&  request()->has('notDelivery')&& request()->input('notDelivery') == 0 )
+        @elseif( request()->routeIs('invoices.*') &&  request()->has('delivery')&& request()->input('delivery') ==  App\Helpers\Constants::INVOICE_DELIVERY_LIV_KEY&&  request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY )
             {{__('Liste des ' .__('invoices'). ' sur titre distribués')}}
-        @elseif(request()->has('state') && request()->input('state') == App\Enums\InvoiceStatusEnums::DRAFT)
-            {{ "Liste des ".__('invoices')." sur titre en état de brouillon" }}
-        @elseif(request()->has('state') && request()->input('state') == App\Enums\InvoiceStatusEnums::ACCEPTED)
+        @elseif(request()->has('state') && request()->input('state') == App\Helpers\Constants::INVOICE_STATE_DRAFT_KEY &&  request()->has('type') && request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY)
+            {{ "Liste des avis sur titre en attente de validation" }}
+        @elseif(request()->has('state') && request()->input('state') ==App\Helpers\Constants::INVOICE_STATE_ACCEPTED_KEY &&  request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY)
             {{ "Liste des ".__('invoices')." sur titre en attente de N° d'ordre de recette" }}
-        @elseif(request()->has('state') && request()->input('state') == App\Enums\InvoiceStatusEnums::PENDING)
+        @elseif(request()->has('state') && request()->input('state') == App\Helpers\Constants::INVOICE_STATE_PENDING_KEY &&  request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY)
             {{ "Liste des ".__('invoices')." sur titre à prendre en Charge/Rejeté" }}
-        @elseif(request()->routeIs('recoveries.*') &&  request()->has('notDelivery')&& request()->input('notDelivery') == 0)
+        @elseif(request()->routeIs('recoveries.*') &&  request()->has('delivery')&& request()->input('delivery') ==  App\Helpers\Constants::INVOICE_DELIVERY_LIV_KEY)
             {{"Liste des ".__('invoices')." à recouvrer"}}
         @else
-            {{ "Liste des ".__('invoices')." sur titre" }}
+            {{ "Liste générale des avis sur titre " }}
         @endif
 
     @endsection
@@ -98,7 +96,7 @@
                                         <span class="path3"></span>
                                         <span class="path4"></span>
                                         <span class="path5"></span>
-                                    </i> 
+                                    </i>
                                         {{ __('Ajouter un avis sur titre') }}
                                 </button> --}}
                             @endif
@@ -114,7 +112,7 @@
                                         <span class="path3"></span>
                                         <span class="path4"></span>
                                         <span class="path5"></span>
-                                    </i> 
+                                    </i>
                                         {{ __('Ajouter un avis au comptant') }}
                                 </button>
                             @endif

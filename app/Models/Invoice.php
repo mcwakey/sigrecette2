@@ -434,16 +434,14 @@ class Invoice extends Model implements FormatDateInterface
      */
     public static function search(string $value): QueryBuilder
     {
-        if (strlen($value) < 3) {
-            return self::query()->whereRaw('1 = 0');
-        }
 
         $columns = [
             'id',
             'invoice_no'
         ];
 
-        $query = self::query();
+        $query = self::query()->whereIn('invoices.status',[InvoiceStatusEnums::APPROVED,InvoiceStatusEnums::APPROVED_CANCELLATION])
+            ->where('invoices.pay_status','!=',InvoicePayStatusEnums::PAID);
 
         foreach ($columns as $column) {
             $query->orWhere($column, 'like', "%{$value}%");

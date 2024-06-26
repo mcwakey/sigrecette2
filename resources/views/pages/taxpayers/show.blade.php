@@ -442,7 +442,9 @@
                 <!--end:::Tab pane-->
                 <!--begin:::Tab pane-->
                 <div class="tab-pane fade" id="kt_user_view_overview_events_and_logs_tab" role="tabpanel">
-                    <div class="card pt-4 mb-6 mb-xl-9">
+                    {{--
+
+                     <div class="card pt-4 mb-6 mb-xl-9">
                         <!--begin::Card header-->
                         <div class="card-header border-0">
                             <!--begin::Card title-->
@@ -467,6 +469,7 @@
                         <!--begin::Card body-->
                         <div class="card-body py-0">
                             <!--begin::Table-->
+
                             <table class="table align-middle table-row-dashed fs-6 text-gray-600 fw-semibold gy-5"
                                    id="kt_table_customers_events">
                                 <tbody>
@@ -569,6 +572,9 @@
                         </div>
                         <!--end::Card body-->
                     </div>
+
+                    --}}
+
                     <div class="card pt-4 mb-6 mb-xl-9">
                         <!--begin::Card header-->
                         <div class="card-header border-0">
@@ -580,13 +586,7 @@
                             <!--begin::Card toolbar-->
                             <div class="card-toolbar">
                                 <!--begin::Button-->
-                                <button type="button" class="btn btn-sm btn-light-primary">
-                                    <i class="ki-duotone ki-cloud-download fs-3">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </i>Download Report
-                                </button>
-                                <!--end::Button-->
+
                             </div>
                             <!--end::Card toolbar-->
                         </div>
@@ -676,12 +676,7 @@
     </div>
 
 
-    <!--begin::Modal-->
-    <livewire:payment.add-payment-modal />
-    <!--end::Modal-->
 
-    <!--begin::Modal-->
-    <livewire:taxpayer.add-taxpayer-modal />
 
 
     @push('scripts')

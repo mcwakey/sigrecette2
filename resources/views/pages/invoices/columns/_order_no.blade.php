@@ -1,7 +1,7 @@
-
-@if (
-    ( request()->routeIs('invoices.*') && request()->input('notDelivery') == 1 )|| ( request()->routeIs('invoices.*') ||  request()->has('aucomptant'))
- )
+@php
+    $actions = App\Helpers\Constants::getInvoiceActionsBasedOnRouteNameAndStatut();
+@endphp
+@if (in_array(App\Enums\InvoiceActionsEnums::ADDORNO,$actions))
     @if($invoice->type==App\Helpers\Constants::INVOICE_TYPE_COMPTANT || $invoice->can("submit_for_pending"))
         @if($invoice->order_no==null)
         @can('peut ajouter le numéro d\'ordre de recette d\'un avis')
