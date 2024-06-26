@@ -68,7 +68,20 @@ class AddTicketModal extends Component
         // 'zone_id' => 'required',
         // 'avatar' => 'nullable|sometimes|image|max:1024',
     ];
+    protected function rules(){
+        $rules = [
+            'name' => 'required|string|unique:taxables,name,' . ($this->edit_mode ?  $this->taxable_id : ''),
+            'tariff' => 'required|numeric',
+            'unit' => 'required',
+        ];
 
+        if ($this->edit_mode) {
+            // En mode d'édition, nous ignorons l'ID actuel pour la validation d'unicité
+            $rules['name'] = 'required|string|unique:taxables,name,' . $this->taxable_id;
+        }
+
+        return $rules;
+    }
     protected $listeners = [
         'delete_user' => 'deleteUser',
         'update_user' => 'updateUser',
