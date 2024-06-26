@@ -35,7 +35,7 @@
     @if(in_array(App\Enums\InvoiceActionsEnums::REDUCE,$actions))
 
         @if( $invoice->can( "submit_for_reduced") ||  $invoice->can("submit_for_canceled") && $invoice->validity == 'VALID')
-            @can('peut réduire ou annuler un avis')
+            @can('peut réduire un avis sur titre')
                 <div class="menu-item px-3">
                     <a href="#" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{ $invoice->id }}"
                        data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice" data-kt-action="update_invoice">
