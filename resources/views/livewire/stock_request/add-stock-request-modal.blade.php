@@ -180,7 +180,15 @@
                                             </td>
                                             <td>
                                                 <button type="button" wire:click="deleteStockRequest({{ $stock_request->id }})"  class="btn btn-sm btn-danger " >
-                                                    <span class="indicator-label">{{ __('remove') }}</span>
+                                                    <span class="indicator-label">
+                                                        <i class="ki-duotone ki-trash">
+                                                             <span class="path1"></span>
+                                                             <span class="path2"></span>
+                                                             <span class="path3"></span>
+                                                             <span class="path4"></span>
+                                                             <span class="path5"></span>
+                                                            </i>
+                                                    </span>
                                                     <!-- <span class="indicator-progress" wire:loading >
                                     {{ __('chargenment ...') }} -->
                                         <!-- <span class="spinner-border spinner-border-sm align-middle ms-2"></span> -->
