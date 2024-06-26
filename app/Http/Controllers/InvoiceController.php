@@ -16,19 +16,8 @@ use Spatie\Permission\Models\Role;
 
 class InvoiceController extends Controller
 {
-    const INVOICE_STATE_VALIDATION_MAP = [
-        'br' =>  InvoiceStatusEnums::DRAFT,
-        'ac' => InvoiceStatusEnums::ACCEPTED,
-        'at' => InvoiceStatusEnums::PENDING,
-    ];
-    const INVOICE_DELIVERY_STATE_VALIDATION_MAP = [
-        'nonliv' => false,
-        'liv' =>true,
-    ];
-    const INVOICE_TYPE_VALIDATION_MAP = [
-        'comptant' => Constants::INVOICE_TYPE_COMPTANT,
-        'titre' =>Constants::INVOICE_TYPE_TITRE,
-    ];
+
+
 
     /**
      * Display a listing of the resource.
@@ -39,17 +28,19 @@ class InvoiceController extends Controller
 
         $year = Year::getActiveYear()->name;
         $validatedData = $request->validate([
-            'notDelivery' => ['nullable', 'string', Rule::in(array_keys(self::INVOICE_DELIVERY_STATE_VALIDATION_MAP))],
+            'delivery' => ['nullable', 'string', Rule::in(Constants::INVOICE_DELIVERY_STATE_VALIDATION_MAP)],
             'startInvoiceId' => 'nullable|integer',
             'endInvoiceId' => 'nullable|integer',
             's_date' => 'nullable|date_format:Y-m-d H:i:s',
             'e_date' => 'nullable|date_format:Y-m-d H:i:s',
-            'aucomptant' => ['nullable', 'string', Rule::in(array_keys(self::INVOICE_TYPE_VALIDATION_MAP))],
-            'state' => ['nullable', 'string', Rule::in(array_keys(self::INVOICE_STATE_VALIDATION_MAP))],
+            'type' => ['nullable', 'string', Rule::in(array_keys(Constants::INVOICE_TYPE_VALIDATION_MAP))],
+            'state' => ['nullable', 'string', Rule::in(array_keys( Constants::INVOICE_STATE_VALIDATION_MAP))],
+            'to_paid' =>['nullable', 'integer', Rule::in([0,1])]
         ]);
-        $state = isset($validatedData['state']) ? self::INVOICE_STATE_VALIDATION_MAP[$validatedData['state']] : null;
-        $aucomptant = isset($validatedData['aucomptant'])?self::INVOICE_TYPE_VALIDATION_MAP[$validatedData['aucomptant']] : null;
-        $notDelivery = isset($validatedData['notDelivery']) ? self::INVOICE_DELIVERY_STATE_VALIDATION_MAP[$validatedData['notDelivery']] : null;
+        $state = isset($validatedData['state']) ? Constants::INVOICE_STATE_VALIDATION_MAP[$validatedData['state']] : null;
+        $to_paid = isset($validatedData['to_paid']) ? $validatedData['to_paid']: null;
+        $type = isset($validatedData['type'])?Constants::INVOICE_TYPE_VALIDATION_MAP[$validatedData['type']] : null;
+        $delivery = isset($validatedData['delivery']) ? $validatedData['delivery'] : null;
         $startInvoiceId = $validatedData['startInvoiceId'] ?? null;
         $endInvoiceId = $validatedData['endInvoiceId'] ?? null;
         $startDate = $validatedData['s_date'] ??  Carbon::parse("{$year}-01-01 00:00:00");
@@ -59,14 +50,16 @@ class InvoiceController extends Controller
         $role = Role::where('name', 'agent_recouvrement')->first();
         $agent_recouvrements = $role->users()->get();
         return $dataTable->with(
+
             [
-                'notDelivery' => $notDelivery,
+                'delivery' => $delivery,
                 'startDate' => $startDate,
                 'endDate' => $endDate,
                 'startInvoiceId'=>$startInvoiceId ,
                 'endInvoiceId'=>$endInvoiceId,
-                'type'=>$aucomptant,
-                'state'=>$state
+                'type'=>$type,
+                'state'=>$state,
+                'to_paid'=>$to_paid,
             ]
         )->render('pages/invoices.list', compact('zones', 'tax_labels','agent_recouvrements'));
     }

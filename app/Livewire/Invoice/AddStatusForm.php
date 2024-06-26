@@ -92,7 +92,7 @@ class AddStatusForm extends Component
             }
 
             $invoice->save();
-            $this->dispatchMessage('Avis', 'update');
+
             switch($this->status){
                 case InvoiceStatusEnums::ACCEPTED:
                     $invoice->submitToState("submit_for_accepted");
@@ -103,6 +103,9 @@ class AddStatusForm extends Component
                     break;
                 case  InvoiceStatusEnums::PENDING:
                     $invoice->submitToState("submit_for_pending");
+                    break;
+                case InvoiceStatusEnums::REJECTED:
+                    $invoice->submitToState("submit_for_rejected");
                     break;
                 case   InvoiceStatusEnums::APPROVED:
                 case     InvoiceStatusEnums::APPROVED_CANCELLATION:
@@ -123,9 +126,11 @@ class AddStatusForm extends Component
                 case InvoiceStatusEnums::REDUCED:
                     //dump(InvoiceStatusEnums::REDUCED);
                     break;
+
                 default :
                     // dump($place);
             }
+            $this->dispatchMessage('Avis', 'update');
         });
 
 

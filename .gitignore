@@ -15,6 +15,4 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
-resources/views/exports/state-account-iv-collectorc.blade.php
-resources/views/exports/state-account-iv-receveurc.blade.php
 resources/views/livewire/invoice/add-invoice-general-modal.blade_l.php

@@ -45,30 +45,19 @@ class AddTicketModal extends Component
     // public $saved_avatar;
 
     public $edit_mode = false;
+    protected function rules(){
+        $rules = [
+            'name' => 'required|string|unique:taxables,name,' . ($this->edit_mode ?  $this->taxable_id : ''),
+            'tariff' => 'required|numeric',
+            'unit' => 'required',
+        ];
 
-    protected $rules = [
-        'name' => 'required|unique:taxables,name,',
-        'tariff' => 'required|numeric',
-        //'tariff_type' => 'required',
-        'unit' => 'required',
-        //'unit_type' => 'required',
-        //'modality' => 'required',
-        //'periodicity' => 'required',
-        //'penalty' => 'nullable',
-        //'penalty_type' => 'nullable',
-        //'tax_label' => 'required',
-        //'tax_label_id' => 'required',
-
-        // 'longitude' => 'nullable',
-        // 'latitude' => 'nullable',
-        // 'canton' => 'required',
-        // 'town' => 'required',
-        // 'erea' => 'required',
-        // 'address' => 'required|string',
-        // 'zone_id' => 'required',
-        // 'avatar' => 'nullable|sometimes|image|max:1024',
-    ];
-
+        if ($this->edit_mode) {
+            $rules['name'] = 'required|string|unique:taxables,name,' . $this->taxable_id;
+        }
+        
+        return $rules;
+    }
     protected $listeners = [
         'delete_user' => 'deleteUser',
         'update_user' => 'updateUser',

@@ -6,7 +6,7 @@
             <!--begin::Modal header-->
             <div class="modal-header" id="kt_modal_add_stock_transfer-deposit_header">
                 <!--begin::Modal title-->
-                <h2 class="fw-bold">{{ __('stock transfers') }}</h2>
+                <h2 class="fw-bold">{{ __('Versement du Collecteur') }}</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
@@ -19,14 +19,14 @@
             <div class="modal-body px-5 my-7">
                 <!--begin::Form-->
                 <form id="kt_modal_add_stock_transfer-deposit_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
-                    <input type="hidden" wire:model="stock_transfer_id" name="stock_transfer_id"  value=""/>
-                    <input type="hidden" wire:model="user_id" name="user_id" value=""/>
+                    <input type="text" wire:model="stock_transfer_id" name="stock_transfer_id"  value=""/>
+                    <input type="text" wire:model="user_id" name="user_id" value=""/>
                     <!--begin::Scroll-->
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_stock_transfer-deposit_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_stock_transfer-deposit_header" data-kt-scroll-wrappers="#kt_modal_add_stock_transfer-deposit_scroll" data-kt-scroll-offset="300px">
 
                         <!--begin::Input group-->
 
-                                <input type="hidden" wire:model="collector_id" name="collector_id" value=""/>
+                                <input type="text" wire:model="collector_id" name="collector_id" value=""/>
 
                         @if (!$edit_mode)
 
@@ -173,6 +173,7 @@
                                                 <th class="min-w-50px">{{ __('qty') }}</th>
                                                 <th class="min-w-50px">{{ __('amount') }}</th>
                                                 <th class="min-w-50px">{{ __('num') }}</th>
+                                                <th class="min-w-50px">{{ __('action') }}</th>
                                             </tr>
                                         </thead>
                                         <tbody class="fs-6 fw-semibold text-gray-600">
@@ -194,6 +195,25 @@
                                                     <td>
                                                         {{ $stock_transfer->start_no." - ".$stock_transfer->end_no }}
                                                     </td>
+                                                    <td>
+                                                <button type="button" wire:click="deleteStockRequest({{ $stock_transfer->id }})"  class="btn btn-sm btn-danger " >
+                                                    <span class="indicator-label">
+                                                          <span class="indicator-label">
+                                                        <i class="ki-duotone ki-trash">
+                                                             <span class="path1"></span>
+                                                             <span class="path2"></span>
+                                                             <span class="path3"></span>
+                                                             <span class="path4"></span>
+                                                             <span class="path5"></span>
+                                                            </i>
+                                                    </span>
+                                                    </span>
+                                                    <!-- <span class="indicator-progress" wire:loading >
+                                    {{ __('chargenment ...') }} -->
+                                        <!-- <span class="spinner-border spinner-border-sm align-middle ms-2"></span> -->
+                                    <!-- </span> -->
+                                                </button>
+                                            </td>
                                                 </tr>
                                             @endforeach
                                         @endif

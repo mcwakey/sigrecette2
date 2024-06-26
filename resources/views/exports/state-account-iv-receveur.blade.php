@@ -45,21 +45,36 @@ $stock_r = \App\Models\StockRequest::find($data[0]);
 
 <table>
     <tr>
-        <td colspan="5" style="border: none; margin: 0;text-align: left">{{$commune->region_name}}</td>
-        <td colspan="5"   style="border: none; margin: 0;text-align: right"> REPUBLIQUE TOGOLAISE</td>
+    <td colspan="1"  style="border: none; margin: 0;text-align: left">
+
+        <img src="{{ $commune-> getImageUrlAttribute() }}" alt="Logo" style="width: 50px; height: 50px;">
+
+    </td>
+    <td colspan="4"  style="border: none; margin: 0;text-align: left">
+
+        {{$commune->region_name}}
+
+    </td>
+    <td colspan="5"  style="border: none; margin: 0;text-align: right">
+        REPUBLIQUE TOGOLAISE
+
+    </td>
     </tr>
     <tr>
-        <td colspan="5"  style="border: none; margin: 0;text-align: left">{{$commune->title}}</td>
-        <td colspan="5"  style="border: none; margin: 0;text-align: right">Travail-Liberté-Patrie</td>
+        <td colspan="1" style="border: none; margin: 0; padding:2px ;text-align: left;">
+        </td>
+        <td colspan="4"  style="border: none; margin: 0;text-align: left">
+
+            {{$commune->title}}
+        </td>
+        <td colspan="5"  style="border: none; margin: 0;text-align: right">
+
+            Travail-Liberté-Patrie
+        </td>
     </tr>
+
     <tr>
         <td colspan="10" style="border: none; margin: 0;text-align: center">
-            ETAT DE COMPTABILITÉ DES VALEURS INACTIVES DU REGISSEUR
-        </td>
-
-    </tr>
-    <tr>
-        <td colspan="10" style="border: none; margin: 0;text-align: left">
             N°001
         </td>
 
@@ -179,7 +194,7 @@ $stock_r = \App\Models\StockRequest::find($data[0]);
     </tr>
     <tr>
         <td colspan="5" style="border: none; margin: 0;text-align: left">
-            A Agou, le 19 avril 2023
+            A {{$commune->name}}, {{now()->format('d M Y')}}
         </td>
         <td colspan="5" style="border: none; margin: 0;text-align: left">
             A ……………….., le ……………..

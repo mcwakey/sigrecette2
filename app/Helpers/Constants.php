@@ -2,8 +2,10 @@
 
 namespace App\Helpers;
 
+use App\Enums\InvoiceActionsEnums;
+use App\Enums\InvoiceStatusEnums;
 use Carbon\Carbon;
-
+use Illuminate\Http\Request;
 class Constants
 {
     public  const DEMANDE="DEMANDE";
@@ -17,6 +19,38 @@ class Constants
     const NOT_PERMISSION_TO_PERFORM_ACTION ="Vous n'avez pas la permission pour effectuer cette action.";
     const DEFAULT_ROLE_CAN_NOT_DELETE = "Ce role par défaut ne peut etre supprimé.";
 
+
+
+    const INVOICE_STATE_DRAFT_KEY = 'br';
+    const INVOICE_STATE_ACCEPTED_KEY = 'ac';
+    const INVOICE_STATE_PENDING_KEY = 'at';
+    const INVOICE_STATE_REJECT_KEY = 'rj';
+
+
+    const INVOICE_DELIVERY_NON_LIV_KEY = 'nonliv';
+    const INVOICE_DELIVERY_LIV_KEY = 'liv';
+
+
+    const INVOICE_TYPE_COMPTANT_KEY = 'comptant';
+    const INVOICE_TYPE_TITRE_KEY = 'titre';
+
+
+    const INVOICE_STATE_VALIDATION_MAP = [
+        self::INVOICE_STATE_DRAFT_KEY => InvoiceStatusEnums::DRAFT,
+        self::INVOICE_STATE_ACCEPTED_KEY => InvoiceStatusEnums::ACCEPTED,
+        self::INVOICE_STATE_PENDING_KEY => InvoiceStatusEnums::PENDING,
+        self::INVOICE_STATE_REJECT_KEY => InvoiceStatusEnums::REJECTED
+    ];
+
+    const INVOICE_DELIVERY_STATE_VALIDATION_MAP = [
+        self::INVOICE_DELIVERY_NON_LIV_KEY,
+        self::INVOICE_DELIVERY_LIV_KEY
+    ];
+
+    const INVOICE_TYPE_VALIDATION_MAP = [
+        self::INVOICE_TYPE_COMPTANT_KEY => Constants::INVOICE_TYPE_COMPTANT,
+        self::INVOICE_TYPE_TITRE_KEY => Constants::INVOICE_TYPE_TITRE,
+    ];
     public static function getMonths():array{
         $months = [];
         for ($i = 1 ; $i <= 12; $i++) {
@@ -26,4 +60,58 @@ class Constants
         }
         return $months;
     }
+    public static function getInvoiceActionsBasedOnRouteNameAndStatut( string $state = null): array
+    {
+        $actions = [InvoiceActionsEnums::VIEW];
+
+
+            if(request()->routeIs('invoices.*')){
+                $actions = self::getInvoiceActions();
+            }
+
+
+
+        return $actions;
+    }
+
+    private static function getInvoiceActions(): array
+    {
+        if(request()->has('state')){
+            if( request()->input('state') == self::INVOICE_STATE_DRAFT_KEY) {
+                return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::EDITSTATUT];
+            }
+            elseif(  request()->input('state') == self::INVOICE_STATE_ACCEPTED_KEY ){
+                return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::PRINT,InvoiceActionsEnums::ADDORNO];
+            }
+            elseif(request()->input('state') == self::INVOICE_STATE_PENDING_KEY ){
+                return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::EDITSTATUT];
+            }
+        }else{
+        if (request()->has('delivery')){
+                if( request()->input('delivery')==Constants::INVOICE_DELIVERY_NON_LIV_KEY){
+                    return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::ADDDELIVERY];
+
+                }
+                elseif ( request()->input('delivery')==Constants::INVOICE_DELIVERY_LIV_KEY&& request()->input('to_paid')=="1"){
+                    return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::PAYMENT];
+                }
+                elseif ( request()->input('delivery')==Constants::INVOICE_DELIVERY_LIV_KEY){
+                    return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::REDUCE,InvoiceActionsEnums::RELAUNCH];
+                }
+        }
+        else {
+                if(request()->input('type')==Constants::INVOICE_TYPE_TITRE_KEY){
+                    return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::ZEROEDITION];
+                }
+                if(request()->input('type')==Constants::INVOICE_TYPE_COMPTANT_KEY){
+                    return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::PAYMENT,InvoiceActionsEnums::REDUCE,InvoiceActionsEnums::PRINT,InvoiceActionsEnums::ADDORNO];
+                }
+            }
+        }
+
+
+
+        return [InvoiceActionsEnums::VIEW];
+    }
+
 }

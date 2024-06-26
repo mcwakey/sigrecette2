@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Notifications\InvoicePaid;
 use App\Traits\DispatchesMessages;
 use Illuminate\Support\Facades\DB;
+use Livewire\WithPagination;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
@@ -21,13 +22,12 @@ class AddPaymentGeneralModal extends Component
 {
     //use WithFileUploads;
     use DispatchesMessages;
-
+    use WithPagination;
     public $invoice_id;
     public $invoice;
     public $search = '';
 
-    public $invoices;
-
+    public $perPages=10;
     protected function rules(){
         $rules = [
 
@@ -50,10 +50,10 @@ class AddPaymentGeneralModal extends Component
     public function render()
     {
 
-        $this->invoices = Invoice::search($this->search)->take(10)->get();
+        //$this->invoices = Invoice::search($this->search)->take(10)->get();
 
-        if (count($this->invoices )==1) {
-            $this->invoice = $this->invoices[0];
+        if ( $this->invoice ) {
+           // $this->invoice = $this->invoices[0];
             $this->invoice_id =$this->invoice->id;
             $this->dispatch('updateSharedInvoiceId', id:  $this->invoice_id);
 
@@ -61,7 +61,9 @@ class AddPaymentGeneralModal extends Component
 
 
 
-        return view('livewire.payment.add-payment-general-modal');
+        return view('livewire.payment.add-payment-general-modal',[
+            'invoices'=>Invoice::search($this->search)->paginate($this->perPages, pageName: 'payment-modal')
+        ]);
     }
 
     public function select_invoice($value){

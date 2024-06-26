@@ -19,7 +19,7 @@
             <div class="modal-body px-5 my-7">
                 <!--begin::Form-->
                 <form id="kt_modal_add_accountant_deposit_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
-                    <input type="hidden" wire:model="accountant_deposit_id" name="accountant_deposit_id"  value=""/>
+                    <input type="text" wire:model="accountant_deposit_id" name="accountant_deposit_id"  value=""/>
                     <input type="hidden" wire:model="user_id" name="user_id" value=""/>
                     <!--begin::Scroll-->
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_accountant_deposit_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_accountant_deposit_header" data-kt-scroll-wrappers="#kt_modal_add_accountant_deposit_scroll" data-kt-scroll-offset="300px">
@@ -36,18 +36,10 @@
                                 <!--end::Input-->
                             </div>
                             <div class="col-md-3">
-                                <!--begin::Label-->
-                                <!--end::Label-->
-                                <!--begin::Input-->
+
 
                                 <input type="text" wire:model="total_amount" name="total_amount" class="form-control mb-3 mb-lg-0" placeholder="{{ __('Montant a verser') }}" readonly/>
 
-                                <!-- <select wire:model="taxlabel_id" name="taxlabel_id" class="form-select" data-dropdown-parent="#kt_modal_add_accountant_deposit">
-                                    <option>{{ __('select an option') }}</option>
-                                    <option value="TICKET">TICKET</option>
-                                    <option value="TIMBRE">TIMBRE</option>
-                                </select> -->
-                                <!--end::Input-->
                                 @error('total_amount')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
@@ -115,15 +107,15 @@
                     <div class="text-center pt-5">
                     <button type="reset" class="btn btn-light me-5" data-bs-dismiss="modal" aria-label="Close" wire:loading.attr="disabled">{{ __('close') }}</button>
 
-    <button type="submit" class="btn btn-danger" data-kt-taxpayer-taxables-modal-action="submit">
-        <span class="indicator-label" wire:loading.remove>{{ __('Finaliser le versement') }}</span>
-        <span class="indicator-progress" wire:loading wire:target="submit">
-        {{ __('chargenment ...') }}
-            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-        </span>
-    </button>
+                                <button type="submit" class="btn btn-danger" data-kt-taxpayer-taxables-modal-action="submit">
+                                    <span class="indicator-label" wire:loading.remove>{{ __('Finaliser le versement') }}</span>
+                                    <span class="indicator-progress" wire:loading wire:target="submit">
+                                    {{ __('chargenment ...') }}
+                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                </button>
                     </div>
-                    <!--end::Actions-->
+                    </div>
                 </form>
                 <!--end::Form-->
             </div>

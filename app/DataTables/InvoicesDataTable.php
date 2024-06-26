@@ -9,6 +9,7 @@ use App\Helpers\Constants;
 use App\Models\Invoice;
 use App\Models\Year;
 use Carbon\Carbon;
+use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
@@ -21,6 +22,9 @@ class InvoicesDataTable extends DataTable
 {
     use WithExportQueue;
     protected $showId;
+
+
+
 
     /**
      * Build the DataTable class.
@@ -117,9 +121,9 @@ class InvoicesDataTable extends DataTable
                         ->distinct()
                 ->orderBy('invoices.created_at', 'desc')
                         ->newQuery();
-
-
-
+        if($this->type!=null){
+            $query->where('invoices.type','=',$this->type);
+        }
         if ($this->startInvoiceId!== null && $this->endInvoiceId!== null) {
             $query->whereBetween('invoices.id', [$this->startInvoiceId, $this->endInvoiceId]);
         }
@@ -127,19 +131,25 @@ class InvoicesDataTable extends DataTable
             $query->where('invoices.status','=',$this->state);
 
         }
-        if($this->type!=null){
-            $query->where('invoices.type','=',$this->type);
-        }
-        if ($this->notDelivery!==null && $this->notDelivery) {
-            $query->whereNull('delivery_date');
-        }elseif ($this->notDelivery!==null && !$this->notDelivery)  {
-            $query->whereNotNull('delivery_date')
-            ;
+        if($this->delivery){
+            if ($this->delivery==Constants::INVOICE_DELIVERY_LIV_KEY) {
+                $query->whereNotNull('delivery_date');
+                if($this->to_paid){
+                    $query->whereIn('invoices.status',[InvoiceStatusEnums::APPROVED,InvoiceStatusEnums::APPROVED_CANCELLATION])
+                    ->where('invoices.pay_status','!=',InvoicePayStatusEnums::PAID);
 
+                }
+            }elseif ( $this->delivery==Constants::INVOICE_DELIVERY_NON_LIV_KEY)  {
+                $query->whereIn('invoices.status',[InvoiceStatusEnums::APPROVED,InvoiceStatusEnums::APPROVED_CANCELLATION]);
+
+                $query->whereNull('delivery_date');
+
+            }
         }
-        if($this->to_paid && !$this->notDelivery){
-            $query->where('invoices.pay_status','!=',InvoicePayStatusEnums::PAID)
-            ->whereIn('invoices.status',[InvoiceStatusEnums::APPROVED,InvoiceStatusEnums::APPROVED_CANCELLATION]);
+
+
+        if($this->id){
+            $query->where('invoices.taxpayer_id','=',$this->id);
         }
         return $query;
     }
@@ -152,16 +162,18 @@ class InvoicesDataTable extends DataTable
      */
     public function html(): HtmlBuilder
     {
+
         return $this->builder()
             ->setTableId('invoices-table')
             ->columns($this->getColumns())
-            ->minifiedAjax()
+            ->minifiedAjax(route("invoices.index",request()->all()))
             ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(3)
             ->pageLength(100) // Set the default number of rows per page to 3
             ->lengthMenu([[100,300, 500,  -1], [100,300, 500, "All"]]) // Define options for the number of rows per page
+
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/taxpayer_taxables/columns/_draw-scripts.js')) . "}");
     }
 
@@ -175,15 +187,16 @@ class InvoicesDataTable extends DataTable
             Column::make('zones.name')->title(__('zone')),
             Column::make('taxpayers.address')->title(__('address'))->visible(false),
             Column::make('taxpayers.latitude')->title(__('gps'))->visible(false),
-            Column::make('tax_labels.code')->title(__('code')),
+            Column::make('tax_labels.code')->title(__('code'))->visible(false),
             Column::make('total')->title(__('amount'))->name('amount'),
-            Column::make('paid')->title(__('Montant payé'))->name('paid'),
-            Column::make('remains_to_be_paid')->title(__('Reste'))->name('remains_to_be_paid'),
+            Column::make('paid')->title(__('Montant payé'))->name('paid')->searchable(false),
+            Column::make('remains_to_be_paid')->title(__('Reste'))->name('remains_to_be_paid')->searchable(false),
             Column::make('status')->title(__('aproval')),
             Column::make('delivery_date')->title(__('delivery date'))->addClass('text-nowrap'),
             Column::make('from_date')->title(__('from_date'))->addClass('text-nowrap'),
             Column::make('to_date')->title(__('expiry date'))->addClass('text-nowrap')->visible(false),
             Column::make('validity')->title(__('status')),
+            Column::make('taxpayer_id')->visible(false),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
                 ->exportable(true)
@@ -191,24 +204,35 @@ class InvoicesDataTable extends DataTable
                 ->width(60)
         ];
 
-        if ($this->state != null) {
+
             $columns = array_map(function ($column) {
-                if ($this->state == InvoiceStatusEnums::DRAFT) {
-                    if (in_array($column->name, ['order_no', 'paid', 'remains_to_be_paid', 'delivery_date', 'to_date', 'validity'])) {
-                        $column->visible(false);
-                    }
-                } elseif ($this->state == InvoiceStatusEnums::ACCEPTED) {
-                    if (in_array($column->name, ['paid', 'remains_to_be_paid', 'delivery_date', 'validity', 'to_date'])) {
-                        $column->visible(false);
-                    }
-                } elseif ($this->state == InvoiceStatusEnums::PENDING) {
-                    if (in_array($column->name, ['paid', 'remains_to_be_paid', 'to_date', 'validity'])) {
+                if ($this->type==Constants::INVOICE_TYPE_COMPTANT){
+                    if (in_array($column->name, ['zones.name','remains_to_be_paid'])) {
                         $column->visible(false);
                     }
                 }
+                if ($this->state != null) {
+                    if ($this->state == InvoiceStatusEnums::DRAFT) {
+                        if (in_array($column->name, ['order_no', 'paid', 'remains_to_be_paid', 'delivery_date', 'to_date', 'validity'])) {
+                            $column->visible(false);
+                        }
+                    } elseif ($this->state == InvoiceStatusEnums::ACCEPTED) {
+                        if (in_array($column->name, ['paid', 'remains_to_be_paid', 'delivery_date', 'validity', 'to_date'])) {
+                            $column->visible(false);
+                        }
+                    }
+
+                    elseif ($this->state == InvoiceStatusEnums::PENDING) {
+                        if (in_array($column->name, ['paid', 'remains_to_be_paid', 'to_date', 'validity','delivery_date'])) {
+                            $column->visible(false);
+                        }
+                    }
+                }
+
+
                 return $column;
             }, $columns);
-        }
+
 
         return $columns;
     }

@@ -22,8 +22,8 @@
             <div class="modal-body px-5 my-7">
                 <!--begin::Form-->
                 <form id="kt_modal_add_stock_transfer_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
-                    <input type="hidden" wire:model="stock_transfer_id" name="stock_transfer_id"  value=""/>
-                    <input type="hidden" wire:model="user_id" name="user_id" value=""/>
+                    <input type="text" wire:model="stock_transfer_id" name="stock_transfer_id"  value=""/>
+                    <input type="text" wire:model="user_id" name="user_id" value=""/>
                     <!--begin::Scroll-->
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_stock_transfer_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_stock_transfer_header" data-kt-scroll-wrappers="#kt_modal_add_stock_transfer_scroll" data-kt-scroll-offset="300px">
 
@@ -69,7 +69,7 @@
                                 <select data-kt-action="load_drop" wire:model="stock_request_id" name="stock_request_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
                                     <option>{{ __('select an option') }}</option>
                                     @foreach($stock_requests as $request)
-                                        <option value="{{ $request->id}}">{{ $request->taxable->name." ".$request->start_no."-".$request->end_no." "." (".$request->req_no.")" }}</option>
+                                        <option value="{{ $request->id}}">{{ $request->taxable->name." (".$request->taxable->tariff.")" }}</option>
                                     @endforeach
                                 </select>
 
@@ -202,6 +202,7 @@
                                                 <th class="min-w-50px">{{ __('qty') }}</th>
                                                 <th class="min-w-50px">{{ __('amount') }}</th>
                                                 <th class="min-w-50px">{{ __('num') }}</th>
+                                                <th class="min-w-50px">{{ __('action') }}</th>
                                             </tr>
                                         </thead>
                                         <tbody class="fs-6 fw-semibold text-gray-600">
@@ -214,13 +215,30 @@
                                                 {{ $stock_transfer->taxable->tariff }}
                                             </td>
                                             <td>
-                                                {{ $stock_transfer->qty }}
+                                                {{ $stock_transfer->qtyy }}
                                             </td>
                                             <td>
                                                 {{ $stock_transfer->qty*$stock_transfer->taxable->tariff }}
                                             </td>
                                             <td>
                                                 {{ $stock_transfer->start_no." - ".$stock_transfer->end_no }}
+                                            </td>
+                                            <td>
+                                                <button type="button" wire:click="deleteStockRequest({{ $stock_transfer->id }})"  class="btn btn-sm btn-danger " >
+                                                    <span class="indicator-label">  <span class="indicator-label">
+                                                        <i class="ki-duotone ki-trash">
+                                                             <span class="path1"></span>
+                                                             <span class="path2"></span>
+                                                             <span class="path3"></span>
+                                                             <span class="path4"></span>
+                                                             <span class="path5"></span>
+                                                            </i>
+                                                    </span></span>
+                                                    <!-- <span class="indicator-progress" wire:loading >
+                                    {{ __('chargenment ...') }} -->
+                                        <!-- <span class="spinner-border spinner-border-sm align-middle ms-2"></span> -->
+                                    <!-- </span> -->
+                                                </button>
                                             </td>
                                         </tr>
                                         @endforeach

@@ -31,12 +31,12 @@
                             <div class="fv-row">
                                 <div class="d-flex align-items-center position-relative my-1">
                                     {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
-                                    <input type="text" data-kt-taxpayer-table-filter="search" class="form-control ps-13" wire:model.live="search"
+                                    <input type="text" data-kt-taxpayer-table-filter="search" class="form-control ps-13"  wire:model.live.debounce.300ms="search"
                                            placeholder="{{ __('search')." un avis" }}" id="mySearchInput" />
                                 </div>
                                 <div class="table-responsive">
-                                    @if(count($invoices) > 0)
-                                        <table class="table">
+
+                                        <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold">
                                             <thead>
                                             <tr class="fw-bold fs-6">
                                                 <th>N° d'avis</th>
@@ -78,7 +78,8 @@
                                             @endforeach
                                             </tbody>
                                         </table>
-                                    @endif
+                                    {{ $invoices->links() }}
+
                                 </div>
                                 @if( $invoice)
                                     <div class="card card-dashed mt-3">
