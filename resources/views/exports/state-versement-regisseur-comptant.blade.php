@@ -39,51 +39,51 @@
 
 <table>
     <tr>
-        <td  colspan="4"> {{$commune->region_name}} </td>
-        <td  colspan="4">REPUBLIQUE TOGOLAISE</td>
+        <td  colspan="4"  style="border: none; padding: 2px;"> {{$commune->region_name}} </td>
+        <td  colspan="4" style="border: none; padding:2px ;text-align: right;">REPUBLIQUE TOGOLAISE</td>
     </tr>
     <tr>
-        <td colspan="4">  {{$commune->title}}</td>
-        <td colspan="4">Travail-Liberté-Patrie</td>
+        <td colspan="4" style="border: none; margin: 0; padding:2px ;">  {{$commune->title}}</td>
+        <td colspan="4" style="border: none; margin: 0 ; padding:2px ; ;text-align: right;">Travail-Liberté-Patrie</td>
     </tr>
     @php
         $year = \App\Models\Year::getActiveYear()
     @endphp
     Exercice : {{$year->name}}
     <tr>
-        <td colspan="5">
+        <td colspan="8" style="border: none; margin: 0; text-align: center;">
             ETAT DE VERSEMENT DU REGISSEUR DES RECETTES
 
         </td>
 
     </tr>
     <tr>
-        <td colspan="8">
+        <td colspan="8" style="border: none; margin: 0; text-align: center;">
             (Recettes sur au comptant)
 
         </td>
 
     </tr>
     <tr>
-        <td colspan="8">
+        <td colspan="8" style="border: none; margin: 0; text-align: center;">
             N°001
         </td>
 
     </tr>
     <tr>
-        <td colspan="8">
+        <td colspan="8" style="border: none; margin: 0;">
             Nom du Régisseur : {{\App\Models\User::getRegisseurName()}}
         </td>
 
     </tr>
     <tr>
-        <td colspan="8">
+        <td colspan="8" style="border: none; margin: 0;">
             Exercice : {{$year->name}}
         </td>
 
     </tr>
     <tr>
-        <td colspan="8">
+        <td colspan="8" style="border: none; margin: 0;" >
             Période de :
         </td>
     </tr>
@@ -122,22 +122,22 @@
     @endforeach
 
     <tr>
-        <td colspan="4">TOTAL</td>
+        <td colspan="4" style=" margin: 0; text-align: center;">TOTAL</td>
         <td>{{ $ssomme}}</td>
         <td></td>
         <td></td>
         <td></td>
     </tr>
     <tr>
-        <td colspan="8">Arrêté le présent état de versement à la somme de e {{number_to_words($ssomme) }} CFA</td>
+        <td colspan="8"  style="border: none; margin: 5;padding: 5;">Arrêté le présent état de versement à la somme de e {{number_to_words($ssomme) }} CFA</td>
     </tr>
     <tr>
-        <td colspan="4">Le Receveur</td>
-        <td colspan="4"> Le Régisseur</td>
+        <td colspan="4" style="border: none; margin: 5;padding: 5;">Le Receveur</td>
+        <td colspan="4" style="border: none; margin: 5;padding: 5;"> Le Régisseur</td>
     </tr>
     <tr>
-        <td colspan="4"> [Signature, nom]</td>
-        <td colspan="4">[Signature, nom]</td>
+        <td colspan="4" style="border: none; margin: 5;padding: 5;"> [Signature, nom]</td>
+        <td colspan="4" style="border: none; margin: 5;padding: 5;">[Signature, nom]</td>
     </tr>
 
 </table>
