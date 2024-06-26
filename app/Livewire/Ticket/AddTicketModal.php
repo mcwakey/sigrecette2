@@ -27,22 +27,7 @@ class AddTicketModal extends Component
     public $tariff;
     // public $tariff_type;
     public $unit;
-    // public $unit_type;
-    // public $modality;
-    // public $periodicity;
-    // public $penalty;
-    // public $penalty_type;
-    // public $tax_label_id;
 
-    // public $longitude;
-    // public $latitude;
-    // public $canton;
-    // public $town;
-    // public $erea;
-    // public $address;
-    // public $zone_id;
-    // public $avatar;
-    // public $saved_avatar;
 
     public $edit_mode = false;
     protected function rules(){
@@ -65,16 +50,9 @@ class AddTicketModal extends Component
 
     public function render()
     {
-        //$cantons = Canton::all();
-        //$towns = Town::all();
-        //$ereas = Erea::all();
-        //$genders = Gender::all();
-        //$id_types = IdType::all();
+
         $tax_labels = TaxLabel::all();
 
-        // Assuming you have a public property $canton in your Livewire component
-        //$towns = $this->canton ? Town::where('canton_id', $this->canton)->get() : collect();
-        //$ereas = $this->town ? Erea::where('town_id', $this->town)->get() : collect();
 
         return view('livewire.ticket.add-ticket-modal', compact('tax_labels'));
     }

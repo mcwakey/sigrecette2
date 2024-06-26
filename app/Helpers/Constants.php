@@ -84,7 +84,7 @@ class Constants
                 return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::PRINT,InvoiceActionsEnums::ADDORNO];
             }
             elseif(request()->input('state') == self::INVOICE_STATE_PENDING_KEY ){
-                return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::EDITSTATUT];
+                return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::EDITSTATUT,InvoiceActionsEnums::PRINT];
             }
         }else{
         if (request()->has('delivery')){
