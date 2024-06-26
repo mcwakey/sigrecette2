@@ -45,29 +45,6 @@ class AddTicketModal extends Component
     // public $saved_avatar;
 
     public $edit_mode = false;
-
-    protected $rules = [
-        'name' => 'required',
-        'tariff' => 'required|numeric',
-        //'tariff_type' => 'required',
-        'unit' => 'required',
-        //'unit_type' => 'required',
-        //'modality' => 'required',
-        //'periodicity' => 'required',
-        //'penalty' => 'nullable',
-        //'penalty_type' => 'nullable',
-        //'tax_label' => 'required',
-        //'tax_label_id' => 'required',
-
-        // 'longitude' => 'nullable',
-        // 'latitude' => 'nullable',
-        // 'canton' => 'required',
-        // 'town' => 'required',
-        // 'erea' => 'required',
-        // 'address' => 'required|string',
-        // 'zone_id' => 'required',
-        // 'avatar' => 'nullable|sometimes|image|max:1024',
-    ];
     protected function rules(){
         $rules = [
             'name' => 'required|string|unique:taxables,name,' . ($this->edit_mode ?  $this->taxable_id : ''),
@@ -76,7 +53,6 @@ class AddTicketModal extends Component
         ];
 
         if ($this->edit_mode) {
-            // En mode d'édition, nous ignorons l'ID actuel pour la validation d'unicité
             $rules['name'] = 'required|string|unique:taxables,name,' . $this->taxable_id;
         }
 
