@@ -41,9 +41,9 @@
 
             <div class="card-toolbar">
                 <!--begin::Toolbar-->
-                <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
+                <div class="d-flex justify-content-end me-5 d-none" data-kt-invoice-table-toolbar="base"  id="print-div">
 
-                    <div href="#" class="btn btn-light btn-active-light-primary btn-flex btn-center ms-auto me-5"
+                    <div href="#" class="btn btn-light btn-active-light-primary btn-flex btn-center ms-auto me-5 "
                          data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                         {{ __('print') }}
                         <i class="ki-duotone ki-down fs-5 ms-1"></i>
@@ -55,12 +55,7 @@
 
                         <div class="menu-item px-3">
                             <a href="#" class="menu-link px-3 print-link" target="_blank">
-                                {{ __('État de versement du Régisseur des Recettes (Recettes sur titre)') }}
-                            </a>
-                        </div>
-                        <div class="menu-item px-3">
-                            <a href="#" class="menu-link px-3 print-link" target="_blank">
-                                {{ __("ETAT DE VERSEMENT DU REGISSEUR DES RECETTES(Recettes au comptant)") }}
+                                {{ __('État de versement du Régisseur des Recettes') }}
                             </a>
                         </div>
                     </div>
@@ -305,6 +300,28 @@
                     window.LaravelDataTables['collector_deposits-table'].ajax.reload();
                 });
             });
+            const selectElement = document.getElementById('mySearchThree');
+            const printdiv = document.getElementById('print-div')
+            let r_type;
+            selectElement.addEventListener('change', function(event) {
+                const selectedValue = event.target.value;
+                const true_array = [ '{{App\Helpers\Constants::INVOICE_TYPE_TITRE}}' ,'{{App\Helpers\Constants::INVOICE_TYPE_COMPTANT}}'];
+                if (
+                    true_array.includes(selectedValue)
+                ) {
+                    printdiv.classList.remove( "d-none");
+                    if(selectedValue===true_array[0]){
+                        r_type = 9;
+                    }else {
+                        r_type = 16;
+                    }
+
+
+                }else {
+                    printdiv.classList.add( "d-none")
+                }
+                console.log(selectedValue);
+            });
             document.querySelectorAll('.print-link').forEach(function(link) {
 
                 function capitalizeFirstLetter(str) {
@@ -350,8 +367,7 @@
 
 
 
-                    let r_type = 9;
-                    // let r_type = 16;
+
                     let jsonData = JSON.stringify(dataArray);
                     let url =
                         "{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type', 'action' => ':selectedValue']) }}";

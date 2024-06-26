@@ -114,7 +114,7 @@
                 $ssomme+=$item["MONTANT"];
             @endphp
             <td>{{$item["MONTANT"]}}</td>
-            <td>{{$item["CODE D'IMPUTATION"]}} </td>
+            <td>{{isset($item["CODE D'IMPUTATION"]) ?? $item["CODE D'IMPUTATION"] }} </td>
             <td></td>
             <td></td>
         </tr>
