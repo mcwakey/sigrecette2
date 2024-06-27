@@ -328,6 +328,7 @@ class AddStockTransferModal extends Component
         }
         elseif($this->qty >$this->remaining_qty){
             $this->qty=$this->remaining_qty;
+            $this->end_no= $this->start_no+$this->qty;
         }
         $this->total = $this->qty * $this->tariff;
     }
