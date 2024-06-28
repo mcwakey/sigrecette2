@@ -61,6 +61,13 @@
                             </span>
                             <span class="menu-title">Liste des contribuables</span>
                         </a>
+                            <a class="menu-link {{ request()->routeIs('taxpayers.*') && request()->has('state')  ? 'active' : '' }}"
+                               href="{{ route('taxpayers.index', ['state' => 'at']) }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                                <span class="menu-title">Liste des contribuables en attente de validation</span>
+                            </a>
                         <a class="menu-link {{ request()->routeIs('taxpayers.*') && request()->has('disable')  ? 'active' : '' }}"
                            href="{{ route('taxpayers.index', ['disable' => true]) }}">
                             <span class="menu-bullet">
@@ -93,6 +100,16 @@
                                     <span class="bullet bullet-dot"></span>
                                 </span>
                                 <span class="menu-title" data-bs-toggle="modal"
+                                      data-bs-target="#kt_modal_add_invoice_general">{{__("Nouvel Taxation")}}</span>
+                            </span>
+                    </div>
+                    <div class="menu-item">
+
+                        <span class="menu-link ">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title" data-bs-toggle="modal"
                                       data-bs-target="#kt_modal_add_invoice_general">{{__("Nouvel avis sur titre")}}</span>
                             </span>
                     </div>
@@ -103,6 +120,15 @@
                                 </span>
                                 <span class="menu-title" data-bs-toggle="modal"
                                       data-bs-target="#kt_modal_add_invoice_no_taxpayer">{{__("Nouvel avis au comptant")}}</span>
+                            </span>
+                    </div>
+                    <div class="menu-item">
+                          <span class="menu-link ">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title" data-bs-toggle="modal"
+                                      data-bs-target="#kt_modal_add_invoice_no_taxpayer">{{__("Nouvel avis de réduction  ou d’annulation")}}</span>
                             </span>
                     </div>
                 </div>
@@ -125,7 +151,7 @@
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
-                            <span class="menu-title">Liste des avis sur titre en attente de validation</span>
+                            <span class="menu-title">Validation des avis sur titre</span>
                         </a>
                     </div>
                     <div class="menu-item">
@@ -134,7 +160,7 @@
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
-                            <span class="menu-title">Liste des avis sur titre en attente de N° d'ordre de recette</span>
+                            <span class="menu-title">Numérotation  d'ordre de recette  des avis sur titre</span>
                         </a>
                     </div>
                     <div class="menu-item">
@@ -143,7 +169,7 @@
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
-                            <span class="menu-title">Liste des avis sur titre à prendre en Charge/Rejeté</span>
+                            <span class="menu-title">Prise en charge/Rejet des avis sur titre</span>
                         </a>
                     </div>
 
@@ -154,7 +180,7 @@
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
-                            <span class="menu-title">Liste des avis sur titre non distribués</span>
+                            <span class="menu-title">Distribution des avis sur titre</span>
                         </a>
                         <!--end:Menu link-->
                     </div>
