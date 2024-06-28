@@ -68,7 +68,7 @@ class AddStockTransferDepositModal extends Component
 
         if ($this->deposit_mode) {
             $rules['code'] = 'required';
-            $rules['taxlabel_id'] = 'required';
+            // $rules['taxlabel_id'] = 'required';
             $rules['start_no'] = 'nullable|numeric|min:' . $this->select_transfer->start_no . '|max:' . ($this->select_transfer->end_no-1);
             $rules['end_no'] = 'nullable|numeric|min:' . ( $this->select_transfer->start_no + 1) . '|max:' .$this->select_transfer->end_no;
         }
@@ -127,13 +127,14 @@ class AddStockTransferDepositModal extends Component
         $this->user_id = Auth::id();
 
 
-       $taxlabel_list = TaxLabel::where('category', 'CATEGORY 3')->get();
+        $taxlabel_list = TaxLabel::where('category', 'CATEGORY 3')->get();
         $stock_requests= StockRequest::where('req_type','DEMANDE')->where('type','ACTIVE')->get();
 
         $this->stock_transfers = StockTransfer::
         where('trans_type', 'RECU')
             ->where('to_user_id', $this->collector_id)
             ->where('type','ACTIVE')->get();
+
         $this->stock_transfers_v = StockTransfer::
         where('trans_type', 'VENDU')
             ->where('type','ACTIVE')
@@ -375,15 +376,12 @@ class AddStockTransferDepositModal extends Component
 
     public function updatedEndNo($value)
     {
-
         $this-> makeStartNoAndEndNoCalcul();
     }
 
     public function updatedStartNo($value)
     {
         $this-> makeStartNoAndEndNoCalcul();
-
-
     }
     public function makeStartNoAndEndNoCalcul(){
         if($this->stock_request_id!=null && $this->start_no < $this->end_no){
@@ -445,7 +443,7 @@ class AddStockTransferDepositModal extends Component
                             $stock_transfer_new = StockTransfer::create($stockTtransferData);
 
                             // $stock_transfer_old = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'VENDU')->where('to_user_id', $this->collector_id)->get();
-                            $stock_transfer_olds = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'VENDU')->where('taxable_id', $stock_transfer->taxable_id)->where('to_user_id', $this->collector_id)->orderBy('end_no', 'DESC')->get();
+                            $stock_transfer_olds = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'VENDU')->where('taxable_id', $stock_transfer->taxable_id)->where('trans_id', $stock_transfer->trans_id)->where('to_user_id', $this->collector_id)->orderBy('end_no', 'DESC')->get();
 
                             // dd($stock_transfer->end_no, $stock_transfer_olds->first()->end_no);
                             //dd($stock_transfer_olds->first()->last_no);

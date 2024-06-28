@@ -19,7 +19,7 @@
             <div class="modal-body px-5 my-7">
                 <!--begin::Form-->
                 <form id="kt_modal_add_accountant_deposit_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
-                    <input type="text" wire:model="accountant_deposit_id" name="accountant_deposit_id"  value=""/>
+                    <input type="hidden" wire:model="accountant_deposit_id" name="accountant_deposit_id"  value=""/>
                     <input type="hidden" wire:model="user_id" name="user_id" value=""/>
                     <!--begin::Scroll-->
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_accountant_deposit_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_accountant_deposit_header" data-kt-scroll-wrappers="#kt_modal_add_accountant_deposit_scroll" data-kt-scroll-offset="300px">

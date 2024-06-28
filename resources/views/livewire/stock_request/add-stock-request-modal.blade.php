@@ -75,8 +75,6 @@
                                     @foreach($taxables as $taxable)
                                     <option value="{{ $taxable->id}}">{{ $taxable->name }}</option>
                                     @endforeach
-                                    <!-- <option value="Homme">Homme</option>
-                                    <option value="Femme">Femme</option> -->
                                 </select>
                                     @endif
                                 <!--end::Input-->
@@ -179,7 +177,7 @@
                                                 {{ $stock_request->start_no." - ".$stock_request->end_no }}
                                             </td>
                                             <td>
-                                                <button type="button" wire:click="deleteStockRequest({{ $stock_request->id }})"  class="btn btn-sm btn-danger " >
+                                                <button type="button" wire:click="deleteStockRequest({{ $stock_request->id }})"  class="btn btn-sm btn-outline btn-outline-dashed btn-outline-danger btn-active-light-danger me-1" >
                                                     <span class="indicator-label">
                                                         <i class="ki-duotone ki-trash">
                                                              <span class="path1"></span>
