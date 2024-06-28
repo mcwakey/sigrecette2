@@ -94,6 +94,9 @@ class AddTaxpayerTaxableModal extends Component
     public $taxpayer_id;
 
 
+    public function mount($id){
+        $this->taxpayer_id=$id;
+    }
     public function render()
     {
         //$cantons = Canton::all();

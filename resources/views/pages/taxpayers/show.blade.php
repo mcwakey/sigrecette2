@@ -200,13 +200,14 @@
                             <!--end::Card title-->
                             <!--begin::Card toolbar-->
 
-                            @if(1!=2)
+                            @if (request()->has('autoClick'))
                                 <div class="card-toolbar">
                                     @can('peut créer une taxation')
-                                        <!-- <button type="button" class="btn btn-light-success ms-auto me-5"
+                                        <button type="button" class="btn btn-light-success ms-auto me-5"
                                                 data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal"
                                                 data-bs-target="#kt_modal_add_taxpayer_taxable"
-                                                data-kt-action="add_taxpayer_taxable">
+                                                data-kt-action="add_taxpayer_taxable"
+                                        id="taxationbtn">
                                             <i class="ki-duotone ki-add-files fs-3">
                                                 <span class="path1"></span>
                                                 <span class="path2"></span>
@@ -214,13 +215,14 @@
                                                 <span class="path4"></span>
                                                 <span class="path5"></span>
                                             </i>{{ __('create asset') }}
-                                        </button> -->
+                                        </button>
                                     @endcan
 
                                     @can('peut émettre un avis sur titre')
-                                        <!-- <button type="button" class="btn btn-light-danger ms-auto"
+                                        <button type="button" class="btn btn-light-danger ms-auto"
                                                 data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal"
-                                                data-bs-target="#kt_modal_add_invoice" data-kt-action="add_invoice">
+                                                data-bs-target="#kt_modal_add_invoice" data-kt-action="add_invoice"
+                                                id="invoicebtn">
                                             <i class="ki-duotone ki-add-files fs-3">
                                                 <span class="path1"></span>
                                                 <span class="path2"></span>
@@ -228,7 +230,7 @@
                                                 <span class="path4"></span>
                                                 <span class="path5"></span>
                                             </i>{{ __('create invoice') }}
-                                        </button> -->
+                                        </button>
                                     @endcan
                                 </div>
                             @endif
@@ -679,7 +681,8 @@
     </div>
 
 
-
+        <livewire:taxpayer_taxable.add-taxpayer-taxable-modal :id="$taxpayer->id"/>
+        <livewire:invoice.add-invoice-modal :id="$taxpayer->id"/>
 
 
     @push('scripts')
@@ -1022,6 +1025,30 @@
                         console.error(error);
                     });
             }
+            function handleClick(buttonId) {
+
+               // sessionStorage.setItem('buttonClicked', buttonId);
+
+            }
+
+            $(document).ready(function() {
+                const urlParams = (new URLSearchParams(window.location.search));
+                let autoClickValue = urlParams.get('autoClick');
+                if (autoClickValue ) {
+                    const buttonClicked = sessionStorage.getItem('buttonClicked');
+                    document.getElementById('taxationbtn').addEventListener('click', handleClick( autoClickValue));
+                    document.getElementById('invoicebtn').addEventListener('click', handleClick( autoClickValue));
+                    if (buttonClicked !== autoClickValue) {
+                        const button = document.getElementById(autoClickValue);
+                        if (button) {
+                            button.click();
+                        }
+                    }
+                }
+
+
+            });
         </script>
+
     @endpush
 </x-default-layout>

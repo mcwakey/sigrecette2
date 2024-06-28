@@ -307,7 +307,7 @@
                         @else
                         <table class="table g-5 gs-0 mb-0 fw-bolder text-gray-700" data-kt-element="items">
                             <tr data-kt-element="empty">
-                                <th colspan="5" class="text-muted text-center py-10">No taxables selected</th>
+                                <th colspan="5" class="text-muted text-center py-10">{{ __('No taxables selected') }}</th>
                             </tr>
                         </table>
                         @endif

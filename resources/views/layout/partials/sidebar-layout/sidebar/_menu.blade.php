@@ -94,24 +94,20 @@
                 </span>
                 <div class="menu-sub menu-sub-accordion">
                     <div class="menu-item">
-
-                        <span class="menu-link ">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title" data-bs-toggle="modal"
-                                      data-bs-target="#kt_modal_add_invoice_general">{{__("Nouvel Taxation")}}</span>
+                    <a class="menu-link {{ request()->routeIs('taxpayers.*') && request()->has('rc') && request()->input('rc') =='taxation' ? 'active' : '' }}"
+                       href="{{ route('taxpayers.index', ['rc' => 'taxation']) }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
                             </span>
-                    </div>
-                    <div class="menu-item">
-
-                        <span class="menu-link ">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title" data-bs-toggle="modal"
-                                      data-bs-target="#kt_modal_add_invoice_general">{{__("Nouvel avis sur titre")}}</span>
+                        <span class="menu-title">{{__("Nouvel Taxation")}}</span>
+                    </a>
+                        <a class="menu-link {{ request()->routeIs('taxpayers.*') && request()->has('rc') && request()->input('rc') =='avis' ? 'active' : '' }}"
+                           href="{{ route('taxpayers.index', ['rc' => 'avis']) }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
                             </span>
+                            <span class="menu-title">{{__("Nouvel avis sur titre")}}</span>
+                        </a>
                     </div>
                     <div class="menu-item">
                           <span class="menu-link ">
@@ -160,7 +156,7 @@
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
-                            <span class="menu-title">Numérotation  d'ordre de recette  des avis sur titre</span>
+                            <span class="menu-title">Enregistrement  du  N°  d'ordre de recette  des avis sur titre</span>
                         </a>
                     </div>
                     <div class="menu-item">

@@ -1,6 +1,17 @@
-<!--begin:: Avatar -->
+@php
+    $taxpayer_url=route('taxpayers.show', $taxpayerinfo->id);
+   if(request()->has('rc') && request()->input('rc') =='taxation'){
+       $taxpayer_url =route('taxpayers.show',  ['taxpayer' => $taxpayerinfo->id, 'autoClick' => 'taxationbtn']);
+
+   }
+   if(request()->has('rc') && request()->input('rc') =='avis'){
+       $taxpayer_url =route('taxpayers.show',  ['taxpayer' => $taxpayerinfo->id, 'autoClick' => 'invoicebtn']);
+
+   }
+
+@endphp
 <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
-    <a href="{{ route('taxpayers.show', $taxpayerinfo) }}">
+    <a href="{{$taxpayer_url }}">
         @if($taxpayerinfo->profile_photo_url)
             <div class="symbol-label">
                 <img src="{{ $taxpayerinfo->profile_photo_url }}" class="w-100"/>
@@ -15,7 +26,7 @@
 <!--end::Avatar-->
 <!--begin::User details-->
 <div class="d-flex flex-column">
-    <a href="{{ route('taxpayers.show', $taxpayerinfo) }}" class="text-gray-800 text-hover-primary mb-1">
+    <a href="{{$taxpayer_url}}" class="text-gray-800 text-hover-primary mb-1">
         {{ $taxpayerinfo->name }}
     </a>
     <span>{{ $taxpayerinfo->id }}</span>
