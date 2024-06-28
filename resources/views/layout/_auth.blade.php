@@ -13,7 +13,7 @@
                 <div class="d-flex flex-column flex-center py-7 py-lg-15 px-5 px-md-15 w-100">
                     <!--begin::Logo-->
                     <a href="{{ route('dashboard') }}" class="mb-12">
-                        <img alt="Logo" src="{{ image('logos/custom-3.png') }}" class="h-100px" />
+                        <img alt="Logo" src="{{ image('logos/custom-3.png') }}" class="h-180px" />
                     </a>
 
                     <!--begin::Title-->
