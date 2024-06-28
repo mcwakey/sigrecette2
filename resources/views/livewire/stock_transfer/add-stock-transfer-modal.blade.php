@@ -22,14 +22,14 @@
             <div class="modal-body px-5 my-7">
                 <!--begin::Form-->
                 <form id="kt_modal_add_stock_transfer_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
-                    <input type="text" wire:model="stock_transfer_id" name="stock_transfer_id"  value=""/>
-                    <input type="text" wire:model="user_id" name="user_id" value=""/>
+                    <input type="hidden" wire:model="stock_transfer_id" name="stock_transfer_id"  value=""/>
+                    <input type="hidden" wire:model="user_id" name="user_id" value=""/>
+                    <input type="hidden" wire:model="collector_id" name="collector_id" value=""/>
                     <!--begin::Scroll-->
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_stock_transfer_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_stock_transfer_header" data-kt-scroll-wrappers="#kt_modal_add_stock_transfer_scroll" data-kt-scroll-offset="300px">
 
                         <!--begin::Input group-->
 
-                                <input type="hidden" wire:model="collector_id" name="collector_id" value=""/>
 
                         @if ($edit_mode==false && $deposit_mode==false)
                         <div class="row mb-7">
@@ -52,6 +52,42 @@
                                 @error('collector_id')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
+                            <div class="col-md-2">
+
+                                <label class="required fs-6 fw-semibold mb-2">{{ __('req no') }}</label>
+
+                                <select data-kt-action="load_drop" wire:model.live="trans_no" name="trans_no" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
+                                    <option>{{ __('select an option') }}</option>
+                                    <option value="001">001</option>
+                                    <option value="002">002</option>
+                                    <!-- @foreach($collectors as $collector)
+                                    <option value="{{ $collector->id}}">{{ $collector->user_name}}</option>
+                                    @endforeach -->
+                                </select>
+
+                                <!-- <input  data-kt-action="load_drop" type="text" wire:model.live="trans_no" name="trans_no" class="form-control mb-3 mb-lg-0" placeholder="{{ __('req no') }}" readonly/> -->
+                                <!--end::Input-->
+                                @error('trans_no')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-2">
+
+                                <label class="required fs-6 fw-semibold mb-2">{{ __('Period de collect') }}</label>
+
+                                <input type="text" wire:model.live="period_from_a" name="period_from" class="form-control mb-3 mb-lg-0" placeholder="{{ __('req no') }}" />
+                                <!--end::Input-->
+                                @error('period_from')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-2">
+
+                                <!-- <label class="required fs-6 fw-semibold mb-2">{{ __('Period de collect') }}</label> -->
+
+                                <input type="text" wire:model.live="period_to_a" name="period_to" class="form-control mb-3 mt-8 mb-lg-0" placeholder="{{ __('req no') }}" />
+                                <!--end::Input-->
+                                @error('period_to')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
                         </div>
 
 
@@ -69,24 +105,16 @@
                                 <select data-kt-action="load_drop" wire:model="stock_request_id" name="stock_request_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
                                     <option>{{ __('select an option') }}</option>
                                     @foreach($stock_requests as $request)
-                                        <option value="{{ $request->id}}">{{ $request->taxable->name." (".$request->taxable->tariff.")" }}</option>
+                                        <option value="{{ $request->id}}">{{ $request->taxable->name." (".$request->taxable->tariff." FCFA) [No: " .$request->start_no. "-" .$request->end_no."]" }}</option>
                                     @endforeach
                                 </select>
 
                                 @error('taxable_id')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col-md-2">
-                                <label  class="required fs-6 fw-semibold mb-2">{{ __('quantité restante') }} </label>
+                            <div class="col-md-4">
+                                <label  class="required fs-6 fw-semibold mb-2">{{ __('Quantité restante') }} </label>
                                 <input  data-kt-action="load_drop" type="text" wire:model.live="remaining_qty" name="remaining_qty" class="form-control mb-3 mb-lg-0" placeholder="{{ __('0') }}" readonly/>
-                            </div>
-                            <div class="col-md-2">
-
-                                <label class="required fs-6 fw-semibold mb-2">{{ __('req no') }}</label>
-                                <input  data-kt-action="load_drop" type="text" wire:model.live="trans_no" name="trans_no" class="form-control mb-3 mb-lg-0" placeholder="{{ __('req no') }}" readonly/>
-                                <!--end::Input-->
-                                @error('trans_no')
-                                <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>
 
@@ -215,7 +243,7 @@
                                                 {{ $stock_transfer->taxable->tariff }}
                                             </td>
                                             <td>
-                                                {{ $stock_transfer->qtyy }}
+                                                {{ $stock_transfer->qty }}
                                             </td>
                                             <td>
                                                 {{ $stock_transfer->qty*$stock_transfer->taxable->tariff }}
@@ -224,7 +252,7 @@
                                                 {{ $stock_transfer->start_no." - ".$stock_transfer->end_no }}
                                             </td>
                                             <td>
-                                                <button type="button" wire:click="deleteStockRequest({{ $stock_transfer->id }})"  class="btn btn-sm btn-danger " >
+                                                <button type="button" wire:click="deleteStockRequest({{ $stock_transfer->id }})"  class="btn btn-sm btn-outline btn-outline-dashed btn-outline-danger btn-active-light-danger me-1" data-bs-toggle="tooltip" title="Suprimer">
                                                     <span class="indicator-label">  <span class="indicator-label">
                                                         <i class="ki-duotone ki-trash">
                                                              <span class="path1"></span>

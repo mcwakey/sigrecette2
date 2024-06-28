@@ -154,7 +154,7 @@ class AddTaxpayerModal extends Component
                 'authorisation' => $this->authorisation,
                 'auth_reference' => $this->auth_reference,
                 'nif' => $this->nif,
-                // 'social_work' => $this->social_work,
+                'social_work' => $this->social_work,
 
                 'town_id' => $this->town_id,
                 'zone_id' => $this->zone_id,

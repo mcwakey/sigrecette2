@@ -54,22 +54,50 @@ class AddStockTransferModal extends Component
     public $deposit_mode;
     public $remaining_qty=0;
     public $option_calculus;
+    public $select_stock;
 
     protected function rules()
     {
         $rules = [
             'collector_id' => 'required',
-            //'code' => 'required',
-            //'taxlabel_id' => 'required',
             'trans_no' => 'required',
+            'start_no'=> 'nullable|numeric|min:' . $this->select_stock->start_no . '|max:' . ($this->select_stock->end_no-1),
+            'end_no' => 'nullable|numeric|min:' . ( $this->select_stock->start_no + 1) . '|max:' .$this->select_stock->end_no,
         ];
 
-        if($this->deposit_mode){
-            $rules['code'] = 'required';
-            $rules['taxlabel_id'] = 'required';
-        }
 
         return $rules;
+    }
+    public function validateData()
+    {
+        $this->validate();
+
+        if ( $this->start_no !== null && $this->end_no !== null) {
+            if ($this->start_no >= $this->end_no) {
+                $this->addError('end_no', 'Le numéro de fin doit être supérieur au numéro de début.');
+            }
+            if ($this->start_no < $this->select_stock->start_no || $this->end_no >$this->select_stock->end_no ) {
+                $this->addError('start_no', 'Le numéro de début et le numéro de fin doivent se situer dans la plage des  allouée.');
+            }
+
+            $overlapExists = StockTransfer::where('type', '=', 'ACTIVE')
+                ->where('stock_request_id', '=', $this->stock_request_id)
+                ->where('trans_type', '=', 'RECU')
+                ->where(function ($query) {
+                    $query->whereBetween('start_no', [$this->start_no, $this->end_no])
+                        ->orWhereBetween('end_no', [$this->start_no, $this->end_no])
+                        ->orWhere(function ($query) {
+                            $query->where('start_no', '<=', $this->start_no)
+                                ->where('end_no', '>=', $this->end_no);
+                        });
+                })
+                ->exists();
+
+            if ($overlapExists) {
+                $this->addError('start_no', 'Le plage de valeurs chevauche les distribution existantes.');
+                $this->addError('end_no', 'Le plage de valeurs chevauche les distribution existantes.');
+            }
+        }
     }
 
     protected $listeners = [
@@ -135,6 +163,7 @@ class AddStockTransferModal extends Component
     {
 
         $request= StockRequest::find($value);
+        $this->select_stock =$request;
         $this->trans_no = $request->req_no;
         $this->taxable_id =$request->taxable->id;
         $value= $request->taxable->id;
@@ -299,6 +328,7 @@ class AddStockTransferModal extends Component
         }
         elseif($this->qty >$this->remaining_qty){
             $this->qty=$this->remaining_qty;
+            $this->end_no= $this->start_no+$this->qty;
         }
         $this->total = $this->qty * $this->tariff;
     }
@@ -309,9 +339,9 @@ class AddStockTransferModal extends Component
 
     public function submit()
     {
-        $this->validate();
+       $this->validateData();
 
-        //dd($this->collector_id);
+        if ($this->getErrorBag()->isEmpty()) {
 
         DB::transaction(function () {
 
@@ -465,7 +495,7 @@ class AddStockTransferModal extends Component
                     $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'VENDU')->where('to_user_id', $this->collector_id)->get();
                 }
         });
-
+        }
         // Reset the form fields after successful submission
         //$this->reset();
         //$this->collector_id = "";

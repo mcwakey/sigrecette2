@@ -72,7 +72,7 @@
     </tr>
     <tr>
         <td colspan="5" style="border: none; margin: 0;" >
-            Nom du régisseur :
+            Nom du régisseur : {{\App\Models\User::getRegisseurName()}}
         </td>
 
     </tr>
@@ -84,7 +84,7 @@
     </tr>
     <tr>
         <td colspan="5" style="border: none; margin: 0;" >
-            Période de : 05/01 à 07/01
+            Période de :
         </td>
     </tr>
     <tr>
@@ -114,20 +114,20 @@
     @endforeach
 
     <tr>
-        <td colspan="3">TOTAL</td>
+        <td colspan="3" style=" margin: 0; text-align: center;">TOTAL</td>
         <td></td>
         <td>{{ $somme}}</td>
     </tr>
     <tr>
-        <td colspan="5">Arrêté le présent état de versement à la somme de e {{number_to_words($somme) }} CFA</td>
+        <td colspan="5"  style="border: none; margin: 5;padding: 5;">Arrêté le présent état de versement à la somme de e {{number_to_words($somme) }} CFA</td>
     </tr>
     <tr>
-        <td colspan="3">Le Receveur</td>
-        <td colspan="2"> Le Régisseur</td>
+        <td colspan="3" style="border: none; margin: 5;padding: 5;">Le Receveur</td>
+        <td colspan="2" style="border: none; margin: 5;padding: 5;"> Le Régisseur</td>
     </tr>
     <tr>
-        <td colspan="3"> [Signature, nom]</td>
-        <td colspan="2">[Signature, nom]</td>
+        <td colspan="3" style="border: none; margin: 5;padding: 5;"> [Signature, nom]</td>
+        <td colspan="2" style="border: none; margin: 5;padding: 5;">[Signature, nom]</td>
     </tr>
 
 </table>

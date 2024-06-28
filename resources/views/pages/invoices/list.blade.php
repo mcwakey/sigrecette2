@@ -9,11 +9,11 @@
         @elseif( request()->routeIs('invoices.*') &&  request()->has('delivery')&& request()->input('delivery') ==  App\Helpers\Constants::INVOICE_DELIVERY_LIV_KEY&&  request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY )
             {{__('Liste des ' .__('invoices'). ' sur titre distribués')}}
         @elseif(request()->has('state') && request()->input('state') == App\Helpers\Constants::INVOICE_STATE_DRAFT_KEY &&  request()->has('type') && request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY)
-            {{ "Liste des avis sur titre en attente de validation" }}
+            {{ "Validation des avis sur titre" }}
         @elseif(request()->has('state') && request()->input('state') ==App\Helpers\Constants::INVOICE_STATE_ACCEPTED_KEY &&  request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY)
-            {{ "Liste des ".__('invoices')." sur titre en attente de N° d'ordre de recette" }}
+            {{ "Numérotation  d'ordre de recette  des avis sur titre" }}
         @elseif(request()->has('state') && request()->input('state') == App\Helpers\Constants::INVOICE_STATE_PENDING_KEY &&  request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY)
-            {{ "Liste des ".__('invoices')." sur titre à prendre en Charge/Rejeté" }}
+            {{ "Prise en charge/Rejet des avis sur titre" }}
         @elseif(request()->routeIs('recoveries.*') &&  request()->has('delivery')&& request()->input('delivery') ==  App\Helpers\Constants::INVOICE_DELIVERY_LIV_KEY)
             {{"Liste des ".__('invoices')." à recouvrer"}}
         @else
@@ -26,7 +26,9 @@
         {{ Breadcrumbs::render('invoices.index') }}
     @endsection
 
-
+        @php
+            $aucomptant =  (request()->input('type') == App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY);
+        @endphp
     <div class="card">
         <!--begin::Card header-->
         <div class="card-header border-0 pt-6">
@@ -86,7 +88,7 @@
                 @if(request()->routeIs('invoices.*'))
                 <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
                         @can('peut émettre un avis sur titre')
-                            @if(request()->input('aucomptant') == 0)
+                            @if(request()->input('type') == App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY)
                                 {{-- <button type="button" class="btn btn-light-success ms-auto me-5" data-kt-user-id="1"
                                         data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice"
                                         data-kt-action="add_no_invoice">
@@ -101,8 +103,9 @@
                                 </button> --}}
                             @endif
                         @endcan
-                        @can('peut émettre un avis au comptant')
-                            @if(request()->input('aucomptant') == 1)
+
+                            @if($aucomptant)
+                                @can('peut émettre un avis au comptant')
                                 <button type="button" class="btn btn-light-success ms-auto me-5" data-kt-user-id="1"
                                         data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice_no_taxpayer"
                                         data-kt-action="add_no_invoice">
@@ -115,17 +118,15 @@
                                     </i>
                                         {{ __('Ajouter un avis au comptant') }}
                                 </button>
+                                @endcan
                             @endif
-                        @endcan
+
                         </div>
                 @else
-                    @if( request()->routeIs('invoices.*') && !request()->has('notDelivery')  && !request()->has('state') && !request()->has('aucomptant'))
+                    @if(request()->routeIs('invoices.*') && !request()->has('delivery')&&!request()->has('state') && request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY)
                         @can('peut générer automatiquement les avis sur titre')
                             @if (now()->format('m') === '01' || $app->environment('local'))
                                 <div class="d-flex justify-content-end" data-kt-invoice-table-toolbar="base">
-                                    <!--begin::Add user-->
-
-
                                     <button type="button" class="btn btn-light-danger ms-auto me-5"
                                             data-bs-toggle="modal" data-bs-target="#kt_modal_auto_invoice">
                                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
@@ -217,25 +218,33 @@
                             <!--end::Row-->
                         </div>
 
+                        @if((request()->routeIs('invoices.*') && !request()->has('delivery')&&!request()->has('state') && request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY) || $aucomptant)
                         <div class="col-xxl-2">
                             <!--begin::Col-->
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('aproval') }}</label>
                             <!--begin::Select-->
                             <select class="form-select" id="mySearchTen">
                                 <option value=""></option>
-                                <option value="{{App\Enums\InvoiceStatusEnums::APPROVED}}">{{ __('APROVED') }}</option>
-                                <option value="{{ App\Enums\InvoiceStatusEnums::REJECTED }}">{{ __('REJECTED') }}</option>
-                                <option value="{{  App\Enums\InvoiceStatusEnums::CANCELED }}">{{ __('CANCELED') }}</option>
-                                <option value="{{  App\Enums\InvoiceStatusEnums::REDUCED }}">{{ __('REDUCED') }}</option>
-                                <option value="{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}">{{ __("AVIS D'ANNULATION/REDUCTION") }}</option>
-                                <option value="{{ App\Enums\InvoiceStatusEnums::PENDING}}">{{ __('PENDING') }}</option>
-                                <option value="{{ App\Enums\InvoiceStatusEnums::ACCEPTED}}">{{ __('ACCEPTED') }}</option>
-                                <option value="{{ App\Enums\InvoiceStatusEnums::DRAFT}}">{{ __('DRAFT') }}</option>
+                                @if($aucomptant)
+                                    <option value="{{ App\Enums\InvoiceStatusEnums::PENDING}}">{{ __('PENDING') }}</option>
+                                    <option value="{{App\Enums\InvoiceStatusEnums::APPROVED}}">{{ __('APROVED') }}</option>
+                                    <option value="{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}">{{ __("AVIS D'ANNULATION/REDUCTION") }}</option>
+
+                                @else
+                                    <option value="{{App\Enums\InvoiceStatusEnums::APPROVED}}">{{ __('APROVED') }}</option>
+                                    <option value="{{ App\Enums\InvoiceStatusEnums::REJECTED }}">{{ __('REJECTED') }}</option>
+                                    <option value="{{  App\Enums\InvoiceStatusEnums::CANCELED }}">{{ __('CANCELED') }}</option>
+                                    <option value="{{  App\Enums\InvoiceStatusEnums::REDUCED }}">{{ __('REDUCED') }}</option>
+                                    <option value="{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}">{{ __("AVIS D'ANNULATION/REDUCTION") }}</option>
+                                    <option value="{{ App\Enums\InvoiceStatusEnums::PENDING}}">{{ __('PENDING') }}</option>
+                                    <option value="{{ App\Enums\InvoiceStatusEnums::ACCEPTED}}">{{ __('ACCEPTED') }}</option>
+                                    <option value="{{ App\Enums\InvoiceStatusEnums::DRAFT}}">{{ __('DRAFT') }}</option>
+                                @endif
                             </select>
                             <!--end::Select-->
                             <!--end::Row-->
                         </div>
-                        <!--end::Col-->
+                        @endif
                         <div class="col-xxl-2">
                             <!--begin::Row-->
                             <!--begin::Col-->
@@ -254,9 +263,7 @@
                         </div>
 
                     </div>
-                    @php
-                        $aucomptant =  request()->routeIs('invoices.*') &&  request()->has('aucomptant');
-                    @endphp
+
                     <input type="hidden" value="{{$aucomptant }}" name="accounted_state" id="accounted_state" />
 
 
@@ -381,24 +388,10 @@
         <!--end::Card body-->
     </div>
 
-    <!--begin::Modal-->
-    <livewire:invoice.add-invoice-no-taxpayer-modal/>
-    <!--end::Modal-->
 
-    <!--begin::Modal-->
-    <livewire:payment.add-payment-modal/>
-    <!--end::Modal-->
-
-    <!--begin::Modal-->
     @if (now()->format('m') === '01' || $app->environment('local'))
         <livewire:invoice.auto-invoice-modal/>
     @endif
-<!--end::Modal-->
-
-    <!--begin::Modal-->
-    <livewire:invoice.add-invoice-modal/>
-    <!--end::Modal-->
-
     @push('scripts')
         {{ $dataTable->scripts() }}
         <script>
