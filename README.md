@@ -48,7 +48,6 @@ Before you begin, ensure you have the following installed :
    ```bash
    php artisan migrate --seed
    ```
-   ```
 ## Serve the Application
 
 To start the development server, run:
