@@ -48,12 +48,7 @@ Before you begin, ensure you have the following installed :
    ```bash
    php artisan migrate --seed
    ```
-
-7. **Install JavaScript dependencies:**
-   ```bash
-   npm install && npm run dev
    ```
-
 ## Serve the Application
 
 To start the development server, run:
