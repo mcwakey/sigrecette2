@@ -136,15 +136,12 @@
     <!--end::Modal-->
 
     <!--begin::Modal-->
-    @if (now()->format('m-d') === '01-01' || $app->environment('local'))
-        <livewire:invoice.auto-invoice-modal />
-    @endif
-
+   
 
     <!--end::Modal-->
 
     <!--begin::Modal-->
-    <livewire:invoice.add-invoice-modal />
+
     <!--end::Modal-->
 
     @push('scripts')

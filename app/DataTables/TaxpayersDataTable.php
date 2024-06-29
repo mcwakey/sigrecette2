@@ -142,7 +142,7 @@ class TaxpayersDataTable extends DataTable
      */
     public function getColumns(): array
     {
-        return [
+        $columns = [
             Column::make('taxpayers.id')->title(__('id'))->visible(false),
             Column::make('taxpayer.name')->title(__('taxpayer'))->addClass('d-flex align-items-center text-uppercase ')->name("taxpayers.name"),
             Column::make('gender')->title(__('gender')),
@@ -159,6 +159,21 @@ class TaxpayersDataTable extends DataTable
                 ->printable(false)
                 ->width(60)
         ];
+        if(request()->has('rc')){
+            $columns = array_map(function ($column) {
+                if (request()->has('rc')){
+                    if (in_array($column->name, ['action'])) {
+                        $column->visible(false);
+                    }
+                }
+
+
+                return $column;
+            }, $columns);
+
+
+        }
+        return $columns;
     }
 
     /**
