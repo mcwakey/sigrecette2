@@ -39,7 +39,7 @@
                 <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
                     @can('peut effectuer une demande d\'approvisionement de valeur inactive')
                     <!--begin::Add user-->
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_stock_request"  data-kt-action="add_request">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_add_stock_request"  data-kt-action="add_request" id="addstockbtn">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
                         {{ __('new stock request') }}
                     </button>

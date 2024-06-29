@@ -73,7 +73,7 @@
 
 
         <tr>
-            <th colspan="15" style="border: none; margin: 0;">
+            <th colspan="15" style="border: none; margin: 4px;">
 
                 Registre-journal des déclarations préalables des usagers
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DataTables\InvoicesDataTable;
 use App\DataTables\RecoveriesDataTable;
 use App\DataTables\TaxpayerInvoicesDataTableDataTableHtml;
+use App\Helpers\Constants;
 use App\Models\Taxpayer;
 use App\DataTables\TaxpayersDataTable;
 use App\DataTables\TaxpayerInvoicesDataTable;
@@ -15,6 +16,7 @@ use App\Models\Zone;
 use Illuminate\Http\Request;
 use App\Imports\TaxpayerImport;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 
 class TaxpayerController extends Controller
@@ -25,13 +27,16 @@ class TaxpayerController extends Controller
     public function index(Request $request,TaxpayersDataTable $dataTable)
     {
         $validatedData = $request->validate([
-            'disable'=>'nullable|integer',
+            'disable'=>['nullable', 'integer', Rule::in(1)],
+            'state'=>['nullable', 'string', Rule::in('at')],
         ]);
         $disable =$validatedData['disable']??null;
+        $state = $validatedData['state']??null;
         $zones = Zone::all();
 
         return $dataTable->with(
             [
+                'state'=>$state,
                 'disable' => $disable,
             ]
         )->render('pages/taxpayers.list', compact('zones'));

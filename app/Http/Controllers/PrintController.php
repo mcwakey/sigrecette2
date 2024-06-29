@@ -69,10 +69,12 @@ class PrintController extends Controller
 
         if ($result['success']) {
             //$this->dispatchMessage("Ficher imprimable");
+            session()->flash('status', 'Ficher Imprimer avec success.');
             return $result['pdf'];
         }
 
         // $this->dispatchMessage("Ficher imprimable","create","error",$result['message']);
+        session()->flash('status', "Erreur lors de la géneration du ficher");
         return back()->with('error', $result['message']);
     }
 

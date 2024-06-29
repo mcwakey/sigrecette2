@@ -78,6 +78,13 @@ class Invoice extends Model implements FormatDateInterface
             &&($this->delivery_date!=null  ||$this->type== Constants::INVOICE_TYPE_COMPTANT)
             ;
     }
+    public function is_editions_is_generate_for_approve_state():bool{
+        if($this->edition_state)
+        {
+            return true;
+        }
+        return false;
+    }
     public function canPrint():bool{
         return true;
         return $this->can( "submit_for_pending")  ||

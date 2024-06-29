@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Enums\TaxpayerStateEnums;
 use App\Helpers\Constants;
 use App\Models\Taxpayer;
 use Yajra\DataTables\Html\Column;
@@ -107,7 +108,9 @@ class TaxpayersDataTable extends DataTable
         if ($this->disable!==null && $this->disable) {
             $query->onlyTrashed();
         }
-
+        if ($this->state) {
+            $query->where('taxpayers.from_mobile_and_validate_state','=',TaxpayerStateEnums::PENDING);
+        }
         return $query;
     }
 
