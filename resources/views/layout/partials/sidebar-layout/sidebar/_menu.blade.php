@@ -54,7 +54,7 @@
                             </span>
                         @endcan
 
-                        <a class="menu-link {{ request()->routeIs('taxpayers.*')  && !request()->has('disable') ? 'active' : '' }}"
+                        <a class="menu-link {{ request()->routeIs('taxpayers.*')  && !request()->has('disable') && !request()->has('state') ? 'active' : '' }}"
                            href="{{ route('taxpayers.index') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
@@ -68,7 +68,7 @@
                             </span>
                                 <span class="menu-title">Liste des contribuables en attente de validation</span>
                             </a>
-                        <a class="menu-link {{ request()->routeIs('taxpayers.*') && request()->has('disable')  ? 'active' : '' }}"
+                        <a class="menu-link {{ request()->routeIs('taxpayers.*') && request()->has('disable') && request()->input('disable')==1 ? 'active' : '' }}"
                            href="{{ route('taxpayers.index', ['disable' => true]) }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
@@ -101,6 +101,9 @@
                             </span>
                         <span class="menu-title">{{__("Nouvel Taxation")}}</span>
                     </a>
+
+                    </div>
+                    <div class="menu-item">
                         <a class="menu-link {{ request()->routeIs('taxpayers.*') && request()->has('rc') && request()->input('rc') =='avis' ? 'active' : '' }}"
                            href="{{ route('taxpayers.index', ['rc' => 'avis']) }}">
                             <span class="menu-bullet">
@@ -282,6 +285,15 @@
                 <div class="menu-sub menu-sub-accordion">
 
                     <div class="menu-item">
+                        <a class="menu-link {{request()->routeIs('ticket.*') && request()->has('autoClick') && request()->input('autoClick') =='addstockbtn' ? 'active' : '' }}"
+                           href="{{ route('ticket.stock-requests.index', [ 'autoClick' => 'addstockbtn']) }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">{{ __('new stock request') }}</span>
+                        </a>
+                    </div>
+                    <div class="menu-item">
                           <span class="menu-link ">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
@@ -291,7 +303,7 @@
                             </span>
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('ticket.stock-requests.*') ? 'active' : '' }}"
+                        <a class="menu-link {{ request()->routeIs('ticket.stock-requests.*') && !request()->has('autoClick') ? 'active' : '' }}"
                            href="{{ route('ticket.stock-requests.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>

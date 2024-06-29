@@ -58,6 +58,7 @@ class AddTaxpayerModal extends Component
 
     public $edit_mode = false;
 
+
     protected function rules()
     {
 
@@ -198,6 +199,7 @@ class AddTaxpayerModal extends Component
 
         // Reset the form fields after successful submission
         $this->reset();
+        $this->redirectRoute('taxpayers.index');
     }
 
     public function updatedCanton($value)

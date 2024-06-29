@@ -141,22 +141,9 @@ class AddInvoiceModal extends Component
 
     public function render()
     {
-        //$cantons = Canton::all();
-        //$towns = Town::all();
-        //$ereas = Erea::all();
-        //$genders = Gender::all();
-        //$id_types = IdType::all();
+
         $taxpayers = Taxpayer::all();
-        //$taxpayer_taxables = TaxpayerTaxable::all();
 
-        //$taxpayer_taxables = $this->taxpayer_id ? TaxpayerTaxable::where('taxpayer_id', $this->taxpayer_id)->where('billable', 1)->get() : collect();
-        //$taxpayer_id = $this->taxpayer_id;
-
-        // Assuming you have a public property $canton in your Livewire component
-        //$towns = $this->canton ? Town::where('canton_id', $this->canton)->get() : collect();
-        //$ereas = $this->town ? Erea::where('town_id', $this->town)->get() : collect();
-
-        //return view('livewire.invoice.add-invoice-modal', ['taxpayer_id' => $this->taxpayer_id]);
 
         $year= Year::getActiveYear();
         $months = Constants::getMonths();
@@ -341,6 +328,7 @@ class AddInvoiceModal extends Component
 
         // Reset form fields after successful submission
         $this->reset();
+        $this->redirectRoute('invoices.index', ['state' =>  Constants::INVOICE_STATE_DRAFT_KEY,'type' => Constants::INVOICE_TYPE_TITRE_KEY]);
     }
 
 

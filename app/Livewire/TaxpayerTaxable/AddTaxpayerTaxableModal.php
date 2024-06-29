@@ -18,6 +18,7 @@ use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use mysql_xdevapi\CollectionRemove;
 
 class AddTaxpayerTaxableModal extends Component
 {
@@ -173,9 +174,10 @@ class AddTaxpayerTaxableModal extends Component
     }
 
 
+
     public function submit()
     {
-        // Validate the form input data
+        $this->authorize('peut créer une taxation');
         $this->validate();
 
         //dd($this->taxpayer_id);

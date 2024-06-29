@@ -1025,29 +1025,7 @@
                         console.error(error);
                     });
             }
-            function handleClick(buttonId) {
 
-               // sessionStorage.setItem('buttonClicked', buttonId);
-
-            }
-
-            $(document).ready(function() {
-                const urlParams = (new URLSearchParams(window.location.search));
-                let autoClickValue = urlParams.get('autoClick');
-                if (autoClickValue ) {
-                    const buttonClicked = sessionStorage.getItem('buttonClicked');
-                    document.getElementById('taxationbtn').addEventListener('click', handleClick( autoClickValue));
-                    document.getElementById('invoicebtn').addEventListener('click', handleClick( autoClickValue));
-                    if (buttonClicked !== autoClickValue) {
-                        const button = document.getElementById(autoClickValue);
-                        if (button) {
-                            button.click();
-                        }
-                    }
-                }
-
-
-            });
         </script>
 
     @endpush

@@ -79,17 +79,35 @@
 @stack('scripts')
 <!--end::Javascript-->
 
-<livewire:taxpayer.add-taxpayer-modal />
 <livewire:invoice.add-invoice-no-taxpayer-modal/>
-<livewire:invoice.add-invoice-general-modal/>
-<livewire:payment.add-payment-general-modal/>
 
 <livewire:payment.add-payment-modal />
 <livewire:stock_request.add-stock-request-modal/>
 <livewire:stock_transfer.add-stock-transfer-modal />
 <livewire:accountant_deposit.add-accountant-deposit-modal/>
+<livewire:taxpayer.add-taxpayer-modal />
 <script>
+    function handleClick(buttonId) {
 
+        // sessionStorage.setItem('buttonClicked', buttonId);
+
+    }
+
+    $(document).ready(function() {
+        const urlParams = (new URLSearchParams(window.location.search));
+        let autoClickValue = urlParams.get('autoClick');
+        if (autoClickValue ) {
+           // const buttonClicked = sessionStorage.getItem('buttonClicked');
+            //document.getElementById('taxationbtn').addEventListener('click', handleClick( autoClickValue));
+            // document.getElementById('invoicebtn').addEventListener('click', handleClick( autoClickValue));
+            const button = document.getElementById(autoClickValue);
+            if (button) {
+                button.click();
+            }
+        }
+
+
+    });
     document.addEventListener('livewire:init', () => {
         Livewire.on('success', (message) => {
             toastr.success(message);

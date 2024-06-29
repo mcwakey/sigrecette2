@@ -225,6 +225,8 @@
                     <!--end::Scroll-->
                     <!--begin::Actions-->
                     @if($taxpayer_id)
+                        @can('peut créer une taxation')
+
                         <div class="text-center pt-15">
                             <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal" aria-label="Close" wire:loading.attr="disabled">{{ __('cancel') }}</button>
                             <button type="submit" class="btn btn-success" data-kt-taxpayer-taxables-modal-action="submit">
@@ -235,6 +237,7 @@
                             </span>
                             </button>
                         </div>
+                    @endcan
                     @endif
 
                     <!--end::Actions-->
