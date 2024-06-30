@@ -5,7 +5,7 @@
         border-radius: 2px;
         box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
         position: absolute;
-        right: 0%;
+        right: 40%;
         top: 15%;
         z-index: 1000;
     }
@@ -120,7 +120,7 @@
         border-radius: 2px;
         box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
         position: absolute;
-        right: 0%;
+        right: -10%;
         top: 15%;
         z-index: 1000;
     }
