@@ -328,7 +328,7 @@ class AddInvoiceModal extends Component
 
         // Reset form fields after successful submission
         $this->reset();
-        $this->redirectRoute('invoices.index', ['state' =>  Constants::INVOICE_STATE_DRAFT_KEY,'type' => Constants::INVOICE_TYPE_TITRE_KEY]);
+        //$this->redirectRoute('invoices.index', ['state' =>  Constants::INVOICE_STATE_DRAFT_KEY,'type' => Constants::INVOICE_TYPE_TITRE_KEY]);
     }
 
 

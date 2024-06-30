@@ -34,7 +34,7 @@
                     <!--end::Header-->
                     <!--begin::Menu separator-->
                     <div class="separator border-gray-200"></div>
-                    <livewire:invoice.add-status-form lazy/>
+                    <livewire:invoice.add-status-form/>
                 </div>
             @endcan
         @endif
@@ -78,7 +78,7 @@
                 <!--end::Header-->
                 <!--begin::Menu separator-->
                 <div class="separator border-gray-200"></div>
-                <livewire:invoice.add-status-form lazy/>
+                <livewire:invoice.add-status-form/>
             </div>
 
         @endcan
