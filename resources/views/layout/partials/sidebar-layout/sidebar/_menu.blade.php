@@ -364,7 +364,7 @@
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
-                            <span class="menu-title">{{ __('Liste des utilisateurs désactivé') }}</span>
+                            <span class="menu-title">{{ __('Liste des collecteurs désactivé') }}</span>
                         </a>
                         <!--end:Menu link-->
                     </div>
