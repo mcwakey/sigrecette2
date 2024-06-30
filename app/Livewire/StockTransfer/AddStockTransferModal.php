@@ -40,6 +40,7 @@ class AddStockTransferModal extends Component
     public $taxables=[];
     public $taxlabels=[];
     public $stock_transfers=[];
+    public $stock_requests=[];
 
     public $taxable_name;
     public $taxable_idd;
@@ -61,6 +62,7 @@ class AddStockTransferModal extends Component
         $rules = [
             'collector_id' => 'required',
             'trans_no' => 'required',
+            'qty' => 'required',
             'start_no'=> 'nullable|numeric|min:' . $this->select_stock->start_no . '|max:' . ($this->select_stock->end_no-1),
             'end_no' => 'nullable|numeric|min:' . ( $this->select_stock->start_no + 1) . '|max:' .$this->select_stock->end_no,
         ];
@@ -119,12 +121,16 @@ class AddStockTransferModal extends Component
                             ->where('roles.name', 'collecteur')
                             ->get();
 
-       $taxlabel_list = TaxLabel::where('category', 'CATEGORY 3')->get();
-        $stock_requests= StockRequest::where('req_type','DEMANDE')->where('type','ACTIVE')->get();
+        // $request_nos = StockRequest::select('id', 'req_no')->distinct()->get();
+        // $request_nos = StockRequest::distinct()->pluck('req_no')->toArray();
+
+        $request_nos = StockRequest::select('req_no')->groupBy('req_no')->get();
+
+        $taxlabel_list = TaxLabel::where('category', 'CATEGORY 3')->get();
 
 
        // dd($taxlabel_list);
-        return view('livewire.stock_transfer.add-stock-transfer-modal', compact('collectors','stock_requests','taxlabel_list'));
+        return view('livewire.stock_transfer.add-stock-transfer-modal', compact('collectors','taxlabel_list','request_nos'));
     }
 
     // public function updatedTaxlabelId($value)
@@ -221,7 +227,11 @@ class AddStockTransferModal extends Component
 
         // }
         //dd($this->tariff);
+    }
 
+    public function updatedTransNo($value)
+    {
+        $this->stock_requests= StockRequest::where('req_type','DEMANDE')->where('type','ACTIVE')->where('req_no', $value)->get();
     }
 
     public function updatedCollectorId($value)
@@ -331,10 +341,6 @@ class AddStockTransferModal extends Component
             $this->end_no= $this->start_no+$this->qty;
         }
         $this->total = $this->qty * $this->tariff;
-    }
-
-    public function updatedTransNo($value)
-    {
     }
 
     public function submit()

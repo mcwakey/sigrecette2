@@ -312,6 +312,16 @@
                                 </span>
                         </a>
                     </div>
+
+<div class="menu-item">
+    <a class="menu-link {{request()->routeIs('ticket.*') && request()->has('autoClick') && request()->input('autoClick') =='addstockbtn' ? 'active' : '' }}"
+       href="{{ route('ticket.stock-transfers.index', [ 'autoClick' => 'addstockbtn']) }}">
+        <span class="menu-bullet">
+            <span class="bullet bullet-dot"></span>
+        </span>
+        <span class="menu-title">{{ __('new supply') }}</span>
+    </a>
+</div>
                     <div class="menu-item">
                           <span class="menu-link ">
                                 <span class="menu-bullet">

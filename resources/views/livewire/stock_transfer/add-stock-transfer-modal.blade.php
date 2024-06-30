@@ -362,11 +362,9 @@
 
                                 <select data-kt-action="load_drop" wire:model.live="trans_no" name="trans_no" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
                                     <option>{{ __('select an option') }}</option>
-                                    <option value="001">001</option>
-                                    <option value="002">002</option>
-                                    <!-- @foreach($collectors as $collector)
-                                    <option value="{{ $collector->id}}">{{ $collector->user_name}}</option>
-                                    @endforeach -->
+                                    @foreach($request_nos as $request_no)
+                                    <option value="{{ $request_no->req_no}}">{{ $request_no->req_no}}</option>
+                                    @endforeach
                                 </select>
 
                                 <!-- <input  data-kt-action="load_drop" type="text" wire:model.live="trans_no" name="trans_no" class="form-control mb-3 mb-lg-0" placeholder="{{ __('req no') }}" readonly/> -->
@@ -472,7 +470,7 @@
                                 <!--begin::Input-->
                                 <input type="text" wire:model="total" name="total" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('total') }}" readonly />
                                 <!--end::Input-->
-                                @error('qty')
+                                @error('total')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>
