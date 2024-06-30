@@ -927,8 +927,35 @@ datePickerbtnTwo?.addEventListener("click", () => {
     openCalendarTwo();
 });
 
+datePickerbtnTwo.addEventListener('click', function(event){
+    event.stopPropagation();
+});
 
+calendarTwo.addEventListener('click', function(event){
+    event.stopPropagation();
+});
 
+document.addEventListener('click', function(event){
+    let target = event.target;
+    if(target != calendarTwo && target != datePickerbtnTwo){
+        calendarTwo.classList.add('hidden');
+    }
+});
+
+calendar.addEventListener('click', function(event){
+    event.stopPropagation();
+});
+
+datePickerbtn.addEventListener('click', function(event){
+    event.stopPropagation();
+});
+
+document.addEventListener('click', function(event){
+    let target = event.target;
+    if(target != calendar && target != datePickerbtn){
+        calendar.classList.add('hidden');
+    }
+});
 
 </script>
 @endpush
