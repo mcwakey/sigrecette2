@@ -48,15 +48,28 @@ class UsersDataTable extends DataTable
     public function query(User $model): QueryBuilder
     {
         $query= $model->newQuery();
-        if(App::environment('production')){
-            $role = Role::where('name', 'administrateur_system')->first();
+        $role = Role::where('name', 'administrateur_system')->first();
+        if(App::environment('production') && $role){
+
             $roleUsers = $role->users()->pluck('id')->toArray();
             $query->whereNotIn('users.id', $roleUsers);
         }
-        
+
         if($this->disable !== null && $this->disable){
             $query->onlyTrashed();
         }
+        $role = Role::where('name', 'collecteur')->first();
+
+        if($role){
+            $roleUsers = $role->users()->pluck('id')->toArray();
+            if ($this->type != null){
+
+                $query->whereIn('users.id', $roleUsers);
+            }else{
+                $query->whereNotIn('users.id', $roleUsers);
+            }
+        }
+
 
        return $query;
 
@@ -83,7 +96,7 @@ class UsersDataTable extends DataTable
      */
     public function getColumns(): array
     {
-        return [
+        $columns = [
             Column::make('user')->addClass('d-flex align-items-center')->name('name')->title(__('user')),
             Column::make('role')->searchable(false),
             Column::make('last_login_at')->title(__('last_login')),
@@ -94,6 +107,19 @@ class UsersDataTable extends DataTable
                 ->printable(false)
                 ->width(60)
         ];
+        $columns = array_map(function ($column) {
+            if ($this->type){
+                if (in_array($column->name, ['role','last_login_at'])) {
+                    $column->visible(false);
+                }
+            }
+
+
+
+            return $column;
+        }, $columns);
+
+       return $columns;
     }
 
     /**

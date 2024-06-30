@@ -273,7 +273,7 @@
             @endcan
 
             <div data-kt-menu-trigger="click"
-                 class="menu-item menu-accordion {{ request()->routeIs('ticket.*') ? 'here show' : '' }}">
+                 class="menu-item menu-accordion {{ request()->routeIs('ticket.*') || request()->routeIs('user-management.users.*')&& request()->has('type') ? 'here show' : '' }}">
                 <!--begin:Menu link-->
                 <span class="menu-link">
                         <span class="menu-icon">{!! getIcon('abstract-7', 'fs-2') !!}</span>
@@ -333,10 +333,31 @@
                                 </span>
                         </a>
                     </div>
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('user-management.users.*') && request()->has('type')&& !request()->has('disable')  ? 'active' : ''}}"
+                           href="{{ route('user-management.users.index',['type' => 'col']) }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                            <span class="menu-title">{{ __('Liste des collecteurs') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
                     <!--end:Menu item-->
 
-
                     <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('user-management.users.*') && request()->has('type')&& request()->has('disable')  ? 'active' : '' }}"
+                           href="{{ route('user-management.users.index',['disable' => true,'type' => 'col']) }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                            <span class="menu-title">{{ __('Liste des utilisateurs désactivé') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
 
                 </div>
                 <!--end:Menu sub-->
@@ -658,7 +679,7 @@
 
             <!--begin:Menu item-->
             <div data-kt-menu-trigger="click"
-                 class="menu-item menu-accordion {{ request()->routeIs('user-management.*') ? 'here show' : '' }}">
+                 class="menu-item menu-accordion {{ request()->routeIs('user-management.*')  && !request()->has('type') ? 'here show' : '' }}">
                 <!--begin:Menu link-->
                 <span class="menu-link">
                         <span class="menu-icon">{!! getIcon('rocket', 'fs-2') !!}</span>
@@ -671,7 +692,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link {{ request()->routeIs('user-management.users.*') && !request()->has('disable')   ? 'active' : ''}}"
+                        <a class="menu-link {{ request()->routeIs('user-management.users.*') && !request()->has('disable') && !request()->has('type')  ? 'active' : ''}}"
                            href="{{ route('user-management.users.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
@@ -685,7 +706,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link {{ request()->routeIs('user-management.users.*') && request()->has('disable')  ? 'active' : '' }}"
+                        <a class="menu-link {{ request()->routeIs('user-management.users.*') && request()->has('disable')&& !request()->has('type')  ? 'active' : '' }}"
                            href="{{ route('user-management.users.index',['disable' => true]) }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
