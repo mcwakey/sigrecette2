@@ -938,7 +938,7 @@ calendarTwo?.addEventListener('click', function(event){
 document.addEventListener('click', function(event){
     let target = event.target;
     if(target != calendarTwo && target != datePickerbtnTwo){
-        calendarTwo.classList.add('hidden');
+        calendarTwo?.classList.add('hidden');
     }
 });
 
@@ -953,7 +953,7 @@ datePickerbtn?.addEventListener('click', function(event){
 document.addEventListener('click', function(event){
     let target = event.target;
     if(target != calendar && target != datePickerbtn){
-        calendar.classList.add('hidden');
+        calendar?.classList.add('hidden');
     }
 });
 
