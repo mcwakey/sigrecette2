@@ -150,7 +150,7 @@ class AddInvoiceModal extends Component
 
         return view('livewire.invoice.add-invoice-modal', compact('taxpayers','months','year'));
     }
-    public function mount($id){
+    public function mount($id=null){
         $this->taxpayer_id=$id;
     }
 
