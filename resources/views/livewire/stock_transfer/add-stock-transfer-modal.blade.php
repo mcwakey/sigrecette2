@@ -927,11 +927,11 @@ datePickerbtnTwo?.addEventListener("click", () => {
     openCalendarTwo();
 });
 
-datePickerbtnTwo.addEventListener('click', function(event){
+datePickerbtnTwo?.addEventListener('click', function(event){
     event.stopPropagation();
 });
 
-calendarTwo.addEventListener('click', function(event){
+calendarTwo?.addEventListener('click', function(event){
     event.stopPropagation();
 });
 
@@ -942,11 +942,11 @@ document.addEventListener('click', function(event){
     }
 });
 
-calendar.addEventListener('click', function(event){
+calendar?.addEventListener('click', function(event){
     event.stopPropagation();
 });
 
-datePickerbtn.addEventListener('click', function(event){
+datePickerbtn?.addEventListener('click', function(event){
     event.stopPropagation();
 });
 

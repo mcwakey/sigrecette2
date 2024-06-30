@@ -366,11 +366,11 @@ datePickerbtn?.addEventListener("click", () => {
     openCalendar();
 });
 
-calendar.addEventListener('click', function(event){
+calendar?.addEventListener('click', function(event){
     event.stopPropagation();
 });
 
-datePickerbtn.addEventListener('click', function(event){
+datePickerbtn?.addEventListener('click', function(event){
     event.stopPropagation();
 });
 
