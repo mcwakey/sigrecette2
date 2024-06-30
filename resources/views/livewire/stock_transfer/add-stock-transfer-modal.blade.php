@@ -1,8 +1,240 @@
+<style>
+    .wrapper {
+        width: 400px;
+        background: #fff;
+        border-radius: 2px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        position: absolute;
+        right: 0%;
+        top: 15%;
+        z-index: 1000;
+    }
+
+    .wrapper.hidden {
+        display: none;
+    }
+
+    .wrapper header {
+        display: flex;
+        align-items: center;
+        padding: 25px 30px 10px;
+        justify-content: space-between;
+    }
+
+    header .icons {
+        display: flex;
+    }
+
+    header .icons span {
+        height: 38px;
+        width: 38px;
+        margin: 0 1px;
+        cursor: pointer;
+        color: #878787;
+        text-align: center;
+        line-height: 38px;
+        font-size: 1.9rem;
+        user-select: none;
+        border-radius: 50%;
+    }
+
+    .icons span:last-child {
+        margin-right: -10px;
+    }
+
+    header .icons span:hover {
+        background: #f2f2f2;
+    }
+
+    header .current-date {
+        font-size: 1.2rem;
+        font-weight: 500;
+    }
+
+    .calendar {
+        padding: 20px;
+    }
+
+    .calendar ul {
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+        text-align: center;
+    }
+
+    .calendar .days {
+        margin-bottom: 20px;
+    }
+
+    .calendar li {
+        color: #333;
+        width: calc(100% / 7);
+        font-size: 1.07rem;
+    }
+
+    .calendar .weeks li {
+        font-weight: 500;
+        cursor: default;
+    }
+
+    .calendar .days li {
+        z-index: 1;
+        cursor: pointer;
+        position: relative;
+        margin-top: 30px;
+    }
+
+    .days li.inactive {
+        color: #aaa;
+    }
+
+    .days li.active {
+        color: #fff;
+    }
+
+    .days li::before {
+        position: absolute;
+        content: "";
+        left: 50%;
+        top: 50%;
+        height: 40px;
+        width: 40px;
+        z-index: -1;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .days li.active::before {
+        background: #0579ff;
+    }
+
+    .days li:not(.active):hover::before {
+        background: #f2f2f2;
+    }
+</style>
+
+<style>
+    .wrapper-two {
+        width: 400px;
+        background: #fff;
+        border-radius: 2px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        position: absolute;
+        right: 0%;
+        top: 15%;
+        z-index: 1000;
+    }
+
+    .wrapper-two.hidden {
+        display: none;
+    }
+
+    .wrapper-two header {
+        display: flex;
+        align-items: center;
+        padding: 25px 30px 10px;
+        justify-content: space-between;
+    }
+
+    header .icons-two {
+        display: flex;
+    }
+
+    header .icons-two span {
+        height: 38px;
+        width: 38px;
+        margin: 0 1px;
+        cursor: pointer;
+        color: #878787;
+        text-align: center;
+        line-height: 38px;
+        font-size: 1.9rem;
+        user-select: none;
+        border-radius: 50%;
+    }
+
+    .icons-two span:last-child {
+        margin-right: -10px;
+    }
+
+    header .icons-two span:hover {
+        background: #f2f2f2;
+    }
+
+    header .current-date-two {
+        font-size: 1.2rem;
+        font-weight: 500;
+    }
+
+    .calendar-two {
+        padding: 20px;
+    }
+
+    .calendar-two ul {
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+        text-align: center;
+    }
+
+    .calendar-two .days-two {
+        margin-bottom: 20px;
+    }
+
+    .calendar-two li {
+        color: #333;
+        width: calc(100% / 7);
+        font-size: 1.07rem;
+    }
+
+    .calendar-two .weeks-two li {
+        font-weight: 500;
+        cursor: default;
+    }
+
+    .calendar-two .days-two li {
+        z-index: 1;
+        cursor: pointer;
+        position: relative;
+        margin-top: 30px;
+    }
+
+    .days-two li.inactive {
+        color: #aaa;
+    }
+
+    .days-two li.active {
+        color: #fff;
+    }
+
+    .days-two li::before {
+        position: absolute;
+        content: "";
+        left: 50%;
+        top: 50%;
+        height: 40px;
+        width: 40px;
+        z-index: -1;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .days-two li.active::before {
+        background: #0579ff;
+    }
+
+    .days-two li:not(.active):hover::before {
+        background: #f2f2f2;
+    }
+</style>
+
 <div class="modal fade" id="kt_modal_add_stock_transfer" tabindex="-1" aria-hidden="true" wire:ignore.self>
+
     <!--begin::Modal dialog-->
     <div class="modal-dialog modal-dialog-centered mw-1000px">
         <!--begin::Modal content-->
         <div class="modal-content">
+
             <!--begin::Modal header-->
             <div class="modal-header" id="kt_modal_add_stock_transfer_header">
                 @if ($edit_mode==false && $deposit_mode==false)
@@ -21,7 +253,82 @@
             <!--begin::Modal body-->
             <div class="modal-body px-5 my-7">
                 <!--begin::Form-->
-                <form id="kt_modal_add_stock_transfer_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
+                <form style="position: relative" id="kt_modal_add_stock_transfer_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
+
+                    <div class="wrapper hidden" id="calendar-one">
+                        <header>
+                            <p class="current-date"></p>
+                            <div class="icons">
+                                <span id="prev" class="material-symbols-rounded">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="32" fill="#ccc"
+                                        viewBox="0 0 256 256">
+                                        <path
+                                            d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z">
+                                        </path>
+                                    </svg>
+                    
+                                </span>
+                                <span id="next" class="material-symbols-rounded">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="32" fill="#ccc"
+                                        viewBox="0 0 256 256">
+                                        <path
+                                            d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z">
+                                        </path>
+                                    </svg>
+                                </span>
+                            </div>
+                        </header>
+                        <div class="calendar">
+                            <ul class="weeks">
+                                <li>Dim</li>
+                                <li>Lun</li>
+                                <li>Mar</li>
+                                <li>Mer</li>
+                                <li>Jeu</li>
+                                <li>Ven</li>
+                                <li>Sam</li>
+                            </ul>
+                            <ul class="days"></ul>
+                        </div>
+                    </div>
+
+                    <div class="wrapper-two hidden" id="calendar-two">
+                        <header>
+                            <p class="current-date-two"></p>
+                            <div class="icons-two">
+                                <span id="prev-two" class="material-symbols-rounded">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="32" fill="#ccc"
+                                        viewBox="0 0 256 256">
+                                        <path
+                                            d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z">
+                                        </path>
+                                    </svg>
+                    
+                                </span>
+                                <span id="next-two" class="material-symbols-rounded">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="32" fill="#ccc"
+                                        viewBox="0 0 256 256">
+                                        <path
+                                            d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z">
+                                        </path>
+                                    </svg>
+                                </span>
+                            </div>
+                        </header>
+                        <div class="calendar-two">
+                            <ul class="weeks-two">
+                                <li>Dim</li>
+                                <li>Lun</li>
+                                <li>Mar</li>
+                                <li>Mer</li>
+                                <li>Jeu</li>
+                                <li>Ven</li>
+                                <li>Sam</li>
+                            </ul>
+                            <ul class="days-two"></ul>
+                        </div>
+                    </div>
+
                     <input type="hidden" wire:model="stock_transfer_id" name="stock_transfer_id"  value=""/>
                     <input type="hidden" wire:model="user_id" name="user_id" value=""/>
                     <input type="hidden" wire:model="collector_id" name="collector_id" value=""/>
@@ -32,8 +339,8 @@
 
 
                         @if ($edit_mode==false && $deposit_mode==false)
-                        <div class="row mb-7">
-                            <div class="col-md-6">
+                        <div class="row mb-7" style="position: relative">
+                            <div class="col-md-3">
 
                                 <!--begin::Label-->
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('collector') }}</label>
@@ -52,7 +359,7 @@
                                 @error('collector_id')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
 
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('req no') }}</label>
 
@@ -70,27 +377,37 @@
                                 @error('trans_no')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col-md-2">
 
-                                <label class="required fs-6 fw-semibold mb-2">{{ __('Period de collect') }}</label>
-
-                                <input type="text" wire:model.live="period_from_a" name="period_from" class="form-control mb-3 mb-lg-0" placeholder="{{ __('req no') }}" />
-                                <!--end::Input-->
+                            <div class="col-md-3">
+                                <label class="required fs-6 fw-semibold mb-2">{{ __('Début période de collecte') }}</label>
+                                <div class="input-group" id="kt_td_picker_simple" data-td-target-input="nearest"
+                                    data-td-target-toggle="nearest">
+                                    <span id="date-picker-btn-one" class="input-group-text" data-td-target="#kt_td_picker_basic"
+                                        data-td-toggle="datetimepicker">
+                                        <i class="ki-duotone ki-calendar fs-2"><span class="path1"></span><span class="path2"></span></i>
+                                    </span>
+                                    <input readonly id="date-picker-input-one" type="text" wire:model.live="period_from_a" name="period_from" class="form-control mb-3 mb-lg-0" placeholder="{{ __('Date') }}" />
+                                </div>
                                 @error('period_from')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
 
-                                <!-- <label class="required fs-6 fw-semibold mb-2">{{ __('Period de collect') }}</label> -->
-
-                                <input type="text" wire:model.live="period_to_a" name="period_to" class="form-control mb-3 mt-8 mb-lg-0" placeholder="{{ __('req no') }}" />
+                                <label class="required fs-6 fw-semibold mb-2">{{ __('Fin période de collecte') }}</label>
+                                <div class="input-group" id="kt_td_picker_simple" data-td-target-input="nearest"
+                                data-td-target-toggle="nearest">
+                                    <span id="date-picker-btn-two" class="input-group-text" data-td-target="#kt_td_picker_basic"
+                                        data-td-toggle="datetimepicker">
+                                        <i class="ki-duotone ki-calendar fs-2"><span class="path1"></span><span class="path2"></span></i>
+                                    </span>
+                                    <input id="date-picker-input-two" type="text" wire:model.live="period_to_a" name="period_to" class="form-control mb-3 mb-lg-0" placeholder="{{ __('Date') }}" />
+                                </div>
                                 <!--end::Input-->
                                 @error('period_to')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
+
                         </div>
-
-
                         @endif
                         <div class="separator saperator-dashed my-3"></div>
                         @if (!$edit_mode)
@@ -299,3 +616,319 @@
     </div>
     <!--end::Modal dialog-->
 </div>
+
+@push('scripts')
+    <script>
+
+
+let datePickerbtn = document.getElementById("date-picker-btn-one");
+let datePickerInput = document.getElementById("date-picker-input-one");
+let calendar = document.getElementById("calendar-one");
+
+const daysTag = document.querySelector(".days"),
+    currentDate = document.querySelector(".current-date"),
+    prevNextIcon = document.querySelectorAll(".icons span");
+
+// getting new date, current year and month
+let date = new Date(),
+    currYear = date.getFullYear(),
+    currMonth = date.getMonth();
+
+// storing full name of all months in array
+const months = [
+    "Janv",
+    "Févr",
+    "Mars",
+    "Avr",
+    "Mai",
+    "Juin",
+    "Juil",
+    "Août",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Déc",
+];
+
+const renderCalendar = () => {
+    let firstDayofMonth = new Date(currYear, currMonth, 1).getDay(), // getting first day of month
+        lastDateofMonth = new Date(currYear, currMonth + 1, 0).getDate(), // getting last date of month
+        lastDayofMonth = new Date(
+            currYear,
+            currMonth,
+            lastDateofMonth
+        ).getDay(), // getting last day of month
+        lastDateofLastMonth = new Date(currYear, currMonth, 0).getDate(); // getting last date of previous month
+
+    let liTag = "";
+    let today = null;
+
+    for (let i = firstDayofMonth; i > 0; i--) {
+        // creating li of previous month last days
+        liTag += `<li class="inactive">${lastDateofLastMonth - i + 1}</li>`;
+    }
+
+    for (let i = 1; i <= lastDateofMonth; i++) {
+        // creating li of all days of current month
+        // adding active class to li if the current day, month, and year matched
+        let isToday =
+            i === date.getDate() &&
+            currMonth === new Date().getMonth() &&
+            currYear === new Date().getFullYear()
+                ? "active"
+                : "";
+
+        liTag += `<li class="${isToday}">${i}</li>`;
+
+        if (today === null) {
+            today =
+                i === date.getDate() &&
+                currMonth === new Date().getMonth() &&
+                currYear === new Date().getFullYear()
+                    ? i
+                    : null;
+        }
+    }
+
+    for (let i = lastDayofMonth; i < 6; i++) {
+        // creating li of next month first days
+        liTag += `<li class="inactive">${i - lastDayofMonth + 1}</li>`;
+    }
+    currentDate.innerText = `${months[currMonth]} ${currYear}`; // passing current mon and yr as currentDate text
+    daysTag.innerHTML = liTag;
+
+    datePickerInput.value = `${currYear}-${
+        currMonth + 1 < 10 ? "0" + (currMonth + 1) : currMonth + 1
+    }-${today ?? 1}`;
+
+    let inputEvent = new Event("input", {
+        bubbles: true,
+        cancelable: true,
+    });
+
+    datePickerInput.dispatchEvent(inputEvent);
+};
+
+prevNextIcon?.forEach((icon) => {
+    // getting prev and next icons
+    icon.addEventListener("click", () => {
+        // adding click event on both icons
+        // if clicked icon is previous icon then decrement current month by 1 else increment it by 1
+        currMonth = icon.id === "prev" ? currMonth - 1 : currMonth + 1;
+
+        if (currMonth < 0 || currMonth > 11) {
+            // if current month is less than 0 or greater than 11
+            // creating a new date of current year & month and pass it as date value
+            date = new Date(currYear, currMonth, new Date().getDate());
+            currYear = date.getFullYear(); // updating current year with new date year
+            currMonth = date.getMonth(); // updating current month with new date month
+        } else {
+            date = new Date(); // pass the current date as date value
+        }
+        renderCalendar(); // calling renderCalendar function
+
+        daysTag.children.forEach((day) => {
+            day.addEventListener("click", () => {
+                datePickerInput.value = `${currYear}-${
+                    currMonth + 1 < 10 ? "0" + (currMonth + 1) : currMonth + 1
+                }-${day.innerText}`;
+
+                let inputEvent = new Event("input", {
+                    bubbles: true,
+                    cancelable: true,
+                });
+
+                datePickerInput.dispatchEvent(inputEvent);
+
+                calendar.classList.add("hidden");
+            });
+        });
+    });
+});
+
+const openCalendar = () => {
+    calendar.classList.toggle("hidden");
+    renderCalendar();
+
+    daysTag.children.forEach((day) => {
+        day.addEventListener("click", () => {
+            datePickerInput.value = `${currYear}-${
+                currMonth + 1 < 10 ? "0" + (currMonth + 1) : currMonth + 1
+            }-${day.innerText}`;
+
+            let inputEvent = new Event("input", {
+                bubbles: true,
+                cancelable: true,
+            });
+
+            datePickerInput.dispatchEvent(inputEvent);
+
+            calendar.classList.add("hidden");
+        });
+    });
+};
+
+datePickerbtn?.addEventListener("click", () => {
+    calendarTwo.classList.add("hidden");
+    openCalendar();
+});
+
+
+
+let datePickerbtnTwo = document.getElementById("date-picker-btn-two");
+let datePickerInputTwo = document.getElementById("date-picker-input-two");
+let calendarTwo = document.getElementById("calendar-two");
+
+const daysTagTwo = document.querySelector(".days-two"),
+    currentDateTwo = document.querySelector(".current-date-two"),
+    prevNextIconTwo = document.querySelectorAll(".icons-two span");
+
+// getting new date, current year and month
+let dateTwo = new Date(),
+    currYearTwo = date.getFullYear(),
+    currMonthTwo = date.getMonth();
+
+// storing full name of all months in array
+const monthsTwo = [
+    "Janv",
+    "Févr",
+    "Mars",
+    "Avr",
+    "Mai",
+    "Juin",
+    "Juil",
+    "Août",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Déc",
+];
+
+const renderCalendarTwo = () => {
+    let firstDayofMonth = new Date(currYearTwo, currMonthTwo, 1).getDay(), // getting first day of month
+        lastDateofMonth = new Date(currYearTwo, currMonthTwo + 1, 0).getDate(), // getting last date of month
+        lastDayofMonth = new Date(
+            currYearTwo,
+            currMonthTwo,
+            lastDateofMonth
+        ).getDay(), // getting last day of month
+        lastDateofLastMonth = new Date(currYearTwo, currMonthTwo, 0).getDate(); // getting last date of previous month
+
+    let liTag = "";
+    let today = null;
+
+    for (let i = firstDayofMonth; i > 0; i--) {
+        // creating li of previous month last days
+        liTag += `<li class="inactive">${lastDateofLastMonth - i + 1}</li>`;
+    }
+
+    for (let i = 1; i <= lastDateofMonth; i++) {
+        // creating li of all days of current month
+        // adding active class to li if the current day, month, and year matched
+        let isToday =
+            i === date.getDate() &&
+            currMonthTwo === new Date().getMonth() &&
+            currYearTwo === new Date().getFullYear()
+                ? "active"
+                : "";
+
+        liTag += `<li class="${isToday}">${i}</li>`;
+
+        if (today === null) {
+            today =
+                i === date.getDate() &&
+                currMonthTwo === new Date().getMonth() &&
+                currYearTwo === new Date().getFullYear()
+                    ? i
+                    : null;
+        }
+    }
+
+    for (let i = lastDayofMonth; i < 6; i++) {
+        // creating li of next month first days
+        liTag += `<li class="inactive">${i - lastDayofMonth + 1}</li>`;
+    }
+    currentDateTwo.innerText = `${monthsTwo[currMonthTwo]} ${currYearTwo}`; // passing current mon and yr as currentDate text
+    daysTagTwo.innerHTML = liTag;
+
+    datePickerInputTwo.value = `${currYearTwo}-${
+        currMonthTwo + 1 < 10 ? "0" + (currMonthTwo + 1) : currMonthTwo + 1
+    }-${today?? 1}`;
+
+    let inputEvent = new Event("input", {
+        bubbles: true,
+        cancelable: true,
+    });
+
+    datePickerInputTwo.dispatchEvent(inputEvent);
+};
+
+prevNextIconTwo?.forEach((icon) => {
+    // getting prev and next icons
+    icon.addEventListener("click", () => {
+        // adding click event on both icons
+        // if clicked icon is previous icon then decrement current month by 1 else increment it by 1
+        currMonthTwo = icon.id === "prev-two" ? currMonthTwo - 1 : currMonthTwo + 1;
+
+        if (currMonthTwo < 0 || currMonthTwo > 11) {
+            // if current month is less than 0 or greater than 11
+            // creating a new date of current year & month and pass it as date value
+            date = new Date(currYearTwo, currMonthTwo, new Date().getDate());
+            currYearTwo = date.getFullYear(); // updating current year with new date year
+            currMonthTwo = date.getMonth(); // updating current month with new date month
+        } else {
+            date = new Date(); // pass the current date as date value
+        }
+        renderCalendarTwo(); // calling renderCalendar function
+
+        daysTagTwo.children.forEach((day) => {
+            day.addEventListener("click", () => {
+                datePickerInputTwo.value = `${currYearTwo}-${
+                    currMonthTwo + 1 < 10 ? "0" + (currMonthTwo + 1) : currMonthTwo + 1
+                }-${day.innerText}`;
+
+                let inputEvent = new Event("input", {
+                    bubbles: true,
+                    cancelable: true,
+                });
+
+                datePickerInputTwo.dispatchEvent(inputEvent);
+
+                calendarTwo.classList.add("hidden");
+            });
+        });
+    });
+});
+
+const openCalendarTwo = () => {
+    calendarTwo.classList.toggle("hidden");
+    renderCalendarTwo();
+
+    daysTagTwo.children.forEach((day) => {
+        day.addEventListener("click", () => {
+            datePickerInputTwo.value = `${currYearTwo}-${
+                currMonthTwo + 1 < 10 ? "0" + (currMonthTwo + 1) : currMonthTwo + 1
+            }-${day.innerText}`;
+
+            let inputEvent = new Event("input", {
+                bubbles: true,
+                cancelable: true,
+            });
+
+            datePickerInputTwo.dispatchEvent(inputEvent);
+
+            calendarTwo.classList.add("hidden");
+        });
+    });
+};
+
+datePickerbtnTwo?.addEventListener("click", () => {
+    calendar.classList.add("hidden");
+    openCalendarTwo();
+});
+
+
+
+
+</script>
+@endpush
