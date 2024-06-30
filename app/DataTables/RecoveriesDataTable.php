@@ -119,11 +119,7 @@ class RecoveriesDataTable extends DataTable
             Column::make('status')->title(__('status')),
             Column::make('users.name')->title(__('user'))->addClass('d-flex align-items-center'),
             Column::make('taxpayer_id')->visible(false),
-            Column::computed('action')
-                ->addClass('text-end text-nowrap')
-                ->exportable(true)
-                ->printable(true)
-                ->width(60)
+           
         ];
     }
 
