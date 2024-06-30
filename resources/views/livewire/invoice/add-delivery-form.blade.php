@@ -15,7 +15,7 @@
         .wrapper.hidden {
             display: none;
         }
-
+ 
         .wrapper header {
             display: flex;
             align-items: center;

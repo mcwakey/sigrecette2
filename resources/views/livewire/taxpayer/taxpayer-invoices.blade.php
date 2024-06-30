@@ -298,7 +298,7 @@
                                         @endcan
 
                                     @endif
-                                    @can('peut réduire ou annuler un avis')
+                                    @can('peut réduire un avis sur titre')
                                             <div class="menu-item px-3">
                                                 <a href="#"
                                                    class="menu-link px-3"
