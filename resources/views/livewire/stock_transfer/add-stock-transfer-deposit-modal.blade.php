@@ -19,9 +19,9 @@
             <div class="modal-body px-5 my-7">
                 <!--begin::Form-->
                 <form id="kt_modal_add_stock_transfer-deposit_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
-                    <input type="text" wire:model="stock_transfer_id" name="stock_transfer_id"  value=""/>
+                    <!-- <input type="text" wire:model="stock_transfer_id" name="stock_transfer_id"  value=""/> -->
                     <input type="text" wire:model="user_id" name="user_id" value=""/>
-                    <input type="text" wire:model="collector_id" name="collector_id" value=""/>
+                    <!-- <input type="text" wire:model="collector_id" name="collector_id" value=""/> -->
                     <!--begin::Scroll-->
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_stock_transfer-deposit_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_stock_transfer-deposit_header" data-kt-scroll-wrappers="#kt_modal_add_stock_transfer-deposit_scroll" data-kt-scroll-offset="300px">
 
@@ -39,9 +39,9 @@
 
                                 <select data-kt-action="load_drop" wire:model="collector_id" name="collector_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
                                     <option>{{ __('select an option') }}</option>
-                                    {{-- @foreach($collectors as $collector) --}}
-                                    <option value="{{-- $collector->id --}}">{{-- $collector->user_name --}}</option>
-                                    {{-- @endforeach --}}
+                                    @foreach($collectors as $collector)
+                                    <option value="{{ $collector->id }}">{{ $collector->user_name }}</option>
+                                    @endforeach
                                 </select>
 
 
@@ -51,13 +51,14 @@
                             </div>
                             <div class="col-md-4">
 
-                                <label class="required fs-6 fw-semibold mb-2">{{ __('req no') }}</label>
+                            <label class="required fs-6 fw-semibold mb-2">{{ __('req no') }}</label>
 
-                                <select data-kt-action="load_drop" wire:model.live="trans_no" name="trans_no" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
-                                    <option>{{ __('select an option') }}</option>
-                                    <option value="001">001</option>
-                                    <option value="002">002</option>
-                                </select>
+<select data-kt-action="load_drop" wire:model.live="trans_no" name="trans_no" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
+    <option>{{ __('select an option') }}</option>
+    @foreach($request_nos as $request_no)
+    <option value="{{ $request_no->trans_no}}">{{ $request_no->trans_no}}</option>
+    @endforeach
+</select>
 
                                 <!-- <input  data-kt-action="load_drop" type="text" wire:model.live="trans_no" name="trans_no" class="form-control mb-3 mb-lg-0" placeholder="{{ __('req no') }}" readonly/> -->
                                 <!--end::Input-->

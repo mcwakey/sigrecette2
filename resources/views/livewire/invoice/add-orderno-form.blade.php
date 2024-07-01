@@ -6,7 +6,9 @@
         <!--begin::Input-->
         <input type="hidden" wire:model="invoice_id" name="invoice_id" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('invoice_id') }}" />
         <input type="text" wire:model="orderno" name="orderno" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('order no') }}" />
-        <!--end::Input-->
+        @error('orderno')
+        <span class="text-danger">{{ $message }}</span>
+        @enderror
     </div>
     <!--end::Input group-->
     <!--begin::Actions-->

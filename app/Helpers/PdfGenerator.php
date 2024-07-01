@@ -219,6 +219,12 @@ class PdfGenerator  implements PdfGeneratorInterface
                     ->stream($filename);
             }
 
+            if(isset($invoice) && $invoice->edition_state==null){
+                $invoice->edition_state = "PRINT";
+                $invoice->save();
+            }
+
+
 
             return ['success' => true, 'pdf' => $pdf];
         }

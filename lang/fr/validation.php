@@ -148,6 +148,7 @@ return [
     'url'                  => 'Le format de l\'URL de :attribute n\'est pas valide.',
     'uuid'                 => 'Le champ :attribute doit être un UUID valide',
     'attributes'           => [
+        'delivery_to' => 'nom',
         'activity_id'              => 'activité principale',
         'address'                  => 'adresse',
         'affiliate_url'            => 'URL d\'affiliation',

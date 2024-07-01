@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\PasswordActionLog;
 use App\DataTables\UsersDataTable;
 use App\Http\Controllers\Controller;
+use Illuminate\Validation\Rule;
 
 class UserManagementController extends Controller
 {
@@ -18,12 +19,15 @@ class UserManagementController extends Controller
     {
         $validatedData = $request->validate([
             'disable' => 'nullable|integer',
+            'type'=>['nullable', 'string', Rule::in(['col'])]
         ]);
 
         $disable = $validatedData['disable'] ?? null;
+        $type = $validatedData['type'] ?? null;
 
         return $dataTable->with([
             'disable' => $disable,
+            'type'=> $type
         ])->render('pages/apps.user-management.users.list');
     }
 

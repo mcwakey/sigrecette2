@@ -150,7 +150,7 @@ class CollectorDepositsDataTable extends DataTable
     // public function query(): QueryBuilder // Remove $request parameter
     public function query(StockTransfer $model): QueryBuilder
     {
-        return $model->join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')
+        $query = $model->join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')
                     // ->with('taxable.tax_label')
                     // ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
                     ->join('users', 'stock_transfers.to_user_id', '=', 'users.id')
@@ -158,8 +158,12 @@ class CollectorDepositsDataTable extends DataTable
                     ->where('stock_transfers.trans_type', 'VENDU') // Filter collector_deposits by taxpayer_id
                     ->select('stock_transfers.*')
                     //->orderBy('tax_labels.name')
-                    ->newQuery();
+                    ;
 
+        if($this->id){
+            $query=$query->where('to_user_id','=',$this->id);
+        }
+        return $query->newQuery();
         // return StockTransfer::where('taxpayer_id', $this->id); // Filter collector_deposits by taxpayer_id
     }
 
@@ -187,7 +191,7 @@ class CollectorDepositsDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('id')->title(__('id'))->exportable(false)->printable(false)->visible(false), 
+            Column::make('id')->title(__('id'))->exportable(false)->printable(false)->visible(false),
             Column::make('stock_transfers.created_at')->title(__('date'))->addClass('text-nowrap'),
             //Column::make('trans_desc')->title(__('trans_desc')),
             // Column::make('tax_labels.name')->title(__('taxlabel')),

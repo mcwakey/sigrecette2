@@ -62,7 +62,7 @@ class InvoicesDataTable extends DataTable
             })
             ->editColumn('total', function (Invoice $invoice) {
                 if ($invoice->reduce_amount != '')
-                    return $invoice->amount - $invoice->reduce_amount ;
+                    return '-'. $invoice->reduce_amount ;
                 else
                    return $invoice->amount;
             })

@@ -25,11 +25,11 @@
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
                 @can('peut créer un utilisateur')
-                    @if (!request()->has('disable'))
+                    @if (!request()->has('disable') &&  !request()->has('type'))
                         <!--begin::Toolbar-->
                         <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
                             <!--begin::Add user-->
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_user">
+                            <button type="button" class="btn btn-light-success h-45px ms-auto" data-bs-toggle="modal" data-bs-target="#kt_modal_add_user">
                                 {!! getIcon('plus', 'fs-2', '', 'i') !!}
                                 {{ __('add_user') }}
                             </button>
@@ -38,9 +38,24 @@
                         <!--end::Toolbar-->
                     @endif
                 @endcan
+                    @can('peut créer un utilisateur')
+                        @if (!request()->has('disable') &&  request()->has('type'))
+                            <!--begin::Toolbar-->
+                            <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
+                                <!--begin::Add user-->
+                                <button type="button" class="btn btn-light-success h-45px ms-auto" data-bs-toggle="modal" data-bs-target="#kt_modal_add_user_collector">
+                                    {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                                    {{ __('Ajouter un collecteur') }}
+                                </button>
+                                <!--end::Add user-->
+                            </div>
+                            <!--end::Toolbar-->
+                        @endif
+                    @endcan
 
                 <!--begin::Modal-->
                 <livewire:user.add-user-modal></livewire:user.add-user-modal>
+                    <livewire:user.add-user-collector-modal></livewire:user.add-user-collector-modal>
                 <!--end::Modal-->
             </div>
             <!--end::Card toolbar-->

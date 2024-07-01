@@ -108,12 +108,12 @@
                             <span class="text-danger">{{ $message }}</span> @enderror
                             <!--begin::Roles-->
                             @foreach($roles as $role)
-                                <!--begin::Input row-->
-                                <div class="d-flex fv-row">
-                                    <!--begin::Radio-->
-                                    <div class="form-check form-check-custom form-check-solid">
-                                        @if($role->name == 'administrateur_system')
-                                            @hasanyrole(['administrateur_system'])
+                               @if($role->name != 'collecteur')
+                                    <div class="d-flex fv-row">
+                                        <!--begin::Radio-->
+                                        <div class="form-check form-check-custom form-check-solid">
+                                            @if($role->name == 'administrateur_system')
+                                                @hasanyrole(['administrateur_system'])
                                                 <!--begin::Input-->
                                                 <input class="form-check-input me-3" id="kt_modal_update_role_option_{{ $role->id }}" wire:model="role" name="role" type="radio" value="{{ $role->name }}" checked="checked"/>
                                                 <!--end::Input-->
@@ -124,27 +124,29 @@
                                                     </div>
                                                 </label>
                                                 <!--end::Label-->
-                                            @endhasanyrole
+                                                @endhasanyrole
 
-                                        @else
+                                            @else
 
                                             <!--begin::Input-->
-                                            <input class="form-check-input me-3" id="kt_modal_update_role_option_{{ $role->id }}" wire:model="role" name="role" type="radio" value="{{ $role->name }}" checked="checked"/>
-                                            <!--end::Input-->
-                                            <!--begin::Label-->
-                                            <label class="form-check-label" for="kt_modal_update_role_option_{{ $role->id }}">
-                                                <div class="fw-bold text-gray-800">
-                                                    {{ ucwords(__($role->name)) }}
-                                                </div>
-                                            </label>
-                                            <!--end::Label-->
+                                                <input class="form-check-input me-3" id="kt_modal_update_role_option_{{ $role->id }}" wire:model="role" name="role" type="radio" value="{{ $role->name }}" checked="checked"/>
+                                                <!--end::Input-->
+                                                <!--begin::Label-->
+                                                <label class="form-check-label" for="kt_modal_update_role_option_{{ $role->id }}">
+                                                    <div class="fw-bold text-gray-800">
+                                                        {{ ucwords(__($role->name)) }}
+                                                    </div>
+                                                </label>
+                                                <!--end::Label-->
 
-                                        @endif
+                                            @endif
 
 
+                                        </div>
+                                        <!--end::Radio-->
                                     </div>
-                                    <!--end::Radio-->
-                                </div>
+                                @endif
+
                                 <!--end::Input row-->
                                 @if(!$loop->last)
                                     <div class='separator separator-dashed my-5'></div>
