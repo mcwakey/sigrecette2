@@ -552,7 +552,7 @@ class AddInvoiceModal extends Component
     public function updateSharedTaxpayerId($id){
         $taxpayer = Taxpayer::findOrFail($id);
 
-        if($taxpayer!=null){
+        if($taxpayer instanceof Taxpayer){
             $this->taxpayer_id = $taxpayer->id;
             $this->addInvoice($id);
         }

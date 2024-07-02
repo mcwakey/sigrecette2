@@ -43,7 +43,7 @@ class AddOrdernoForm extends Component
         $invoice = Invoice::find($this->invoice_id);
 
         if ($invoice) {
-            if($invoice->type ==Constants::INVOICE_TYPE_TITRE && $invoice->edition_state != "bPRINT"){
+            if($invoice->type ==Constants::INVOICE_TYPE_TITRE && $invoice->edition_state != "PRINT"){
                 if(!$invoice->edition_state ){
                     $this->error_message="Veuillez au préalable imprimer l'avis.";
                 }

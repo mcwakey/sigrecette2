@@ -15,7 +15,7 @@
         .wrapper.hidden {
             display: none;
         }
- 
+
         .wrapper header {
             display: flex;
             align-items: center;
@@ -137,17 +137,20 @@
                 id="kt_td_picker_basic_input" type="text" class="form-control" data-td-target="#kt_td_picker_basic"
                 placeholder="yyyy-MM-dd" />
         </div>
-        <label class="required fw-semibold fs-6 mb-2">{{ __('Nom  du réceptionnaire') }}</label>
-        <!--end::Label-->
-        <!--begin::Input-->
-        <!--end::Label-->
-        <!--begin::Input-->
-        <input type="text" wire:model="delivery_to" name="delivery_to" class="form-control  mb-3 mb-lg-0"
-            placeholder="{{ __('commune_name') }}" />
-        <!--end::Input-->
-        @error('delivery_to')
+        <div class="">
+            <label class="required fw-semibold fs-6 mb-2">{{ __('Nom  du réceptionnaire') }}</label>
+            <!--end::Label-->
+            <!--begin::Input-->
+            <!--end::Label-->
+            <!--begin::Input-->
+            <input type="text" wire:model="delivery_to" name="delivery_to" class="form-control  mb-3 mb-lg-0"
+                   placeholder="{{ __('commune_name') }}" />
+            <!--end::Input-->
+            @error('delivery_to')
             <span class="text-danger">{{ $message }}</span>
-        @enderror
+            @enderror
+        </div>
+
 
 
         <!--end::Input-->
