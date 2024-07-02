@@ -110,6 +110,9 @@ class TaxpayersDataTable extends DataTable
         }
         if ($this->state) {
             $query->where('taxpayers.from_mobile_and_validate_state','=',TaxpayerStateEnums::PENDING);
+        }else{
+            $query->where('taxpayers.from_mobile_and_validate_state', TaxpayerStateEnums::APPROVED)
+                ->orWhereNull('taxpayers.from_mobile_and_validate_state');
         }
         return $query;
     }
