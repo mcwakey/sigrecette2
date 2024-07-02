@@ -113,13 +113,13 @@
                         </a>
                     </div>
                     <div class="menu-item">
-                          <span class="menu-link ">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title" data-bs-toggle="modal"
-                                      data-bs-target="#kt_modal_add_invoice_no_taxpayer">{{__("Nouvel avis au comptant")}}</span>
+                        <a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->input('type') ==    App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY && request()->has('autoClick') && request()->input('autoClick') =='invoicebtnc' ? 'active' : '' }}"
+                           href="{{ route('invoices.index', ['type' =>   App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY,'autoClick' => 'invoicebtnc']) }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
                             </span>
+                            <span class="menu-title">{{__("Nouvel avis au comptant")}}</span>
+                        </a>
                     </div>
                     <div class="menu-item">
                           <span class="menu-link ">
@@ -294,13 +294,13 @@
                         </a>
                     </div>
                     <div class="menu-item">
-                          <span class="menu-link ">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title" data-bs-toggle="modal"
-                                      data-bs-target="#kt_modal_add_stock_request"  data-kt-action="add_request">{{ __('new stock request') }}</span>
-                            </span>
+                        <a class="menu-link {{request()->routeIs('ticket.*') && request()->has('autoClick') && request()->input('autoClick') =='addstocktbtn' ? 'active' : '' }}"
+                           href="{{ route('ticket.stock-transfers.index', [ 'autoClick' => 'addstocktbtn']) }}">
+        <span class="menu-bullet">
+            <span class="bullet bullet-dot"></span>
+        </span>
+                            <span class="menu-title">{{ __('new supply') }}</span>
+                        </a>
                     </div>
                     <div class="menu-item">
                         <a class="menu-link {{ request()->routeIs('ticket.stock-requests.*') && !request()->has('autoClick') ? 'active' : '' }}"
@@ -313,15 +313,7 @@
                         </a>
                     </div>
 
-<div class="menu-item">
-    <a class="menu-link {{request()->routeIs('ticket.*') && request()->has('autoClick') && request()->input('autoClick') =='addstockbtn' ? 'active' : '' }}"
-       href="{{ route('ticket.stock-transfers.index', [ 'autoClick' => 'addstockbtn']) }}">
-        <span class="menu-bullet">
-            <span class="bullet bullet-dot"></span>
-        </span>
-        <span class="menu-title">{{ __('new supply') }}</span>
-    </a>
-</div>
+
                     <div class="menu-item">
                           <span class="menu-link ">
                                 <span class="menu-bullet">

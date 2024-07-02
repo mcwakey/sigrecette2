@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Invoice;
 
+use App\Helpers\Constants;
 use App\Models\Invoice;
 use App\Traits\DispatchesMessages;
 use Livewire\Component;
@@ -18,7 +19,7 @@ class AddDeliveryForm extends Component
     public $delivery_to;
 
     public $edit_mode = false;
-
+    private $error_message;
     protected $rules = [
         //"delivery" =>"required",
         "delivery_date" =>"required|string",
@@ -34,13 +35,25 @@ class AddDeliveryForm extends Component
     {
         return view('livewire.invoice.add-delivery-form');
     }
+    public function validateData(){
+        $this->validate();
+        $invoice = Invoice::find($this->invoice_id);
 
+        if (
+            $invoice  ) {
+            if($invoice->type ==Constants::INVOICE_TYPE_TITRE && $invoice->edition_state != "dPRINT"){
+                $this->error_message="Veuillez au préalable imprimer une fiche de distribuation contenant l'avis.";
+                $this->addError('delivery_to', $this->error_message);
+
+            }
+
+
+        }
+    }
     public function submit()
     {
-        //dd($this->status);
-
-        // Validate the form input data
-        $this->validate();
+        $this->validateData();
+        if ($this->getErrorBag()->isEmpty()) {
 
         DB::transaction(function () {
 
@@ -66,18 +79,13 @@ class AddDeliveryForm extends Component
             $this->dispatchMessage('Avis', 'update');
         });
 
-        // Reset form fields after successful submission
-        $this->reset();
+            $this->reset();
+        }else{
+            $this->dispatchMessage('Avis', 'update', 'error',$this->error_message);
+
+        }
     }
 
-// public function updateInvoice($id)
-// {
-//     $this->edit_mode = true;
-
-//     $this->invoice_id = $invoice->id;
-//     $this->tnif = $invoice->taxpayer->tnif;
-//     $this->zone = $invoice->taxpayer->zone_id;
-// }
 
     public function updateStatus($id)
     {

@@ -14,6 +14,7 @@ use App\Notifications\InvoiceRejected;
 use App\Traits\DispatchesMessages;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
@@ -28,10 +29,20 @@ class AddStatusForm extends Component
 
     public $edit_mode = false;
 
-    protected $rules = [
-        "status" => "required|string",
-    ];
-
+    public function rules()
+    {
+        return [
+            'status' => ['required', 'string', Rule::in(
+                InvoiceStatusEnums::ACCEPTED,
+                InvoiceStatusEnums::REJECTED_BY_OR,
+                InvoiceStatusEnums::PENDING,
+                InvoiceStatusEnums::REJECTED,
+                InvoiceStatusEnums::APPROVED,
+                InvoiceStatusEnums::APPROVED_CANCELLATION,
+                InvoiceStatusEnums::CANCELED,
+                InvoiceStatusEnums::REDUCED)],
+        ];
+    }
     private $error_message;
     protected $listeners = [
         //'delete_user' => 'deleteUser',
@@ -154,12 +165,14 @@ class AddStatusForm extends Component
                 $this->dispatchMessage('Avis', 'update');
             });
             $this->reset();
+        }else{
+            $this->dispatchMessage('Avis', 'update', 'error',$this->error_message);
+
         }
 
-        $this->dispatchMessage('Avis', 'update', 'error',$this->error_message);
 
 
-        $this->reset();
+
 
     }
 

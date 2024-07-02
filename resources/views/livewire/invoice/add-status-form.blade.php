@@ -31,7 +31,7 @@
                     @endcan
                 @endif
             </select>
-            @error('status')<span class="text-danger">{{ $message }}</span>@enderror
+            @error('status')<span class="text-danger  text-wrap">{{ $message }}</span>@enderror
         </div>
 
     </div>

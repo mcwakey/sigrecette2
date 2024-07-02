@@ -161,16 +161,14 @@
                 <li class="nav-item ms-auto">
                     <!--begin::Action menu-->
                     <a href="#" class="btn btn-success ps-7" data-kt-menu-trigger="click"
-                        data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">{{ __('more here') }}
+                        data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">{{ __('Fiche du contribuable') }}
                         <i class="ki-duotone ki-down fs-2 me-0"></i></a>
                     <!--begin::Menu-->
                     <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold py-4 w-250px fs-6"
                         data-kt-menu="true">
-                        <!--end::Menu item-->
-                        <!--TODO Fiche du contribuable-->
                         <div class="menu-item px-5">
                             <a href="{{ route('generatePdf', ['data' => json_encode([$taxpayer->id]), 'type' => '11']) }}"
-                                class="menu-link px-5" target="_blank">{{ __('Fiche du contribuable') }}</a>
+                                class="menu-link px-5" target="_blank">{{ __('Télécharger') }}</a>
                         </div>
 
 
@@ -215,6 +213,18 @@
                                                 <span class="path4"></span>
                                                 <span class="path5"></span>
                                             </i>{{ __('create asset') }}
+                                        </button>
+                                        <button type="button" class="btn btn-light-danger ms-auto d-none"
+                                                data-kt-user-id="{{ $taxpayer->id }}" data-bs-toggle="modal"
+                                                data-bs-target="#kt_modal_add_invoice_general" data-kt-action="add_invoice"
+                                                id="invoicebtng">
+                                            <i class="ki-duotone ki-add-files fs-3">
+                                                <span class="path1"></span>
+                                                <span class="path2"></span>
+                                                <span class="path3"></span>
+                                                <span class="path4"></span>
+                                                <span class="path5"></span>
+                                            </i>{{ __('create invoice') }}
                                         </button>
                                     @endcan
 
@@ -683,6 +693,7 @@
 
         <livewire:taxpayer_taxable.add-taxpayer-taxable-modal :id="$taxpayer->id"/>
         <livewire:invoice.add-invoice-modal :id="$taxpayer->id"/>
+        <livewire:invoice.add-invoice-general-modal :id="$taxpayer->id" />
 
 
     @push('scripts')
