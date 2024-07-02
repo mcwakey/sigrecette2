@@ -74,7 +74,7 @@
                                     <option>{{ __('select an option') }}</option>
                                     <option value="Jours">Jours</option>
                                     <option value="Mois">Mois</option>
-                                    <option value="Ans">Ans</option>
+                                    <option value="Ans">An</option>
                                     <option value="Autre">Autre</option>
                                 </select>
                                 <!--end::Input-->
