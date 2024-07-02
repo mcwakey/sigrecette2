@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Invoice;
 
+use App\Enums\InvoiceStatusEnums;
+use App\Helpers\Constants;
 use App\Models\Invoice;
 use Livewire\Component;
 use App\Traits\DispatchesMessages;
@@ -22,9 +24,9 @@ class AddOrdernoForm extends Component
     public $orderno;
 
     public $edit_mode = false;
-
+    private $error_message;
     protected $rules = [
-        "orderno" => "required",
+        "orderno" => "required|string",
     ];
 
     protected $listeners = [
@@ -36,27 +38,48 @@ class AddOrdernoForm extends Component
     {
         return view('livewire.invoice.add-orderno-form');
     }
+    public function validateData(){
+        $this->validate();
+        $invoice = Invoice::find($this->invoice_id);
 
+        if ($invoice) {
+            if($invoice->type ==Constants::INVOICE_TYPE_TITRE && $invoice->edition_state != "PRINT"){
+                if(!$invoice->edition_state ){
+                    $this->error_message="Veuillez au préalable imprimer l'avis.";
+                }
+                $this->addError('status', $this->error_message);
+
+            }
+
+
+        }
+    }
     public function submit()
     {
-        $this->validate();
+        $this->validateData();
+        if ($this->getErrorBag()->isEmpty()) {
+            DB::transaction(function () {
 
-        DB::transaction(function () {
-
-            $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
-
-
-            $this->invoice_id = $invoice->id;
-            $invoice->order_no =$this->orderno;
+                $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
 
 
-            $invoice->submitToState("submit_for_pending");
-            $invoice->save();
-            $this->dispatchMessage('Avis', 'update');
-        });
+                $this->invoice_id = $invoice->id;
+                $invoice->order_no =$this->orderno;
 
-        // Reset form fields after successful submission
-        $this->reset();
+
+                $invoice->submitToState("submit_for_pending");
+                $invoice->save();
+                $this->dispatchMessage('Avis', 'update');
+            });
+            $this->reset();
+        }else{
+            $this->dispatchMessage('Avis', 'update', 'error',$this->error_message);
+
+        }
+
+
+
+
     }
 
     public function updateInvoice($id)

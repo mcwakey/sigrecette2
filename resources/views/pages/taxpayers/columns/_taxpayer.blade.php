@@ -5,7 +5,7 @@
 
    }
    if(request()->has('rc') && request()->input('rc') =='avis'){
-       $taxpayer_url =route('taxpayers.show',  ['taxpayer' => $taxpayerinfo->id, 'autoClick' => 'invoicebtn']);
+       $taxpayer_url =route('taxpayers.show',  ['taxpayer' => $taxpayerinfo->id, 'autoClick' => 'invoicebtng']);
 
    }
 

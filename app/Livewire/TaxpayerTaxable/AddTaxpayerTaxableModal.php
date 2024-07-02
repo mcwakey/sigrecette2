@@ -244,6 +244,7 @@ class AddTaxpayerTaxableModal extends Component
                 //$this->dispatch('success', __('New Asset created'));
                 $this->dispatchMessage('Taxation du contribuable');
             }
+            $this->dispatch('updatesTaxpayerTaxables', ['id' => $this->taxpayer_id]);
         });
 
         // Reset the form fields after successful submission
@@ -310,8 +311,9 @@ class AddTaxpayerTaxableModal extends Component
     #[On('updateSharedTaxpayerId')]
     public function updateSharedTaxpayerId($id){
 
-        $taxpayer = Taxpayer::findOrFail($id);
-        if($taxpayer!=null){
+
+        $taxpayer = Taxpayer::find($id);
+        if($taxpayer instanceof Taxpayer){
             $this->taxpayer_id = $taxpayer->id;
         }
 

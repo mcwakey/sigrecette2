@@ -10,6 +10,7 @@ use App\Models\TaxpayerTaxable;
 
 use App\Models\Zone;
 use App\Traits\DispatchesMessages;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Livewire\WithPagination;
@@ -18,11 +19,11 @@ class AddInvoiceGeneralModal extends Component
 {
     use DispatchesMessages;
     use WithPagination;
-    public $search="";
-    public $is_set_taxpayer=false;
+
+
     public $taxpayer_id;
     public $taxpayer_taxables;
-    public $perPages=10;
+
     protected $rules = [
 
 
@@ -41,27 +42,27 @@ class AddInvoiceGeneralModal extends Component
     }
 
 
-    public function mount(){
-        $this->zones = Zone::all();
+    public function mount($id){
+       $this->taxpayer_id = $id;
+        $this->loadTaxpayerData();
     }
-    public function render(TaxpayersDataTable $taxpayersDataTable  )
+    public function render()
     {
 
-        $taxpayer= Taxpayer::find($this->taxpayer_id);
-        if($taxpayer){
-            $this->is_set_taxpayer=true;
-            $this->taxpayer_taxables =$taxpayer->taxpayer_taxables;
-            $this->dispatch('updateSharedTaxpayerId', id:  $this->taxpayer_id);
-        }else{
-            $this->is_set_taxpayer=false;
-        }
+
         return view('livewire.invoice.add-invoice-general-modal',
         [
-            'taxpayers'=> Taxpayer::search($this->search)->paginate($this->perPages, pageName: 'invoices-modal'),
-            'taxpayer'=>$taxpayer,
-            //'taxpayersDataTable'=>$taxpayersDataTable->html()
+            'taxpayer'=>Taxpayer::find($this->taxpayer_id)
 
         ]);
+    }
+    public function loadTaxpayerData()
+    {
+        $taxpayer = Taxpayer::find($this->taxpayer_id);
+        if ($taxpayer) {
+            $this->taxpayer_taxables = $taxpayer->taxpayer_taxables;
+            $this->dispatch('updateSharedTaxpayerId', ['id' => $this->taxpayer_id]);
+        }
     }
     public function updateCheckbox($taxpayerTaxableId, $value)
     {
@@ -78,6 +79,17 @@ class AddInvoiceGeneralModal extends Component
     {
         return 'layout.partials.custom_pagination';
     }
+    public function updating()
+    {
+        $this->loadTaxpayerData();
+    }
+    #[On('updatesTaxpayerTaxables')]
+    public function updatesTaxpayerTaxables($id){
+        if($this->taxpayer_id == $id ){
+            $this->loadTaxpayerData();
+        }
+
+    }
     public function submit()
     {
 
@@ -88,7 +100,7 @@ class AddInvoiceGeneralModal extends Component
         DB::transaction(function () {
 
 
-            $this->dispatchMessage('Avis au comptant');
+            $this->dispatchMessage('Avis au sur titre');
 
         });
 
@@ -96,9 +108,7 @@ class AddInvoiceGeneralModal extends Component
         $this->reset();
     }
 
-    public function select_taxpayer($value){
-        $this->taxpayer_id = $value;
-    }
+
 
 
     public function hydrate()

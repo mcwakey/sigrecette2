@@ -16,7 +16,7 @@ class CollectorDepositController extends Controller
             'id' => ['nullable', 'integer'],
         ]);
         $user_id = isset($validatedData['id']) ? $validatedData['id']: null;
-        
+
 
         return $dataTable->with('id',$user_id)->render('pages/collector_deposits.list');
     }
