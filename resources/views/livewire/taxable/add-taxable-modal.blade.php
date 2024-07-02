@@ -152,7 +152,7 @@
                                 <div class="form-control form-check form-switch form-check-custom form-check-solid"  style="border: none;">
                                     <input class="form-check-input" type="checkbox"  id="flexSwitchDefault"  wire:model="use_second_formula" name="use_second_formula" value="{{$use_second_formula}}"  @if($use_second_formula) checked="checked" @endif/>
                                     <label class="form-check-label text-nowrap" for="flexSwitchDefault">
-                                        {{__("Ignorer la valeur d'assiète")}}
+                                        {{__("Ignorer la valeur d'assiette")}}
                                     </label>
                                 </div>
 
