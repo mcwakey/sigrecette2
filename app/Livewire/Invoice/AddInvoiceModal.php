@@ -312,10 +312,13 @@ class AddInvoiceModal extends Component
             $invoice->save();
 
             if(!$this->edit_mode){
+                $role_a = Role::where('name', 'agent_assiette')->first();
                 $role = Role::where('name', 'agent_delegation')->first();
                 if ($role) {
                     $users = $role->users()->get();
+                    $users_agent_assiette= $role_a->users()->get();
                     Notification::send($users, new InvoiceCreated($invoice,Auth::user(),'agent_delegation'));
+                    Notification::send($users_agent_assiette, new InvoiceCreated($invoice,Auth::user(),'agent_delegation_du_receveur'));
                 }
             }
 
