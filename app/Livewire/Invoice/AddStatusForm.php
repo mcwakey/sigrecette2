@@ -105,6 +105,7 @@ class AddStatusForm extends Component
                         'invoice_type' => $description_str,
                         'status' => $description_str,
                         'payment_type' => $description_str,
+                          'code'=>null
 
                     ];
                     $payments = Invoice::getCode($invoice->invoice_no, $invoice->reduce_amount, $paymentData);
