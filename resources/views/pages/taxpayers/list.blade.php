@@ -1,6 +1,6 @@
 <x-default-layout>
     @section('title')
-        @if(request()->routeIs('taxpayers.*')  && !request()->has('disable') )
+        @if((request()->routeIs('taxpayers.*')  && !request()->has('disable')) or (request()->routeIs('invoicing.*')) )
             {{ "Liste des ".__('taxpayers') }}
         @else
             {{ "Liste des ".__('taxpayers') . " " .__('désactivés') }}

@@ -82,10 +82,10 @@
                 <!--end:Menu sub-->
             </div>
             <!--end:Menu item-->
-
+            
             <!--begin:Menu item-->
             <div data-kt-menu-trigger="click"
-                 class="menu-item menu-accordion {{ request()->routeIs('invoices.*') ? 'here show' : '' }}">
+                 class="menu-item menu-accordion {{ request()->routeIs('invoicing.*') ? 'here show' : '' }}">
                 <!--begin:Menu link-->
                 <span class="menu-link">
                     <span class="menu-icon">{!! getIcon('abstract-10', 'fs-2') !!}</span>
@@ -94,8 +94,8 @@
                 </span>
                 <div class="menu-sub menu-sub-accordion">
                     <div class="menu-item">
-                    <a class="menu-link {{ request()->routeIs('taxpayers.*') && request()->has('rc') && request()->input('rc') =='taxation' ? 'active' : '' }}"
-                       href="{{ route('taxpayers.index', ['rc' => 'taxation']) }}">
+                    <a class="menu-link {{ (request()->routeIs('invoicing.*') && request()->has('rc') && request()->input('rc') == 'taxation') || (request()->has('autoClick') && request()->input('autoClick') == 'taxationbtn') ? 'active' : '' }}"
+                       href="{{ route('invoicing.taxpayers.index', ['rc' => 'taxation']) }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -104,8 +104,8 @@
 
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('taxpayers.*') && request()->has('rc') && request()->input('rc') =='avis' ? 'active' : '' }}"
-                           href="{{ route('taxpayers.index', ['rc' => 'avis']) }}">
+                        <a class="menu-link {{ (request()->routeIs('invoicing.*') && request()->has('rc') && request()->input('rc') =='avis') || (request()->has('autoClick') && request()->input('autoClick') == 'invoicebtng') ? 'active' : '' }}"
+                           href="{{ route('invoicing.taxpayers.index', ['rc' => 'avis']) }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -113,8 +113,8 @@
                         </a>
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->input('type') ==    App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY && request()->has('autoClick') && request()->input('autoClick') =='invoicebtnc' ? 'active' : '' }}"
-                           href="{{ route('invoices.index', ['type' =>   App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY,'autoClick' => 'invoicebtnc']) }}">
+                        <a class="menu-link {{ request()->routeIs('invoicing.*') &&  request()->input('type') ==    App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY && request()->has('autoClick') && request()->input('autoClick') =='invoicebtnc' ? 'active' : '' }}"
+                           href="{{ route('invoicing.invoices.index', ['type' =>   App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY,'autoClick' => 'invoicebtnc']) }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -122,6 +122,15 @@
                         </a>
                     </div>
                     <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('invoicing.*') && request()->has('state') && request()->input('state') =='pr' ? 'active' : '' }}"
+                           href="{{ route('invoicing.invoices.index', ['state' => 'pr']) }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">{{__("Nouvel avis de réduction  ou d’annulation")}}</span>
+                        </a>
+                   </div>
+                     <!-- <div class="menu-item">
                           <span class="menu-link ">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
@@ -129,7 +138,7 @@
                                 <span class="menu-title" data-bs-toggle="modal"
                                       data-bs-target="#kt_modal_add_invoice_no_taxpayer">{{__("Nouvel avis de réduction  ou d’annulation")}}</span>
                             </span>
-                    </div>
+                    </div> -->
                 </div>
                 <!--end:Menu sub-->
             </div>

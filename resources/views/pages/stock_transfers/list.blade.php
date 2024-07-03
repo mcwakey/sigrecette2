@@ -283,7 +283,7 @@
                 window.LaravelDataTables['stock_transfers-table'].search(this.value).draw();
             });
 
-            document.getElementById('mySearchZero').addEventListener('keyup', function() {
+            document.getElementById('mySearchZero')?.addEventListener('keyup', function() {
                 window.LaravelDataTables['stock_transfers-table'].column(1).search(this.value).draw();
             });
 
@@ -291,15 +291,15 @@
             //     window.LaravelDataTables['stock_transfers-table'].column(2).search(this.value).draw();
             // });
 
-            document.getElementById('mySearchTwo').addEventListener('keyup', function() {
+            document.getElementById('mySearchTwo')?.addEventListener('keyup', function() {
                 window.LaravelDataTables['stock_transfers-table'].column(2).search(this.value).draw();
             });
 
-            document.getElementById('mySearchFour').addEventListener('change', function() {
+            document.getElementById('mySearchFour')?.addEventListener('change', function() {
                 window.LaravelDataTables['stock_transfers-table'].column(10).search(this.value).draw();
             });
 
-            document.getElementById('mySearchFive').addEventListener('change', function() {
+            document.getElementById('mySearchFive')?.addEventListener('change', function() {
                 window.LaravelDataTables['stock_transfers-table'].column(11).search(this.value).draw();
             });
 
@@ -324,7 +324,7 @@
                         return words.join(' ');
                     }
                 }
-                link.addEventListener('click', function(event) {
+                link?.addEventListener('click', function(event) {
                     event.preventDefault();
                     let selectedValue = link.getAttribute('data-type');
                     let table = document.getElementById("stock_transfers-table");

@@ -18,6 +18,8 @@
             {{ "Prise en charge/Rejet des avis sur titre" }}
         @elseif(request()->routeIs('recoveries.*') &&  request()->has('delivery')&& request()->input('delivery') ==  App\Helpers\Constants::INVOICE_DELIVERY_LIV_KEY)
             {{"Liste des ".__('invoices')." à recouvrer"}}
+        @elseif(request()->routeIs('invoicing.*'))
+            {{__('Liste des ' .__('invoices'). ' au comptant')}}
         @else
             {{ "Liste générale des avis sur titre " }}
             @php
@@ -102,7 +104,7 @@ $filters = [
 
                     </div>
 
-                @if(request()->routeIs('invoices.*'))
+                @if(request()->routeIs('invoicing.*'))
                 <div class="d-flex justify-content-end me-5" data-kt-invoice-table-toolbar="base">
                         @can('peut émettre un avis sur titre')
                             @if(request()->input('type') == App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY)
@@ -124,9 +126,8 @@ $filters = [
                             @if($aucomptant)
                                 @can('peut émettre un avis au comptant')
                                 <button type="button" class="btn btn-light-success ms-auto me-5" data-kt-user-id="1"
-                                        data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice_no_taxpayer"
-                                        data-kt-action="add_no_invoice"
-                                id="invoicebtnc">
+                                        data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice_no_taxpayer" id="invoicebtnc"
+                                        data-kt-action="add_no_invoice">
                                     <i class="ki-duotone ki-add-files fs-3">
                                         <span class="path1"></span>
                                         <span class="path2"></span>

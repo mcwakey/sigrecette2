@@ -133,6 +133,11 @@ class AddStockTransferModal extends Component
         return view('livewire.stock_transfer.add-stock-transfer-modal', compact('collectors','taxlabel_list','request_nos'));
     }
 
+    public function loadDrop (){
+        // dd('hey');
+        // $this->stock_requests= StockRequest::where('req_type','DEMANDE')->where('type','ACTIVE')->where('req_no', $value)->get();
+    }
+
     // public function updatedTaxlabelId($value)
     // {
         // $this->taxable_id = "";

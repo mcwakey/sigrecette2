@@ -125,6 +125,7 @@
         let autoClickValue = urlParams.get('autoClick');
         if (autoClickValue ) {
             const button = document.getElementById(autoClickValue);
+            console.log(button);
             if (button) {
                 button.click();
             }

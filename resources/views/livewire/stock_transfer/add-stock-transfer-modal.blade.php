@@ -360,7 +360,7 @@
 
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('req no') }}</label>
 
-                                <select data-kt-action="load_drop" wire:model.live="trans_no" name="trans_no" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
+                                <select data-kt-action="load_drop" wire:model.live="trans_no" name="trans_no" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer" data-kt-user-id ="">
                                     <option>{{ __('select an option') }}</option>
                                     @foreach($request_nos as $request_no)
                                     <option value="{{ $request_no->req_no}}">{{ $request_no->req_no}}</option>
@@ -582,7 +582,7 @@
                                             </td>
                                         </tr>
                                         @endforeach
-                                        </tbody>
+                                </tbody>
                             </table>
 
                         <!--end::Input group-->
@@ -591,15 +591,15 @@
                     <!--begin::Actions-->
                     <div class="text-center pt-15">
                     <button type="reset" class="btn btn-light me-5" data-bs-dismiss="modal" aria-label="Close" wire:loading.attr="disabled">{{ __('close') }}</button>
-                      @if ($edit_mode)
-                                <button type="submit" class="btn btn-danger" data-kt-taxpayer-taxables-modal-action="submit">
-                                    <span class="indicator-label" wire:loading.remove>{{ __('faire etat de compte du collecteur') }}</span>
-                                    <span class="indicator-progress" wire:loading wire:target="submit">
-                                    {{ __('chargenment ...') }}
-                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                    </span>
-                                </button>
-                            @endif
+                        @if ($edit_mode)
+                            <button type="submit" class="btn btn-danger" data-kt-taxpayer-taxables-modal-action="submit">
+                                <span class="indicator-label" wire:loading.remove>{{ __('faire etat de compte du collecteur') }}</span>
+                                <span class="indicator-progress" wire:loading wire:target="submit">
+                                {{ __('chargenment ...') }}
+                                    <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                </span>
+                            </button>
+                        @endif
                     </div>
                     <!--end::Actions-->
                 </form>
@@ -613,7 +613,9 @@
 </div>
 
 @push('scripts')
-    <script>
+
+
+<script>
 
 
 let datePickerbtn = document.getElementById("date-picker-btn-one");
@@ -930,7 +932,7 @@ calendarTwo?.addEventListener('click', function(event){
     event.stopPropagation();
 });
 
-document.addEventListener('click', function(event){
+document?.addEventListener('click', function(event){
     let target = event.target;
     if(target != calendarTwo && target != datePickerbtnTwo){
         calendarTwo?.classList.add('hidden');
@@ -945,7 +947,7 @@ datePickerbtn?.addEventListener('click', function(event){
     event.stopPropagation();
 });
 
-document.addEventListener('click', function(event){
+document?.addEventListener('click', function(event){
     let target = event.target;
     if(target != calendar && target != datePickerbtn){
         calendar?.classList.add('hidden');
