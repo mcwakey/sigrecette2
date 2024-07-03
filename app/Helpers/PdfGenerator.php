@@ -349,6 +349,7 @@ class PdfGenerator  implements PdfGeneratorInterface
                 foreach ($data as $invoice){
                     if($invoice->edition_state== "PRINT"){
                         $invoice->edition_state = "bPRINT";
+                        $invoice->status= InvoiceStatusEnums::PENDING;
                         $invoice->save();
                     }
                 }
