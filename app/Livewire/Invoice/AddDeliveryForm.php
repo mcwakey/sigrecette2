@@ -47,7 +47,7 @@ class AddDeliveryForm extends Component
                 }else{
                     $this->error_message="Veuillez au préalable imprimer une fiche de recouvrement contenant l'avis.";
                 }
-                $this->addError('delivery_to', $this->error_message);
+                // $this->addError('delivery_to', $this->error_message);
 
             }
 

@@ -47,7 +47,7 @@ class AddOrdernoForm extends Component
                 if(!$invoice->edition_state ){
                     $this->error_message="Veuillez au préalable imprimer l'avis.";
                 }
-                $this->addError('status', $this->error_message);
+                // $this->addError('status', $this->error_message);
 
             }
 
