@@ -35,7 +35,8 @@ class InvoiceController extends Controller
             'e_date' => 'nullable|date_format:Y-m-d H:i:s',
             'type' => ['nullable', 'string', Rule::in(array_keys(Constants::INVOICE_TYPE_VALIDATION_MAP))],
             'state' => ['nullable', 'string', Rule::in(array_keys( Constants::INVOICE_STATE_VALIDATION_MAP))],
-            'to_paid' =>['nullable', 'integer', Rule::in([0,1])]
+            'to_paid' =>['nullable', 'integer', Rule::in([0,1])],
+            'invoice_id'=>['nullable', 'integer'],
         ]);
         $state = isset($validatedData['state']) ? Constants::INVOICE_STATE_VALIDATION_MAP[$validatedData['state']] : null;
         $to_paid = isset($validatedData['to_paid']) ? $validatedData['to_paid']: null;
@@ -49,6 +50,24 @@ class InvoiceController extends Controller
         $tax_labels = TaxLabel::all();
         $role = Role::where('name', 'agent_recouvrement')->first();
         $agent_recouvrements = $role->users()->get();
+        $invoice_id =  isset($validatedData['invoice_id']) ? $validatedData['invoice_id'] : null;
+
+
+
+        if(  $invoice_id){
+            $invoice = Invoice::find($invoice_id);
+            if ($invoice){
+                if($invoice->status == InvoiceStatusEnums::PENDING){
+                   return redirect()->route('invoices.index', ['state' =>  Constants::INVOICE_STATE_DRAFT_KEY,'type' => Constants::INVOICE_TYPE_TITRE_KEY]);
+                }elseif ($invoice->status == InvoiceStatusEnums::ACCEPTED){
+                    return redirect()->route('invoices.index',  ['state' =>  Constants::INVOICE_STATE_ACCEPTED_KEY,'type' => Constants::INVOICE_TYPE_TITRE_KEY]);
+
+                }
+                elseif ($invoice->status == InvoiceStatusEnums::PENDING){
+                    return redirect()->route('invoices.index', ['state' =>  Constants::INVOICE_STATE_PENDING_KEY,'type' => Constants::INVOICE_TYPE_TITRE_KEY]);
+                }
+            }
+        }
         return $dataTable->with(
 
             [
@@ -62,6 +81,8 @@ class InvoiceController extends Controller
                 'to_paid'=>$to_paid,
             ]
         )->render('pages/invoices.list', compact('zones', 'tax_labels','agent_recouvrements'));
+
+
     }
 
     /**
