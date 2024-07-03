@@ -8,7 +8,7 @@
        $taxpayer_url =route('invoicing.taxpayers.show',  ['taxpayer' => $taxpayerinfo->id, 'autoClick' => 'invoicebtng']);
 
    }else{
-        $taxpayer_url =route('taxpayers.show');
+        $taxpayer_url =route('taxpayers.show',['taxpayer' => $taxpayerinfo->id]);
    }
 
 @endphp
