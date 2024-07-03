@@ -5,8 +5,7 @@
 
 @if($invoice->can("submit_for_approved"))
     <div class="badge badge-lg badge-light-primary d-inline">{{ __($invoice->status) }}
-        @if(in_array(App\Enums\InvoiceActionsEnums::EDITSTATUT,$actions))
-            @can('peut prendre en charge un avis sur titre')
+        {{-- @if(in_array(App\Enums\InvoiceActionsEnums::EDITSTATUT,$actions)) --}}
                 <button type="button"
                         class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto  pulse pulse-warning"
                         data-kt-user-id="{{ $invoice->id }}"
@@ -36,8 +35,7 @@
                     <div class="separator border-gray-200"></div>
                     <livewire:invoice.add-status-form/>
                 </div>
-            @endcan
-        @endif
+        {{-- @endif --}}
 
     </div>
 @endif
@@ -50,7 +48,6 @@
 @elseif($invoice->can( "submit_for_accepted"))
 <div class="badge badge-lg badge-light-secondary d-inline">{{ __('DRAFT')}}
     @if(in_array(App\Enums\InvoiceActionsEnums::EDITSTATUT,$actions))
-        @can('peut accepter un avis sur titre')
             <button type="button"
                     class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto pulse pulse-warning"
                     data-kt-user-id="{{ $invoice->id }}"
@@ -81,7 +78,6 @@
                 <livewire:invoice.add-status-form/>
             </div>
 
-        @endcan
     @endif
 
 </div>
