@@ -139,15 +139,11 @@
         </div>
         <div class="">
             <label class="required fw-semibold fs-6 mb-2">{{ __('Nom  du réceptionnaire') }}</label>
-            <!--end::Label-->
-            <!--begin::Input-->
-            <!--end::Label-->
-            <!--begin::Input-->
             <input type="text" wire:model="delivery_to" name="delivery_to" class="form-control  mb-3 mb-lg-0"
                    placeholder="{{ __('commune_name') }}" />
             <!--end::Input-->
             @error('delivery_to')
-            <span class="text-danger">{{ $message }}</span>
+            <span class="text-danger text-wrap">{{ $message }}</span>
             @enderror
         </div>
 

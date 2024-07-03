@@ -232,7 +232,10 @@
                                         <select data-kt-action="load_drop" wire:model="category_id" name="category_id" class="form-select" data-dropdown-parent="#kt_modal_add_taxpayer">
                                             <option>{{ __('select an option') }}</option>
                                             @foreach($categories as $category)
-                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                @if( $category->status=="ACTIVE")
+                                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                @endif
+
                                             @endforeach
                                         </select>
                                         <!--end::Input-->
@@ -247,7 +250,9 @@
                                         <select wire:model="activity_id" name="activity_id" class="form-select " data-dropdown-parent="#kt_modal_add_taxpayer">
                                             <option>{{ __('select an option') }}</option>
                                             @foreach($activities as $activity)
+                                                @if( $activity->status=="ACTIVE")
                                             <option value="{{ $activity->id }}">{{ $activity->name }}</option>
+                                                @endif
                                             @endforeach
                                         </select>
                                         <!--end::Input-->
@@ -353,7 +358,9 @@
                                         <select data-kt-action="load_drop" wire:model="town_id" name="town_id" class="form-select">
                                             <option>{{ __('select an option') }}</option>
                                             @foreach($towns as $town)
+                                                @if( $town->status=="ACTIVE")
                                             <option value="{{ $town->id }}">{{ $town->name }}</option>
+                                                @endif
                                             @endforeach
                                         </select>
                                         <!--end::Input-->

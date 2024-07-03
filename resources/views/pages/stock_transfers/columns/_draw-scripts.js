@@ -60,7 +60,7 @@ document.querySelectorAll('[data-kt-action="update_transfer"]').forEach(function
 // Add click event listener to update buttons
 document.querySelectorAll('[data-kt-action="add_deposit"]').forEach(function (element) {
     element.addEventListener('click', function () {
-        console.log(this.getAttribute('data-kt-user-id'));
+        console.log(this.getAttribute('data-kt-user-id'),'test');
         Livewire.dispatch('add_deposit', [this.getAttribute('data-kt-user-id')]);
     });
 });

@@ -123,7 +123,7 @@ class AddTaxpayerModal extends Component
         $cantons = Canton::where('status',"ACTIVE")->get();
         $genders = Gender::all();
         $id_types = IdType::all();
-        $zones = Zone::all();
+        $zones = Zone::where('status',"ACTIVE")->get();;
         $categories = Category::all();
 
         return view('livewire.taxpayer.add-taxpayer-modal', compact('cantons', 'genders', 'id_types', 'zones', 'categories'));
@@ -256,8 +256,9 @@ class AddTaxpayerModal extends Component
         $this->address = $taxpayer->address;
 
         $this->file_no = $taxpayer->file_no;
-        $this->category_id = $taxpayer->category_id;
         $this->activity_id = $taxpayer->activity_id;
+        $this->category_id = $taxpayer->category_id;
+
         $this->other_work = $taxpayer->other_work;
         $this->authorisation = $taxpayer->authorisation;
         $this->auth_reference = $taxpayer->auth_reference;

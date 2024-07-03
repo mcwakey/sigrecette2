@@ -1,12 +1,14 @@
 @php
     $taxpayer_url=route('taxpayers.show', $taxpayerinfo->id);
    if(request()->has('rc') && request()->input('rc') =='taxation'){
-       $taxpayer_url =route('taxpayers.show',  ['taxpayer' => $taxpayerinfo->id, 'autoClick' => 'taxationbtn']);
+       $taxpayer_url =route('invoicing.taxpayers.show',  ['taxpayer' => $taxpayerinfo->id, 'autoClick' => 'taxationbtn']);
 
    }
-   if(request()->has('rc') && request()->input('rc') =='avis'){
-       $taxpayer_url =route('taxpayers.show',  ['taxpayer' => $taxpayerinfo->id, 'autoClick' => 'invoicebtng']);
+   elseif(request()->has('rc') && request()->input('rc') =='avis'){
+       $taxpayer_url =route('invoicing.taxpayers.show',  ['taxpayer' => $taxpayerinfo->id, 'autoClick' => 'invoicebtng']);
 
+   }else{
+        $taxpayer_url =route('taxpayers.show',['taxpayer' => $taxpayerinfo->id]);
    }
 
 @endphp

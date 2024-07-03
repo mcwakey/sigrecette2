@@ -127,7 +127,12 @@ class InvoicesDataTable extends DataTable
             $query->whereBetween('invoices.id', [$this->startInvoiceId, $this->endInvoiceId]);
         }
         if($this->state!=null){
-            $query->where('invoices.status','=',$this->state);
+            if($this->state==InvoiceStatusEnums::APPROVED){
+                $query->whereIn('invoices.status',[InvoiceStatusEnums::APPROVED,InvoiceStatusEnums::APPROVED_CANCELLATION]);
+            }else{
+                $query->where('invoices.status','=',$this->state);
+            }
+
 
         }
         if($this->delivery){

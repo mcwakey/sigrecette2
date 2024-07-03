@@ -50,10 +50,10 @@
                         <div class="row mb-7">
                             <div class="col-md-8">
                                 <!--begin::Label-->
-                                <label class="required fw-semibold fs-6 mb-2">{{ __('town') }}</label>
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('Village/Quartier') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="name" name="name" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('town') }}"/>
+                                <input type="text" wire:model="name" name="name" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('Village/Quartier') }}"/>
                                 <!--end::Input-->
                                 @error('name')
                                 <span class="text-danger">{{ $message }}</span> @enderror

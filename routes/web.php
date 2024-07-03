@@ -81,6 +81,11 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/geolocation/zone', [Geolocation::class, 'setZoneGeolocation'])->name('zone');
     });
 
+    Route::name('invoicing.')->group(function () {
+        Route::resource('invoicing/taxpayers', TaxpayerController::class);
+        Route::resource('invoicing/invoices', InvoiceController::class);
+    });
+
     Route::name('ticket.')->group(function () {
         Route::resource('/ticket/stock-requests', StockRequestController::class);
         Route::resource('/ticket/stock-transfers', StockTransferController::class);

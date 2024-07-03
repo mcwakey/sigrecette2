@@ -73,6 +73,12 @@ class TaxpayersDataTable extends DataTable
                 // }
                 //return $taxpayer->zone->name;
             })
+            ->editColumn('status', function (Taxpayer $taxpayerinfo) {
+                return view('pages/taxpayers.columns._aproval', compact('taxpayerinfo'));
+            })
+            ->editColumn('created_at', function (Taxpayer $taxpayer) {
+                return $taxpayer->created_at->format('d M Y');
+            })
             ->editColumn('created_at', function (Taxpayer $taxpayer) {
                 return $taxpayer->created_at->format('d M Y');
             })
@@ -105,12 +111,16 @@ class TaxpayersDataTable extends DataTable
             ->where('taxpayers.type', '=',Constants::TITRE)->select('taxpayers.*') // Select columns from taxpayers table
            ->newQuery();
 
+        if ($this->state) {
+            $query->where('taxpayers.from_mobile_and_validate_state','=',TaxpayerStateEnums::PENDING);
+        }else{
+            $query->where('taxpayers.from_mobile_and_validate_state', TaxpayerStateEnums::APPROVED)
+                ->orWhereNull('taxpayers.from_mobile_and_validate_state');
+        }
         if ($this->disable!==null && $this->disable) {
             $query->onlyTrashed();
         }
-        if ($this->state) {
-            $query->where('taxpayers.from_mobile_and_validate_state','=',TaxpayerStateEnums::PENDING);
-        }
+
         return $query;
     }
 
@@ -152,6 +162,7 @@ class TaxpayersDataTable extends DataTable
             //Column::make('erea.name')->title(__('erea')),
             Column::make('address')->title(__('address')),
             Column::make('zone.name')->title(__('zone'))->name("zone.name"),
+            Column::make('status')->title(__('aproval')),
             //Column::make('created_at')->title(__('created at'))->addClass('text-nowrap created_at')->visible(false),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
@@ -165,6 +176,9 @@ class TaxpayersDataTable extends DataTable
                     if (in_array($column->name, ['action'])) {
                         $column->visible(false);
                     }
+                }
+                if(in_array($column->name, ['action'])){
+
                 }
 
 
