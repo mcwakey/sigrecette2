@@ -239,7 +239,7 @@ $filters = [
                         @if((request()->routeIs('invoices.*') && !request()->has('delivery')&&!request()->has('state') && request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY) || $aucomptant)
 
                         @endif
-                        @if( $is_general_list)
+
                             <div class="col-xxl-2 ">
                                 <!--begin::Col-->
                                 <label class="fs-6 form-label fw-bold text-dark">{{ __('aproval') }}</label>
@@ -265,7 +265,7 @@ $filters = [
                                 <!--end::Select-->
                                 <!--end::Row-->
                             </div>
-                        @endif
+                      
 
                         <div class="col-xxl-2">
                             <!--begin::Row-->
