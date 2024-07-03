@@ -18,6 +18,8 @@
             {{ "Prise en charge/Rejet des avis sur titre" }}
         @elseif(request()->routeIs('recoveries.*') &&  request()->has('delivery')&& request()->input('delivery') ==  App\Helpers\Constants::INVOICE_DELIVERY_LIV_KEY)
             {{"Liste des ".__('invoices')." à recouvrer"}}
+        @elseif(request()->routeIs('invoicing.*')&& request()->has('state'))
+            {{__('Liste des ' .__('invoices'). ' prise en charge')}}
         @elseif(request()->routeIs('invoicing.*'))
             {{__('Liste des ' .__('invoices'). ' au comptant')}}
         @else
@@ -266,7 +268,7 @@ $filters = [
                                 <!--end::Select-->
                                 <!--end::Row-->
                             </div>
-                      
+
 
                         <div class="col-xxl-2">
                             <!--begin::Row-->
