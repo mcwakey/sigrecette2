@@ -41,7 +41,7 @@ class AddDeliveryForm extends Component
 
         if (
             $invoice  ) {
-            if($invoice->type ==Constants::INVOICE_TYPE_TITRE && $invoice->edition_state != "dPRINT"){
+            if($invoice->type ==Constants::INVOICE_TYPE_TITRE &&  !$invoice->ondistributionprint){
                 $this->error_message="Veuillez au préalable imprimer une fiche de distribuation contenant l'avis.";
                 $this->addError('delivery_to', $this->error_message);
 

@@ -89,6 +89,9 @@ class Constants
             elseif(request()->input('state') == self::INVOICE_STATE_PENDING_KEY ){
                 return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::EDITSTATUT,InvoiceActionsEnums::PRINT];
             }
+            elseif(request()->input('state') == self::INVOICE_STATE_APPROVE_KEY ){
+                return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::REDUCE];
+            }
         }else{
         if (request()->has('delivery')){
                 if( request()->input('delivery')==Constants::INVOICE_DELIVERY_NON_LIV_KEY){

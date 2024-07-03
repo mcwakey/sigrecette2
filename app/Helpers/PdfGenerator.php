@@ -416,7 +416,9 @@ class PdfGenerator  implements PdfGeneratorInterface
     public function generateInvoiceDistribtionOrInvoiceRecouvrementPdf(array|PrintFile $data,string $template,int $action=null,User $user=null): array
     {
         $type = null;
+
         if($action==4){
+
             $type=PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS;
         }elseif ($action==41){
             $type=PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES;
