@@ -1,5 +1,7 @@
 <x-default-layout>
-
+    @php
+        $is_general_list= false;
+    @endphp
     @section('title')
 
         @if(request()->routeIs('invoices.*') && request()->has('type') &&  request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY)
@@ -18,6 +20,9 @@
             {{"Liste des ".__('invoices')." à recouvrer"}}
         @else
             {{ "Liste générale des avis sur titre " }}
+            @php
+            $is_general_list= true;
+            @endphp
         @endif
 
     @endsection
@@ -28,6 +33,18 @@
 
         @php
             $aucomptant =  (request()->input('type') == App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY);
+            $current_request = request()->all();
+            //$state = isset($current_request['state']) ? App\Helpers\Constants::INVOICE_STATE_VALIDATION_MAP[$current_request['state']] : null;
+            //$to_paid = isset($current_request['to_paid']) ? $current_request['to_paid']: null;
+            // $delivery = isset($current_request['delivery']) ? $current_request['delivery'] : null;
+            //$type = isset($current_request['type'])?App\Helpers\Constants::INVOICE_TYPE_VALIDATION_MAP[$current_request['type']] : null;
+$filters = [
+    'state' => isset($current_request['state']) ? App\Helpers\Constants::INVOICE_STATE_VALIDATION_MAP[$current_request['state']] : null,
+    'to_paid' => $current_request['to_paid'] ?? null,
+    'delivery' => $current_request['delivery'] ?? null,
+    'type' => isset($current_request['type']) ? App\Helpers\Constants::INVOICE_TYPE_VALIDATION_MAP[$current_request['type']] : null,
+];
+
         @endphp
     <div class="card">
         <!--begin::Card header-->
@@ -108,7 +125,8 @@
                                 @can('peut émettre un avis au comptant')
                                 <button type="button" class="btn btn-light-success ms-auto me-5" data-kt-user-id="1"
                                         data-bs-toggle="modal" data-bs-target="#kt_modal_add_invoice_no_taxpayer"
-                                        data-kt-action="add_no_invoice">
+                                        data-kt-action="add_no_invoice"
+                                id="invoicebtnc">
                                     <i class="ki-duotone ki-add-files fs-3">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
@@ -221,31 +239,34 @@
                         @if((request()->routeIs('invoices.*') && !request()->has('delivery')&&!request()->has('state') && request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY) || $aucomptant)
 
                         @endif
-                        <div class="col-xxl-2 ">
-                            <!--begin::Col-->
-                            <label class="fs-6 form-label fw-bold text-dark">{{ __('aproval') }}</label>
-                            <!--begin::Select-->
-                            <select class="form-select" id="mySearchTen">
-                                <option value=""></option>
-                                @if($aucomptant)
-                                    <option value="{{ App\Enums\InvoiceStatusEnums::PENDING}}">{{ __('PENDING') }}</option>
-                                    <option value="{{App\Enums\InvoiceStatusEnums::APPROVED}}">{{ __('APROVED') }}</option>
-                                    <option value="{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}">{{ __("AVIS D'ANNULATION/REDUCTION") }}</option>
+                        @if( $is_general_list)
+                            <div class="col-xxl-2 ">
+                                <!--begin::Col-->
+                                <label class="fs-6 form-label fw-bold text-dark">{{ __('aproval') }}</label>
+                                <!--begin::Select-->
+                                <select class="form-select" id="mySearchTen">
+                                    <option value=""></option>
+                                    @if($aucomptant)
+                                        <option value="{{ App\Enums\InvoiceStatusEnums::PENDING}}">{{ __('PENDING') }}</option>
+                                        <option value="{{App\Enums\InvoiceStatusEnums::APPROVED}}">{{ __('APROVED') }}</option>
+                                        <option value="{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}">{{ __("AVIS D'ANNULATION/REDUCTION") }}</option>
 
-                                @else
-                                    <option value="{{App\Enums\InvoiceStatusEnums::APPROVED}}">{{ __('APROVED') }}</option>
-                                    <option value="{{ App\Enums\InvoiceStatusEnums::REJECTED }}">{{ __('REJECTED') }}</option>
-                                    <option value="{{  App\Enums\InvoiceStatusEnums::CANCELED }}">{{ __('CANCELED') }}</option>
-                                    <option value="{{  App\Enums\InvoiceStatusEnums::REDUCED }}">{{ __('REDUCED') }}</option>
-                                    <option value="{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}">{{ __("AVIS D'ANNULATION/REDUCTION") }}</option>
-                                    <option value="{{ App\Enums\InvoiceStatusEnums::PENDING}}">{{ __('PENDING') }}</option>
-                                    <option value="{{ App\Enums\InvoiceStatusEnums::ACCEPTED}}">{{ __('ACCEPTED') }}</option>
-                                    <option value="{{ App\Enums\InvoiceStatusEnums::DRAFT}}">{{ __('DRAFT') }}</option>
-                                @endif
-                            </select>
-                            <!--end::Select-->
-                            <!--end::Row-->
-                        </div>
+                                    @else
+                                        <option value="{{App\Enums\InvoiceStatusEnums::APPROVED}}">{{ __('APROVED') }}</option>
+                                        <option value="{{ App\Enums\InvoiceStatusEnums::REJECTED }}">{{ __('REJECTED') }}</option>
+                                        <option value="{{  App\Enums\InvoiceStatusEnums::CANCELED }}">{{ __('CANCELED') }}</option>
+                                        <option value="{{  App\Enums\InvoiceStatusEnums::REDUCED }}">{{ __('REDUCED') }}</option>
+                                        <option value="{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}">{{ __("AVIS D'ANNULATION/REDUCTION") }}</option>
+                                        <option value="{{ App\Enums\InvoiceStatusEnums::PENDING}}">{{ __('PENDING') }}</option>
+                                        <option value="{{ App\Enums\InvoiceStatusEnums::ACCEPTED}}">{{ __('ACCEPTED') }}</option>
+                                        <option value="{{ App\Enums\InvoiceStatusEnums::DRAFT}}">{{ __('DRAFT') }}</option>
+                                    @endif
+                                </select>
+                                <!--end::Select-->
+                                <!--end::Row-->
+                            </div>
+                        @endif
+
                         <div class="col-xxl-2">
                             <!--begin::Row-->
                             <!--begin::Col-->
@@ -397,6 +418,7 @@
     @push('scripts')
         {{ $dataTable->scripts() }}
         <script>
+
             document.getElementById('mySearchInput').addEventListener('keyup', function () {
                 window.LaravelDataTables['invoices-table'].search(this.value).draw();
             });
@@ -473,52 +495,7 @@
                 newMenuItem.appendChild(newLink);
                 printModal.appendChild(newMenuItem);
             }
-            function onSelectedValueChanged(selectedValue) {
-                removePrintMenuItems();
-                const array = ['{{App\Enums\InvoiceStatusEnums::APPROVED}}','{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}','{{  App\Enums\InvoiceStatusEnums::CANCELED }}','{{ App\Enums\InvoiceStatusEnums::PENDING}}',"{{ App\Enums\InvoiceStatusEnums::REJECTED }}",'{{ App\Enums\InvoiceStatusEnums::REDUCED}}'];
-                if (array.includes(selectedValue)) {
-                    printButton.classList.add('btn-active-light-primary');
-                    printButton.classList.remove( "d-none");
-                    const approve_array = ['{{App\Enums\InvoiceStatusEnums::APPROVED}}','{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}','{{  App\Enums\InvoiceStatusEnums::CANCELED }}','{{ App\Enums\InvoiceStatusEnums::REDUCED}}'];
-                    if (
-                        approve_array.includes(selectedValue)
-                    ) {
-
-
-                        if( aucomptant){
-                            addPrintMenuItem('{{ __('Registre-journal des déclarations préalables des usagers') }}', '77');
-                        }else {
-                            agentDiv.classList.remove( "d-none")
-                            addPrintMenuItem('{{ __('Fiche de recouvrement des avis distribués') }}', '41');
-                            addPrintMenuItem('{{ __('Fiche de distribution des avis') }}', '4');
-                            addPrintMenuItem('{{ __('Journal des avis des sommes à payer confiés par le receveur') }}', '5');
-                            addPrintMenuItem('{{ __('Registre-journal des avis distribués') }}', '3');
-                        }
-                    }else if(  selectedValue ==="{{ App\Enums\InvoiceStatusEnums::PENDING}}" ){
-                        if(aucomptant){
-                            addPrintMenuItem('{{ __('Registre-journal des déclarations préalables des usagers') }}', '77');
-
-                        }else {
-                            addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
-                            addPrintMenuItem('{{ __('Bordereau journal des avis de réduction ou d’annulation') }}', '2');
-                        }
-                        agentDiv.classList.add( "d-none")
-                    }else addPrintMenuItem('', '1');
-
-                }
-
-                else {
-                    printButton.classList.remove('btn-active-light-primary');
-                    printButton.classList.add( "d-none");
-                }
-                printButton.classList.add('btn-active-light-primary');
-                printButton.classList.remove( "d-none");
-            }
-
-            const selectElement = document.getElementById('mySearchTen');
-            selectElement.addEventListener('change', function(event) {
-                const selectedValue = event.target.value;
-                onSelectedValueChanged(selectedValue);
+            function afterSelected(){
                 document.querySelectorAll('.print-link').forEach(function(link) {
                     link.addEventListener('click', function(event) {
                         event.preventDefault();
@@ -554,8 +531,62 @@
                         window.open(url,'_blank');
                     });
                 });
-            });
+            }
+            function onSelectedValueChanged(selectedValue) {
+                removePrintMenuItems();
+                const array = ['{{App\Enums\InvoiceStatusEnums::APPROVED}}','{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}','{{  App\Enums\InvoiceStatusEnums::CANCELED }}','{{ App\Enums\InvoiceStatusEnums::PENDING}}',"{{ App\Enums\InvoiceStatusEnums::REJECTED }}",'{{ App\Enums\InvoiceStatusEnums::REDUCED}}'];
+                if (array.includes(selectedValue)) {
+                    printButton.classList.add('btn-active-light-primary');
+                    printButton.classList.remove( "d-none");
+                    const approve_array = ['{{App\Enums\InvoiceStatusEnums::APPROVED}}','{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}','{{  App\Enums\InvoiceStatusEnums::CANCELED }}','{{ App\Enums\InvoiceStatusEnums::REDUCED}}'];
+                    if (
+                        approve_array.includes(selectedValue)
+                    ) {
 
+
+                        if( aucomptant){
+                            addPrintMenuItem('{{ __('Registre-journal des déclarations préalables des usagers') }}', '77');
+                        }else {
+                            agentDiv.classList.remove( "d-none")
+                            addPrintMenuItem('{{ __('Fiche de recouvrement des avis distribués') }}', '41');
+                            addPrintMenuItem('{{ __('Fiche de distribution des avis') }}', '4');
+                            addPrintMenuItem('{{ __('Journal des avis des sommes à payer confiés par le receveur') }}', '5');
+                            addPrintMenuItem('{{ __('Registre-journal des avis distribués') }}', '3');
+                        }
+                    }else if(  selectedValue ==="{{ App\Enums\InvoiceStatusEnums::PENDING}}" && !aucomptant){
+                        addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
+                        addPrintMenuItem('{{ __('Bordereau journal des avis de réduction ou d’annulation') }}', '2');
+                        agentDiv.classList.add( "d-none")
+                    }else if(  selectedValue ==="{{ App\Enums\InvoiceStatusEnums::PENDING}}" ||  selectedValue ==="{{ App\Enums\InvoiceStatusEnums::APPROVED}}" && aucomptant){
+                        addPrintMenuItem('{{ __('Registre-journal des déclarations préalables des usagers') }}', '77');
+                        agentDiv.classList.add( "d-none")
+                    }
+                    else addPrintMenuItem('', '1');
+
+                }
+
+                else {
+                    printButton.classList.remove('btn-active-light-primary');
+                    printButton.classList.add( "d-none");
+                }
+                printButton.classList.add('btn-active-light-primary');
+                printButton.classList.remove( "d-none");
+                afterSelected();
+            }
+
+
+            const selectElement = document.getElementById('mySearchTen');
+            selectElement.addEventListener('change', function(event) {
+                const selectedValue = event.target.value;
+                onSelectedValueChanged(selectedValue);
+            });
+            let filters =@json($filters);
+
+            onSelectedValueChanged(filters.state);
+            console.log(filters)
+            if(!filters.state && filters.delivery=='nonliv' && filters.type== "TITRE"){
+                onSelectedValueChanged("{{ App\Enums\InvoiceStatusEnums::APPROVED}}");
+            }
 
         </script>
 

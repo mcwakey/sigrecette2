@@ -256,8 +256,9 @@ class AddTaxpayerModal extends Component
         $this->address = $taxpayer->address;
 
         $this->file_no = $taxpayer->file_no;
-        $this->category_id = $taxpayer->category_id;
         $this->activity_id = $taxpayer->activity_id;
+        $this->category_id = $taxpayer->category_id;
+
         $this->other_work = $taxpayer->other_work;
         $this->authorisation = $taxpayer->authorisation;
         $this->auth_reference = $taxpayer->auth_reference;

@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Enums\InvoiceActionsEnums;
 use App\Enums\InvoiceStatusEnums;
+use App\Models\Invoice;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 class Constants
@@ -22,6 +23,7 @@ class Constants
 
 
     const INVOICE_STATE_DRAFT_KEY = 'br';
+    const INVOICE_STATE_APPROVE_KEY = 'pr';
     const INVOICE_STATE_ACCEPTED_KEY = 'ac';
     const INVOICE_STATE_PENDING_KEY = 'at';
     const INVOICE_STATE_REJECT_KEY = 'rj';
@@ -39,7 +41,8 @@ class Constants
         self::INVOICE_STATE_DRAFT_KEY => InvoiceStatusEnums::DRAFT,
         self::INVOICE_STATE_ACCEPTED_KEY => InvoiceStatusEnums::ACCEPTED,
         self::INVOICE_STATE_PENDING_KEY => InvoiceStatusEnums::PENDING,
-        self::INVOICE_STATE_REJECT_KEY => InvoiceStatusEnums::REJECTED
+        self::INVOICE_STATE_REJECT_KEY => InvoiceStatusEnums::REJECTED,
+        self::INVOICE_STATE_APPROVE_KEY => InvoiceStatusEnums::APPROVED
     ];
 
     const INVOICE_DELIVERY_STATE_VALIDATION_MAP = [
