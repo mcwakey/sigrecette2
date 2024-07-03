@@ -6,7 +6,6 @@
 @if($invoice->can("submit_for_approved"))
     <div class="badge badge-lg badge-light-primary d-inline">{{ __($invoice->status) }}
         @if(in_array(App\Enums\InvoiceActionsEnums::EDITSTATUT,$actions))
-            @can('peut prendre en charge un avis sur titre')
                 <button type="button"
                         class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto  pulse pulse-warning"
                         data-kt-user-id="{{ $invoice->id }}"
@@ -36,7 +35,6 @@
                     <div class="separator border-gray-200"></div>
                     <livewire:invoice.add-status-form/>
                 </div>
-            @endcan
         @endif
 
     </div>
