@@ -323,7 +323,7 @@ class Invoice extends Model implements FormatDateInterface
             $paidTotal = array_sum($paidAmounts) ?? 0;
             foreach ($sumsByTaxCode as $code => $code_amount) {
                 if ($amount > 0 && $code_amount['amount'] > 0) {
-                    if( isset($paymentData["code"]) && $paymentData["code"] ==null)
+                    if( $paymentData["code"] ==null)
                     {
                         $paymentData["code"] = $code;
                     }//elseif ($amount> $sumsByTaxCode[ $paymentData["code"] ]['amount']){$amount=$sumsByTaxCode[$paymentData["code"]]['amount'];}
