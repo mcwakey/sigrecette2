@@ -130,7 +130,7 @@ $total_vendu=0;
     @endphp
     @foreach($data as $index => $item)
 
-        @if($item->type=="ACTIVE")
+        @if($item->type=="ACTIVE"|| 1==1)
             <tr>
                 <td>{{ $item->taxable->name }}</td>
                 <td>{{$item->taxable->tariff}}</td>
