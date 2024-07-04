@@ -145,7 +145,7 @@ class StockTransfersDataTable extends DataTable
             ->addColumn('action', function (StockTransfer $stock_transfer) {
                 return view('pages.stock_transfers.columns._actions', compact('stock_transfer'));
             })
-            ->editColumn('stock_transfers.period_from', function (StockTransfer $stock_transfer) {
+            ->editColumn('stock_transfers.period', function (StockTransfer $stock_transfer) {
                 return $stock_transfer->period_from ." - " $stock_transfer->period_to;
             })
 
@@ -235,7 +235,7 @@ class StockTransfersDataTable extends DataTable
             // //Column::make('location')->title(__('location'))->addClass('text-nowrap'),
             // Column::make('users.name')->title(__('collector')),
             Column::make('stock_transfers.type')->title(__('status')),
-            Column::make('stock_transfers.period_from')->title(__('Période')),
+            Column::make('stock_transfers.period')->title(__('Période')),
             Column::computed('action')->title(__('action'))
                 ->addClass('text-end text-nowrap')
                 ->exportable(false)
