@@ -58,11 +58,11 @@
 
                                     <select data-kt-action="load_drop" wire:model.live="trans_no" name="trans_no" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
                                         <option>{{ __('select an option') }}</option>
-                                        <option value="001">001</option>
-                                        <option value="002">002</option>
-                                        <!-- @foreach($collectors as $collector)
-                                            <option value="{{ $collector->id}}">{{ $collector->user_name}}</option>
-                                    @endforeach -->
+                                        <!-- <option value="001">001</option>
+                                        <option value="002">002</option> -->
+                                        @foreach($request_nos as $collector)
+                                            <option value="{{ $collector->req_no}}">{{ $collector->req_no}}</option>
+                                    @endforeach
                                     </select>
 
                                     <!-- <input  data-kt-action="load_drop" type="text" wire:model.live="trans_no" name="trans_no" class="form-control mb-3 mb-lg-0" placeholder="{{ __('req no') }}" readonly/> -->
@@ -74,7 +74,7 @@
 
                                     <label class="required fs-6 fw-semibold mb-2">{{ __('Period de collect') }}</label>
 
-                                    <input type="text" wire:model.live="period_from_a" name="period_from" class="form-control mb-3 mb-lg-0" placeholder="{{ __('req no') }}" />
+                                    <input type="text" wire:model.live="period_from" name="period_from" class="form-control mb-3 mb-lg-0" placeholder="{{ __('req no') }}" />
                                     <!--end::Input-->
                                     @error('period_from')
                                     <span class="text-danger">{{ $message }}</span> @enderror
@@ -83,7 +83,7 @@
 
                                     <!-- <label class="required fs-6 fw-semibold mb-2">{{ __('Period de collect') }}</label> -->
 
-                                    <input type="text" wire:model.live="period_to_a" name="period_to" class="form-control mb-3 mt-8 mb-lg-0" placeholder="{{ __('req no') }}" />
+                                    <input type="text" wire:model.live="period_to" name="period_to" class="form-control mb-3 mt-8 mb-lg-0" placeholder="{{ __('req no') }}" />
                                     <!--end::Input-->
                                     @error('period_to')
                                     <span class="text-danger">{{ $message }}</span> @enderror
