@@ -82,7 +82,7 @@
                 <!--end:Menu sub-->
             </div>
             <!--end:Menu item-->
-            
+
             <!--begin:Menu item-->
             <div data-kt-menu-trigger="click"
                  class="menu-item menu-accordion {{ request()->routeIs('invoicing.*') ? 'here show' : '' }}">
@@ -302,15 +302,7 @@
                             <span class="menu-title">{{ __('new stock request') }}</span>
                         </a>
                     </div>
-                    <div class="menu-item">
-                        <a class="menu-link {{request()->routeIs('ticket.*') && request()->has('autoClick') && request()->input('autoClick') =='addstocktbtn' ? 'active' : '' }}"
-                           href="{{ route('ticket.stock-transfers.index', [ 'autoClick' => 'addstocktbtn']) }}">
-        <span class="menu-bullet">
-            <span class="bullet bullet-dot"></span>
-        </span>
-                            <span class="menu-title">{{ __('new supply') }}</span>
-                        </a>
-                    </div>
+
                     <div class="menu-item">
                         <a class="menu-link {{ request()->routeIs('ticket.stock-requests.*') && !request()->has('autoClick') ? 'active' : '' }}"
                            href="{{ route('ticket.stock-requests.index') }}">
@@ -321,18 +313,15 @@
                                 </span>
                         </a>
                     </div>
-
-
                     <div class="menu-item">
-                          <span class="menu-link ">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title" data-bs-toggle="modal"
-                                      data-bs-target="#kt_modal_add_stock_transfer" data-kt-action="add_transfer"> {{ __('new supply') }}</span>
-                            </span>
+                        <a class="menu-link }}"
+                           href="{{ route('ticket.stock-transfers.index', [ 'autoClick' => 'addstocktbtn']) }}">
+        <span class="menu-bullet">
+            <span class="bullet bullet-dot"></span>
+        </span>
+                            <span class="menu-title">{{ __('new supply') }}</span>
+                        </a>
                     </div>
-
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <a class="menu-link {{ request()->routeIs('ticket.stock-transfers.*') ? 'active' : '' }}"
