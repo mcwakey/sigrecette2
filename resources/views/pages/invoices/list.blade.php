@@ -586,8 +586,11 @@ $filters = [
             let filters =@json($filters);
 
             onSelectedValueChanged(filters.state);
-            console.log(filters)
+            ///console.log(filters)
             if(!filters.state && filters.delivery=='nonliv' && filters.type== "TITRE"){
+                onSelectedValueChanged("{{ App\Enums\InvoiceStatusEnums::APPROVED}}");
+            }
+            else if(!filters.state && !filters.delivery && aucomptant){
                 onSelectedValueChanged("{{ App\Enums\InvoiceStatusEnums::APPROVED}}");
             }
 
