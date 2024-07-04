@@ -134,6 +134,7 @@ class CollectorsDataTable extends DataTable
                 return view('pages.stock_transfers.columns._status', compact('stock_transfer'));
                 //return $stock_request->type;
             })
+            ->editColumn('stock_transfers.period', function (StockTransfer $stock_transfer) {return $stock_transfer->period_from ." - ".$stock_transfer->period_to;})
             ->addColumn('action', function (StockTransfer $stock_transfer) {
                 return view('pages.stock_transfers.columns._collector_actions', compact('stock_transfer'));
             })
@@ -225,6 +226,7 @@ class CollectorsDataTable extends DataTable
             // //Column::make('location')->title(__('location'))->addClass('text-nowrap'),
             // Column::make('users.name')->title(__('collector')),
             Column::make('stock_transfers.type')->title(__('status')),
+            Column::make('stock_transfers.period')->title(__('Période')),
             Column::computed('action')->title(__('action'))
                 ->addClass('text-end text-nowrap')
                 ->exportable(false)
