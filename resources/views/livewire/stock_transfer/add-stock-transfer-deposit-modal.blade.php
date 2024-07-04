@@ -20,7 +20,7 @@
                 <!--begin::Form-->
                 <form id="kt_modal_add_stock_transfer-deposit_form" class="form" action="#" wire:submit="submit" enctype="multipart/form-data">
                     <!-- <input type="text" wire:model="stock_transfer_id" name="stock_transfer_id"  value=""/> -->
-                    <input type="text" wire:model="user_id" name="user_id" value=""/>
+                    <input type="text" wire:model="user_id" name="user_id" hidden value=""/>
                     <!-- <input type="text" wire:model="collector_id" name="collector_id" value=""/> -->
                     <!--begin::Scroll-->
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_stock_transfer-deposit_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_stock_transfer-deposit_header" data-kt-scroll-wrappers="#kt_modal_add_stock_transfer-deposit_scroll" data-kt-scroll-offset="300px">

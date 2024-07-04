@@ -31,6 +31,8 @@ class AddStockTransferModal extends Component
     public $trans_id;
     public $code;
     public $total;
+    public $period_from;
+    public $period_to;
     //public $tariff;
 
     public $taxable_id;
@@ -350,6 +352,8 @@ class AddStockTransferModal extends Component
 
     public function submit()
     {
+
+        // dd($this->period_from, $this->period_to);
        $this->validateData();
 
         if ($this->getErrorBag()->isEmpty()) {
@@ -371,6 +375,8 @@ class AddStockTransferModal extends Component
 
                         $stockTtransferData = [
                             'trans_no' => $stock_transfer->trans_no,
+                            'period_from' => $stock_transfer->period_from,
+                            'period_to' =>  $stock_transfer->period_to,
                             'trans_id' => $stock_transfer->trans_id,
                             //'qty' => $stock_transfer->qty,
                             'type' => 'ARCHIVED',
@@ -382,6 +388,7 @@ class AddStockTransferModal extends Component
                         ];
 
                         $stock_transfer_new = StockTransfer::create($stockTtransferData);
+                        dd($stock_transfer_new);
 
                         // $stock_transfer_old = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'VENDU')->where('to_user_id', $this->collector_id)->get();
                         $stock_transfer_olds = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'VENDU')->where('taxable_id', $stock_transfer->taxable_id)->where('to_user_id', $this->collector_id)->orderBy('end_no', 'DESC')->get();
@@ -426,6 +433,8 @@ class AddStockTransferModal extends Component
                 // Prepare the data for creating a new Taxable
                 $data = [
                     'trans_no' => $this->trans_no,
+                    'period_from' => $this->period_from,
+                    'period_to' =>  $this->period_to,
                     'qty' => $this->qty,
                     'start_no' => $this->start_no,
                     'end_no' => $this->end_no,

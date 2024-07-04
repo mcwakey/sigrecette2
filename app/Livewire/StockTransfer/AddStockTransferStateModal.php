@@ -54,7 +54,8 @@ class AddStockTransferStateModal extends Component
     public $deposit_mode;
     public $remaining_qty=0;
     public $option_calculus;
-
+    public $period_from;
+    public $period_to;
     protected function rules()
     {
         $rules = [
@@ -100,6 +101,8 @@ class AddStockTransferStateModal extends Component
                         $stockTtransferData = [
                             'trans_no' => $stock_transfer->trans_no,
                             'trans_id' => $stock_transfer->trans_id,
+                            'period_from' => $stock_transfer->period_from,
+                            'period_to' =>  $stock_transfer->period_to,
                             //'qty' => $stock_transfer->qty,
                             'type' => 'ARCHIVED',
                             'end_no' => $stock_transfer->end_no,

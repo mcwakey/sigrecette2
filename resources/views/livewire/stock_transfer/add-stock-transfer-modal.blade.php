@@ -383,7 +383,7 @@
                                         data-td-toggle="datetimepicker">
                                         <i class="ki-duotone ki-calendar fs-2"><span class="path1"></span><span class="path2"></span></i>
                                     </span>
-                                    <input readonly id="date-picker-input-one" type="text" wire:model.live="period_from_a" name="period_from" class="form-control mb-3 mb-lg-0" placeholder="{{ __('Date') }}" />
+                                    <input readonly id="date-picker-input-one" type="text" wire:model="period_from" name="period_from" class="form-control mb-3 mb-lg-0" placeholder="{{ __('Date') }}" />
                                 </div>
                                 @error('period_from')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -397,7 +397,7 @@
                                         data-td-toggle="datetimepicker">
                                         <i class="ki-duotone ki-calendar fs-2"><span class="path1"></span><span class="path2"></span></i>
                                     </span>
-                                    <input id="date-picker-input-two" type="text" wire:model.live="period_to_a" name="period_to" class="form-control mb-3 mb-lg-0" placeholder="{{ __('Date') }}" />
+                                    <input id="date-picker-input-two" type="text" wire:model="period_to" name="period_to" class="form-control mb-3 mb-lg-0" placeholder="{{ __('Date') }}" />
                                 </div>
                                 <!--end::Input-->
                                 @error('period_to')

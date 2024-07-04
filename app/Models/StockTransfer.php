@@ -24,7 +24,9 @@ class StockTransfer extends Model
         'by_user_id',
         'to_user_id',
         'payment_id',
-        'stock_request_id'
+        'stock_request_id',
+        'period_to',
+        'period_from'
     ];
 
     public function taxable()
