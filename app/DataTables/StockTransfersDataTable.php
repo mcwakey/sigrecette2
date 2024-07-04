@@ -145,7 +145,7 @@ class StockTransfersDataTable extends DataTable
             ->addColumn('action', function (StockTransfer $stock_transfer) {
                 return view('pages.stock_transfers.columns._actions', compact('stock_transfer'));
             })
-            
+
 
             ->setRowId('id');
     }
