@@ -56,7 +56,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <!--begin::Label-->
-                                    <label class=" fw-semibold fs-6 mb-2">{{ __('id type') }}</label>
+                                    <label class="required fw-semibold fs-6 mb-2">{{ __('id type') }}</label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <!-- <select aria-label="Select an ID Type" data-control="select2" data-placeholder="Select an ID Type..." class="form-select "
