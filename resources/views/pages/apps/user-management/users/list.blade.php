@@ -1,7 +1,11 @@
 <x-default-layout>
 
     @section('title')
+        @if(!request()->has('disable') && request()->has('type') && request()->has('type') == 'col')
+            {{__('Collecteurs')}}
+        @else
         {{__('users')}}
+        @endif
     @endsection
 
     @section('breadcrumbs')
