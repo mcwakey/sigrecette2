@@ -131,7 +131,7 @@ class AddStockTransferDepositModal extends Component
 
 
         $taxlabel_list = TaxLabel::where('category', 'CATEGORY 3')->get();
-        $stock_requests= StockRequest::where('req_type','DEMANDE')->where('type','ACTIVE')->get();        
+        $stock_requests= StockRequest::where('req_type','DEMANDE')->where('type','ACTIVE')->get();
 
         $collectors = User::select('users.id', 'users.name as user_name', 'roles.name as role_name')
                             ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
@@ -180,7 +180,7 @@ class AddStockTransferDepositModal extends Component
     public function updatedTransNo($value)
     {
         // $this->stock_requests= StockRequest::where('req_type','DEMANDE')->where('type','ACTIVE')->where('req_no', $value)->get();
-        
+
 
         $this->stock_transfers = StockTransfer::
         where('trans_type', 'RECU')
@@ -532,7 +532,7 @@ class AddStockTransferDepositModal extends Component
                             'description' => "Etat de versement collecteur ".User::find($this->collector_id)?->name,
                             'user_id' => $this->user_id,
                             'r_user_id' => $this->collector_id,
-                            'reference' => $this->taxlabel_id,
+                            'reference' => $this->taxlabel_id ?? " ",
                         ];
 
                         //dd($paymentData);
