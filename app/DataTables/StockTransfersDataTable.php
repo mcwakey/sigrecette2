@@ -144,10 +144,10 @@ class StockTransfersDataTable extends DataTable
             })
             ->addColumn('action', function (StockTransfer $stock_transfer) {
                 return view('pages.stock_transfers.columns._actions', compact('stock_transfer'));
-            });
+            })
             ->editColumn('stock_transfers.period', function (StockTransfer $stock_transfer) {
                 return $stock_transfer->period_from ." - ".$stock_transfer->period_to;
-            });
+            })
 
             ->setRowId('id');
     }
