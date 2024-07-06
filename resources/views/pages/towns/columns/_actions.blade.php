@@ -22,14 +22,6 @@
         <!--end::Menu item-->
     @endcan
 
-    @can('peut supprimer un village/quartier')
-        <!--begin::Menu item-->
-        <div class="menu-item px-3">
-            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $town->id }}" data-kt-action="delete_row">
-            {{ __('delete') }}
-            </a>
-        </div>
-        <!--end::Menu item-->
-    @endcan
+
 </div>
 <!--end::Menu-->

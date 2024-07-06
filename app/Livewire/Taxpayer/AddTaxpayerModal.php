@@ -4,6 +4,7 @@ namespace App\Livewire\Taxpayer;
 
 use App\Events\TaxpayerAction;
 use App\Models\Activity;
+use App\Models\Commune;
 use App\Models\Erea;
 use App\Models\Town;
 use App\Models\Zone;
@@ -90,7 +91,7 @@ class AddTaxpayerModal extends Component
 
             // 'auth_reference' => 'required',
             // 'nif' => 'required',
-            // 'social_work' => 'required',
+            'social_work' => 'nullable|string',
 
             'canton' => 'required',
             'town_id' => 'required|int',
@@ -144,8 +145,8 @@ class AddTaxpayerModal extends Component
                 'id_number' => $this->id_number,
                 'mobilephone' => $this->mobilephone,
                 'telephone' => $this->telephone,
-                'longitude' => $this->longitude,
-                'latitude' => $this->latitude,
+                'longitude' => $this->longitude??Commune::getFirstCommune()->longitude,
+                'latitude' => $this->latitude??Commune::getFirstCommune()->latitude,
                 'address' => $this->address,
 
                 'file_no' => $this->file_no,
@@ -160,6 +161,7 @@ class AddTaxpayerModal extends Component
                 'town_id' => $this->town_id,
                 'zone_id' => $this->zone_id,
             ];
+
 
             if ($this->avatar) {
                 $data['profile_photo_path'] = $this->avatar->store('avatars', 'public');
