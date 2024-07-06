@@ -43,6 +43,7 @@
 
 
         </div>
+        @if(request()->routeIs('taxpayers.*'))
 
             <div class="card-toolbar">
 
@@ -79,6 +80,7 @@
                 @endif
 
             </div>
+            @endif
 
 
 

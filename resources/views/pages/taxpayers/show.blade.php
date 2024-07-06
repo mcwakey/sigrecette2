@@ -766,11 +766,6 @@
                 <div style="width:480px;min-height:200px;border-radius:8px;">
                                 <div style="padding:10px;text-align:center;display:flex;align-items:flex-start;flex-direction:column;">
 
-                                    <div style="margin-bottom:6px;display:flex;justify-content:space-between;width:100%;align-items:center;">
-                                        <h2 class="text-dark">Informations du contribuable</h2 class="text-dark">
-                                        <a class="badge pt-2 pb-2 bg-secondary" href="/taxpayers/${taxpayer.id}" class="">Afficher</a>
-                                    </div>
-
                                     <div style="margin-bottom:6px;">
                                         <span style="font-weight:600;font-size:15px;"> Nom complet </span>
                                         <span style="font-size:15px"> : ${taxpayer.name}</span>
@@ -808,11 +803,9 @@
                                 </div>
                             </div>`;
 
+                try {
 
-                if (taxpayer.invoices.length) {
-                    let {
-                        invoices
-                    } = taxpayer;
+                    let {invoices} = taxpayer;
                     let icon = null;
 
                     invoices.forEach(invoice => {
@@ -824,14 +817,14 @@
                         } else {
                             icon = taxpayerGreen;
                         }
-
                     });
 
                     L.marker([latitude, longitude], {
                             icon: icon
                         }).addTo(map_render)
                         .bindPopup(popupContent);
-                } else {
+                    
+                } catch (error) {
                     L.marker([latitude, longitude], {
                             icon: taxpayerBlue
                         }).addTo(map_render)

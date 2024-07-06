@@ -258,8 +258,10 @@ class AddTaxpayerModal extends Component
         $this->address = $taxpayer->address;
 
         $this->file_no = $taxpayer->file_no;
-        $this->activity_id = $taxpayer->activity_id;
+        
         $this->category_id = $taxpayer->category_id;
+        $this->updatedCategoryId($taxpayer->category_id);
+        $this->activity_id = $taxpayer->activity_id;
 
         $this->other_work = $taxpayer->other_work;
         $this->authorisation = $taxpayer->authorisation;
@@ -268,6 +270,7 @@ class AddTaxpayerModal extends Component
         $this->social_work = $taxpayer->social_work;
 
         $this->canton = $taxpayer->town->canton->id;
+        $this->updatedCanton($taxpayer->town->canton->id);
         $this->town_id = $taxpayer->town_id;
         $this->zone_id = $taxpayer->zone_id;
     }
