@@ -250,8 +250,10 @@
                                         <select wire:model="activity_id" name="activity_id" class="form-select " data-dropdown-parent="#kt_modal_add_taxpayer">
                                             <option>{{ __('select an option') }}</option>
                                             @foreach($activities as $activity)
-                                                @if( $activity->status=="ACTIVE")
-                                            <option value="{{ $activity->id }}">{{ $activity->name }}</option>
+                                                @if( $activity_id == $activity->id)
+                                                <option selected value="{{ $activity->id }}">{{ $activity->name }}</option>
+                                                @else
+                                                <option value="{{ $activity->id }}">{{ $activity->name }}</option>
                                                 @endif
                                             @endforeach
                                         </select>
@@ -355,11 +357,14 @@
                                         <label class="required fw-semibold fs-6 mb-2">{{ __('Villages/Quartiers') }}</label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <select data-kt-action="load_drop" wire:model="town_id" name="town_id" class="form-select">
+                                        <select wire:model="town_id" name="town_id" class="form-select">
                                             <option>{{ __('select an option') }}</option>
+
                                             @foreach($towns as $town)
-                                                @if( $town->status=="ACTIVE")
-                                            <option value="{{ $town->id }}">{{ $town->name }}</option>
+                                                @if ( $town_id == $town->id)
+                                                <option value="{{ $town_id }}" selected>{{ $town->name }}</option>
+                                                @else
+                                                <option value="{{ $town->id }}">{{ $town->name }}</option>
                                                 @endif
                                             @endforeach
                                         </select>
