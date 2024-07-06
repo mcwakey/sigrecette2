@@ -22,14 +22,6 @@
     <!--end::Menu item-->
     @endcan
 
-    @can('peut supprimer une activité')
-        <!--begin::Menu item-->
-        <div class="menu-item px-3">
-            <a href="#" class="menu-link px-3" data-kt-user-id="{{ $activity->id }}" data-kt-action="delete_row">
-            {{ __('delete') }}
-            </a>
-        </div>
-        <!--end::Menu item-->
-    @endcan
+
 </div>
 <!--end::Menu-->
