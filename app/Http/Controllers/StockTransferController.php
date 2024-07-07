@@ -26,9 +26,11 @@ class StockTransferController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $userId, StockTransfersDataTable $dataTable)
+    public function show(string $userId,  StockTransfersDataTable $dataTable)
     {
          $user = User::find($userId);
+         $dateFrom = "2024-07-14";
+         $dateTo = "2024-07-14";
          //dd($user, $dataTable);
         //return view('pages/stock_transfers.show', compact('user'));
 
@@ -38,7 +40,7 @@ class StockTransferController extends Controller
         //                             ->where('roles.name', 'collecteur')
         //                             ->get();
 
-        return $dataTable->with('id', $user->id)->render('pages/stock_transfers.show', compact('user'));
+        return $dataTable->with('id', $user->id)->with('dateFrom', $dateFrom)->render('pages/stock_transfers.show', compact('user', 'dateFrom', 'dateTo'));
     }
 }
 

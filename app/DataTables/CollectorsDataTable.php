@@ -31,9 +31,9 @@ class CollectorsDataTable extends DataTable
             //     }
             // })
             ->rawColumns(['status'])
-            // ->editColumn('id', function (StockTransfer $stock_transfer) {
-            //     return $stock_transfer->id;
-            // })
+            ->editColumn('id', function (StockTransfer $stock_transfer) {
+                return $stock_transfer->id;
+            })
             // ->editColumn('trans_no', function (StockTransfer $stock_transfer) {
             //     return view('pages.stock_transfers.columns._bill', compact('stock_transfer'));
             // })
@@ -134,7 +134,10 @@ class CollectorsDataTable extends DataTable
                 return view('pages.stock_transfers.columns._status', compact('stock_transfer'));
                 //return $stock_request->type;
             })
-            ->editColumn('stock_transfers.period', function (StockTransfer $stock_transfer) {return $stock_transfer->period_from ." - ".$stock_transfer->period_to;})
+            ->editColumn('period', function (StockTransfer $stock_transfer) {
+                // return $stock_transfer->period_from->format('d M Y')." - ".$stock_transfer->period_to->format('d M Y');
+                return $stock_transfer->period_from." - ".$stock_transfer->period_to;
+            })
             ->addColumn('action', function (StockTransfer $stock_transfer) {
                 return view('pages.stock_transfers.columns._collector_actions', compact('stock_transfer'));
             })
@@ -171,13 +174,15 @@ class CollectorsDataTable extends DataTable
                             DB::raw('MIN(stock_transfers.trans_type) AS trans_type'),
                             DB::raw('MIN(stock_transfers.type) AS type'),
                             //DB::raw('MAX(stock_transfers.to_user_id) AS to_user_id'),
+                            DB::raw('MAX(stock_transfers.period_from) AS period_from'),
+                            DB::raw('MAX(stock_transfers.period_to) AS period_to'),
                             DB::raw('MAX(stock_transfers.created_at) AS created_at'),
                             DB::raw('MAX(stock_transfers.taxable_id) AS taxable_id'))
                     // ->where('stock_transfers.to_user_id', $this->id)
-                    ->groupBy( 'stock_transfers.to_user_id')
+                    ->groupBy( 'stock_transfers.to_user_id', 'stock_transfers.period_to')
                     ->orderBy('trans_id', 'desc')
             //mask olders
-            ->where('stock_transfers.type','!=', 'ARCHIVED')
+            // ->where('stock_transfers.type','!=', 'ARCHIVED')
             ;
 
         // return StockTransfer::where('taxpayer_id', $this->id); // Filter stock_transfers by taxpayer_id
@@ -211,7 +216,8 @@ class CollectorsDataTable extends DataTable
             Column::make('stock_transfers.created_at')->title(__('date'))->addClass('text-nowrap'),
             // //Column::make('trans_desc')->title(__('trans_desc')),
             Column::make('users.name')->title(__('collector')),
-            // Column::make('taxable.tariff')->title(__('tariff')),
+            Column::make('period')->title(__('Période')),
+            Column::make('id')->title(__('id')),
             // Column::make('stock_transfers.start_no')->title(__('num')),
             // //Column::make('tax_type')->title(__('tax_type')),
             // //Column::make('seize')->title(__('amount')),
@@ -226,7 +232,6 @@ class CollectorsDataTable extends DataTable
             // //Column::make('location')->title(__('location'))->addClass('text-nowrap'),
             // Column::make('users.name')->title(__('collector')),
             Column::make('stock_transfers.type')->title(__('status')),
-            Column::make('stock_transfers.period')->title(__('Période')),
             Column::computed('action')->title(__('action'))
                 ->addClass('text-end text-nowrap')
                 ->exportable(false)

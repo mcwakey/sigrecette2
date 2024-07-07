@@ -1,7 +1,7 @@
 <x-default-layout>
 
     @section('title')
-        {{ __('comptabilite des valeurs inactives du collecteur'). ' - ' .$user->name }}
+        {{ __('Stock des valeurs inactives du collecteur') . ' - ' . $user->name . ' - [ ' . $dateFrom . ' : ' . $dateTo. ' ] '}}
     @endsection
 
     @section('breadcrumbs')
