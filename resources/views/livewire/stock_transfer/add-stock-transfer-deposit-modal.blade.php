@@ -207,7 +207,7 @@
                                                         {{ $stock_transfer->start_no." - ".$stock_transfer->end_no }}
                                                     </td>
                                                     <td>
-                                                <button type="button" wire:click="deleteStockRequest({{ $stock_transfer->id }})"  class="btn btn-sm btn-outline btn-outline-dashed btn-outline-danger btn-active-light-danger me-1" >
+                                                <button type="button"   class="btn btn-sm btn-outline btn-outline-dashed btn-outline-danger btn-active-light-danger me-1" >
                                                     <span class="indicator-label">
                                                           <span class="indicator-label">
                                                         <i class="ki-duotone ki-trash">
@@ -233,7 +233,7 @@
                             </table>
 
                         <!--end::Input group-->
-                        
+
                         <div class="separator separator-content separator-dashed my-3 mb-8 mt-10">
                             <span class="w-250px text-gray-500 fw-semibold fs-7">{{ __('reference no') }}</span>
                         </div>

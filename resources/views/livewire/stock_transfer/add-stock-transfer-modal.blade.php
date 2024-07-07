@@ -12,22 +12,22 @@
             top: 15%;
             z-index: 1000;
         }
-    
+
         .wrapper.hidden {
             display: none;
         }
-    
+
         .wrapper header {
             display: flex;
             align-items: center;
             padding: 25px 30px 10px;
             justify-content: space-between;
         }
-    
+
         header .icons {
             display: flex;
         }
-    
+
         header .icons span {
             height: 38px;
             width: 38px;
@@ -40,61 +40,61 @@
             user-select: none;
             border-radius: 50%;
         }
-    
+
         .icons span:last-child {
             margin-right: -10px;
         }
-    
+
         header .icons span:hover {
             background: #f2f2f2;
         }
-    
+
         header .current-date {
             font-size: 1.2rem;
             font-weight: 500;
         }
-    
+
         .calendar {
             padding: 20px;
         }
-    
+
         .calendar ul {
             display: flex;
             flex-wrap: wrap;
             list-style: none;
             text-align: center;
         }
-    
+
         .calendar .days {
             margin-bottom: 20px;
         }
-    
+
         .calendar li {
             color: #333;
             width: calc(100% / 7);
             font-size: 1.07rem;
         }
-    
+
         .calendar .weeks li {
             font-weight: 500;
             cursor: default;
         }
-    
+
         .calendar .days li {
             z-index: 1;
             cursor: pointer;
             position: relative;
             margin-top: 30px;
         }
-    
+
         .days li.inactive {
             color: #aaa;
         }
-    
+
         .days li.active {
             color: #fff;
         }
-    
+
         .days li::before {
             position: absolute;
             content: "";
@@ -106,16 +106,16 @@
             border-radius: 50%;
             transform: translate(-50%, -50%);
         }
-    
+
         .days li.active::before {
             background: #0579ff;
         }
-    
+
         .days li:not(.active):hover::before {
             background: #f2f2f2;
         }
     </style>
-    
+
     <style>
         .wrapper-two {
             width: 400px;
@@ -127,22 +127,22 @@
             top: 15%;
             z-index: 1000;
         }
-    
+
         .wrapper-two.hidden {
             display: none;
         }
-    
+
         .wrapper-two header {
             display: flex;
             align-items: center;
             padding: 25px 30px 10px;
             justify-content: space-between;
         }
-    
+
         header .icons-two {
             display: flex;
         }
-    
+
         header .icons-two span {
             height: 38px;
             width: 38px;
@@ -155,61 +155,61 @@
             user-select: none;
             border-radius: 50%;
         }
-    
+
         .icons-two span:last-child {
             margin-right: -10px;
         }
-    
+
         header .icons-two span:hover {
             background: #f2f2f2;
         }
-    
+
         header .current-date-two {
             font-size: 1.2rem;
             font-weight: 500;
         }
-    
+
         .calendar-two {
             padding: 20px;
         }
-    
+
         .calendar-two ul {
             display: flex;
             flex-wrap: wrap;
             list-style: none;
             text-align: center;
         }
-    
+
         .calendar-two .days-two {
             margin-bottom: 20px;
         }
-    
+
         .calendar-two li {
             color: #333;
             width: calc(100% / 7);
             font-size: 1.07rem;
         }
-    
+
         .calendar-two .weeks-two li {
             font-weight: 500;
             cursor: default;
         }
-    
+
         .calendar-two .days-two li {
             z-index: 1;
             cursor: pointer;
             position: relative;
             margin-top: 30px;
         }
-    
+
         .days-two li.inactive {
             color: #aaa;
         }
-    
+
         .days-two li.active {
             color: #fff;
         }
-    
+
         .days-two li::before {
             position: absolute;
             content: "";
@@ -221,11 +221,11 @@
             border-radius: 50%;
             transform: translate(-50%, -50%);
         }
-    
+
         .days-two li.active::before {
             background: #0579ff;
         }
-    
+
         .days-two li:not(.active):hover::before {
             background: #f2f2f2;
         }
@@ -566,7 +566,7 @@
                                                 {{ $stock_transfer->start_no." - ".$stock_transfer->end_no }}
                                             </td>
                                             <td>
-                                                <button type="button" wire:click="deleteStockRequest({{ $stock_transfer->id }})"  class="btn btn-sm btn-outline btn-outline-dashed btn-outline-danger btn-active-light-danger me-1" data-bs-toggle="tooltip" title="Suprimer">
+                                                <button type="button"   class="btn btn-sm btn-outline btn-outline-dashed btn-outline-danger btn-active-light-danger me-1" data-bs-toggle="tooltip" title="Suprimer">
                                                     <span class="indicator-label">  <span class="indicator-label">
                                                         <i class="ki-duotone ki-trash">
                                                              <span class="path1"></span>
