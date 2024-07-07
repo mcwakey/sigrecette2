@@ -1,51 +1,55 @@
 <!--begin::sidebar menu-->
 <div class="app-sidebar-menu overflow-hidden flex-column-fluid">
-	<!--begin::Menu wrapper-->
-	<div id="kt_app_sidebar_menu_wrapper" class="app-sidebar-wrapper hover-scroll-overlay-y my-5" data-kt-scroll="true"
-		 data-kt-scroll-activate="true" data-kt-scroll-height="auto"
-		 data-kt-scroll-dependencies="#kt_app_sidebar_logo, #kt_app_sidebar_footer"
-		 data-kt-scroll-wrappers="#kt_app_sidebar_menu" data-kt-scroll-offset="5px" data-kt-scroll-save-state="true">
-		<!--begin::Menu-->
-		<div class="menu menu-column menu-rounded menu-sub-indention px-3 fw-semibold fs-6" id="#kt_app_sidebar_menu"
-			 data-kt-menu="true" data-kt-menu-expand="false">
-			<!--begin:Menu item-->
+    <!--begin::Menu wrapper-->
+    <div id="kt_app_sidebar_menu_wrapper" class="app-sidebar-wrapper hover-scroll-overlay-y my-5" data-kt-scroll="true"
+         data-kt-scroll-activate="true" data-kt-scroll-height="auto"
+         data-kt-scroll-dependencies="#kt_app_sidebar_logo, #kt_app_sidebar_footer"
+         data-kt-scroll-wrappers="#kt_app_sidebar_menu" data-kt-scroll-offset="5px" data-kt-scroll-save-state="true">
+        <!--begin::Menu-->
+        <div class="menu menu-column menu-rounded menu-sub-indention px-3 fw-semibold fs-6" id="#kt_app_sidebar_menu"
+             data-kt-menu="true" data-kt-menu-expand="false">
+            <!--begin:Menu item-->
 
-			<div class="menu-item">
-				<!--begin:Menu link-->
-				<a class="menu-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
-				   href="{{ route('dashboard') }}" href="{{ route('dashboard') }}">
-					<span class="menu-icon">{!! getIcon('element-11', 'fs-2') !!}</span>
-					<span class="menu-title">{{ __('dashboard') }}</span>
-				</a>
-				<!--end:Menu link-->
-			</div>
+            <div class="menu-item">
+                <!--begin:Menu link-->
+                @php
+                    $dashboardUrl = App\Helpers\Constants::checkUrl(route('dashboard'));
+                @endphp
+                <a class="menu-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
+                   href="{{ App\Helpers\Constants::checkUrl(route('dashboard'))}}">
+                    <span class="menu-icon">{!! getIcon('element-11', 'fs-2') !!}</span>
+                    <span class="menu-title">{{ __('dashboard') }}</span>
+                </a>
+                <!--end:Menu link-->
+            </div>
 
-			<!--end:Menu item-->
-			<!--begin:Menu item-->
-			<div class="menu-item pt-5">
-				<!--begin:Menu content-->
-				<div class="menu-content">
-					<span class="menu-heading fw-bold text-uppercase fs-7">{{ __('home') }}</span>
-				</div>
-				<!--end:Menu content-->
-			</div>
-			<!--end:Menu item-->
-			<!--begin:Menu item-->
-			<div data-kt-menu-trigger="click"
-				 class="menu-item menu-accordion {{ request()->routeIs('taxpayers.*') ? 'here show' : '' }}">
-				<!--begin:Menu link-->
-				<span class="menu-link">
+
+            <!--end:Menu item-->
+            <!--begin:Menu item-->
+            <div class="menu-item pt-5">
+                <!--begin:Menu content-->
+                <div class="menu-content">
+                    <span class="menu-heading fw-bold text-uppercase fs-7">{{ __('home') }}</span>
+                </div>
+                <!--end:Menu content-->
+            </div>
+            <!--end:Menu item-->
+            <!--begin:Menu item-->
+            <div data-kt-menu-trigger="click"
+                 class="menu-item menu-accordion {{ request()->routeIs('taxpayers.*') ? 'here show' : '' }}">
+                <!--begin:Menu link-->
+                <span class="menu-link">
 					<span class="menu-icon">{!! getIcon('user', 'fs-2') !!}</span>
 					<span class="menu-title">{{ __('taxpayer') }}</span>
 					<span class="menu-arrow"></span>
 				</span>
-				<!--end:Menu link-->
-				<!--begin:Menu sub-->
-				<div class="menu-sub menu-sub-accordion">
+                <!--end:Menu link-->
+                <!--begin:Menu sub-->
+                <div class="menu-sub menu-sub-accordion">
                     @can('peut créer un contribuable')
                         <div class="menu-item">
                             <a class="menu-link  {{ request()->routeIs('taxpayers.*')  && !request()->has('disable') && !request()->has('state') &&  request()->has('autoClick')  ? 'active' : '' }}"
-                               href="{{ route('taxpayers.index', ['autoClick' => 'taxpayerbtn']) }}">
+                               href="{{  App\Helpers\Constants::checkUrl(route('taxpayers.index', ['autoClick' => 'taxpayerbtn']))}}">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
 							</span>
@@ -56,84 +60,84 @@
                     @endcan
                     <div class="menu-item">
                         <a class="menu-link {{ request()->routeIs('taxpayers.*')  && !request()->has('disable') && !request()->has('state')  &&  !request()->has('autoClick')  ? 'active' : '' }}"
-                           href="{{ route('taxpayers.index') }}">
+                           href="{{  App\Helpers\Constants::checkUrl(route('taxpayers.index')) }}">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
 							</span>
                             <span class="menu-title">Liste des contribuables</span>
                         </a>
                     </div>
-                        <div class="menu-item">
-                            <a class="menu-link {{ request()->routeIs('taxpayers.*') && request()->has('state')  ? 'active' : '' }}"
-                               href="{{ route('taxpayers.index', ['state' => 'at']) }}">
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('taxpayers.*') && request()->has('state')  ? 'active' : '' }}"
+                           href="{{ App\Helpers\Constants::checkUrl( route('taxpayers.index', ['state' => 'at'])) }}">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
 							</span>
-                                <span class="menu-title">Liste des contribuables en attente de validation</span>
-                            </a>
-                        </div>
-					<div class="menu-item">
-						<a class="menu-link {{ request()->routeIs('taxpayers.*') && request()->has('disable') && request()->input('disable')==1 ? 'active' : '' }}"
-						   href="{{ route('taxpayers.index', ['disable' => true]) }}">
+                            <span class="menu-title">Liste des contribuables en attente de validation</span>
+                        </a>
+                    </div>
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('taxpayers.*') && request()->has('disable') && request()->input('disable')==1 ? 'active' : '' }}"
+                           href="{{ App\Helpers\Constants::checkUrl( route('taxpayers.index', ['disable' => true])) }}">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
 							</span>
-							<span class="menu-title">Liste des contribuables   {{ __('désactiver') }}</span>
-						</a>
+                            <span class="menu-title">Liste des contribuables   {{ __('désactiver') }}</span>
+                        </a>
 
-					</div>
-				</div>
-			</div>
-			<!--end:Menu item-->
+                    </div>
+                </div>
+            </div>
+            <!--end:Menu item-->
 
-			<!--begin:Menu item-->
-			<div data-kt-menu-trigger="click"
-				 class="menu-item menu-accordion {{ request()->routeIs('invoicing.*') ? 'here show' : '' }}">
-				<!--begin:Menu link-->
-				<span class="menu-link">
+            <!--begin:Menu item-->
+            <div data-kt-menu-trigger="click"
+                 class="menu-item menu-accordion {{ request()->routeIs('invoicing.*') ? 'here show' : '' }}">
+                <!--begin:Menu link-->
+                <span class="menu-link">
 					<span class="menu-icon">{!! getIcon('abstract-10', 'fs-2') !!}</span>
 					<span class="menu-title">{{ __('invoice') }}</span>
 					<span class="menu-arrow"></span>
 				</span>
-				<div class="menu-sub menu-sub-accordion">
-					<div class="menu-item">
-					<a class="menu-link {{ (request()->routeIs('invoicing.*') && request()->has('rc') && request()->input('rc') == 'taxation') || (request()->has('autoClick') && request()->input('autoClick') == 'taxationbtn') ? 'active' : '' }}"
-					   href="{{ route('invoicing.taxpayers.index', ['rc' => 'taxation']) }}">
+                <div class="menu-sub menu-sub-accordion">
+                    <div class="menu-item">
+                        <a class="menu-link {{ (request()->routeIs('invoicing.*') && request()->has('rc') && request()->input('rc') == 'taxation') || (request()->has('autoClick') && request()->input('autoClick') == 'taxationbtn') ? 'active' : '' }}"
+                           href="{{ App\Helpers\Constants::checkUrl( route('invoicing.taxpayers.index', ['rc' => 'taxation'])) }}">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
 							</span>
-						<span class="menu-title">{{__("Nouvel Taxation")}}</span>
-					</a>
+                            <span class="menu-title">{{__("Nouvel Taxation")}}</span>
+                        </a>
 
-					</div>
-					<div class="menu-item">
-						<a class="menu-link {{ (request()->routeIs('invoicing.*') && request()->has('rc') && request()->input('rc') =='avis') || (request()->has('autoClick') && request()->input('autoClick') == 'invoicebtng') ? 'active' : '' }}"
-						   href="{{ route('invoicing.taxpayers.index', ['rc' => 'avis']) }}">
+                    </div>
+                    <div class="menu-item">
+                        <a class="menu-link {{ (request()->routeIs('invoicing.*') && request()->has('rc') && request()->input('rc') =='avis') || (request()->has('autoClick') && request()->input('autoClick') == 'invoicebtng') ? 'active' : '' }}"
+                           href="{{ App\Helpers\Constants::checkUrl( route('invoicing.taxpayers.index', ['rc' => 'avis'])) }}">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
 							</span>
-							<span class="menu-title">{{__("Nouvel avis sur titre")}}</span>
-						</a>
-					</div>
-					<div class="menu-item">
-						<a class="menu-link {{ request()->routeIs('invoicing.*') &&  request()->input('type') ==    App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY && request()->has('autoClick') && request()->input('autoClick') =='invoicebtnc' ? 'active' : '' }}"
-						   href="{{ route('invoicing.invoices.index', ['type' =>   App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY,'autoClick' => 'invoicebtnc']) }}">
+                            <span class="menu-title">{{__("Nouvel avis sur titre")}}</span>
+                        </a>
+                    </div>
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('invoicing.*') &&  request()->input('type') ==    App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY && request()->has('autoClick') && request()->input('autoClick') =='invoicebtnc' ? 'active' : '' }}"
+                           href="{{ App\Helpers\Constants::checkUrl( route('invoicing.invoices.index', ['type' =>   App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY,'autoClick' => 'invoicebtnc'])) }}">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
 							</span>
-							<span class="menu-title">{{__("Nouvel avis au comptant")}}</span>
-						</a>
-					</div>
-					<div class="menu-item">
-						<a class="menu-link {{ request()->routeIs('invoicing.*') && request()->has('state') && request()->input('state') =='pr' ? 'active' : '' }}"
-						   href="{{ route('invoicing.invoices.index', ['state' => 'pr']) }}">
+                            <span class="menu-title">{{__("Nouvel avis au comptant")}}</span>
+                        </a>
+                    </div>
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('invoicing.*') && request()->has('state') && request()->input('state') =='pr' ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('invoicing.invoices.index', ['state' => 'pr'])) }}">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
 							</span>
-							<span class="menu-title">{{__("Nouvel avis de réduction  ou d’annulation")}}</span>
-						</a>
-				   </div>
-					 <!-- <div class="menu-item">
+                            <span class="menu-title">{{__("Nouvel avis de réduction  ou d’annulation")}}</span>
+                        </a>
+                    </div>
+                    <!-- <div class="menu-item">
 						  <span class="menu-link ">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
@@ -142,652 +146,632 @@
 									  data-bs-target="#kt_modal_add_invoice_no_taxpayer">{{__("Nouvel avis de réduction  ou d’annulation")}}</span>
 							</span>
 					</div> -->
-				</div>
-				<!--end:Menu sub-->
-			</div>
-				<div data-kt-menu-trigger="click"
-					 class="menu-item menu-accordion {{ request()->routeIs('invoices.*') ? 'here show' : '' }}">
-					<!--begin:Menu link-->
-					<span class="menu-link">
+                </div>
+                <!--end:Menu sub-->
+            </div>
+            <div data-kt-menu-trigger="click"
+                 class="menu-item menu-accordion {{ request()->routeIs('invoices.*') ? 'here show' : '' }}">
+                <!--begin:Menu link-->
+                <span class="menu-link">
 						<span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
 						<span class="menu-title">{{ __('Gestion des avis sur TITRE') }}</span>
 						<span class="menu-arrow"></span>
 					</span>
-					<div class="menu-sub menu-sub-accordion">
+                <div class="menu-sub menu-sub-accordion">
 
 
-						<div class="menu-item">
-							<a class="menu-link {{ request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Helpers\Constants::INVOICE_STATE_DRAFT_KEY ? 'active' : '' }}"
-							   href="{{ route('invoices.index', ['state' =>  App\Helpers\Constants::INVOICE_STATE_DRAFT_KEY,'type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY]) }}">
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Helpers\Constants::INVOICE_STATE_DRAFT_KEY ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('invoices.index', ['state' =>  App\Helpers\Constants::INVOICE_STATE_DRAFT_KEY,'type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY])) }}">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
 							</span>
-								<span class="menu-title">Validation des avis</span>
-							</a>
-						</div>
-					<div class="menu-item">
-						<a class="menu-link {{ request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Helpers\Constants::INVOICE_STATE_ACCEPTED_KEY ? 'active' : '' }}"
-						   href="{{ route('invoices.index', ['state' =>  App\Helpers\Constants::INVOICE_STATE_ACCEPTED_KEY,'type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY])}}">
+                            <span class="menu-title">Validation des avis</span>
+                        </a>
+                    </div>
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Helpers\Constants::INVOICE_STATE_ACCEPTED_KEY ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('invoices.index', ['state' =>  App\Helpers\Constants::INVOICE_STATE_ACCEPTED_KEY,'type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY]))}}">
 		<span class="menu-bullet">
 			<span class="bullet bullet-dot"></span>
 		</span>
-							<span class="menu-title">Enregistrement du N° d'ordre de recette</span>
-						</a>
-					</div>
-					<div class="menu-item">
-						<a class="menu-link {{request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') ==   App\Helpers\Constants::INVOICE_STATE_PENDING_KEY ? 'active' : '' }}"
-						   href="{{  route('invoices.index', ['state' =>  App\Helpers\Constants::INVOICE_STATE_PENDING_KEY,'type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY]) }}">
+                            <span class="menu-title">Enregistrement du N° d'ordre de recette</span>
+                        </a>
+                    </div>
+                    <div class="menu-item">
+                        <a class="menu-link {{request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') ==   App\Helpers\Constants::INVOICE_STATE_PENDING_KEY ? 'active' : '' }}"
+                           href="{{   App\Helpers\Constants::checkUrl(route('invoices.index', ['state' =>  App\Helpers\Constants::INVOICE_STATE_PENDING_KEY,'type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY]) )}}">
 		<span class="menu-bullet">
 			<span class="bullet bullet-dot"></span>
 		</span>
-							<span class="menu-title">Prise en charge/Rejet des avis</span>
-						</a>
-					</div>
+                            <span class="menu-title">Prise en charge/Rejet des avis</span>
+                        </a>
+                    </div>
 
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('invoices.*') && request()->input('delivery') == App\Helpers\Constants::INVOICE_DELIVERY_NON_LIV_KEY ? 'active' : '' }}"
-						   href="{{ route('invoices.index', ['delivery' => App\Helpers\Constants::INVOICE_DELIVERY_NON_LIV_KEY,'type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY  ]) }}">
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && request()->input('delivery') == App\Helpers\Constants::INVOICE_DELIVERY_NON_LIV_KEY ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('invoices.index', ['delivery' => App\Helpers\Constants::INVOICE_DELIVERY_NON_LIV_KEY,'type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY  ])) }}">
 		<span class="menu-bullet">
 			<span class="bullet bullet-dot"></span>
 		</span>
-							<span class="menu-title">Distribution des avis</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
+                            <span class="menu-title">Distribution des avis</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
 
-					<div class="separator separator-dashed my-4 mx-11"></div>
+                    <div class="separator separator-dashed my-4 mx-11"></div>
 
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->has('delivery')&& request()->input('delivery') ==  App\Helpers\Constants::INVOICE_DELIVERY_LIV_KEY ? 'active' : '' }}"
-						   href="{{ route('invoices.index', ['delivery' =>App\Helpers\Constants::INVOICE_DELIVERY_LIV_KEY,'type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY]) }}">
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->has('delivery')&& request()->input('delivery') ==  App\Helpers\Constants::INVOICE_DELIVERY_LIV_KEY ? 'active' : '' }}"
+                           href="{{ App\Helpers\Constants::checkUrl( route('invoices.index', ['delivery' =>App\Helpers\Constants::INVOICE_DELIVERY_LIV_KEY,'type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY])) }}">
 		<span class="menu-bullet">
 			<span class="bullet bullet-dot"></span>
 		</span>
-							<span class="menu-title">Liste des avis distribués</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
-					<div class="menu-item">
-						<a class="menu-link {{request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Helpers\Constants::INVOICE_STATE_REJECT_KEY ? 'active' : ''  }}"
-						   href="{{ route('invoices.index' ,['state'=>App\Helpers\Constants::INVOICE_STATE_REJECT_KEY,'type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY ]) }}">
+                            <span class="menu-title">Liste des avis distribués</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <div class="menu-item">
+                        <a class="menu-link {{request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Helpers\Constants::INVOICE_STATE_REJECT_KEY ? 'active' : ''  }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('invoices.index' ,['state'=>App\Helpers\Constants::INVOICE_STATE_REJECT_KEY,'type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY ])) }}">
 		<span class="menu-bullet">
 			<span class="bullet bullet-dot"></span>
 		</span>
-							<span class="menu-title">Liste des avis rejetés </span>
-						</a>
-					</div>
+                            <span class="menu-title">Liste des avis rejetés </span>
+                        </a>
+                    </div>
 
-					<div class="menu-item">
-						<a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('delivery')&&!request()->has('state') && request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY  ? 'active' : '' }}"
-						   href="{{ route('invoices.index' ,['type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY ]) }}">
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('delivery')&&!request()->has('state') && request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY  ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('invoices.index' ,['type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY ])) }}">
 		<span class="menu-bullet">
 			<span class="bullet bullet-dot"></span>
 		</span>
-							<span class="menu-title">Liste générale des avis</span>
-						</a>
-					</div>
+                            <span class="menu-title">Liste générale des avis</span>
+                        </a>
+                    </div>
 
 
-				</div>
-				<!--end:Menu sub-->
-			</div>
-			<!--end:Menu item-->
+                </div>
+                <!--end:Menu sub-->
+            </div>
+            <!--end:Menu item-->
 
-			<div data-kt-menu-trigger="click"
-				 class="menu-item menu-accordion {{ request()->routeIs('invoices.*') ? 'here show' : '' }}">
-				<!--begin:Menu link-->
-				<span class="menu-link">
+            <div data-kt-menu-trigger="click"
+                 class="menu-item menu-accordion {{ request()->routeIs('invoices.*') ? 'here show' : '' }}">
+                <!--begin:Menu link-->
+                <span class="menu-link">
 					<span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
 					<span class="menu-title">{{ __('Gestion des avis au COMPTANT') }}</span>
 					<span class="menu-arrow"></span>
 				</span>
-				<div class="menu-sub menu-sub-accordion">
+                <div class="menu-sub menu-sub-accordion">
 
 
-					<div class="menu-item">
-						<a class="menu-link {{ request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Helpers\Constants::INVOICE_STATE_DRAFT_KEY ? 'active' : '' }}"
-						   href="{{ route('invoices.index', ['state' =>  App\Helpers\Constants::INVOICE_STATE_PENDING_KEY,'type' => App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY]) }}">
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Helpers\Constants::INVOICE_STATE_DRAFT_KEY ? 'active' : '' }}"
+                           href="{{ App\Helpers\Constants::checkUrl( route('invoices.index', ['state' =>  App\Helpers\Constants::INVOICE_STATE_PENDING_KEY,'type' => App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY]) )}}">
 						<span class="menu-bullet">
 							<span class="bullet bullet-dot"></span>
 						</span>
-							<span class="menu-title">Validation des avis</span>
-						</a>
-					</div>
+                            <span class="menu-title">Validation des avis</span>
+                        </a>
+                    </div>
 
-					<div class="separator separator-dashed my-4 mx-11"></div>
+                    <div class="separator separator-dashed my-4 mx-11"></div>
 
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->input('type') ==    App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY? 'active' : '' }}"
-						   href="{{ route('invoices.index', ['type' =>   App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY]) }}">
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->input('type') ==    App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl( route('invoices.index', ['type' =>   App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY])) }}">
 		<span class="menu-bullet">
 			<span class="bullet bullet-dot"></span>
 		</span>
-							<span class="menu-title">Liste générale des avis</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
-					<!--end:Menu sub-->
-				</div>
-			</div>
-		@can('peut voir le recouvrement')
-			<!--begin:Menu item-->
-				<div data-kt-menu-trigger="click"
-					 class="menu-item menu-accordion {{ request()->routeIs('recoveries.*') ? 'here show' : '' }}">
-					<!--begin:Menu link-->
-					<span class="menu-link">
+                            <span class="menu-title">Liste générale des avis</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <!--end:Menu sub-->
+                </div>
+            </div>
+            @can('peut voir le recouvrement')
+                <!--begin:Menu item-->
+                <div data-kt-menu-trigger="click"
+                     class="menu-item menu-accordion {{ request()->routeIs('recoveries.*') ? 'here show' : '' }}">
+                    <!--begin:Menu link-->
+                    <span class="menu-link">
 						<span class="menu-icon">{!! getIcon('abstract-28', 'fs-2') !!}</span>
 						<span class="menu-title">{{ __('revenue') }}</span>
 						<span class="menu-arrow"></span>
 					</span>
-					<!--end:Menu link-->
-					<!--begin:Menu sub-->
-					<div class="menu-sub menu-sub-accordion">
-						<div class="menu-item">
-							<!--begin:Menu link-->
-							<a class="menu-link {{ request()->routeIs('recoveries.*') &&  request()->has('delivery')&& request()->input('delivery') ==  App\Helpers\Constants::INVOICE_DELIVERY_LIV_KEY ? 'active' : '' }}"
-							   href="{{ route('recoveries.index', ['delivery' =>  App\Helpers\Constants::INVOICE_DELIVERY_LIV_KEY,'to_paid'=>1]) }}">
+                    <!--end:Menu link-->
+                    <!--begin:Menu sub-->
+                    <div class="menu-sub menu-sub-accordion">
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->routeIs('recoveries.*') &&  request()->has('delivery')&& request()->input('delivery') ==  App\Helpers\Constants::INVOICE_DELIVERY_LIV_KEY ? 'active' : '' }}"
+                               href="{{ App\Helpers\Constants::checkUrl( route('recoveries.index', ['delivery' =>  App\Helpers\Constants::INVOICE_DELIVERY_LIV_KEY,'to_paid'=>1])) }}">
 		<span class="menu-bullet">
 			<span class="bullet bullet-dot"></span>
 		</span>
-								<span class="menu-title">Liste des avis  à recouvrer</span>
-							</a>
-							<!--end:Menu link-->
-						</div>
-						<div class="menu-item">
-							<!--begin:Menu link-->
-							<a class="menu-link {{ request()->routeIs('recoveries.*') &&  !request()->has('delivery') ? 'active' : '' }}"
-							   href="{{ route('recoveries.index') }}">
+                                <span class="menu-title">Liste des avis  à recouvrer</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->routeIs('recoveries.*') &&  !request()->has('delivery') ? 'active' : '' }}"
+                               href="{{ App\Helpers\Constants::checkUrl( route('recoveries.index')) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
-								<span class="menu-title">{{ __('Liste des recouvrements') }}</span>
-							</a>
-							<!--end:Menu link-->
-						</div>
-					</div>
-					<!--end:Menu sub-->
-				</div>
-				<!--end:Menu item-->
-			@endcan
+                                <span class="menu-title">{{ __('Liste des recouvrements') }}</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+                    </div>
+                    <!--end:Menu sub-->
+                </div>
+                <!--end:Menu item-->
+            @endcan
 
-			<div data-kt-menu-trigger="click"
-				 class="menu-item menu-accordion {{ request()->routeIs('ticket.*') || request()->routeIs('user-management.users.*')&& request()->has('type') ? 'here show' : '' }}">
-				<!--begin:Menu link-->
-				<span class="menu-link">
+            <div data-kt-menu-trigger="click"
+                 class="menu-item menu-accordion {{ request()->routeIs('ticket.*') || request()->routeIs('user-management.users.*')&& request()->has('type') ? 'here show' : '' }}">
+                <!--begin:Menu link-->
+                <span class="menu-link">
 						<span class="menu-icon">{!! getIcon('abstract-7', 'fs-2') !!}</span>
 						<span class="menu-title">{{ __('Gestion des valeurs inactives') }}</span>
 						<span class="menu-arrow"></span>
 					</span>
-				<!--end:Menu link-->
-				<!--begin:Menu sub-->
-				<div class="menu-sub menu-sub-accordion">
+                <!--end:Menu link-->
+                <!--begin:Menu sub-->
+                <div class="menu-sub menu-sub-accordion">
 
-					<div class="menu-item">
-						<a class="menu-link {{request()->routeIs('ticket.*') && request()->has('autoClick') && request()->input('autoClick') =='addstockbtn' ? 'active' : '' }}"
-						   href="{{ route('ticket.stock-requests.index', [ 'autoClick' => 'addstockbtn']) }}">
+                    <div class="menu-item">
+                        <a class="menu-link {{request()->routeIs('ticket.*') && request()->has('autoClick') && request()->input('autoClick') =='addstockbtn' ? 'active' : '' }}"
+                           href="{{ App\Helpers\Constants::checkUrl( route('ticket.stock-requests.index', [ 'autoClick' => 'addstockbtn'])) }}">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
 							</span>
-							<span class="menu-title">{{ __('new stock request') }}</span>
-						</a>
-					</div>
+                            <span class="menu-title">{{ __('new stock request') }}</span>
+                        </a>
+                    </div>
 
-					<div class="menu-item">
-						<a class="menu-link {{ request()->routeIs('ticket.stock-requests.*') && !request()->has('autoClick') ? 'active' : '' }}"
-						   href="{{ route('ticket.stock-requests.index') }}">
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('ticket.stock-requests.*') && !request()->has('autoClick') ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('ticket.stock-requests.index')) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
-							<span class="menu-title">{{ __('Stock des valeurs inactives du regisseur') }}
+                            <span class="menu-title">{{ __('Stock des valeurs inactives du regisseur') }}
 								</span>
-						</a>
-					</div>
-					<div class="menu-item">
-						<a class="menu-link }}"
-						   href="{{ route('ticket.stock-transfers.index', [ 'autoClick' => 'addstocktbtn']) }}">
+                        </a>
+                    </div>
+                    <div class="menu-item">
+                        <a class="menu-link }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('ticket.stock-transfers.index', [ 'autoClick' => 'addstocktbtn'])) }}">
 		<span class="menu-bullet">
 			<span class="bullet bullet-dot"></span>
 		</span>
-							<span class="menu-title">{{ __('new supply') }}</span>
-						</a>
-					</div>
-					<!--begin:Menu item-->
-					<div class="menu-item">
-						<a class="menu-link {{ request()->routeIs('ticket.stock-transfers.*') ? 'active' : '' }}"
-						   href="{{ route('ticket.stock-transfers.index') }}">
+                            <span class="menu-title">{{ __('new supply') }}</span>
+                        </a>
+                    </div>
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('ticket.stock-transfers.*') ? 'active' : '' }}"
+                           href="{{ App\Helpers\Constants::checkUrl( route('ticket.stock-transfers.index')) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
-							<span class="menu-title">{{ __('Stock des valeurs inactives du collecteur') }}
+                            <span class="menu-title">{{ __('Stock des valeurs inactives du collecteur') }}
 								</span>
-						</a>
-					</div>
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('user-management.users.*') && request()->has('type')&& !request()->has('disable')  ? 'active' : ''}}"
-						   href="{{ route('user-management.users.index',['type' => 'col']) }}">
+                        </a>
+                    </div>
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('user-management.users.*') && request()->has('type')&& !request()->has('disable')  ? 'active' : ''}}"
+                           href="{{ App\Helpers\Constants::checkUrl( route('user-management.users.index',['type' => 'col'])) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
-							<span class="menu-title">{{ __('Liste des collecteurs') }}</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
-					<!--end:Menu item-->
+                            <span class="menu-title">{{ __('Liste des collecteurs') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <!--end:Menu item-->
 
-					<!--begin:Menu item-->
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('user-management.users.*') && request()->has('type')&& request()->has('disable')  ? 'active' : '' }}"
-						   href="{{ route('user-management.users.index',['disable' => true,'type' => 'col']) }}">
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('user-management.users.*') && request()->has('type')&& request()->has('disable')  ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('user-management.users.index',['disable' => true,'type' => 'col'])) }}">
 										<span class="menu-bullet">
 											<span class="bullet bullet-dot"></span>
 										</span>
-							<span class="menu-title">{{ __('Liste des collecteurs désactivé') }}</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
+                            <span class="menu-title">{{ __('Liste des collecteurs désactivé') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
 
-				</div>
-				<!--end:Menu sub-->
-			</div>
-			@can('peut voir la comptabilité')
-				<div data-kt-menu-trigger="click"
-					 class="menu-item menu-accordion {{ request()->routeIs('accounts.*') ? 'here show' : '' }}">
-					<!--begin:Menu link-->
-					<span class="menu-link">
+                </div>
+                <!--end:Menu sub-->
+            </div>
+            @can('peut voir la comptabilité')
+                <div data-kt-menu-trigger="click"
+                     class="menu-item menu-accordion {{ request()->routeIs('accounts.*') ? 'here show' : '' }}">
+                    <!--begin:Menu link-->
+                    <span class="menu-link">
 						<span class="menu-icon">{!! getIcon('abstract-27', 'fs-2') !!}</span>
 						<span class="menu-title">{{ __('accounts') }}</span>
 						<span class="menu-arrow"></span>
 					</span>
-					<!--end:Menu link-->
-					<!--begin:Menu sub-->
-					<div class="menu-sub menu-sub-accordion">
-						<!--end:Menu item-->
-
-						<!--begin:Menu item-->
-					<!-- <div class="menu-item">
-							<a class="menu-link {{ request()->routeIs('accounts.accountant-deposits-outright.*') ? 'active' : '' }}"
-								href="{{ route('accounts.accountant-deposits-outright.index') }}">
-								<span class="menu-bullet">
-									<span class="bullet bullet-dot"></span>
-								</span>
-								<span class="menu-title">{{ __('Etat de versement du regisseur - Recettes au comptant') }} </span>
-							</a>
-						</div> -->
-						<!--end:Menu item-->
+                    <!--end:Menu link-->
+                    <!--begin:Menu sub-->
+                    <div class="menu-sub menu-sub-accordion">
 
 
-						<!--begin:Menu item-->
-
-						<!--end:Menu item-->
-
-
-						<!--begin:Menu item-->
-
-
-						<div class="menu-item">
+                        <div class="menu-item">
 						  <span class="menu-link ">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
 								<span class="menu-title" data-bs-toggle="modal"
-								data-bs-target="#kt_modal_add_stock_transfer-deposit" data-kt-user-id="{{-- $user->id --}}" data-kt-action="add_deposit">   {{ __('Nouveau versement du Collecteur') }}</span>
+                                      data-bs-target="#kt_modal_add_stock_transfer-deposit"
+                                      data-kt-user-id="{{-- $user->id --}}"
+                                      data-kt-action="add_deposit">   {{ __('Nouveau versement du Collecteur') }}</span>
 							</span>
-						</div>
-						<div class="menu-item">
-							<a class="menu-link {{ request()->routeIs('accounts.collector-deposits.*') ? 'active' : '' }}"
-							   href="{{ route('accounts.collector-deposits.index') }}">
+                        </div>
+                        <div class="menu-item">
+                            <a class="menu-link {{ request()->routeIs('accounts.collector-deposits.*') ? 'active' : '' }}"
+                               href="{{ route('accounts.collector-deposits.index') }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
-								<span class="menu-title">{{ __('Etat de versement du collecteur') }} </span>
-							</a>
-						</div>
-						<!--end:Menu item-->
+                                <span class="menu-title">{{ __('Etat de versement du collecteur') }} </span>
+                            </a>
+                        </div>
+                        <!--end:Menu item-->
 
 
-
-
-						<div class="menu-item">
+                        <div class="menu-item">
 						  <span class="menu-link ">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
 								<span class="menu-title" data-bs-toggle="modal"
-									  data-bs-target="#kt_modal_add_accountant_deposit" data-kt-user-id="TITRE" data-kt-action="add_accountant_deposit">    {{ __('Nouveau versement du Regisseur') }}</span>
+                                      data-bs-target="#kt_modal_add_accountant_deposit" data-kt-user-id="TITRE"
+                                      data-kt-action="add_accountant_deposit">    {{ __('Nouveau versement du Regisseur') }}</span>
 							</span>
-						</div>
-						<div class="menu-item">
-							<a class="menu-link {{ request()->routeIs('accounts.accountant-deposits-title.*') ? 'active' : '' }}"
-							   href="{{ route('accounts.accountant-deposits-title.index') }}">
+                        </div>
+                        <div class="menu-item">
+                            <a class="menu-link {{ request()->routeIs('accounts.accountant-deposits-title.*') ? 'active' : '' }}"
+                               href="{{  App\Helpers\Constants::checkUrl(route('accounts.accountant-deposits-title.index')) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
-								<span class="menu-title">{{ __('Etat de versement du regisseur') }} </span>
-							</a>
-						</div>
-						<!--begin:Menu item-->
-						<div class="menu-item">
-							<!--begin:Menu link-->
-							<a class="menu-link {{ request()->routeIs('accounts.ledgers.*') ? 'active' : '' }}"
-							   href="{{ route('accounts.ledgers.index') }}">
+                                <span class="menu-title">{{ __('Etat de versement du regisseur') }} </span>
+                            </a>
+                        </div>
+                        <!--begin:Menu item-->
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->routeIs('accounts.ledgers.*') ? 'active' : '' }}"
+                               href="{{  App\Helpers\Constants::checkUrl(route('accounts.ledgers.index')) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
-								<span class="menu-title">{{ __('Livre - journal de la regie') }}</span>
-							</a>
-							<!--end:Menu link-->
-						</div>
-					</div>
-					<!--end:Menu sub-->
-				</div>
-		@endcan
+                                <span class="menu-title">{{ __('Livre - journal de la regie') }}</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+                    </div>
+                    <!--end:Menu sub-->
+                </div>
+            @endcan
 
 
-		<!--begin:Menu item-->
-			<div data-kt-menu-trigger="click"
-				 class="menu-item menu-accordion {{ request()->routeIs('geolocation.*') ? 'here show' : '' }}">
-				<!--begin:Menu link-->
-				<span class="menu-link">
+            <!--begin:Menu item-->
+            <div data-kt-menu-trigger="click"
+                 class="menu-item menu-accordion {{ request()->routeIs('geolocation.*') ? 'here show' : '' }}">
+                <!--begin:Menu link-->
+                <span class="menu-link">
 					<span class="menu-icon">{!! getIcon('map', 'fs-2') !!}</span>
 					<span class="menu-title">{{ __('Géolocalisation') }}</span>
 					<span class="menu-arrow"></span>
 				</span>
-				<!--end:Menu link-->
-				<!--begin:Menu sub-->
-				<div class="menu-sub menu-sub-accordion">
-					<div class="menu-item">
-					@can('peut voir la geolocalisation d\'un contribuable')
-						<!--begin:Menu link-->
-							<a class="menu-link {{ request()->routeIs('geolocation.zones') ? 'active' : '' }}"
-							   href="{{ route('geolocation.taxpayers') }}">
+                <!--end:Menu link-->
+                <!--begin:Menu sub-->
+                <div class="menu-sub menu-sub-accordion">
+                    <div class="menu-item">
+                        @can('peut voir la geolocalisation d\'un contribuable')
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->routeIs('geolocation.zones') ? 'active' : '' }}"
+                               href="{{  App\Helpers\Constants::checkUrl(route('geolocation.taxpayers')) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
-								<span class="menu-title">{{ __('taxpayers') }}</span>
-							</a>
-					@endcan
-					<!--end:Menu link-->
-					</div>
-					<!--end:Menu item-->
-				</div>
-				<!--end:Menu sub-->
-			</div>
-			<div class="menu-item">
-				<!--begin:Menu link-->
-				<a class="menu-link {{ request()->routeIs('prints') ? 'active' : '' }}"
-				   href="{{ route('prints') }}" href="{{ route('prints') }}">
-					<span class="menu-icon">{!! getIcon('element-11', 'fs-2') !!}</span>
-					<span class="menu-title">{{ __('Impression') }}</span>
-				</a>
-				<!--end:Menu link-->
-			</div>
+                                <span class="menu-title">{{ __('taxpayers') }}</span>
+                            </a>
+                        @endcan
+                        <!--end:Menu link-->
+                    </div>
+                    <!--end:Menu item-->
+                </div>
+                <!--end:Menu sub-->
+            </div>
+            <div class="menu-item">
+                <!--begin:Menu link-->
+                <a class="menu-link {{ request()->routeIs('prints') ? 'active' : '' }}"
+                 href="{{  App\Helpers\Constants::checkUrl(route('prints')) }}">
+                    <span class="menu-icon">{!! getIcon('element-11', 'fs-2') !!}</span>
+                    <span class="menu-title">{{ __('Impression') }}</span>
+                </a>
+                <!--end:Menu link-->
+            </div>
 
-			<!--begin:Menu item-->
-			<!--end:Menu item-->
-			<!--begin:Menu item-->
-			@hasanyrole(['administrateur_system','administrateur'])
+            <!--begin:Menu item-->
+            <!--end:Menu item-->
+            <!--begin:Menu item-->
+            @hasanyrole(['administrateur_system','administrateur'])
 
-			<div class="menu-item pt-5">
-				<!--begin:Menu content-->
-				<div class="menu-content">
-					<span class="menu-heading fw-bold text-uppercase fs-7">{{ __('Paramétrages') }}</span>
-				</div>
-				<!--end:Menu content-->
-			</div>
+            <div class="menu-item pt-5">
+                <!--begin:Menu content-->
+                <div class="menu-content">
+                    <span class="menu-heading fw-bold text-uppercase fs-7">{{ __('Paramétrages') }}</span>
+                </div>
+                <!--end:Menu content-->
+            </div>
 
-			<div data-kt-menu-trigger="click"
-				 class="menu-item menu-accordion {{ request()->routeIs('taxations.*') ? 'here show' : '' }}">
+            <div data-kt-menu-trigger="click"
+                 class="menu-item menu-accordion {{ request()->routeIs('taxations.*') ? 'here show' : '' }}">
 
 					<span class="menu-link">
 						<span class="menu-icon">{!! getIcon('technology-4', 'fs-2') !!}</span>
 						<span class="menu-title">{{ __('taxations') }}</span>
 						<span class="menu-arrow"></span>
 					</span>
-				<div class="menu-sub menu-sub-accordion pt-3">
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('taxations.taxlabels.*') ? 'active' : '' }}"
-						   href="{{ route('taxations.taxlabels.index') }}">
+                <div class="menu-sub menu-sub-accordion pt-3">
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('taxations.taxlabels.*') ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('taxations.taxlabels.index')) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
-							<span class="menu-title">{{ __('taxlabels') }}</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
-					<!--end:Menu item-->
-					<!--begin:Menu item-->
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('taxations.taxables.*') ? 'active' : '' }}"
-						   href="{{ route('taxations.taxables.index') }}">
+                            <span class="menu-title">{{ __('taxlabels') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <!--end:Menu item-->
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('taxations.taxables.*') ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('taxations.taxables.index')) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
-							<span class="menu-title">{{ __('taxables') }}</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('taxations.tickets.*') ? 'active' : '' }}"
-						   href="{{ route('taxations.tickets.index') }}">
+                            <span class="menu-title">{{ __('taxables') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('taxations.tickets.*') ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('taxations.tickets.index')) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
-							<span class="menu-title">{{ __('tickets') }}</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
-				</div>
-			</div>
+                            <span class="menu-title">{{ __('tickets') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                </div>
+            </div>
 
-			<!--end:Menu item-->
+            <!--end:Menu item-->
 
-			<!--begin:Menu item-->
-			<div data-kt-menu-trigger="click"
-				 class="menu-item menu-accordion {{ request()->routeIs('administratives.*') ? 'here show' : '' }}">
+            <!--begin:Menu item-->
+            <div data-kt-menu-trigger="click"
+                 class="menu-item menu-accordion {{ request()->routeIs('administratives.*') ? 'here show' : '' }}">
 
 					<span class="menu-link">
 						<span class="menu-icon">{!! getIcon('pointers', 'fs-2') !!}</span>
 						<span class="menu-title">{{ __('Découpage administratif') }}</span>
 						<span class="menu-arrow"></span>
 					</span>
-				<div class="menu-sub menu-sub-accordion pt-3">
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link  {{ request()->routeIs('administratives.cantons.*') ? 'active' : '' }}"
-						   href="{{ route('administratives.cantons.index') }}">
+                <div class="menu-sub menu-sub-accordion pt-3">
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link  {{ request()->routeIs('administratives.cantons.*') ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('administratives.cantons.index')) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
-							<span class="menu-title">{{ __('cantons') }}</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
-					<!--end:Menu item-->
-					<!--begin:Menu item-->
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('administratives.towns.*') ? 'active' : '' }}"
-						   href="{{ route('administratives.towns.index') }}">
+                            <span class="menu-title">{{ __('cantons') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <!--end:Menu item-->
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('administratives.towns.*') ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('administratives.towns.index') )}}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
-							<span class="menu-title">{{ __('Villages/Quartiers') }}</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
-					<!--end:Menu item-->
-					<!--begin:Menu item-->
+                            <span class="menu-title">{{ __('Villages/Quartiers') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <!--end:Menu item-->
+                    <!--begin:Menu item-->
 
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('administratives.zones.*') ? 'active' : '' }}"
-						   href="{{ route('administratives.zones.index') }}">
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('administratives.zones.*') ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('administratives.zones.index')) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
-							<span class="menu-title">{{ __('zones') }}</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
-				</div>
-			</div>
+                            <span class="menu-title">{{ __('zones') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                </div>
+            </div>
 
-			<div data-kt-menu-trigger="click"
-				 class="menu-item menu-accordion {{ request()->routeIs('economics.*') ? 'here show' : '' }}">
+            <div data-kt-menu-trigger="click"
+                 class="menu-item menu-accordion {{ request()->routeIs('economics.*') ? 'here show' : '' }}">
 					<span class="menu-link">
 						<span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
 						<span class="menu-title">{{ __('Activités économiques') }}</span>
 						<span class="menu-arrow"></span>
 					</span>
-				<div class="menu-sub menu-sub-accordion pt-3">
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('economics.categories.*') ? 'active' : '' }}"
-						   href="{{ route('economics.categories.index') }}">
+                <div class="menu-sub menu-sub-accordion pt-3">
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('economics.categories.*') ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('economics.categories.index')) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
-							<span class="menu-title">{{ __('Catégories') }}</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('economics.activities.*') ? 'active' : '' }}"
-						   href="{{ route('economics.activities.index') }}">
+                            <span class="menu-title">{{ __('Catégories') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('economics.activities.*') ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('economics.activities.index')) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
-							<span class="menu-title">{{ __('Activités') }}</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
-				</div>
-			</div>
-			<div data-kt-menu-trigger="click"
-				 class="menu-item menu-accordion {{ request()->routeIs('settings.*') ? 'here show' : '' }}">
+                            <span class="menu-title">{{ __('Activités') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                </div>
+            </div>
+            <div data-kt-menu-trigger="click"
+                 class="menu-item menu-accordion {{ request()->routeIs('settings.*') ? 'here show' : '' }}">
 					<span class="menu-link">
 						<span class="menu-icon">{!! getIcon('information-4', 'fs-2') !!}</span>
 						<span class="menu-title">{{ __('Informations commune') }}</span>
 						<span class="menu-arrow"></span>
 					</span>
-				<div class="menu-sub menu-sub-accordion pt-3">
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('settings.communes.*') ? 'active' : '' }}"
-						   href="{{ route('settings.communes.index') }}">
+                <div class="menu-sub menu-sub-accordion pt-3">
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('settings.communes.*') ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('settings.communes.index')) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
-							<span class="menu-title">{{ __('Voir les informations de la commune') }}</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
-				</div>
-			</div>
+                            <span class="menu-title">{{ __('Voir les informations de la commune') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                </div>
+            </div>
 
-			@hasanyrole(['administrateur_system'])
-			<div class="menu-item">
-				<!--begin:Menu link-->
-				<a class="menu-link {{ request()->routeIs('import-view') ? 'active' : '' }}"
-				   href="{{ route('import-view') }}">
-					<span class="menu-icon">{!! getIcon('user', 'fs-2') !!}</span>
-					<span class="menu-title">{{ __('Importer des contribuables') }}</span>
-				</a>
-				<!--end:Menu link-->
-			</div>
-			@endhasanyrole
+            @hasanyrole(['administrateur_system'])
+            <div class="menu-item">
+                <!--begin:Menu link-->
+                <a class="menu-link {{ request()->routeIs('import-view') ? 'active' : '' }}"
+                   href="{{   App\Helpers\Constants::checkUrl(App\Helpers\Constants::checkUrl(route('import-view'))) }}">
+                    <span class="menu-icon">{!! getIcon('user', 'fs-2') !!}</span>
+                    <span class="menu-title">{{ __('Importer des contribuables') }}</span>
+                </a>
+                <!--end:Menu link-->
+            </div>
+            @endhasanyrole
 
-			<!--end:Menu item-->
+            <!--end:Menu item-->
 
 
-			<!--begin:Menu item-->
-			<div data-kt-menu-trigger="click"
-				 class="menu-item menu-accordion {{ request()->routeIs('user-management.*')  && !request()->has('type') ? 'here show' : '' }}">
-				<!--begin:Menu link-->
-				<span class="menu-link">
+            <!--begin:Menu item-->
+            <div data-kt-menu-trigger="click"
+                 class="menu-item menu-accordion {{ request()->routeIs('user-management.*')  && !request()->has('type') ? 'here show' : '' }}">
+                <!--begin:Menu link-->
+                <span class="menu-link">
 						<span class="menu-icon">{!! getIcon('rocket', 'fs-2') !!}</span>
 						<span class="menu-title">{{ __('user management') }}</span>
 						<span class="menu-arrow"></span>
 					</span>
-				<!--end:Menu link-->
-				<!--begin:Menu sub-->
-				<div class="menu-sub menu-sub-accordion">
-					<!--begin:Menu item-->
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('user-management.users.*') && !request()->has('disable') && !request()->has('type')  ? 'active' : ''}}"
-						   href="{{ route('user-management.users.index') }}">
+                <!--end:Menu link-->
+                <!--begin:Menu sub-->
+                <div class="menu-sub menu-sub-accordion">
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('user-management.users.*') && !request()->has('disable') && !request()->has('type')  ? 'active' : ''}}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('user-management.users.index')) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
-							<span class="menu-title">{{ __('Liste des utilisateurs') }}</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
-					<!--end:Menu item-->
+                            <span class="menu-title">{{ __('Liste des utilisateurs') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <!--end:Menu item-->
 
-					<!--begin:Menu item-->
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('user-management.users.*') && request()->has('disable')&& !request()->has('type')  ? 'active' : '' }}"
-						   href="{{ route('user-management.users.index',['disable' => true]) }}">
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('user-management.users.*') && request()->has('disable')&& !request()->has('type')  ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('user-management.users.index',['disable' => true])) }}">
 										<span class="menu-bullet">
 											<span class="bullet bullet-dot"></span>
 										</span>
-							<span class="menu-title">{{ __('Liste des utilisateurs désactivé') }}</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
-					<!--end:Menu item-->
+                            <span class="menu-title">{{ __('Liste des utilisateurs désactivé') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <!--end:Menu item-->
 
-					<!--begin:Menu item-->
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('user-management.roles.*') ? 'active' : '' }}"
-						   href="{{ route('user-management.roles.index') }}">
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('user-management.roles.*') ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('user-management.roles.index')) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
-							<span class="menu-title">{{ __('Liste des rôles') }}</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
-					<!--end:Menu item-->
+                            <span class="menu-title">{{ __('Liste des rôles') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <!--end:Menu item-->
 
 
-					<!--begin:Menu item-->
-					<div class="menu-item">
-						<!--begin:Menu link-->
-						<a class="menu-link {{ request()->routeIs('user-management.permissions.*') ? 'active' : '' }}"
-						   href="{{ route('user-management.permissions.index') }}">
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('user-management.permissions.*') ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('user-management.permissions.index')) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
-							<span class="menu-title">{{ __('Liste des permissions') }}</span>
-						</a>
-						<!--end:Menu link-->
-					</div>
-					<!--end:Menu item-->
-				</div>
-				<!--end:Menu sub-->
-			</div>
-			<!--end:Menu item-->
+                            <span class="menu-title">{{ __('Liste des permissions') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <!--end:Menu item-->
+                </div>
+                <!--end:Menu sub-->
+            </div>
+            <!--end:Menu item-->
 
-			@endhasanyrole
+            @endhasanyrole
 
 
-		</div>
-		<!--end::Menu-->
-	</div>
-	<!--end::Menu wrapper-->
+        </div>
+        <!--end::Menu-->
+    </div>
+    <!--end::Menu wrapper-->
 </div>
 <!--end::sidebar menu-->
