@@ -201,7 +201,7 @@ class AddTaxpayerModal extends Component
 
         // Reset the form fields after successful submission
         $this->reset();
-        $this->redirectRoute('taxpayers.index');
+       // $this->redirectRoute('taxpayers.index');
     }
 
     public function updatedCanton($value)
@@ -258,7 +258,7 @@ class AddTaxpayerModal extends Component
         $this->address = $taxpayer->address;
 
         $this->file_no = $taxpayer->file_no;
-        
+
         $this->category_id = $taxpayer->category_id;
         $this->updatedCategoryId($taxpayer->category_id);
         $this->activity_id = $taxpayer->activity_id;

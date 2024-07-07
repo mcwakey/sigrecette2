@@ -47,12 +47,12 @@
 
             <div class="card-toolbar">
 
-                @if(!request()->has('disable'))
+                @if(!request()->has('disable') && !request()->has('state'))
 
                     @can('peut créer un contribuable')
                         <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
                             <!--begin::Add user-->
-                            <button type="button" class="btn btn-light-success h-45px ms-auto" data-bs-toggle="modal"
+                            <button type="button" class="btn btn-light-success h-45px ms-auto" data-bs-toggle="modal" id="taxpayerbtn"
                                     data-bs-target="#kt_modal_add_taxpayer">
                                 {!! getIcon('plus', 'fs-2', '', 'i') !!}
                                 {{ __('new taxpayer') }}

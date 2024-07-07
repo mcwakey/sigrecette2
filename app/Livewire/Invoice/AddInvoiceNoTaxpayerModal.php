@@ -3,6 +3,7 @@
 namespace App\Livewire\Invoice;
 
 use App\Enums\InvoiceStatusEnums;
+use App\Enums\PaymentStatusEnums;
 use App\Helpers\Constants;
 use App\Models\Canton;
 use App\Models\Erea;
@@ -24,6 +25,7 @@ use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Spatie\Permission\Models\Role;
 
 class AddInvoiceNoTaxpayerModal extends Component
 {
@@ -184,33 +186,19 @@ class AddInvoiceNoTaxpayerModal extends Component
 
     public function render()
     {
-        //TODO set by default develery at delivery and delevery date
-        //$cantons = Canton::all();
-        //$towns = Town::all();
-        //$ereas = Erea::all();
-        //$genders = Gender::all();
-        //$id_types = IdType::all();
+
         $taxpayers = Taxpayer::all();
         $taxlabels = TaxLabel::where("category","CATEGORY 2")->get();
-
-        //dd($taxlabels);
         $genders = Gender::all();
         $id_types = IdType::all();
         $year= Year::getActiveYear();
-        $months = [];//Constants::getMonths();
+        $months = [];
         $currentMonth = Carbon::now()->month;
         $monthName = Carbon::createFromFormat('m',$currentMonth)->monthName;
         $monthNumber = str_pad($currentMonth, 2, '0', STR_PAD_LEFT);
         $months[$monthNumber] = $monthName;
         $this->start_month = $monthNumber;
-        //$taxpayer_taxables = $this->taxpayer_id ? TaxpayerTaxable::where('taxpayer_id', $this->taxpayer_id)->where('billable', 1)->get() : collect();
-        //$taxpayer_id = $this->taxpayer_id;
 
-        // Assuming you have a public property $canton in your Livewire component
-        //$towns = $this->canton ? Town::where('canton_id', $this->canton)->get() : collect();
-        //$ereas = $this->town ? Erea::where('town_id', $this->town)->get() : collect();
-
-        //return view('livewire.invoice.add-invoice-modal', ['taxpayer_id' => $this->taxpayer_id]);
 
         return view('livewire.invoice.add-invoice-no-taxpayer-modal', compact('taxpayers','taxlabels','genders','id_types','months','year'));
     }
@@ -276,44 +264,6 @@ class AddInvoiceNoTaxpayerModal extends Component
     {
         $this->seize = intval($this->length) * intval($this->width);
     }
-    // public function submit()
-    // {
-    //     // Validate the form input data
-    //     $this->validate();
-
-    //     DB::transaction(function () {
-
-    //         $data = [
-    //             //save into Invoice_items table
-    //             "taxpayer_taxable_id" => $this->taxpayer_taxable_id,
-    //             "qty" => $this->qty,
-    //             "s_amount" => $this->s_amount,
-
-    //             //save into Invoice table
-    //             'taxpayer_id' => $this->taxpayer_id,
-    //             'amount' => $this->amount,
-
-    //         ];
-
-    //         $invoice = Invoice::find($this->invoice_id) ?? Invoice::create($data);
-
-    //         if ($this->edit_mode) {
-    //             foreach ($data as $k => $v) {
-    //                 $invoice->$k = $v;
-    //             }
-    //             $invoice->save();
-    //         }
-
-    //         if ($this->edit_mode) {
-    //             $this->dispatch('success', __('Invoice updated'));
-    //         } else {
-    //             $this->dispatch('success', __('New Invoice created'));
-    //         }
-    //     });
-
-    //     $this->reset();
-    // }
-
     public function submit()
     {
 
@@ -321,15 +271,7 @@ class AddInvoiceNoTaxpayerModal extends Component
 
         // Validate the form input data
        $this->validate();
-//dd(  $this->amount,$this->s_amount,$this->taxpayer_taxable_id,$this->qty,$this->start_month,$this->validate());
-        //'cancel_reduct' => 'required',
         DB::transaction(function () {
-
-            //dd($this->qty,$this->start_month);
-            // if (!$this->edit_mode){
-            //     $this->invoice_id = null;
-            // }
-
             $taxpayersData = [
                 'name' => $this->fullname,
                 'gender' => $this->gender,
@@ -343,9 +285,9 @@ class AddInvoiceNoTaxpayerModal extends Component
 
 
             ];
-            //
             $taxpayer = Taxpayer::create($taxpayersData);
             $taxpayer->save();
+
 
             $invoiceData = [
                 'taxpayer_id' => $taxpayer->id,
@@ -357,7 +299,14 @@ class AddInvoiceNoTaxpayerModal extends Component
                 'pay_status' => 'OWING',
                 'type'=> Constants::INVOICE_TYPE_COMPTANT
             ];
-
+            $role = Role::where('name', 'regisseur')->first();
+            if ($role) {
+                /**@var App\Models\User $user  */
+                $user = auth()->user();
+                if ($user->hasRole('regisseur')) {
+                    $invoiceData['status'] =InvoiceStatusEnums::APPROVED;
+                }
+            }
 
             // if ($this->edit_mode) {
             //     $invoiceData['amount'] = $this->amount_e;
@@ -372,7 +321,7 @@ class AddInvoiceNoTaxpayerModal extends Component
 
             // Save the invoice ID into the invoice_no column
 
-            $invoice->invoice_no = $invoice->id;
+            $invoice->invoice_no = 'c-'.$invoice->id;
             $invoice->nic = '00000'.$invoice->id;
             //$invoice->order_no = $this->order_no;
             $invoice->save();

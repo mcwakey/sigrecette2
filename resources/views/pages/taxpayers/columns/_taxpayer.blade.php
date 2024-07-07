@@ -7,7 +7,11 @@
    elseif(request()->has('rc') && request()->input('rc') =='avis'){
        $taxpayer_url =route('invoicing.taxpayers.show',  ['taxpayer' => $taxpayerinfo->id, 'autoClick' => 'invoicebtng']);
 
-   }else{
+   }
+   elseif (request()->has('disable')){
+        $taxpayer_url ="#";
+   }
+   else{
         $taxpayer_url =route('taxpayers.show',['taxpayer' => $taxpayerinfo->id]);
    }
 

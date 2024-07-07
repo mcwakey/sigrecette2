@@ -118,4 +118,19 @@ class Constants
         return [InvoiceActionsEnums::VIEW];
     }
 
+    /**
+     * check if user is already on a url
+     *
+     * @param string $url
+     * @return string
+     */
+    public static function checkUrl(string $url): string
+    {
+        //dump(request()->fullUrl() ,url($url));
+        if (request()->fullUrl() == url($url)) {
+            return 'javascript:void(0);';
+        }
+
+        return $url;
+    }
 }
