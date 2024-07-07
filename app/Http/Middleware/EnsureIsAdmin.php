@@ -15,7 +15,10 @@ class EnsureIsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!$request->user()->hasAnyRole(['administrateur_system', 'administrateur','regisseur'])) {
+        if (!$request->user()->hasAnyRole(['administrateur_system', 'administrateur',])
+         && (!$request->has('type') || !$request->user()->hasAnyRole(['regisseur',]))
+        ) 
+        {
             return redirect()->route('dashboard');
         }
 
