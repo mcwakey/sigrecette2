@@ -79,13 +79,10 @@
 @stack('scripts')
 <!--end::Javascript-->
 
-<livewire:invoice.add-invoice-no-taxpayer-modal/>
 
-<livewire:payment.add-payment-modal />
 <livewire:stock_request.add-stock-request-modal/>
 <livewire:stock_transfer.add-stock-transfer-modal />
 <livewire:accountant_deposit.add-accountant-deposit-modal/>
-<livewire:taxpayer.add-taxpayer-modal />
 <script>
 
     document.addEventListener('livewire:init', () => {

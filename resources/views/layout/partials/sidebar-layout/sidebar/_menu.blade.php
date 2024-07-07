@@ -42,34 +42,37 @@
 				<!--end:Menu link-->
 				<!--begin:Menu sub-->
 				<div class="menu-sub menu-sub-accordion">
+                    @can('peut créer un contribuable')
+                        <div class="menu-item">
+                            <a class="menu-link  {{ request()->routeIs('taxpayers.*')  && !request()->has('disable') && !request()->has('state') &&  request()->has('autoClick')  ? 'active' : '' }}"
+                               href="{{ route('taxpayers.index', ['autoClick' => 'taxpayerbtn']) }}">
+							<span class="menu-bullet">
+								<span class="bullet bullet-dot"></span>
+							</span>
+                                <span class="menu-title">{{ __('Nouveau contribuable') }}</span>
+                            </a>
+                            <div class="separator separator-dashed my-4 mx-11"></div>
+                        </div>
+                    @endcan
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('taxpayers.*')  && !request()->has('disable') && !request()->has('state')  &&  !request()->has('autoClick')  ? 'active' : '' }}"
+                           href="{{ route('taxpayers.index') }}">
+							<span class="menu-bullet">
+								<span class="bullet bullet-dot"></span>
+							</span>
+                            <span class="menu-title">Liste des contribuables</span>
+                        </a>
+                    </div>
+                        <div class="menu-item">
+                            <a class="menu-link {{ request()->routeIs('taxpayers.*') && request()->has('state')  ? 'active' : '' }}"
+                               href="{{ route('taxpayers.index', ['state' => 'at']) }}">
+							<span class="menu-bullet">
+								<span class="bullet bullet-dot"></span>
+							</span>
+                                <span class="menu-title">Liste des contribuables en attente de validation</span>
+                            </a>
+                        </div>
 					<div class="menu-item">
-
-						@can('peut créer un contribuable')
-							<span class="menu-link ">
-								<span class="menu-bullet">
-									<span class="bullet bullet-dot"></span>
-								</span>
-								<span class="menu-title" data-bs-toggle="modal"
-									  data-bs-target="#kt_modal_add_taxpayer">{{ __('Nouveau contribuable') }}</span>
-							</span>
-
-							<div class="separator separator-dashed my-4 mx-11"></div>
-						@endcan
-
-						<a class="menu-link {{ request()->routeIs('taxpayers.*')  && !request()->has('disable') && !request()->has('state') ? 'active' : '' }}"
-						   href="{{ route('taxpayers.index') }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
-							</span>
-							<span class="menu-title">Liste des contribuables</span>
-						</a>
-							<a class="menu-link {{ request()->routeIs('taxpayers.*') && request()->has('state')  ? 'active' : '' }}"
-							   href="{{ route('taxpayers.index', ['state' => 'at']) }}">
-							<span class="menu-bullet">
-								<span class="bullet bullet-dot"></span>
-							</span>
-								<span class="menu-title">Liste des contribuables en attente de validation</span>
-							</a>
 						<a class="menu-link {{ request()->routeIs('taxpayers.*') && request()->has('disable') && request()->input('disable')==1 ? 'active' : '' }}"
 						   href="{{ route('taxpayers.index', ['disable' => true]) }}">
 							<span class="menu-bullet">
@@ -77,11 +80,9 @@
 							</span>
 							<span class="menu-title">Liste des contribuables   {{ __('désactiver') }}</span>
 						</a>
-						<!--end:Menu link-->
+
 					</div>
-					<!--end:Menu item-->
 				</div>
-				<!--end:Menu sub-->
 			</div>
 			<!--end:Menu item-->
 
@@ -153,8 +154,8 @@
 						<span class="menu-arrow"></span>
 					</span>
 					<div class="menu-sub menu-sub-accordion">
-	
-	
+
+
 						<div class="menu-item">
 							<a class="menu-link {{ request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Helpers\Constants::INVOICE_STATE_DRAFT_KEY ? 'active' : '' }}"
 							   href="{{ route('invoices.index', ['state' =>  App\Helpers\Constants::INVOICE_STATE_DRAFT_KEY,'type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY]) }}">
@@ -217,7 +218,7 @@
 							<span class="menu-title">Liste des avis rejetés </span>
 						</a>
 					</div>
-					
+
 					<div class="menu-item">
 						<a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('delivery')&&!request()->has('state') && request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY  ? 'active' : '' }}"
 						   href="{{ route('invoices.index' ,['type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY ]) }}">
