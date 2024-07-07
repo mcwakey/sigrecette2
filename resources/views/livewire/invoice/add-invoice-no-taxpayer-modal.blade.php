@@ -234,29 +234,24 @@
                                     </div>
                                 </div>
                             @endif
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <!--begin::Label-->
-                                <label class="required fs-6 fw-semibold mb-2">{{ __('seize') }}</label>
+                                <label class="required fs-6 fw-semibold mb-2">{{ $option_calculus }}</label>
                                 <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" wire:model="seize" name="seize"
+                                <div class="input-group mb-2">
+                                    <input type="text" wire:model="seize" name="seize"
                                     class="form-control mb-3 mb-lg-0" placeholder="{{ __('seize') }}"
                                        data-kt-action="change_tarrif"/>
+                                    <span class="input-group-text"
+                                        id="basic-addon1">{{ $unit }}</span>
+                                </div>
+                                <!--begin::Input-->
+                                
                                 <!--end::Input-->
                                 @error('seize')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                                    <div class="col-md-1">
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-semibold mb-2">{{ __('unit') }}</label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <input type="text" wire:model="unit" name="unit" class="form-control form-control-flush mb-3 mb-lg-0" placeholder="{{ __('unit') }}" readonly/>
-                                        <!--end::Input-->
-                                        @error('taxable_id')
-                                        <span class="text-danger">{{ $message }}</span> @enderror
-                                    </div>
                         </div>
 
 
@@ -297,7 +292,7 @@
                                 <thead>
                                     <tr class="border-bottom fs-7 fw-bolder text-gray-700 text-uppercase">
                                         <th class="min-w-300px w-450px">Item</th>
-                                        <th class="min-w-150px w-150px">Dimensions</th>
+                                        <th class="min-w-150px w-150px">{{ $option_calculus }}</th>
                                         <th class="min-w-150px w-150px">Price</th>
                                         <!-- <th class="min-w-100px w-100px">period</th> -->
                                         <th class="min-w-100px text-end">Total</th>

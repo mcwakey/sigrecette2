@@ -204,15 +204,6 @@
                         <!--end:Menu link-->
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('delivery')&&!request()->has('state') && request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY  ? 'active' : '' }}"
-                           href="{{ route('invoices.index' ,['type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY ]) }}">
-        <span class="menu-bullet">
-            <span class="bullet bullet-dot"></span>
-        </span>
-                            <span class="menu-title">Liste générale des avis sur titre </span>
-                        </a>
-                    </div>
-                    <div class="menu-item">
                         <a class="menu-link {{request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Helpers\Constants::INVOICE_STATE_REJECT_KEY ? 'active' : ''  }}"
                            href="{{ route('invoices.index' ,['state'=>App\Helpers\Constants::INVOICE_STATE_REJECT_KEY,'type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY ]) }}">
         <span class="menu-bullet">
@@ -232,7 +223,16 @@
                         </a>
                         <!--end:Menu link-->
                     </div>
-
+                    
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && !request()->has('delivery')&&!request()->has('state') && request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY  ? 'active' : '' }}"
+                           href="{{ route('invoices.index' ,['type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY ]) }}">
+        <span class="menu-bullet">
+            <span class="bullet bullet-dot"></span>
+        </span>
+                            <span class="menu-title">Liste générale des avis</span>
+                        </a>
+                    </div>
 
 
                 </div>
