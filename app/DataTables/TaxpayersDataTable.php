@@ -170,23 +170,26 @@ class TaxpayersDataTable extends DataTable
                 ->printable(false)
                 ->width(60)
         ];
-        if(request()->has('rc')){
+
             $columns = array_map(function ($column) {
                 if (request()->has('rc')){
-                    if (in_array($column->name, ['action'])) {
+                    if (in_array($column->name, ['action','status'])) {
                         $column->visible(false);
                     }
                 }
-                if(in_array($column->name, ['action'])){
-
+                if(!request()->has('state')){
+                    if(in_array($column->name, ['status'])){
+                        $column->visible(false);
+                    }
                 }
+
 
 
                 return $column;
             }, $columns);
 
 
-        }
+
         return $columns;
     }
 
