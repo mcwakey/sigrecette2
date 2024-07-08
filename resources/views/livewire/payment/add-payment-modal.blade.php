@@ -154,11 +154,6 @@
                                 <label class="required fw-semibold fs-6 mb-2">{{ __("Selectionner le code d'imputation") }}</label>
                                 <select wire:model=code" name="code" class="form-select" data-dropdown-parent="#kt_modal_add_payment" data-kt-action="update_payment_amount">
 
-                                    @if($invoice != null)
-                                        @foreach( $invoice->taxpayer_taxables()->get()  as $tax)
-                                            <option value="{{ $tax->taxable->tax_label->code}}">{{$tax->taxable->name."-".$tax->seize}}</option>
-                                        @endforeach
-                                    @endif
 
                                     @if($paidAndCodeArray!=null)
                                         @foreach($paidAndCodeArray  as $code => $code_amount)
