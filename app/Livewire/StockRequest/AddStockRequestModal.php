@@ -149,9 +149,12 @@ class AddStockRequestModal extends Component
             $this->start_no = null;
             $this->end_no = null;
 
+
             if ($this->edit_mode) {
                 // Emit a success event with a message
-                $this->dispatch('success', __('Etat de comptabilité mis a jour avec succès'));
+                $this->dispatchMessage( __('Stock valeur inactive'),'update',);
+            }else{
+                $this->dispatchMessage('Stock valeur inactive');
             }
             // }
         });
