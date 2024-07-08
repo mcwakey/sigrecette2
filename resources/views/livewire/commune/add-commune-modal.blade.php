@@ -108,7 +108,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="fw-semibold fs-6 mb-2">{{ __('email') }}</label>
-                                    <div class="input-group input-group-solid mb-5">
+                                    <div class="input-group mb-5">
 
                                         <input type="text"
                                                wire:model="email" name="email"

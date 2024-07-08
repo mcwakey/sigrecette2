@@ -150,6 +150,7 @@ return [
     'attributes'           => [
         'delivery_to' => 'nom',
         'seize' => 'surface',
+        't_title' => 'préfixe',
         'taxable_id' => 'matière taxable',
         'fullname' => 'nom complet',
         'activity_id'              => 'activité principale',
