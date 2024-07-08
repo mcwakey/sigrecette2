@@ -141,16 +141,19 @@ class AddTaxpayerTaxableModal extends Component
 
     public function updatedLength($value)
     {
-        //TODO fix this calcul ignore les virgurles
         $this->length = doubleval($this->length);
-        $this->width =  doubleval($this->width);
-        $this->seize = $this->length * $this->width;
+        $this->makeCalculSeize();
+
     }
 
     public function updatedWidth($value)
     {
-        $this->length = doubleval($this->length);
+
         $this->width =  doubleval($this->width);
+        $this->makeCalculSeize();
+    }
+    public function makeCalculSeize()
+    {
         $this->seize = $this->length * $this->width;
     }
 
