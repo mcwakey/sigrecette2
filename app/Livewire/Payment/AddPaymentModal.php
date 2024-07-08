@@ -145,7 +145,7 @@ class AddPaymentModal extends Component
                         $this->amount=$this->paidAndCodeArray[ $this->code ]['amount'];
                     }
                 }
-                dd($this->amount,$this->code);
+                //dd($this->amount,$this->code);
                 $paymentData = [
                     // 'invoice_id' => $this->invoice_id,
                     'invoice_id' => $this->invoice_no,

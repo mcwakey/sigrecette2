@@ -151,13 +151,12 @@
 
                         <div class="row">
                             <div class="col">
-                                <label class="required fw-semibold fs-6 mb-2">{{ __("Selectionner le code d'imputation") }}</label>
+                                <label class="required fw-semibold fs-6 mb-2">{{ __("La matière taxable") }}</label>
                                 <select wire:model=code" name="code" class="form-select" data-dropdown-parent="#kt_modal_add_payment" data-kt-action="update_payment_amount">
-
-
+                                    <option>Selectionner une option</option>
                                     @if($paidAndCodeArray!=null)
                                         @foreach($paidAndCodeArray  as $code => $code_amount)
-                                            <option value="{{$code}}">{{$code_amount['name']."-".$code_amount['amount']}}</option>
+                                            <option value="{{$code}}">{{$code_amount['name']." - (".$code_amount['amount'].")"}}</option>
                                         @endforeach
                                     @endif
 
