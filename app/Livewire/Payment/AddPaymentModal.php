@@ -54,6 +54,7 @@ class AddPaymentModal extends Component
     public $validCodes;
 
     public $edit_amount =true;
+    public $notes;
     protected function rules(){
         $rules = [
 
@@ -157,9 +158,11 @@ class AddPaymentModal extends Component
                     'description' =>  $invoice->type == Constants::INVOICE_TYPE_COMPTANT ? "Avis " . $this->invoice_no : "Avis " . $this->invoice_no . ", OR " . $this->order_no,
                     'remaining_amount' => $this->bill - ($this->amount + $this->paid),
                     'user_id' =>  Auth::id(),
-                    'invoice_type' => $invoice->type
+                    'invoice_type' => $invoice->type,
+                    'notes'=>$this->notes
 
                 ];
+                //dd($paymentData);
 
                 $role = Role::where('name', 'regisseur')->first();
                 if ($role) {

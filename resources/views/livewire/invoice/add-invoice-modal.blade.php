@@ -232,7 +232,7 @@
                             </table>
                             <div>
                                 <label class="form-label fs-6 fw-bolder text-gray-700">Notes</label>
-                                <textarea name="notes" class="form-control" rows="2" placeholder=""></textarea>
+                                <textarea name="notes"  wire:model="notes" class="form-control" rows="2" placeholder=""></textarea>
                             </div>
                         </div>
 

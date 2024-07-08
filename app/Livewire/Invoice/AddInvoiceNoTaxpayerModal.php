@@ -321,7 +321,7 @@ class AddInvoiceNoTaxpayerModal extends Component
 
             // Save the invoice ID into the invoice_no column
 
-            $invoice->invoice_no = 'c-'.$invoice->id;
+            $invoice->invoice_no = $invoice->id;
             $invoice->nic = '00000'.$invoice->id;
             //$invoice->order_no = $this->order_no;
             $invoice->save();
