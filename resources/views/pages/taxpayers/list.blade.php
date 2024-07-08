@@ -1,9 +1,9 @@
 <x-default-layout>
     @section('title')
         @if((request()->routeIs('taxpayers.*')  && !request()->has('disable')) or (request()->routeIs('invoicing.*')) )
-            {{ "Liste des ".__('taxpayers') }}
+            {{ "Liste des ".__('contribuables') }}
         @else
-            {{ "Liste des ".__('taxpayers') . " " .__('désactivés') }}
+            {{ "Liste des ".__('contribuables') . " " .__('désactivés') }}
         @endif
     @endsection
 

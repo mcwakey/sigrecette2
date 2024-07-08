@@ -319,13 +319,15 @@
                         <div class="text-center pt-5">
                             <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal" aria-label="Close" wire:loading.attr="disabled">{{ __('cancel') }}</button>
                             @if ($taxpayer_taxables instanceof \Illuminate\Support\Collection && $taxpayer_taxables->count() > 0)
-                            <button type="submit" class="btn btn-success" data-kt-invoices-modal-action="submit">
-                                <span class="indicator-label" wire:loading.remove>{{ __('submit') }}</span>
-                                <span class="indicator-progress" wire:loading wire:target="submit">
-                                    {{ __('please wait') }}
-                                    <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                </span>
-                            </button>
+                                @can('peut émettre un avis sur titre')
+                                    <button type="submit" class="btn btn-success" data-kt-invoices-modal-action="submit">
+                                        <span class="indicator-label" wire:loading.remove>{{ __('submit') }}</span>
+                                        <span class="indicator-progress" wire:loading wire:target="submit">
+                                            {{ __('please wait') }}
+                                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                        </span>
+                                    </button>
+                                @endcan
                             @endif
                         </div>
                         @endif
