@@ -143,8 +143,13 @@ class AddInvoiceNoTaxpayerModal extends Component
         "name"=> "required|string",
         "s_amount" => 'required|numeric',
         "taxpayer_taxable_id" => "required|int",
+        "taxlabel_id" => "required|int",
+        "taxable_id" => "required|int",
         "qty" => "required|numeric",
         "fullname" => "required|string",
+        "gender" => "required|string",
+        "tariff" => "required",
+        "seize" => "required|numeric",
 
         // 'taxpayer_id' => 'required',
         'amount' => 'required|numeric',
@@ -282,9 +287,7 @@ class AddInvoiceNoTaxpayerModal extends Component
                 'telephone' => $this->telephone,
                 'email' => $this->email,
                 'type'=>Constants::INVOICE_TYPE_COMPTANT,
-                'password'=>""
-
-
+                'password'=>"",
             ];
             $taxpayer = Taxpayer::create($taxpayersData);
             $taxpayer->save();

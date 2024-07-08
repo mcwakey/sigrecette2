@@ -47,8 +47,7 @@
                                         @foreach($genders as $gender)
                                             <option value="{{ $gender->name}}">{{ $gender->name }}</option>
                                     @endforeach
-                                    <!-- <option value="Homme">Homme</option>
-                                            <option value="Femme">Femme</option> -->
+
                                     </select>
                                     <!--end::Input-->
                                     @error('gender')
@@ -59,21 +58,13 @@
                                     <label class="required fw-semibold fs-6 mb-2">{{ __('id type') }}</label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <!-- <select aria-label="Select an ID Type" data-control="select2" data-placeholder="Select an ID Type..." class="form-select "
-                                        data-dropdown-parent="#kt_modal_add_taxpayer">
-                                        <option value="Homme">Homme</option>
-                                        <option value="Femme">Femme</option>
-                                    </select> -->
 
                                     <select wire:model="id_type" name="id_type" class="form-select " data-dropdown-parent="#kt_modal_add_taxpayer" data-allow-clear="true">
                                         <option>{{ __('select an option') }}</option>
                                         @foreach($id_types as $id_type)
                                             <option value="{{ $id_type->name}}">{{ $id_type->name }}</option>
                                     @endforeach
-                                    <!-- <option value="1">Approved</option>
-                                            <option value="2">Pending</option>
-                                            <option value="3">In Process</option>
-                                            <option value="4">Rejected</option> -->
+                              
                                     </select>
                                     <!--end::Input-->
                                     @error('id_type')
@@ -415,64 +406,23 @@
                             </div>
                         </div>
 
-
-                        @can('create invoice payment')
-                        {{--
-                            <div class="separator separator-content mb-5">
-                                <span class="w-200px text-gray-500 fw-semibold fs-7">{{ __('payment info') }}</span>
-                            </div>
-
-                            <div class="row">
-                                <div class=" d-flex bg-light-warning rounded border-warning border border-dashed mb-1 p-2">
-                                    <div class="col-md-4 me-10">
-                                        <label class="required fw-semibold fs-6 mb-2">{{ __('amount paid') }}</label>
-                                        <!-- <input wire:model="amount" name="amount" class="form-control mb-2" type="text" /> -->
-                                        <div class="input-group mb-2">
-                                            <input wire:model="amount" name="amount" class="form-control text-end"
-                                                type="text" readonly />
-                                            <span class="input-group-text" id="basic-addon1">{{ __('currency') }}</span>
-                                        </div>
-                                    </div>
-                                    <!-- <div class="col-md-2">
-                                        <label class="fw-semibold fs-6 mb-2">{{ __('.') }}</label>
-                                        <input class="form-control form-control-flush mb-2" type="text" placeholder="FCFA" readonly />
-                                    </div> -->
-                                    <!-- <div class="col-md-2">
-                                    </div> -->
-                                    <div class="col-md-3 me-10">
-                                        <label class="required fw-semibold fs-6 mb-2">{{ __('payment type') }}</label>
-                                        <select wire:model="payment_type" name="payment_type" class="form-select"
-                                            data-dropdown-parent="#kt_modal_add_payment">
-                                            <option></option>
-                                            <option value="CASH">CASH</option>
-                                            <option value="DIGI">DIGI</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="required fw-semibold fs-6 mb-2">{{ __('reference no') }}</label>
-                                        <input wire:model="reference" name="reference" class="form-control mb-2 text-end"
-                                            type="text" />
-                                    </div>
-                                </div>
-                            </div>
-                            --}}
-                        @endcan
-
-
                         <!--end::Input group-->
                         <!--end::Scroll-->
                         <!--begin::Actions-->
-                        <div class="text-center pt-5">
-                            <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal"
-                                aria-label="Close" wire:loading.attr="disabled">{{ __('cancel') }}</button>
-                            <button type="submit" class="btn btn-success" data-kt-invoices-modal-action="submit">
-                                <span class="indicator-label" wire:loading.remove>{{ __('submit') }}</span>
-                                <span class="indicator-progress" wire:loading wire:target="submit">
-                                    {{ __('please wait') }}
-                                    <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                </span>
-                            </button>
-                        </div>
+                        @can('peut valider un avis au comptant')
+                            <div class="text-center pt-5">
+                                <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal"
+                                    aria-label="Close" wire:loading.attr="disabled">{{ __('cancel') }}</button>
+                                <button type="submit" class="btn btn-success" data-kt-invoices-modal-action="submit">
+                                    <span class="indicator-label" wire:loading.remove>{{ __('submit') }}</span>
+                                    <span class="indicator-progress" wire:loading wire:target="submit">
+                                        {{ __('please wait') }}
+                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                </button>
+                            </div>
+                        @endcan
+
                         <!--end::Actions-->
                     </div>
                 </form>
