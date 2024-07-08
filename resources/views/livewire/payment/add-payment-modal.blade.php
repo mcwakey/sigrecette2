@@ -153,10 +153,16 @@
                             <div class="col">
                                 <label class="required fw-semibold fs-6 mb-2">{{ __("Selectionner le code d'imputation") }}</label>
                                 <select wire:model=code" name="code" class="form-select" data-dropdown-parent="#kt_modal_add_payment" data-kt-action="update_payment_amount">
-                                    <option></option>
+
+                                    @if($invoice != null)
+                                        @foreach( $invoice->taxpayer_taxables()->get()  as $tax)
+                                            <option value="{{ $tax->taxable->tax_label->code}}">{{$tax->taxable->name."-".$tax->seize}}</option>
+                                        @endforeach
+                                    @endif
+
                                     @if($paidAndCodeArray!=null)
                                         @foreach($paidAndCodeArray  as $code => $code_amount)
-                                            <option value="{{$code}}">{{$code."-".$code_amount['name']."-".$code_amount['amount']}}</option>
+                                            <option value="{{$code}}">{{$code_amount['name']."-".$code_amount['amount']}}</option>
                                         @endforeach
                                     @endif
 
@@ -171,7 +177,7 @@
                                 @if (!$edit_amount)
                                     <input wire:model="amount" name="amount" class="form-control mb-2 text-end" type="text" readonly/>
                                 @else
-                                    <input wire:model="amount" name="amount" class="form-control mb-2 text-end" type="text" />
+                                    <input wire:model="amount" name="amount" class="form-control mb-2 text-end" type="text" data-kt-action="update_local_amount" />
                                 @endif
                                 @error('amount')
                                 <span class="text-danger">{{ $message }}</span> @enderror
