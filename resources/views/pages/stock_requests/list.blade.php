@@ -221,9 +221,16 @@
     @push('scripts')
         {{ $dataTable->scripts() }}
         <script>
+            document.addEventListener('livewire:init', function () {
+                Livewire.on('success', function () {
+            //        $('#kt_modal_add_stock_request').modal('hide');
+                    window.LaravelDataTables['stock_requests-table'].ajax.reload();
+                });
+            });
             document.getElementById('mySearchInput').addEventListener('keyup', function () {
                 window.LaravelDataTables['stock_requests-table'].search(this.value).draw();
             });
+
 
             // document.getElementById('mySearchInput').addEventListener('keyup', function() {
             //     window.LaravelDataTables['stock_requests-table'].search(this.value).draw();
@@ -249,12 +256,7 @@
                 window.LaravelDataTables['stock_requests-table'].column(11).search(this.value).draw();
             });
 
-            document.addEventListener('livewire:init', function () {
-                Livewire.on('success', function () {
-                    $('#kt_modal_add_stock_request').modal('hide');
-                    window.LaravelDataTables['stock_requests-table'].ajax.reload();
-                });
-            });
+
             document.querySelectorAll('.print-link').forEach(function(link) {
 
                 function capitalizeFirstLetter(str) {
