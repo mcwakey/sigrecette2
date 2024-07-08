@@ -273,7 +273,7 @@ class RolesPermissionsSeeder extends Seeder
         ];
 
         foreach ($permissions_by_role['administrateur_system'] as $permission) {
-            Permission::create(['name' => $permission]);
+            Permission::firstOrCreate(['name' => $permission]);
         }
 
         foreach ($permissions_by_role as $role => $permissions) {
@@ -281,7 +281,7 @@ class RolesPermissionsSeeder extends Seeder
             foreach ($permissions as $permission) {
                 $permissions_list[] = $permission;
             }
-            Role::create(['name' => $role, 'user_id' => 0])->syncPermissions($permissions_list);
+            Role::firstOrCreate(['name' => $role, 'user_id' => 0])->syncPermissions($permissions_list);
         }
 
         if (!app()->environment('production')) {
