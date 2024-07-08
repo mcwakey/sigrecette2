@@ -11,6 +11,8 @@ class TaxpayerTaxable extends Model
 
     protected $fillable = [
         'name',
+        'length',
+        'width',
         'seize',
         'location',
         'longitude',

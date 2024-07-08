@@ -200,16 +200,25 @@
                                         <th class="text-primary">
                                             <!-- <button class="btn btn-link py-1" data-kt-element="add-item">Add item</button> -->
                                         </th>
-                                        <th colspan="2" class="border-bottom border-bottom-dashed ps-0">
+                                        <th colspan="1" class="border-bottom border-bottom-dashed ps-0">
                                             <div class="d-flex flex-column align-items-start">
                                                 <div class="fs-5">Soustotal</div>
                                             </div>
                                         </th>
-                                        <th colspan="2" class="border-bottom border-bottom-dashed text-end">
-                                            <input type="text" class="fs-6 form-control form-control-flush text-end" wire:model="amount_ph" name="amount_ph" placeholder="0.00 FCFA" readonly />
+                                        <th colspan="3" class="border-bottom border-bottom-dashed text-end">
+                                            {{-- <input type="text" class="fs-6 form-control form-control-flush text-end" wire:model="amount_ph" name="amount_ph" placeholder="0.00 FCFA" readonly /> --}}
+
+                                            <div class="input-group mb-2">
+                                                <input type="text" class="fs-6 form-control form-control-flush text-end" wire:model="amount_ph" name="amount_ph" placeholder="0.00" readonly/>
+                                                <span class="input-group-text"  id="basic-addon1">FCFA</span>
+                                            </div>
 
                                             @if ($view_mode)
-                                            <input type="text" class="fs-6 form-control text-end" wire:model="amount_ph_e" name="amount_ph_e" placeholder="0.00 FCFA" readonly />
+                                            {{-- <input type="text" class="fs-6 form-control text-end" wire:model="amount_ph_e" name="amount_ph_e" placeholder="0.00 FCFA" readonly /> --}}
+                                            <div class="input-group mb-2">
+                                                <input type="text" class="fs-6 form-control text-end" wire:model="amount_ph_e" name="amount_ph_e" placeholder="0.00" readonly/>
+                                                <span class="input-group-text"  id="basic-addon1">FCFA</span>
+                                            </div>
                                             @endif
                                             <input type="hidden" class="form-control form-control-flush text-end" wire:model="amount" name="amount" placeholder="0.00" readonly />
                                             <input type="hidden" class="form-control form-control-flush text-end" wire:model="amount_e" name="amount_e" placeholder="0.00" readonly />
@@ -217,11 +226,19 @@
                                     </tr>
                                     <tr class="align-top fw-bolder text-gray-700">
                                         <th></th>
-                                        <th colspan="2" class="fs-4 ps-0">Total</th>
+                                        <th colspan="1" class="fs-4 ps-0">Total</th>
                                         <th colspan="2" class="text-end fs-4 text-nowrap">
-                                            <input type="text" class="fs-5 form-control form-control-flush text-end" wire:model="amount_ph" name="amount_ph" placeholder="0.00 FCFA" readonly />
+                                            {{-- <input type="text" class="fs-5 form-control form-control-flush text-end" wire:model="amount_ph" name="amount_ph" placeholder="0.00 FCFA" readonly /> --}}
+                                            <div class="input-group mb-2">
+                                                <input type="text" class="fs-6 form-control form-control-flush text-end" wire:model="amount_ph" name="amount_ph" placeholder="0.00" readonly/>
+                                                <span class="input-group-text"  id="basic-addon1">FCFA</span>
+                                            </div>
                                             @if ($view_mode)
-                                            <input type="text" class="fs-5 form-control text-end" wire:model="amount_ph_e" name="amount_ph_e" placeholder="0.00 FCFA" readonly />
+                                            {{-- <input type="text" class="fs-5 form-control text-end" wire:model="amount_ph_e" name="amount_ph_e" placeholder="0.00 FCFA" readonly /> --}}
+                                            <div class="input-group mb-2">
+                                                <input type="text" class="fs-6 form-control text-end" wire:model="amount_ph_e" name="amount_ph_e" placeholder="0.00" readonly/>
+                                                <span class="input-group-text"  id="basic-addon1">FCFA</span>
+                                            </div>
                                             @endif
                                             <input type="hidden" class="form-control form-control-flush text-end" wire:model="amount" name="amount" placeholder="0.00" readonly />
                                             <input type="hidden" class="form-control form-control-flush text-end" wire:model="amount_e" name="amount_e" placeholder="0.00" readonly />

@@ -417,10 +417,12 @@ $filters = [
     @if (now()->format('m') === '01' || $app->environment('local'))
         <livewire:invoice.auto-invoice-modal/>
     @endif
-        <livewire:invoice.add-invoice-modal />
+
+    <livewire:invoice.add-invoice-modal />
     <livewire:invoice.add-invoice-no-taxpayer-modal/>
 
     <livewire:payment.add-payment-modal />
+    
     @push('scripts')
         {{ $dataTable->scripts() }}
         <script>

@@ -40,6 +40,7 @@ class AddInvoiceModal extends Component
     public $name;
     public $tnif;
     public $zone;
+    public $notes;
 
     public $invoice_no;
     public $periodicity;
@@ -376,7 +377,8 @@ class AddInvoiceModal extends Component
         $this->taxpayer_id = $invoice->taxpayer->id ?? '';
         $this->invoice_id = $invoice->id;
 
-        $this->qty = $invoice->qty;
+        $this->qty = intval($invoice->qty);
+        // dd($this->qty);
 
         $this->name = $invoice->taxpayer->name ?? '';
         $this->tnif = $invoice->taxpayer->id ?? '';
@@ -444,8 +446,8 @@ class AddInvoiceModal extends Component
             //$this->taxpayer_taxable_id[$index] = $taxable->id;
         }
 
-        $this->amount_ph = array_sum($this->s_amount) . " FCFA";
-        $this->amount_ph_e = array_sum($this->s_amount_e) . " FCFA";
+        $this->amount_ph = array_sum($this->s_amount);
+        $this->amount_ph_e = array_sum($this->s_amount_e);
 
         $this->amount = array_sum($this->s_amount);
         $this->amount_e = array_sum($this->s_amount_e);
@@ -487,7 +489,7 @@ class AddInvoiceModal extends Component
         }
 
 
-        $this->amount_ph = " FCFA";
+        $this->amount_ph = '';
         $this->amount = '';
 
         //dd($this->taxpayer_taxables);
@@ -557,7 +559,7 @@ class AddInvoiceModal extends Component
             $this->taxpayer_taxable_id[$index] = $taxable->id;
         }
 
-        $this->amount_ph = array_sum($this->s_amount) . " FCFA";
+        $this->amount_ph = array_sum($this->s_amount);
         $this->amount = array_sum($this->s_amount);
     }
     #[On('updateSharedTaxpayerId')]

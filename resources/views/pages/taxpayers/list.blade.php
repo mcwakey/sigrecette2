@@ -36,14 +36,14 @@
                     </div>
 
 
+                </div>
+
+
+
+
+
             </div>
-
-
-
-
-
-        </div>
-        @if(request()->routeIs('taxpayers.*'))
+            @if(request()->routeIs('taxpayers.*'))
 
             <div class="card-toolbar">
 
@@ -59,7 +59,7 @@
                             </button>
                             <!--end::Add user-->
                         </div>
-                @endcan
+                    @endcan
                         <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
 
                             <div class=" ms-5 mt-1 me-5">
@@ -82,6 +82,7 @@
             </div>
             @endif
 
+        </div>
 
 
         <div class="card-body py-4">
@@ -240,6 +241,7 @@
                     <div class="separator separator-dashed mt-5 mb-5"></div>
                 </div>
             </form>
+            {{-- <br/> --}}
             <!--begin::Table-->
             <div class="table-responsive">
                 {{ $dataTable->table() }}
@@ -248,7 +250,9 @@
         </div>
         <!--end::Card body-->
     </div>
-        <livewire:taxpayer.add-taxpayer-modal />
+
+    <livewire:taxpayer.add-taxpayer-modal />
+
     @push('scripts')
         <!-- <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css">
         <script src="https://cdn.datatables.net/buttons/1.0.3/js/dataTables.buttons.min.js"></script>
