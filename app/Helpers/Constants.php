@@ -5,7 +5,10 @@ namespace App\Helpers;
 use App\Enums\InvoiceActionsEnums;
 use App\Enums\InvoiceStatusEnums;
 use App\Models\Invoice;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 class Constants
 {
@@ -132,5 +135,22 @@ class Constants
         }
 
         return $url;
+    }
+
+    /**
+     * @param array $permissions
+     * @return Builder[]|Collection
+     */
+    public static function getUserWithPermission(array $permissions): Collection|array
+    {
+        $usersQuery = User::query();
+        $usersQuery->where(function($query) use ($permissions) {
+            foreach ($permissions as $permission) {
+                $query->orWhereHas('permissions', function($q) use ($permission) {
+                    $q->where('name', $permission);
+                });
+            }
+        });
+        return $usersQuery->get();
     }
 }

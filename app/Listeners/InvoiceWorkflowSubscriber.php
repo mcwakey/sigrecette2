@@ -3,8 +3,11 @@
 namespace App\Listeners;
 
 use App\Enums\InvoiceStatusEnums;
+use App\Helpers\Constants;
+use App\Models\User;
 use App\Notifications\InvoiceAccepted;
 use App\Notifications\InvoiceApproved;
+use App\Notifications\InvoiceCreated;
 use App\Notifications\InvoiceRejected;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
@@ -45,24 +48,17 @@ class InvoiceWorkflowSubscriber
         //dump($place);
        switch ($place){
            case InvoiceStatusEnums::ACCEPTED:
-               $role = Role::where('name', 'agent_delegation_du_receveur')->first();
-               $role_a = Role::where('name', 'agent_assiette')->first();
-               $role_r = Role::where('name', 'agent_recette')->first();
-               if ($role && $role_a && $role_r) {
-                   $users = $role->users()->get();
-                   $users_agent_assiette= $role_a->users()->get();
-                   $users_agent_recette=  $role_r->users()->get();
-                   Notification::send($users, new InvoiceAccepted($invoice, Auth::user(), "agent_delegation_du_receveur"));
-                   Notification::send($users_agent_assiette, new InvoiceAccepted($invoice, Auth::user(), "agent_assiette"));
-                   Notification::send( $users_agent_recette, new InvoiceAccepted($invoice, Auth::user(), "agent_recette"));
-
+               $permissions = ['peut émettre un avis sur titre', 'peut accepter un avis sur titre', 'peut ajouter le numéro d\'ordre de recette d\'un avis'];
+               $users = Constants::getUserWithPermission($permissions);;
+               if ($users && count($users)>0) {
+                   Notification::send($users, new InvoiceAccepted($invoice,Auth::user(),'agent_delegation'));
                }
                break;
            case InvoiceStatusEnums::REJECTED_BY_OR:
-               $role = Role::where('name', 'agent_assiette')->first();
-               if ($role) {
-                   $users = $role->users()->get();
-                   Notification::send($users, new InvoiceRejected($invoice, Auth::user(), "agent_assiette"));
+               $permissions = ['peut émettre un avis sur titre'];
+              $users = Constants::getUserWithPermission($permissions);
+               if ($users && count($users)>0) {
+                   Notification::send($users, new  InvoiceRejected($invoice,Auth::user(),'agent_delegation'));
                }
                foreach ( $invoice->taxpayer_taxables as $taxpayerTaxable){
                    $taxpayerTaxable->billable ='0';
@@ -72,22 +68,17 @@ class InvoiceWorkflowSubscriber
                }
                break;
            case  InvoiceStatusEnums::PENDING:
-               $role = Role::where('name', 'agent_recette')->first();
-               if ($role) {
-                   $users = $role->users()->get();
+               $permissions = ['peut prendre en charge un avis sur titre', 'peut rejeter un avis sur titre (agent par délégation du receveur)'];
+               $users = Constants::getUserWithPermission($permissions);
+               if ($users && count($users)>0) {
                    Notification::send($users, new InvoiceAccepted($invoice, Auth::user(), "agent_recette"));
-               }
-               $role_assiette = Role::where('name', 'agent_assiette')->first();
-               if($role_assiette){
-                   $users =  $role_assiette->users()->get();
-                   Notification::send($users, new InvoiceAccepted($invoice, Auth::user(), "agent_assiette"));
                }
            break;
            case   InvoiceStatusEnums::APPROVED:
            case     InvoiceStatusEnums::APPROVED_CANCELLATION:
-                 $role = Role::where('name', 'regisseur')->first();
-                   if ($role) {
-                       $users = $role->users()->get();
+           $permissions = ['peut prendre en charge un avis sur titre', 'peut rejeter un avis sur titre (agent par délégation du receveur)','peut comptabiliser un paiement'];
+           $users = Constants::getUserWithPermission($permissions);
+           if ($users && count($users)>0) {
                        Notification::send($users, new InvoiceApproved($invoice, Auth::user(), "regisseur"));
                    }
                break;

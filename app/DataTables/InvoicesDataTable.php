@@ -21,9 +21,6 @@ use Yajra\DataTables\WithExportQueue;
 class InvoicesDataTable extends DataTable
 {
     use WithExportQueue;
-    protected $showId;
-
-
 
 
     /**
@@ -95,12 +92,6 @@ class InvoicesDataTable extends DataTable
     }
 
 
-    // public function query(Invoice $model): QueryBuilder
-    // {
-    //     return $query = $model->newQuery();
-    // }
-
-    // use Illuminate\Database\Eloquent\Builder;
 
     public function query(Invoice $model): QueryBuilder
     {
