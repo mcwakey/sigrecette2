@@ -2,9 +2,13 @@
 
     @section('title')
         @if(!request()->has('disable') && request()->has('type') && request()->has('type') == 'col')
-            {{__('Collecteurs')}}
+            {{__('Liste des collecteurs')}}
+        @elseif(request()->has('disable') && request()->has('type') && request()->has('type') == 'col')
+            {{__('Liste des collecteurs désactivés')}}
+        @elseif(request()->has('disable'))
+        {{__('Liste des utilisateurs désactivés')}}
         @else
-        {{__('users')}}
+            {{__('Liste des utilisateurs')}}
         @endif
     @endsection
 
