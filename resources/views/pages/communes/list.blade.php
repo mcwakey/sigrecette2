@@ -1,7 +1,7 @@
 <x-default-layout>
 
     @section('title')
-    {{ __('info commune') }}
+    {{ __('Informations de la commune') }}
     @endsection
 
     @section('breadcrumbs')
@@ -17,7 +17,7 @@
                 <div class="card-header">
                     <!--begin::Card title-->
                     <div class="card-title">
-                        <h2 class="fw-bold">Commune details</h2>
+                        <h2 class="fw-bold">Commune détaille</h2>
                     </div>
                     <!--begin::Card title-->
 
@@ -74,7 +74,7 @@
                                         <td class="text-gray-800">{{$commune->email}}</td>
                                     </tr>
                                     <tr>
-                                        <td class="text-gray-500">Website url:</td>
+                                        <td class="text-gray-500">URL site web:</td>
                                         <td class="text-gray-800">{{$commune->url}}</td>
                                     </tr>
 
@@ -110,7 +110,7 @@
                                     <tr>
                                         <td class="text-gray-500">{{ __('treasury_address') }}:</td>
                                         <td class="text-gray-800">
-                                            "{{ $commune->treasury_address }}
+                                            {{ $commune->treasury_address }}
                                         </td>
                                     </tr>
                                     <!--end::Row-->
@@ -122,7 +122,11 @@
                                     </tr>
                                     <tr>
                                         <td class="text-gray-500">Limite:</td>
-                                        <td class="text-gray-800">{{$commune->latitude.",".$commune->longitude}}</td>
+                                        @if ($commune->latitude || $commune->longitude)
+                                            <td class="text-gray-800">{{$commune->latitude.",".$commune->longitude}}</td>
+                                        @else
+                                            <td class="text-gray-800">-- : --</td>
+                                        @endif
                                     </tr>
                                     <!--begin::Row-->
                                     <tr>

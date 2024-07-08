@@ -51,7 +51,7 @@
                             </div>
                             <div class="col-md-4 mb-4">
                                 <!--begin::Label-->
-                                <label class="required fw-semibold fs-6 mb-2">{{ __('commune_name') }}</label>
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('Nom de la commune') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="text" wire:model="name" name="name"
@@ -224,12 +224,12 @@
                             </div>
 
                             <div class="col-md-12 mb-4">
-                                <label class="fw-semibold fs-6 mb-2">{{ __('Website URL') }}</label>
+                                <label class="fw-semibold fs-6 mb-2">{{ __('URL site web') }}</label>
                                 <div class="input-group mb-5">
                                     <span class="input-group-text" id="basic-addon3">
                                     <i class="ki-duotone ki-wallet fs-1"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></i>
                                     </span>
-                                    <input type="text" class="form-control" id="basic-url"  placeholder="{{ __('Website URL') }}" aria-describedby="basic-addon3"
+                                    <input type="text" class="form-control" id="basic-url"  placeholder="{{ __('URL du site web de la comunne') }}" aria-describedby="basic-addon3"
                                            wire:model="url" name="url"/>
                                     @error('url')
                                     <span class="text-danger">{{ $message }}</span>
