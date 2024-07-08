@@ -660,5 +660,6 @@
     "zone": "Zone fiscale",
     "zone geolocation": "Géolocalisation d'une zone",
     "zones": "Zones Fiscales",
-    "No taxables selected": "Veuillez sélectionner au moins une taxation"
+    "No taxables selected": "Veuillez sélectionner au moins une taxation",
+    "reason_for_reject": "Motif de reject"
 }

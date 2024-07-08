@@ -34,6 +34,16 @@
             @error('status')<span class="text-danger  text-wrap">{{ $message }}</span>@enderror
         </div>
 
+        @if($status ==  App\Enums\InvoiceStatusEnums::PENDING)
+            <div class="">
+                <label class="form-label fw-semibold fs-6 mt-2 mb-2">{{ __('reason_for_reject') }}</label>
+                <textarea name="notes"  wire:model="reason_for_reject" class="form-control" rows="2" placeholder=""></textarea>
+                @error('reason_for_reject')<span class="text-danger  text-wrap">{{ $message }}</span>@enderror
+            </div>
+        @endif
+
+
+
     </div>
     <!--end::Input group-->
     <!--begin::Actions-->

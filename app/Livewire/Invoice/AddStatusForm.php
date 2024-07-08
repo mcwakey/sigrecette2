@@ -28,6 +28,7 @@ class AddStatusForm extends Component
     public $status;
 
     public $edit_mode = false;
+    public $reason_for_reject;
 
     public function rules()
     {
@@ -90,8 +91,9 @@ class AddStatusForm extends Component
 
                 $this->invoice_id = $invoice->id;
 
-                //foreach ($data as $k => $v) {$invoice->$k = $v;}
-                //dd($invoice->getAvailableTransitions());
+                if($invoice->type == Constants::INVOICE_TYPE_TITRE && $this->status==InvoiceStatusEnums::REJECTED){
+                    $invoice->reason_for_reject = $this->reason_for_reject;
+                }
                 if ($this->status == InvoiceStatusEnums::APPROVED &&  $invoice->reduce_amount != '') {
                     //Todo make cascade reduction
                     $description_str = $invoice->reduce_amount == $invoice->amount ? Constants::ANNULATION : Constants::REDUCTION;
@@ -119,6 +121,7 @@ class AddStatusForm extends Component
                     }
                     $this->status = InvoiceStatusEnums::APPROVED_CANCELLATION;
                 }
+
 
                 $invoice->save();
 

@@ -111,7 +111,6 @@ class AddInvoiceModal extends Component
     public $edit_mode = false;
     public $view_mode = false;
     public $button_mode = false;
-    public $notes;
 
     protected $rules = [
         "s_amount" => "required|numeric",
@@ -317,15 +316,7 @@ class AddInvoiceModal extends Component
 
             if(!$this->edit_mode){
                 $permissions = ['peut émettre un avis sur titre', 'peut accepter un avis sur titre', 'peut rejeter un avis sur titre (agent par délégation de l\'ordonateur)'];
-                $usersQuery = User::query();
-                $usersQuery->where(function($query) use ($permissions) {
-                    foreach ($permissions as $permission) {
-                        $query->orWhereHas('permissions', function($q) use ($permission) {
-                            $q->where('name', $permission);
-                        });
-                    }
-                });
-                $users = $usersQuery->get();
+                $users = Constants::getUserWithPermission($permissions);
                 if ($users && count($users)>0) {
                     Notification::send($users, new InvoiceCreated($invoice,Auth::user(),'agent_delegation'));
                 }

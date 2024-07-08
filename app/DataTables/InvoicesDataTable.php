@@ -85,6 +85,8 @@ class InvoicesDataTable extends DataTable
            // ->editColumn('from_date', function (Invoice $invoice) {return $invoice->from_date;})
             ->editColumn('to_date', function (Invoice $invoice) {
                 return $invoice->to_date;})
+            ->editColumn('reason_for_reject', function (Invoice $invoice) {
+                return $invoice->reason_for_reject;})
             ->addColumn('action', function (Invoice $invoice) {
                 return view('pages/invoices.columns._actions', compact('invoice'));
             })
@@ -192,6 +194,7 @@ class InvoicesDataTable extends DataTable
             Column::make('to_date')->title(__('expiry date'))->addClass('text-nowrap')->visible(false),
             Column::make('validity')->title(__('status')),
             Column::make('taxpayer_id')->visible(false),
+            Column::make('reason_for_reject')->title(__('reason_for_reject')),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
                 ->exportable(true)
@@ -202,22 +205,26 @@ class InvoicesDataTable extends DataTable
 
             $columns = array_map(function ($column) {
                 if ($this->type==Constants::INVOICE_TYPE_COMPTANT){
-                    if (in_array($column->name, ['zones.name','remains_to_be_paid'])) {
+                    if (in_array($column->name, ['zones.name','remains_to_be_paid','reason_for_reject'])) {
                         $column->visible(false);
                     }
                 }
                 if ($this->state != null) {
                     if ($this->state == InvoiceStatusEnums::DRAFT) {
-                        if (in_array($column->name, ['order_no', 'paid', 'remains_to_be_paid', 'delivery_date', 'to_date', 'validity'])) {
+                        if (in_array($column->name, ['order_no', 'paid', 'remains_to_be_paid', 'delivery_date', 'to_date', 'validity','reason_for_reject'])) {
                             $column->visible(false);
                         }
                     } elseif ($this->state == InvoiceStatusEnums::ACCEPTED) {
-                        if (in_array($column->name, ['paid', 'remains_to_be_paid', 'delivery_date', 'validity', 'to_date'])) {
+                        if (in_array($column->name, ['paid', 'remains_to_be_paid', 'delivery_date', 'validity', 'to_date','reason_for_reject'])) {
                             $column->visible(false);
                         }
                     }
 
                     elseif ($this->state == InvoiceStatusEnums::PENDING) {
+                        if (in_array($column->name, ['paid', 'remains_to_be_paid', 'to_date', 'validity','delivery_date','reason_for_reject'])) {
+                            $column->visible(false);
+                        }
+                    }elseif ($this->state==InvoiceStatusEnums::REJECTED){
                         if (in_array($column->name, ['paid', 'remains_to_be_paid', 'to_date', 'validity','delivery_date'])) {
                             $column->visible(false);
                         }
