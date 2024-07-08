@@ -29,8 +29,8 @@ class StockTransferController extends Controller
     public function show(string $userId,  StockTransfersDataTable $dataTable,Request $request)
     {
         $validatedData = $request->validate([
-            's_date' => 'nullable|date_format:Y-m-d H:i:s',
-            'e_date' => 'nullable|date_format:Y-m-d H:i:s',
+            's_date' => 'nullable|date_format:Y-m-d',
+            'e_date' => 'nullable|date_format:Y-m-d',
         ]);
          $user = User::find($userId);
         $dateFrom = $validatedData['s_date'] ?? null;
