@@ -186,6 +186,8 @@ class AddTaxpayerTaxableModal extends Component
             // Prepare the data for creating a new Taxable
             $data = [
                 'name' => $this->description,
+                'length' => $this->length,
+                'width' => $this->width,
                 'seize' => $this->seize,
                 'location' => $this->location,
                 'taxpayer_id' => $this->taxpayer_id,
@@ -276,6 +278,8 @@ class AddTaxpayerTaxableModal extends Component
 
         $this->taxpayer_taxable_id = $taxpayer_taxable->id;
         $this->description = $taxpayer_taxable->name;
+        $this->length = $taxpayer_taxable->length;
+        $this->width = $taxpayer_taxable->width;
         $this->seize = $taxpayer_taxable->seize;
         $this->location = $taxpayer_taxable->location;
         $this->longitude = $taxpayer_taxable->longitude;

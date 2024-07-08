@@ -62,7 +62,11 @@
                                 <select data-kt-action="load_drop" wire:model="taxable_id" name="taxable_id" class="form-select" data-dropdown-parent="#kt_modal_add_taxpayer_taxable">
                                     <option>{{ __('select an option') }}</option>
                                     @foreach($taxables as $taxable)
+                                    @if($taxable_id == $taxable->id)
+                                    <option selected value="{{ $taxable->id}}">{{ $taxable->name }}</option>
+                                    @else
                                     <option value="{{ $taxable->id}}">{{ $taxable->name }}</option>
+                                    @endif
                                     @endforeach
                                     <!-- <option value="Homme">Homme</option>
                                     <option value="Femme">Femme</option> -->
@@ -122,24 +126,31 @@
                         <div class="separator saperator-dashed my-5"></div>
 
                         <div class="row col-md-12">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __($option_calculus) }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="seize" name="seize" class="form-control mb-3 mb-lg-0" placeholder="{{ __('seize') }}"/>
+                                {{-- <input type="text" wire:model="seize" name="seize" class="form-control mb-3 mb-lg-0" placeholder="{{ __('seize') }}"/> --}}
+                                <div class="input-group mb-2">
+                                    <input type="text" wire:model="seize" name="seize"
+                                    class="form-control mb-3 mb-lg-0" placeholder="{{ __('seize') }}"
+                                       data-kt-action="change_tarrif"/>
+                                    <span class="input-group-text"
+                                        id="basic-addon1">{{ $unit }}</span>
+                                </div>
                                 <!--end::Input-->
                                 @error('seize')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col-md-6">
+                            {{-- <div class="col-md-6">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-semibold mb-2">{{ __('unit') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="text" wire:model="unit" name="unit" class="form-control form-control-flush mb-3 mb-lg-0" placeholder="{{ __('unit') }}" readonly/>
                                 <!--end::Input-->
-                            </div>
+                            </div> --}}
                         </div>
                         @else
                         <div class="row mb-7">
@@ -148,7 +159,7 @@
                                 <label class="fs-6 fw-semibold mb-2">{{ __('length') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input wire:model="length" name="length" type="text" class="form-control mb-3 mb-lg-0" placeholder="{{ __('length') }}" data-kt-action="load_drop"/>
+                                <input wire:model.live="length" name="length" type="text" class="form-control mb-3 mb-lg-0" placeholder="{{ __('length') }}"/>
                                 <!--end::Input-->
                                 @error('length')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -158,22 +169,29 @@
                                 <label class="fs-6 fw-semibold mb-2">{{ __('width') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input wire:model="width" name="width" type="text" class="form-control mb-3 mb-lg-0" placeholder="{{ __('width') }}" data-kt-action="load_drop"/>
+                                <input wire:model.live="width" name="width" type="text" class="form-control mb-3 mb-lg-0" placeholder="{{ __('width') }}"/>
                                 <!--end::Input-->
                                 @error('width')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{'Surface' }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="seize" name="seize" class="form-control mb-3 mb-lg-0" placeholder="{{ __('seize') }}"/>
+                                {{-- <input type="text" wire:model="seize" name="seize" class="form-control mb-3 mb-lg-0" placeholder="{{ __('seize') }}"/> --}}
+                                <div class="input-group mb-2">
+                                    <input type="text" wire:model="seize" name="seize"
+                                    class="form-control mb-3 mb-lg-0" placeholder="{{ __('seize') }}"
+                                       data-kt-action="change_tarrif"/>
+                                    <span class="input-group-text"
+                                        id="basic-addon1">{{ $unit }}</span>
+                                </div>
                                 <!--end::Input-->
                                 @error('seize')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col-md-3">
+                            {{-- <div class="col-md-3">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-semibold mb-2">{{ __('unit') }}</label>
                                 <!--end::Label-->
@@ -182,7 +200,7 @@
                                 <!--end::Input-->
                                 @error('taxable_id')
                                 <span class="text-danger">{{ $message }}</span> @enderror
-                            </div>
+                            </div> --}}
                         </div>
                         @endif
 

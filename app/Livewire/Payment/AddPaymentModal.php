@@ -211,6 +211,8 @@ class AddPaymentModal extends Component
                 $payments = Invoice::getCode($this->invoice_no, $this->amount, $paymentData);
                 $payment = Payment::find($this->payment_id);
 
+                // dd($payments);
+
                 if ($payment == null) {
                     foreach ($payments as $payment) {
                         $tempPay = Payment::create($payment);

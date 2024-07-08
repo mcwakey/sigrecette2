@@ -411,7 +411,7 @@
                             </table>
                             <div class="mb-5">
                                 <label class="form-label fs-6 fw-bolder text-gray-700">Notes</label>
-                                <textarea name="notes" class="form-control" rows="2" placeholder="Thanks for your business"></textarea>
+                                <textarea wire:model="notes" name="notes" class="form-control" rows="2" placeholder="Thanks for your business"></textarea>
                             </div>
                         </div>
 

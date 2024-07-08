@@ -37,7 +37,8 @@ class Invoice extends Model implements FormatDateInterface
         'delivery_date',
         'type',
         'delivery',
-        'edition_state'
+        'edition_state',
+        'notes'
 
         // 'profile_photo_path',
     ];
@@ -313,7 +314,7 @@ class Invoice extends Model implements FormatDateInterface
      * @param array $paymentData Additional data for payments.
      * @return array|null An array containing the payment codes or null if the invoice does not exist.
      */
-    public static function getCode($id, float $amount, array $paymentData): ?array {
+    public static function getCode($id, float $amount, array $paymentData) : ? array {
         $invoice = Invoice::find($id);
 
         ///dd($paymentData["code"]);

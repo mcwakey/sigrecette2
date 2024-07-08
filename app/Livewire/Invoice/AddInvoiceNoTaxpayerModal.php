@@ -37,6 +37,7 @@ class AddInvoiceNoTaxpayerModal extends Component
     public $name;
     public $tnif;
     public $zone;
+    public $notes;
 
     public $invoice_no;
     public $periodicity;
@@ -148,7 +149,7 @@ class AddInvoiceNoTaxpayerModal extends Component
         // 'taxpayer_id' => 'required',
         'amount' => 'required|numeric',
         'id_type'=>"required",
-        //'cancel_reduct' => 'required',
+        // 'notes' => 'required',
 
         // 'telephone' => 'required|string|min:10|max:10',
         // 'longitude' => 'nullable',
@@ -288,6 +289,7 @@ class AddInvoiceNoTaxpayerModal extends Component
             $taxpayer = Taxpayer::create($taxpayersData);
             $taxpayer->save();
 
+            // dd($this->notes);
 
             $invoiceData = [
                 'taxpayer_id' => $taxpayer->id,
@@ -297,7 +299,8 @@ class AddInvoiceNoTaxpayerModal extends Component
                 'to_date' => date('Y-').$this->start_month + $this->qty."-01",
                 'status' => InvoiceStatusEnums::PENDING,
                 'pay_status' => 'OWING',
-                'type'=> Constants::INVOICE_TYPE_COMPTANT
+                'type'=> Constants::INVOICE_TYPE_COMPTANT,
+                'notes' => $this->notes
             ];
             $role = Role::where('name', 'regisseur')->first();
             if ($role) {
