@@ -149,6 +149,8 @@ return [
     'uuid'                 => 'Le champ :attribute doit être un UUID valide',
     'attributes'           => [
         'delivery_to' => 'nom',
+        'seize' => 'surface',
+        'taxable_id' => 'matière taxable',
         'activity_id'              => 'activité principale',
         'address'                  => 'adresse',
         'affiliate_url'            => 'URL d\'affiliation',
