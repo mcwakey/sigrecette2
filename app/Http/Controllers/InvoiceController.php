@@ -18,6 +18,15 @@ class InvoiceController extends Controller
 {
 
 
+    // UPDATE taxpayer_taxables
+    // INNER JOIN invoices ON taxpayer_taxables.invoice_id = invoices.invoice_no
+    // AND validity = "VALID"
+    // SET taxpayer_taxables.invoice_id = NULL,
+    // taxpayer_taxables.bill_status = "NOT BILLED",
+    // invoices.validity = "EXPIRED",
+    // invoices.status = "APROVED"
+    // WHERE invoices.to_date = "2024-07-07" AND
+    // invoices.type = "TITRE";
 
     /**
      * Display a listing of the resource.

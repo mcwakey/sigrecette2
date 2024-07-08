@@ -105,20 +105,20 @@ class StockTransfersDataTable extends DataTable
                 return $vv_total;
             })
             ->editColumn('rd_qty', function (StockTransfer $stock_transfer) {
-                if (!$stock_transfer->rd_qty) {
-                    $rd_qty =  "";
-                } else {
+                // if (!$stock_transfer->rd_qty) {
+                //     $rd_qty =  "";
+                // } else {
                     $rd_qty = $stock_transfer->rd_qty ;
-                }
+                // }
 
                 return $rd_qty;
             })
             ->editColumn('rd_total', function (StockTransfer $stock_transfer) {
-                if (!$stock_transfer->rd_qty) {
-                    $rd_total =  "";
-                } else {
+                // if (!$stock_transfer->rd_qty) {
+                //     $rd_total =  "";
+                // } else {
                     $rd_total = $stock_transfer->rd_qty * $stock_transfer->taxable->tariff;
-                }
+                // }
 
                 return $rd_total;
             })
@@ -183,6 +183,7 @@ class StockTransfersDataTable extends DataTable
                             DB::raw('MAX(stock_transfers.created_at) AS created_at'),
                             DB::raw('MAX(stock_transfers.taxable_id) AS taxable_id'))
                     ->where('stock_transfers.to_user_id', $this->id)
+                    ->where('stock_transfers.period_from', $this->dateFrom)
 
                     ->groupBy('stock_transfers.trans_id')
                     ->orderBy('trans_id', 'desc');
