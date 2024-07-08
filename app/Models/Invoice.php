@@ -118,6 +118,7 @@ class Invoice extends Model implements FormatDateInterface
     }
 
 
+
     public function taxpayer_taxables()
     {
         return $this->hasMany(TaxpayerTaxable::class);

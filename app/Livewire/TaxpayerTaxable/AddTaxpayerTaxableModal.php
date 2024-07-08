@@ -43,7 +43,6 @@ class AddTaxpayerTaxableModal extends Component
     public $width;
 
     public $taxlabel_id;
-
     public $taxables=[];
     // public $penalty_type;
     // public $tax_label_id;
@@ -143,12 +142,16 @@ class AddTaxpayerTaxableModal extends Component
     public function updatedLength($value)
     {
         //TODO fix this calcul ignore les virgurles
-        $this->seize = doubleval($this->length) * doubleval($this->width);
+        $this->length = doubleval($this->length);
+        $this->width =  doubleval($this->width);
+        $this->seize = $this->length * $this->width;
     }
 
     public function updatedWidth($value)
     {
-        $this->seize =doubleval($this->length) *doubleval($this->width);
+        $this->length = doubleval($this->length);
+        $this->width =  doubleval($this->width);
+        $this->seize = $this->length * $this->width;
     }
 
     public function updateCheckbox($id)
@@ -194,10 +197,8 @@ class AddTaxpayerTaxableModal extends Component
                 'taxable_id' => $this->taxable_id,
                 'authorisation' => $this->authorisation,
                 'auth_reference' => $this->auth_reference,
-                // 'penalty' => $this->penalty,
-                // 'penalty_type' => $this->penalty_type,
-                // 'tax_label_id' => $this->tax_label_id,
-
+                'width'=>$this->width ,
+                'length' =>$this->length,
                 'longitude' => $this->longitude,
                 'latitude' => $this->latitude,
                 // 'canton' => $this->canton,

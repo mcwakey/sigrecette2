@@ -151,12 +151,12 @@
 
                         <div class="row">
                             <div class="col">
-                                <label class="required fw-semibold fs-6 mb-2">{{ __("Selectionner le code d'imputation") }}</label>
+                                <label class="required fw-semibold fs-6 mb-2">{{ __("La matière taxable") }}</label>
                                 <select wire:model=code" name="code" class="form-select" data-dropdown-parent="#kt_modal_add_payment" data-kt-action="update_payment_amount">
-                                    <option></option>
+                                    <option value="">Selectionner une option</option>
                                     @if($paidAndCodeArray!=null)
                                         @foreach($paidAndCodeArray  as $code => $code_amount)
-                                            <option value="{{$code}}">{{$code."-".$code_amount['name']."-".$code_amount['amount']}}</option>
+                                            <option value="{{$code}}">{{$code_amount['name']." - (".$code_amount['amount'].")"}}</option>
                                         @endforeach
                                     @endif
 
@@ -171,7 +171,7 @@
                                 @if (!$edit_amount)
                                     <input wire:model="amount" name="amount" class="form-control mb-2 text-end" type="text" readonly/>
                                 @else
-                                    <input wire:model="amount" name="amount" class="form-control mb-2 text-end" type="text" />
+                                    <input wire:model="amount" name="amount" class="form-control mb-2 text-end" type="text" data-kt-action="update_local_amount" />
                                 @endif
                                 @error('amount')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -189,7 +189,7 @@
                             <div class="col">
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('payment type') }}</label>
                                 <select wire:model="payment_type" name="payment_type" class="form-select" data-dropdown-parent="#kt_modal_add_payment">
-                                    <option></option>
+                                    <option value="">Selectionner une option</option>
                                     <option value="{{App\Enums\PaymentTypeEnums::CASH}}">ESPECE</option>
                                     <option value="{{App\Enums\PaymentTypeEnums::CHEQUE}}">CHEQUE</option>
                                     <option value="{{App\Enums\PaymentTypeEnums::DIGI}}">DIGITAL</option>
@@ -206,7 +206,7 @@
                         </div>
                         <div class="mb-0">
                             <label class="form-label fs-6 fw-bolder text-gray-700">Notes</label>
-                            <textarea  wire:model="description" name="description"  class="form-control" rows="2" placeholder=""></textarea>
+                            <textarea  wire:model="notes" name="description"  class="form-control" rows="2" placeholder=""></textarea>
                         </div>
 
 

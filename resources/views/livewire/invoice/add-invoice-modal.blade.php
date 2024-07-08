@@ -202,7 +202,7 @@
                                         </th>
                                         <th colspan="1" class="border-bottom border-bottom-dashed ps-0">
                                             <div class="d-flex flex-column align-items-start">
-                                                <div class="fs-5">Subtotal</div>
+                                                <div class="fs-5">Soustotal</div>
                                             </div>
                                         </th>
                                         <th colspan="3" class="border-bottom border-bottom-dashed text-end">
@@ -249,7 +249,7 @@
                             </table>
                             <div>
                                 <label class="form-label fs-6 fw-bolder text-gray-700">Notes</label>
-                                <textarea wire:model="notes" name="notes" class="form-control" rows="2" placeholder=""></textarea>
+                                <textarea name="notes"  wire:model="notes" class="form-control" rows="2" placeholder=""></textarea>
                             </div>
                         </div>
 
@@ -336,13 +336,15 @@
                         <div class="text-center pt-5">
                             <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal" aria-label="Close" wire:loading.attr="disabled">{{ __('cancel') }}</button>
                             @if ($taxpayer_taxables instanceof \Illuminate\Support\Collection && $taxpayer_taxables->count() > 0)
-                            <button type="submit" class="btn btn-success" data-kt-invoices-modal-action="submit">
-                                <span class="indicator-label" wire:loading.remove>{{ __('submit') }}</span>
-                                <span class="indicator-progress" wire:loading wire:target="submit">
-                                    {{ __('please wait') }}
-                                    <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                </span>
-                            </button>
+                                @can('peut émettre un avis sur titre')
+                                    <button type="submit" class="btn btn-success" data-kt-invoices-modal-action="submit">
+                                        <span class="indicator-label" wire:loading.remove>{{ __('submit') }}</span>
+                                        <span class="indicator-progress" wire:loading wire:target="submit">
+                                            {{ __('please wait') }}
+                                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                        </span>
+                                    </button>
+                                @endcan
                             @endif
                         </div>
                         @endif
