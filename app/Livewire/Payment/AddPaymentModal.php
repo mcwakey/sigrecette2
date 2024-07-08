@@ -76,11 +76,11 @@ class AddPaymentModal extends Component
         return $rules;
     }
 
-
     protected $listeners = [
         'delete_user' => 'deleteUser',
         'update_payment' => 'updatePayment',
-        'update_payment_amount'=>'updatePaymentAmount'
+        'update_payment_amount'=>'updatePaymentAmount',
+        'update_local_amount'=> 'updateLocalAmount',
         //'add_invoice' => 'addPayment',
         //'load_invoice' => 'loadPayment',
     ];
@@ -127,63 +127,25 @@ class AddPaymentModal extends Component
         $paidAndCodeArray =$this->paidAndCodeArray;
 
 
-        return view('livewire.payment.add-payment-modal', compact('taxpayers','paidAndCodeArray'));
+        return view('livewire.payment.add-payment-modal', compact('taxpayers','paidAndCodeArray','invoice'));
     }
-
-    // public function submit()
-    // {
-    //     // Validate the form input data
-    //     $this->validate();
-
-    //     DB::transaction(function () {
-
-    //         $data = [
-    //             //save into Payment_items table
-    //             "taxpayer_taxable_id" => $this->taxpayer_taxable_id,
-    //             "qty" => $this->qty,
-    //             "s_amount" => $this->s_amount,
-
-    //             //save into Payment table
-    //             'taxpayer_id' => $this->taxpayer_id,
-    //             'amount' => $this->amount,
-
-    //         ];
-
-    //         $payment = Payment::find($this->payment_id) ?? Payment::create($data);
-
-    //         if ($this->edit_mode) {
-    //             foreach ($data as $k => $v) {
-    //                 $payment->$k = $v;
-    //             }
-    //             $payment->save();
-    //         }
-
-    //         if ($this->edit_mode) {
-    //             $this->dispatch('success', __('Payment updated'));
-    //         } else {
-    //             $this->dispatch('success', __('New Payment created'));
-    //         }
-    //     });
-
-    //     $this->reset();
-    // }
 
     public function submit()
     {
         // Validate the form input data
         $this->validate();
-
         DB::transaction(function () {
 
             $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
 
-            if (($this->paid + $this->amount) <= $invoice->amount ) {
+            if (($this->paid + $this->amount) <= $invoice->amount  ) {
 
                 if($this->code!=null){
                     if ($this->amount>=$this->paidAndCodeArray[ $this->code ]['amount']){
                         $this->amount=$this->paidAndCodeArray[ $this->code ]['amount'];
                     }
                 }
+                dd($this->amount,$this->code);
                 $paymentData = [
                     // 'invoice_id' => $this->invoice_id,
                     'invoice_id' => $this->invoice_no,
@@ -297,7 +259,6 @@ class AddPaymentModal extends Component
             }
         });
 
-        // Reset form fields after successful submission
         $this->reset();
     }
 
@@ -375,11 +336,17 @@ class AddPaymentModal extends Component
 
     public function updatePaymentAmount($code){
 
+        //dump($code);
         if($code){
+            $this->code = $code;
             $this->amount = $this->paidAndCodeArray[$code]['amount'];
         }
 
     }
+    public function updateLocalPayment(){
+        //dump($this->amount);
+    }
+
     #[On('updateSharedInvoiceId')]
     public function updateSharedTaxpayerId($id){
         $this->updatePayment($id);

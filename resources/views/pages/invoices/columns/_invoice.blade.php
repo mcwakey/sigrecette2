@@ -27,7 +27,7 @@
         {{ '-' }}
     </div>
 </div>
-    
+
 <div class="d-flex flex-column">
          -
 </div>

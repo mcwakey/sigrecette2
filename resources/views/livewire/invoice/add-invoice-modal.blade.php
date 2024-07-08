@@ -202,7 +202,7 @@
                                         </th>
                                         <th colspan="2" class="border-bottom border-bottom-dashed ps-0">
                                             <div class="d-flex flex-column align-items-start">
-                                                <div class="fs-5">Subtotal</div>
+                                                <div class="fs-5">Soustotal</div>
                                             </div>
                                         </th>
                                         <th colspan="2" class="border-bottom border-bottom-dashed text-end">
