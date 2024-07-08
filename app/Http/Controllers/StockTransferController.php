@@ -26,11 +26,16 @@ class StockTransferController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $userId,  StockTransfersDataTable $dataTable)
+    public function show(string $userId,  StockTransfersDataTable $dataTable,Request $request)
     {
+        $validatedData = $request->validate([
+            's_date' => 'nullable|date_format:Y-m-d H:i:s',
+            'e_date' => 'nullable|date_format:Y-m-d H:i:s',
+        ]);
          $user = User::find($userId);
-         $dateFrom = "2024-07-14";
-         $dateTo = "2024-07-14";
+        $dateFrom = $validatedData['s_date'] ?? null;
+        $dateTo = $validatedData['e_date'] ??  null;
+
          //dd($user, $dataTable);
         //return view('pages/stock_transfers.show', compact('user'));
 
