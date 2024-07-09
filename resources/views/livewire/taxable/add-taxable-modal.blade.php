@@ -148,14 +148,24 @@
                                 @error('tariff')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col-md-3">
-                                <label class=" fw-semibold fs-6 mb-2 mb-7"></label>
-                                <div class="form-control form-check form-switch form-check-custom form-check-solid"  style="border: none;">
-                                    <input class="form-check-input" type="checkbox"  id="flexSwitchDefault"  wire:model="use_second_formula" name="use_second_formula" value="{{$use_second_formula}}"  @if($use_second_formula) checked="checked" @endif/>
-                                    <label class="form-check-label text-nowrap" for="flexSwitchDefault">
-                                        {{__("Ignorer la valeur d'assiette")}}
-                                    </label>
-                                </div>
+                            <div class="col-md-3 mt-9">
+                                @if($use_second_formula)
+                                    <div class="form-check form-switch form-check-custom form-check-solid" style="border: none;">
+                                        <input class="form-check-input" type="checkbox" value="{{$use_second_formula}}" id="flexSwitchChecked" checked="checked"  wire:model.live.debounce.250ms="use_second_formula"/>
+                                        <label class="form-check-label" for="flexSwitchChecked">
+                                            {{__("Ignorer la valeur d'assiette")}}
+                                        </label>
+                                    </div>
+                                         @else
+                                    <div class="form-check form-switch form-check-custom form-check-solid" style="border: none;">
+                                        <input class="form-check-input" type="checkbox"  value="{{$use_second_formula}}"  id="flexSwitchDefault"   wire:model.live.debounce.250ms="use_second_formula"/>
+                                        <label class="form-check-label" for="flexSwitchDefault">
+                                            {{__("Ignorer la valeur d'assiette")}}
+                                        </label>
+                                    </div>
+                                @endif
+
+
 
                             </div>
                         </div>
