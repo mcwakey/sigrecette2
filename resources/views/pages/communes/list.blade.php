@@ -17,7 +17,7 @@
                 <div class="card-header">
                     <!--begin::Card title-->
                     <div class="card-title">
-                        <h2 class="fw-bold">Commune détaille</h2>
+                        <h2 class="fw-bold">Commune détail</h2>
                     </div>
                     <!--begin::Card title-->
 
