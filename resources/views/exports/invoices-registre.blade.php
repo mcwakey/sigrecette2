@@ -106,8 +106,8 @@
                 <td style="text-align: center">{{$item->invoice_no}}</td>
                 <td style="text-align: center">{{$item->order_no}}</td>
                 <td style="text-align: center">{{$item->nic}}</td>
-                <td style="text-align: center">{{$item->taxpayer->name}}</td>
-                <td style="text-align: center">{{$item->taxpayer->mobilephone}}</td>
+                <td style="text-align: center">{{$item->taxpayer?->name}}</td>
+                <td style="text-align: center">{{$item->taxpayer?->mobilephone}}</td>
                 <td>
                     {{ date('Y-m-d', strtotime($item->delivery_date)) }}
 

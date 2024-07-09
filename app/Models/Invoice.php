@@ -422,14 +422,16 @@ class Invoice extends Model implements FormatDateInterface
             return $query
             ->get();
     }
-    public static function addPrintableToInvoices( $collection,PrintFile $printFile){
+    public static function addPrintableToInvoices( $collection,PrintFile $printFile):PrintFile{
 
 
+       // dump($collection,$printFile);
         DB::transaction(function () use ($collection,$printFile) {
             foreach ($collection as $invoice){
                 if($invoice instanceof Invoice){
                     $invoice->printFiles()->sync($printFile->id);
-                    $invoice->save();
+                    //$invoice->save();
+                    //dump($invoice,$printFile);
                 }
             }
         });

@@ -422,7 +422,7 @@ $filters = [
     <livewire:invoice.add-invoice-no-taxpayer-modal/>
 
     <livewire:payment.add-payment-modal />
-    
+
     @push('scripts')
         {{ $dataTable->scripts() }}
         <script>
@@ -542,7 +542,7 @@ $filters = [
             }
             function onSelectedValueChanged(selectedValue) {
                 removePrintMenuItems();
-                const array = ['{{App\Enums\InvoiceStatusEnums::APPROVED}}','{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}','{{  App\Enums\InvoiceStatusEnums::CANCELED }}','{{ App\Enums\InvoiceStatusEnums::PENDING}}',"{{ App\Enums\InvoiceStatusEnums::REJECTED }}",'{{ App\Enums\InvoiceStatusEnums::REDUCED}}'];
+                const array = ['liv','{{App\Enums\InvoiceStatusEnums::APPROVED}}','{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}','{{  App\Enums\InvoiceStatusEnums::CANCELED }}','{{ App\Enums\InvoiceStatusEnums::PENDING}}',"{{ App\Enums\InvoiceStatusEnums::REJECTED }}",'{{ App\Enums\InvoiceStatusEnums::REDUCED}}'];
                 if (array.includes(selectedValue)) {
                     printButton.classList.add('btn-active-light-primary');
                     printButton.classList.remove( "d-none");
@@ -556,10 +556,10 @@ $filters = [
                             addPrintMenuItem('{{ __('Registre-journal des déclarations préalables des usagers') }}', '77');
                         }else {
                             agentDiv.classList.remove( "d-none")
-                            addPrintMenuItem('{{ __('Fiche de recouvrement des avis distribués') }}', '41');
                             addPrintMenuItem('{{ __('Fiche de distribution des avis') }}', '4');
-                            addPrintMenuItem('{{ __('Journal des avis des sommes à payer confiés par le receveur') }}', '5');
-                            addPrintMenuItem('{{ __('Registre-journal des avis distribués') }}', '3');
+                            addPrintMenuItem('{{ __('Fiche de recouvrement des avis distribués') }}', '41');
+
+
                         }
                     }else if(  selectedValue ==="{{ App\Enums\InvoiceStatusEnums::PENDING}}" && !aucomptant){
                         addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
@@ -568,6 +568,9 @@ $filters = [
                     }else if(  selectedValue ==="{{ App\Enums\InvoiceStatusEnums::PENDING}}" ||  selectedValue ==="{{ App\Enums\InvoiceStatusEnums::APPROVED}}" && aucomptant){
                         addPrintMenuItem('{{ __('Registre-journal des déclarations préalables des usagers') }}', '77');
                         agentDiv.classList.add( "d-none")
+                    }else if(selectedValue ==='liv'){
+                        addPrintMenuItem('{{ __('Journal des avis des sommes à payer confiés par le receveur') }}', '5');
+                        addPrintMenuItem('{{ __('Registre-journal des avis distribués') }}', '3');
                     }
                     else addPrintMenuItem('', '1');
 
@@ -597,6 +600,8 @@ $filters = [
             }
             else if(!filters.state && !filters.delivery && aucomptant){
                 onSelectedValueChanged("{{ App\Enums\InvoiceStatusEnums::APPROVED}}");
+            }else if(!filters.state && filters.delivery=='liv' && filters.type== "TITRE"){
+                onSelectedValueChanged('liv');
             }
 
         </script>

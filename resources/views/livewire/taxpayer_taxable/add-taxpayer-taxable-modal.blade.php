@@ -134,7 +134,7 @@
                                 <!--begin::Input-->
                                 {{-- <input type="text" wire:model="seize" name="seize" class="form-control mb-3 mb-lg-0" placeholder="{{ __('seize') }}"/> --}}
                                 <div class="input-group mb-2">
-                                    <input type="text" wire:model="seize" name="seize"
+                                    <input type="text"wire:model.live.debounce.250ms="seize" name="seize"
                                     class="form-control mb-3 mb-lg-0" placeholder="{{ __('seize') }}"
                                        data-kt-action="change_tarrif"/>
                                     <span class="input-group-text"
@@ -182,7 +182,7 @@
                                 <!--begin::Input-->
                                 {{-- <input type="text" wire:model="seize" name="seize" class="form-control mb-3 mb-lg-0" placeholder="{{ __('seize') }}"/> --}}
                                 <div class="input-group mb-2">
-                                    <input type="text" wire:model="seize" name="seize"
+                                    <input type="text" wire:model.live.debounce.250ms="seize" name="seize"
                                     class="form-control mb-3 mb-lg-0" placeholder="{{ __('seize') }}"
                                        data-kt-action="change_tarrif"/>
                                     <span class="input-group-text"

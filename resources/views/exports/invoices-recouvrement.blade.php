@@ -124,9 +124,9 @@
                     <td>{{\App\Models\TaxLabel::getNameByCode($code)}}</td>
                     <td>{{$code}}</td>
                     <td>{{$item->nic}}</td>
-                    <td>{{$item->taxpayer->name}}</td>
-                    <td>{{$item->taxpayer->longitude,$item->taxpayer->latitude}}</td>
-                    <td>{{$item->taxpayer->address}}</td>
+                    <td>{{$item->taxpayer?->name}}</td>
+                    <td>{{$item->taxpayer?->longitude,$item->taxpayer?->latitude}}</td>
+                    <td>{{$item->taxpayer?->address}}</td>
                     <td>{{$tax['amount']}}</td>
                     <td>{{$paid}}</td>
                     <td>{{$tax['amount']-$paid}}</td>
