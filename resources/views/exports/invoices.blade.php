@@ -165,7 +165,7 @@
     </div>
     <div class="sub-header">
         <p>
-            <span>Nom/Raison sociale: {{$data->taxpayer->name}},</span>
+            <span>Nom/Raison sociale: {{$data->taxpayer->social_work??$data->taxpayer->name}},</span>
             <span>Téléphone :{{$data->taxpayer->mobilephone}}</span>
         </p>
         <p>
