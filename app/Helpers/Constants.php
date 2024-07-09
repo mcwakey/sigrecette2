@@ -143,14 +143,13 @@ class Constants
      */
     public static function getUserWithPermission(array $permissions): Collection|array
     {
-        $usersQuery = User::query();
-        $usersQuery->where(function($query) use ($permissions) {
-            foreach ($permissions as $permission) {
-                $query->orWhereHas('permissions', function($q) use ($permission) {
-                    $q->where('name', $permission);
-                });
-            }
-        });
-        return $usersQuery->get();
+        return User::where(function ($query) use ($permissions) {
+            $query->whereHas('permissions', function ($q) use ($permissions) {
+                $q->whereIn('name', $permissions);
+            })->orWhereHas('roles.permissions', function ($q) use ($permissions) {
+                $q->whereIn('name', $permissions);
+            });
+        })->get();
+
     }
 }
