@@ -317,7 +317,9 @@ class AddInvoiceModal extends Component
             if(!$this->edit_mode){
                 $permissions = ['peut émettre un avis sur titre', 'peut accepter un avis sur titre', 'peut rejeter un avis sur titre (agent par délégation de l\'ordonateur)'];
                 $users = Constants::getUserWithPermission($permissions);
+               // dump($users);
                 if ($users && count($users)>0) {
+
                     Notification::send($users, new InvoiceCreated($invoice,Auth::user(),'agent_delegation'));
                 }
 

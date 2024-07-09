@@ -38,21 +38,23 @@ class AddDeliveryForm extends Component
     public function validateData(){
         $this->validate();
         $invoice = Invoice::find($this->invoice_id);
+        if($invoice && $invoice->reduce_amount == ''){
+            if (
+                $invoice  ) {
+                if($invoice->type ==Constants::INVOICE_TYPE_TITRE &&  (!$invoice->ondistributionprint) || (!$invoice->onrecoveryprint) ){
+                    if(!$invoice->ondistributionprint){
+                        $this->error_message="Veuillez au préalable imprimer une fiche de distribution contenant l'avis.";
+                    }else{
+                        $this->error_message="Veuillez au préalable imprimer une fiche de recouvrement contenant l'avis.";
+                    }
+                    $this->addError('delivery_to', $this->error_message);
 
-        if (
-            $invoice  ) {
-            if($invoice->type ==Constants::INVOICE_TYPE_TITRE &&  (!$invoice->ondistributionprint) || (!$invoice->onrecoveryprint) ){
-                if(!$invoice->ondistributionprint){
-                    $this->error_message="Veuillez au préalable imprimer une fiche de distribution contenant l'avis.";
-                }else{
-                    $this->error_message="Veuillez au préalable imprimer une fiche de recouvrement contenant l'avis.";
                 }
-                // $this->addError('delivery_to', $this->error_message);
+
 
             }
-
-
         }
+
     }
     public function submit()
     {

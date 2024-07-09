@@ -60,6 +60,7 @@ class PrintController extends Controller
     public function downloadWithPrintData(PrintFile $printFile ,$type=null,$action=null)
     {
 
+
         if (Storage::missing("exports")) {
             Storage::makeDirectory("exports");
         }
@@ -68,12 +69,10 @@ class PrintController extends Controller
 
 
         if ($result['success']) {
-            //$this->dispatchMessage("Ficher imprimable");
             session()->flash('status', 'Ficher Imprimer avec success.');
             return $result['pdf'];
         }
 
-        // $this->dispatchMessage("Ficher imprimable","create","error",$result['message']);
         session()->flash('status', "Erreur lors de la géneration du ficher");
         return back()->with('error', $result['message']);
     }
@@ -86,6 +85,7 @@ class PrintController extends Controller
      */
     public function processType($type, $data,$action,User $user=null):array
     {
+        //dump("test 1",$data,$type,$action);
          // dd($type,$data,$action);
         switch ($type) {
             case 1:

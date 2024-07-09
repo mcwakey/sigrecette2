@@ -424,9 +424,13 @@ class PdfGenerator  implements PdfGeneratorInterface
         }elseif ($action==41){
             $type=PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES;
         }
+        //dd("test 2",$data->invoices()->get(),$type,$action);
         if($data instanceof PrintFile){
             $printFile =$data;
+
             $data = $data->invoices()->get();
+
+
         }else{
             if($type!=null &&$user instanceof User){
 
@@ -441,8 +445,7 @@ class PdfGenerator  implements PdfGeneratorInterface
                                 $item->save();
                             }
                         });
-                    }
-                    else{
+                    } else{
                         DB::transaction(function () use ($data) {
                             foreach ($data as $item){
                                 $item->onrecoveryprint= true;
@@ -450,15 +453,15 @@ class PdfGenerator  implements PdfGeneratorInterface
                             }
                         });
                     }
+
                 }
             }else{
                 $data=[];
             }
 
         }
-
         if($this->checkIfCommuneIsNotNull() &&  isset($printFile)&& count($data)>0){
-                $filename = $type."-" . ".pdf";
+                $filename = $type."-" . $printFile->id."-" . date('Ymd_His') . ".pdf";
                 $pdf = PDF::loadView("exports.".$template, ['data' => $data,'titles'=>$this->generateTitleWithAction($action),"commune"=> $this->commune,"action"=>$action,'print'=>$printFile,'agent'=>$user])->setPaper('a4', 'landscape')->stream($filename);
                 return ['success' => true, 'pdf' => $pdf];
         }

@@ -41,18 +41,20 @@ class AddOrdernoForm extends Component
     public function validateData(){
         $this->validate();
         $invoice = Invoice::find($this->invoice_id);
+        if($invoice && $invoice->reduce_amount == ''){
+            if ($invoice) {
+                if($invoice->type ==Constants::INVOICE_TYPE_TITRE && $invoice->edition_state != "PRINT"){
+                    if(!$invoice->edition_state ){
+                        $this->error_message="Veuillez au préalable imprimer l'avis.";
+                    }
+                    $this->addError('orderno', $this->error_message);
 
-        if ($invoice) {
-            if($invoice->type ==Constants::INVOICE_TYPE_TITRE && $invoice->edition_state != "PRINT"){
-                if(!$invoice->edition_state ){
-                    $this->error_message="Veuillez au préalable imprimer l'avis.";
                 }
-                // $this->addError('status', $this->error_message);
+
 
             }
-
-
         }
+
     }
     public function submit()
     {
