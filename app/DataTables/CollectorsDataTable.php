@@ -96,17 +96,29 @@ class CollectorsDataTable extends DataTable
                 return $vv_total;
             })
             ->editColumn('rd_qty', function (StockTransfer $stock_transfer) {
-                if (!$stock_transfer->rd_qty) {
-                    $rd_qty =  "";
-                } else {
+                // if (!$stock_transfer->rd_qty) {
+                    // $rd_qty =  "";
+                // } else {
                     $rd_qty = $stock_transfer->rd_qty ;
-                }
+                // }
+
+                // if (is_null($stock_transfer->rd_qty)) {
+                //     $rd_total = null;
+                // } else {
+                //     $rd_total = $stock_transfer->rd_qty * $stock_transfer->taxable->tariff;
+                // }
 
                 return $rd_qty;
             })
             ->editColumn('rd_total', function (StockTransfer $stock_transfer) {
-                if (!$stock_transfer->rd_qty) {
-                    $rd_total =  "";
+                // if (!$stock_transfer->rd_qty) {
+                //     $rd_total =  "";
+                // } else {
+                //     $rd_total = $stock_transfer->rd_qty * $stock_transfer->taxable->tariff;
+                // }
+
+                if (is_null($stock_transfer->rd_qty)) {
+                    $rd_total = null;
                 } else {
                     $rd_total = $stock_transfer->rd_qty * $stock_transfer->taxable->tariff;
                 }
@@ -164,7 +176,7 @@ class CollectorsDataTable extends DataTable
                     ->select('stock_transfers.to_user_id',
                             DB::raw('SUM(CASE WHEN trans_type = "RECU" THEN qty*tariff END) AS rc_qty'),
                             DB::raw('SUM(CASE WHEN trans_type = "VENDU" THEN qty*tariff END) AS vv_qty'),
-                            DB::raw('MAX(CASE WHEN trans_type = "RENDU" THEN qty*tariff END) AS rd_qty'),
+                            DB::raw('SUM(CASE WHEN trans_type = "RENDU" THEN qty*tariff END) AS rd_qty'),
                             DB::raw('MAX(stock_transfers.id) AS id'),
                             // DB::raw('MAX(users.name) AS trans_no'),
                             //DB::raw('MAX(stock_transfers.trans_desc) AS trans_desc'),
@@ -217,7 +229,7 @@ class CollectorsDataTable extends DataTable
             // //Column::make('trans_desc')->title(__('trans_desc')),
             Column::make('users.name')->title(__('collector')),
             Column::make('period')->title(__('Période')),
-            Column::make('id')->title(__('id')),
+            // Column::make('id')->title(__('id')),
             // Column::make('stock_transfers.start_no')->title(__('num')),
             // //Column::make('tax_type')->title(__('tax_type')),
             // //Column::make('seize')->title(__('amount')),

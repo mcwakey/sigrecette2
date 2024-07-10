@@ -182,11 +182,7 @@ class AddStockTransferDepositModal extends Component
         // $this->stock_requests= StockRequest::where('req_type','DEMANDE')->where('type','ACTIVE')->where('req_no', $value)->get();
 
 
-        $this->stock_transfers = StockTransfer::
-        where('trans_type', 'RECU')
-            ->where('to_user_id', $this->collector_id)
-            ->where('trans_no', $value)
-            ->where('type','ACTIVE')->get();
+        $this->stock_transfers = StockTransfer::where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->where('trans_no', $value)->where('type','ACTIVE')->get();
 
         $this->stock_transfers_v = StockTransfer::
         where('trans_type', 'VENDU')
@@ -222,10 +218,13 @@ class AddStockTransferDepositModal extends Component
                                     if($this->collector_id < 1){
                                         return;
                                     }else{
-                                        if($stock_transfers_r->first()->trans_type=="RECU"){
+                                        $stock_transfers_v = $stock_transfers_r->first()->trans_type ?? "";
+                                        if($stock_transfers_v=="RECU"){
                                             $this->start_no =  $select_transfer?->start_no;
                                         }else{
+                                            if($stock_transfers_v !=""){
                                             $this->start_no = $stock_transfers_r->first()->end_no + 1;
+                                            }
                                         }
                                     }
 
@@ -394,7 +393,7 @@ class AddStockTransferDepositModal extends Component
         }
 
         // $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('unit', $value)->where('to_user_id', $this->collector_id)->get();
-        $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
+        $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('type', 'ACTIVE')->where('to_user_id', $this->collector_id)->get();
 
         if ($this->edit_mode == true) {
              //$this->stock_transfers = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
@@ -541,6 +540,10 @@ class AddStockTransferDepositModal extends Component
 
                         $data['payment_id'] = $payment->id;
                         $data['trans_type'] = 'VENDU';
+                    
+                        $data['period_from'] =  $stock_transfers->first()->period_from;
+                        $data['period_to'] =  $stock_transfers->first()->period_to;
+
                         if ($this->end_no > 0) {
                             $data['last_no'] = $this->end_no + 1;
                         }else{
@@ -583,11 +586,13 @@ class AddStockTransferDepositModal extends Component
                     //dd($data);
                 }
 
-                $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
+                $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('type','ACTIVE')->where('to_user_id', $this->collector_id)->get();
+                // $this->stock_transfers = StockTransfer::where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->where('trans_no', $this->trans_no)->where('type','ACTIVE')->get();
 
-                if ($this->deposit_mode) {
-                    $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'VENDU')->where('to_user_id', $this->collector_id)->get();
-                }
+
+                // if ($this->deposit_mode) {
+                //     $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('type','ACTIVE')->where('to_user_id', $this->collector_id)->get();
+                // }
             });
 
         }
