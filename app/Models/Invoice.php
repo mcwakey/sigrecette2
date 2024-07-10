@@ -154,6 +154,47 @@ class Invoice extends Model implements FormatDateInterface
             ->toArray();
     }
 
+    public static function getAmountsSummary(): array
+    {
+        $year = Year::getActiveYear()->name;
+        $startDate =  Carbon::parse("{$year}-01-01 00:00:00");
+        $endDate = Carbon::parse("{$year}-12-31 23:59:59");
+
+        // Amount remaining to be collected
+        $totalAmountRemaining = self::whereIn('status', [InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::REDUCED])
+            ->whereBetween('invoices.created_at', [$startDate, $endDate])
+            ->where('invoices.pay_status', '!=', InvoicePayStatusEnums::PAID)
+            ->sum('amount');
+
+        $totalReduceAmountRemaining = self::whereIn('status', [InvoiceStatusEnums::APPROVED_CANCELLATION, InvoiceStatusEnums::REDUCED])
+            ->whereBetween('invoices.created_at', [$startDate, $endDate])
+            ->where('invoices.pay_status', '!=', InvoicePayStatusEnums::PAID)
+            ->whereNotNull('reduce_amount')
+            ->sum('reduce_amount');
+
+        $remainingAmount = $totalAmountRemaining - $totalReduceAmountRemaining;
+
+        // Amount collected
+        $totalAmountCollected = self::whereIn('status', [InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::CANCELED, InvoiceStatusEnums::REDUCED])
+            ->whereBetween('invoices.created_at', [$startDate, $endDate])
+            ->where('invoices.pay_status', '=', InvoicePayStatusEnums::PAID)
+            ->sum('amount');
+
+        $totalReduceAmountCollected = self::whereIn('status', [InvoiceStatusEnums::APPROVED_CANCELLATION, InvoiceStatusEnums::CANCELED, InvoiceStatusEnums::REDUCED])
+            ->whereBetween('invoices.created_at', [$startDate, $endDate])
+            ->where('invoices.pay_status', '=', InvoicePayStatusEnums::PAID)
+            ->whereNotNull('reduce_amount')
+            ->sum('reduce_amount');
+
+        $collectedAmount = $totalAmountCollected - $totalReduceAmountCollected;
+
+        return [
+            'remaining_amount' => $remainingAmount,
+            'collected_amount' => $collectedAmount,
+        ];
+    }
+
+
     public static function getReceiverName($id)
     {
         $invoice = Invoice::find($id);

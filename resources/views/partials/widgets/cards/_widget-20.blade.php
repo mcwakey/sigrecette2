@@ -10,14 +10,16 @@
 
 	@if(isset($count_invoices['NOEXPIRED']))
 		<div class="card-title d-flex flex-column">
-			<!--begin::Amount-->
-			<span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{$count_invoices["NOEXPIRED"]}}</span>
-			<!--end::Amount-->
-			<!--begin::Subtitle-->
-			<span class="text-white opacity-75 pt-1 fw-semibold fs-6">Avis</span>
 
-			<!--end::Subtitle-->
+			<span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{$count_invoices["NOEXPIRED"]}}</span>
+			<span class="text-white opacity-75 pt-1 fw-semibold fs-6">Avis émis</span>
+            <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{format_amount(\App\Models\Invoice::getAmountsSummary()['remaining_amount']) .\App\Helpers\Constants::CURRENCY}}</span>
+            <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Avis à recouvrer</span>
+
+
+
 		</div>
+
 	@endif
 
 		<!--end::Title-->

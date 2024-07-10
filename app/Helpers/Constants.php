@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 class Constants
 {
+    public const CURRENCY = " FCFA";
     public  const DEMANDE="DEMANDE";
     public  const  TITRE="TITRE";
     public  const  REDUCTION="Réduction";

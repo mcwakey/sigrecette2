@@ -306,6 +306,13 @@
                 <td class="">
                     <p>Le Maire <span>{{ " ".$commune->mayor_name}}</span></p>
                 </td>
+                <td class="">
+                    <p><span
+                            class="write"> </span></p>
+                </td>
+                <td class="">
+                    <p><span> </span></p>
+                </td>
             </tr>
         </table>
         @if($action==1)
