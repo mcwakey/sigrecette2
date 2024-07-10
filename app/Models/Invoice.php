@@ -309,7 +309,7 @@ class Invoice extends Model implements FormatDateInterface
 
         foreach ($invoice->invoiceitems as $item) {
             $code = $item->taxpayer_taxable->taxable->tax_label->code;
-            $name = $item->taxpayer_taxable->taxable->tax_label->name;
+            $name = $item->taxpayer_taxable->name;
             $amount = $item->amount;
 
             if (array_key_exists($code, $sumsByTaxCode)) {

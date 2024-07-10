@@ -114,11 +114,11 @@ class StockTransfersDataTable extends DataTable
                 return $rd_qty;
             })
             ->editColumn('rd_total', function (StockTransfer $stock_transfer) {
-                // if (!$stock_transfer->rd_qty) {
-                //     $rd_total =  "";
-                // } else {
+                if (is_null($stock_transfer->rd_qty)) {
+                    $rd_total = null;
+                } else {
                     $rd_total = $stock_transfer->rd_qty * $stock_transfer->taxable->tariff;
-                // }
+                }
 
                 return $rd_total;
             })

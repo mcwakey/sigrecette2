@@ -50,7 +50,7 @@ class AddPaymentModal extends Component
 
     public $periodicity;
     public $code;
-    public  $paidAndCodeArray;
+    public $paidAndCodeArray;
     public $validCodes;
 
     public $edit_amount =true;
@@ -122,6 +122,7 @@ class AddPaymentModal extends Component
                 $this->edit_amount=false;
             }
             $this->paidAndCodeArray=Invoice::returnPaidAndSumByCode($invoice)[0];
+            // $this->paidAndCodeArray=$invoice->invoiceItems;
             $this->validCodes = array_keys($this->paidAndCodeArray);
         }
 

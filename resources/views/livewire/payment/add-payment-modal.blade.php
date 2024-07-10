@@ -148,7 +148,7 @@
                         <div class="separator separator-content mb-5">
                             <span class="w-200px text-gray-500 fw-semibold fs-7">{{ __('payment info') }}</span>
                         </div>
-
+{{-- {{ dd($paidAndCodeArray);}} --}}
                         <div class="row">
                             <div class="col">
                                 <label class="required fw-semibold fs-6 mb-2">{{ __("La matière taxable") }}</label>
@@ -157,6 +157,7 @@
                                     @if($paidAndCodeArray!=null)
                                         @foreach($paidAndCodeArray  as $code => $code_amount)
                                             <option value="{{$code}}">{{$code_amount['name']." - (".$code_amount['amount'].")"}}</option>
+                                            {{-- <option value="{{$code}}">{{$code_amount->taxpayer_taxable-groupBy('name')->name." - (".$code_amount->code.")"}}</option> --}}
                                         @endforeach
                                     @endif
 
