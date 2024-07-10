@@ -13,7 +13,7 @@
 
 			<span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{$count_invoices["NOEXPIRED"]}}</span>
 			<span class="text-white opacity-75 pt-1 fw-semibold fs-6">Avis émis</span>
-            <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{format_amount(\App\Models\Invoice::getAmountsSummary()['remaining_amount']) .\App\Helpers\Constants::CURRENCY}}</span>
+            <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{format_amount(\App\Models\Invoice::getTotalRemainingToBeCollected()) .\App\Helpers\Constants::CURRENCY}}</span>
             <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Avis à recouvrer</span>
 
 
