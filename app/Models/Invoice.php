@@ -154,6 +154,65 @@ class Invoice extends Model implements FormatDateInterface
             ->toArray();
     }
 
+    public static function getAmountsSummary(): array
+    {
+        $year = Year::getActiveYear()->name;
+        $startDate =  Carbon::parse("{$year}-01-01 00:00:00");
+        $endDate = Carbon::parse("{$year}-12-31 23:59:59");
+
+        // Amount remaining to be collected
+        $totalAmountRemaining = self::whereIn('status', [InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION])
+            ->whereBetween('invoices.created_at', [$startDate, $endDate])
+            ->where('invoices.pay_status', '!=', InvoicePayStatusEnums::PAID)
+            ->sum('amount');
+
+        $totalReduceAmountRemaining = self::whereIn('status', [InvoiceStatusEnums::APPROVED_CANCELLATION])
+            ->whereBetween('invoices.created_at', [$startDate, $endDate])
+            ->where('invoices.pay_status', '!=', InvoicePayStatusEnums::PAID)
+            ->whereNotNull('reduce_amount')
+            ->sum('reduce_amount');
+
+        $remainingAmount = $totalAmountRemaining - $totalReduceAmountRemaining;
+
+        // Amount collected
+        $totalAmountCollected = self::whereIn('status', [InvoiceStatusEnums::APPROVED,InvoiceStatusEnums::APPROVED_CANCELLATION])
+            ->whereBetween('invoices.created_at', [$startDate, $endDate])
+            ->where('invoices.pay_status', '=', InvoicePayStatusEnums::PAID)
+            ->sum('amount');
+
+
+
+        $collectedAmount = $totalAmountCollected;
+        return [
+            'remaining_amount' => $remainingAmount,
+            'collected_amount' => $collectedAmount,
+        ];
+    }
+    public static function getTotalRemainingToBeCollected(array $validatedData = []): float|int
+    {
+        $year = Year::getActiveYear()->name;
+        $startDate = $validatedData['s_date'] ?? Carbon::parse("{$year}-01-01 00:00:00");
+        $endDate = $validatedData['e_date'] ?? Carbon::parse("{$year}-12-31 23:59:59");
+
+        $invoices = self::whereIn('status', [InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION])
+            ->whereBetween('invoices.created_at', [$startDate, $endDate])
+            ->where('invoices.pay_status', '!=', InvoicePayStatusEnums::PAID)
+            ->get();
+
+
+        $totalRemaining = 0;
+
+        foreach ($invoices as $invoice) {
+            $paid = Payment::where('invoice_id', $invoice->invoice_no)
+                ->sum('amount');
+            $restToPay = $invoice->amount - doubleval($invoice->reduce_amount) - $paid;
+            $totalRemaining += max($restToPay, 0);
+        }
+
+        return $totalRemaining;
+    }
+
+
     public static function getReceiverName($id)
     {
         $invoice = Invoice::find($id);
@@ -251,7 +310,7 @@ class Invoice extends Model implements FormatDateInterface
         $default= $data[0];
         $invoiceitems=$default->invoiceitems()->get();
         //$array = (array)$invoiceitems;
-        dd($invoiceitems);
+       // dd($invoiceitems);
     }
     /**
      * Sum amounts by tax code for the given invoice.
@@ -352,16 +411,11 @@ class Invoice extends Model implements FormatDateInterface
      */
     public static function getRestToPaid(Invoice $invoice): float|int
     {
-        $s_amount= [];
-        $last_payments = Payment::where('invoice_id', $invoice->invoice_no)->get();
-        foreach ($last_payments as $index => $payment) {
-            //if ($payment->description !== "Annulation/Réduction") {
-                $s_amount[$index] = $payment->amount;
+        $paid = Payment::where('invoice_id', $invoice->invoice_no)
+            ->sum('amount');
+        $restToPay = $invoice->amount - $paid;
 
-        }
-        $paid=array_sum($s_amount) ?? 0;
-        return $invoice->amount - $paid;
-
+        return max( $restToPay, 0);
     }
 
     /**
