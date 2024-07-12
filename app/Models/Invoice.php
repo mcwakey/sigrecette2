@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
+use Spatie\Permission\Models\Role;
 use Symfony\Component\Workflow\Workflow;
 use ZeroDaHero\LaravelWorkflow\Traits\WorkflowTrait;
 
@@ -518,12 +519,28 @@ class Invoice extends Model implements FormatDateInterface
 
         return $query;
     }
-    public function setDeliveryToNow()
+    public function setDeliveryToNow(string $status)
     {
-        $this->status =$this->status;
+        $this->status =$status;
         $this->delivery="DELIVERED";
         $this->delivery_date=now();
-        $this->save();
+    }
+
+    /**
+     * @param string $roleName
+     * @return $this
+     */
+    public  function processOnInvoicesByUser(string $roleName):Invoice
+    {
+        $role = Role::where('name', $roleName)->first();
+        if ($role) {
+            $user = auth()->user();
+            if ($user->hasRole($roleName)) {
+                $this->setDeliveryToNow(InvoiceStatusEnums::APPROVED);
+            }
+        }
+
+        return $this;
     }
 
 }

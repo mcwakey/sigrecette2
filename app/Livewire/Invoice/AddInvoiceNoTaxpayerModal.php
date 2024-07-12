@@ -25,7 +25,7 @@ use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
-use Spatie\Permission\Models\Role;
+
 
 class AddInvoiceNoTaxpayerModal extends Component
 {
@@ -318,15 +318,7 @@ class AddInvoiceNoTaxpayerModal extends Component
             // Create or update Invoice record
             $invoice = Invoice::create($invoiceData);
 
-            $role = Role::where('name', 'regisseur')->first();
-            if ($role) {
-                /**@var App\Models\User $user  */
-                $user = auth()->user();
-                if ($user->hasRole('regisseur')) {
-                    $invoice->status = InvoiceStatusEnums::APPROVED;
-                    $invoice->setDeliveryToNow();
-                }
-            }
+            $invoice->processOnInvoicesByUser('regisseur');
 
             $invoice->invoice_no = $invoice->id;
             $invoice->nic = '00000'.$invoice->id;
@@ -521,11 +513,6 @@ class AddInvoiceNoTaxpayerModal extends Component
                     $this->s_amount_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff * $invoice_item->taxpayer_taxable->seize * $this->qty * $period / 100;
                 }
 
-            // } else {
-            //     $this->s_amount[$index] = $taxable->seize * $taxable->taxable->tariff * $value * $period / 100;
-            // }
-            //$this->qty[$index] = $taxable->seize;
-            //$this->taxpayer_taxable_id[$index] = $taxable->id;
         }
 
         $this->amount_ph = array_sum($this->s_amount)." FCFA";

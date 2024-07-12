@@ -306,6 +306,7 @@ class AddInvoiceModal extends Component
                 $invoice->type=$invoice_old->type;
                if($invoice_old->type==Constants::INVOICE_TYPE_COMPTANT){
                    $invoice->status= InvoiceStatusEnums::PENDING;
+                   $invoice->processOnInvoicesByUser('regisseur');
                }
                 $invoice_old->save();
             }
