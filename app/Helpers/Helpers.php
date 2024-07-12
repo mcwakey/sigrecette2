@@ -450,8 +450,8 @@ if (!function_exists('number_to_words')) {
         }
 }
 if (!function_exists('format_amount')) {
-    function format_amount($amount) {
-        return number_format($amount, 2, '.', ',');
+  function format_amount($amount) {
+        return number_format($amount, 2, ',', '.');
     }
 }
 

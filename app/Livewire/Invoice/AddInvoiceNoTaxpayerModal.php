@@ -305,14 +305,7 @@ class AddInvoiceNoTaxpayerModal extends Component
                 'type'=> Constants::INVOICE_TYPE_COMPTANT,
                 'notes' => $this->notes
             ];
-            $role = Role::where('name', 'regisseur')->first();
-            if ($role) {
-                /**@var App\Models\User $user  */
-                $user = auth()->user();
-                if ($user->hasRole('regisseur')) {
-                    $invoiceData['status'] =InvoiceStatusEnums::APPROVED;
-                }
-            }
+
 
             // if ($this->edit_mode) {
             //     $invoiceData['amount'] = $this->amount_e;
@@ -325,7 +318,15 @@ class AddInvoiceNoTaxpayerModal extends Component
             // Create or update Invoice record
             $invoice = Invoice::create($invoiceData);
 
-            // Save the invoice ID into the invoice_no column
+            $role = Role::where('name', 'regisseur')->first();
+            if ($role) {
+                /**@var App\Models\User $user  */
+                $user = auth()->user();
+                if ($user->hasRole('regisseur')) {
+                    $invoice->status = InvoiceStatusEnums::APPROVED;
+                    $invoice->setDeliveryToNow();
+                }
+            }
 
             $invoice->invoice_no = $invoice->id;
             $invoice->nic = '00000'.$invoice->id;

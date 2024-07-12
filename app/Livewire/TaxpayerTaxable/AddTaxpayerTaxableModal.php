@@ -134,27 +134,36 @@ class AddTaxpayerTaxableModal extends Component
         //$this->ereas = Erea::where('town_id', $value)->get(); // Load taxables based on tax label ID
         //dd($taxables);
 
-        $this->option_calculus = $taxables->unit_type;
-        $this->unit = $taxables->unit;
+        $this->option_calculus = $taxables?->unit_type;
+        $this->unit = $taxables?->unit;
 
     }
 
     public function updatedLength($value)
     {
-        $this->length = doubleval($this->length);
-        $this->makeCalculSeize();
+        if($value>0){
+            $this->length = doubleval($this->length);
+            $this->makeCalculSeize();
+        }
+
 
     }
 
     public function updatedWidth($value)
     {
 
-        $this->width =  doubleval($this->width);
-        $this->makeCalculSeize();
+        if($value>0){
+            $this->width =  doubleval($this->width);
+            $this->makeCalculSeize();
+        }
+
     }
     public function makeCalculSeize()
     {
-        $this->seize = $this->length * $this->width;
+        if($this->length>0 && $this->width>0){
+            $this->seize = $this->length * $this->width;
+        }
+
     }
 
     public function updateCheckbox($id)
@@ -200,8 +209,6 @@ class AddTaxpayerTaxableModal extends Component
                 'taxable_id' => $this->taxable_id,
                 'authorisation' => $this->authorisation,
                 'auth_reference' => $this->auth_reference,
-                'width'=>$this->width ,
-                'length' =>$this->length,
                 'longitude' => $this->longitude,
                 'latitude' => $this->latitude,
                 // 'canton' => $this->canton,

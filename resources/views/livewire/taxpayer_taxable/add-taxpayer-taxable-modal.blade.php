@@ -160,7 +160,7 @@
                                 <label class="fs-6 fw-semibold mb-2">{{ __('length') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input wire:model.live.debounce.250ms="length" name="length" type="text" class="form-control mb-3 mb-lg-0" placeholder="{{ __('length') }}"/>
+                                <input wire:model.live.debounce.500ms="length" name="length" type="text" class="form-control mb-3 mb-lg-0" placeholder="{{ __('length') }}"/>
                                 <!--end::Input-->
                                 @error('length')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -170,7 +170,7 @@
                                 <label class="fs-6 fw-semibold mb-2">{{ __('width') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input wire:model.live.debounce.250ms="width" name="width" type="text" class="form-control mb-3 mb-lg-0" placeholder="{{ __('width') }}"/>
+                                <input wire:model.live.debounce.500ms="width" name="width" type="text" class="form-control mb-3 mb-lg-0" placeholder="{{ __('width') }}"/>
                                 <!--end::Input-->
                                 @error('width')
                                 <span class="text-danger">{{ $message }}</span> @enderror

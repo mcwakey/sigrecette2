@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Contracts\FormatDateInterface;
 use App\Enums\InvoicePayStatusEnums;
 use App\Enums\InvoiceStatusEnums;
+use App\Enums\PaymentStatusEnums;
 use App\Enums\PrintNameEnums;
 use App\Helpers\Constants;
 use Carbon\Carbon;
@@ -204,6 +205,7 @@ class Invoice extends Model implements FormatDateInterface
 
         foreach ($invoices as $invoice) {
             $paid = Payment::where('invoice_id', $invoice->invoice_no)
+                ->where('status',PaymentStatusEnums::ACCOUNTED)
                 ->sum('amount');
             $restToPay = $invoice->amount - doubleval($invoice->reduce_amount) - $paid;
             $totalRemaining += max($restToPay, 0);
@@ -347,7 +349,7 @@ class Invoice extends Model implements FormatDateInterface
 
 
     public static function returnPaidAndSumByCode(Invoice $invoice):array{
-        $last_payments = Payment::where('invoice_id', $invoice->invoice_no)->get();
+        $last_payments = Payment::where('invoice_id', $invoice->invoice_no)->where('status',PaymentStatusEnums::ACCOUNTED)->get();
         $sumsByTaxCode = Invoice::sumAmountsByTaxCode($invoice);
         $paidAmounts = [];
         foreach ($sumsByTaxCode as $code => &$totalAmount) {
@@ -412,6 +414,7 @@ class Invoice extends Model implements FormatDateInterface
     public static function getRestToPaid(Invoice $invoice): float|int
     {
         $paid = Payment::where('invoice_id', $invoice->invoice_no)
+            ->where('status',PaymentStatusEnums::ACCOUNTED)
             ->sum('amount');
         $restToPay = $invoice->amount - $paid;
 
@@ -424,7 +427,7 @@ class Invoice extends Model implements FormatDateInterface
      */
     public static function getPaid($invoice_id): float|int
     {
-        $payments= Payment::where('invoice_id', $invoice_id)->get();
+        $payments= Payment::where('invoice_id', $invoice_id)->where('status',PaymentStatusEnums::ACCOUNTED)->get();
         $s_amount = [];
 
             foreach ($payments as $index => $payment) {
@@ -515,4 +518,12 @@ class Invoice extends Model implements FormatDateInterface
 
         return $query;
     }
+    public function setDeliveryToNow()
+    {
+        $this->status =$this->status;
+        $this->delivery="DELIVERED";
+        $this->delivery_date=now();
+        $this->save();
+    }
+
 }
