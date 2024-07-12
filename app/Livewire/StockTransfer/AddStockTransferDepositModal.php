@@ -82,31 +82,42 @@ class AddStockTransferDepositModal extends Component
     public function validateData()
     {
         $this->validate();
-        if ($this->deposit_mode && $this->start_no !== null && $this->end_no !== null && $this->select_transfer!=null) {
+        if ($this->deposit_mode ) {
+            if( $this->start_no &&  $this->end_no==null || $this->start_no==null &&  $this->end_no){
+                if( $this->start_no==null){
+                    $this->addError('start_no', 'Le numéro de début est obligaoire quand le numéro de fin est défini');
 
-            if ($this->start_no >= $this->end_no) {
-                $this->addError('end_no', 'Le numéro de fin doit être supérieur au numéro de début.');
+                }else{
+                    $this->addError('end_no', 'Le numéro de fin est obligaoire quand le numéro de debut est défini ');
+                }
             }
-            if ($this->start_no <  $this->select_transfer->start_no || $this->end_no >$this->select_transfer->end_no) {
-                $this->addError('start_no', 'Le numéro de début et le numéro de fin doivent se situer dans la plage des  allouée.');
+            if( $this->start_no !== null && $this->end_no !== null && $this->select_transfer!=null){
+                if ($this->start_no >= $this->end_no) {
+                    $this->addError('end_no', 'Le numéro de fin doit être supérieur au numéro de début.');
+                }
+                if ($this->start_no <  $this->select_transfer->start_no || $this->end_no >$this->select_transfer->end_no) {
+                    $this->addError('start_no', 'Le numéro de début et le numéro de fin doivent se situer dans la plage des  allouée.');
+                }
+                $overlapExists = StockTransfer::where('type', '=', 'ACTIVE')
+                    ->where('stock_request_id', '=', $this->stock_request_id)
+                    ->where('to_user_id', '=', $this->collector_id)
+                    ->where('trans_type', '=', 'VENDU')
+                    ->where(function ($query) {
+                        $query->whereBetween('start_no', [$this->start_no, $this->end_no])
+                            ->orWhereBetween('end_no', [$this->start_no, $this->end_no])
+                            ->orWhere(function ($query) {
+                                $query->where('start_no', '<=', $this->start_no)
+                                    ->where('end_no', '>=', $this->end_no);
+                            });
+                    })
+                    ->exists();
+                if ($overlapExists) {
+                    $this->addError('start_no', 'Le plage de valeurs chevauche les ventes existantes.');
+                    $this->addError('end_no', 'Le plage de valeurs chevauche les ventes existantes.');
+                }
             }
-            $overlapExists = StockTransfer::where('type', '=', 'ACTIVE')
-                ->where('stock_request_id', '=', $this->stock_request_id)
-                ->where('to_user_id', '=', $this->collector_id)
-                ->where('trans_type', '=', 'VENDU')
-                ->where(function ($query) {
-                    $query->whereBetween('start_no', [$this->start_no, $this->end_no])
-                        ->orWhereBetween('end_no', [$this->start_no, $this->end_no])
-                        ->orWhere(function ($query) {
-                            $query->where('start_no', '<=', $this->start_no)
-                                ->where('end_no', '>=', $this->end_no);
-                        });
-                })
-                ->exists();
-            if ($overlapExists) {
-                $this->addError('start_no', 'Le plage de valeurs chevauche les ventes existantes.');
-                $this->addError('end_no', 'Le plage de valeurs chevauche les ventes existantes.');
-            }
+
+
         }
     }
 
@@ -540,7 +551,7 @@ class AddStockTransferDepositModal extends Component
 
                         $data['payment_id'] = $payment->id;
                         $data['trans_type'] = 'VENDU';
-                    
+
                         $data['period_from'] =  $stock_transfers->first()->period_from;
                         $data['period_to'] =  $stock_transfers->first()->period_to;
 

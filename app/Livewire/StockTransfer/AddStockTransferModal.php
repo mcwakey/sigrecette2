@@ -76,6 +76,14 @@ class AddStockTransferModal extends Component
     {
         $this->validate();
 
+        if( $this->start_no &&  $this->end_no==null || $this->start_no==null &&  $this->end_no){
+            if( $this->start_no==null){
+                $this->addError('start_no', 'Le numéro de début est obligaoire quand le numéro de fin est défini');
+
+            }else{
+                $this->addError('end_no', 'Le numéro de fin est obligaoire quand le numéro de debut est défini ');
+            }
+        }
         if ( $this->start_no !== null && $this->end_no !== null) {
             if ($this->start_no >= $this->end_no) {
                 $this->addError('end_no', 'Le numéro de fin doit être supérieur au numéro de début.');
@@ -467,8 +475,8 @@ class AddStockTransferModal extends Component
 
                     $data['payment_id'] = $payment->id;
                     $data['trans_type'] = 'VENDU';
-                    
-                    
+
+
                     $data['period_from'] =  $stock_transfers->first()->period_from;
                     $data['period_to'] =  $stock_transfers->first()->period_to;
 
