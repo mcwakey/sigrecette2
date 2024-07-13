@@ -34,7 +34,7 @@
     </style>
 
     <div class="widget-container">
-        @include('partials/widgets/cards/_widget-20')
+        @include('pages.dashboards._widget_invoices_stats')
     </div>
     <div class="grid-2">
         <div class="widget-container">

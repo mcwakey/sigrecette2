@@ -197,6 +197,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\TelescopeServiceProvider::class,
         ZeroDaHero\LaravelWorkflow\WorkflowServiceProvider::class,
         App\Providers\VersionServiceProvider::class,
     ],

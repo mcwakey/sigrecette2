@@ -162,7 +162,7 @@ class TaxpayersDataTable extends DataTable
             //Column::make('erea.name')->title(__('erea')),
             Column::make('address')->title(__('address')),
             Column::make('zone.name')->title(__('zone'))->name("zone.name"),
-            Column::make('status')->title(__('aproval')),
+            Column::make('status')->title(__('aproval'))->searchable(false),
             //Column::make('created_at')->title(__('created at'))->addClass('text-nowrap created_at')->visible(false),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')

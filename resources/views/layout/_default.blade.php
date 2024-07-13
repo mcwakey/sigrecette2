@@ -36,7 +36,8 @@
     </div>
     <!--end::App-->
 
-    @include('partials/_drawers')
+
+
 
     @include('partials/_modals')
 

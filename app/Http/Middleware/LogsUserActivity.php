@@ -6,15 +6,15 @@ use App\Models\UserLogs;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Queue;
+use App\Jobs\LogUserActivity;
 
 class LogsUserActivity
 {
     public function handle(Request $request, Closure $next)
     {
         $response = $next($request);
-
-        if (auth()->check()) {
-
+        if (auth()->check() &&  !request()->is('api/v1/user/notifications')) {
             $data = [
                 'user_id' => auth()->id(),
                 'ip_address' => $request->getClientIp(),
@@ -32,11 +32,12 @@ class LogsUserActivity
             if ($request->routeIs('taxpayers.show')) {
                 try {
                     $data['taxpayer_id'] = $request->route('taxpayer')->id;
-                    UserLogs::create($data);
-                } catch (\Exception $e) {}
-                
-            } else if (!$request->routeIs('taxpayers.*') && !$response->status() != 404) {
-                UserLogs::create($data);
+                    Queue::push(new LogUserActivity($data));
+                } catch (\Exception $e) {
+                    // Handle exception (optional)
+                }
+            } else if (!$request->routeIs('taxpayers.*') && $response->status() != 404) {
+                Queue::push(new LogUserActivity($data));
             }
         }
 
