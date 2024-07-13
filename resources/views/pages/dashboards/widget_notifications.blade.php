@@ -59,7 +59,7 @@
 
                                             </a>
                                             <div class="text-gray-500 fs-7">
-                                                {{ 'Montant :' . $notification->data['amount'] . ' FCFA - ' . $notification->created_at->diffForHumans() }}
+                                                {{ 'Montant :' .format_amount($notification->data['amount']) . ' FCFA - ' . $notification->created_at->diffForHumans() }}
                                             </div>
 
                                         </div>
@@ -79,7 +79,7 @@
                                                 @endif
                                             </a>
                                             <div class="text-gray-500 fs-7">
-                                                {{ 'Montant :' . $notification->data['amount'] . ' FCFA - ' . $notification->created_at->diffForHumans() }}
+                                                {{ 'Montant :' .format_amount($notification->data['amount']) . ' FCFA - ' . $notification->created_at->diffForHumans() }}
                                             </div>
                                         </div>
                                     @endif
@@ -134,7 +134,7 @@
                                                 Paiement : {{ $notification->data['invoice_id'] }} - ajouté
                                             </a>
                                             <div class="text-gray-500 fs-7">
-                                                {{ 'montant :' . $notification->data['amount'] . ' FCFA - ' . $notification->created_at->diffForHumans() }}
+                                                {{ 'montant :' . format_amount($notification->data['amount']) . ' FCFA - ' . $notification->created_at->diffForHumans() }}
                                             </div>
                                         </div>
                                     @else
@@ -153,7 +153,7 @@
                                                 @endif
                                             </a>
                                             <div class="text-gray-500 fs-7">
-                                                {{ 'Montant :' . $notification->data['amount'] . ' FCFA - ' . $notification->created_at->diffForHumans() }}
+                                                {{ 'Montant :' .format_amount($notification->data['amount']) . ' FCFA - ' . $notification->created_at->diffForHumans() }}
                                             </div>
                                         </div>
                                     @endif

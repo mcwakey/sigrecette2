@@ -22,7 +22,7 @@
 
             <div class="tab-pane fade show active" id="kt_chart_widget_8_gender_tab" role="tabpanel">
 
-               
+
                 <!--begin::Chart-->
                 <div >
                     @if(isset($count_tapyers_with_gender["Homme"],$count_tapyers_with_gender["Femme"]))
@@ -64,7 +64,12 @@
                                             <div class="ms-auto fw-bolder text-gray-700 text-end"> {{$count_tapyers_with_gender["Homme"] ?? ''}}</div>
 
                                         </div>
-                                        <!--end::Label-->
+                                        <div class="d-flex fs-6 fw-semibold align-items-center my-4">
+                                            <div class="bullet bg-info me-3" style="border-radius: 3px;width: 12px;height: 12px"></div>
+                                            <div class="fs-5 fw-bold text-gray-600 me-5">Entreprise</div>
+                                            <div class="ms-auto fw-bolder text-gray-700 text-end"> {{$count_tapyers_with_gender["Autre"] ?? ''}}</div>
+
+                                        </div>
 
                                         <!--begin::Label-->
                                         <div class="d-flex fs-6 fw-semibold align-items-center">
@@ -95,7 +100,7 @@
                         </div>
                     @endif
                 </div>
-            </div> 
+            </div>
         </div>
     </div>
 </div>

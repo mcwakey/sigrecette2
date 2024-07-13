@@ -1,11 +1,10 @@
 @php
     $charts = [
         [
-            'container_id' => 'kt_amcharts_77',
+            'container_id' => 'kt_amcharts_77_activity',
             'data' => \App\Models\Taxpayer::countTaxpayersByActivity(),
         ],
     ];
-    $count_tapyers_with_gender = \App\Models\Taxpayer::countTaxpayers();
 @endphp
 <div class="card card-flush h-xl-100">
     <!--begin::Header-->
@@ -16,7 +15,7 @@
                 <li class="nav-item">
                     <a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-light fw-bold px-4 me-1 active"
                         data-bs-toggle="tab" id="kt_chart_widget_8_month_toggle"
-                        href="#kt_chart_widget_8_month_tab">Graphique - Contribuables par catégorie d'activité</a>
+                        href="#kt_chart_widget_8_month_tab">Graphique - Contribuables par activité économique</a>
                 </li>
             </ul>
         </div>
@@ -32,7 +31,7 @@
             <!--begin::Tab pane-->
             <div class="tab-pane fade active show" id="kt_chart_widget_8_month_tab" role="tabpanel">
                 <!--begin::Chart-->
-                <div id="kt_amcharts_77" class="ms-n5 min-h-auto" style="height: 275px"></div>
+                <div id="kt_amcharts_77_activity" class="ms-n5 min-h-auto" style="height: 275px"></div>
                 <!--end::Chart-->
             </div>
         </div>
@@ -59,7 +58,7 @@
                         alignLabels: true,
                         calculateAggregates: true,
                         valueField: "value",
-                        categoryField: "category"
+                        categoryField: "activity"
                     }));
                     series.slices.template.setAll({
                         strokeWidth: 3,

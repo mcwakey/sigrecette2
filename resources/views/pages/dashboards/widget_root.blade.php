@@ -17,7 +17,6 @@
             //        'data' =>\App\Models\Taxpayer::countTaxpayersState(),
             //    ]
            ];
-   $count_tapyers_with_gender = \App\Models\Taxpayer::countTaxpayers();
 @endphp
 <div class="card card-flush h-xl-100">
     <!--begin::Header-->

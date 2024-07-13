@@ -140,7 +140,7 @@ class Taxpayer extends Model
             ->toArray();
     }
 
-    public static function countTaxpayersByActivity()
+    public static function countTaxpayersByCategory()
     {
         $categories = Category::all()->pluck('name', 'id');
 
@@ -150,6 +150,21 @@ class Taxpayer extends Model
             ->map(function ($item) use ($categories) {
                 $categoryName = $categories[$item->category_id] ?? 'Unknown category';
                 return ['value' => $item->count, 'category' => $categoryName];
+            })
+            ->toArray();
+
+        return $counts;
+    }
+    public static function countTaxpayersByActivity()
+    {
+        $activities = Activity::all()->pluck('name', 'id');
+
+        $counts = Taxpayer::selectRaw('activity_id, count(*) as count')
+            ->groupBy('category_id')
+            ->get()
+            ->map(function ($item) use ($activities) {
+                $activityName = $activities[$item->activity_id] ?? 'Unknown activity';
+                return ['value' => $item->count, 'activity' => $activityName];
             })
             ->toArray();
 

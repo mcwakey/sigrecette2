@@ -53,7 +53,9 @@
         <div style="margin-bottom: 20px;">
             @include('pages.dashboards.widget_taxpayer_taxable')
         </div>
-
+        <div style="margin-bottom: 20px;">
+            @include('pages.dashboards.widget_taxpayer_category')
+        </div>
         <div style="margin-bottom: 20px;">
             @include('pages.dashboards.widget_taxpayer_activity')
         </div>
