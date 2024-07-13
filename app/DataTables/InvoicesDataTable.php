@@ -59,16 +59,16 @@ class InvoicesDataTable extends DataTable
             })
             ->editColumn('total', function (Invoice $invoice) {
                 if ($invoice->reduce_amount != '')
-                    return '-'. $invoice->reduce_amount ;
+                    return '-'. format_amount($invoice->reduce_amount) ;
                 else
-                   return $invoice->amount;
+                   return format_amount($invoice->amount);
             })
             ->editColumn('paid', function (Invoice $invoice) {
 
-                    return $invoice::getPaid($invoice->invoice_no);
+                    return format_amount($invoice::getPaid($invoice->invoice_no));
             })
             ->editColumn('remains_to_be_paid', function (Invoice $invoice) {
-                    return $invoice->get_remains_to_be_paid();
+                    return  format_amount($invoice->get_remains_to_be_paid());
             })
             ->editColumn('validity', function (Invoice $invoice) {
                 return view('pages/invoices.columns._validity', compact('invoice'));
