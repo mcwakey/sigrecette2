@@ -12,7 +12,6 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
 
 class AddUserModal extends Component
 {
@@ -41,6 +40,7 @@ class AddUserModal extends Component
         'update_user' => 'updateUser',
         'disabeld_row' => 'disabeldUser',
         'restore_row' => 'restoreUser',
+        'close_user_modal' => 'closeUserModal',
     ];
 
     public function render()
@@ -57,7 +57,7 @@ class AddUserModal extends Component
             $this->rules['email'] = 'required|email|unique:users,email,' . $this->user_id;
         }
 
-        $roleNeedZone = [__('agent_recouvrement'), __('collecteur')];
+        $roleNeedZone = [__('agent_recouvrement'), __('collecteur'), __('regisseur')];
 
         if (in_array(__($this->role), $roleNeedZone)) {
             $this->rules['zone_id'] = 'required|integer';
@@ -70,9 +70,7 @@ class AddUserModal extends Component
 
         DB::transaction(function () {
             // Prepare the data for creating a new user
-            $data = [
-                'name' => $this->name,
-            ];
+            $data = ['name' => $this->name,];
 
             if ($this->avatar) {
                 $data['profile_photo_path'] = $this->avatar->store('avatars', 'public');
@@ -84,7 +82,7 @@ class AddUserModal extends Component
                 $data['password'] = Hash::make($this->email);
             }
 
-            $data['email'] = $this->email;
+            $data['email'] = trim($this->email);
             $data['zone_id'] = $this->zone_id;
 
             if (!$this->edit_mode && !Gate::forUser(auth()->user())->allows('create-user', User::class)) {
@@ -110,13 +108,13 @@ class AddUserModal extends Component
                 $user->syncRoles($this->role);
 
                 // Emit a success event with a message
-                $this->dispatch('success', __('Utilisateur mis a jour avec succès'));
+                $this->dispatch('success', __('Utilisateur mis a jour avec succès.'));
             } else {
                 // Assign selected role for user
                 $user->assignRole($this->role);
 
                 // Emit a success event with a message
-                $this->dispatch('success', __('Utilisateur créer avec succès'));
+                $this->dispatch('success', __('Utilisateur créer avec succès.'));
             }
         });
 
@@ -144,7 +142,7 @@ class AddUserModal extends Component
         $user = User::destroy($id);
 
         // Emit a success event with a message
-        $this->dispatch('success', 'Utilisateur supprimer avec succès');
+        $this->dispatch('success', 'Utilisateur supprimer avec succès.');
     }
 
     public function updateUser($id)
@@ -167,7 +165,7 @@ class AddUserModal extends Component
 
         if ($user && !$user ->trashed()) {
             $user->delete();
-            $this->dispatch('success', 'Utilisateur désactiver avec succès');
+            $this->dispatch('success', 'Utilisateur désactiver avec succès.');
             return true;
         }
 
@@ -179,8 +177,13 @@ class AddUserModal extends Component
 
         if ($user) {
             $user->restore();
-            $this->dispatch('success', 'Utilisateur restorer avec succès');
+            $this->dispatch('success', 'Utilisateur restorer avec succès.');
         }
+    }
+
+    public function closeUserModal()
+    {
+        $this->edit_mode = false;
     }
 
     public function hydrate()

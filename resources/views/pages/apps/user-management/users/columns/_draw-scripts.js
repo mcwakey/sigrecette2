@@ -2,7 +2,7 @@
 KTMenu.init();
 
 // Add click event listener to delete buttons
-document.querySelectorAll('[data-kt-action="delete_row"]').forEach(function (element) {
+document.querySelectorAll('[data-kt-action="delete_row"]')?.forEach(function (element) {
     element.addEventListener('click', function () {
         Swal.fire({
             text: 'Voulez-vous supprimer ce utilisateur?',
@@ -24,7 +24,7 @@ document.querySelectorAll('[data-kt-action="delete_row"]').forEach(function (ele
 });
 
 
-document.querySelectorAll('[data-kt-action="disabeld_row"]').forEach(function (element) {
+document.querySelectorAll('[data-kt-action="disabeld_row"]')?.forEach(function (element) {
     element.addEventListener('click', function () {
         Swal.fire({
             text: 'Voulez-vous désactiver ce utilisateur?',
@@ -46,7 +46,7 @@ document.querySelectorAll('[data-kt-action="disabeld_row"]').forEach(function (e
 });
 
 
-document.querySelectorAll('[data-kt-action="restore_row"]').forEach(function (element) {
+document.querySelectorAll('[data-kt-action="restore_row"]')?.forEach(function (element) {
     element.addEventListener('click', function () {
         Swal.fire({
             text: 'Voulez-vous activer ce utilisateur?',
@@ -67,12 +67,20 @@ document.querySelectorAll('[data-kt-action="restore_row"]').forEach(function (el
     });
 });
 
+
 // Add click event listener to update buttons
-document.querySelectorAll('[data-kt-action="update_row"]').forEach(function (element) {
+document.querySelectorAll('[data-kt-action="update_row"]')?.forEach(function (element) {
     element.addEventListener('click', function () {
         Livewire.dispatch('update_user', [this.getAttribute('data-kt-user-id')]);
     });
 });
+
+document.querySelectorAll('[data-kt-action="close_user_modal"]')?.forEach(function(element){
+    element.addEventListener('click', function () {
+        Livewire.dispatch('close_user_modal', []);
+    });
+});
+
 
 // Listen for 'success' event emitted by Livewire
 Livewire.on('success', (message) => {
