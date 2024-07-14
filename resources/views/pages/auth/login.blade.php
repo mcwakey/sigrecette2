@@ -1,7 +1,6 @@
 <x-auth-layout>
-
     <!--begin::Form-->
-    <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" data-kt-redirect-url="{{ route('dashboard') }}" action="{{ route('login') }}">
+    <form method="POST" class="form w-100" novalidate="novalidate" id="kt_sign_in_form" data-kt-redirect-url="{{ route('dashboard') }}" action="{{ route('login') }}">
         @csrf
         <!--begin::Heading-->
         <div class="text-center mb-11">
@@ -11,20 +10,8 @@
             </h1>
             <!--end::Title-->
 
-            <!--begin::Subtitle-->
-            <!-- <div class="text-gray-500 fw-semibold fs-6">
-            {{ __('your social campaigns') }}
-            </div> -->
-            <!--end::Subtitle--->
         </div>
         <!--begin::Heading-->
-
-
-        <!--begin::Separator-->
-        <!-- <div class="separator separator-content my-14">
-            <span class="w-125px text-gray-500 fw-semibold fs-7">{{ __('or with email') }}</span>
-        </div> -->
-        <!--end::Separator-->
 
         <!--begin::Input group--->
         <div class="fv-row mb-8">
@@ -47,7 +34,7 @@
 
             <!--begin::Link-->
             <a href="{{ route('password.request') }}" class="link-success">
-            {{ __('forgetpass') }}
+            {{ __('Mot de passe oublié ?') }}
             </a>
             <!--end::Link-->
         </div>
@@ -63,11 +50,7 @@
 
         <!--begin::Sign up-->
         <div class="text-gray-500 text-center fw-semibold fs-6">
-        {{ __('no account') }}
-
-            <!-- <a href="{{ route('register') }}" class="link-success">
-                Sign up
-            </a> -->
+            {{ __('Pas encore de compte ? Contactez un administrateur.') }}
         </div>
         <!--end::Sign up-->
     </form>

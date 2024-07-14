@@ -13,26 +13,15 @@
 
             <!--begin::Link-->
             <div class="text-gray-500 fw-semibold fs-6">
-            {{ __('Vous-avez oublier votre mot de passe ? contactez un administrateur.') }}
+            {{ __('Vous avez oublié votre mot de passe ? Contactez un administrateur.') }}
             </div>
             <!--end::Link-->
         </div>
         <!--begin::Heading-->
 
-        <!--begin::Input group--->
-        {{-- <div class="fv-row mb-8">
-            <!--begin::Email-->
-            <input type="text" placeholder="{{ __('email') }}" name="email" autocomplete="off" class="form-control bg-transparent" value="demo@demo.com"/>
-            <!--end::Email-->
-        </div> --}}
-
         <!--begin::Actions-->
         <div class="d-flex flex-wrap justify-content-center pb-lg-0">
-            {{-- <button type="button" id="kt_password_reset_submit" class="btn btn-success me-4">
-                @include('partials/general/_button-indicator', ['label' => __('submit')])
-            </button> --}}
-
-            <a href="{{ route('login') }}" class="btn btn-light">{{ __('cancel') }}</a>
+            <a href="{{ route('login') }}" class="btn btn-light">{{ __('Se Connecter') }}</a>
         </div>
         <!--end::Actions-->
     </form>
