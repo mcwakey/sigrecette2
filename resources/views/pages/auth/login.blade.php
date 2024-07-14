@@ -10,11 +10,6 @@
             </h1>
             <!--end::Title-->
 
-            <!--begin::Subtitle-->
-            <!-- <div class="text-gray-500 fw-semibold fs-6">
-            {{ __('your social campaigns') }}
-            </div> -->
-            <!--end::Subtitle--->
         </div>
         <!--begin::Heading-->
 
@@ -39,7 +34,7 @@
 
             <!--begin::Link-->
             <a href="{{ route('password.request') }}" class="link-success">
-            {{ __('forgetpass') }}
+            {{ __('Mot de passe oublié ?') }}
             </a>
             <!--end::Link-->
         </div>
@@ -55,11 +50,7 @@
 
         <!--begin::Sign up-->
         <div class="text-gray-500 text-center fw-semibold fs-6">
-        {{ __('no account') }}
-
-            <!-- <a href="{{ route('register') }}" class="link-success">
-                Sign up
-            </a> -->
+            {{ __('Pas encore de compte ? Contactez un administrateur.') }}
         </div>
         <!--end::Sign up-->
     </form>
