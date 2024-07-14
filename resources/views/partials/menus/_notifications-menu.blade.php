@@ -9,9 +9,11 @@
 
     <div class="d-flex flex-column bgi-no-repeat rounded-top">
         <!--begin::Title-->
-        <h3 class=" fw-semibold px-9 mt-10 -mb-4">Notifications
+        <h3 class=" fw-semibold px-9 mt-10 -mb-4">
+            Notifications
             <span class="fs-8 opacity-75 ps-3 badge badge-light-danger"
-                id="notif-counter">{{ count(Auth::user()->unreadNotifications) }}</span>
+                id="notif-counter">{{ count(Auth::user()->unreadNotifications) }}
+            </span>
         </h3>
         <!--end::Title-->
         <!--begin::Tabs-->
@@ -25,9 +27,6 @@
                     Déjà consulté
                 </a>
             </li>
-            {{-- <li class="nav-item">
-				<a class="nav-link text-white opacity-75 opacity-state-100 pb-4" data-bs-toggle="tab" href="#kt_topbar_notifications_3">Logs</a>
-			</li> --}}
         </ul>
         <!--end::Tabs-->
     </div>
@@ -543,9 +542,7 @@
         }, 5000);
 
 
-        // Vérifie si le navigateur prend en charge l'API MediaDevices
         if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
-            // Vérifie si l'utilisateur a déjà accordé les permissions pour le microphone
             navigator.mediaDevices.enumerateDevices()
                 .then(function(devices) {
                     const hasMicrophone = devices.some(function(device) {
@@ -553,29 +550,23 @@
                     });
 
                     if (!hasMicrophone) {
-                        // Demande l'autorisation d'accéder au microphone
                         navigator.mediaDevices.getUserMedia({
                                 audio: true
                             })
                             .then(function(stream) {
-                                // L'utilisateur a autorisé l'accès au microphone
                                 console.log('Accès au microphone autorisé !');
                             })
                             .catch(function(error) {
-                                // L'utilisateur a refusé l'accès au microphone ou une erreur est survenue
                                 console.error('Accès au microphone refusé ou erreur : ', error);
                             });
                     } else {
-                        // L'utilisateur a déjà accordé les permissions pour le microphone
                         console.log('L\'utilisateur a déjà accordé les permissions pour le microphone.');
                     }
                 })
                 .catch(function(error) {
-                    // Une erreur est survenue lors de la vérification des périphériques
                     console.error('Erreur lors de la vérification des périphériques : ', error);
                 });
         } else {
-            // Le navigateur ne prend pas en charge l'API MediaDevices
             console.log("Votre navigateur ne prend pas en charge l'API MediaDevices.");
         }
     </script>

@@ -2,7 +2,7 @@
 <div class="app-navbar flex-shrink-0 d-flex align-items-center">
     <div class="mt-1">
         @foreach(auth()->user()->getRoleNames() as $role)
-            <span class="p-3 text-center rounded-1 fw-bolder badge-light-success">{{ __($role) }}</span>
+            <span class="p-3 text-center rounded-1 fw-bolder badge-light-primary">{{ __($role) }}</span>
         @endforeach     
     </div>
 	<div class="app-navbar-item ms-1 ms-md-4">
