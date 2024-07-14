@@ -16,23 +16,28 @@
                 $refs.exportBtn.disabled = true;
                 var oTable = LaravelDataTables['{{ $tableId }}'];
                 var baseUrl = oTable.ajax.url() === '' ? window.location.toString() : oTable.ajax.url();
+                var url = new URL(baseUrl);
+                var params = new URLSearchParams(url.search);
+                params.set('action', 'exportQueue');
+                params.set('exportType', '{{$fileType}}');
+                params.set('sheetName', '{{$sheetName}}');
+                params.set('emailTo', '{{urlencode($emailTo)}}');
+                var dataTableParams = new URLSearchParams($.param(oTable.ajax.params()));
+                for (const [key, value] of dataTableParams.entries()) {
+                    params.set(key, value);
+                }
 
-                var params = new URLSearchParams({
-                    action: 'exportQueue',
-                    exportType: '{{$fileType}}',
-                    sheetName: '{{$sheetName}}',
-                    emailTo: '{{urlencode($emailTo)}}',
-                });
+                url.search = params.toString();
 
-                $.get(baseUrl + '?' + params.toString() + '&' + $.param(oTable.ajax.params())).then(function(exportId) {
+                $.get(url.toString()).then(function(exportId) {
                     $wire.export(exportId);
                 }).catch(function(error) {
                     $wire.set('exportFinished', true);
                     $wire.set('exporting', false);
                     $wire.set('exportFailed', true);
                 });
-              ">
 
+              ">
                 <div class="d-grid gap-2">
                     <button type="submit" class="btn btn-link  btn-lg" x-ref="exportBtn" :disabled="$wire.exporting">
                         <span class="menu-link px-3">

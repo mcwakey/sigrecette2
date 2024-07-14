@@ -62,8 +62,10 @@
                     @endcan
                         <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
 
-                            <div class=" ms-5 mt-1 me-5">
-                                <livewire:export-button :table-id="$dataTable->getTableId()" auto-download="true" type="xlsx"  buttonName="Export Excel"/>
+                            <div id="no-data-message" style="display: none;">
+                                <div class=" ms-5 mt-1 me-5">
+                                    <livewire:export-button :table-id="$dataTable->getTableId()" auto-download="true" type="xlsx" buttonName="Export Excel"/>
+                                </div>
                             </div>
 
 
@@ -260,6 +262,19 @@
 
         {{ $dataTable->scripts() }}
         <script>
+            $(document).ready(function() {
+                var table = $('#taxpayers-table').DataTable();
+
+                table.on('xhr', function() {
+                    var json = table.ajax.json();
+                    if (json.data.length === 0) {
+                        $('#no-data-message').hide();
+                    } else {
+                        $('#no-data-message').show();
+
+                    }
+                });
+            });
             document.getElementById('mySearchInput').addEventListener('keyup', function() {
                 window.LaravelDataTables['taxpayers-table'].search(this.value).draw();
             });
