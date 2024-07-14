@@ -2,7 +2,7 @@
     $charts = [
         [
             'container_id' => 'kt_amcharts_30',
-            'data' => \App\Models\Taxpayer::countTaxpayersByTaxables(),
+            'data' => $stats[ \App\Enums\StatisticKeysEnums::BY_TAXABLE],
         ],
     ];
 @endphp

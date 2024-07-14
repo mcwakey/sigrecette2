@@ -140,21 +140,7 @@ class Invoice extends Model implements FormatDateInterface
     {
         return $this->hasMany(InvoiceItem::class);
     }
-    public static function countInvoices(Year $year){
-        return Invoice::whereYear('created_at', $year->name)
-            ->selectRaw('status, count(*) as count')
-            ->groupBy('status')
-            ->pluck('count', 'status')
-            ->merge(['NOEXPIRED' => Invoice::whereYear('created_at', $year->name)
-                ->where('status', '!=', 'EXPIRED')
-                ->count()])
-            ->merge(['Pending' => Invoice::whereYear('created_at', $year->name)
-                ->where('status', '!=', 'EXPIRED')
-                ->where('delivery', '=', 'NOT DELIVERED')
-                ->count()])
-            ->merge(['Total' => Invoice::whereYear('created_at', $year->name) ->count()])
-            ->toArray();
-    }
+
 
     public static function getAmountsSummary(): array
     {
@@ -410,7 +396,7 @@ class Invoice extends Model implements FormatDateInterface
 
     /**
      * @param Invoice $invoice
-     * @return int
+     * @return float|int
      */
     public static function getRestToPaid(Invoice $invoice): float|int
     {
@@ -423,7 +409,7 @@ class Invoice extends Model implements FormatDateInterface
     }
 
     /**
-     * @param Invoice $invoice
+     * @param $invoice_id
      * @return float|int
      */
     public static function getPaid($invoice_id): float|int

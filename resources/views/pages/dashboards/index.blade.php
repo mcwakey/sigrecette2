@@ -50,18 +50,16 @@
             @include('pages.dashboards.widget_root')
         </div>
 
-        <div style="margin-bottom: 20px;">
-            @include('pages.dashboards.widget_taxpayer_taxable')
-        </div>
-        <div style="margin-bottom: 20px;">
-            @include('pages.dashboards.widget_taxpayer_category')
-        </div>
-        <div style="margin-bottom: 20px;">
-            @include('pages.dashboards.widget_taxpayer_activity')
-        </div>
 
+        <div style="margin-bottom: 20px;">
+            @include('pages.dashboards.widget_activity_and_category')
+        </div>
         <div style="margin-bottom: 20px;">
             @include('pages.dashboards.widget_taxpayer_state')
         </div>
+        <div style="margin-bottom: 20px;">
+            @include('pages.dashboards.widget_taxpayer_taxable')
+        </div>
+
     </div>
 </x-default-layout>

@@ -1,5 +1,5 @@
 @php
-   $count_tapyers_with_gender = \App\Models\Taxpayer::countTaxpayers();
+   $count_tapyers_with_gender = $stats[ \App\Enums\StatisticKeysEnums::BY_GENDER];
 @endphp
 <div class="card card-flush h-xl-100">
     <!--begin::Header-->
@@ -26,10 +26,10 @@
                     <!--begin::Title-->
                     <div class="card-title d-flex flex-column">
                         <!--begin::Amount-->
-                        <span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">357</span>
+                        <span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">{{$count_tapyers_with_gender["Total"] ?? ''}}</span>
                         <!--end::Amount-->
                         <!--begin::Subtitle-->
-                        <span class="text-gray-500 pt-1 fw-semibold fs-6">Professionals</span>
+                        <span class="text-gray-500 pt-1 fw-semibold fs-6">{{ __('Contribuables')}}</span>
                         <!--end::Subtitle-->
                     </div>
                     <!--end::Title-->

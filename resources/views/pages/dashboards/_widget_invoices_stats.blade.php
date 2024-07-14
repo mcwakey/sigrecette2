@@ -1,7 +1,6 @@
 @php
-    use Carbon\Carbon;
-    $year = \App\Models\Year::getActiveYear();
-    $count_invoices = \App\Models\Invoice::countInvoices($year);
+
+    $count_invoices = $stats[ \App\Enums\StatisticKeysEnums::BY_INVOICE];
 @endphp
 <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-50 mb-5 mb-xl-10"
      style="background-color: #F1416C;background-image:url('assets/media/patterns/vector-1.png')">

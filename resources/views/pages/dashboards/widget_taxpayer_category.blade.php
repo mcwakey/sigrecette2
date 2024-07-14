@@ -2,41 +2,15 @@
     $charts = [
         [
             'container_id' => 'kt_amcharts_77',
-            'data' => \App\Models\Taxpayer::countTaxpayersByCategory(),
+            'data' => $stats[ \App\Enums\StatisticKeysEnums::BY_CATEGORY],
         ],
     ];
 @endphp
-<div class="card card-flush h-xl-100">
-    <!--begin::Header-->
-    <div class="card-header pt-5">
-        <!--begin::Toolbar-->
-        <div class="card-toolbar">
-            <ul class="nav" id="kt_chart_widget_8_tabs">
-                <li class="nav-item">
-                    <a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-light fw-bold px-4 me-1 active"
-                        data-bs-toggle="tab" id="kt_chart_widget_8_month_toggle"
-                        href="#kt_chart_widget_8_month_tab">Graphique - Contribuables par catégorie d'activité</a>
-                </li>
-            </ul>
-        </div>
-        <!--end::Toolbar-->
-    </div>
-    <!--end::Header-->
-    <!--begin::Body-->
-    <div class="card-body pt-6">
-        <!--begin::Tab content-->
-        <div class="tab-content">
-            <!--begin::Tab pane-->
-            <!--end::Tab pane-->
-            <!--begin::Tab pane-->
-            <div class="tab-pane fade active show" id="kt_chart_widget_8_month_tab" role="tabpanel">
+            <div class="tab-pane fade active show" id="kt_chart_widget_8_month_tab1" role="tabpanel">
                 <!--begin::Chart-->
                 <div id="kt_amcharts_77" class="ms-n5 min-h-auto" style="height: 275px"></div>
                 <!--end::Chart-->
             </div>
-        </div>
-    </div>
-</div>
 
 @push('scripts')
 
