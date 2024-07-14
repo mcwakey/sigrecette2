@@ -21,11 +21,6 @@
                         {{ __('SIG-Recette') }}
                     </h2>
                     <!--end::Title-->
-
-                    <!--begin::Text-->
-                    <div class="d-none d-lg-block text-gray-500 mb-20 fs-base text-center">
-                        {{-- {{ __('slogan') }} --}}
-                    </div>
                 </div>
                 <!--end::Content-->
             </div>
@@ -35,6 +30,9 @@
             <div class="d-flex flex-column flex-lg-row-fluid w-lg-70 p-10 order-2 order-lg-2">
                 <!--begin::Form-->
                 <div class="d-flex flex-center flex-column flex-lg-row-fluid">
+
+                    <img src="{{ image('logos/giz.jpeg') }}" style="width:320px;height:auto;object-fit:cover;" alt="Mise en oeuvre par la GIZ" >
+
                     <!--begin::Wrapper-->
                     <div class="w-lg-500px p-10">
                         <!--begin::Page-->
@@ -49,10 +47,6 @@
                 <div class="d-flex flex-center flex-wrap px-5">
                     <!--begin::Links-->
                     <div class="d-flex fw-semibold fs-base">
-                        <!-- <a href="#" class="px-5" target="_blank">Terms</a>
-
-                            <a href="#" class="px-5" target="_blank">Plans</a> -->
-
                         <a href="#" class=" px-5" target="_blank">{{ __('2024 SIG-Recette.') }}</a>
                     </div>
 
