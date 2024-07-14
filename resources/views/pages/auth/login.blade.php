@@ -1,7 +1,6 @@
 <x-auth-layout>
-
     <!--begin::Form-->
-    <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" data-kt-redirect-url="{{ route('dashboard') }}" action="{{ route('login') }}">
+    <form method="POST" class="form w-100" novalidate="novalidate" id="kt_sign_in_form" data-kt-redirect-url="{{ route('dashboard') }}" action="{{ route('login') }}">
         @csrf
         <!--begin::Heading-->
         <div class="text-center mb-11">
@@ -18,13 +17,6 @@
             <!--end::Subtitle--->
         </div>
         <!--begin::Heading-->
-
-
-        <!--begin::Separator-->
-        <!-- <div class="separator separator-content my-14">
-            <span class="w-125px text-gray-500 fw-semibold fs-7">{{ __('or with email') }}</span>
-        </div> -->
-        <!--end::Separator-->
 
         <!--begin::Input group--->
         <div class="fv-row mb-8">
