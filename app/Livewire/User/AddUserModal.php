@@ -184,6 +184,10 @@ class AddUserModal extends Component
     public function closeUserModal()
     {
         $this->edit_mode = false;
+        $this->name = '';
+        $this->email = '';
+        $this->role = '';
+        $this->zone_id = '';
     }
 
     public function hydrate()
