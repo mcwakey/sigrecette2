@@ -1992,17 +1992,19 @@
                             <div class="row mb-2">
                                 <div
                                     class="notice d-flex align-items-start rounded py-5  bg-light-danger border-danger border border-dashed">
-                                    <i class="ki-duotone ki-information-5 fs-3x text-danger me-5"><span
-                                            class="path1"></span><span class="path2"></span><span
-                                            class="path3"></span></i>
+                                    <i class="ki-duotone ki-information-5 fs-3x text-danger me-5">
+                                        <span class="path1"></span><span class="path2"></span><span
+                                            class="path3"></span>
+                                    </i>
                                     <!--begin::Description-->
                                     <div class="text-gray-700 fw-bold fs-6">
-                                        En effectuant une réinitialisation du mot de passe via le bouton dédié, le mot
-                                        de passe de l'utilisateur concerné sera réinitialisé, impliquant ainsi qu'à sa
-                                        prochaine connexion, il sera invité à le modifier. Pour des motifs de sécurité
-                                        et de traçabilité des activités administratives, les détails de cette action,
-                                        incluant vos informations en tant qu'administrateur ainsi que la date et l'heure
-                                        de l'opération, seront consignés dans nos journaux internes.
+                                        En procédant à une réinitialisation du mot de passe via le bouton dédié, 
+                                        le mot de passe de l'utilisateur sera réinitialisé, nécessitant ainsi une 
+                                        modification lors de sa prochaine connexion. Pour des raisons de sécurité 
+                                        et de traçabilité des activités administratives, les détails de cette action, 
+                                        incluant vos informations en tant qu'administrateur ainsi que la date 
+                                        et l'heure de l'opération, seront consignés dans nos journaux internes.
+
                                     </div>
                                     <!--end::Description-->
                                 </div>
