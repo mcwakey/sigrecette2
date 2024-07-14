@@ -99,8 +99,8 @@
                     <div class="d-flex flex-stack flex-grow-1">
                         <!--begin::Content-->
                         <div class="fw-semibold">
-                            <h4 class="text-gray-900 fw-bold">Tutoriel sur <a class="fw-bold" href="#">
-                                    {{ __('Utilisateurs') }}</a>
+                            <h4 class="text-gray-900 fw-bold">Tutoriel sur la gestion des <a class="fw-bold" href="#">
+                                    {{ __('utilisateurs') }}</a>
                             </h4>
                             <div class="fs-6 text-gray-700">
 
@@ -110,7 +110,7 @@
                                 <button type="button" class="btn btn-light-success h-45px ms-auto"
                                     data-bs-toggle="modal">
                                     {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                                    {{ __('add_user') }}
+                                    {{ __('Créer un utilisateur') }}
                                 </button>
                                 <!--end::Add user-->
                                 pour procéder a la création d'un utilisateur.
