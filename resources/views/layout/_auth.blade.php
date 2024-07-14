@@ -31,7 +31,7 @@
                 <!--begin::Form-->
                 <div class="d-flex flex-center flex-column flex-lg-row-fluid">
 
-                    <img src="{{ image('logos/giz.jpeg') }}" style="width:320px;height:auto;object-fit:cover;" alt="Mise en oeuvre par la GIZ" >
+                    <img src="{{ image('logos/giz.png') }}" style="width:320px;height:auto;object-fit:cover;" alt="Mise en oeuvre par la GIZ" >
 
                     <!--begin::Wrapper-->
                     <div class="w-lg-500px p-10">
