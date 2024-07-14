@@ -9,13 +9,16 @@
 <div class="card card-flush h-xl-100">
     <!--begin::Header-->
     <div class="card-header pt-5">
-        <!--begin::Toolbar-->
+        <h3 class="card-title align-items-start flex-column">
+            <span class="card-label fw-bold text-gray-900">Graphique - Contribuables</span>
+            <span class="text-gray-500 mt-1 fw-semibold fs-6">Par statut</span>
+        </h3>
         <div class="card-toolbar">
             <ul class="nav" id="kt_chart_widget_8_tabs">
                 <li class="nav-item">
                     <a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-light fw-bold px-4 me-1 active"
                         data-bs-toggle="tab" id="kt_chart_widget_8_month_toggle"
-                        href="#kt_chart_widget_8_month_tab">Graphique - Contribuables par statut</a>
+                        href="#kt_chart_widget_8_month_tab">Statut</a>
                 </li>
             </ul>
         </div>

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Contracts\InvoiceStatisticsInterface;
 use App\Contracts\TaxpayerStatisticsInterface;
+use App\Enums\InvoiceStaticsEnums;
 use App\Enums\StatisticKeysEnums;
 use App\Enums\TaxpayerStaticsEnums;
 use App\Models\Activity;
@@ -47,6 +48,8 @@ class StatisticsService implements TaxpayerStatisticsInterface,InvoiceStatistics
                 return $this->countTaxpayersByZone($this->year);
             case TaxpayerStaticsEnums::BY_TAXABLE:
                 return $this->countTaxpayersByTaxables($this->year);
+            case InvoiceStaticsEnums::BY_INVOICE:
+                return $this->countInvoices($this->year);
             default:
                 return $this->getAllStatistics();
         }
@@ -69,7 +72,7 @@ class StatisticsService implements TaxpayerStatisticsInterface,InvoiceStatistics
             ->groupBy('category_id')
             ->get()
             ->map(function ($item) use ($categories) {
-                $categoryName = $categories[$item->category_id] ?? 'Unknown category';
+                $categoryName = $categories[$item->category_id] ?? $this->NoneMessage;
                 return ['value' => $item->count, 'category' => $categoryName];
             })
             ->toArray();
@@ -84,7 +87,7 @@ class StatisticsService implements TaxpayerStatisticsInterface,InvoiceStatistics
             ->groupBy('category_id')
             ->get()
             ->map(function ($item) use ($activities) {
-                $activityName = $activities[$item->activity_id] ?? 'Unknown activity';
+                $activityName = $activities[$item->activity_id] ?? $this->NoneMessage;
                 return ['value' => $item->count, 'activity' => $activityName];
             })
             ->toArray();
@@ -92,6 +95,7 @@ class StatisticsService implements TaxpayerStatisticsInterface,InvoiceStatistics
         return $counts;
     }
 
+    protected string $NoneMessage='Non défini';
     public  function countTaxpayersByCanton(Year $year): array
     {
         $cantons = Canton::all()->pluck('name', 'id');
@@ -99,7 +103,7 @@ class StatisticsService implements TaxpayerStatisticsInterface,InvoiceStatistics
             ->groupBy('town_id')
             ->get()
             ->map(function ($item) use ($cantons) {
-                $categoryName = $item->town ? $cantons[$item->town->canton_id] ?? 'Unknown canton' : 'Unknown town';
+                $categoryName = $item->town ? $cantons[$item->town->canton_id] ?? $this->NoneMessage : $this->NoneMessage;
                 return ['value' => $item->count, 'category' => $categoryName];
             })
             ->unique(function ($item) {
@@ -116,7 +120,7 @@ class StatisticsService implements TaxpayerStatisticsInterface,InvoiceStatistics
             ->groupBy('town_id')
             ->get()
             ->map(function ($item) use ($cantons) {
-                $categoryName = $item->town ? $cantons[$item->town_id] ?? 'Unknown canton' : 'Unknown town';
+                $categoryName = $item->town ? $cantons[$item->town_id] ?? $this->NoneMessage : $this->NoneMessage;
                 return ['value' => $item->count, 'category' => $categoryName];
             })
             ->unique(function ($item) {
@@ -133,7 +137,7 @@ class StatisticsService implements TaxpayerStatisticsInterface,InvoiceStatistics
             ->groupBy('town_id')
             ->get()
             ->map(function ($item) use ($cantons) {
-                $categoryName = $item->zone_id ? $cantons[$item->zone_id] ?? 'Unknown canton' : 'Unknown town';
+                $categoryName = $item->zone_id ? $cantons[$item->zone_id] ?? $this->NoneMessage : $this->NoneMessage;
                 return ['value' => $item->count, 'category' => $categoryName];
             })
             ->unique(function ($item) {
@@ -216,7 +220,6 @@ class StatisticsService implements TaxpayerStatisticsInterface,InvoiceStatistics
     protected function getAllStatistics(): array
     {
         return [
-            StatisticKeysEnums::BY_GENDER => $this->countTaxpayers($this->year),
             StatisticKeysEnums::BY_CATEGORY => $this->countTaxpayersByCategory($this->year),
             StatisticKeysEnums::BY_ACTIVITY => $this->countTaxpayersByActivity($this->year),
             StatisticKeysEnums::BY_CANTON => $this->countTaxpayersByCanton($this->year),
@@ -224,7 +227,6 @@ class StatisticsService implements TaxpayerStatisticsInterface,InvoiceStatistics
             StatisticKeysEnums::BY_ZONE => $this->countTaxpayersByZone($this->year),
             StatisticKeysEnums::BY_TAXABLE => $this->countTaxpayersByTaxables($this->year),
             StatisticKeysEnums::BY_STATE => $this->countTaxpayersState($this->year),
-            StatisticKeysEnums::BY_INVOICE => $this->countInvoices($this->year),
         ];
     }
 

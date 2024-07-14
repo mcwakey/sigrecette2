@@ -61,8 +61,12 @@
 @push('scripts')
 
 
-    @foreach($charts as $chart)
-        <script>
+
+
+    <script>
+        function initializeCharts() {
+            @foreach($charts as $chart)
+
             (function() {
                 let data = @json($chart['data']);
 
@@ -103,7 +107,11 @@
                 });
             })();
 
-        </script>
-    @endforeach
+
+
+            @endforeach
+        }
+        initializeCharts();
+    </script>
 @endpush
 
