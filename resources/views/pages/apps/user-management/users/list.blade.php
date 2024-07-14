@@ -42,7 +42,7 @@
                             <button type="button" class="btn btn-light-success h-45px ms-auto" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_add_user">
                                 {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                                {{ __('add_user') }}
+                                {{ __('Créer un utilisateur') }}
                             </button>
                             <!--end::Add user-->
                         </div>
@@ -57,7 +57,7 @@
                             <button type="button" class="btn btn-light-success h-45px ms-auto" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_add_user_collector">
                                 {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                                {{ __('Ajouter un collecteur') }}
+                                {{ __('Créer un collecteur') }}
                             </button>
                             <!--end::Add user-->
                         </div>
