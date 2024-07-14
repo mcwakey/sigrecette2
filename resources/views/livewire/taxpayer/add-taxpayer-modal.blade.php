@@ -1,6 +1,7 @@
-<div class="modal fade" id="kt_modal_add_taxpayer" tabindex="-1" aria-hidden="true" wire:ignore.self data-bs-backdrop='static'>
-    <!--begin::Modal dialog-->
-    <!-- <div class="modal-dialog  mw-1800px"> -->
+@can('peut créer un contribuable')
+    <div class="modal fade" id="kt_modal_add_taxpayer" tabindex="-1" aria-hidden="true" wire:ignore.self data-bs-backdrop='static'>
+        <!--begin::Modal dialog-->
+        <!-- <div class="modal-dialog  mw-1800px"> -->
         <div class="modal-dialog modal-dialog-centered" style="max-width:calc(100vw - 20px)!important;">
             <div class="col-md-1"></div>
             <div class="col-md-10">
@@ -22,7 +23,7 @@
                     <div class="modal-body px-5 mb-5">
                         <!--begin::Form-->
                         <div>
-                        <!--begin::Information-->
+                            <!--begin::Information-->
                             <div class="d-flex align-items-center rounded py-5 px-5 bg-light-danger ">
                                 <i class="ki-duotone ki-information-5 fs-3x text-dager me-5">
                                     <span class="path1"></span>
@@ -30,7 +31,7 @@
                                     <span class="path3"></span>
                                 </i>    <!--begin::Description-->
                                 <div class="text-gray-700 fw-bold fs-6">
-                                Tous les champs marque par <code>*</code> sont obligatoire! Veiller remplir le formulaire judicieusement et avec le plus d information possible. Clicker sur <button class="btn btn-success btn sm mx-3" wire:loading.attr="disabled">{{ __('submit') }}</button> en bas de la page, pour sauvegarder les informations du contribuable.
+                                    Tous les champs marque par <code>*</code> sont obligatoire! Veiller remplir le formulaire judicieusement et avec le plus d information possible. Clicker sur <button class="btn btn-success btn sm mx-3" wire:loading.attr="disabled">{{ __('submit') }}</button> en bas de la page, pour sauvegarder les informations du contribuable.
                                 </div>    <!--end::Description-->
                             </div>
                             <!--end::Information-->
@@ -121,7 +122,7 @@
                                         <select wire:model="gender" name="gender" class="form-select " data-dropdown-parent="#kt_modal_add_taxpayer">
                                             <option>{{ __('select an option') }}</option>
                                             @foreach($genders as $gender)
-                                            <option value="{{ $gender->name}}">{{ $gender->name }}</option>
+                                                <option value="{{ $gender->name}}">{{ $gender->name }}</option>
                                             @endforeach
                                             <!-- <option value="Homme">Homme</option>
                                             <option value="Femme">Femme</option> -->
@@ -144,7 +145,7 @@
                                         <select wire:model="id_type" name="id_type" class="form-select " data-dropdown-parent="#kt_modal_add_taxpayer" data-allow-clear="true">
                                             <option>{{ __('select an option') }}</option>
                                             @foreach($id_types as $id_type)
-                                            <option value="{{ $id_type->name}}">{{ $id_type->name }}</option>
+                                                <option value="{{ $id_type->name}}">{{ $id_type->name }}</option>
                                             @endforeach
                                             <!-- <option value="1">Approved</option>
                                             <option value="2">Pending</option>
@@ -168,41 +169,41 @@
                                 </div>
                                 <div class="row mb-7">
                                     <!-- <div class="notice"> -->
-                                        <div class="col-md-3">
+                                    <div class="col-md-3">
 
-                                            <!--begin::Label-->
-                                            <label class="required fw-semibold fs-6 mb-2">{{ __('mobilephone') }}</label>
-                                            <!--end::Label-->
+                                        <!--begin::Label-->
+                                        <label class="required fw-semibold fs-6 mb-2">{{ __('mobilephone') }}</label>
+                                        <!--end::Label-->
 
-                                            <div class="input-group mb-5">
-                                                <span class="input-group-text" id="basic-addon1">+228</span>
-                                                <!--begin::Input-->
-                                                <input type="text" wire:model="mobilephone" name="mobilephone" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('mobilephone') }}" />
-                                                <!--end::Input-->
-                                            </div>
-
-                                            @error('mobilephone')
-                                            <span class="text-danger">{{ $message }}</span> @enderror
-                                        </div>
-                                        <div class="col-md-3">
-                                            <!--begin::Label-->
-                                            <label class="fw-semibold fs-6 mb-2">{{ __('telephone') }}</label>
-                                            <!--end::Label-->
+                                        <div class="input-group mb-5">
+                                            <span class="input-group-text" id="basic-addon1">+228</span>
                                             <!--begin::Input-->
-                                            <input type="text" wire:model="telephone" name="telephone" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('telephone') }}" />
+                                            <input type="text" wire:model="mobilephone" name="mobilephone" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('mobilephone') }}" />
                                             <!--end::Input-->
-                                            @error('telephone')
-                                            <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-semibold fs-6 mb-2">{{ __('email') }}</label>
-                                            <!--end::Label-->
-                                            <!--begin::Input-->
-                                            <input type="email" wire:model="email" name="email" class="form-control  mb-3 mb-lg-0" placeholder="example@domain.com" />
-                                            <!--end::Input-->
-                                            @error('email')
-                                            <span class="text-danger">{{ $message }}</span> @enderror
-                                        </div>
+
+                                        @error('mobilephone')
+                                        <span class="text-danger">{{ $message }}</span> @enderror
+                                    </div>
+                                    <div class="col-md-3">
+                                        <!--begin::Label-->
+                                        <label class="fw-semibold fs-6 mb-2">{{ __('telephone') }}</label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="text" wire:model="telephone" name="telephone" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('telephone') }}" />
+                                        <!--end::Input-->
+                                        @error('telephone')
+                                        <span class="text-danger">{{ $message }}</span> @enderror
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="fw-semibold fs-6 mb-2">{{ __('email') }}</label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="email" wire:model="email" name="email" class="form-control  mb-3 mb-lg-0" placeholder="example@domain.com" />
+                                        <!--end::Input-->
+                                        @error('email')
+                                        <span class="text-danger">{{ $message }}</span> @enderror
+                                    </div>
                                     <!-- </div> -->
                                 </div>
                                 <!--end::Input group-->
@@ -251,9 +252,9 @@
                                             <option>{{ __('select an option') }}</option>
                                             @foreach($activities as $activity)
                                                 @if( $activity_id == $activity->id)
-                                                <option selected value="{{ $activity->id }}">{{ $activity->name }}</option>
+                                                    <option selected value="{{ $activity->id }}">{{ $activity->name }}</option>
                                                 @else
-                                                <option value="{{ $activity->id }}">{{ $activity->name }}</option>
+                                                    <option value="{{ $activity->id }}">{{ $activity->name }}</option>
                                                 @endif
                                             @endforeach
                                         </select>
@@ -344,7 +345,7 @@
                                         <select data-kt-action="load_drop" wire:model="canton" name="canton" class="form-select">
                                             <option>{{ __('select an option') }}</option>
                                             @foreach($cantons as $canton)
-                                            <option value="{{ $canton->id }}">{{ $canton->name }}</option>
+                                                <option value="{{ $canton->id }}">{{ $canton->name }}</option>
                                             @endforeach
                                         </select>
 
@@ -362,9 +363,9 @@
 
                                             @foreach($towns as $town)
                                                 @if ( $town_id == $town->id)
-                                                <option value="{{ $town_id }}" selected>{{ $town->name }}</option>
+                                                    <option value="{{ $town_id }}" selected>{{ $town->name }}</option>
                                                 @else
-                                                <option value="{{ $town->id }}">{{ $town->name }}</option>
+                                                    <option value="{{ $town->id }}">{{ $town->name }}</option>
                                                 @endif
                                             @endforeach
                                         </select>
@@ -380,7 +381,7 @@
                                         <select wire:model="zone_id" name="zone_id" class="form-select " data-dropdown-parent="#kt_modal_add_taxpayer">
                                             <option>{{ __('select an option') }}</option>
                                             @foreach($zones as $zone)
-                                            <option value="{{ $zone->id }}">{{ $zone->name }}</option>
+                                                <option value="{{ $zone->id }}">{{ $zone->name }}</option>
                                             @endforeach
                                         </select>
                                         <!--end::Input-->
@@ -426,18 +427,18 @@
                             </div>
                             <!--end::Scroll-->
                             <!--begin::Actions-->
-                            @can('peut créer un contribuable')
+
                             <div class="text-center pt-15">
                                 <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal" aria-label="Close" wire:loading.attr="disabled">{{ __('cancel') }}</button>
-                                    <button type="submit" class="btn btn-success" data-kt-taxpayers-modal-action="submit">
-                                        <span class="indicator-label" wire:loading.remove>{{ __('submit') }}</span>
-                                        <span class="indicator-progress" wire:loading wire:target="submit">
+                                <button type="submit" class="btn btn-success" data-kt-taxpayers-modal-action="submit" wire:loading.attr="disabled">
+                                    <span class="indicator-label" wire:loading.remove>{{ __('submit') }}</span>
+                                    <span class="indicator-progress" wire:loading.delay wire:target="submit">
                                             {{ __('please wait') }}
                                             <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                                         </span>
-                                    </button>
-                                </div>
-                            @endcan
+                                </button>
+                            </div>
+
                             <!--end::Actions-->
                         </form>
                         <!--end::Form-->
@@ -447,6 +448,8 @@
             </div>
             <!--end::Modal content-->
         </div>
-    <!-- </div> -->
-    <!--end::Modal dialog-->
-</div>
+        <!-- </div> -->
+        <!--end::Modal dialog-->
+    </div>
+
+@endcan
