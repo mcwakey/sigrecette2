@@ -99,8 +99,8 @@
                     <div class="d-flex flex-stack flex-grow-1">
                         <!--begin::Content-->
                         <div class="fw-semibold">
-                            <h4 class="text-gray-900 fw-bold">Tutoriel sur la gestion des <a class="fw-bold" href="#">
-                                    {{ __('utilisateurs') }}</a>
+                            <h4 class="text-gray-900 fw-bold">Tutoriel sur les <a class="fw-bold" href="#">
+                                    {{ __('Utilisateurs') }}</a>
                             </h4>
                             <div class="fs-6 text-gray-700">
 
@@ -118,6 +118,7 @@
                             <div class="fs-6 text-gray-700 mt-2">
                                 -> Clicker sur le selecteur
                                 <a href="#"
+                                    style="margin-left: 4px;margin-right:4px;"
                                     class="btn btn-outline-success btn-light btn-active-light-primary btn-flex btn-center btn-sm"
                                     data-kt-menu-target="#kt-users-actions" data-kt-menu-trigger="click"
                                     data-kt-menu-placement="bottom-end">
@@ -149,9 +150,11 @@
                                 pour plus de controle sur le tableau en dessous selon vos permissions.
                                 <br> -> Clicker sur le <span>nom de l'utilisateur</span> ou sur
                                 <a href="#"
+                                    style="margin-left: 4px;margin-right:4px;"
                                     class="btn btn-outline-success btn-light btn-active-light-primary btn-sm">{{ __('view') }}</a>
 
                                 disponible dans le sélecteur <a href="#"
+                                    style="margin-left: 4px;margin-right:4px;"
                                     class="btn btn-outline-success btn-light btn-active-light-primary btn-flex btn-center btn-sm"
                                     data-kt-menu-target="#kt-users-actions" data-kt-menu-trigger="click"
                                     data-kt-menu-placement="bottom-end">
@@ -163,10 +166,12 @@
                             </div>
                             <div class="fs-6 text-gray-700 mt-2">
                                 -> Clicker sur la commande<a href="#"
+                                    style="margin-left: 4px;margin-right:4px;"
                                     class="btn btn-outline-success btn-light btn-active-light-primary btn-flex btn-center btn-sm">{{ __('edit') }}</a>
                                 ou
                                 <a href="#"
-                                    class="btn btn-outline-success btn-light btn-active-light-primary btn-flex btn-center btn-sm">{{ __('désactiver') }}</a>
+                                    style="margin-left: 4px;margin-right:4px;"
+                                    class="btn btn-outline-success btn-light btn-active-light-primary btn-flex btn-center btn-sm">{{ __('Désactiver') }}</a>
                                 disponible dans le sélecteur <a href="#"
                                     class="btn btn-outline-success btn-light btn-active-light-primary btn-flex btn-center btn-sm"
                                     data-kt-menu-target="#kt-users-actions" data-kt-menu-trigger="click"
@@ -174,7 +179,7 @@
                                     {{ __('actions') }}
                                     <i class="ki-duotone ki-down fs-5 ms-1"></i>
                                 </a>
-                                pour pouvoir modifier ou désactiver l'utilisateur selon vos permissions.
+                                pour modifier ou désactiver l'utilisateur selon vos permissions.
                             </div>
                         </div>
                         <!--end::Content-->
