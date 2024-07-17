@@ -2,8 +2,10 @@
 
 namespace App\Rules;
 
-use libphonenumber\PhoneNumberUtil;
+use Exception;
 use Illuminate\Contracts\Validation\Rule;
+use Propaganistas\LaravelPhone\Rules\Phone;
+
 
 class ValidPhoneNumber implements Rule
 {
@@ -16,11 +18,11 @@ class ValidPhoneNumber implements Rule
      */
     public function passes($attribute, $value)
     {
-        $phoneNumberUtil = PhoneNumberUtil::getInstance();
         try {
-            $parsedNumber = $phoneNumberUtil->parse($value, 'TG');
-            return $phoneNumberUtil->isValidNumber($parsedNumber);
-        } catch (\libphonenumber\NumberParseException $e) {
+            $phone = new Phone();
+            $phone->country(['TG','GH','BJ'])->type('mobile');
+            return true;
+        } catch (Exception $e) {
             return false; 
         }
     }

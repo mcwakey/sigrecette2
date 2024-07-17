@@ -147,8 +147,10 @@ return [
     'uppercase'            => 'Le champ :attribute doit être en majuscules.',
     'url'                  => 'Le format de l\'URL de :attribute n\'est pas valide.',
     'uuid'                 => 'Le champ :attribute doit être un UUID valide',
+    'phone'                => 'Le champ :attribute doit être un numéro valide.',
     'attributes'           => [
         'activity_id'              => 'activité principale',
+        'phone' =>                  'téléphone',
         'address'                  => 'adresse',
         'affiliate_url'            => 'URL d\'affiliation',
         'age'                      => 'âge',

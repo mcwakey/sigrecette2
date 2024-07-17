@@ -2,24 +2,23 @@
 
 namespace App\Livewire\Taxpayer;
 
-use App\Events\TaxpayerAction;
-use App\Models\Activity;
-use App\Models\Commune;
-use App\Models\Erea;
 use App\Models\Town;
 use App\Models\Zone;
 use App\Models\Canton;
-use App\Models\Category;
 use App\Models\Gender;
 use App\Models\IdType;
-use App\Traits\DispatchesMessages;
+use App\Models\Commune;
 use Livewire\Component;
+use App\Models\Activity;
+use App\Models\Category;
 use App\Models\Taxpayer;
 use Illuminate\Http\Request;
 use Livewire\WithFileUploads;
+use App\Events\TaxpayerAction;
+use App\Traits\DispatchesMessages;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
+use Propaganistas\LaravelPhone\Rules\Phone;
 
 class AddTaxpayerModal extends Component
 {
@@ -73,9 +72,7 @@ class AddTaxpayerModal extends Component
             'mobilephone' => [
                 'required',
                 'string',
-                'min:8',
-                'max:8',
-                new \App\Rules\ValidPhoneNumber,
+                (new Phone)->country(['TG','GH','BJ'])->type('mobile'),
             ],
 
             'longitude' => 'nullable|sometimes|string',
