@@ -96,17 +96,17 @@
                 <!--begin:Menu link-->
                 <span class="menu-link">
 					<span class="menu-icon">{!! getIcon('abstract-10', 'fs-2') !!}</span>
-					<span class="menu-title">{{ __('invoice') }}</span>
+					<span class="menu-title">{{ __('Emission des avis') }}</span>
 					<span class="menu-arrow"></span>
 				</span>
-                <div class="menu-sub menu-sub-accordion">
+                <div class="menu-sub menu-sub-accordion"> 
                     <div class="menu-item">
                         <a class="menu-link {{ (request()->routeIs('invoicing.*') && request()->has('rc') && request()->input('rc') == 'taxation') || (request()->has('autoClick') && request()->input('autoClick') == 'taxationbtn') ? 'active' : '' }}"
                            href="{{ App\Helpers\Constants::checkUrl( route('invoicing.taxpayers.index', ['rc' => 'taxation'])) }}">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
 							</span>
-                            <span class="menu-title">{{__("Nouvel Taxation")}}</span>
+                            <span class="menu-title">{{__("Nouvelle taxation")}}</span>
                         </a>
 
                     </div>
@@ -420,7 +420,7 @@
 								<span class="menu-title" data-bs-toggle="modal"
                                       data-bs-target="#kt_modal_add_stock_transfer-deposit"
                                       data-kt-user-id="{{-- $user->id --}}"
-                                      data-kt-action="add_deposit">   {{ __('Nouveau versement du Collecteur') }}</span>
+                                      data-kt-action="add_deposit">   {{ __('Nouveau versement du collecteur') }}</span>
 							</span>
                         </div>
                         <div class="menu-item">
@@ -442,7 +442,7 @@
 								</span>
 								<span class="menu-title" data-bs-toggle="modal"
                                       data-bs-target="#kt_modal_add_accountant_deposit" data-kt-user-id="TITRE"
-                                      data-kt-action="add_accountant_deposit">    {{ __('Nouveau versement du Regisseur') }}</span>
+                                      data-kt-action="add_accountant_deposit">    {{ __('Nouveau versement du regisseur') }}</span>
 							</span>
                         </div>
                         <div class="menu-item">

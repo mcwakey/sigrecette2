@@ -8,12 +8,12 @@
 
             <!--begin::Aside-->
             <div class="d-flex flex-lg-row-fluid w-lg-30 bgi-size-cover bgi-position-center order-1 order-lg-1"
-                style="background-image: url({{ image('misc/auth-bg-1.png') }})">
+                style="background-image: url({{ image('misc/auth-bg-giz.jpeg') }})">
                 <!--begin::Content-->
-                <div class="d-flex flex-column flex-center py-7 py-lg-15 px-5 px-md-15 w-100">
+                <div class="d-flex flex-column align-items-center py-7 py-lg-15 px-5 px-md-15 w-100">
                     <!--begin::Logo-->
                     <a href="{{ route('dashboard') }}" class="mb-12">
-                        <img alt="Logo" src="{{ image('logos/custom-3.png') }}" class="h-180px" />
+                        <img alt="Logo" src="{{ image('logos/custom-3.png') }}"  style="width: 280px;height:auto;object-fit:cover;" />
                     </a>
 
                     <!--begin::Title-->
@@ -21,6 +21,7 @@
                         {{ __('SIG-Recette') }}
                     </h2>
                     <!--end::Title-->
+
                 </div>
                 <!--end::Content-->
             </div>
@@ -31,7 +32,6 @@
                 <!--begin::Form-->
                 <div class="d-flex flex-center flex-column flex-lg-row-fluid">
 
-                    <img src="{{ image('logos/giz.png') }}" style="width:320px;height:auto;object-fit:cover;" alt="Mise en oeuvre par la GIZ" >
 
                     <!--begin::Wrapper-->
                     <div class="w-lg-500px p-10">
@@ -39,9 +39,11 @@
                         {{ $slot }}
                         <!--end::Page-->
                     </div>
+
                     <!--end::Wrapper-->
                 </div>
                 <!--end::Form-->
+
 
                 <!--begin::Footer-->
                 <div class="d-flex flex-center flex-wrap px-5">
