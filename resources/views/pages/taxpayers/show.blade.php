@@ -151,12 +151,14 @@
                 </li>
 
                 <!--end:::Tab item-->
-                <!--begin:::Tab item-->
-                <li class="nav-item">
-                    <a class="nav-link text-active-success pb-4" data-bs-toggle="tab"
-                       href="#kt_user_view_overview_events_and_logs_tab">{{ __('events logs') }}</a>
-                </li>
-                <!--end:::Tab item-->
+                @hasanyrole(['administrateur_system','administrateur'])
+                    <!--begin:::Tab item-->
+                    <li class="nav-item">
+                        <a class="nav-link text-active-success pb-4" data-bs-toggle="tab"
+                        href="#kt_user_view_overview_events_and_logs_tab">{{ __('events logs') }}</a>
+                    </li>
+                    <!--end:::Tab item-->
+                @endhasanyrole
                 <!--begin:::Tab item-->
                 <li class="nav-item ms-auto">
                     <!--begin::Action menu-->
@@ -457,138 +459,6 @@
                 <!--end:::Tab pane-->
                 <!--begin:::Tab pane-->
                 <div class="tab-pane fade" id="kt_user_view_overview_events_and_logs_tab" role="tabpanel">
-                    {{--
-
-                     <div class="card pt-4 mb-6 mb-xl-9">
-                        <!--begin::Card header-->
-                        <div class="card-header border-0">
-                            <!--begin::Card title-->
-                            <div class="card-title">
-                                <h2>Events</h2>
-                            </div>
-                            <!--end::Card title-->
-                            <!--begin::Card toolbar-->
-                            <div class="card-toolbar">
-                                <!--begin::Button-->
-                                <button type="button" class="btn btn-sm btn-light-primary">
-                                    <i class="ki-duotone ki-cloud-download fs-3">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </i>Download Report
-                                </button>
-                                <!--end::Button-->
-                            </div>
-                            <!--end::Card toolbar-->
-                        </div>
-                        <!--end::Card header-->
-                        <!--begin::Card body-->
-                        <div class="card-body py-0">
-                            <!--begin::Table-->
-
-                            <table class="table align-middle table-row-dashed fs-6 text-gray-600 fw-semibold gy-5"
-                                   id="kt_table_customers_events">
-                                <tbody>
-                                <tr>
-                                    <td class="min-w-400px">
-                                        <a href="#" class="text-gray-600 text-hover-primary me-1">Melody
-                                            Macy</a>has made payment to
-                                        <a href="#"
-                                           class="fw-bold text-gray-900 text-hover-primary">#XRS-45670</a>
-                                    </td>
-                                    <td class="pe-0 text-gray-600 text-end min-w-200px">10 Mar 2023, 5:30 pm</td>
-                                </tr>
-                                <tr>
-                                    <td class="min-w-400px">Invoice
-                                        <a href="#"
-                                           class="fw-bold text-gray-900 text-hover-primary me-1">#SEP-45656</a>status
-                                        has changed from
-                                        <span class="badge badge-light-warning me-1">Pending</span>to
-                                        <span class="badge badge-light-info">In Progress</span>
-                                    </td>
-                                    <td class="pe-0 text-gray-600 text-end min-w-200px">10 Nov 2023, 5:30 pm</td>
-                                </tr>
-                                <tr>
-                                    <td class="min-w-400px">
-                                        <a href="#" class="text-gray-600 text-hover-primary me-1">Max
-                                            Smith</a>has made payment to
-                                        <a href="#"
-                                           class="fw-bold text-gray-900 text-hover-primary">#SDK-45670</a>
-                                    </td>
-                                    <td class="pe-0 text-gray-600 text-end min-w-200px">10 Mar 2023, 11:30 am</td>
-                                </tr>
-                                <tr>
-                                    <td class="min-w-400px">
-                                        <a href="#" class="text-gray-600 text-hover-primary me-1">Brian
-                                            Cox</a>has made payment to
-                                        <a href="#"
-                                           class="fw-bold text-gray-900 text-hover-primary">#OLP-45690</a>
-                                    </td>
-                                    <td class="pe-0 text-gray-600 text-end min-w-200px">10 Nov 2023, 11:05 am</td>
-                                </tr>
-                                <tr>
-                                    <td class="min-w-400px">
-                                        <a href="#" class="text-gray-600 text-hover-primary me-1">Melody
-                                            Macy</a>has made payment to
-                                        <a href="#"
-                                           class="fw-bold text-gray-900 text-hover-primary">#XRS-45670</a>
-                                    </td>
-                                    <td class="pe-0 text-gray-600 text-end min-w-200px">20 Jun 2023, 6:43 am</td>
-                                </tr>
-                                <tr>
-                                    <td class="min-w-400px">Invoice
-                                        <a href="#"
-                                           class="fw-bold text-gray-900 text-hover-primary me-1">#LOP-45640</a>has
-                                        been
-                                        <span class="badge badge-light-danger">Declined</span>
-                                    </td>
-                                    <td class="pe-0 text-gray-600 text-end min-w-200px">25 Jul 2023, 5:30 pm</td>
-                                </tr>
-                                <tr>
-                                    <td class="min-w-400px">Invoice
-                                        <a href="#"
-                                           class="fw-bold text-gray-900 text-hover-primary me-1">#SEP-45656</a>status
-                                        has changed from
-                                        <span class="badge badge-light-warning me-1">Pending</span>to
-                                        <span class="badge badge-light-info">In Progress</span>
-                                    </td>
-                                    <td class="pe-0 text-gray-600 text-end min-w-200px">21 Feb 2023, 8:43 pm</td>
-                                </tr>
-                                <tr>
-                                    <td class="min-w-400px">Invoice
-                                        <a href="#"
-                                           class="fw-bold text-gray-900 text-hover-primary me-1">#DER-45645</a>status
-                                        has changed from
-                                        <span class="badge badge-light-info me-1">In Progress</span>to
-                                        <span class="badge badge-light-primary">In Transit</span>
-                                    </td>
-                                    <td class="pe-0 text-gray-600 text-end min-w-200px">25 Jul 2023, 10:10 pm</td>
-                                </tr>
-                                <tr>
-                                    <td class="min-w-400px">
-                                        <a href="#" class="text-gray-600 text-hover-primary me-1">Brian
-                                            Cox</a>has made payment to
-                                        <a href="#"
-                                           class="fw-bold text-gray-900 text-hover-primary">#OLP-45690</a>
-                                    </td>
-                                    <td class="pe-0 text-gray-600 text-end min-w-200px">10 Nov 2023, 9:23 pm</td>
-                                </tr>
-                                <tr>
-                                    <td class="min-w-400px">
-                                        <a href="#" class="text-gray-600 text-hover-primary me-1">Melody
-                                            Macy</a>has made payment to
-                                        <a href="#"
-                                           class="fw-bold text-gray-900 text-hover-primary">#XRS-45670</a>
-                                    </td>
-                                    <td class="pe-0 text-gray-600 text-end min-w-200px">25 Oct 2023, 11:30 am</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <!--end::Table-->
-                        </div>
-                        <!--end::Card body-->
-                    </div>
-
-                    --}}
 
                     <div class="card pt-4 mb-6 mb-xl-9">
                         <!--begin::Card header-->
@@ -755,13 +625,7 @@
                 var latitude = parseFloat(taxpayer.latitude.trim());
                 var longitude = parseFloat(taxpayer.longitude.trim());
 
-                // Create a custom popup content
-
-                // Gender: ${taxpayer.gender}<br>
-                // ID Type: ${taxpayer.id_type}<br>
-                // ID Number: ${taxpayer.id_number}<br>
-                // Telephone: ${taxpayer.telephone}<br>
-
+    
                 var popupContent = `
                 <div style="width:480px;min-height:200px;border-radius:8px;">
                                 <div style="padding:10px;text-align:center;display:flex;align-items:flex-start;flex-direction:column;">
