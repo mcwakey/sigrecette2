@@ -192,7 +192,7 @@ class Invoice extends Model implements FormatDateInterface
 
         foreach ($invoices as $invoice) {
             $paid = Payment::where('invoice_id', $invoice->invoice_no)
-                ->where('status',PaymentStatusEnums::ACCOUNTED)
+                ->whereIn('status',[PaymentStatusEnums::ACCOUNTED,PaymentStatusEnums::DONE])
                 ->sum('amount');
             $restToPay = $invoice->amount - doubleval($invoice->reduce_amount) - $paid;
             $totalRemaining += max($restToPay, 0);
@@ -336,7 +336,7 @@ class Invoice extends Model implements FormatDateInterface
 
 
     public static function returnPaidAndSumByCode(Invoice $invoice):array{
-        $last_payments = Payment::where('invoice_id', $invoice->invoice_no)->where('status',PaymentStatusEnums::ACCOUNTED)->get();
+        $last_payments = Payment::where('invoice_id', $invoice->invoice_no)->whereIn('status',[PaymentStatusEnums::ACCOUNTED,PaymentStatusEnums::DONE])->get();
         $sumsByTaxCode = Invoice::sumAmountsByTaxCode($invoice);
         $paidAmounts = [];
         foreach ($sumsByTaxCode as $code => &$totalAmount) {
@@ -401,7 +401,7 @@ class Invoice extends Model implements FormatDateInterface
     public static function getRestToPaid(Invoice $invoice): float|int
     {
         $paid = Payment::where('invoice_id', $invoice->invoice_no)
-            ->where('status',PaymentStatusEnums::ACCOUNTED)
+            ->whereIn('status',[PaymentStatusEnums::ACCOUNTED,PaymentStatusEnums::DONE])
             ->sum('amount');
         $restToPay = $invoice->amount - $paid;
 
@@ -414,7 +414,7 @@ class Invoice extends Model implements FormatDateInterface
      */
     public static function getPaid($invoice_id): float|int
     {
-        $payments= Payment::where('invoice_id', $invoice_id)->where('status',PaymentStatusEnums::ACCOUNTED)->get();
+        $payments= Payment::where('invoice_id', $invoice_id)->whereIn('status',[PaymentStatusEnums::ACCOUNTED,PaymentStatusEnums::DONE])->get();
         $s_amount = [];
 
             foreach ($payments as $index => $payment) {
