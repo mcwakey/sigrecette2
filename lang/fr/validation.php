@@ -152,6 +152,8 @@ return [
         'activity_id'              => 'activité principale',
         'phone' =>                  'téléphone',
         'address'                  => 'adresse',
+        'qty'                      => 'quantité',
+        'req_no'                   => 'numéro de demande',
         'affiliate_url'            => 'URL d\'affiliation',
         'age'                      => 'âge',
         'amount'                   => 'montant',
