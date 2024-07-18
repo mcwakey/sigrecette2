@@ -457,7 +457,7 @@ if (!function_exists('format_amount')) {
      */
     function format_amount($amount) {
       if(is_numeric($amount )){
-           return number_format($amount, 2, ',', '.');
+           return number_format($amount, 2, ',', ' ');
       }
       return $amount;
     }
