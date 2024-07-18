@@ -302,7 +302,18 @@
                         </div>
                         <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('recoveries.*') &&  !request()->has('delivery') ? 'active' : '' }}"
+                            <a class="menu-link {{ request()->routeIs('recoveries.*') &&  !request()->has('delivery')&&  request()->has('state') ? 'active' : '' }}"
+                               href="{{ App\Helpers\Constants::checkUrl( route('recoveries.index',['state' =>  App\Helpers\Constants::INVOICE_STATE_PENDING_KEY])) }}">
+								<span class="menu-bullet">
+									<span class="bullet bullet-dot"></span>
+								</span>
+                                <span class="menu-title">{{ __('Validation des recouvrements') }}</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->routeIs('recoveries.*') &&  !request()->has('delivery') &&  !request()->has('state') ? 'active' : '' }}"
                                href="{{ App\Helpers\Constants::checkUrl( route('recoveries.index')) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
@@ -338,7 +349,15 @@
                             <span class="menu-title">{{ __('new stock request') }}</span>
                         </a>
                     </div>
-
+                    <div class="menu-item">
+                        <a class="menu-link }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('ticket.stock-transfers.index', [ 'autoClick' => 'addstocktbtn'])) }}">
+		<span class="menu-bullet">
+			<span class="bullet bullet-dot"></span>
+		</span>
+                            <span class="menu-title">{{ __('new supply') }}</span>
+                        </a>
+                    </div>
                     <div class="menu-item">
                         <a class="menu-link {{ request()->routeIs('ticket.stock-requests.*') && !request()->has('autoClick') ? 'active' : '' }}"
                            href="{{  App\Helpers\Constants::checkUrl(route('ticket.stock-requests.index')) }}">
@@ -349,15 +368,7 @@
 								</span>
                         </a>
                     </div>
-                    <div class="menu-item">
-                        <a class="menu-link }}"
-                           href="{{  App\Helpers\Constants::checkUrl(route('ticket.stock-transfers.index', [ 'autoClick' => 'addstocktbtn'])) }}">
-		<span class="menu-bullet">
-			<span class="bullet bullet-dot"></span>
-		</span>
-                            <span class="menu-title">{{ __('new supply') }}</span>
-                        </a>
-                    </div>
+
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <a class="menu-link {{ request()->routeIs('ticket.stock-transfers.*') ? 'active' : '' }}"
@@ -424,6 +435,16 @@
 							</span>
                         </div>
                         <div class="menu-item">
+						  <span class="menu-link ">
+								<span class="menu-bullet">
+									<span class="bullet bullet-dot"></span>
+								</span>
+								<span class="menu-title" data-bs-toggle="modal"
+                                      data-bs-target="#kt_modal_add_accountant_deposit" data-kt-user-id="TITRE"
+                                      data-kt-action="add_accountant_deposit">    {{ __('Nouveau versement du Regisseur') }}</span>
+							</span>
+                        </div>
+                        <div class="menu-item">
                             <a class="menu-link {{ request()->routeIs('accounts.collector-deposits.*') ? 'active' : '' }}"
                                href="{{ route('accounts.collector-deposits.index') }}">
 								<span class="menu-bullet">
@@ -435,6 +456,7 @@
                         <!--end:Menu item-->
 
 
+<<<<<<< Updated upstream
                         <div class="menu-item">
 						  <span class="menu-link ">
 								<span class="menu-bullet">
@@ -445,6 +467,9 @@
                                       data-kt-action="add_accountant_deposit">    {{ __('Nouveau versement du regisseur') }}</span>
 							</span>
                         </div>
+=======
+
+>>>>>>> Stashed changes
                         <div class="menu-item">
                             <a class="menu-link {{ request()->routeIs('accounts.accountant-deposits-title.*') ? 'active' : '' }}"
                                href="{{  App\Helpers\Constants::checkUrl(route('accounts.accountant-deposits-title.index')) }}">

@@ -109,7 +109,7 @@ class Constants
         }
         else {
                 if(request()->input('type')==Constants::INVOICE_TYPE_TITRE_KEY){
-                    return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::ZEROEDITION];
+                    return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::ZEROEDITION,InvoiceActionsEnums::PRINT];
                 }
                 if(request()->input('type')==Constants::INVOICE_TYPE_COMPTANT_KEY){
                     return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::REDUCE,InvoiceActionsEnums::PRINT,InvoiceActionsEnums::ADDORNO,InvoiceActionsEnums::EDITSTATUT];
