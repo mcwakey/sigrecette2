@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+@php use App\Helpers\InvoiceHelper; @endphp
+        <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -22,7 +23,6 @@
         }
 
 
-
         th {
             background-color: #f2f2f2;
         }
@@ -40,16 +40,16 @@
 
 <table>
     <tr>
-        <td colspan="1"  style="border: none; margin: 0;text-align: left">
+        <td colspan="1" style="border: none; margin: 0;text-align: left">
 
             <img src="{{ $commune-> getImageUrlAttribute() }}" alt="Logo" style="width: 50px; height: 50px;">
 
         </td>
-        <td colspan="6"  style="border: none; padding: 2px;">
+        <td colspan="6" style="border: none; padding: 2px;">
             {{$commune->region_name}}
 
         </td>
-        <td colspan="7"  style="border: none; padding:2px ;text-align: right;">
+        <td colspan="7" style="border: none; padding:2px ;text-align: right;">
             REPUBLIQUE TOGOLAISE
 
         </td>
@@ -60,13 +60,15 @@
 
             {{$commune->title}}
         </td>
-        <td colspan="7"  style="border: none; margin: 0 ; padding:2px ; ;text-align: right;">
+        <td colspan="7" style="border: none; margin: 0 ; padding:2px ; ;text-align: right;">
 
             Travail-Liberté-Patrie
         </td>
     </tr>
     <tr>
-        <th colspan="14" style="border: none; margin: 0; text-align: center;" class="caption">Fiche de recouvrement des avis distribués</th>
+        <th colspan="14" style="border: none; margin: 0; text-align: center;" class="caption">Fiche de recouvrement des
+            avis distribués
+        </th>
     </tr>
     <tr>
         <td colspan="14" style="border: none; margin: 0; text-align: center;">N° {{$print->last_sequence_number}}</td>
@@ -75,16 +77,16 @@
         @php
             $year = \App\Models\Year::getActiveYear()
         @endphp
-        <td colspan="14" style="border: none; margin: 0;" >Exercice : {{" ".$year->name}}</td>
+        <td colspan="14" style="border: none; margin: 0;">Exercice : {{" ".$year->name}}</td>
     </tr>
     <tr>
         <td colspan="14" style="border: none; margin: 0;">Zone fiscale :</td>
     </tr>
     <tr>
-        <td colspan="14" style="border: none; margin: 0;" >Nom de l’agent de recouvrement : {{$print->user->name}}</td>
+        <td colspan="14" style="border: none; margin: 0;">Nom de l’agent de recouvrement : {{$print->user->name}}</td>
     </tr>
     <tr>
-        <td  colspan="14" style="border: none; margin: 0;" >Période de distribution: </td>
+        <td colspan="14" style="border: none; margin: 0;">Période de distribution:</td>
     </tr>
     <tr>
 
@@ -101,9 +103,9 @@
     </tr>
     <tr>
 
-        <td>Somme due </td>
-        <td>Sommes déjà recouvrées </td>
-        <td>Reste à recouvrer </td>
+        <td>Somme due</td>
+        <td>Sommes déjà recouvrées</td>
+        <td>Reste à recouvrer</td>
         <td>Date de recouvrement</td>
 
         <td>Somme recouvrée</td>
@@ -112,11 +114,11 @@
 
     @foreach($data as $index => $item)
         @if($item instanceof \App\Models\Invoice)
-            @foreach(\App\Models\Invoice::sumAmountsByTaxCode($item) as $code => $tax)
+            @foreach(InvoiceHelper::sumAmountsByTaxCode($item) as $code => $tax)
 
                 @php
-                $paid = \App\Models\Payment::getSumPaymentByCode($code,$item);
-                    @endphp
+                    $paid = \App\Models\Payment::getSumPaymentByCode($code,$item);
+                @endphp
                 <tr>
 
                     <td>{{$item->invoice_no}}</td>

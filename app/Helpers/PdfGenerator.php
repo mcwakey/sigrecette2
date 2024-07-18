@@ -37,7 +37,7 @@ class PdfGenerator  implements PdfGeneratorInterface
     public function generateInvoicePdf(array $data,string $templateName,int $action=null ):array
     {
 
-        $data=Invoice::retrieveByUUIDs($data);
+        $data= InvoiceHelper::retrieveByUUIDs($data);
         usort($data, function ($a, $b) {
             $codeA = $a->taxpayer_taxable->taxable->tax_label->code;
             $codeB = $b->taxpayer_taxable->taxable->tax_label->code;
@@ -97,9 +97,9 @@ class PdfGenerator  implements PdfGeneratorInterface
 
         //dd($data,$template,$action);
         if($action==42){
-            $data=Invoice::retrieveByUUIDs($data,'payment');
+            $data= InvoiceHelper::retrieveByUUIDs($data, 'payment');
         }else{
-            $data=Invoice::retrieveByUUIDs($data);
+            $data= InvoiceHelper::retrieveByUUIDs($data);
         }
         if ($this->checkIfCommuneIsNotNull()&& count($data)>0) {
 
@@ -313,7 +313,7 @@ class PdfGenerator  implements PdfGeneratorInterface
         }
 
         if( $type!=null&&$printFile==null){
-            $data=Invoice::getPrintData([InvoiceStatusEnums::PENDING],$type);
+            $data= InvoiceHelper::getPrintData([InvoiceStatusEnums::PENDING], $type);
             //dd($data);
            // dd($templateName,$type,$data);
             //dd($printFile,$type,$data);
@@ -371,7 +371,7 @@ class PdfGenerator  implements PdfGeneratorInterface
     {
 
 
-        $data=Invoice::getPrintData(
+        $data= InvoiceHelper::getPrintData(
             [InvoiceStatusEnums::CANCELED,
                 InvoiceStatusEnums::REDUCED,
                 InvoiceStatusEnums::APPROVED,
@@ -397,7 +397,7 @@ class PdfGenerator  implements PdfGeneratorInterface
     {
 
         //dd($data,$template,$action);
-        $data=Invoice::getPrintData(
+        $data= InvoiceHelper::getPrintData(
             [InvoiceStatusEnums::CANCELED,
                 InvoiceStatusEnums::REDUCED,
                 InvoiceStatusEnums::APPROVED,
@@ -434,7 +434,7 @@ class PdfGenerator  implements PdfGeneratorInterface
         }else{
             if($type!=null &&$user instanceof User){
 
-                $data=Invoice::filterByType(Invoice::retrieveByUUIDs($data),$type);
+                $data= InvoiceHelper::filterByType(InvoiceHelper::retrieveByUUIDs($data), $type);
                 if (count($data)>0) {
                     $printFile= PrintFile::createPrintFile($type,$data,0,$user);
 

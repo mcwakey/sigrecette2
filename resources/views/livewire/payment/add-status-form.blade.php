@@ -18,8 +18,6 @@
                     <option></option>
                     @can('peut comptabiliser un paiement')
                         <option value="{{App\Enums\PaymentStatusEnums::ACCOUNTED}}">{{ __('ACCOUNTED') }}</option>
-                    @endcan
-                    @can('peut annuler un paiement')
                         <option value="{{App\Enums\PaymentStatusEnums::CANCELED}}">{{ __('CANCELED') }}</option>
                     @endcan
                 </select>

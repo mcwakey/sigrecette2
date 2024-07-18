@@ -115,31 +115,24 @@
                         <!--begin::Col-->
                         <div class="col-xxl-2">
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('canton') }}</label>
-                            <input type="text" class="form-control" name="tags" id="mySearchFour" />
+                            <select class="form-select" id="mySearchFour">
+                                <option value=""></option>
+                                @foreach ($cantons as $canton)
+                                    <option value="{{ $canton->id }}">{{ $canton->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="col-xxl-2">
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('town') }}</label>
-                            <input type="text" class="form-control" name="tags" id="mySearchFive" />
+                            <select class="form-select" id="mySearchFive">
+                                <option value=""></option>
+                                @foreach ($towns as $town)
+                                    <option value="{{ $town->id }}">{{ $town->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
-                        <div class="col-xxl-2">
-                            <label class="fs-6 form-label fw-bold text-dark">{{ __('erea') }}</label>
-                            <input type="text" class="form-control" name="tags" id="mySearchSix" />
-                        </div>
-                        <!-- </div> -->
-                        <!--begin::Col-->
-                        <!-- <div class="col-xxl-6"> -->
-                        <!-- <div class="col-xxl-2">
-                                <label class="fs-6 form-label fw-bold text-dark">{{ __('erea') }}</label>
-                                <input type="text" class="form-control" name="tags" value="products, users, events" id="mySearchTwo" />
-                            </div> -->
-                        <!--end::Col-->
-                        <!--begin::Col-->
-                        <!-- <div class="col-xxl-2">
-                                <label class="fs-6 form-label fw-bold text-dark">{{ __('address') }}</label>
-                                <input type="text" class="form-control" name="tags" value="products, users, events" id="mySearchTwo" />
-                            </div> -->
-                        <!--end::Col-->
-                        <!--begin::Col-->
+
+
                         <div class="col-xxl-1">
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('zone') }}</label>
                             <!-- <input type="text" class="form-control" name="tags" /> -->
@@ -153,10 +146,29 @@
                             </select>
                             <!--end::Select-->
                         </div>
-                        <!-- </div> -->
-                        <!--end::Col-->
+                        <div class="col-xxl-1">
+                            <label class="fs-6 form-label fw-bold text-dark">{{ __('Catégorie') }}</label>
+                            <!-- <input type="text" class="form-control" name="tags" /> -->
+
+                            <!--begin::Select-->
+                            <select class="form-select" id="myCat">
+                                <option value=""></option>
+                                @foreach ($categories as $cat)
+                                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                @endforeach
+                            </select>
+                            <!--end::Select-->
+                        </div>
+                        <div class="col-xxl-1">
+                            <label class="fs-6 form-label fw-bold text-dark">{{ __('Activité') }}</label>
+                            <select class="form-select" id="myAct">
+                                <option value=""></option>
+                                @foreach ($activities as $activity)
+                                    <option value="{{$activity->id }}">{{ $activity->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
-                    <!--end::Row-->
 
                     <div class="separator separator-dashed mt-5 mb-5"></div>
                 </div>

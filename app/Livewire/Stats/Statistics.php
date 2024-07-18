@@ -12,8 +12,12 @@ use Livewire\Component;
 class Statistics extends Component
 {
     protected $statisticsService;
-    public function mount()
+    protected  $startDate;
+    protected  $endDate;
+    public function mount( $startDate,$endDate)
     {
+        $this->endDate= $endDate;
+        $this->startDate = $startDate;
         $this->assignStats();
     }
     public function assignStats()
@@ -30,6 +34,7 @@ class Statistics extends Component
     public function render()
     {
         return view('livewire.stats.statistics',[
+            'invoice_count'=> $this->statisticsService->getTotalRemainingToBeCollected($this->startDate,$this->endDate),
             'stats_reactive'=>[
                 StatisticKeysEnums::BY_INVOICE=>$this->statisticsService->getStats(InvoiceStaticsEnums::BY_INVOICE),
                 StatisticKeysEnums::BY_GENDER => $this->statisticsService->getStats( TaxpayerStaticsEnums::BY_GENDER)

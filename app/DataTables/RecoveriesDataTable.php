@@ -2,11 +2,13 @@
 
 namespace App\DataTables;
 
+use App\Enums\PaymentStatusEnums;
 use App\Helpers\Constants;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\Year;
 use Carbon\Carbon;
+use PHPUnit\TextUI\Configuration\Constant;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
@@ -18,7 +20,7 @@ use Yajra\DataTables\WithExportQueue;
 class RecoveriesDataTable extends DataTable
 {
     use WithExportQueue;
-    protected $showId;
+
 
     /**
      * Build the DataTable class.
@@ -49,10 +51,10 @@ class RecoveriesDataTable extends DataTable
                 return view('pages/recoveries.columns._invoice', compact('payment'));
             })
             ->editColumn('amount', function (Payment $payment) {
-                return $payment->amount;
+                return format_amount($payment->amount)  ;
             })
             ->editColumn('remaining_amount', function (Payment $payment) {
-                return $payment->remaining_amount;
+                return format_amount($payment->remaining_amount);
             })
 
             ->editColumn('status', function (Payment $payment) {
@@ -66,23 +68,32 @@ class RecoveriesDataTable extends DataTable
     }
 
 
+
     public function query(Payment $model): QueryBuilder
     {
-        $activeYear = Year::getActiveYear();
-        $startOfYear = Carbon::parse("{$activeYear->name}-01-01 00:00:00");
-        $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
-
-        return $model->newQuery()
-            ->distinct()
+        $query = $model
             ->join('invoices', 'invoices.id', '=', 'payments.invoice_id')
-            ->leftjoin('taxpayers', 'taxpayers.id', '=', 'payments.taxpayer_id')
-            ->leftjoin('users', 'users.id', '=', 'payments.user_id')
+            ->leftJoin('taxpayers', 'taxpayers.id', '=', 'payments.taxpayer_id')
+            ->leftJoin('users', 'users.id', '=', 'payments.user_id')
             ->join('tax_labels', 'tax_labels.code', '=', 'payments.code')
+            ->select('payments.*')
             ->whereNotNull('payments.user_id')
             ->whereNotIn('payments.reference', [Constants::ANNULATION, Constants::REDUCTION])
-            ->whereBetween('payments.created_at', [$startOfYear, $endOfYear])
-            ->select('payments.*')
-            ->orderByDesc('payments.created_at');
+            ->distinct()
+            ->whereBetween('payments.created_at', [$this->startDate, $this->endDate])
+            ->orderBy('payments.created_at', 'desc')
+            ->newQuery();
+
+
+
+
+        if ($this->state!=null) {
+            $query->where('payments.status', '=', $this->state);
+        }else {
+            $query->whereIn('payments.status', [PaymentStatusEnums::DONE,PaymentStatusEnums::ACCOUNTED]);
+        }
+
+        return $query;
     }
 
 
@@ -94,11 +105,11 @@ class RecoveriesDataTable extends DataTable
         return $this->builder()
             ->setTableId('recoveries-table')
             ->columns($this->getColumns())
-            ->minifiedAjax(route('recoveries.index'))
+            ->minifiedAjax(route('recoveries.index',request()->all()))
             ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
-            ->orderBy(8)
+            ->orderBy(7)
             ->pageLength(100) // Set the default number of rows per page to 3
             ->lengthMenu([[100,300, 500,  -1], [100,300, 500, "All"]]) // Define options for the number of rows per page
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/recoveries/columns/_draw-scripts.js')) . "}");
@@ -109,18 +120,31 @@ class RecoveriesDataTable extends DataTable
      */
     public function getColumns(): array
     {
-        return [
+        $columns = [
             Column::make('taxpayers.name')->title(__('taxpayer'))->addClass('d-flex align-items-center'),
             Column::make('invoices.invoice_no')->title(__('invoice no')),
             Column::make('reference')->title(__("reference no"))->name("reference"),
             Column::make('tax_labels.code')->title(__('code')),
             Column::make('amount')->title(__('amount paid')),
-            Column::make('remaining_amount')->title(__('balance')),
             Column::make('status')->title(__('status')),
             Column::make('users.name')->title(__('user'))->addClass('d-flex align-items-center'),
             Column::make('taxpayer_id')->visible(false),
-           
+            Column::computed('action')
+                ->addClass('text-end text-nowrap')
+                ->exportable(false)
+                ->printable(false)
+                ->width(60)
         ];
+        $columns = array_map(function ($column) {
+
+            if ($this->state!=PaymentStatusEnums::CANCELED) {
+                if (in_array($column->name, ['action'])) {
+                    $column->visible(false);
+                }
+            }
+            return $column;
+        }, $columns);
+        return $columns;
     }
 
     /**

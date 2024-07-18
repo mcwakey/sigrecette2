@@ -199,7 +199,7 @@
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div class="col">
-                                <label class="required fw-semibold fs-6 mb-2">{{ __('reference no') }}</label>
+                                <label class="fw-semibold fs-6 mb-2">{{ __('reference no') }}</label>
                                 <input wire:model="reference" name="reference" class="form-control mb-2 text-end" type="text" />
                                 @error('reference')
                                 <span class="text-danger">{{ $message }}</span> @enderror

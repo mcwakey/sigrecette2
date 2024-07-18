@@ -95,6 +95,9 @@ public $query = false;
             // ->orderColumn('taxable_name', function ($query, $order) {
             //     $query->orderBy('taxable.name', $order);
             // })
+            ->orderColumn('penalty', function (Taxable $taxable) {
+                return $taxable->penalty;
+            })
             ->setRowId('id');
     }
 
@@ -147,7 +150,7 @@ public $query = false;
             Column::make('unit')->title(__('unit')),
             Column::make('periodicity')->title(__('periodicity')),
             // Column::make('modality')->title(__('modality')),
-            // Column::make('penalty')->title(__('penalty')),
+            Column::make('penalty')->title(__('penalty')),
             Column::make('created_at')->title(__('created at'))->addClass('text-nowrap')->visible(false),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')

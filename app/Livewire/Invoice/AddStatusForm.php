@@ -4,6 +4,7 @@ namespace App\Livewire\Invoice;
 
 use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
+use App\Helpers\InvoiceHelper;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\TaxpayerTaxable;
@@ -112,7 +113,7 @@ class AddStatusForm extends Component
                           'code'=>null
 
                     ];
-                    $payments = Invoice::getCode($invoice->invoice_no, $invoice->reduce_amount, $paymentData);
+                    $payments = InvoiceHelper::getCode($invoice->invoice_no, $invoice->reduce_amount, $paymentData);
                     foreach ($payments as $payment) {
                         Payment::create($payment);
                     }

@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+@php use App\Helpers\InvoiceHelper; @endphp
+        <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -43,17 +44,17 @@
 <table>
 
     <tr>
-        <td colspan="1"  style="border: none; margin: 0;text-align: left">
+        <td colspan="1" style="border: none; margin: 0;text-align: left">
 
             <img src="{{ $commune-> getImageUrlAttribute() }}" alt="Logo" style="width: 50px; height: 50px;">
 
         </td>
-        <td colspan="4"  style="border: none; margin: 0;text-align: left">
+        <td colspan="4" style="border: none; margin: 0;text-align: left">
 
             {{$commune->region_name}}
 
         </td>
-        <td colspan="6"  style="border: none; margin: 0;text-align: right">
+        <td colspan="6" style="border: none; margin: 0;text-align: right">
             REPUBLIQUE TOGOLAISE
 
         </td>
@@ -61,16 +62,15 @@
     <tr>
         <td colspan="1" style="border: none; margin: 0; padding:2px ;text-align: left;">
         </td>
-        <td colspan="4"  style="border: none; margin: 0;text-align: left">
+        <td colspan="4" style="border: none; margin: 0;text-align: left">
 
             {{$commune->title}}
         </td>
-        <td colspan="6"  style="border: none; margin: 0;text-align: right">
+        <td colspan="6" style="border: none; margin: 0;text-align: right">
 
             Travail-Liberté-Patrie
         </td>
     </tr>
-
 
 
     <tr>
@@ -86,7 +86,7 @@
     <tr>
         <td colspan="11" style="margin-left: 2px;text-align:left;padding:4px ">
             @php
-            $year = \App\Models\Year::getActiveYear()
+                $year = \App\Models\Year::getActiveYear()
             @endphp
             Exercice : {{$year->name}}
 
@@ -97,7 +97,7 @@
     <tr>
         @foreach($titles as $index => $item)
             @if($index <11)
-            <th>{{$item}}</th>
+                <th>{{$item}}</th>
             @endif
         @endforeach
     </tr>
@@ -110,37 +110,37 @@
 
     @foreach($data as $index => $item )
 
-            @php
-            $sumsByTaxCode = \App\Models\Invoice::sumAmountsByTaxCode($item);
-            @endphp
+        @php
+            $sumsByTaxCode = InvoiceHelper::sumAmountsByTaxCode($item);
+        @endphp
 
         {{--TODO logique à refaire l'implémentation n'est pas correction doit gérer la creation des avis et les paiement associés --}}
-            @if($item->status!="APROVED-CANCELLATION")
-                @foreach($sumsByTaxCode as $code => &$tax)
-                            <tr>
-                                <td>@if($item->delivery_date !=null)
-                                        {{date("d-m-Y", strtotime( $item->delivery_date  ))}}
-                                    @endif</td>
-                                <td>{{$item->order_no}}</td>
-                                <td>{{$item->invoice_no}}</td>
-                                <td>{{$item->nic}}</td>
-                                <td>{{$item->taxpayer?->name}}</td>
-                                <td>{{$item->taxpayer?->longitude,$item->taxpayer?->latitude}}</td>
-                                <td>{{$code}}</td>
-                                @php
-                                    $total_somme+=$tax['amount'];
-                                    @endphp
-                                <td>{{ $tax['amount']}}</td>
-                                <td></td>
-                                <td></td>
-                                <td>{{$total_somme}}</td>
+        @if($item->status!="APROVED-CANCELLATION")
+            @foreach($sumsByTaxCode as $code => &$tax)
+                <tr>
+                    <td>@if($item->delivery_date !=null)
+                            {{date("d-m-Y", strtotime( $item->delivery_date  ))}}
+                        @endif</td>
+                    <td>{{$item->order_no}}</td>
+                    <td>{{$item->invoice_no}}</td>
+                    <td>{{$item->nic}}</td>
+                    <td>{{$item->taxpayer?->name}}</td>
+                    <td>{{$item->taxpayer?->longitude,$item->taxpayer?->latitude}}</td>
+                    <td>{{$code}}</td>
+                    @php
+                        $total_somme+=$tax['amount'];
+                    @endphp
+                    <td>{{ $tax['amount']}}</td>
+                    <td></td>
+                    <td></td>
+                    <td>{{$total_somme}}</td>
 
-                            </tr>
+                </tr>
             @endforeach
-            @endif
+        @endif
 
         @foreach($item->payments()->get() as $payment)
-                <tr>
+            <tr>
                 <td>{{date("d-m-Y", strtotime( $payment->updated_at))}}</td>
                 <td>{{$item->order_no}}</td>
                 <td>{{$item->invoice_no}}</td>
@@ -148,27 +148,27 @@
                 <td>{{$item->taxpayer?->name}}</td>
                 <td>{{$item->taxpayer?->longitude,$item->taxpayer?->latitude}}</td>
                 <td>{{$payment->code}}</td>
-                    <td></td>
-                    <td>
-                        @if( $payment->reference!=\App\Helpers\Constants::REDUCTION &&  $payment->reference!=\App\Helpers\Constants::ANNULATION )
-                            {{ $payment->reference}}
-                        @else
-                        @endif
-                       </td>
-                    @php
-                        $total_somme-=$payment->amount;
-                    @endphp
-                    <td>{{ $payment->amount}}</td>
-                    <td>{{$total_somme}}</td>
+                <td></td>
+                <td>
+                    @if( $payment->reference!=\App\Helpers\Constants::REDUCTION &&  $payment->reference!=\App\Helpers\Constants::ANNULATION )
+                        {{ $payment->reference}}
+                    @else
+                    @endif
+                </td>
+                @php
+                    $total_somme-=$payment->amount;
+                @endphp
+                <td>{{ $payment->amount}}</td>
+                <td>{{$total_somme}}</td>
             </tr>
         @endforeach
     @endforeach
 
 
     <tr>
-        <td colspan="9" >Total </td>
+        <td colspan="9">Total</td>
         <td></td>
-        <td ></td>
+        <td></td>
     </tr>
 
     </tbody>

@@ -5,7 +5,7 @@ KTMenu.init();
 document.querySelectorAll('[data-kt-action="delete_row"]').forEach(function (element) {
     element.addEventListener('click', function () {
         Swal.fire({
-            text: 'Are you sure you want to remove?',
+            text: 'Êtes-vous sûr de vouloir supprimer ce paiement ?',
             icon: 'warning',
             buttonsStyling: false,
             showCancelButton: true,
@@ -17,7 +17,7 @@ document.querySelectorAll('[data-kt-action="delete_row"]').forEach(function (ele
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                Livewire.dispatch('delete_user', [this.getAttribute('data-kt-user-id')]);
+                Livewire.dispatch('delete_payment', [this.getAttribute('data-kt-user-id')]);
             }
         });
     });

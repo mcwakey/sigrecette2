@@ -41,62 +41,7 @@
                             <input type="hidden" type="text" wire:model="taxpayer_id" name="taxpayer_id" />
                             <!--begin::Scroll-->
                             <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_taxpayer_scroll" data-kt-scroll="false" data-kt-scroll-activate="false" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_taxpayer_header" data-kt-scroll-wrappers="#kt_modal_add_taxpayer_scroll" data-kt-scroll-offset="300px">
-                                <!--begin::Input group-->
-                                {{--
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="d-block fw-semibold fs-6 mb-5">{{ __('avatar') }}</label>
-                                    <!--end::Label-->
-                                    <!--begin::Image placeholder-->
-                                    <style>
-                                        .image-input-placeholder {
-                                            background-image: url('{{ image(' svg/files/blank-image.svg') }}');
-                                        }
 
-                                        [data-bs-theme="dark"] .image-input-placeholder {
-                                            background-image: url('{{ image(' svg/files/blank-image-dark.svg') }}');
-                                        }
-                                    </style>
-                                    <!--end::Image placeholder-->
-                                    <!--begin::Image input-->
-                                    <div class="image-input image-input-outline image-input-placeholder {{ $avatar || $saved_avatar ? '' : 'image-input-empty' }}" data-kt-image-input="true">
-                                        <!--begin::Preview existing avatar-->
-                                        @if($avatar)
-                                        <div class="image-input-wrapper w-125px h-125px" style="background-image: url({{ $avatar ? $avatar->temporaryUrl() : '' }});"></div>
-                                        @else
-                                        <div class="image-input-wrapper w-125px h-125px" style="background-image: url({{ $saved_avatar }});"></div>
-                                        @endif
-                                        <!--end::Preview existing avatar-->
-                                        <!--begin::Label-->
-                                        <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" title="Change avatar">
-                                            {!! getIcon('pencil','fs-7') !!}
-                                            <!--begin::Inputs-->
-                                            <input type="file" wire:model="avatar" name="avatar" accept=".png, .jpg, .jpeg" />
-                                            <input type="hidden" name="avatar_remove" />
-                                            <!--end::Inputs-->
-                                        </label>
-                                        <!--end::Label-->
-                                        <!--begin::Cancel-->
-                                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="Cancel avatar">
-                                            {!! getIcon('cross','fs-2') !!}
-                                        </span>
-                                        <!--end::Cancel-->
-                                        <!--begin::Remove-->
-                                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="Remove avatar">
-                                            {!! getIcon('cross','fs-2') !!}
-                                        </span>
-                                        <!--end::Remove-->
-                                    </div>
-                                    <!--end::Image input-->
-                                    <!--begin::Hint-->
-                                    <div class="form-text">{{ __('allowed file') }}</div>
-                                    <!--end::Hint-->
-                                    @error('avatar')
-                                    <span class="text-danger">{{ $message }}</span> @enderror
-                                </div>
-                                --}}
-                                <!--end::Input group-->
-                                <!--begin::Input group-->
 
 
                                 <div class="separator separator-content mb-7 mt-7">

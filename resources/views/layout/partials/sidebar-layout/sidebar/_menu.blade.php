@@ -99,7 +99,7 @@
 					<span class="menu-title">{{ __('Emission des avis') }}</span>
 					<span class="menu-arrow"></span>
 				</span>
-                <div class="menu-sub menu-sub-accordion"> 
+                <div class="menu-sub menu-sub-accordion">
                     <div class="menu-item">
                         <a class="menu-link {{ (request()->routeIs('invoicing.*') && request()->has('rc') && request()->input('rc') == 'taxation') || (request()->has('autoClick') && request()->input('autoClick') == 'taxationbtn') ? 'active' : '' }}"
                            href="{{ App\Helpers\Constants::checkUrl( route('invoicing.taxpayers.index', ['rc' => 'taxation'])) }}">
@@ -302,12 +302,23 @@
                         </div>
                         <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('recoveries.*') &&  !request()->has('delivery')&&  request()->has('state') ? 'active' : '' }}"
-                               href="{{ App\Helpers\Constants::checkUrl( route('recoveries.index',['state' =>  App\Helpers\Constants::INVOICE_STATE_PENDING_KEY])) }}">
+                            <a class="menu-link {{ request()->routeIs('recoveries.*') &&  !request()->has('delivery')&&  request()->has('state')  && request()->input('state')== App\Helpers\Constants::PAYMENT_STATE_PENDING_KEY ? 'active' : '' }}"
+                               href="{{ App\Helpers\Constants::checkUrl( route('recoveries.index',['state' =>  App\Helpers\Constants::PAYMENT_STATE_PENDING_KEY])) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
                                 <span class="menu-title">{{ __('Validation des recouvrements') }}</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->routeIs('recoveries.*') &&  !request()->has('delivery') &&  request()->has('state')  && request()->input('state')== App\Helpers\Constants::PAYMENT_STATE_CANCEL_KEY ? 'active' : '' }}"
+                               href="{{ App\Helpers\Constants::checkUrl( route('recoveries.index',['state' =>  App\Helpers\Constants::PAYMENT_STATE_CANCEL_KEY])) }}">
+								<span class="menu-bullet">
+									<span class="bullet bullet-dot"></span>
+								</span>
+                                <span class="menu-title">{{ __('Liste des recouvrements annulés') }}</span>
                             </a>
                             <!--end:Menu link-->
                         </div>

@@ -6,11 +6,15 @@ use App\DataTables\InvoicesDataTable;
 use App\DataTables\RecoveriesDataTable;
 use App\DataTables\TaxpayerInvoicesDataTableDataTableHtml;
 use App\Helpers\Constants;
+use App\Models\Activity;
+use App\Models\Canton;
+use App\Models\Category;
 use App\Models\Taxpayer;
 use App\DataTables\TaxpayersDataTable;
 use App\DataTables\TaxpayerInvoicesDataTable;
 use App\DataTables\TaxpayerTaxablesDataTable;
 use App\Http\Controllers\Controller;
+use App\Models\Town;
 use App\Models\UserLogs;
 use App\Models\Zone;
 use Illuminate\Http\Request;
@@ -33,13 +37,17 @@ class TaxpayerController extends Controller
         $disable =$validatedData['disable']??null;
         $state = $validatedData['state']??null;
         $zones = Zone::all();
+        $categories = Category::all();
+        $towns = Town::all();
+        $cantons = Canton::all();
+        $activities = Activity::all();
 
         return $dataTable->with(
             [
                 'state'=>$state,
                 'disable' => $disable,
             ]
-        )->render('pages/taxpayers.list', compact('zones'));
+        )->render('pages/taxpayers.list', compact('zones','categories','towns','cantons','activities'));
     }
 
     // public function index()

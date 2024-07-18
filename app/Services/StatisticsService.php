@@ -4,24 +4,29 @@ namespace App\Services;
 
 use App\Contracts\InvoiceStatisticsInterface;
 use App\Contracts\TaxpayerStatisticsInterface;
+use App\Enums\InvoicePayStatusEnums;
 use App\Enums\InvoiceStaticsEnums;
+use App\Enums\InvoiceStatusEnums;
+use App\Enums\PaymentStatusEnums;
 use App\Enums\StatisticKeysEnums;
 use App\Enums\TaxpayerStaticsEnums;
 use App\Models\Activity;
 use App\Models\Canton;
 use App\Models\Category;
 use App\Models\Invoice;
+use App\Models\Payment;
 use App\Models\Taxable;
 use App\Models\Taxpayer;
 use App\Models\TaxpayerTaxable;
 use App\Models\Town;
 use App\Models\Year;
 use App\Models\Zone;
+use Carbon\Carbon;
 
 class StatisticsService implements TaxpayerStatisticsInterface,InvoiceStatisticsInterface
 {
     private Year $year;
-
+    protected string $NoneMessage='Non défini';
     public function __construct(Year $year = null)
     {
         $this->year = $year ?? Year::getActiveYear();
@@ -95,7 +100,7 @@ class StatisticsService implements TaxpayerStatisticsInterface,InvoiceStatistics
         return $counts;
     }
 
-    protected string $NoneMessage='Non défini';
+
     public  function countTaxpayersByCanton(Year $year): array
     {
         $cantons = Canton::all()->pluck('name', 'id');
@@ -216,6 +221,23 @@ class StatisticsService implements TaxpayerStatisticsInterface,InvoiceStatistics
                 ->count()])
             ->merge(['Total' => Invoice::whereYear('created_at', $year->name) ->count()])
             ->toArray();
+    }
+    public  function getTotalRemainingToBeCollected( $startDate, $endDate): float|int
+    {
+        $invoices = Invoice::whereIn('status', [InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION])
+            ->whereBetween('invoices.created_at', [$startDate, $endDate])
+            ->where('invoices.pay_status', '!=', InvoicePayStatusEnums::PAID)
+            ->get();
+        $totalRemaining = 0;
+        foreach ($invoices as $invoice) {
+            $paid = Payment::where('invoice_id', $invoice->invoice_no)
+                ->where('status',PaymentStatusEnums::ACCOUNTED)
+                ->sum('amount');
+            $restToPay = $invoice->amount - doubleval($invoice->reduce_amount) - $paid;
+            $totalRemaining += max($restToPay, 0);
+        }
+
+        return $totalRemaining;
     }
     protected function getAllStatistics(): array
     {

@@ -690,7 +690,7 @@
         <!--end::Content-->
     </div>
 
-
+        <livewire:taxpayer.add-taxpayer-modal />
         <livewire:taxpayer_taxable.add-taxpayer-taxable-modal :id="$taxpayer->id"/>
         <livewire:invoice.add-invoice-modal :id="$taxpayer->id"/>
         <livewire:invoice.add-invoice-general-modal :id="$taxpayer->id" />
@@ -823,7 +823,7 @@
                             icon: icon
                         }).addTo(map_render)
                         .bindPopup(popupContent);
-                    
+
                 } catch (error) {
                     L.marker([latitude, longitude], {
                             icon: taxpayerBlue

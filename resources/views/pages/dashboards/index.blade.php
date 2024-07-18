@@ -31,7 +31,7 @@
                 height: 100%;
             }
         </style>
-        <livewire:stats.statistics />
+        <livewire:stats.statistics :startDate="$s_date" :endDate="$e_date" />
         <div>
             <div style="margin-bottom: 20px;">
                 @include('pages.dashboards.widget_root')

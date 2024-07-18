@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\PaymentStatusEnums;
 use App\Enums\PaymentTypeEnums;
 use App\Helpers\Constants;
+use App\Helpers\PaymentHelper;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -33,6 +34,25 @@ class Payment extends Model
         'invoice_type',
         'notes'
     ];
+
+    /**
+     * @param $invoice_id
+     * @return float|int
+     */
+    public static function getPaid($invoice_id): float|int
+    {
+        return PaymentHelper::getPaid($invoice_id);
+
+    }
+
+    /**
+     * @param Invoice $invoice
+     * @return float|int
+     */
+    public static function getRestToPaid(Invoice $invoice): float|int
+    {
+       return PaymentHelper::getRestToPaid($invoice);
+    }
 
     public function invoice()
     {

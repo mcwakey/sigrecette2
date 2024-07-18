@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Payment;
 
+use App\Helpers\InvoiceHelper;
 use App\Models\Invoice;
 use App\Models\Payment;
 use Livewire\Attributes\On;
@@ -60,7 +61,6 @@ class AddPaymentModal extends Component
 
             "amount" => "required|numeric",
             "payment_type" => "required",
-            "reference" => "required",
             'code'=>[
                 'nullable',
                 'sometimes',
@@ -78,7 +78,6 @@ class AddPaymentModal extends Component
     }
 
     protected $listeners = [
-        'delete_user' => 'deleteUser',
         'update_payment' => 'updatePayment',
         'update_payment_amount'=>'updatePaymentAmount',
         'update_local_amount'=> 'updateLocalAmount',
@@ -121,7 +120,7 @@ class AddPaymentModal extends Component
                 $this->amount = $invoice->amount;
                 $this->edit_amount=false;
             }
-            $this->paidAndCodeArray=Invoice::returnPaidAndSumByCode($invoice)[0];
+            $this->paidAndCodeArray= InvoiceHelper::returnPaidAndSumByCode($invoice)[0];
             // $this->paidAndCodeArray=$invoice->invoiceItems;
             $this->validCodes = array_keys($this->paidAndCodeArray);
         }
@@ -134,9 +133,21 @@ class AddPaymentModal extends Component
 
     public function submit()
     {
-        // Validate the form input data
+        $is_regisseur=false;
+        $role = Role::where('name', 'regisseur')->first();
+        if ($role) {
+            /**@var App\Models\User $user  */
+            $user = auth()->user();
+            if ($user->hasRole('regisseur')) {
+                $is_regisseur =true;
+            }
+        }
+
+        if ($is_regisseur) {
+            $this->rules["reference"] = "required";
+        }
         $this->validate();
-        DB::transaction(function () {
+        DB::transaction(function () use ($role, $is_regisseur) {
 
             $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
 
@@ -165,16 +176,11 @@ class AddPaymentModal extends Component
                 ];
                 //dd($paymentData);
 
-                $role = Role::where('name', 'regisseur')->first();
-                if ($role) {
-                    /**@var App\Models\User $user  */
-                    $user = auth()->user();
-                    if ($user->hasRole('regisseur')) {
-                        $paymentData['status'] = PaymentStatusEnums::ACCOUNTED;
-                    }
+                if ($is_regisseur) {
+                    $paymentData['status'] = PaymentStatusEnums::ACCOUNTED;
                 }
 
-                $payments = Invoice::getCode($this->invoice_no, $this->amount, $paymentData);
+                $payments = InvoiceHelper::getCode($this->invoice_no, $this->amount, $paymentData);
                 $payment = Payment::find($this->payment_id);
 
                 // dd($payments);
@@ -182,11 +188,7 @@ class AddPaymentModal extends Component
                 if ($payment == null) {
                     foreach ($payments as $payment) {
                         $tempPay = Payment::create($payment);
-
-                        /**@var App\Models\User $user  */
-                        $user = auth()->user();
-
-                        if ($role && !$user->hasRole('regisseur')) {
+                        if ($is_regisseur) {
                             $users = $role->users()->get();
                             Notification::send($users, new InvoicePaid($tempPay , Auth::user()));
                         }
@@ -312,7 +314,7 @@ class AddPaymentModal extends Component
 
         $this->qty = $invoice->qty;
         $this->bill = $invoice->amount;
-        $this->paid = Invoice::getPaid($invoice->invoice_no);
+        $this->paid = Payment::getPaid($invoice->invoice_no);
 
 
 
@@ -356,6 +358,12 @@ class AddPaymentModal extends Component
     #[On('updateSharedInvoiceId')]
     public function updateSharedTaxpayerId($id){
         $this->updatePayment($id);
+    }
+    #[On('delete_payment')]
+    public function deletePayment($id)
+    {
+        Payment::destroy($id);
+        $this->dispatchMessage('Paiement', 'delete');
     }
     public function hydrate()
     {

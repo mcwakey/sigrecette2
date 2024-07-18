@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Enums\InvoiceActionsEnums;
 use App\Enums\InvoiceStatusEnums;
+use App\Enums\PaymentStatusEnums;
 use App\Models\Invoice;
 use App\Models\User;
 use Carbon\Carbon;
@@ -40,13 +41,21 @@ class Constants
     const INVOICE_TYPE_COMPTANT_KEY = 'comptant';
     const INVOICE_TYPE_TITRE_KEY = 'titre';
 
-
+    const PAYMENT_STATE_CANCEL_KEY = "del";
+    const PAYMENT_STATE_PENDING_KEY = self:: INVOICE_STATE_PENDING_KEY;
     const INVOICE_STATE_VALIDATION_MAP = [
         self::INVOICE_STATE_DRAFT_KEY => InvoiceStatusEnums::DRAFT,
         self::INVOICE_STATE_ACCEPTED_KEY => InvoiceStatusEnums::ACCEPTED,
         self::INVOICE_STATE_PENDING_KEY => InvoiceStatusEnums::PENDING,
         self::INVOICE_STATE_REJECT_KEY => InvoiceStatusEnums::REJECTED,
-        self::INVOICE_STATE_APPROVE_KEY => InvoiceStatusEnums::APPROVED
+        self::INVOICE_STATE_APPROVE_KEY => InvoiceStatusEnums::APPROVED,
+
+
+    ];
+    const PAYMENT_STATE_VALIDATION_MAP = [
+        self::PAYMENT_STATE_PENDING_KEY => InvoiceStatusEnums::PENDING,
+        self::PAYMENT_STATE_CANCEL_KEY => PaymentStatusEnums::CANCELED,
+
     ];
 
     const INVOICE_DELIVERY_STATE_VALIDATION_MAP = [

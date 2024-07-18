@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Payment;
 
+use App\Helpers\InvoiceHelper;
 use App\Models\Invoice;
 use App\Models\Payment;
 use Livewire\Component;
@@ -62,7 +63,7 @@ class AddPaymentGeneralModal extends Component
 
 
         return view('livewire.payment.add-payment-general-modal',[
-            'invoices'=>Invoice::search($this->search)->paginate($this->perPages, pageName: 'payment-modal')
+            'invoices'=> InvoiceHelper::search($this->search)->paginate($this->perPages, pageName: 'payment-modal')
         ]);
     }
 

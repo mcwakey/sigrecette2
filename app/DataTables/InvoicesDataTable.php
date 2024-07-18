@@ -7,6 +7,7 @@ use App\Enums\PrintNameEnums;
 use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
 use App\Models\Invoice;
+use App\Models\Payment;
 use App\Models\Year;
 use Carbon\Carbon;
 use Yajra\DataTables\Html\Button;
@@ -65,7 +66,7 @@ class InvoicesDataTable extends DataTable
             })
             ->editColumn('paid', function (Invoice $invoice) {
 
-                    return format_amount($invoice::getPaid($invoice->invoice_no));
+                    return format_amount(Payment::getPaid($invoice->invoice_no));
             })
             ->editColumn('remains_to_be_paid', function (Invoice $invoice) {
                     return  format_amount($invoice->get_remains_to_be_paid());
@@ -87,6 +88,9 @@ class InvoicesDataTable extends DataTable
                 return $invoice->to_date;})
             ->editColumn('reason_for_reject', function (Invoice $invoice) {
                 return $invoice->reason_for_reject;})
+            ->addColumn('type', function (Invoice $invoice) {
+                return $invoice->type;
+            })
             ->addColumn('action', function (Invoice $invoice) {
                 return view('pages/invoices.columns._actions', compact('invoice'));
             })
@@ -195,6 +199,7 @@ class InvoicesDataTable extends DataTable
             Column::make('validity')->title(__('status')),
             Column::make('taxpayer_id')->visible(false),
             Column::make('reason_for_reject')->title(__('reason_for_reject')),
+            Column::make('type')->title(__('invoice_type')),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
                 ->exportable(true)
@@ -205,23 +210,23 @@ class InvoicesDataTable extends DataTable
 
             $columns = array_map(function ($column) {
                 if ($this->type==Constants::INVOICE_TYPE_COMPTANT){
-                    if (in_array($column->name, ['zones.name','remains_to_be_paid','reason_for_reject'])) {
+                    if (in_array($column->name, ['zones.name','remains_to_be_paid','reason_for_reject','type'])) {
                         $column->visible(false);
                     }
                 }
                 if ($this->state != null) {
                     if ($this->state == InvoiceStatusEnums::DRAFT) {
-                        if (in_array($column->name, ['order_no', 'paid', 'remains_to_be_paid', 'delivery_date', 'to_date', 'validity','reason_for_reject'])) {
+                        if (in_array($column->name, ['order_no', 'paid', 'remains_to_be_paid', 'delivery_date', 'to_date', 'validity','reason_for_reject','type'])) {
                             $column->visible(false);
                         }
                     } elseif ($this->state == InvoiceStatusEnums::ACCEPTED) {
-                        if (in_array($column->name, ['paid', 'remains_to_be_paid', 'delivery_date', 'validity', 'to_date','reason_for_reject'])) {
+                        if (in_array($column->name, ['paid', 'remains_to_be_paid', 'delivery_date', 'validity', 'to_date','reason_for_reject','type'])) {
                             $column->visible(false);
                         }
                     }
 
                     elseif ($this->state == InvoiceStatusEnums::PENDING) {
-                        if (in_array($column->name, ['paid', 'remains_to_be_paid', 'to_date', 'validity','delivery_date','reason_for_reject'])) {
+                        if (in_array($column->name, ['paid', 'remains_to_be_paid', 'to_date', 'validity','delivery_date','reason_for_reject','type'])) {
                             $column->visible(false);
                         }
                     }elseif ($this->state==InvoiceStatusEnums::REJECTED){
@@ -229,8 +234,13 @@ class InvoicesDataTable extends DataTable
                             $column->visible(false);
                         }
                     }
-                }
 
+                }
+                if ($this->to_paid){
+                    if (in_array($column->name, [ 'to_date', 'delivery_date','reason_for_reject','order_no','status'])) {
+                        $column->visible(false);
+                    }
+                }
 
                 return $column;
             }, $columns);
