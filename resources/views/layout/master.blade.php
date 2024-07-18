@@ -133,7 +133,9 @@
             }
         });
 
-        if (currentHref.match(/[?&]notif_id=([^&]*)/)) {
+        const currentHref = window.location.href;
+
+        if (currentHref?.match(/[?&]notif_id=([^&]*)/)) {
             let notifId = currentHref.match(/[?&]notif_id=([^&]*)/)[1];
             let request = new Request('/api/v1/user/notification/update', {
                 method: "POST",
