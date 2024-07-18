@@ -33,10 +33,10 @@
         <div class="d-flex align-items-center flex-column mt-3 w-100">
             <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
                 @if(isset($count_invoices['APROVED']))
-                    <span>{{ $count_invoices["APROVED"]." " }}APROVED</span>
+                    <span>{{ $count_invoices["APROVED"]." " }}Approuvé</span>
                 @endif
                 @if(isset($count_invoices['REJECTED']))
-                    <span>{{ $count_invoices["REJECTED"]." " }}Rejected</span>
+                    <span>{{ $count_invoices["REJECTED"]." " }}Rejeté</span>
                 @endif
 
 

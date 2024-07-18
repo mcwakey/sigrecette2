@@ -30,7 +30,7 @@
                 </li>
 
                  <li class="nav-item">
-                    <a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-light fw-bold px-4 me-1 " data-bs-toggle="tab" id="kt_amcharts_t_toggle" href="#kt_amcharts_t_tab">Town</a>
+                    <a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-light fw-bold px-4 me-1 " data-bs-toggle="tab" id="kt_amcharts_t_toggle" href="#kt_amcharts_t_tab">Villages/Quartiers</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-light fw-bold px-4 me-1 " data-bs-toggle="tab" id="kt_amcharts_z_toggle" href="#kt_amcharts_z_tab">Zone</a>
