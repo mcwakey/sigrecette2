@@ -298,7 +298,7 @@
 
         setInterval(async () => {
             await makeNotifRequest2()
-        }, 5000);
+        }, 8000);
 
 
         // Vérifie si le navigateur prend en charge l'API MediaDevices
