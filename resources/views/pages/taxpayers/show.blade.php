@@ -846,55 +846,6 @@
             // });
         </script>
 
-        <script>
-            let invoicesPaymentsTab = document.getElementById('invoices_payments');
-            let invoicesPaymentsTabContent = document.querySelector('[data-id="invoice_payments_tab_content"]');
-
-            let overviewTab = document.getElementById('overview');
-            let overviewTabContent = document.querySelector('[data-id="overview_tab_content"]');
-
-            const currentHref = window.location.href;
-
-            if (currentHref.match(/[?&]invoice_tab=([^&]*)/)) {
-                overviewTab.classList.remove('active');
-                invoicesPaymentsTab.classList.add('active');
-
-                overviewTabContent.classList.remove('active');
-                overviewTabContent.classList.remove('show');
-
-                invoicesPaymentsTabContent.classList.add('active');
-                invoicesPaymentsTabContent.classList.add('show');
-            }
-
-            if (currentHref.match(/[?&]notif_id=([^&]*)/)) {
-                let notifId = currentHref.match(/[?&]notif_id=([^&]*)/)[1];
-                let request = new Request('/api/v1/user/notification/update', {
-                    method: "POST",
-                    body: JSON.stringify({
-                        notif_id: notifId
-                    }),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                fetch(request)
-                    .then((response) => {
-                        if (response.status === 200) {
-                            return response.json();
-                        } else {
-                            throw new Error("Something went wrong on API server!");
-                        }
-                    })
-                    .then((response) => {
-                        localStorage.setItem('notifSize',response.size);
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
-            }
-
-        </script>
 
     @endpush
 </x-default-layout>
