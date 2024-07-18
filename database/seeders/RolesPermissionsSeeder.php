@@ -41,6 +41,7 @@ class RolesPermissionsSeeder extends Seeder
                 'peut modifier un contribuable',
                 'peut activer un contribuable',
                 'peut désactiver un contribuable',
+                'peut valider un contribuable',
 
                 // Payment permissions
                 'peut ajouter un paiement',
@@ -55,9 +56,9 @@ class RolesPermissionsSeeder extends Seeder
                 'peut modifier un utilisateur',
                 'peut activer un utilisateur',
                 'peut désactiver un utilisateur',
+                'peut créer un collecteur',
 
                 // Geolocatoion permissions
-                'peut voir la geolocalisation d\'un utilisateur',
                 'peut voir la geolocalisation d\'un contribuable',
 
                 // Account permissions 
@@ -70,7 +71,7 @@ class RolesPermissionsSeeder extends Seeder
                 'peut faire un etat de compte du régisseur',
 
                 // Print permissions
-                'peut imprimer des fiches',
+                // 'peut imprimer des fiches',
 
                 // Recovery permissions
                 'peut voir le recouvrement',
@@ -131,6 +132,12 @@ class RolesPermissionsSeeder extends Seeder
                 'peut modifier un utilisateur',
                 'peut activer un utilisateur',
                 'peut désactiver un utilisateur',
+                'peut créer un collecteur',
+
+                // Taxpayer permissions
+                'peut activer un contribuable',
+                'peut désactiver un contribuable',
+                'peut valider un contribuable',
 
                 // Role permissions
                 'peut créer un rôle',
@@ -182,7 +189,6 @@ class RolesPermissionsSeeder extends Seeder
                 'peut supprimer une matière taxable',
 
                 // Geolocatoion permissions
-                'peut voir la geolocalisation d\'un utilisateur',
                 'peut voir la geolocalisation d\'un contribuable',
             ],
 
@@ -224,9 +230,13 @@ class RolesPermissionsSeeder extends Seeder
                 'peut effectuer une alimentation des collecteurs',
                 'peut faire un etat de compte du collecteur',
                 'peut faire un etat de compte du régisseur',
+                'peut valider un avis au comptant',
 
                 // Recovery permissions
                 'peut voir le recouvrement',
+
+                // Collector permissions
+                'peut créer un collecteur',
 
                 // Payment permissions
                 'peut ajouter un paiement',
@@ -241,8 +251,6 @@ class RolesPermissionsSeeder extends Seeder
                 // Taxpayer permissions
                 'peut créer un contribuable',
                 'peut modifier un contribuable',
-                'peut activer un contribuable',
-                'peut désactiver un contribuable',
 
                 // Payment permissions
                 'peut ajouter un paiement',
@@ -258,7 +266,6 @@ class RolesPermissionsSeeder extends Seeder
             ],
 
             'collecteur' =>  [],
-
 
             'agent_delegation_du_receveur' => [
                 // Invoice permissions

@@ -441,7 +441,7 @@
 								</span>
 								<span class="menu-title" data-bs-toggle="modal"
                                       data-bs-target="#kt_modal_add_stock_transfer-deposit"
-                                      data-kt-user-id="{{-- $user->id --}}"
+                                      data-kt-user-id=""
                                       data-kt-action="add_deposit">   {{ __('Nouveau versement du collecteur') }}</span>
 							</span>
                         </div>
@@ -467,20 +467,6 @@
                         <!--end:Menu item-->
 
 
-<<<<<<< Updated upstream
-                        <div class="menu-item">
-						  <span class="menu-link ">
-								<span class="menu-bullet">
-									<span class="bullet bullet-dot"></span>
-								</span>
-								<span class="menu-title" data-bs-toggle="modal"
-                                      data-bs-target="#kt_modal_add_accountant_deposit" data-kt-user-id="TITRE"
-                                      data-kt-action="add_accountant_deposit">    {{ __('Nouveau versement du regisseur') }}</span>
-							</span>
-                        </div>
-=======
-
->>>>>>> Stashed changes
                         <div class="menu-item">
                             <a class="menu-link {{ request()->routeIs('accounts.accountant-deposits-title.*') ? 'active' : '' }}"
                                href="{{  App\Helpers\Constants::checkUrl(route('accounts.accountant-deposits-title.index')) }}">

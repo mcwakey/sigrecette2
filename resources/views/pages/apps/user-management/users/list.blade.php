@@ -49,7 +49,7 @@
                         <!--end::Toolbar-->
                     @endif
                 @endcan
-                @can('peut créer un utilisateur')
+                @can('peut créer un collecteur')
                     @if (!request()->has('disable') && request()->has('type'))
                         <!--begin::Toolbar-->
                         <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">

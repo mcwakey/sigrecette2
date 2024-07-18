@@ -49,4 +49,22 @@ class NotificationController extends Controller
 
         return response()->json(['notif_id' => $notifId,'size' => count($notifications)], 200);
     }
+
+    public function clear()
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        $user->notifications()->delete();
+
+        return response()->json(['message' => 'Notifications deleted.'], 200);
+    }
+
+    public function markAsRead()
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        $user->unreadNotifications->markAsRead();
+
+        return response()->json(['message' => 'Notifications mark as read.'], 200);
+    }
 }
