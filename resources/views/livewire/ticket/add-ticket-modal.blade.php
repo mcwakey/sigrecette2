@@ -1,15 +1,19 @@
 <div class="modal fade" id="kt_modal_add_ticket" tabindex="-1" aria-hidden="true" wire:ignore.self data-bs-backdrop='static'>
     <!--begin::Modal dialog-->
-    <div class="modal-dialog modal-dialog-centered mw-800px">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:calc(1020px - 20px)!important;">
         <!--begin::Modal content-->
         <div class="modal-content">
             <!--begin::Modal header-->
             <div class="modal-header" id="kt_modal_add_ticket_header">
                 <!--begin::Modal title-->
-                <h2 class="fw-bold">{{ __('tickets') }}</h2>
+                @if (!$edit_mode)
+                    <h2 class="fw-bold">{{ __('new ticket') }}</h2>
+                @else
+                    <h2 class="fw-bold">{{ __('Modifier Valeur Inactive') }}</h2>
+                @endif
                 <!--end::Modal title-->
                 <!--begin::Close-->
-                <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
+                <div class="btn btn-icon btn-sm btn-active-icon-primary" data-kt-action="close_ticket_modal" data-bs-dismiss="modal" aria-label="Close">
                     {!! getIcon('cross','fs-1') !!}
                 </div>
                 <!--end::Close-->
