@@ -7,9 +7,9 @@
             <div class="modal-header" id="kt_modal_add_user_header">
                 <!--begin::Modal title-->
                 @if (!$edit_mode)
-                    <h2 class="fw-bold">Nouvel utilisateur</h2>
+                    <h2 class="fw-bold">Nouvel Utilisateur</h2>
                 @else
-                    <h2 class="fw-bold"> Modifier : {{$name}} </h2>  
+                    <h2 class="fw-bold"> Modifier Utilisateur</h2>  
                 @endif
                 {{-- <h2 class="fw-bold">Utilisateur</h2> --}}
                 <!--end::Modal title-->

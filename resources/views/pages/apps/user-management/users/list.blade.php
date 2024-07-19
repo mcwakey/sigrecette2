@@ -42,7 +42,7 @@
                             <button type="button" class="btn btn-light-success h-45px ms-auto" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_add_user">
                                 {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                                {{ __('Nouvel utilisateur') }}
+                                {{ __('Nouvel Utilisateur') }}
                             </button>
                             <!--end::Add user-->
                         </div>
