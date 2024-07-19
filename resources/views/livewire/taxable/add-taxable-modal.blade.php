@@ -1,15 +1,19 @@
 <div class="modal fade" id="kt_modal_add_taxable" tabindex="-1" aria-hidden="true" wire:ignore.self data-bs-backdrop='static'>
     <!--begin::Modal dialog-->
-    <div class="modal-dialog modal-dialog-centered mw-800px">
+    <div  class="modal-dialog modal-dialog-centered" style="max-width:calc(1020px - 20px)!important;">
         <!--begin::Modal content-->
         <div class="modal-content">
             <!--begin::Modal header-->
             <div class="modal-header" id="kt_modal_add_taxable_header">
                 <!--begin::Modal title-->
-                <h2 class="fw-bold">{{ __('taxables') }}</h2>
+                @if (!$edit_mode)
+                    <h2 class="fw-bold">{{ __('Nouvelle Matière Taxable') }}</h2>
+                @else
+                    <h2 class="fw-bold">{{ __('Modifier Matière Taxable') }}</h2>
+                @endif
                 <!--end::Modal title-->
                 <!--begin::Close-->
-                <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
+                <div class="btn btn-icon btn-sm btn-active-icon-primary" data-kt-action="close_taxable_modal" data-bs-dismiss="modal" aria-label="Close">
                     {!! getIcon('cross','fs-1') !!}
                 </div>
                 <!--end::Close-->
@@ -23,7 +27,7 @@
                     <input type="hidden" wire:model="modality" name="modality"  value="Quitance"/>
 
                     <!--begin::Scroll-->
-                    <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_taxable_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_taxable_header" data-kt-scroll-wrappers="#kt_modal_add_taxable_scroll" data-kt-scroll-offset="300px">
+                    <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_taxable_scroll"   data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_taxable_header" data-kt-scroll-wrappers="#kt_modal_add_taxable_scroll" data-kt-scroll-offset="300px">
 
                         <!--begin::Input group-->
 
@@ -43,7 +47,7 @@
                                     <option value="Femme">Femme</option> -->
                                 </select>
                                 <!--end::Input-->
-                                @error('gender')
+                                @error('tax_label_id')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>
@@ -69,14 +73,44 @@
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('periodicity') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <select wire:model="periodicity" name="periodicity" class="form-select"
+                                @if (!$edit_mode)
+                                    <select wire:model="periodicity" name="periodicity" class="form-select"
+                                            data-dropdown-parent="#kt_modal_add_taxable">
+                                        <option>{{ __('select an option') }}</option>
+                                        <option value="Jours">Jours</option>
+                                        <option value="Mois">Mois</option>
+                                        <option value="Ans">Ans</option>
+                                        <option value="Autre">Autre</option>
+                                    </select>
+                                @else
+                                    <select wire:model="periodicity" name="periodicity" class="form-select"
                                         data-dropdown-parent="#kt_modal_add_taxable">
-                                    <option>{{ __('select an option') }}</option>
-                                    <option value="Jours">Jours</option>
-                                    <option value="Mois">Mois</option>
-                                    <option value="Ans">An</option>
-                                    <option value="Autre">Autre</option>
-                                </select>
+                                            <option>{{ __('select an option') }}</option>
+                                            @if ($periodicity == 'Jours')
+                                              <option selected  value="Jours">Jours</option>
+                                              <option value="Mois">Mois</option>
+                                              <option value="Ans">Ans</option>
+                                              <option value="Autre">Autre</option>
+                                            @elseif ($periodicity == 'Mois')
+                                                <option selected  value="Mois">Mois</option>
+                                                <option value="Jours">Jours</option>
+                                                <option value="Ans">Ans</option>
+                                                <option value="Autre">Autre</option>
+                                            @elseif ($periodicity == 'Ans')
+                                                <option selected  value="Ans">Ans</option>
+                                                <option value="Jours">Jours</option>
+                                                <option value="Mois">Mois</option>
+                                                <option value="Autre">Autre</option>
+                                            @else
+                                                <option selected  value="Autre">Autre</option>
+                                                <option value="Jours">Jours</option>
+                                                <option value="Mois">Mois</option>
+                                                <option value="Ans">Ans</option>
+                                            @endif
+                                          
+                                    </select>
+                                @endif
+                  
                                 <!--end::Input-->
                                 @error('periodicity')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -85,17 +119,7 @@
                                 <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('unit type') }}</label>
                                 <!--end::Label-->
-                                <!--begin::Input-->
-                                <!-- <select aria-label="Select an ID Type" data-control="select2" data-placeholder="Select an ID Type..." class="form-select"
-                                    data-dropdown-parent="#kt_modal_add_taxable">
-                                    <option value="Homme">Homme</option>
-                                    <option value="Femme">Femme</option>
-                                </select> -->
-
-                                {{--
-
-                                  <option value="Type">{{ __('type') }}</option>
-                                --}}
+   
                                 <select wire:model="unit_type" name="unit_type" class="form-select" data-dropdown-parent="#kt_modal_add_taxable">
                                     <option>{{ __('select an option') }}</option>
                                     <option value="Superficie">{{ __('surface') }}</option>
@@ -110,12 +134,7 @@
                                 <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('unit') }}</label>
                                 <!--end::Label-->
-                                <!--begin::Input-->
-                                <!-- <select aria-label="Select an ID Type" data-control="select2" data-placeholder="Select an ID Type..." class="form-select"
-                                    data-dropdown-parent="#kt_modal_add_taxable">
-                                    <option value="Homme">Homme</option>
-                                    <option value="Femme">Femme</option>
-                                </select> -->
+   
                                 <input type="text" wire:model="unit" name="unit" class="form-control mb-3 mb-lg-0" placeholder="{{ __('unit') }}"/>
                                 <!--end::Input-->
                                 @error('unit')
@@ -165,12 +184,10 @@
                                     </div>
                                 @endif
 
-
-
                             </div>
                         </div>
                         <div class="mb-0">
-                            <label class="form-label fs-6 fw-bolder text-gray-700">Penalité</label>
+                            <label class="fw-semibold fs-6 mb-2">Penalité</label>
                             <textarea  wire:model="penalty" name="description"  class="form-control" rows="2" placeholder=""></textarea>
                         </div>
                     </div>

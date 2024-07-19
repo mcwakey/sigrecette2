@@ -149,6 +149,7 @@ return [
     'uuid'                 => 'Le champ :attribute doit être un UUID valide',
     'phone'                => 'Le champ :attribute doit être un numéro valide.',
     'attributes'           => [
+        'tax_label_id'   => 'libellé fiscale',
         'activity_id'              => 'activité principale',
         'phone' =>                  'téléphone',
         'address'                  => 'adresse',

@@ -30,6 +30,12 @@ document.querySelectorAll('[data-kt-action="update_row"]').forEach(function (ele
     });
 });
 
+document.querySelectorAll('[data-kt-action="close_taxable_modal"]').forEach(function (element) {
+    element.addEventListener('click', function () {
+        Livewire.dispatch('close_taxable_modal', []);
+    });
+});
+
 // Listen for 'success' event emitted by Livewire
 Livewire.on('success', (message) => {
     // Reload the users-table datatable

@@ -2,19 +2,14 @@
 
 namespace App\Livewire\Taxable;
 
-use App\Models\Canton;
-use App\Models\Erea;
-use App\Models\Gender;
-use App\Models\IdType;
+
 use App\Models\Taxable;
 use App\Models\TaxLabel;
-use App\Models\Town;
 use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
+
 
 class AddTaxableModal extends Component
 {
@@ -34,15 +29,6 @@ class AddTaxableModal extends Component
     public $tax_label_id;
     public $use_second_formula=false;
 
-    // public $longitude;
-    // public $latitude;
-    // public $canton;
-    // public $town;
-    // public $erea;
-    // public $address;
-    // public $zone_id;
-    // public $avatar;
-    // public $saved_avatar;
 
     public $edit_mode = false;
 
@@ -69,23 +55,12 @@ class AddTaxableModal extends Component
     protected $listeners = [
         'delete_user' => 'deleteUser',
         'update_user' => 'updateUser',
+        'close_taxable_modal' => 'closeTaxableModal',
     ];
 
     public function render()
     {
-        //$cantons = Canton::all();
-        //$towns = Town::all();
-        //$ereas = Erea::all();
-        //$genders = Gender::all();
-        //$id_types = IdType::all();
         $tax_labels = TaxLabel::all();
-
-
-
-
-
-
-
         return view('livewire.taxable.add-taxable-modal', compact('tax_labels'));
     }
     public function mount()
@@ -116,26 +91,8 @@ class AddTaxableModal extends Component
                 'penalty_type' => $this->penalty_type,
                 'tax_label_id' => $this->tax_label_id,
                 'use_second_formula'=>$this->use_second_formula
-                // 'latitude' => $this->latitude,
-                // 'canton' => $this->canton,
-                // 'town' => $this->town,
-                // 'erea' => $this->erea,
-                // 'address' => $this->address,
-                // 'zone_id' => $this->zone_id,
             ];
 
-            // if ($this->avatar) {
-            //     $data['profile_photo_path'] = $this->avatar->store('avatars', 'public');
-            // } else {
-            //     $data['profile_photo_path'] = null;
-            // }
-
-            // if (!$this->edit_mode) {
-            //     $data['password'] = Hash::make($this->email);
-            // }
-
-            // Update or Create a new Taxable record in the database
-            //$data['email'] = $this->email;
             $taxable = Taxable::find($this->taxable_id) ?? Taxable::create($data);
 
             if ($this->edit_mode) {
@@ -160,17 +117,7 @@ class AddTaxableModal extends Component
 
     public function deleteUser($id)
     {
-        // Prevent deletion of current Taxable
-        // if ($id == Auth::id()) {
-        //     $this->dispatch('error', 'Taxable cannot be deleted');
-        //     return;
-        // }
-
-
         Taxable::destroy($id);
-
-        // Emit a success event with a message
-        //$this->dispatch('success', 'Taxable successfully deleted');
         $this->dispatchMessage('Matière Taxable', 'delete');
     }
 
@@ -193,27 +140,29 @@ class AddTaxableModal extends Component
         $this->penalty = $taxable->penalty;
         $this->penalty_type = $taxable->penalty_type;
 
-
-        //$this->tax_label = $taxable->tax_labels?->first()->name ?? '';
-
-        // $this->mobilephone = $taxable->mobilephone;
-        // $this->telephone = $taxable->telephone;
-        // $this->longitude = $taxable->longitude;
-        // $this->latitude = $taxable->latitude;
-        // $this->canton = $taxable->canton;
-        // $this->town = $taxable->town;
-        // $this->erea = $taxable->erea;
-        // $this->address = $taxable->address;
-        // $this->zone_id = $taxable->zone_id;
-
     }
     public function rendering($view, $data)
     {
-        // Runs BEFORE the provided view is rendered...
         //
-        // $view: The view about to be rendered
-        // $data: The data provided to the view
     }
+
+    public function closeTaxableModal()
+    {
+        $this->edit_mode = false;
+        $this->taxable_id='';
+        $this->name='';
+        $this->tariff='';
+        $this->tariff_type='';
+        $this->unit='';
+        $this->unit_type='';
+        $this->modality='';
+        $this->periodicity='';
+        $this->penalty='';
+        $this->penalty_type='';
+        $this->tax_label_id='';
+        $this->use_second_formula=false;
+    }
+
     public function hydrate()
     {
         $this->resetErrorBag();
