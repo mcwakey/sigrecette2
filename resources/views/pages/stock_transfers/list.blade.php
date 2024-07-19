@@ -1,7 +1,7 @@
 <x-default-layout>
 
     @section('title')
-        {{ __('stock des valeurs inactives du collecteur') }}
+        {{ __('stock des valeurs inactives des collecteurs') }}
     @endsection
 
     @section('breadcrumbs')
@@ -75,7 +75,7 @@
                     @can('peut effectuer une alimentation des collecteurs')
                         <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                             <button type="button" class="btn btn-light-success" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_add_stock_transfer" data-kt-action="add_transfer" id="addstocktbtn">
+                                data-bs-target="#kt_modal_add_stock_transfer" data-kt-action="add_transfer" id="addsupplytbtn">
                                 {!! getIcon('plus', 'fs-2', '', 'i') !!}
                                 {{ __('new supply') }}
                             </button>

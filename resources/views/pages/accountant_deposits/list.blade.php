@@ -66,6 +66,7 @@
                         <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                             <!--begin::Add user-->
                             <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                                    id="addrdepositbtn"
                                 data-bs-target="#kt_modal_add_accountant_deposit" data-kt-user-id="TITRE" data-kt-action="add_accountant_deposit">
                                 {!! getIcon('plus', 'fs-2', '', 'i') !!}
                                 {{ __('new deposit') }}

@@ -63,6 +63,7 @@
                         <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                             <!--begin::Add user-->
                             <button type="button" class="btn btn-light-warning" data-bs-toggle="modal"
+                                    id="addvertbtn"
                                 data-bs-target="#kt_modal_add_stock_transfer-deposit" data-kt-user-id="{{ $user->id }}" data-kt-action="add_deposit">
                                 {!! getIcon('plus', 'fs-2', '', 'i') !!}
                                 {{ __('new deposit') }}
@@ -76,6 +77,7 @@
                         <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                             <!--begin::Add user-->
                             <button type="button" class="btn btn-light-danger" data-bs-toggle="modal"
+                                    id="addstatetbtn"
                                 data-bs-target="#kt_modal_add_stock_transfer-state" data-kt-user-id="{{ $user->id }}" data-kt-action="update_transfer">
                                 {!! getIcon('plus', 'fs-2', '', 'i') !!}
                                 {{ __('account state') }}

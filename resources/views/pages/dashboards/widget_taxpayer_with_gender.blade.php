@@ -85,18 +85,7 @@
                                         </div>
 
                                         <!--begin::Label-->
-                                        <div class="d-flex fs-6 fw-semibold align-items-center">
-                                            <!--begin::Bullet-->
-                                            <div class="bullet me-3" style="border-radius: 3px;background-color: #E4E6EF;width: 12px;height: 12px"></div>
-                                            <!--end::Bullet-->
 
-                                            <!--begin::Label-->
-                                            <div class="fs-5 fw-bold text-gray-600 me-5">Ratio F/H</div>
-                                            <!--end::Label-->
-
-
-                                            <div class="ms-auto fw-bolder text-gray-700 text-end">{{"~ ". round(  ($count_tapyers_with_gender["Femme"]/$count_tapyers_with_gender["Homme"]) ,2)}}</div>                        <!--end::Stats-->
-                                        </div>
                                         <!--end::Label-->
                                     </div>
 

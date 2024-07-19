@@ -162,7 +162,5 @@ class Constants
         })->get();
 
     }
-    public static function format_amount($amount) {
-        return number_format($amount, 2, ',', '.');
-    }
+
 }

@@ -121,17 +121,21 @@
             //
         }
 
-        $(document).ready(function() {
-            const urlParams = (new URLSearchParams(window.location.search));
-            let autoClickValue = urlParams.get('autoClick');
-            if (autoClickValue) {
-                const button = document.getElementById(autoClickValue);
-                console.log(button);
-                if (button) {
-                    button.click();
+        window.onload = function() {
+            setTimeout(function() {
+                const urlParams = new URLSearchParams(window.location.search);
+                let autoClickValue = urlParams.get('autoClick');
+                if (autoClickValue) {
+                    const button = document.getElementById(autoClickValue);
+                    console.log(button);
+                    if (button) {
+                        button.click();
+                    }
                 }
-            }
-        });
+            }, 1000);
+        };
+
+
 
         const currentHref = window.location.href;
 

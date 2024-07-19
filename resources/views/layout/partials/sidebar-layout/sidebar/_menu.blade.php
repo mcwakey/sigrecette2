@@ -137,17 +137,7 @@
                             <span class="menu-title">{{__("Nouvel avis de réduction  ou d’annulation")}}</span>
                         </a>
                     </div>
-                    <!-- <div class="menu-item">
-						  <span class="menu-link ">
-								<span class="menu-bullet">
-									<span class="bullet bullet-dot"></span>
-								</span>
-								<span class="menu-title" data-bs-toggle="modal"
-									  data-bs-target="#kt_modal_add_invoice_no_taxpayer">{{__("Nouvel avis de réduction  ou d’annulation")}}</span>
-							</span>
-					</div> -->
                 </div>
-                <!--end:Menu sub-->
             </div>
             <div data-kt-menu-trigger="click"
                  class="menu-item menu-accordion {{ request()->routeIs('invoices.*') ? 'here show' : '' }}">
@@ -361,12 +351,30 @@
                         </a>
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link }}"
-                           href="{{  App\Helpers\Constants::checkUrl(route('ticket.stock-transfers.index', [ 'autoClick' => 'addstocktbtn'])) }}">
+                        <a class="menu-link  {{ request()->routeIs('ticket.*') && request()->has('autoClick') && request()->input('autoClick') =='addsupplytbtn' ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('ticket.stock-transfers.index', [ 'autoClick' => 'addsupplytbtn'])) }}">
 		<span class="menu-bullet">
 			<span class="bullet bullet-dot"></span>
 		</span>
                             <span class="menu-title">{{ __('new supply') }}</span>
+                        </a>
+                    </div>
+                    <div class="menu-item">
+                        <a class="menu-link  {{ request()->routeIs('ticket.*') && request()->has('rc') && request()->input('rc') =='versement' ||  request()->has('autoClick') && request()->input('autoClick') =='addvertbtn' ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('ticket.stock-transfers.index', ['rc' => 'versement'])) }}">
+		<span class="menu-bullet">
+			<span class="bullet bullet-dot"></span>
+		</span>
+                            <span class="menu-title"> {{ __('Nouveau versement du collecteur') }}</span>
+                        </a>
+                    </div>
+                    <div class="menu-item">
+                        <a class="menu-link  {{ request()->routeIs('ticket.*') && request()->has('rc') && request()->input('rc') =='etat' ||  request()->has('autoClick') && request()->input('autoClick') =='addstatetbtn' ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('ticket.stock-transfers.index', ['rc' => 'etat'])) }}">
+		<span class="menu-bullet">
+			<span class="bullet bullet-dot"></span>
+		</span>
+                            <span class="menu-title"> {{  __('account state').__(' du collecteur') }}</span>
                         </a>
                     </div>
                     <div class="menu-item">
@@ -382,12 +390,12 @@
 
                     <!--begin:Menu item-->
                     <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('ticket.stock-transfers.*') ? 'active' : '' }}"
+                        <a class="menu-link {{ request()->routeIs('ticket.stock-transfers.*')&& !request()->has('autoClick') && !request()->has('rc') ? 'active' : '' }}"
                            href="{{ App\Helpers\Constants::checkUrl( route('ticket.stock-transfers.index')) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
-                            <span class="menu-title">{{ __('Stock des valeurs inactives du collecteur') }}
+                            <span class="menu-title">{{ __('Stock des valeurs inactives des collecteurs') }}
 								</span>
                         </a>
                     </div>
@@ -434,26 +442,16 @@
                     <div class="menu-sub menu-sub-accordion">
 
 
-                        <div class="menu-item">
-						  <span class="menu-link ">
-								<span class="menu-bullet">
-									<span class="bullet bullet-dot"></span>
-								</span>
-								<span class="menu-title" data-bs-toggle="modal"
-                                      data-bs-target="#kt_modal_add_stock_transfer-deposit"
-                                      data-kt-user-id=""
-                                      data-kt-action="add_deposit">   {{ __('Nouveau versement du collecteur') }}</span>
+
+
+                          <div class="menu-item">
+                            <a class="menu-link {{request()->routeIs('accounts.accountant-deposits-title.*') && request()->has('autoClick') && request()->input('autoClick') =='addrdepositbtn' ? 'active' : '' }}"
+                               href="{{ App\Helpers\Constants::checkUrl( route('accounts.accountant-deposits-title.index', [ 'autoClick' => 'addrdepositbtn'])) }}">
+							<span class="menu-bullet">
+								<span class="bullet bullet-dot"></span>
 							</span>
-                        </div>
-                        <div class="menu-item">
-						  <span class="menu-link ">
-								<span class="menu-bullet">
-									<span class="bullet bullet-dot"></span>
-								</span>
-								<span class="menu-title" data-bs-toggle="modal"
-                                      data-bs-target="#kt_modal_add_accountant_deposit" data-kt-user-id="TITRE"
-                                      data-kt-action="add_accountant_deposit">    {{ __('Nouveau versement du Regisseur') }}</span>
-							</span>
+                                <span class="menu-title"> {{ __('Nouveau versement du Regisseur') }}</span>
+                            </a>
                         </div>
                         <div class="menu-item">
                             <a class="menu-link {{ request()->routeIs('accounts.collector-deposits.*') ? 'active' : '' }}"
@@ -461,14 +459,14 @@
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
-                                <span class="menu-title">{{ __('Etat de versement du collecteur') }} </span>
+                                <span class="menu-title">{{ __('Etat de versement des collecteur') }} </span>
                             </a>
                         </div>
                         <!--end:Menu item-->
 
 
                         <div class="menu-item">
-                            <a class="menu-link {{ request()->routeIs('accounts.accountant-deposits-title.*') ? 'active' : '' }}"
+                            <a class="menu-link {{ request()->routeIs('accounts.accountant-deposits-title.*') && !request()->input('autoClick') ? 'active' : '' }}"
                                href="{{  App\Helpers\Constants::checkUrl(route('accounts.accountant-deposits-title.index')) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
