@@ -22,7 +22,7 @@
     <!--end::Menu item-->
     @endcan
 
-    @can('peut supprimer une matière taxable')
+    {{-- @can('peut supprimer une matière taxable')
     <!--begin::Menu item-->
     <div class="menu-item px-3">
         <a href="#" class="menu-link px-3" data-kt-user-id="{{ $taxable->id }}" data-kt-action="delete_row">
@@ -30,6 +30,6 @@
         </a>
     </div>
     <!--end::Menu item-->
-    @endcan
+    @endcan --}}
 </div>
 <!--end::Menu-->
