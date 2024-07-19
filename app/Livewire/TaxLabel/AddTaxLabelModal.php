@@ -61,11 +61,11 @@ class AddTaxLabelModal extends Component
 
             if ($this->edit_mode) {
                 // Emit a success event with a message
-                $this->dispatch('success', __('Libellé fiscal mis a jour avec succès.'));
+                $this->dispatch('success', __('Libellé Fiscal mis a jour.'));
             } else {
 
                 // Emit a success event with a message
-                $this->dispatch('success', __('Libellé fiscal créer avec succès.'));
+                $this->dispatch('success', __('Libellé Fiscal créer.'));
             }
         });
 
@@ -79,7 +79,7 @@ class AddTaxLabelModal extends Component
         TaxLabel::destroy($id);
 
         // Emit a success event with a message
-        $this->dispatch('success', 'Libellé fiscal supprimé avec succès.');
+        $this->dispatch('success', 'Libellé Fiscal supprimé.');
     }
 
     public function updateUser($id)

@@ -1,6 +1,6 @@
 <div class="modal fade" id="kt_modal_add_tax_label" tabindex="-1" aria-hidden="true" wire:ignore.self data-bs-backdrop='static'>
     <!--begin::Modal dialog-->
-    <div class="modal-dialog modal-dialog-centered mw-800px">
+    <div  class="modal-dialog modal-dialog-centered" style="max-width:calc(1020px - 20px)!important;">
         <!--begin::Modal content-->
         <div class="modal-content">
             <!--begin::Modal header-->
