@@ -6,10 +6,14 @@
             <!--begin::Modal header-->
             <div class="modal-header" id="kt_modal_add_tax_label_header">
                 <!--begin::Modal title-->
-                <h2 class="fw-bold">{{ __('new taxlabel') }}</h2>
+                @if (!$edit_mode)
+                    <h2 class="fw-bold">{{ __('new taxlabel') }}</h2> 
+                @else
+                    <h2 class="fw-bold">{{ __('Modifier Libellé Fiscale') }}</h2> 
+                @endif
                 <!--end::Modal title-->
                 <!--begin::Close-->
-                <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
+                <div class="btn btn-icon btn-sm btn-active-icon-primary" data-kt-action="close_tax_label_modal" data-bs-dismiss="modal" aria-label="Close">
                     {!! getIcon('cross','fs-1') !!}
                 </div>
                 <!--end::Close-->
