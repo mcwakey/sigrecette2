@@ -105,10 +105,15 @@ Si le projet est fourni sous forme d'un fichier zip, téléchargez et extrayez l
 cd /var/www
 sudo wget http://example.com/your-sigrecette-app.zip -O sigrecette-app.zip
 sudo unzip sigrecette-app.zip -d sigrecette-app
-sudo chown -R www-data:www-data sigrecette-app
 cd sigrecette-app
 ```
+Définissez les permissions appropriées pour les répertoires de stockage et de cache :
 
+```bash
+sudo chown -R www-data:www-data storage
+sudo chown -R www-data:www-data bootstrap/cache
+
+```
 Installez les dépendances avec Composer :
 
 ```bash
@@ -135,7 +140,7 @@ php artisan key:generate
 Créez un fichier de configuration Apache pour l'application SIGRECETTE :
 
 ```bash
-sudo nano /etc/apache2/sites-available/sigrecette-app.conf
+sudo nano /etc/apache2/sites-available/000-default.conf
 ```
 
 Ajoutez le contenu suivant :
@@ -145,12 +150,6 @@ Ajoutez le contenu suivant :
     ServerAdmin admin@example.com
     ServerName example.com
     DocumentRoot /var/www/sigrecette-app/public
-
-    <Directory /var/www/sigrecette-app>
-        Options Indexes FollowSymLinks
-        AllowOverride All
-        Require all granted
-    </Directory>
 
     <Directory /var/www/sigrecette-app/public>
         Options Indexes FollowSymLinks
@@ -166,7 +165,7 @@ Ajoutez le contenu suivant :
 Activez la nouvelle configuration et mod_rewrite :
 
 ```bash
-sudo a2ensite sigrecette-app.conf
+sudo a2ensite 000-default.conf
 sudo a2enmod rewrite
 sudo systemctl restart apache2
 ```
@@ -179,12 +178,7 @@ Exécutez les migrations et les seed de base de données pour charger la configu
 php artisan migrate --seed
 ```
 
-Définissez les permissions appropriées pour les répertoires de stockage et de cache :
 
-```bash
-sudo chown -R www-data:www-data storage
-sudo chown -R www-data:www-data bootstrap/cache
-```
 
 Créez un lien symbolique pour le dossier `storage` :
 

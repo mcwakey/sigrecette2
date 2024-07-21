@@ -473,7 +473,7 @@ class AddInvoiceModal extends Component
 
         foreach ($taxpayer_taxables as $index => $taxable) {
 
-            $this->unit_type = $taxable->taxable->unit_type;
+            // $this->unit_type = $taxable->taxable->unit_type;
 
             $this->taxpayer_taxable_id[$index] = $taxable->id;
             $this->taxpayer_taxable[$index] = $taxable->name;
@@ -531,7 +531,7 @@ class AddInvoiceModal extends Component
             // }
 
             $this->periodicity = $taxable->taxable->periodicity;
-            $this->unit_type = $taxable->taxable->unit_type;
+            // $this->unit_type = $taxable->taxable->unit_type;
 
             $this->taxpayer_taxable_id[$index] = $taxable->id;
             $this->taxpayer_taxable[$index] = $taxable->name;

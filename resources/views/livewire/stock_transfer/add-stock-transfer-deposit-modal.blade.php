@@ -37,7 +37,7 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
 
-                                <select data-kt-action="load_drop" wire:model="collector_id" name="collector_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
+                                <select data-kt-action="load_drop" wire:model="collector_id" name="collector_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer" disabled>
                                     <option>{{ __('select an option') }}</option>
                                     @foreach($collectors as $collector)
                                     <option value="{{ $collector->id }}">{{ $collector->user_name }}</option>
@@ -53,12 +53,12 @@
 
                             <label class="required fs-6 fw-semibold mb-2">{{ __('req no') }}</label>
 
-<select data-kt-action="load_drop" wire:model.live="trans_no" name="trans_no" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
-    <option>{{ __('select an option') }}</option>
-    @foreach($request_nos as $request_no)
-    <option value="{{ $request_no->trans_no}}">{{ $request_no->trans_no}}</option>
-    @endforeach
-</select>
+                            <select data-kt-action="load_drop" wire:model.live="trans_no" name="trans_no" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer">
+                                <option>{{ __('select an option') }}</option>
+                                @foreach($request_nos as $request_no)
+                                <option value="{{ $request_no->trans_no}}">{{ $request_no->trans_no}}</option>
+                                @endforeach
+                            </select>
 
                                 <!-- <input  data-kt-action="load_drop" type="text" wire:model.live="trans_no" name="trans_no" class="form-control mb-3 mb-lg-0" placeholder="{{ __('req no') }}" readonly/> -->
                                 <!--end::Input-->
@@ -184,6 +184,7 @@
                                                 <th class="min-w-50px">{{ __('qty') }}</th>
                                                 <th class="min-w-50px">{{ __('amount') }}</th>
                                                 <th class="min-w-50px">{{ __('num') }}</th>
+                                                <th class="min-w-50px">{{ __('reference no') }}</th>
                                                 <th class="min-w-50px">{{ __('action') }}</th>
                                             </tr>
                                         </thead>
@@ -205,6 +206,9 @@
                                                     </td>
                                                     <td>
                                                         {{ $stock_transfer->start_no." - ".$stock_transfer->end_no }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $stock_transfer->payment->reference }}
                                                     </td>
                                                     <td>
                                                 <button type="button"   class="btn btn-sm btn-outline btn-outline-dashed btn-outline-danger btn-active-light-danger me-1" >

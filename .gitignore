@@ -15,4 +15,3 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
-resources/views/livewire/invoice/add-invoice-general-modal.blade_l.php

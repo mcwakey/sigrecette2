@@ -17,7 +17,7 @@ $url = "stock-transfers/{$stock_transfer->to_user_id}?s_date={$stock_transfer->p
 
         <a             href="{{$url}}"
                        class="menu-link px-3 text-start text-wrap">
-        {{ $stock_transfer->user->name }}
+        {{ $stock_transfer->period_from." - ".$stock_transfer->period_to; }}
         </a>
 </div>
 <!--begin::User details-->

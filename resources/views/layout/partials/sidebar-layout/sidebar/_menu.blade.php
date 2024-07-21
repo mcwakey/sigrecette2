@@ -368,25 +368,18 @@
                             <span class="menu-title"> {{ __('Nouveau versement du collecteur') }}</span>
                         </a>
                     </div>
+
                     <div class="menu-item">
                         <a class="menu-link  {{ request()->routeIs('ticket.*') && request()->has('rc') && request()->input('rc') =='etat' ||  request()->has('autoClick') && request()->input('autoClick') =='addstatetbtn' ? 'active' : '' }}"
                            href="{{  App\Helpers\Constants::checkUrl(route('ticket.stock-transfers.index', ['rc' => 'etat'])) }}">
 		<span class="menu-bullet">
 			<span class="bullet bullet-dot"></span>
 		</span>
-                            <span class="menu-title"> {{  __('account state').__(' du collecteur') }}</span>
+                            <span class="menu-title"> {{  __('Nouvel etat de compte du Collecteur') }}</span>
                         </a>
                     </div>
-                    <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('ticket.stock-requests.*') && !request()->has('autoClick') ? 'active' : '' }}"
-                           href="{{  App\Helpers\Constants::checkUrl(route('ticket.stock-requests.index')) }}">
-								<span class="menu-bullet">
-									<span class="bullet bullet-dot"></span>
-								</span>
-                            <span class="menu-title">{{ __('Stock des valeurs inactives du regisseur') }}
-								</span>
-                        </a>
-                    </div>
+
+                    <div class="separator separator-dashed my-4 mx-11"></div>
 
                     <!--begin:Menu item-->
                     <div class="menu-item">
@@ -396,6 +389,16 @@
 									<span class="bullet bullet-dot"></span>
 								</span>
                             <span class="menu-title">{{ __('Stock des valeurs inactives des collecteurs') }}
+								</span>
+                        </a>
+                    </div>
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('ticket.stock-requests.*') && !request()->has('autoClick') ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('ticket.stock-requests.index')) }}">
+								<span class="menu-bullet">
+									<span class="bullet bullet-dot"></span>
+								</span>
+                            <span class="menu-title">{{ __('Stock des valeurs inactives du regisseur') }}
 								</span>
                         </a>
                     </div>
