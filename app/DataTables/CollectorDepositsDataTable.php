@@ -172,9 +172,13 @@ class CollectorDepositsDataTable extends DataTable
      */
     public function html(): HtmlBuilder
     {
+        $columns=$this->getColumns();
+
         return $this->builder()
             ->setTableId('collector_deposits-table')
-            ->columns($this->getColumns())
+            ->language('../../public/assets/js/datatable-fr.json')
+            // ->columns($this->getColumns())
+            ->columns($columns)
             ->minifiedAjax()
             ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')

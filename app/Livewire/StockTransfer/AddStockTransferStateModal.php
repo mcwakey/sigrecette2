@@ -115,7 +115,7 @@ class AddStockTransferStateModal extends Component
                         $stock_transfer_new = StockTransfer::create($stockTtransferData);
 
                         // $stock_transfer_old = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'VENDU')->where('to_user_id', $this->collector_id)->get();
-                        $stock_transfer_olds = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'VENDU')->where('taxable_id', $stock_transfer->taxable_id)->where('to_user_id', $this->collector_id)->orderBy('end_no', 'DESC')->get();
+                        $stock_transfer_olds = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'VENDU')->where('taxable_id', $stock_transfer->taxable_id)->where('trans_id',  $stock_transfer->trans_id)->orderBy('end_no', 'DESC')->get();
 
                         // dd($stock_transfer->end_no, $stock_transfer_olds->first()->end_no);
                         //dd($stock_transfer_olds->first()->last_no);

@@ -138,8 +138,8 @@ class CollectorsDataTable extends DataTable
             //     return view('pages.stock_transfers.columns._location', compact('stock_transfer'));
             // })
             ->editColumn('users.name', function (StockTransfer $stock_transfer) {
-                // return $stock_transfer->user->name;
-                return view('pages.stock_transfers.columns._collector', compact('stock_transfer'));
+                return $stock_transfer->user->name;
+                // return view('pages.stock_transfers.columns._collector', compact('stock_transfer'));
             })
 
             ->editColumn('stock_transfers.type', function (StockTransfer $stock_transfer) {
@@ -148,7 +148,8 @@ class CollectorsDataTable extends DataTable
             })
             ->editColumn('period', function (StockTransfer $stock_transfer) {
                 // return $stock_transfer->period_from->format('d M Y')." - ".$stock_transfer->period_to->format('d M Y');
-                return $stock_transfer->period_from." - ".$stock_transfer->period_to;
+                // return $stock_transfer->period_from." - ".$stock_transfer->period_to;
+                return view('pages.stock_transfers.columns._collector', compact('stock_transfer'));
             })
             ->addColumn('action', function (StockTransfer $stock_transfer) {
                 return view('pages.stock_transfers.columns._collector_actions', compact('stock_transfer'));
