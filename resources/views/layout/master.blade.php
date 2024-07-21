@@ -28,6 +28,10 @@
 
     <link rel="icon" type="image/png" href="assets/media/logos/logo.png" sizes="16x16 32x32" />
 
+    <!--begin::Fonts-->
+      {!! includeFonts() !!}
+    <!--end::Fonts-->
+
     <!--begin::Global Stylesheets Bundle(used by all pages)-->
     @foreach (getGlobalAssets('css') as $path)
         {!! sprintf('<link rel="stylesheet" href="%s">', asset($path)) !!}
