@@ -8,19 +8,26 @@
 
             <!--begin::Aside-->
             <div class="d-flex flex-lg-row-fluid w-lg-30 bgi-size-cover bgi-position-center order-1 order-lg-1"
-                style="background-image: url({{ image('misc/auth-bg-giz.jpeg') }})">
+                style="background-image: url({{ image('misc/auth-bg.jpeg') }})">
                 <!--begin::Content-->
                 <div class="d-flex flex-column align-items-center py-7 mt-18 py-lg-15 px-5 px-md-15 w-100">
                     <!--begin::Logo-->
-                    <a href="{{ route('dashboard') }}" class="mb-12">
-                        <img alt="Logo" src="{{ image('logos/custom-3.png') }}"  style="width: 280px;height:auto;object-fit:cover;" />
+                    <a href="{{ route('dashboard') }}" >
+                        <img alt="Logo" src="{{ image('logos/logo.png') }}"  style="width: 300px;height:300px;object-fit:cover;" />
                     </a>
 
-                    <!--begin::Title-->
-                    <h2 class="d-none d-lg-block text-white fs-2qx fw-bolder text-center mb-1">
+                    <style>
+                        .sig-logo-text{
+                            position: relative;
+                            top: -44px;
+                        }
+                    </style>
+
+                    <!-- begin::Title-->
+                    <h2 class="sig-logo-text d-none d-lg-block text-white fs-2qx fw-bolder text-center mb-1">
                         {{ __('SIG-Recette') }}
                     </h2>
-                    <!--end::Title-->
+                    <!--end::Title -->
 
                 </div>
                 <!--end::Content-->

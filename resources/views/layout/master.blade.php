@@ -10,10 +10,8 @@
     <meta name="description" content="" />
     <meta name="keywords" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content="fr_FR" />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="" />
-    <link rel="canonical" href="" />
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -28,11 +26,7 @@
         integrity="sha512-OFs3W4DIZ5ZkrDhBFtsCP6JXtMEDGmhl0QPlmWYBJay40TT1n3gt2Xuw8Pf/iezgW9CdabjkNChRqozl/YADmg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    {!! includeFavicon() !!}
-
-    <!--begin::Fonts-->
-    {!! includeFonts() !!}
-    <!--end::Fonts-->
+    <link rel="icon" type="image/png" href="assets/media/logos/logo.png" sizes="16x16 32x32" />
 
     <!--begin::Global Stylesheets Bundle(used by all pages)-->
     @foreach (getGlobalAssets('css') as $path)
