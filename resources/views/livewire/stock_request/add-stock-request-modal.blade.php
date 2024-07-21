@@ -187,10 +187,6 @@
                                                              <span class="path5"></span>
                                                             </i>
                                                     </span>
-                                                    <!-- <span class="indicator-progress" wire:loading >
-                                    {{ __('chargenment ...') }} -->
-                                        <!-- <span class="spinner-border spinner-border-sm align-middle ms-2"></span> -->
-                                    <!-- </span> -->
                                                 </button>
                                             </td>
                                         </tr>

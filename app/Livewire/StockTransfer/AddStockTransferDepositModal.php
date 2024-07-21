@@ -74,7 +74,7 @@ class AddStockTransferDepositModal extends Component
                 // $rules['taxlabel_id'] = 'required';
                 $rules['start_no'] = 'nullable|numeric|min:' . $this->select_transfer->start_no . '|max:' . ($this->select_transfer->end_no-1);
                 $rules['end_no'] = 'nullable|numeric|min:' . ( $this->select_transfer->start_no + 1) . '|max:' .$this->select_transfer->end_no;
-               
+
             }else{
             }
         }
@@ -138,7 +138,15 @@ class AddStockTransferDepositModal extends Component
     public function mount($id){
        $this->collector_id =$id;
     }
+    public function deleteStockTransfer($id)
+    {
+        $stock_transfert = StockTransfer::find($id);
+        $payment_id = $stock_transfert?->payment_id;
+        StockTransfer::destroy($id);
+        Payment::destroy($payment_id);
+        $this->updateStockTransfer();
 
+    }
     public function render()
     {
 
@@ -199,12 +207,16 @@ class AddStockTransferDepositModal extends Component
 
         $this->stock_transfers = StockTransfer::where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->where('trans_no', $value)->where('type','ACTIVE')->get();
 
+      $this-> updateStockTransfer();
+    }
+
+    public function updateStockTransfer()
+    {
         $this->stock_transfers_v = StockTransfer::
         where('trans_type', 'VENDU')
             ->where('type','ACTIVE')
             ->where('to_user_id', $this->collector_id)->get();
     }
-
     public function updatedStockTransferId($value)
     {
         if($value==null){
@@ -523,10 +535,10 @@ class AddStockTransferDepositModal extends Component
                         $stock_transfers = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'VENDU')->where('to_user_id', $this->collector_id)->get();
                         // $stock_transfers = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'VENDU')->where('taxable_id', $stock_transfer->taxable_id)->where('trans_id', $stock_transfer->trans_id)->where('to_user_id', $this->collector_id)->orderBy('end_no', 'DESC')->get();
                         // $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('type','ACTIVE')->where('to_user_id', $this->collector_id)->get();
-                
+
 
                         foreach ($stock_transfers as $stock_transfer) {
-                        
+
                             $payment = Payment::find( $stock_transfer->payment_id);
 
                             if ($payment->reference == null ||  trim($payment->reference) == '') {
@@ -537,7 +549,7 @@ class AddStockTransferDepositModal extends Component
 
                     }else{
                         // dd('2');
-                        
+
 
                         // Prepare the data for creating a new Taxable
                         $data = [
@@ -618,7 +630,7 @@ class AddStockTransferDepositModal extends Component
                         // }
 
                         //dd($data);
-                    
+
                     }
                 }
 
@@ -760,12 +772,7 @@ class AddStockTransferDepositModal extends Component
         // $this->collector_idd = $stock_transfer->to_user_id;
         // //dd($stock_transfer);
         // $this->collector_name = $stock_transfer->user->name;
-    }public function deleteStockRequest($id)
-{
-    StockTransfer::destroy($id);
-
-    // $this->dispatchMessage('line', 'delete');
-}
+    }
 
     public function hydrate()
     {
