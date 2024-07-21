@@ -111,7 +111,7 @@ class AddAccountantDepositModal extends Component
                         'description' => "Versement",
                         'user_id' => Auth::id(),
                         'r_user_id' => null,
-                        'reference' => $this->reference,
+                        'reference_deposit' => $this->reference,
                     ];
 
                     //dd($paymentData);
@@ -135,6 +135,7 @@ class AddAccountantDepositModal extends Component
                         // ];
 
                         // $stock_transfer_new = StockTransfer::create($stockTtransferData);
+                        $payments_old->reference_deposit = $this->reference;
                         $payments_old->status = 'DONE';
                         $payments_old->save();
                     }
