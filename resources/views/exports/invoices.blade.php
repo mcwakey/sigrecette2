@@ -232,12 +232,12 @@
                         <td style="text-align: center">{{$item->ii_seize}}</td>
                         <td style="text-align: center">{{$item->ii_tariff}}</td>
                         <td style="text-align: center">{{$item->qty}}</td>
-                        <td style="text-align: center">{{$item->amount}}</td>
+                        <td style="text-align: center">{{format_amount($item->amount) }}</td>
                     </tr>
                 @endforeach
                 <tr>
                     <th colspan="6" style="text-align: right;">Total:</th>
-                    <td style="text-align: center;">{{$invoice->amount}}</td>
+                    <td style="text-align: center;">{{ format_amount($invoice->amount) }}</td>
                 </tr>
                 <tr>
                     <th colspan="7">Tableau du nouveau décompte</th>
@@ -266,14 +266,14 @@
                     <td style="text-align: center">{{$item->ii_seize}}</td>
                     <td style="text-align: center">{{$item->ii_tariff}}</td>
                     <td style="text-align: center">{{$item->qty}}</td>
-                    <td style="text-align: center">{{$item->amount}}</td>
+                    <td style="text-align: center">{{format_amount($item->amount)}}</td>
                 </tr>
             @endforeach
 
             <tr>
                 <td colspan="6" style="text-align: right;"><strong>Total :</strong></td>
 
-                <td style="text-align: center;">{{$data->amount}}</td>
+                <td style="text-align: center;">{{format_amount($data->amount)}}</td>
 
 
             </tr>
@@ -304,17 +304,27 @@
                             class="write"> {{date("d/m/Y", strtotime( $data->from_date))}}</span></p>
                 </td>
                 <td class="">
+
+                </td>
+                <td class="">
                     <p>Le Maire <span>{{ " ".$commune->mayor_name}}</span></p>
+                </td>
+                <td class="">
+
                 </td>
                 <td class="">
                     <p><span
                             class="write"> </span></p>
                 </td>
                 <td class="">
+
+                </td>
+                <td class="">
                     <p><span> </span></p>
                 </td>
             </tr>
         </table>
+
         @if($action==1)
             <p>N.B. Le paiement peut être effectué en numéraire, par chèque au nom du Receveur de la <span
                     class="write"> {{$commune->title}}</span>. ou
