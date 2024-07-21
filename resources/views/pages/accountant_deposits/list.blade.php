@@ -28,14 +28,14 @@
                                 class="ki-duotone ki-black-right-line fs-2 rotate-270 ms-3"><span
                                     class="path1"></span><span class="path2"></span></i></a>
                     </div>
-                <div class="d-flex align-items-center ms-5">
+                {{-- <div class="d-flex align-items-center ms-5">
                     <select class="form-select" id="mySearchThree">
                         <option value="">{{ __("Type de recettes") }}</option>
                         <option value="{{App\Helpers\Constants::INVOICE_TYPE_TITRE}}">{{__('Recettes sur titre')}}</option>
                         <option value="{{App\Helpers\Constants::INVOICE_TYPE_COMPTANT}}">{{__('Recettes au comptant')}}</option>
 
                     </select>
-                </div>
+                </div> --}}
             </div>
             <!--begin::Card title-->
 
@@ -63,7 +63,7 @@
 
                     @can('peut effectuer un versement au receveur')
 
-                        <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
+                        {{-- <div class="d-flex justify-content-end ms-5" data-kt-stock_request-table-toolbar="base">
                             <!--begin::Add user-->
                             <button type="button" class="btn btn-warning" data-bs-toggle="modal"
                                     id="addrdepositbtn"
@@ -72,7 +72,7 @@
                                 {{ __('new deposit') }}
                             </button>
                             <!--end::Add user-->
-                        </div>
+                        </div> --}}
 
                     @endcan
                 <!--end::Toolbar-->
