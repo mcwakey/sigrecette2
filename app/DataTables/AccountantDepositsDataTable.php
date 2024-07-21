@@ -160,8 +160,8 @@ class AccountantDepositsDataTable extends DataTable
                     // ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
                     // ->join('users', 'payments.to_user_id', '=', 'users.id')
                     //  ->orWhere('invoice_id', null) // Filter collector_deposits by taxpayer_id
-                    // ->where('invoice_type', 'TITRE') // Filter collector_deposits by taxpayer_id
-                    ->where('status',PaymentStatusEnums::ACCOUNTED) // Filter collector_deposits by taxpayer_id
+                    ->where('invoice_type', '!=', 'VERSEMENT') // Filter collector_deposits by taxpayer_id
+                    ->where('reference_deposit', null)
                     // ->select('payments.*')
                     //->orderBy('tax_labels.name')
                     ->newQuery();

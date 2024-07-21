@@ -81,7 +81,7 @@ class LedgersDataTable extends DataTable
                     // ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
                     // ->join('users', 'payments.to_user_id', '=', 'users.id')
             ->whereNot('status', PaymentStatusEnums::PENDING) // Filter collector_deposits by taxpayer_id
-            ->whereNotIn('payments.reference', [Constants::ANNULATION, Constants::REDUCTION])
+            // ->whereNotIn('payments.reference', [Constants::ANNULATION, Constants::REDUCTION])
             ->whereBetween('payments.created_at', [$startOfYear, $endOfYear])
             ->orderBy('created_at', 'asc')
             ->newQuery();
