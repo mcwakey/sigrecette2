@@ -208,10 +208,13 @@
                                                         {{ $stock_transfer->start_no." - ".$stock_transfer->end_no }}
                                                     </td>
                                                     <td>
-                                                        {{ $stock_transfer->payment->reference }}
+
+                                                        {{ $stock_transfer->payment?->reference }}
                                                     </td>
                                                     <td>
-                                                <button type="button"   class="btn btn-sm btn-outline btn-outline-dashed btn-outline-danger btn-active-light-danger me-1" >
+
+                                                <button type="button"   class="btn btn-sm btn-outline btn-outline-dashed btn-outline-danger btn-active-light-danger me-1" wire:click="deleteStockTransfer({{ $stock_transfer->id }})">
+
                                                     <span class="indicator-label">
                                                           <span class="indicator-label">
                                                         <i class="ki-duotone ki-trash">
@@ -223,10 +226,6 @@
                                                             </i>
                                                     </span>
                                                     </span>
-                                                    <!-- <span class="indicator-progress" wire:loading >
-                                    {{ __('chargenment ...') }} -->
-                                        <!-- <span class="spinner-border spinner-border-sm align-middle ms-2"></span> -->
-                                    <!-- </span> -->
                                                 </button>
                                             </td>
                                                 </tr>

@@ -83,7 +83,7 @@
                             </div>
                             <div class="col-md-4">
                                 <!--begin::Label-->
-                                <label class="required fs-6 fw-semibold mb-2">{{ __('reference no') }}</label>
+                                <label class="fs-6 fw-semibold mb-2">{{ __('reference no') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
 

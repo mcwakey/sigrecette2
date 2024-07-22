@@ -18,19 +18,19 @@
     <!--end::Menu item-->
 
     <!--begin::Menu item-->
-    <div class="menu-item px-3">
+    {{-- <div class="menu-item px-3">
         <a href="#" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{ $payment->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_stock_transfer" data-kt-action="update_taxable">
         {{ __('edit') }}
         </a>
-    </div>
+    </div> --}}
     <!--end::Menu item-->
 
     <!--begin::Menu item-->
-    <div class="menu-item px-3">
+    {{-- <div class="menu-item px-3">
         <a href="#" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{ $payment->id }}" data-kt-action="delete_taxpayer">
         {{ __('delete') }}
         </a>
-    </div>
+    </div> --}}
     <!--end::Menu item-->
 
     <!--begin::Menu item-->

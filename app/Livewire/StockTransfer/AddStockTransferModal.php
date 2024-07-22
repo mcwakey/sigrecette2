@@ -65,6 +65,7 @@ class AddStockTransferModal extends Component
             'collector_id' => 'required',
             'trans_no' => 'required',
             'qty' => 'required',
+            'taxable_id'=> 'required',
             'start_no'=> 'nullable|numeric|min:' . $this->select_stock->start_no . '|max:' . ($this->select_stock->end_no-1),
             'end_no' => 'nullable|numeric|min:' . ( $this->select_stock->start_no + 1) . '|max:' .$this->select_stock->end_no,
         ];
@@ -185,16 +186,16 @@ class AddStockTransferModal extends Component
 
         $request= StockRequest::find($value);
         $this->select_stock =$request;
-        $this->trans_no = $request->req_no;
-        $this->taxable_id =$request->taxable->id;
-        $value= $request->taxable->id;
-        $this->tariff = $request->taxable->tariff;
+        $this->trans_no = $request?->req_no;
+        $this->taxable_id =$request?->taxable->id;
+        $value= $request?->taxable->id;
+        $this->tariff = $request?->taxable->tariff;
         $qty=0;
-        $stock_transfers = StockTransfer::where("stock_request_id", $request->id)->where('type', 'ACTIVE')->whereIn('trans_type',[ 'RECU','RENDU'])->get();
+        $stock_transfers = StockTransfer::where("stock_request_id", $request?->id)->where('type', 'ACTIVE')->whereIn('trans_type',[ 'RECU','RENDU'])->get();
         foreach ($stock_transfers as $transfer){
             $qty+=$transfer->qty;
         }
-        $this->remaining_qty =  $request->qty -$qty;
+        $this->remaining_qty =  $request?->qty -$qty;
        // dd($qty, $request->id);
         if ($this->deposit_mode) {
             $taxables = Taxable::select('taxables.*', 'trans_no', 'trans_id', 'last_no', 'stock_transfers.id AS stock_transfers_id')
@@ -357,6 +358,14 @@ class AddStockTransferModal extends Component
         }
         $this->total = $this->qty * $this->tariff;
     }
+
+    public function deleteStockTransfer($id)
+    {
+        StockTransfer::destroy($id);
+
+        // $this->dispatchMessage('line', 'delete');
+    }
+
 
     public function submit()
     {

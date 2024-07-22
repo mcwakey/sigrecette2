@@ -84,8 +84,8 @@
     <!--end::Javascript-->
 
 
-    <livewire:stock_request.add-stock-request-modal />
-    <livewire:stock_transfer.add-stock-transfer-modal />
+
+
     <livewire:accountant_deposit.add-accountant-deposit-modal />
     <script>
         document.addEventListener('livewire:init', () => {
@@ -130,7 +130,7 @@
                         button.click();
                     }
                 }
-            }, 1000);
+            }, 2000);
         };
 
 

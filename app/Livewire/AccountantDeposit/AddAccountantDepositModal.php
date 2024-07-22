@@ -60,6 +60,7 @@ class AddAccountantDepositModal extends Component
 
     protected $rules = [
         'total_amount' => 'required',
+        'payment_type' => 'required',
     ];
 
     protected $listeners = [
@@ -111,7 +112,8 @@ class AddAccountantDepositModal extends Component
                         'description' => "Versement",
                         'user_id' => Auth::id(),
                         'r_user_id' => null,
-                        'reference_deposit' => $this->reference,
+                        'reference' => $this->reference,
+                        'invoice_type' => 'VERSEMENT',
                     ];
 
                     //dd($paymentData);

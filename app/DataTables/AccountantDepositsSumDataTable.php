@@ -41,22 +41,22 @@ class AccountantDepositsSumDataTable extends DataTable
             ->editColumn('payments.created_at', function (Payment $payment) {
                 return $payment->created_at->format('d M Y');
             })
-            ->editColumn('invoice_no', function (Payment $payment) {
-                return $payment->invoice->invoice_no ?? '';
-            })
-            ->editColumn('order_no', function (Payment $payment) {
-                return $payment->invoice->order_no ?? '';
-            })
-            ->editColumn('reference', function (Payment $payment) {
-                return $payment->reference;
-            })
-            ->editColumn('amount', function (Payment $payment) {
-                return $payment->amount;
-            })
-            ->editColumn('stock_transfers.code', function (Payment $payment) {
-                return $payment->stock_transfers->first()->code ?? '';
-                //return $payment->code;
-            })
+            // ->editColumn('invoice_no', function (Payment $payment) {
+            //     return $payment->invoice->invoice_no ?? '';
+            // })
+            // ->editColumn('order_no', function (Payment $payment) {
+            //     return $payment->invoice->order_no ?? '';
+            // })
+            // ->editColumn('reference', function (Payment $payment) {
+            //     return $payment->reference;
+            // })
+            // ->editColumn('amount', function (Payment $payment) {
+            //     return $payment->amount;
+            // })
+            // ->editColumn('stock_transfers.code', function (Payment $payment) {
+            //     return $payment->stock_transfers->first()->code ?? '';
+            //     //return $payment->code;
+            // })
             // ->editColumn('tariff', function (Payment $payment) {
             //     return $payment->taxable->tariff;
             // })
@@ -139,10 +139,12 @@ class AccountantDepositsSumDataTable extends DataTable
             // ->editColumn('users.name', function (Payment $payment) {
             //     return $payment->user->name;
             // })
-            // ->editColumn('payments.type', function (Payment $payment) {
-            //     return view('pages.payments.columns._status', compact('payment'));
-            //     //return $stock_request->type;
-            // })
+            ->editColumn('reference_deposit', function (Payment $payment) {
+                return view('pages.accountant_deposits.columns._reference', compact('payment'));
+            })
+            ->editColumn('status', function (Payment $payment) {
+                return view('pages.accountant_deposits.columns._status', compact('payment'));
+            })
             ->addColumn('action', function (Payment $payment) {
                 return view('pages.accountant_deposits.columns._actions', compact('payment'));
             })
@@ -184,13 +186,13 @@ class AccountantDepositsSumDataTable extends DataTable
                 //  DB::raw('MAX(stock_requests.last_no) AS last_no'),
                 //  DB::raw('MIN(stock_requests.req_type) AS req_type'),
                 //  DB::raw('MIN(stock_requests.type) AS type'),
-                //  DB::raw('MAX(stock_requests.user_id) AS user_id'),
+                 DB::raw('MAX(status) AS status'),
                  DB::raw('MAX(payments.updated_at) AS created_at')
                 //  DB::raw('MAX(stock_requests.taxable_id) AS taxable_id')
                 )
                 
         // ->where('status',PaymentStatusEnums::ACCOUNTED) // Filter collector_deposits by taxpayer_id
-        ->groupBy('reference_deposit')
+        ->groupBy('reference_deposit', 'status')
         ->orderBy('reference_deposit', 'asc');
     }
 
@@ -238,7 +240,7 @@ class AccountantDepositsSumDataTable extends DataTable
             // // // Column::make('total2')->title(__('sd total')),
             // // Column::make('tax_labels.code')->title(__('code')),
             // // Column::make('users.name')->title(__('collector')),
-            // // Column::make('payments.type')->title(__('status')),
+            Column::make('status')->title(__('status')),
             Column::computed('action')->title(__('action'))
                 ->addClass('text-end text-nowrap')
                 ->exportable(false)
