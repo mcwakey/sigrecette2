@@ -42,8 +42,8 @@ class DatabaseSeeder extends Seeder
 
         array_push(
             $seedersArray,
-            TaxLabelsSeeder::class,
-            TaxablesSeeder::class,
+            // TaxLabelsSeeder::class,
+            // TaxablesSeeder::class,
             UsersSeeder::class,
             RolesPermissionsSeeder::class,
             GendersSeeder::class,
