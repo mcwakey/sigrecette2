@@ -67,6 +67,7 @@ class Constants
         self::INVOICE_TYPE_COMPTANT_KEY => Constants::INVOICE_TYPE_COMPTANT,
         self::INVOICE_TYPE_TITRE_KEY => Constants::INVOICE_TYPE_TITRE,
     ];
+    const REFERENCE_DEPOSIT_NULL ="ref_deposit_is_null";
     public static function getMonths():array{
         $months = [];
         for ($i = 1 ; $i <= 12; $i++) {

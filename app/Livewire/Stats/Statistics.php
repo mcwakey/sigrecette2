@@ -8,16 +8,16 @@ use App\Enums\TaxpayerStaticsEnums;
 use App\Services\StatisticsService;
 use Livewire\Attributes\On;
 use Livewire\Component;
-
+use Carbon\Carbon;
 class Statistics extends Component
 {
     protected $statisticsService;
-    protected  $startDate;
-    protected  $endDate;
+    public  $startDate;
+    public  $endDate;
     public function mount( $startDate,$endDate)
     {
-        $this->endDate= $endDate;
-        $this->startDate = $startDate;
+        $this->endDate= $endDate->toDateString();
+        $this->startDate =$startDate->toDateString();;
         $this->assignStats();
     }
     public function assignStats()
@@ -33,8 +33,10 @@ class Statistics extends Component
     }
     public function render()
     {
+        $startDate = Carbon::parse($this->startDate);
+        $endDate = Carbon::parse($this->endDate);
         return view('livewire.stats.statistics',[
-            'invoice_count'=> $this->statisticsService->getTotalRemainingToBeCollected($this->startDate,$this->endDate),
+            'invoice_count' => $this->statisticsService->getTotalRemainingToBeCollected($startDate, $endDate),
             'stats_reactive'=>[
                 StatisticKeysEnums::BY_INVOICE=>$this->statisticsService->getStats(InvoiceStaticsEnums::BY_INVOICE),
                 StatisticKeysEnums::BY_GENDER => $this->statisticsService->getStats( TaxpayerStaticsEnums::BY_GENDER)

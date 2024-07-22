@@ -9,12 +9,23 @@
             Aviser
         </a>
     </div> -->
-    
-    <div class="menu-item px-3">
-        <a href="#" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{ $payment->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_stock_transfer" data-kt-action="update_taxable">
-        {{ __('view') }}
-        </a>
-    </div>
+
+    @if($payment->reference_deposit == null )
+        <div class="menu-item px-3">
+            <a href="{{ '/accounts/accountant-deposits-title/'.App\Helpers\Constants::REFERENCE_DEPOSIT_NULL}}"
+               class="menu-link px-3 text-start text-wrap"   >
+                {{ __('view') }}
+            </a>
+        </div>
+    @else
+        <div class="menu-item px-3">
+            <a href="{{ '/accounts/accountant-deposits-title/'.$payment->reference_deposit}}"
+               class="menu-link px-3 text-start text-wrap"   >
+                {{ __('view') }}
+            </a>
+        </div>
+    @endif
+
     <!--end::Menu item-->
 
     <!--begin::Menu item-->

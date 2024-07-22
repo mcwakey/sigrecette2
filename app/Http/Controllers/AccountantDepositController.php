@@ -16,9 +16,9 @@ class AccountantDepositController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(AccountantDepositsDataTable $dataTable)
+    public function show(string $ref,AccountantDepositsDataTable $dataTable)
     {
-        // return view('pages/tax_labels.show', compact('tax_label'));
+        dump($ref);
         return $dataTable->render('pages/accountant_deposits.show');
     }
 }
