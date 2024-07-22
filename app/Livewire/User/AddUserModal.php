@@ -57,11 +57,11 @@ class AddUserModal extends Component
             $this->rules['email'] = 'required|email|unique:users,email,' . $this->user_id;
         }
 
-        $roleNeedZone = [__('agent_recouvrement'), __('collecteur'), __('regisseur')];
+        $roleNeedZone = [__('agent_recouvrement'), __('collecteur'), ];
 
         if (in_array(__($this->role), $roleNeedZone)) {
             $this->rules['zone_id'] = 'required|integer';
-        } else if ($this->zone_id) {
+        } else if ($this->zone_id && $this->role != 'regisseur') {
             $this->zone_id =  null;
         }
 
