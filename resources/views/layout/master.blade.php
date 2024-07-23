@@ -13,24 +13,17 @@
     <meta property="og:locale" content="fr_FR" />
     <meta property="og:type" content="article" />
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css"
-        integrity="sha512-6ZCLMiYwTeli2rVh3XAPxy3YoR5fVxGdH/pz+KMCzRY2M65Emgkw00Yqmhh8qLGeYQ3LbVZGdmOX9KUjSKr0TA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css"
-        integrity="sha512-mQ77VzAakzdpWdgfL/lM1ksNy89uFgibRQANsNneSTMD/bj0Y/8+94XMwYhnbzx8eki2hrbPpDm0vD0CiT2lcg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"
-        integrity="sha512-OFs3W4DIZ5ZkrDhBFtsCP6JXtMEDGmhl0QPlmWYBJay40TT1n3gt2Xuw8Pf/iezgW9CdabjkNChRqozl/YADmg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- LeaftLet -->
+    <link rel="stylesheet" href="/assets/js/leaftlet/leaftlet.css">
+    <script async defer src="/assets/js/leaftlet/leaftlet.js"></script> 
+    
+    <!-- Marker Cluster LeaftLet -->
+    <link rel="stylesheet" href="/assets/js/leaftlet/MarkerCluster.css">
+    <link rel="stylesheet" href="/assets/js/leaftlet/MarkerCluster.Default.css">
+    <script async defer src="/assets/js/leaftlet/markercluster.js"></script>
 
     <link rel="icon" type="image/png" href="assets/media/logos/logo.png" sizes="16x16 32x32" />
-
-    <!--begin::Fonts-->
-      {!! includeFonts() !!}
-    <!--end::Fonts-->
+    <link rel="stylesheet" href="/assets/css/fonts.css">
 
     <!--begin::Global Stylesheets Bundle(used by all pages)-->
     @foreach (getGlobalAssets('css') as $path)
@@ -84,8 +77,6 @@
     <!--end::Javascript-->
 
 
-
-
     <livewire:accountant_deposit.add-accountant-deposit-modal />
     <script>
         document.addEventListener('livewire:init', () => {
@@ -115,25 +106,18 @@
             });
         });
 
-        function handleClick(buttonId) {
-            //
-        }
-
         window.onload = function() {
             setTimeout(function() {
                 const urlParams = new URLSearchParams(window.location.search);
                 let autoClickValue = urlParams.get('autoClick');
                 if (autoClickValue) {
                     const button = document.getElementById(autoClickValue);
-                    console.log(button);
                     if (button) {
                         button.click();
                     }
                 }
             }, 2000);
         };
-
-
 
         const currentHref = window.location.href;
 

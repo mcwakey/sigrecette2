@@ -202,7 +202,7 @@
                                             {{ __('new taxpayer') }}
                                         </button>
                                         <!--end::Add user-->
-                                     pour faire une nouvelle demande d'approvisionnement.
+                                     pour créer  un nouveau contribuable.
                                 </div>
                                 <div class="fs-6 text-gray-700 mt-2">
                                  -> utiliser le selecteur <a href="#"
