@@ -153,8 +153,12 @@
 
 
         <h2 class="text-center">
+            @if($data->type ==App\Helpers\Constants::INVOICE_TYPE_TITRE)
+                <span>@if($action===1) AVIS DES SOMMES À PAYER @else AVIS DE REDUCTION OU D’ANNULATION @endif </span>
+            @else
+                <span>AVIS AU COMPTANT</span>
+            @endif
 
-            <span>@if($action===1) AVIS DES SOMMES À PAYER @else AVIS DE REDUCTION OU D’ANNULATION @endif </span>
 
         </h2>
         <h6>N°:<span class="write">{{$data->invoice_no}}/</span>{{date("Y", strtotime($data->from_date))}}</h6>
