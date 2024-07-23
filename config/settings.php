@@ -86,7 +86,7 @@ return [
         ],
         'google-jsapi' => [
             'js' => [
-                '//www.google.com/jsapi',
+                // '//www.google.com/jsapi',
             ],
         ],
         'tinymce' => [
@@ -192,30 +192,30 @@ return [
         ],
         'amcharts' => [
             'js' => [
-                'https://cdn.amcharts.com/lib/5/index.js',
-                'https://cdn.amcharts.com/lib/5/xy.js',
-                'https://cdn.amcharts.com/lib/5/percent.js',
-                'https://cdn.amcharts.com/lib/5/radar.js',
-                'https://cdn.amcharts.com/lib/5/themes/Animated.js',
+                // 'https://cdn.amcharts.com/lib/5/index.js',
+                // 'https://cdn.amcharts.com/lib/5/xy.js',
+                // 'https://cdn.amcharts.com/lib/5/percent.js',
+                // 'https://cdn.amcharts.com/lib/5/radar.js',
+                // 'https://cdn.amcharts.com/lib/5/themes/Animated.js',
             ],
         ],
         'amcharts-maps' => [
             'js' => [
-                'https://cdn.amcharts.com/lib/5/index.js',
-                'https://cdn.amcharts.com/lib/5/map.js',
-                'https://cdn.amcharts.com/lib/5/geodata/worldLow.js',
-                'https://cdn.amcharts.com/lib/5/geodata/continentsLow.js',
-                'https://cdn.amcharts.com/lib/5/geodata/usaLow.js',
-                'https://cdn.amcharts.com/lib/5/geodata/worldTimeZonesLow.js',
-                'https://cdn.amcharts.com/lib/5/geodata/worldTimeZoneAreasLow.js',
-                'https://cdn.amcharts.com/lib/5/themes/Animated.js',
+                // 'https://cdn.amcharts.com/lib/5/index.js',
+                // 'https://cdn.amcharts.com/lib/5/map.js',
+                // 'https://cdn.amcharts.com/lib/5/geodata/worldLow.js',
+                // 'https://cdn.amcharts.com/lib/5/geodata/continentsLow.js',
+                // 'https://cdn.amcharts.com/lib/5/geodata/usaLow.js',
+                // 'https://cdn.amcharts.com/lib/5/geodata/worldTimeZonesLow.js',
+                // 'https://cdn.amcharts.com/lib/5/geodata/worldTimeZoneAreasLow.js',
+                // 'https://cdn.amcharts.com/lib/5/themes/Animated.js',
             ],
         ],
         'amcharts-stock' => [
             'js' => [
-                'https://cdn.amcharts.com/lib/5/index.js',
-                'https://cdn.amcharts.com/lib/5/xy.js',
-                'https://cdn.amcharts.com/lib/5/themes/Animated.js',
+                // 'https://cdn.amcharts.com/lib/5/index.js',
+                // 'https://cdn.amcharts.com/lib/5/xy.js',
+                // 'https://cdn.amcharts.com/lib/5/themes/Animated.js',
             ],
         ],
         'bootstrap-select' => [

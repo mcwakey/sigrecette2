@@ -23,8 +23,8 @@
     <script async defer src="/assets/js/leaftlet/markercluster.js"></script>
 
     <!-- amr5 graphiques -->
-    <script async defer src="assets/js/am5/percent.js"></script>
     <script async defer src="assets/js/am5/index.js"></script>
+    <script async defer src="assets/js/am5/percent.js"></script>
     <script async defer src="assets/js/am5/xy.js"></script>
     <script async defer src="assets/js/am5/animated.js"></script>
     <script async defer src="assets/js/am5/de_de.js"></script>
