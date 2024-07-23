@@ -56,7 +56,7 @@ class PdfGenerator  implements PdfGeneratorInterface
             }
 
 
-            $filename = "Invoice-" . (isset($invoice) ? $invoice->invoice_no : $default_invoice->invoice_no) . '-' . date('Ymd_His') . ".pdf";
+            $filename = "Avis-" . (isset($invoice) ? $invoice->invoice_no : $default_invoice->invoice_no) . '-' . date('Ymd_His') . ".pdf";
             if($action ==null){
 
                 $action=1;
@@ -103,7 +103,7 @@ class PdfGenerator  implements PdfGeneratorInterface
         }
         if ($this->checkIfCommuneIsNotNull()&& count($data)>0) {
 
-            $filename = "Invoice-list-" .count($data). '-' . date('Ymd_His') . ".pdf";
+            $filename = "Avis-liste-" .count($data). '-' . date('Ymd_His') . ".pdf";
             //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
             $pdf =
                 PDF::loadView(

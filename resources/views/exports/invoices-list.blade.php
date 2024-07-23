@@ -160,9 +160,9 @@
             <td>{{$item->taxpayer?->longitude,$item->taxpayer?->latitude}}</td>
             <td>
                 @if($action==2)
-                    {{$item->reduce_amount}}
+                    {{format_amount($item->reduce_amount)}}
                 @else
-                    {{$item->amount}}
+                    {{format_amount($item->amount)}}
                 @endif
 
             </td>
