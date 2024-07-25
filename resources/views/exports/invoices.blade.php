@@ -234,7 +234,7 @@
                         <td style="text-align: center">{{$item->taxpayer_taxable->name}}</td>
                         <td style="text-align: center"> {{$item->taxpayer_taxable->taxable->unit}}</td>
                         <td style="text-align: center">{{$item->ii_seize}}</td>
-                        <td style="text-align: center">{{$item->ii_tariff}}</td>
+                        <td style="text-align: center">{{format_amount($item->ii_tariff)}}</td>
                         <td style="text-align: center">{{$item->qty}}</td>
                         <td style="text-align: center">{{format_amount($item->amount) }}</td>
                     </tr>

@@ -16,6 +16,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'SIG-RECETTE'),
+    'disable_taxpayers_on_load' => env('DISABLE_TAXPAYERS_ON_LOAD', false),
 
     /*
     |--------------------------------------------------------------------------

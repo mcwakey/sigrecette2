@@ -46,7 +46,7 @@
                              data-kt-menu="true" id="print-modal">
                             <div class="menu-item px-3">
                                 @php
-                                    $data = [$user->id];
+                                    $data = [$user->id,$dateTo];
                                 @endphp
                                 <a href="{{ route('generatePdf', ['data' => json_encode($data),'type' => '6']) }}" class="menu-link px-3 print-link" data-type="1" target="_blank">
                                     {{ __('ETAT DE COMPTABILITE DES VALEURS INACTIVES ') }}

@@ -53,7 +53,8 @@ class AddStatusForm extends Component
     ];
     public function render()
     {
-        return view('livewire.invoice.add-status-form');
+        $invoice = Invoice::find($this->invoice_id);
+        return view('livewire.invoice.add-status-form', compact('invoice'));
     }
 
     public function validateData(){

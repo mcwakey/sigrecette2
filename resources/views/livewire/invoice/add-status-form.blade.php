@@ -3,7 +3,6 @@
     <div class="fv-row mb-5">
         <!--begin::Label-->
 
-
         <!--end::Label-->
         <!--begin::Input-->
         <input type="hidden" wire:model="invoice_id" name="invoice_id" class="form-control form-control-solid mb-3 mb-lg-0"
@@ -13,12 +12,23 @@
             <select class="form-select form-select-solid" wire:model="status" name="status"
                     data-placeholder="Select option" data-allow-clear="true">
                 <option>{{ __('select an option') }}</option>
+
                 @if ($status ==  App\Enums\InvoiceStatusEnums::PENDING)
-                    @can('peut prendre en charge un avis sur titre')
-                        <option value="{{App\Enums\InvoiceStatusEnums::APPROVED  }}">{{ __('APROVED') }}</option>
-                    @endcan
+                    @if($invoice->type ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY)
+                        @can('peut prendre en charge un avis sur titre')
+                            <option value="{{App\Enums\InvoiceStatusEnums::APPROVED  }}">{{ __('APROVED') }}</option>
+                        @endcan
+                    @else
+                        @can('peut prendre en charge un avis au comptant')
+                            <option value="{{App\Enums\InvoiceStatusEnums::APPROVED  }}">{{ __('APROVED') }}</option>
+                        @endcan
+                    @endif
 
                     @can('peut rejeter un avis sur titre (agent par délégation du receveur)')
+                        <option value="{{ App\Enums\InvoiceStatusEnums::REJECTED }}">{{ __('REJECTED') }}</option>
+                    @endcan
+
+                    @can('peut prendre en charge un avis au comptant')
                         <option value="{{ App\Enums\InvoiceStatusEnums::REJECTED }}">{{ __('REJECTED') }}</option>
                     @endcan
                 @elseif($status == App\Enums\InvoiceStatusEnums::DRAFT)

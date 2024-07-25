@@ -1,5 +1,5 @@
-@can('peut créer un contribuable')
-    <div class="modal fade" id="kt_modal_add_taxpayer" tabindex="-1" aria-hidden="true" wire:ignore.self data-bs-backdrop='static'>
+<div class="modal fade" id="kt_modal_add_taxpayer" tabindex="-1" aria-hidden="true" wire:ignore.self data-bs-backdrop='static'>
+        @can('peut créer un contribuable')
         <!--begin::Modal dialog-->
         <!-- <div class="modal-dialog  mw-1800px"> -->
         <div class="modal-dialog modal-dialog-centered" style="max-width:calc(100vw - 20px)!important;">
@@ -395,6 +395,6 @@
         </div>
         <!-- </div> -->
         <!--end::Modal dialog-->
+        @endcan
     </div>
 
-@endcan

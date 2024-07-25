@@ -27,9 +27,12 @@ class RolesPermissionsSeeder extends Seeder
                 'peut accepter un avis sur titre',
                 'peut prendre en charge un avis sur titre',
                 'peut valider un avis au comptant',
+                'peut prendre en charge un avis au comptant',
+                'peut rejeter un avis au comptant',
                 'peut rejeter un avis sur titre (agent par délégation de l\'ordonateur)',
                 'peut rejeter un avis sur titre (agent par délégation du receveur)',
                 'peut réduire un avis sur titre',
+                'peut réduire un avis au comptant',
                 'peut réduire un avis au comptant',
                 'peut générer automatiquement les avis sur titre',
 
@@ -231,6 +234,9 @@ class RolesPermissionsSeeder extends Seeder
                 'peut faire un etat de compte du collecteur',
                 'peut faire un etat de compte du régisseur',
                 'peut valider un avis au comptant',
+                'peut prendre en charge un avis au comptant',
+                'peut rejeter un avis au comptant',
+                'peut réduire un avis au comptant',
 
                 // Recovery permissions
                 'peut voir le recouvrement',
