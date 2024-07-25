@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Core\KTBootstrap;
 use App\Models\Commune;
+use App\Services\GetPublicService;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
@@ -36,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
         });
         View::composer('*', function ($view) {
             $view->with('commune', Commune::getFirstCommune());
+            $view->with('public_ip', GetPublicService::getServerIP());
         });
         KTBootstrap::init();
     }
