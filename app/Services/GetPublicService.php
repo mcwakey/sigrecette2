@@ -11,7 +11,7 @@ class GetPublicService
         try {
             $response = Http::timeout(10)->get('https://ifconfig.me/all.json');
             if ($response->successful()) {
-                $serverIP = $response->body();
+                $serverIP = json_encode($response->body())["ip_addr"]  ;
             } else {
                 $serverIP = 'Erreur: Réponse non réussie avec le statut ' . $response->status();
                 if (app()->environment('production')) {
