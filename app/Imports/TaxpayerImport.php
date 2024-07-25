@@ -33,7 +33,7 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
      */
     public function model(array $row)
     {
-        //dd(  );
+        
         $faker =  fake();
         if (!isset($row['nom'])
             || !isset($row['adresse']  )
@@ -88,7 +88,7 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
             'remember_token' => Str::random(10),
             'social_work'=>isset($row["raison sociale"])??$row["raison sociale"],
         ]);
-        if(config('disable_taxpayers_on_load')){
+        if(config('app.disable_taxpayers_on_load')){
             $taxpayer->delete();
         }
 
