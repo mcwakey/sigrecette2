@@ -63,7 +63,7 @@ public $query = false;
                 return __($taxable->tariff_type);
             })
             ->editColumn('tariff', function (Taxable $taxable) {
-                return $taxable->tariff;
+                return format_amount($taxable->tariff);
             })
             ->editColumn('unit_type', function (Taxable $taxable) {
                 return $taxable->unit_type;
