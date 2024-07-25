@@ -26,7 +26,7 @@ class SearchInvoiceResource extends JsonResource
             'taxpayerId' => $this->resource->taxpayer_id,
             'invoiceNo' => $this->resource->invoice_no,
             'nic' => $this->resource->nic,
-            'orderNo' => $this->resource->longitude,
+            'orderNo' => $this->resource->order_no,
             'amount' => $this->resource->amount,
             'reduceAmount'=> $this->resource->auth_reference,
             'qty'=> $this->resource->qty,

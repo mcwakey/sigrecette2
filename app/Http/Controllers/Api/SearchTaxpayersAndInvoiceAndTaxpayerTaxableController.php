@@ -80,6 +80,8 @@ class SearchTaxpayersAndInvoiceAndTaxpayerTaxableController extends Controller
 
                 $queryInvoices = Invoice::join('taxpayers', 'invoices.taxpayer_id', '=', 'taxpayers.id')
                                         ->where('taxpayers.zone_id', $zone->id)
+                                        ->where('status', 'APPROVED')
+                                        ->where('validity', 'VALID')
                                         ->select('invoices.*');
 
                 $queryPayments = Payment::join('taxpayers', 'payments.taxpayer_id', '=', 'taxpayers.id')
