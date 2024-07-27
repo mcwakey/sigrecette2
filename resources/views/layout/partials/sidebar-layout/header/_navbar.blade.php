@@ -3,12 +3,13 @@
     <div class="mt-1">
         @foreach(auth()->user()->getRoleNames() as $role)
             <span class="p-3 text-center rounded-1 fw-bolder badge-light-primary">{{ __($role) }}</span>
-             @if($role =='administrateur'|| $role =='administrateur_system')
+             @if($role =='administrateur'|| $role =='administrateur_system' && $public_ip!='null')
                 <span class="p-3 text-center rounded-1 fw-bolder  badge-light-info">{{$public_ip }}</span>
             @endif
         @endforeach
     </div>
-	<div class="app-navbar-item ms-1 ms-md-4">
+
+    <div class="app-navbar-item ms-1 ms-md-4">
 		<div data-globalnotif="true" class="btn btn-icon btn-custom btn-icon-muted pulse pulse-danger btn-active-light btn-active-color-primary w-35px h-35px" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end" id="kt_menu_item_wow">
             <span  class="pulse-ring d-none"></span>
             {!! getIcon('notification-status', 'fs-2') !!}

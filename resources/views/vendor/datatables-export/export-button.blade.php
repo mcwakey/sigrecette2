@@ -5,11 +5,7 @@
     </button>
     <div id="kt_datatable_example_export_menu" class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-200px py-4" data-kt-menu="true">
 
-        <div class="menu-item px-3">
-            <a href="#" class="menu-link px-3" data-kt-export="pdf">
-                {{__('Export')." en PDF"}}
-            </a>
-        </div>
+
         <div class="menu-item px-3" x-data>
 
             <form class="mr-2" x-on:submit.prevent="
