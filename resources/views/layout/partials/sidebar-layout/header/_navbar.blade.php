@@ -2,11 +2,32 @@
 <div class="app-navbar flex-shrink-0 d-flex align-items-center">
     <div class="mt-1">
         @foreach(auth()->user()->getRoleNames() as $role)
-            <span class="p-3 text-center rounded-1 fw-bolder badge-light-primary">{{ __($role) }}</span>
+            <span style="cursor: pointer" id="user-role" class="p-3 text-center rounded-1 fw-bolder badge-light-primary">{{ __($role) }}</span>
              @if($role =='administrateur'|| $role =='administrateur_system' && $public_ip!='null')
-                <span class="p-3 text-center rounded-1 fw-bolder  badge-light-info">{{$public_ip }}</span>
+                <span id="server-ip" style="opacity:0;pointer-events:none;display:none;" class="p-3 text-center rounded-1 fw-bolder  badge-light-info">{{$public_ip }}</span>
             @endif
         @endforeach
+
+        @push('scripts')
+            <script async defer>
+                let userRole = document.getElementById('user-role');
+                let serverIp = document.getElementById('server-ip');
+                let toggle = false;
+
+                userRole?.addEventListener('click', () => {
+                    if(serverIp && !toggle){
+                        serverIp.style.opacity = 1;
+                        serverIp.style.display = 'flex';
+                        toggle = true;
+                    }else{
+                        serverIp.style.opacity = 0;
+                        serverIp.style.display = 'none';
+                        toggle = false;
+                    }
+                });
+            </script>
+        @endpush
+
     </div>
 
     <div class="app-navbar-item ms-1 ms-md-4">
