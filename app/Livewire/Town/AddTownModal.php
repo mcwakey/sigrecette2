@@ -4,6 +4,7 @@ namespace App\Livewire\Town;
 
 use App\Models\Canton;
 use App\Models\Town;
+use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
@@ -12,10 +13,10 @@ use Illuminate\Support\Facades\DB;
 class AddTownModal extends Component
 {
     use WithFileUploads;
-
+    use DispatchesMessages;
     public $canton_id;
     public $town_id;
-    
+
     public $name;
     public $status;
 
@@ -63,10 +64,10 @@ class AddTownModal extends Component
 
             if ($this->edit_mode) {
                 // Emit a success event with a message
-                $this->dispatch('success', __('Canton updated'));
+                $this->dispatchMessage('Ville/Quartier', 'update');
             } else {
                 // Emit a success event with a message
-                $this->dispatch('success', __('New Caton created'));
+                $this->dispatchMessage('Ville/Quartier');
             }
         });
 
