@@ -666,5 +666,6 @@
     "zone geolocation": "Géolocalisation d'une zone",
     "zones": "Zones Fiscales",
     "invoice_type": "Type d'avis",
-    "DONE": "VERSÉ AU RECEVEUR"
+    "DONE": "VERSÉ AU RECEVEUR",
+    "penalty": "Pénalité"
 }

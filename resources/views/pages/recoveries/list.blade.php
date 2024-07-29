@@ -1,10 +1,18 @@
 <x-default-layout>
 
     @section('title')
-        {{ __('recoveries information') }}
+
+        @if(request()->fullUrl()==route('recoveries.index',['state' =>  App\Helpers\Constants::PAYMENT_STATE_PENDING_KEY]))
+        {{ __('Validation des recouvrements')}}
+        @elseif(request()->fullUrl()==route('recoveries.index',['state' =>  App\Helpers\Constants::PAYMENT_STATE_CANCEL_KEY]))
+            {{__('Liste des recouvrements annulés')}}
+        @else
+            {{ __('recoveries information') }}
+        @endif
     @endsection
 
     @section('breadcrumbs')
+
         {{ Breadcrumbs::render('recoveries.index') }}
     @endsection
 
@@ -136,7 +144,7 @@
     <!--end::Modal-->
 
     <!--begin::Modal-->
-   
+
 
     <!--end::Modal-->
 
