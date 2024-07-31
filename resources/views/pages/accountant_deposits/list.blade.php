@@ -115,28 +115,6 @@
             <div class="col-md-3">
                 <label class="fs-6 form-label fw-bold text-dark">{{ __('taxable') }}</label>
                 <input type="text" class="form-control" name="tags" id="mySearchTwo" />
-                <!-- <select class="form-select" aria-label="Select a Country" select2="true" data-placeholder="{{ __('select an option') }}" id="mySearchTwo"> -->
-                    <!-- <select name="country" id="mySearchTwo" aria-label="Select a Country" data-control="select2" data-placeholder="{{ __('select an option') }}" class="form-select form-select-solid form-select-lg fw-semibold"> -->
-                    <!-- <option value=""></option>
-                    <option value="RECU">RECU</option>
-                    <option value="VENDU">VENDU</option>
-                    <option value="RENDU">RENDU</option>
-                </select> -->
-
-                <select class="form-select form-select-solid" data-control="select2" data-placeholder="Select an option" data-allow-clear="true" id="mySearchTwo">
-                    <option></option>
-                    <option value="1">Option 1</option>
-                    <option value="2">Option 2</option>
-                    <option value="3">Option 3</option>
-                    <option value="4">Option 4</option>
-                    <option value="5">Option 5</option>
-                    <option value="6">Option 6</option>
-                    <option value="7">Option 7</option>
-                    <option value="8">Option 8</option>
-                    <option value="9">Option 9</option>
-                    <option value="10">Option 10</option>
-                </select>
-
 
             </div>
             <div class="col-md-3">

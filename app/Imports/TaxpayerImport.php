@@ -36,12 +36,9 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
 
         $faker =  fake();
         if (!isset($row['nom'])
-            || isset($row['prenoms'])
+            || !isset($row['prenoms'])
             || !isset($row['adresse']  )
-            //|| !isset($row['canton'])
-           // || !isset($row['ville_village']  )
             || !isset($row['zone'])
-            || !isset($row['quartier'])
             || !isset($row['activite'])
         ) {
             return null;
@@ -57,8 +54,8 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
         }
         $canton = isset($row['canton'])?Canton::firstOrCreate(['name' =>  $row['canton']]): Canton::firstOrCreate(['name' => "Aneho"]);
         $town = Town::firstOrCreate(['name' =>
-            isset($row['ville_village'])?$row['ville_village']."/": "".
-            $row['quartier'], 'canton_id' => $canton->id]);
+            (isset($row['ville_village']) ? $row['ville_village'] . "/" : "" .
+                isset($row['quartier'])) ? $row['quartier'] : "", 'canton_id' => $canton->id]);
         //$erea = Erea::firstOrCreate(['name' => $row['quartier'], 'town_id' => $town->id]);
         $zone = Zone::firstOrCreate(['name' => $row['zone']]);
         $category =  isset($row['categ_activite'])?Category::firstOrCreate(['name' => $row['categ_activite']]): Category::firstOrCreate(['name' => 'Non défini']);
@@ -76,11 +73,10 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
             'id_number' => $row["num_identification"] ?? $row["num_carte_electeur"] ?? random_int(1000000, 6000000),
             'mobilephone' => $row["telephone_1"] ?? " ",
             'telephone' => $row["telephone_2"] ?? " ",
-            'longitude' => $row["longitude"],
-            'latitude' => $row["latitude"],
-            'address' => $row["adresse"],
+            'longitude' => $row["longitude"]?? " ",
+            'latitude' => $row["latitude"]?? " ",
+            'address' => $row["adresse"]?? " ",
             'town_id' => $town->id,
-            //'erea_id' => $erea->id,
             'zone_id' => $zone->id,
             'category_id'=>$category->id,
             'activity_id'=>$activity->id,
