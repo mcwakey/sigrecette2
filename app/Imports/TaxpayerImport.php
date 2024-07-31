@@ -33,9 +33,10 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
      */
     public function model(array $row)
     {
-        
+
         $faker =  fake();
         if (!isset($row['nom'])
+            || isset($row['prenoms'])
             || !isset($row['adresse']  )
             //|| !isset($row['canton'])
            // || !isset($row['ville_village']  )
@@ -46,7 +47,7 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
             return null;
         }
         $existingTaxpayer = Taxpayer::where(
-            'name', $row['nom'] . " "
+            'name', $row['nom'] . " ".$row['prenoms']
         )
             ->where('address', $row["adresse"])
             ->first();
@@ -67,7 +68,7 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
         // Créer le modèle Taxpayer
         $taxpayer = new Taxpayer([
             'tnif' => $row['n°'] ?? fake()->randomNumber(3, 1, 10) . Str::random(5) . fake()->randomNumber(3, 0, 9),
-            'name' => $row['nom'] . " " ,
+            'name' => $row['nom'] . " ".$row['prenoms'],
             'email' => isset($row['email'])?$row['email']:"",
             'email_verified_at' => now(),
             'gender' => $row["sexe"] ?? $faker->randomElement(['Homme', 'Femme']),
