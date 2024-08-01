@@ -119,7 +119,7 @@ class AddPaymentModal extends Component
         }
 
         if ($is_regisseur) {
-            $this->rules["reference"] = "required";
+            //$this->rules["reference"] = "required";
         }
         $this->validate();
         DB::transaction(function () use ($role, $is_regisseur) {
