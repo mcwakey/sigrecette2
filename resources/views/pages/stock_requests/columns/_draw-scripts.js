@@ -25,7 +25,7 @@ document.querySelectorAll('[data-kt-action="delete_row"]').forEach(function (ele
 
 // Add click event listener to update buttons
 document.querySelectorAll('[data-kt-action="load_drop"]').forEach(function (element) {
-    element.addEventListener('change', function () {
+    element.addEventListener('input', function () {
         console.log('load_taxables', this.value);
         Livewire.dispatch('load_drop', [this.value]);
     });
@@ -35,7 +35,7 @@ document.querySelectorAll('[data-kt-action="load_drop"]').forEach(function (elem
 
 // Add click event listener to update buttons
 document.querySelectorAll('[data-kt-action="change_qty"]').forEach(function (element) {
-    element.addEventListener('blur', function () {
+    element.addEventListener('input', function () {
         console.log('change_qty', this.value);
         Livewire.dispatch('change_qty', [this.value]);
     });

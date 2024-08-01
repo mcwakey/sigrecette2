@@ -105,8 +105,19 @@ class AddStockTransferModal extends Component
                         });
                 })
                 ->exists();
-
-            if ($overlapExists) {
+            $overlapExists_vendu = StockTransfer::where('type', '=', 'ARCHIVED')
+                ->where('stock_request_id', '=', $this->stock_request_id)
+                ->where('trans_type', '=', 'VENDU')
+                ->where(function ($query) {
+                    $query->whereBetween('start_no', [$this->start_no, $this->end_no])
+                        ->orWhereBetween('end_no', [$this->start_no, $this->end_no])
+                        ->orWhere(function ($query) {
+                            $query->where('start_no', '<=', $this->start_no)
+                                ->where('end_no', '>=', $this->end_no);
+                        });
+                })
+                ->exists();
+            if ($overlapExists_vendu||$overlapExists) {
                 $this->addError('start_no', 'Le plage de valeurs chevauche les distribution existantes.');
                 $this->addError('end_no', 'Le plage de valeurs chevauche les distribution existantes.');
             }
@@ -131,9 +142,6 @@ class AddStockTransferModal extends Component
                             ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
                             ->where('roles.name', 'collecteur')
                             ->get();
-
-        // $request_nos = StockRequest::select('id', 'req_no')->distinct()->get();
-        // $request_nos = StockRequest::distinct()->pluck('req_no')->toArray();
 
         $request_nos = StockRequest::select('req_no')->groupBy('req_no')->get();
 
@@ -407,7 +415,6 @@ class AddStockTransferModal extends Component
                         $stock_transfer_new = StockTransfer::create($stockTtransferData);
 
 
-                        // $stock_transfer_old = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'VENDU')->where('to_user_id', $this->collector_id)->get();
                         $stock_transfer_olds = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'VENDU')->where('taxable_id', $stock_transfer->taxable_id)->where('to_user_id', $this->collector_id)->orderBy('end_no', 'DESC')->get();
 
                         // dd($stock_transfer->end_no, $stock_transfer_olds->first()->end_no);

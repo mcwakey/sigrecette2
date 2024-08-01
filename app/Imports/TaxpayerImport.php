@@ -56,13 +56,9 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
         $town = Town::firstOrCreate(['name' =>
             (isset($row['ville_village']) ? $row['ville_village'] . "/" : "" .
                 isset($row['quartier'])) ? $row['quartier'] : "", 'canton_id' => $canton->id]);
-        //$erea = Erea::firstOrCreate(['name' => $row['quartier'], 'town_id' => $town->id]);
         $zone = Zone::firstOrCreate(['name' => $row['zone']]);
         $category =  isset($row['categ_activite'])?Category::firstOrCreate(['name' => $row['categ_activite']]): Category::firstOrCreate(['name' => 'Non défini']);
         $activity= Activity::firstOrCreate(['name' => $row["activite"], 'category_id' => $category->id]);
-
-       // dump($category,$activity);
-        // Créer le modèle Taxpayer
         $taxpayer = new Taxpayer([
             'tnif' => $row['n°'] ?? fake()->randomNumber(3, 1, 10) . Str::random(5) . fake()->randomNumber(3, 0, 9),
             'name' => $row['nom'] . " ".$row['prenoms'],

@@ -165,7 +165,7 @@ class AddStockTransferDepositModal extends Component
         $this->request_nos = StockTransfer::select('trans_no')->groupBy('trans_no')->where('to_user_id', $this->collector_id)->get();
 
         return view('livewire.stock_transfer.add-stock-transfer-deposit-modal', compact('collectors', 'stock_requests', 'taxlabel_list'));
-    } 
+    }
 
     // public function updatedTaxlabelId($value)
     // {
@@ -657,6 +657,7 @@ class AddStockTransferDepositModal extends Component
         $this->code = null;
         $this->taxable_id = null;
         // $this->trans_no = null;
+        $this->total = null;
         $this->end_no = null;
         $this->start_no = null;
         $this->qty = null;

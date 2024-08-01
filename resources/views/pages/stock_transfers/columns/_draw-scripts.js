@@ -35,7 +35,7 @@ document.querySelectorAll('[data-kt-action="load_drop"]').forEach(function (elem
 
 // Add click event listener to update buttons
 document.querySelectorAll('[data-kt-action="change_qty"]').forEach(function (element) {
-    element.addEventListener('blur', function () {
+    element.addEventListener('input', function () {
         console.log('change_qty', this.value);
         Livewire.dispatch('change_qty', [this.value]);
     });

@@ -245,7 +245,6 @@ class PdfGenerator  implements PdfGeneratorInterface
        // if ($this->checkInvoiceListDataUniformity($data,$expectedDataSize)&& $this->checkIfCommuneIsNotNull()) {
 
             $filename = "StateValueCollector" . Str::random(8) . ".pdf";
-            //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
             $pdf = PDF::loadView("exports.".$template, ['data' => $data,"commune"=> $this->commune])->setPaper('a4', 'landscape')->stream($filename);
 
             return ['success' => true, 'pdf' => $pdf];
@@ -295,7 +294,9 @@ class PdfGenerator  implements PdfGeneratorInterface
         $filename = "Livre-journal_de_Regie". ".pdf";
 
         //dd($this->commune->getImageUrlAttribute());
-        $pdf = PDF::loadView("exports.".$template, ['data' => $data,"commune"=> $this->commune,'logo_url'=>$this->commune->getImageUrlAttribute()])->setPaper('a4', 'landscape')->stream($filename);
+        $pdf = PDF::loadView("exports.".$template,
+            ['data' => $data,"commune"=> $this->commune,'logo_url'=>$this->commune->getImageUrlAttribute()]
+        )->setPaper('a4', 'landscape')->stream($filename);
 
         return ['success' => true, 'pdf' => $pdf];
         // }
@@ -405,7 +406,6 @@ class PdfGenerator  implements PdfGeneratorInterface
         if ($this->checkIfCommuneIsNotNull()&& count($data)>0) {
 
             $filename = "Registre-journal-des-avis-distribués" . Str::random(8) . ".pdf";
-            //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
             $pdf = PDF::loadView("exports.".$template, ['data' => $data,'titles'=>$this->generateTitleWithAction($action),"commune"=> $this->commune,"action"=>$action])->setPaper('a4', 'landscape')->stream($filename);
 
             return ['success' => true, 'pdf' => $pdf];
@@ -503,9 +503,7 @@ class PdfGenerator  implements PdfGeneratorInterface
         $data = StockTransfer::buildAndGetStockTransferWithQuery($data[0], $formattedDate);
         $filename = "StateValueCollector" . Str::random(8) . ".pdf";
 
-        dd($data);
 
-        //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
         $pdf = PDF::loadView("exports.".$template, ['data' => $data,"commune"=> $this->commune,'user'=>$user])->setPaper('a4', 'landscape')->stream($filename);
 
         return ['success' => true, 'pdf' => $pdf];

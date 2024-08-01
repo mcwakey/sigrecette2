@@ -98,7 +98,7 @@
                                 <label class="fs-6 fw-semibold mb-2">{{ __('start no') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input data-kt-action="load_drop" -->
-                                <input type="text" wire:model="start_no" name="start_no" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('start no') }}" data-kt-action="change_qty" />
+                                <input type="text" wire:model.live.debounce.250ms="start_no" name="start_no" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('start no') }}" data-kt-action="change_qty" />
                                 <!--end::Input-->
                                 @error('start_no')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -108,7 +108,7 @@
                                 <label class="fw-semibold fs-6 mb-2">{{ __('end no') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="end_no" name="end_no" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('end no') }}" data-kt-action="change_qty" />
+                                <input type="text" wire:model.live.debounce.250ms="end_no" name="end_no" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('end no') }}" data-kt-action="change_qty" />
                                 <!--end::Input-->
                                 @error('end_no')
                                 <span class="text-danger">{{ $message }}</span> @enderror

@@ -134,7 +134,7 @@ class PdfGenerator  implements PdfGeneratorInterface
                 $pdf= PDF::loadView('exports.invoices', ['data' => $subdata])
                     ->save(Storage::path('exports') . DIRECTORY_SEPARATOR . $filename)
                     ->stream($filename);
-                dd($pdf);
+
             }
 
         }
@@ -242,14 +242,14 @@ class PdfGenerator  implements PdfGeneratorInterface
     public function generateStateValueCollectorPdf($data, string $template, $action):array
     {
         //dd($data);
-       // if ($this->checkInvoiceListDataUniformity($data,$expectedDataSize)&& $this->checkIfCommuneIsNotNull()) {
+       if ($this->checkIfCommuneIsNotNull()) {
 
             $filename = "StateValueCollector" . Str::random(8) . ".pdf";
             //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
             $pdf = PDF::loadView("exports.".$template, ['data' => $data,"commune"=> $this->commune])->setPaper('a4', 'landscape')->stream($filename);
 
             return ['success' => true, 'pdf' => $pdf];
-       // }
+       }
 
         return ['success' => false, 'message' => 'Invalid data structure.'];
     }
@@ -259,14 +259,14 @@ class PdfGenerator  implements PdfGeneratorInterface
 
     public function generateStateValueReciepientPdf($data, $template, $action):array
     {
-        // if ($this->checkInvoiceListDataUniformity($data,$expectedDataSize)&& $this->checkIfCommuneIsNotNull()) {
+        if ($this->checkIfCommuneIsNotNull()) {
 
         $filename = "StateValueCollector" . Str::random(8) . ".pdf";
         //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
         $pdf = PDF::loadView("exports.".$template, ['data' => $data,"commune"=> $this->commune])->setPaper('a4', 'landscape')->stream($filename);
 
         return ['success' => true, 'pdf' => $pdf];
-        // }
+        }
 
         return ['success' => false, 'message' => 'Invalid data structure.'];
     }
@@ -405,7 +405,6 @@ class PdfGenerator  implements PdfGeneratorInterface
         if ($this->checkIfCommuneIsNotNull()&& count($data)>0) {
 
             $filename = "Registre-journal-des-avis-distribués" . Str::random(8) . ".pdf";
-            //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
             $pdf = PDF::loadView("exports.".$template, ['data' => $data,'titles'=>$this->generateTitleWithAction($action),"commune"=> $this->commune,"action"=>$action])->setPaper('a4', 'landscape')->stream($filename);
 
             return ['success' => true, 'pdf' => $pdf];
@@ -483,8 +482,7 @@ class PdfGenerator  implements PdfGeneratorInterface
             ->where('type','=',Constants::INVOICE_TYPE_COMPTANT)
             ->where('status','=',InvoiceStatusEnums::APPROVED)->get();
         if ($this->checkIfCommuneIsNotNull()&& count($data)>0) {
-            $filename = "Invoice-list-" . Str::random(8) . ".pdf";
-            //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
+            $filename = "Registre-journal_des_déclarations_préalables_des_usagers" . Str::random(8) . ".pdf";
             $pdf = PDF::loadView("exports.".$template, ['data' => $data,'titles'=>$this->generateTitleWithAction($action),"commune"=> $this->commune,"action"=>$action])->setPaper('a4', 'landscape')->stream($filename);
 
             return ['success' => true, 'pdf' => $pdf];
@@ -494,20 +492,17 @@ class PdfGenerator  implements PdfGeneratorInterface
     }
 
 
-    public function generateStateAcountIvCollectorPdf($data, string $template, $action):array
+    public function generateStateAcountIvCollectorPdf($data, string $template):array
     {
-        //dd($data);
-        // if ($this->checkInvoiceListDataUniformity($data,$expectedDataSize)&& $this->checkIfCommuneIsNotNull()) {
 
         $user = User::find($data[0]);
-       //*$ dd($user,$data[0]);
-        $data = StockTransfer::buildAndGetStockTransferWithQuery($data[0]);
-        $filename = "StateValueCollector" . Str::random(8) . ".pdf";
+        $period= $data[1];
+        $data = StockTransfer::buildAndGetStockTransferWithQuery($period);
+        $filename = "ETAT_DE_COMPTABILITE_DES_VALEURS_INACTIVES_DU_COLLECTEUR" . Str::random(8) . ".pdf";
 
 
 
-        //$pdf = PDF::loadView("exports.".$template, ['data' => $data])->setPaper('a4', 'landscape')->stream($filename);
-        $pdf = PDF::loadView("exports.".$template, ['data' => $data,"commune"=> $this->commune,'user'=>$user])->setPaper('a4', 'landscape')->stream($filename);
+        $pdf = PDF::loadView("exports.".$template, ['data' => $data,"commune"=> $this->commune,'user'=>$user,'period'=>$data[1]])->setPaper('a4', 'landscape')->stream($filename);
 
         return ['success' => true, 'pdf' => $pdf];
         // }

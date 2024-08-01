@@ -81,38 +81,14 @@ class AddPaymentModal extends Component
         'update_payment' => 'updatePayment',
         'update_payment_amount'=>'updatePaymentAmount',
         'update_local_amount'=> 'updateLocalAmount',
-        //'add_invoice' => 'addPayment',
-        //'load_invoice' => 'loadPayment',
+
     ];
 
-    // public $taxpayer_id; // Define public property to hold taxpayer_id
-
-    // // Constructor to accept taxpayer_id
-    // public function mount($taxpayer_id)
-    // {
-    //     $this->taxpayer_id = $taxpayer_id;
-    // }
 
 
     public function render()
     {
-        //$cantons = Canton::all();
-        //$towns = Town::all();
-        //$ereas = Erea::all();
-        //$genders = Gender::all();
-        //$id_types = IdType::all();
         $taxpayers = Taxpayer::all();
-        //$taxpayer_taxables = TaxpayerTaxable::all();
-
-        //$invoiceitems = $this->invoice_id ? InvoiceItem::where('invoice_id', $this->invoice_id)->get() : collect();
-        //$taxpayer_id = $this->taxpayer_id;
-
-        // Assuming you have a public property $canton in your Livewire component
-        //$towns = $this->canton ? Town::where('canton_id', $this->canton)->get() : collect();
-        //$ereas = $this->town ? Erea::where('town_id', $this->town)->get() : collect();
-
-        //return view('livewire.payment.add-payment-modal', ['taxpayer_id' => $this->taxpayer_id]);
-        //dd($invoiceitems,$this->invoice_id);
         $invoice = Invoice::find($this->invoice_id);
 
         if ($invoice != null) {
@@ -121,7 +97,6 @@ class AddPaymentModal extends Component
                 $this->edit_amount=false;
             }
             $this->paidAndCodeArray= InvoiceHelper::returnPaidAndSumByCode($invoice)[0];
-            // $this->paidAndCodeArray=$invoice->invoiceItems;
             $this->validCodes = array_keys($this->paidAndCodeArray);
         }
 
@@ -158,9 +133,8 @@ class AddPaymentModal extends Component
                         $this->amount=$this->paidAndCodeArray[ $this->code ]['amount'];
                     }
                 }
-                //dd($this->amount,$this->code);
+
                 $paymentData = [
-                    // 'invoice_id' => $this->invoice_id,
                     'invoice_id' => $this->invoice_no,
                     'taxpayer_id' => ($this->taxpayer_id === "") ? null : $this->taxpayer_id,
                     'amount' => $invoice->type == Constants::INVOICE_TYPE_COMPTANT ? $invoice->amount : $this->amount,
@@ -174,7 +148,7 @@ class AddPaymentModal extends Component
                     'notes'=>$this->notes
 
                 ];
-                //dd($paymentData);
+
 
                 if ($is_regisseur) {
                     $paymentData['status'] = PaymentStatusEnums::ACCOUNTED;
@@ -196,12 +170,7 @@ class AddPaymentModal extends Component
                 }
 
 
-                // $taxpayerTaxableData = [
-                //     'pay_status' => $payment->id,
-                // ];
 
-                // $invoice = Invoice::find($this->invoice_id);
-                //dd($this->bill,$this->amount);
 
                 if ($this->amount + $this->paid >= $this->bill) {
                     $paystatus = "PAID";
@@ -212,9 +181,7 @@ class AddPaymentModal extends Component
                     'pay_status' => $paystatus,
                 ];
 
-                //dd($invoiceData);
 
-                // Create or update Invoice record
 
 
                 $this->invoice_id = $invoice->id;
@@ -223,39 +190,6 @@ class AddPaymentModal extends Component
                     $invoice->$k = $v;
                 }
                 $invoice->save();
-
-                // foreach ($taxpayerTaxables as $taxpayerTaxable) {
-                //     $taxpayerTaxable->update($taxpayerTaxableData);
-                // }
-
-                // // Prepare data for Payment_items
-                // $paymentItemsData = [
-                //     'payment_id' => $payment->id,
-                //     'taxpayer_taxable_id' => $this->taxpayer_taxable_id,
-                //     'qty' => $this->qty,
-                //     'amount' => $this->s_amount,
-                // ];
-
-                //dd($paymentItemsData);
-
-                // foreach ($this->taxpayer_taxable_id as $index => $taxpayer_taxable_id) {
-                //     PaymentItem::create([
-                //         'payment_id' => $payment->id,
-                //         'taxpayer_taxable_id' => $taxpayer_taxable_id,
-                //         'qty' => $this->qty,
-                //         'amount' => $this->s_amount[$index],
-                //     ]);
-                // }
-
-
-                // $role = Role::where('name', 'regisseur')->first();
-                // /**@var App\Models\User $user  */
-                // $user = auth()->user();
-
-                // if ($role && !$user->hasRole('regisseur')) {
-                //     $users = $role->users()->get();
-                //     Notification::send($users, new InvoicePaid($payment, Auth::user()));
-                // }
 
                 if ($this->edit_mode) {
                     $this->dispatchMessage('Paiement', 'update');
@@ -273,23 +207,15 @@ class AddPaymentModal extends Component
 
     public function deleteUser($id)
     {
-        // Prevent deletion of current Taxpayer
-        // if ($id == Auth::id()) {
-        //     $this->dispatch('error', 'Taxpayer cannot be deleted');
-        //     return;
-        // }
 
-        // Delete the user record with the specified ID
         Payment::destroy($id);
 
-        // Emit a success event with a message
-        // $this->dispatch('success', 'Payment successfully deleted');
         $this->dispatchMessage('Paiement', 'delete');
     }
 
     public function updatePayment($id)
     {
-        //dd($id);
+
 
         $this->edit_mode = true;
 
@@ -320,26 +246,9 @@ class AddPaymentModal extends Component
 
         $this->periodicity = ' / '.$invoice->taxpayer->taxpayer_taxables->first()->taxable->periodicity;
 
-        // dd($this->periodicity);
-
-        //dd(($this->s_amount));
-
-        //$this->paid = array_sum($this->s_amount);
-
-        //$this->paid = $invoice->amount;
         $this->balance = $this->bill - $this->paid;
 
-        //dd($this->invoice_id);
 
-        // $invoiceitems = $this->invoiceitems = $this->invoice_id ? InvoiceItem::where('invoice_id', $id)->get() : collect();
-
-        // //dd(($invoiceitems));
-
-        // foreach ($invoiceitems as $index => $invoiceitem) {
-        //     $this->taxpayer_taxable[$index] = $invoiceitem->name;
-
-
-        // }
     }
 
     public function updatePaymentAmount($code){
@@ -363,6 +272,17 @@ class AddPaymentModal extends Component
     public function deletePayment($id)
     {
         Payment::destroy($id);
+        $invoice = Invoice::where('invoice_no', $id)
+            ->where('validity', 'VALID')
+            ->first();
+        $paid= Payment::getPaid($invoice->invoice_no);
+        if ($paid ==0) {
+            $paystatus = PaymentStatusEnums::PENDING;
+        } else {
+            $paystatus =  "PART PAID";
+        }
+        $invoice->pay_status =$paystatus;
+        $invoice->save();
         $this->dispatchMessage('Paiement', 'delete');
     }
     public function hydrate()

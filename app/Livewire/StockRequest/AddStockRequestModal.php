@@ -38,7 +38,8 @@ class AddStockRequestModal extends Component
     public $edit_mode = false;
     //public $option_calculus;
 
-    protected $rules = [
+    protected function rules()
+    { $rules = [
         'req_no' => 'required|string',
         'qty' => 'required|numeric',
         // 'start_no' =>'required|numeric',
@@ -46,7 +47,11 @@ class AddStockRequestModal extends Component
         //'taxlabel_id' => 'required|numeric',
         //'taxable_id' => 'required|numeric',
         //'user_id' => 'required|numeric',
+        'start_no'=> 'nullable|numeric|min:' . 0 . '|max:' . ($this->end_no-1),
+        'end_no' => 'nullable|numeric|min:' . ( $this->start_no + 1),
     ];
+        return $rules;
+    }
 
     protected $listeners = [
         'delete_taxpayer' => 'deleteUser',
