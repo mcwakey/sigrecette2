@@ -125,7 +125,6 @@ class AddStockTransferModal extends Component
     }
 
     protected $listeners = [
-        'delete_taxpayer' => 'deleteUser',
         'change_qty' => 'changeQty',
         'load_drop' => 'loadDrop',
         'add_transfer' => 'addTrnasfer',
@@ -351,6 +350,7 @@ class AddStockTransferModal extends Component
             $this->updatedQty("");
 
         }else{
+            $this->addError('trans_no', 'Le numéro de demande doit etre défini');
             $this->end_no=null;
         }
     }
@@ -367,12 +367,7 @@ class AddStockTransferModal extends Component
         $this->total = $this->qty * $this->tariff;
     }
 
-    public function deleteStockTransfer($id)
-    {
-        StockTransfer::destroy($id);
 
-        // $this->dispatchMessage('line', 'delete');
-    }
 
 
     public function submit()
@@ -553,20 +548,12 @@ class AddStockTransferModal extends Component
         $this->taxlabel_id = null;
         $this->code = null;
         $this->taxable_id = null;
-       // $this->trans_no = null;
+        $this->total = null;
         $this->end_no = null;
         $this->start_no = null;
         $this->qty = null;
     }
 
-    public function deleteUser($id)
-    {
-        // Delete the user record with the specified ID
-        TaxpayerTaxable::destroy($id);
-
-        // Emit a success event with a message
-        $this->dispatch('success', 'Asset successfully deleted');
-    }
 
     public function addTrnasfer($id)
     {
@@ -674,5 +661,14 @@ class AddStockTransferModal extends Component
     {
         $this->resetErrorBag();
         $this->resetValidation();
+    }
+
+    public function deleteStockTransfer($id)
+    {
+
+        StockTransfer::destroy($id);
+        $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('type', 'ACTIVE')->where('to_user_id', $this->collector_id)->get();
+
+
     }
 }

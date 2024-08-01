@@ -443,6 +443,7 @@ class AddStockTransferDepositModal extends Component
             $this->updatedQty("");
 
         }else{
+            $this->addError('trans_no', 'Le numéro de demande doit etre défini');
             $this->end_no=null;
         }
     }
@@ -664,14 +665,7 @@ class AddStockTransferDepositModal extends Component
 
     }
 
-    public function deleteUser($id)
-    {
-        // Delete the user record with the specified ID
-        TaxpayerTaxable::destroy($id);
 
-        // Emit a success event with a message
-        $this->dispatch('success', 'Asset successfully deleted');
-    }
 
     public function addTrnasfer($id)
     {

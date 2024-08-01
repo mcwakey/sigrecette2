@@ -413,9 +413,6 @@
                         </a>
                         <!--end:Menu link-->
                     </div>
-                    <!--end:Menu item-->
-
-                    <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
                         <a class="menu-link {{ request()->routeIs('user-management.users.*') && request()->has('type')&& request()->has('disable')  ? 'active' : '' }}"
@@ -524,19 +521,60 @@
                 </div>
                 <!--end:Menu sub-->
             </div>
-            <div class="menu-item">
+            <div data-kt-menu-trigger="click"
+                 class="menu-item menu-accordion {{ request()->routeIs('prints.*') ? 'here show' : '' }}">
                 <!--begin:Menu link-->
-                <a class="menu-link {{ request()->routeIs('prints') ? 'active' : '' }}"
-                 href="{{  App\Helpers\Constants::checkUrl(route('prints')) }}">
-                    <span class="menu-icon">{!! getIcon('element-11', 'fs-2') !!}</span>
-                    <span class="menu-title">{{ __('Impression') }}</span>
-                </a>
+                <span class="menu-link">
+					<span class="menu-icon">{!! getIcon('element-11', 'fs-2') !!}</span>
+					<span class="menu-title">{{  __('Impression/Export') }}</span>
+					<span class="menu-arrow"></span>
+				</span>
                 <!--end:Menu link-->
+                <!--begin:Menu sub-->
+                <div class="menu-sub menu-sub-accordion">
+                    <div class="menu-item">
+                        <a class="menu-link {{request()->routeIs('prints') ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('prints')) }}">
+								<span class="menu-bullet">
+									<span class="bullet bullet-dot"></span>
+								</span>
+                            <span class="menu-title">{{  __('Impression') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <div class="menu-item">
+                        <a class="menu-link {{request()->routeIs('prints') ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('prints')) }}">
+								<span class="menu-bullet">
+									<span class="bullet bullet-dot"></span>
+								</span>
+                            <span class="menu-title">{{  __('Export Taxpayers') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <div class="menu-item">
+                        <a class="menu-link {{request()->routeIs('prints') ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('prints')) }}">
+								<span class="menu-bullet">
+									<span class="bullet bullet-dot"></span>
+								</span>
+                            <span class="menu-title">{{  __('Export Invoice') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <div class="menu-item">
+                        <a class="menu-link {{request()->routeIs('prints') ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('prints')) }}">
+								<span class="menu-bullet">
+									<span class="bullet bullet-dot"></span>
+								</span>
+                            <span class="menu-title">{{  __('Export recoveries') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                </div>
+                <!--end:Menu sub-->
             </div>
-
-            <!--begin:Menu item-->
-            <!--end:Menu item-->
-            <!--begin:Menu item-->
             @hasanyrole(['administrateur_system','administrateur'])
 
             <div class="menu-item pt-5">
