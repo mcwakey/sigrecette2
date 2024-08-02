@@ -113,6 +113,7 @@ class AddTaxpayerModal extends Component
         'restore_taxpayer' => 'restoreUser',
         'update_taxpayer' => 'updateTaxPayer',
         'load_drop' => 'loadDrop',
+        'close_taxpayer_modal' => 'closeTaxPayerModal',
     ];
 
 
@@ -270,6 +271,38 @@ class AddTaxpayerModal extends Component
         $this->updatedCanton($taxpayer->town->canton->id);
         $this->town_id = $taxpayer->town_id;
         $this->zone_id = $taxpayer->zone_id;
+    }
+
+    public function closeTaxPayerModal()
+    {
+        $this->edit_mode = false;
+        $this->taxpayer_id = '';
+        $this->tnif = '';
+        $this->name = '';
+        $this->email = '';
+        $this->gender = '';
+        $this->id_type = '';
+        $this->id_number = '';
+        $this->mobilephone = '';
+        $this->telephone = '';
+        $this->longitude = '';
+        $this->latitude = '';
+        $this->canton = '';
+        $this->town_id = '';
+        $this->address = '';
+        $this->zone_id = '';
+    
+        $this->file_no = '';
+        $this->category_id = '';
+        $this->activity_id = '';
+        $this->other_work = '';
+        $this->authorisation = '';
+        $this->auth_reference = '';
+        $this->nif = '';
+        $this->social_work = '';
+    
+        $this->towns = [];
+        $this->activities = [];
     }
 
     public function hydrate()

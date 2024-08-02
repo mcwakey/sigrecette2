@@ -10,10 +10,14 @@
                     <!--begin::Modal header-->
                     <div class="modal-header" id="kt_modal_add_taxpayer_header">
                         <!--begin::Modal title-->
-                        <h2 class="fw-bold">{{ __('new taxpayer') }}</h2>
+                        @if (!$edit_mode)
+                            <h2 class="fw-bold">{{ __('new taxpayer') }}</h2>
+                        @else
+                            <h2 class="fw-bold">{{ __('Modifier Contribuable') }}</h2>
+                        @endif
                         <!--end::Modal title-->
                         <!--begin::Close-->
-                        <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
+                        <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" data-kt-action="close_taxpayer_modal" aria-label="Close">
                             {!! getIcon('cross','fs-1') !!}
                         </div>
                         <!--end::Close-->

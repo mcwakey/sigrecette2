@@ -151,6 +151,7 @@ return [
     'attributes'           => [
         'end_no'           => 'no de fin',
         'tax_label_id'   => 'libellé fiscale',
+        'auth_reference' => 'référence',
         'activity_id'              => 'activité principale',
         'phone' =>                  'téléphone',
         'address'                  => 'adresse',
