@@ -169,7 +169,7 @@
                         </a>
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link {{request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') ==   App\Helpers\Constants::INVOICE_STATE_PENDING_KEY ? 'active' : '' }}"
+                        <a class="menu-link {{request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') ==   App\Helpers\Constants::INVOICE_STATE_PENDING_KEY &&  request()->input('type')==App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY ? 'active' : '' }}"
                            href="{{   App\Helpers\Constants::checkUrl(route('invoices.index', ['state' =>  App\Helpers\Constants::INVOICE_STATE_PENDING_KEY,'type' => App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY]) )}}">
 		<span class="menu-bullet">
 			<span class="bullet bullet-dot"></span>
@@ -241,7 +241,7 @@
 
 
                     <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') == App\Helpers\Constants::INVOICE_STATE_DRAFT_KEY ? 'active' : '' }}"
+                        <a class="menu-link {{ request()->routeIs('invoices.*') && request()->has('state') && request()->input('state') ==  App\Helpers\Constants::INVOICE_STATE_PENDING_KEY && request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY ? 'active' : '' }}"
                            href="{{ App\Helpers\Constants::checkUrl( route('invoices.index', ['state' =>  App\Helpers\Constants::INVOICE_STATE_PENDING_KEY,'type' => App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY]) )}}">
 						<span class="menu-bullet">
 							<span class="bullet bullet-dot"></span>
@@ -254,7 +254,7 @@
 
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->input('type') ==    App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY? 'active' : '' }}"
+                        <a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->input('type') ==    App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY  && !request()->has('state')? 'active' : '' }}"
                            href="{{  App\Helpers\Constants::checkUrl( route('invoices.index', ['type' =>   App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY])) }}">
 		<span class="menu-bullet">
 			<span class="bullet bullet-dot"></span>

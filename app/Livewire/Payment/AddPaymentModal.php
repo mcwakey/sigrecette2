@@ -56,6 +56,7 @@ class AddPaymentModal extends Component
 
     public $edit_amount =true;
     public $notes;
+
     protected function rules(){
         $rules = [
 
@@ -119,7 +120,7 @@ class AddPaymentModal extends Component
         }
 
         if ($is_regisseur) {
-            //$this->rules["reference"] = "required";
+            $this->rules()["reference"] = "required";
         }
         $this->validate();
         DB::transaction(function () use ($role, $is_regisseur) {
@@ -152,6 +153,8 @@ class AddPaymentModal extends Component
 
                 if ($is_regisseur) {
                     $paymentData['status'] = PaymentStatusEnums::ACCOUNTED;
+                }else{
+
                 }
 
                 $payments = InvoiceHelper::getCode($this->invoice_no, $this->amount, $paymentData);
@@ -205,13 +208,7 @@ class AddPaymentModal extends Component
     }
 
 
-    public function deleteUser($id)
-    {
 
-        Payment::destroy($id);
-
-        $this->dispatchMessage('Paiement', 'delete');
-    }
 
     public function updatePayment($id)
     {
@@ -271,10 +268,11 @@ class AddPaymentModal extends Component
     #[On('delete_payment')]
     public function deletePayment($id)
     {
-        Payment::destroy($id);
-        $invoice = Invoice::where('invoice_no', $id)
+        $payment = Payment::find($id);
+        $invoice = Invoice::where('invoice_no',  $payment->invoice_id)
             ->where('validity', 'VALID')
             ->first();
+        Payment::destroy($id);
         $paid= Payment::getPaid($invoice->invoice_no);
         if ($paid ==0) {
             $paystatus = PaymentStatusEnums::PENDING;

@@ -4,8 +4,10 @@
     @endphp
     @section('title')
 
-        @if(request()->routeIs('invoices.*') && request()->has('type') &&  request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY)
+        @if(request()->routeIs('invoices.*') && request()->has('type') &&  request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY && !request()->input('state'))
             {{__('Liste des ' .__('invoices'). ' au comptant')}}
+        @elseif(request()->routeIs('invoices.*') && request()->has('type') &&  request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY && request()->input('state'))
+            {{__('Validations des ' .__('invoices'). ' au comptant')}}
         @elseif( request()->routeIs('invoices.*') && request()->input('delivery') ==  App\Helpers\Constants::INVOICE_DELIVERY_NON_LIV_KEY &&  request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY )
             {{__('Liste des ' .__('invoices'). ' sur titre non distribués')}}
         @elseif( request()->routeIs('invoices.*') &&  request()->has('delivery')&& request()->input('delivery') ==  App\Helpers\Constants::INVOICE_DELIVERY_LIV_KEY&&  request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY )
