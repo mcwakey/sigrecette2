@@ -48,8 +48,6 @@ class AddTaxLabelModal extends Component
                 'code' => $this->code,
             ];
 
-            // Update or Create a new TaxLabel record in the database
-            //$data['email'] = $this->email;
             $tax_label = TaxLabel::find($this->tax_label_id) ?? TaxLabel::create($data);
 
             if ($this->edit_mode) {
