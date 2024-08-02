@@ -18,19 +18,22 @@
                         @can('peut prendre en charge un avis sur titre')
                             <option value="{{App\Enums\InvoiceStatusEnums::APPROVED  }}">{{ __('APROVED') }}</option>
                         @endcan
+
+                        @can('peut rejeter un avis sur titre (agent par délégation du receveur)')
+                            <option value="{{ App\Enums\InvoiceStatusEnums::REJECTED }}">{{ __('REJECTED') }}</option>
+                        @endcan
+
                     @else
                         @can('peut prendre en charge un avis au comptant')
                             <option value="{{App\Enums\InvoiceStatusEnums::APPROVED  }}">{{ __('APROVED') }}</option>
                         @endcan
+
+                        @can('peut rejeter un avis au comptant')
+                            <option value="{{ App\Enums\InvoiceStatusEnums::REJECTED }}">{{ __('REJECTED') }}</option>
+                        @endcan
                     @endif
 
-                    @can('peut rejeter un avis sur titre (agent par délégation du receveur)')
-                        <option value="{{ App\Enums\InvoiceStatusEnums::REJECTED }}">{{ __('REJECTED') }}</option>
-                    @endcan
-
-                    @can('peut prendre en charge un avis au comptant')
-                        <option value="{{ App\Enums\InvoiceStatusEnums::REJECTED }}">{{ __('REJECTED') }}</option>
-                    @endcan
+    
                 @elseif($status == App\Enums\InvoiceStatusEnums::DRAFT)
                     @can('peut accepter un avis sur titre')
                         <option value="{{App\Enums\InvoiceStatusEnums::ACCEPTED}}">{{ __('ACCEPTED') }}</option>
