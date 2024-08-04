@@ -9,22 +9,27 @@ class GetPublicService
     public static function getServerIP()
     {
         try {
-            $response = Http::timeout(10)->get('https://ifconfig.me/all.json');
+            $response = Http::timeout(5)->get('https://ifconfig.me/all.json');
             if ($response->successful()) {
                 $data = $response->json();
-                $serverIP = $data['ip_addr'];
-            } else {
-                $serverIP = 'Erreur: Réponse non réussie avec le statut ' . $response->status();
-                if (app()->environment('production')) {
-                    $serverIP  = 'null';
-                }
+                return $data['ip_addr'] ?? self::handleError('IP address not found in response.');
             }
+
+            return self::handleError('Response not successful with status ' . $response->status());
+
+        } catch (\Illuminate\Http\Client\RequestException $e) {
+            return self::handleError('HTTP request error: ' . $e->getMessage());
         } catch (\Exception $e) {
-            $serverIP = 'Erreur lors de la récupération de l\'adresse IP: ' . $e->getMessage();
-            if (app()->environment('production')) {
-                $serverIP  = 'null';
-            }
+            return self::handleError('General error: ' . $e->getMessage());
         }
-        return $serverIP;
+    }
+
+    private static function handleError($message)
+    {
+        if (app()->environment('production')) {
+            return 'null';
+        }
+
+        return 'Erreur: ' . $message;
     }
 }
