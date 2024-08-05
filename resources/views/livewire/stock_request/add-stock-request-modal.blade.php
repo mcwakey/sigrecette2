@@ -72,7 +72,7 @@
                                     <input type="text" wire:model="taxable_name" name="taxable_name" class="form-control form-control- mb-3 mb-lg-0" readonly/>
                                     <input type="text" wire:model="taxable_idd" name="taxable_idd" class="form-control form-control- mb-3 mb-lg-0" readonly/>
                                     @else
-                                    <select data-kt-action="load_drop" wire:model="taxable_id" name="taxable_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_request">
+                                    <select data-kt-action="load_drop" wire:model="taxable_id"  wire:change="handleTaxableChange" name="taxable_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_request">
                                     <option>{{ __('select an option') }}</option>
                                     @foreach($taxables as $taxable)
                                     <option value="{{ $taxable->id}}">{{ $taxable->name }}</option>
@@ -85,7 +85,7 @@
                             </div>
                             <div class="col-md-3">
                                 <label  class="required fs-6 fw-semibold mb-2">{{ __('Valeur') }} </label>
-                                <input  data-kt-action="load_drop" type="text" wire:model.live="remaining_qty" name="remaining_qty" class="form-control mb-3 mb-lg-0" placeholder="{{ __('0') }}" readonly/>
+                                <input   type="text" wire:model.live="remaining_qty" name="remaining_qty" class="form-control mb-3 mb-lg-0" placeholder="{{ __('0') }}" readonly/>
                             </div>
                         </div>
                             <div class="separator saperator-dashed my-3"></div>
@@ -96,7 +96,7 @@
                                     <label class="fs-6 fw-semibold mb-2">{{ __('start no') }}</label>
                                     <!--end::Label-->
                                     <!--begin::Input data-kt-action="load_drop" -->
-                                    <input type="text" wire:model="start_no" name="start_no" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('start no') }}" data-kt-action="change_qty" />
+                                    <input type="text" wire:model="start_no" name="start_no" wire:change="makeCalcul" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('start no') }}" data-kt-action="change_qty" />
                                     <!--end::Input-->
                                     @error('start_no')
                                     <span class="text-danger">{{ $message }}</span> @enderror
@@ -106,7 +106,7 @@
                                     <label class="fw-semibold fs-6 mb-2">{{ __('end no') }}</label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" wire:model="end_no" name="end_no" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('end no') }}" data-kt-action="change_qty" />
+                                    <input type="text" wire:model="end_no" name="end_no" wire:change="makeCalcul" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('end no') }}" data-kt-action="change_qty" />
                                     <!--end::Input-->
                                     @error('end_no')
                                     <span class="text-danger">{{ $message }}</span> @enderror
@@ -116,7 +116,12 @@
                                     <label class="fw-semibold fs-6 mb-2">{{ __('qty') }}</label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" wire:model="qty" name="qty" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('qty') }}" />
+                                    @if(is_numeric($this->start_no) || is_numeric($this->end_no))
+                                        <input type="text" wire:model="qty" name="qty" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('qty') }}"   READONLY />
+                                    @else
+                                        <input type="text" wire:model="qty" name="qty" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('qty') }}"  />
+                                    @endif
+
                                     <!--end::Input-->
                                     @error('qty')
                                     <span class="text-danger">{{ $message }}</span> @enderror

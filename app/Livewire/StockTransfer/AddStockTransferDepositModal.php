@@ -438,8 +438,8 @@ class AddStockTransferDepositModal extends Component
         $this-> makeStartNoAndEndNoCalcul();
     }
     public function makeStartNoAndEndNoCalcul(){
-        if($this->stock_request_id!=null && $this->start_no < $this->end_no){
-                $this->qty = $this->end_no - $this->start_no + 1;
+        if($this->stock_request_id!=null && is_numeric($this->start_no) && is_numeric($this->end_no)&&$this->start_no < $this->end_no){
+                $this->qty = intval($this->end_no) - intval($this->start_no) + 1;
             $this->updatedQty("");
 
         }else{
@@ -622,26 +622,12 @@ class AddStockTransferDepositModal extends Component
                                 $this->start_no = $this->end_no + 1;
                             }
                         }
-                        //dd($stock_request);
-                        //$this->stock_request_id
-
-                        // if ($this->edit_mode) {
-                        //     // Emit a success event with a message
-                        //     $this->dispatch('success', __('Etat de comptabilité mis a jour avec succès'));
-                        // }
-
-                        //dd($data);
 
                     }
                 }
 
                 $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('type','ACTIVE')->where('to_user_id', $this->collector_id)->get();
-                // $this->stock_transfers = StockTransfer::where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->where('trans_no', $this->trans_no)->where('type','ACTIVE')->get();
 
-
-                // if ($this->deposit_mode) {
-                //     $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('type','ACTIVE')->where('to_user_id', $this->collector_id)->get();
-                // }
             });
 
         }
@@ -651,13 +637,10 @@ class AddStockTransferDepositModal extends Component
             ->where('type','ACTIVE')
             ->where('to_user_id', $this->collector_id)->get();
 
-        // Reset the form fields after successful submission
-        //$this->reset();
-        //$this->collector_id = "";
+
         $this->taxlabel_id = null;
         $this->code = null;
         $this->taxable_id = null;
-        // $this->trans_no = null;
         $this->total = null;
         $this->end_no = null;
         $this->start_no = null;
@@ -694,10 +677,7 @@ class AddStockTransferDepositModal extends Component
         // $this->trans_no = null;
         $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
 
-    //     $this->edit_mode = false;
 
-    //     //$this->updateRequest($id);
-    //     //$this->addRequest($id);
         $this->deposit_mode = true;
         $this->edit_mode = false;
 
@@ -745,28 +725,10 @@ class AddStockTransferDepositModal extends Component
         $this->deposit_mode = false;
 
         if ($this->edit_mode == true) {
-            //$this->stock_transfers = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
            $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
        }
 
-        // dd($this->edit_mode,$this->deposit_mode);
 
-        // $taxpayer = Taxpayer::find($id);
-        // $stock_transfer = StockTransfer::find($id);
-        // //dd($stock_transfer->taxable->tax_label);
-
-        // $this->stock_transfer_id = $id;
-        // $this->trans_no = $stock_transfer->trans_no;
-
-        // $this->taxlabel_idd = $stock_transfer->taxable->tax_label->id;
-        // $this->taxlabel_name = $stock_transfer->taxable->tax_label->name;
-
-        // $this->taxable_idd = $stock_transfer->taxable_id;
-        // $this->taxable_name = $stock_transfer->taxable->name;
-
-        // $this->collector_idd = $stock_transfer->to_user_id;
-        // //dd($stock_transfer);
-        // $this->collector_name = $stock_transfer->user->name;
     }
 
     public function hydrate()

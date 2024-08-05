@@ -82,37 +82,7 @@ class AddAccountantDepositOutrightModal extends Component
         return view('livewire.accountant_deposit_outright.add-accountant-deposit-outright-modal', compact('collectors'));
     }
 
-    // public function updatedTaxlabelId($value)
-    // {
-        // $this->taxable_id = "";
-        // $this->trans_no = "";
 
-        // if ($this->deposit_mode) {
-        //     $this->taxables = Taxable::select('taxables.*')
-        //                                 ->join('stock_transfers', 'stock_transfers.taxable_id', '=', 'taxables.id')
-        //                                 ->where('tax_label_id', null)
-        //                                 ->where('unit', $value)
-        //                                 ->where('type', 'ACTIVE')
-        //                                 ->where('to_user_id', $this->collector_id)
-        //                                 ->distinct()
-        //                                 ->get();
-        // }else{
-        //     $this->taxables = Taxable::select('taxables.*')
-        //                                 ->join('stock_requests', 'stock_requests.taxable_id', '=', 'taxables.id')
-        //                                 ->where('tax_label_id', null)
-        //                                 ->where('unit', $value)
-        //                                 ->get();
-
-        // }
-
-        // // $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('unit', $value)->where('to_user_id', $this->collector_id)->get();
-        // $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
-
-        // if ($this->edit_mode == true) {
-        //      //$this->stock_transfers = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
-        //     $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('unit', $value)->where('to_user_id', $this->collector_id)->get();
-        // }
-    // }
 
     public function updatedTaxableId($value)
     {
@@ -154,8 +124,7 @@ class AddAccountantDepositOutrightModal extends Component
 
             $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
         }
-        // }
-        //dd($taxables->first());
+
 
     }
 

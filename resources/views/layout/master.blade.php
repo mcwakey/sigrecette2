@@ -15,26 +15,26 @@
 
     <!-- LeaftLet -->
     <link rel="stylesheet" href="/assets/js/leaftlet/leaftlet.css">
-    <script async defer src="/assets/js/leaftlet/leaftlet.js"></script> 
-    
+    <script async defer src="/assets/js/leaftlet/leaftlet.js"></script>
+
     <!-- Marker Cluster LeaftLet -->
     <link rel="stylesheet" href="/assets/js/leaftlet/MarkerCluster.css">
     <link rel="stylesheet" href="/assets/js/leaftlet/MarkerCluster.Default.css">
     <script async defer src="/assets/js/leaftlet/markercluster.js"></script>
 
     <!-- amr5 graphiques -->
-    <script async defer src="assets/js/am5/index.js"></script>
-    <script async defer src="assets/js/am5/percent.js"></script>
-    <script async defer src="assets/js/am5/xy.js"></script>
-    <script async defer src="assets/js/am5/animated.js"></script>
-    <script async defer src="assets/js/am5/de_de.js"></script>
-    <script async defer src="assets/js/am5/germany_low.js"></script>
-    <script async defer src="assets/js/am5/notosans_sc.js"></script>
+    <!--<script async defer src="assets/js/am5/index.js"></script>-->
+  <!--<script async defer src="assets/js/am5/percent.js"></script>-->
+<!--<script async defer src="assets/js/am5/xy.js"></script>-->
+<!--<script async defer src="assets/js/am5/animated.js"></script>-->
+<!--<script async defer src="assets/js/am5/de_de.js"></script>-->
+<!-- <script async defer src="assets/js/am5/germany_low.js"></script>-->
+<!-- <script async defer src="assets/js/am5/notosans_sc.js"></script>-->
 
-    <link rel="icon" type="image/png" href="assets/media/logos/logo.png" sizes="16x16 32x32" />
-    <link rel="stylesheet" href="/assets/css/fonts.css">
+<link rel="icon" type="image/png" href="assets/media/logos/logo.png" sizes="16x16 32x32" />
+<link rel="stylesheet" href="/assets/css/fonts.css">
 
-    <!--begin::Global Stylesheets Bundle(used by all pages)-->
+<!--begin::Global Stylesheets Bundle(used by all pages)-->
     @foreach (getGlobalAssets('css') as $path)
         {!! sprintf('<link rel="stylesheet" href="%s">', asset($path)) !!}
     @endforeach
@@ -162,7 +162,7 @@
     <script src="/livewire/add-taxpayer-modal.js"></script>
     <script src="/livewire/add-invoice-modal.js"></script>
 
- 
+
 
     @livewireScripts
 </body>
