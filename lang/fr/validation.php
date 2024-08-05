@@ -149,6 +149,7 @@ return [
     'uuid'                 => 'Le champ :attribute doit être un UUID valide',
     'phone'                => 'Le champ :attribute doit être un numéro valide.',
     'attributes'           => [
+        'unit_type'  =>   "type d'unité",
         'end_no'           => 'no de fin',
         'tax_label_id'   => 'libellé fiscale',
         'auth_reference' => 'référence',
