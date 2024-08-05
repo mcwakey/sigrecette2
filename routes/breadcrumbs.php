@@ -72,6 +72,16 @@ Breadcrumbs::for('invoices.index', function (BreadcrumbTrail $trail) {
     $trail->push(__('invoices'), route('invoices.index'));
 });
 
+Breadcrumbs::for('taxations.taxlabels.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push(__('taxlabels'), route('taxations.taxlabels.index'));
+});
+
+Breadcrumbs::for('taxations.taxables.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push(__('taxables'), route('taxations.taxables.index'));
+});
+ 
 Breadcrumbs::for('towns.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
     $trail->push(__('Villages/Quartiers'), route('administratives.towns.index'));
