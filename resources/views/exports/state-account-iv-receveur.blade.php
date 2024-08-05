@@ -141,7 +141,7 @@ $stock_r = \App\Models\StockRequest::find($data[0]);
     </tr>
     <tr>
         <td>{{$stock_r->created_at->format('d M Y')}}</td>
-        <td>{{"Demande d’approvisionnement N°".$stock_r->req_no}}</td>
+        <td>{{"Demande d’approvisionnement N°".$stock_r->first()->req_no}}</td>
         <td>{{$stock_r->start_no}}</td>
         <td>{{$stock_r->end_no}}</td>
         <td>{{$stock_r->qty}}</td>

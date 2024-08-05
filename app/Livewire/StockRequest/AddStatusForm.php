@@ -45,10 +45,9 @@ class AddStatusForm extends Component
             // Prepare data for request
             $data = [
                 'type' => $this->status,
-                //'r_user_id'=>  Auth::id()
             ];
 
-            //dd($requestData);
+
 
             // Create or update request record
             $requests = StockRequest::where("req_id", $this->request_id)->get(); //?? request::create($request_id);
@@ -56,28 +55,14 @@ class AddStatusForm extends Component
             foreach ($requests as $request) {
                 $request->update($data);
             }
-            //$this->request_id = $request->id;
 
-            // foreach ($data as $k => $v) {
-            //     $request->$k = $v;
-            // }
-            // $request->save();
-                //$this->dispatch('success', __('request updated'));
             $this->dispatchMessage('Paiement', 'update');
         });
 
-        // Reset form fields after successful submission
         $this->reset();
     }
 
-// public function updaterequest($id)
-// {
-//     $this->edit_mode = true;
 
-//     $this->request_id = $request->id;
-//     $this->tnif = $request->taxpayer->tnif;
-//     $this->zone = $request->taxpayer->zone_id;
-// }
 
     public function updateRequestStatus($id)
     {
@@ -86,9 +71,6 @@ class AddStatusForm extends Component
         $this->request_id = $request->req_id;
         $this->status = $request->stock_request;
 
-        //$this->$request = $request;
-
-        //dd($this->request_id);
 
     }
 

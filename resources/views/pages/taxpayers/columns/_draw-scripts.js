@@ -1,7 +1,4 @@
-// Initialize KTMenu
 KTMenu.init();
-
-// Add click event listener to delete buttons
 document.querySelectorAll('[data-kt-action="delete_taxpayer"]').forEach(function (element) {
     element.addEventListener('click', function () {
         Swal.fire({
@@ -44,19 +41,20 @@ document.querySelectorAll('[data-kt-action="restore_taxpayer"]').forEach(functio
 });
 
 
-// Add click event listener to update buttons
+
 document.querySelectorAll('[data-kt-action="update_taxpayer"]').forEach(function (element) {
     element.addEventListener('click', function () {
         Livewire.dispatch('update_taxpayer', [this.getAttribute('data-kt-user-id')]);
     });
 });
 
-// Add click event listener to update buttons
+
 document.querySelectorAll('[data-kt-action="update_invoice"]').forEach(function (element) {
     element.addEventListener('click', function () {
         Livewire.dispatch('update_invoice', [this.getAttribute('data-kt-user-id')]);
     });
 });
+
 
 // Add click event listener to update buttons
 document.querySelectorAll('[data-kt-action="load_drop"]').forEach(function (element) {
@@ -76,3 +74,4 @@ document.querySelectorAll('[data-kt-action="close_taxpayer_modal"]')?.forEach(fu
         Livewire.dispatch('close_taxpayer_modal', []);
     });
 });
+

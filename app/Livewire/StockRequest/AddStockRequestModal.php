@@ -39,19 +39,23 @@ class AddStockRequestModal extends Component
     //public $option_calculus;
 
     protected function rules()
-    { $rules = [
-        'req_no' => 'required|string',
-        'qty' => 'required|numeric',
-        // 'start_no' =>'required|numeric',
-        // 'end_no' => 'required|numeric',
-        //'taxlabel_id' => 'required|numeric',
-        //'taxable_id' => 'required|numeric',
-        //'user_id' => 'required|numeric',
-        'start_no'=> 'nullable|numeric|min:' . 0 . '|max:' . ($this->end_no-1),
-        'end_no' => 'nullable|numeric|min:' . ( $this->start_no + 1),
-    ];
-        return $rules;
+    {
+        return [
+            'req_no' => 'required|string',
+            'taxlabel_id' => 'required',
+            'taxable_id' => 'required|numeric',
+            'start_no' => 'nullable|numeric|min:0|max:' . ($this->end_no - 1),
+            'end_no' => 'nullable|numeric|min:' . ($this->start_no + 1),
+            'qty' => ['required', 'numeric', function ($attribute, $value, $fail) {
+                if (!is_null($this->start_no) && !is_null($this->end_no)) {
+                    if ($value !== intval($this->end_no) - intval($this->start_no) + 1) {
+                        $fail('The qty value must be equal to (end_no - start_no + 1).');
+                    }
+                }
+            }],
+        ];
     }
+
 
     protected $listeners = [
         'delete_taxpayer' => 'deleteUser',
@@ -65,7 +69,7 @@ class AddStockRequestModal extends Component
     {
         $taxlabels = TaxLabel::all();
 
-        //dd($taxlabels);
+
         $this->user_id = Auth::id();
         $this->stock_requests = StockRequest::where('req_no', $this->req_no)->where('req_type', 'DEMANDE')->get();
         return view('livewire.stock_request.add-stock-request-modal', compact('taxlabels'));
@@ -76,35 +80,25 @@ class AddStockRequestModal extends Component
         $this->taxables = Taxable::where('tax_label_id', null)->where('unit', $value)->get();
     }
 
-    public function updatedTaxableId($value)
+    public function handleTaxableChange()
     {
-        $taxables = Taxable::find($value);
+        $taxable = Taxable::find($this->taxable_id);
 
-        //$this->option_calculus = $taxables->unit_type ?? "";
-        // $this->unit = $taxables->unit ?? "";
-        $this->remaining_qty = $taxables->tariff ?? "";
-        //$this->start_no = $taxables->tariff ?? "";
+        $this->remaining_qty = $taxable->tariff ?? 0;
     }
 
-    public function updatedEndNo($value)
-    {
-        //dd($this->start_no,$this->end_no);
 
-        if ($this->start_no !== "" && $this->end_no !== "")
+    public function makeCalcul()
+    {
+        if (is_numeric($this->start_no) && is_numeric($this->end_no))
         {
-            $this->qty = $this->end_no - $this->start_no + 1;
+            $this->qty = intval($this->end_no) - intval($this->start_no) + 1;
         }
     }
 
-    public function updatedStartNo($value)
-    {
-        //dd($this->start_no,$this->end_no);
 
-        if ($this->start_no !== "" && $this->end_no !== "")
-        {
-            $this->qty = $this->end_no - $this->start_no + 1;
-        }
-    }
+
+
 
     public function updatedReqNo($value)
     {

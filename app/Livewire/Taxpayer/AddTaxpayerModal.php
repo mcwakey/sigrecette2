@@ -8,6 +8,7 @@ use App\Models\Canton;
 use App\Models\Gender;
 use App\Models\IdType;
 use App\Models\Commune;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\Activity;
 use App\Models\Category;
@@ -109,9 +110,6 @@ class AddTaxpayerModal extends Component
     }
 
     protected $listeners = [
-        'delete_taxpayer' => 'deleteUser',
-        'restore_taxpayer' => 'restoreUser',
-        'update_taxpayer' => 'updateTaxPayer',
         'load_drop' => 'loadDrop',
         'close_taxpayer_modal' => 'closeTaxPayerModal',
     ];
@@ -212,29 +210,32 @@ class AddTaxpayerModal extends Component
         $this->activities = Activity::where('category_id', $value)->get();
     }
 
-    public function deleteUser($id)
+    #[On('delete_taxpayer')]
+   public function deleteTaxpayer($id)
     {
         $taxpayer = Taxpayer::find($id);
 
 
             if ($taxpayer &&!$taxpayer->trashed()) {
                 $taxpayer->delete();
-                $this->dispatchMessage('Contribuable', 'delete');
+                $this->dispatchMessage('Contribuable', 'update');
 
             }
 
     }
-    public function restoreUser($id)
+    #[On('restore_taxpayer')]
+    public function restoreTaxpayer($id)
     {
         $taxpayer = Taxpayer::onlyTrashed()->find($id);
 
         if ($taxpayer) {
             $taxpayer->restore();
-            $this->dispatchMessage('Contribuable', 'restore');
+            $this->dispatchMessage('Contribuable', 'update');
         }
     }
 
 
+   #[On('update_taxpayer')]
     public function updateTaxPayer($id)
     {
 
