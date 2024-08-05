@@ -5,7 +5,7 @@
     @endsection
 
     @section('breadcrumbs')
-        {{ Breadcrumbs::render('taxpayers.index') }}
+        {{ Breadcrumbs::render('taxations.tickets.index') }}
     @endsection
 
     <div class="card">

@@ -82,6 +82,11 @@ Breadcrumbs::for('taxations.taxables.index', function (BreadcrumbTrail $trail) {
     $trail->push(__('taxables'), route('taxations.taxables.index'));
 });
  
+Breadcrumbs::for('taxations.tickets.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push(__('tickets'), route('taxations.tickets.index'));
+});
+
 Breadcrumbs::for('towns.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
     $trail->push(__('Villages/Quartiers'), route('administratives.towns.index'));
