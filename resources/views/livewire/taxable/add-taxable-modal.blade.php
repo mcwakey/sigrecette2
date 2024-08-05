@@ -107,10 +107,10 @@
                                                 <option value="Mois">Mois</option>
                                                 <option value="Ans">Ans</option>
                                             @endif
-                                          
+
                                     </select>
                                 @endif
-                  
+
                                 <!--end::Input-->
                                 @error('periodicity')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -119,7 +119,7 @@
                                 <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('unit type') }}</label>
                                 <!--end::Label-->
-   
+
                                 <select wire:model="unit_type" name="unit_type" class="form-select" data-dropdown-parent="#kt_modal_add_taxable">
                                     <option>{{ __('select an option') }}</option>
                                     <option value="Superficie">{{ __('surface') }}</option>
@@ -134,7 +134,7 @@
                                 <!--begin::Label-->
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('unit') }}</label>
                                 <!--end::Label-->
-   
+
                                 <input type="text" wire:model="unit" name="unit" class="form-control mb-3 mb-lg-0" placeholder="{{ __('unit') }}"/>
                                 <!--end::Input-->
                                 @error('unit')
@@ -154,7 +154,7 @@
                                     <option value="PERCENT">{{ __('percent') }}</option>
                                 </select>
                                 <!--end::Input-->
-                                @error('periodicity')
+                                @error('tariff_type')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div class="col-md-3 ">

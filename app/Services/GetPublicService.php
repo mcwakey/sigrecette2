@@ -88,7 +88,7 @@ class GetPublicService
      * @param array $ips The list of collected IP addresses.
      * @return string The consistent IP address or an error message/null if inconsistent.
      */
-    private static function processIPs(array $ips,string $errors):string
+    private static function processIPs(array $ips,string|null $errors):string
     {
         if (count($ips) === 0) {
             return self::handleError('No IP addresses could be retrieved.'.$errors);
