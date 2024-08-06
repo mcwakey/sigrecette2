@@ -79,6 +79,7 @@ class RecoveriesDataTable extends DataTable
             ->select('payments.*')
             ->whereNotNull('payments.user_id')
             ->whereNotIn('payments.reference', [Constants::ANNULATION, Constants::REDUCTION])
+            ->orWhereNull('payments.reference')
             ->distinct()
             ->whereBetween('payments.created_at', [$this->startDate, $this->endDate])
             ->orderBy('payments.created_at', 'desc')
