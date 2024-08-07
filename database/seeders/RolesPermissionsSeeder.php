@@ -50,6 +50,7 @@ class RolesPermissionsSeeder extends Seeder
                 'peut ajouter un paiement',
                 'peut accepter un paiement',
                 'peut comptabiliser un paiement',
+                'peut supprimer un paiement',
 
                 // Order no permissions
                 'peut ajouter le numéro d\'ordre de recette d\'un avis',
