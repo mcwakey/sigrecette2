@@ -73,7 +73,7 @@ class AddTaxpayerModal extends Component
             'mobilephone' => [
                 'required',
                 'string',
-                (new Phone)->country(['TG','GH','BJ'])->type('mobile'),
+                (new Phone)->country(['TG','GH','BJ']),
             ],
 
             'longitude' => 'nullable|sometimes|string',
