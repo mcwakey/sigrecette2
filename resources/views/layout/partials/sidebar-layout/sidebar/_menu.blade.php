@@ -78,7 +78,7 @@
                     </div>
                     <div class="menu-item">
                         <a class="menu-link {{ request()->routeIs('taxpayers.*') && request()->has('disable') && request()->input('disable')==1 ? 'active' : '' }}"
-                           href="{{ App\Helpers\Constants::checkUrl( route('taxpayers.index', ['disable' => true])) }}">
+                           href="{{ App\Helpers\Constants::checkUrl( route('taxpayers.index', ['disable' => true]) ) }}">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
 							</span>
@@ -140,7 +140,7 @@
                 </div>
             </div>
             <div data-kt-menu-trigger="click"
-                 class="menu-item menu-accordion {{ request()->routeIs('invoices.*') ? 'here show' : '' }}">
+                 class="menu-item menu-accordion {{ request()->routeIs('invoices.*')&& request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY ? 'here show' : '' }}">
                 <!--begin:Menu link-->
                 <span class="menu-link">
 						<span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>
@@ -230,7 +230,7 @@
             <!--end:Menu item-->
 
             <div data-kt-menu-trigger="click"
-                 class="menu-item menu-accordion {{ request()->routeIs('invoices.*') ? 'here show' : '' }}">
+                 class="menu-item menu-accordion {{ request()->routeIs('invoices.*') && request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY ? 'here show' : '' }}">
                 <!--begin:Menu link-->
                 <span class="menu-link">
 					<span class="menu-icon">{!! getIcon('abstract-26', 'fs-2') !!}</span>

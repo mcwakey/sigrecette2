@@ -352,9 +352,6 @@
                                     <option value="{{ $collector->id}}">{{ $collector->user_name}}</option>
                                     @endforeach
                                 </select>
-
-
-                                <!--end::Input-->
                                 @error('collector_id')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
@@ -369,8 +366,6 @@
                                     @endforeach
                                 </select>
 
-                                <!-- <input  data-kt-action="load_drop" type="text" wire:model.live="trans_no" name="trans_no" class="form-control mb-3 mb-lg-0" placeholder="{{ __('req no') }}" readonly/> -->
-                                <!--end::Input-->
                                 @error('trans_no')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
@@ -440,7 +435,7 @@
                                 <label class="fs-6 fw-semibold mb-2">{{ __('start no') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input data-kt-action="load_drop" -->
-                                <input type="text" wire:model="start_no" name="start_no" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('start no') }}" data-kt-action="change_qty" />
+                                <input type="text" wire:model="start_no" name="start_no" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('start no') }}"  wire:change="makeCalcul" />
                                 <!--end::Input-->
                                 @error('start_no')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -450,28 +445,24 @@
                                 <label class="fw-semibold fs-6 mb-2">{{ __('end no') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="end_no" name="end_no" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('end no') }}" data-kt-action="change_qty" />
+                                <input type="text" wire:model="end_no" name="end_no" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('end no') }}" wire:change="makeCalcul" />
                                 <!--end::Input-->
                                 @error('end_no')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div class="col-md-3">
-                                <!--begin::Label-->
-                                <label class="fw-semibold fs-6 mb-2">{{ __('qty') }}</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" wire:model="qty" name="qty" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('qty') }}" data-kt-action="change_qty"/>
-                                <!--end::Input-->
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('qty') }}</label>
+                                @if(is_numeric($this->start_no) || is_numeric($this->end_no))
+                                    <input type="text" wire:model="qty" name="qty" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('qty') }}"   READONLY />
+                                @else
+                                    <input type="text" wire:model="qty" name="qty" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('qty') }}"  data-kt-action="change_qty"/>
+                                @endif
                                 @error('qty')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div class="col-md-3">
-                                <!--begin::Label-->
                                 <label class="fw-semibold fs-6 mb-2">{{ __('total') }}</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
                                 <input type="text" wire:model="total" name="total" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('total') }}" readonly />
-                                <!--end::Input-->
                                 @error('total')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>

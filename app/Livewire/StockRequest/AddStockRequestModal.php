@@ -49,7 +49,7 @@ class AddStockRequestModal extends Component
             'qty' => ['required', 'numeric', function ($attribute, $value, $fail) {
                 if (!is_null($this->start_no) && !is_null($this->end_no)) {
                     if ($value !== intval($this->end_no) - intval($this->start_no) + 1) {
-                        $fail('The qty value must be equal to (end_no - start_no + 1).');
+                        $fail('Les valeurs saisies dans n° de debut ou n° de fin sont incorrectes.');
                     }
                 }
             }],
