@@ -62,7 +62,7 @@ class AddUserModal extends Component
         if (in_array(__($this->role), $roleNeedZone)) {
             $this->rules['zone_id'] = 'required|integer';
         } else if ($this->zone_id && $this->role != 'regisseur') {
-            $this->zone_id =  null;
+            // $this->zone_id =  null;
         }
 
         // Validate the form input data
