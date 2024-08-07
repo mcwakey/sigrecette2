@@ -51,7 +51,6 @@
         {!! sprintf('<link rel="stylesheet" href="%s">', asset($path)) !!}
     @endforeach
     <!--end::Custom Stylesheets-->
-
     @livewireStyles
 </head>
 <!--end::Head-->
@@ -82,6 +81,8 @@
         {!! sprintf('<script src="%s"></script>', asset($path)) !!}
     @endforeach
     <!--end::Custom Javascript-->
+
+    @stack('scripts')
 
     <livewire:accountant_deposit.add-accountant-deposit-modal />
 
