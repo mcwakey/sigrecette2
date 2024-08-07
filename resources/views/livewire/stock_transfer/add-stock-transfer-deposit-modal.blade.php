@@ -98,8 +98,7 @@
                                 <label class="fs-6 fw-semibold mb-2">{{ __('start no') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input data-kt-action="load_drop" -->
-                                <input type="text" wire:model="start_no" name="start_no" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('start no') }}" wire:change="makeStartNoAndEndNoCalcul />
-                                <!--end::Input-->
+                                <input type="text" wire:model="start_no" name="start_no" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('start no') }}" wire:change="makeStartNoAndEndNoCalcul" />
                                 @error('start_no')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>

@@ -64,7 +64,6 @@ class AddAccountantDepositModal extends Component
     ];
 
     protected $listeners = [
-        'delete_taxpayer' => 'deleteUser',
         'change_qty' => 'changeQty',
         'load_drop' => 'loadDrop',
         'add_accountant_deposit' => 'addAccountantDeposit',
@@ -244,14 +243,6 @@ class AddAccountantDepositModal extends Component
         $this->qty = "";
     }
 
-    public function deleteUser($id)
-    {
-        // Delete the user record with the specified ID
-        TaxpayerTaxable::destroy($id);
-
-        // Emit a success event with a message
-        $this->dispatch('success', 'Asset successfully deleted');
-    }
 
     public function addAccountantDeposit($type)
     {

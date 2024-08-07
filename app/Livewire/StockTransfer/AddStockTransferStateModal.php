@@ -169,14 +169,6 @@ class AddStockTransferStateModal extends Component
         $this->qty = null;
     }
 
-    public function deleteUser($id)
-    {
-        // Delete the user record with the specified ID
-        TaxpayerTaxable::destroy($id);
-
-        // Emit a success event with a message
-        $this->dispatch('success', 'Asset successfully deleted');
-    }
 
 
 

@@ -81,7 +81,7 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
             'remember_token' => Str::random(10),
             'social_work'=>isset($row["raison sociale"])??$row["raison sociale"],
         ]);
-        if(config('app.disable_taxpayers_on_load')){
+        if(isset($row['state'])&&$row['state']!=null){
             $taxpayer->delete();
         }
 
