@@ -15,21 +15,21 @@
 
     <!-- LeaftLet -->
     <link rel="stylesheet" href="/assets/js/leaftlet/leaftlet.css">
-    <script async defer src="/assets/js/leaftlet/leaftlet.js"></script>
+    <script async src="/assets/js/leaftlet/leaftlet.js"></script>
 
     <!-- Marker Cluster LeaftLet -->
     <link rel="stylesheet" href="/assets/js/leaftlet/MarkerCluster.css">
     <link rel="stylesheet" href="/assets/js/leaftlet/MarkerCluster.Default.css">
-    <script async defer src="/assets/js/leaftlet/markercluster.js"></script>
+    <script async src="/assets/js/leaftlet/markercluster.js"></script>
 
    
-    <script async defer src="assets/js/am5/index.js"></script>
-  <script async defer src="assets/js/am5/percent.js"></script>
-    <script async defer src="assets/js/am5/xy.js"></script>
-    <script async defer src="assets/js/am5/animated.js"></script>
-    <script async defer src="assets/js/am5/de_de.js"></script>
-    <script async defer src="assets/js/am5/germany_low.js"></script>
-    <script async defer src="assets/js/am5/notosans_sc.js"></script>
+    <script async src="/assets/js/am5/index.js"></script>
+    <script async src="/assets/js/am5/percent.js"></script>
+    <script async src="/assets/js/am5/xy.js"></script>
+    <script async src="/assets/js/am5/animated.js"></script>
+    <script async src="/assets/js/am5/de_de.js"></script>
+    <script async src="/assets/js/am5/germany_low.js"></script>
+    <script async src="/assets/js/am5/notosans_sc.js"></script>
 
 <link rel="icon" type="image/png" href="assets/media/logos/logo.png" sizes="16x16 32x32" />
 <link rel="stylesheet" href="/assets/css/fonts.css">
@@ -82,11 +82,9 @@
         {!! sprintf('<script src="%s"></script>', asset($path)) !!}
     @endforeach
     <!--end::Custom Javascript-->
-    @stack('scripts')
-    <!--end::Javascript-->
-
 
     <livewire:accountant_deposit.add-accountant-deposit-modal />
+
     <script>
         document.addEventListener('livewire:init', () => {
             Livewire.on('success', (message) => {
@@ -160,10 +158,6 @@
     </script>
 
     <script src="/livewire/add-taxpayer-modal.js"></script>
-    <script src="/livewire/add-invoice-modal.js"></script>
-
-
-
     @livewireScripts
 </body>
 <!--end::Body-->
