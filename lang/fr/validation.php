@@ -153,6 +153,7 @@ return [
         'end_no'           => 'no de fin',
         'tax_label_id'   => 'libellé fiscale',
         'auth_reference' => 'référence',
+        'orderno' =>         'ordre de recette',
         'activity_id'              => 'activité principale',
         'phone' =>                  'téléphone',
         'address'                  => 'adresse',
