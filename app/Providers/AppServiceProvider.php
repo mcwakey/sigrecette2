@@ -37,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
         });
         View::composer('*', function ($view) {
             $view->with('commune', Commune::getFirstCommune());
-            $view->with('public_ip', GetPublicService::getServerIP());
+            $view->with('public_ip', '');
         });
         KTBootstrap::init();
     }
