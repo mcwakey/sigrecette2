@@ -69,7 +69,7 @@ class AddStockTransferModal extends Component
             'period_to' => 'required',
             'start_no'=> 'nullable|numeric|min:' . $this->select_stock->start_no . '|max:' . ($this->select_stock->end_no-1),
             'end_no' => 'nullable|numeric|min:' . ( $this->select_stock->start_no + 1) . '|max:' .$this->select_stock->end_no,
-            'qty' => ['required', 'numeric', function ($attribute, $value, $fail) {
+            'qty' => ['required', 'numeric','min:1', function ($attribute, $value, $fail) {
                 if (!is_null($this->start_no) && !is_null($this->end_no)) {
                     if ($value !== intval($this->end_no) - intval($this->start_no) + 1) {
                         $fail('Les valeurs saisies dans n° de debut ou n° de fin sont incorrectes.');

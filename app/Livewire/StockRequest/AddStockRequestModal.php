@@ -44,9 +44,9 @@ class AddStockRequestModal extends Component
             'req_no' => 'required|string',
             'taxlabel_id' => 'required',
             'taxable_id' => 'required|numeric',
-            'start_no' => 'nullable|numeric|min:0|max:' . ($this->end_no - 1),
-            'end_no' => 'nullable|numeric|min:' . ($this->start_no + 1),
-            'qty' => ['required', 'numeric', function ($attribute, $value, $fail) {
+            'start_no' => 'nullable|numeric|min:0|max:' . (intval($this->end_no) - 1),
+            'end_no' => 'nullable|numeric|min:' . (intval($this->start_no) + 1),
+            'qty' => ['required', 'numeric','min:1', function ($attribute, $value, $fail) {
                 if (!is_null($this->start_no) && !is_null($this->end_no)) {
                     if ($value !== intval($this->end_no) - intval($this->start_no) + 1) {
                         $fail('Les valeurs saisies dans n° de debut ou n° de fin sont incorrectes.');
