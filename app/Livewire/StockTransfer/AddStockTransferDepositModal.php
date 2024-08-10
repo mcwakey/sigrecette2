@@ -72,7 +72,7 @@ class AddStockTransferDepositModal extends Component
             if (trim($this->taxlabel_id) == '' || $this->taxlabel_id == null) {
                  $rules['code'] = 'required';
                 $rules['start_no'] = 'nullable|numeric|min:' . $this->select_transfer->start_no . '|max:' . ($this->select_transfer->end_no-1);
-                $rules['end_no'] = 'nullable|numeric|min:' . ( $this->select_transfer->start_no + 1) . '|max:' .$this->select_transfer->end_no;
+                $rules['end_no'] = 'nullable|numeric|min:' . ($this->select_transfer->start_no + 1) . '|max:' .$this->select_transfer->end_no;
                 $rules['qty'] = 'required|numeric|min:1';
                 $rules['taxable_id'] = 'required|numeric';
             }else{

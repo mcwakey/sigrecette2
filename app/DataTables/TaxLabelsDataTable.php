@@ -20,12 +20,11 @@ class TaxLabelsDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            //->rawColumns(['tax_label', 'last_login_at'])
-            // ->editColumn('tax_label', function (TaxLabel $tax_label) {
-            //     return view('pages/tax_labels.columns._tax_label', compact('tax_label'));
-            // })
             ->editColumn('category', function (TaxLabel $tax_label) {
-                return __($tax_label->category);
+                $translatedCategories = array_map(function($category) {
+                    return __($category);
+                }, explode(',', $tax_label->category));
+                return  implode(', ', $translatedCategories);
             })
             ->editColumn('name', function (TaxLabel $tax_label) {
                 return $tax_label->name;
