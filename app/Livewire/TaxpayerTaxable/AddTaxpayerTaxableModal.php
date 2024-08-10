@@ -99,11 +99,7 @@ class AddTaxpayerTaxableModal extends Component
     }
     public function render()
     {
-        //$cantons = Canton::all();
-        //$towns = Town::all();
-        //$ereas = Erea::all();
-        //$genders = Gender::all();
-        $taxlabels = TaxLabel::where("category","CATEGORY 1")->get();
+        $taxlabels = TaxLabel::where('category', 'LIKE', '%CATEGORY 1%')->get();
         //$taxables = Taxable::all();
 
         // Assuming you have a public property $canton in your Livewire component
@@ -276,8 +272,6 @@ class AddTaxpayerTaxableModal extends Component
         // Delete the user record with the specified ID
         TaxpayerTaxable::destroy($id);
 
-        // Emit a success event with a message
-        //$this->dispatch('success', 'Asset successfully deleted');
         $this->dispatchMessage('Taxation du contribuable', 'delete');
     }
 

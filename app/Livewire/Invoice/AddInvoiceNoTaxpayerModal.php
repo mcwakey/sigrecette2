@@ -194,7 +194,7 @@ class AddInvoiceNoTaxpayerModal extends Component
     {
 
         $taxpayers = Taxpayer::all();
-        $taxlabels = TaxLabel::where("category","CATEGORY 2")->get();
+        $taxlabels = TaxLabel::where('category', 'LIKE', '%CATEGORY 2%')->get();
         $genders = Gender::all();
         $id_types = IdType::all();
         $year= Year::getActiveYear();

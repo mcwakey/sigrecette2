@@ -73,7 +73,8 @@ class AddStockTransferDepositModal extends Component
                  $rules['code'] = 'required';
                 $rules['start_no'] = 'nullable|numeric|min:' . $this->select_transfer->start_no . '|max:' . ($this->select_transfer->end_no-1);
                 $rules['end_no'] = 'nullable|numeric|min:' . ( $this->select_transfer->start_no + 1) . '|max:' .$this->select_transfer->end_no;
-                $rules['qty'] = 'required|numeric';
+                $rules['qty'] = 'required|numeric|min:1';
+                $rules['taxable_id'] = 'required|numeric';
             }else{
             }
         }
@@ -152,7 +153,7 @@ class AddStockTransferDepositModal extends Component
         $this->user_id = Auth::id();
 
 
-        $taxlabel_list = TaxLabel::where('category', 'CATEGORY 3')->get();
+        $taxlabel_list = TaxLabel::where('category', 'LIKE', '%CATEGORY 3%')->get();
         $stock_requests= StockRequest::where('req_type','DEMANDE')->where('type','ACTIVE')->get();
 
         $collectors = User::select('users.id', 'users.name as user_name', 'roles.name as role_name')
@@ -424,8 +425,6 @@ class AddStockTransferDepositModal extends Component
                         // }
 
                         $stock_transfers = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'VENDU')->where('to_user_id', $this->collector_id)->get();
-                        // $stock_transfers = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'VENDU')->where('taxable_id', $stock_transfer->taxable_id)->where('trans_id', $stock_transfer->trans_id)->where('to_user_id', $this->collector_id)->orderBy('end_no', 'DESC')->get();
-                        // $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('type','ACTIVE')->where('to_user_id', $this->collector_id)->get();
 
 
                         foreach ($stock_transfers as $stock_transfer) {

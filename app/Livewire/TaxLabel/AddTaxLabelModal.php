@@ -17,12 +17,18 @@ class AddTaxLabelModal extends Component
     public $code;
 
     public $edit_mode = false;
-
-    protected $rules = [
+    public $categories = [];
+    public $allCategories = ['CATEGORY 1', 'CATEGORY 2', 'CATEGORY 3'];
+    protected function rules()
+    {
+        return  [
         'name' => 'required|string',
-        'category' => 'required',
         'code' => 'required',
+            'categories' => 'required|array|min:1',
+            'categories.*' => 'in:' . implode(',', $this->allCategories),
+
     ];
+    }
 
     protected $listeners = [
         'delete_user' => 'deleteUser',
@@ -41,10 +47,10 @@ class AddTaxLabelModal extends Component
         $this->validate();
 
         DB::transaction(function () {
-            // Prepare the data for creating a new TaxLabel
+            $categoryString = implode(',', $this->categories);
             $data = [
                 'name' => $this->name,
-                'category' => $this->category,
+                'category' =>  $categoryString,
                 'code' => $this->code,
             ];
 
@@ -89,6 +95,7 @@ class AddTaxLabelModal extends Component
         $this->tax_label_id = $tax_label->id;
         $this->name = $tax_label->name;
         $this->category = $tax_label->category;
+        $this->categories = explode(',', $tax_label->category);
         $this->code = $tax_label->code;
     }
 

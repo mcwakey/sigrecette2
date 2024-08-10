@@ -7,9 +7,9 @@
             <div class="modal-header" id="kt_modal_add_tax_label_header">
                 <!--begin::Modal title-->
                 @if (!$edit_mode)
-                    <h2 class="fw-bold">{{ __('new taxlabel') }}</h2> 
+                    <h2 class="fw-bold">{{ __('new taxlabel') }}</h2>
                 @else
-                    <h2 class="fw-bold">{{ __('Modifier Libellé Fiscale') }}</h2> 
+                    <h2 class="fw-bold">{{ __('Modifier Libellé Fiscale') }}</h2>
                 @endif
                 <!--end::Modal title-->
                 <!--begin::Close-->
@@ -27,27 +27,24 @@
                     <!--begin::Scroll-->
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_tax_label_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_tax_label_header" data-kt-scroll-wrappers="#kt_modal_add_tax_label_scroll" data-kt-scroll-offset="300px">
 
-                        <!--begin::Input group-->
+
 
                         <div class="row mb-7">
                             <div class="col-md-12">
-                                <!--begin::Label-->
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('category') }}</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <select wire:model="category" name="category" class="form-select"
-                                    data-dropdown-parent="#kt_modal_add_tax_label">
-                                    <option>{{ __('select an option') }}</option>
-                                    <option value="CATEGORY 1">{{ __('CATEGORY 1') }}</option>
-                                    <option value="CATEGORY 2">{{ __('CATEGORY 2') }}</option>
-                                    <option value="CATEGORY 3">{{ __('CATEGORY 3') }}</option>
-                                    <!-- <option value="Homme">Homme</option>
-                                    <option value="Femme">Femme</option> -->
-                                </select>
-                                <!--end::Input-->
-                                @error('category')
+
+                                @foreach($allCategories as $category)
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox"  value="{{ $category }}" id="category_{{ $loop->index }}"  wire:model="categories" />
+                                        <label class="form-check-label" for="category_{{ $loop->index }}">
+                                            {{ __($category) }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                                @error('categories')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
+
                         </div>
 
                         <div class="separator saperator-dashed my-5"></div>
