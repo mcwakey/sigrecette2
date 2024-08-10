@@ -153,7 +153,7 @@ class AccountantDepositsDataTable extends DataTable
     {
         return $model
                     ->where('invoice_type', '!=', 'VERSEMENT') // Filter collector_deposits by taxpayer_id
-                    ->AndWhere('reference_deposit', $this->ref==Constants::REFERENCE_DEPOSIT_NULL?null: $this->ref)
+                    ->andWhere('reference_deposit', $this->ref==Constants::REFERENCE_DEPOSIT_NULL?null: $this->ref)
                     ->newQuery();
 
     }
