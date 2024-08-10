@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Enums\PaymentStatusEnums;
+use App\Helpers\Constants;
 use App\Models\Payment;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
@@ -148,25 +149,13 @@ class AccountantDepositsDataTable extends DataTable
             ->setRowId('id');
     }
 
-    /**
-     * Get the query source of dataTable.
-     */
-    // public function query(): QueryBuilder // Remove $request parameter
     public function query(Payment $model): QueryBuilder
     {
         return $model
-        // ->join('taxables', 'payments.taxable_id', '=', 'taxables.id')
-                    // ->with('taxable.tax_label')
-                    // ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
-                    // ->join('users', 'payments.to_user_id', '=', 'users.id')
-                    //  ->orWhere('invoice_id', null) // Filter collector_deposits by taxpayer_id
                     ->where('invoice_type', '!=', 'VERSEMENT') // Filter collector_deposits by taxpayer_id
-                    ->where('reference_deposit', null)
-                    // ->select('payments.*')
-                    //->orderBy('tax_labels.name')
+                    ->AndWhere('reference_deposit', $this->ref==Constants::REFERENCE_DEPOSIT_NULL?null: $this->ref)
                     ->newQuery();
 
-        // return Payment::where('taxpayer_id', $this->id); // Filter collector_deposits by taxpayer_id
     }
 
     /**

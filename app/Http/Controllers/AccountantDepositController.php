@@ -18,7 +18,9 @@ class AccountantDepositController extends Controller
      */
     public function show(string $ref,AccountantDepositsDataTable $dataTable)
     {
-        dump($ref);
-        return $dataTable->render('pages/accountant_deposits.show');
+        return $dataTable->with([
+            'ref'=>$ref,
+        ])
+            ->render('pages/accountant_deposits.show');
     }
 }
