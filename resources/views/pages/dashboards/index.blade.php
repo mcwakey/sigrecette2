@@ -12,22 +12,26 @@
                 margin-bottom: 12px;
                 display: grid;
                 grid-template-columns: repeat(2, 1fr);
-                /* Crée une grille avec 4 colonnes égales */
                 gap: 10px;
-                /* Ajoute un espace entre les éléments de la grille */
                 width: 100%;
                 height: 100%;
             }
 
-            .widget-container {
+            .grid-3 {
+                margin-bottom: 12px;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+                width: 100%;
+                height: 100%;
+                padding: 40px 20px;
+                border-radius: 20px;
+            }
 
-                /* Exemple de style pour voir les éléments plus facilement */
+            .widget-container {
                 padding: 10px;
-                /* Ajoute un padding pour l'espacement interne */
                 box-sizing: border-box;
-                /* Inclut le padding et la bordure dans la largeur et la hauteur */
-                border-radius: 6px;
-                /* Hauteur pa défaut de la div */
+                border-radius: 8px;
                 height: 100%;
             }
         </style>

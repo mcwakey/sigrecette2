@@ -1,4 +1,4 @@
-<div class="card menu-column" style="height:calc(100% - 10px);width:100%;" >
+<div class="card menu-column" style="height:100%;width:100%;" >
     <!--begin::Heading-->
 
     <div style="opacity: 0;pointer-events:none;">
@@ -9,7 +9,7 @@
 
     <div class="d-flex flex-column bgi-no-repeat rounded-top">
         <!--begin::Title-->
-        <h3 class=" fw-semibold px-9 mt-10 -mb-4">Notifications
+        <h3 class=" fw-bold px-9 mt-10 -mb-4">Notifications
             <span class="fs-8 opacity-75 ps-3 badge badge-light-danger"
                 id="notif-counter2">{{ count(Auth::user()->unreadNotifications) }}</span>
         </h3>
