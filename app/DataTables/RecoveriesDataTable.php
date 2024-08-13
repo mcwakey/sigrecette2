@@ -40,9 +40,14 @@ class RecoveriesDataTable extends DataTable
             ->editColumn('invoices.invoice_no', function (Payment $payment) {
                 return $payment->invoice->invoice_no;
             })
+            // ->editColumn('reference', function (Payment $payment) {
+            //     return $payment->reference;
+            // })
+
             ->editColumn('reference', function (Payment $payment) {
-                return $payment->reference;
+                return view('pages/recoveries.columns._reference', compact('payment'));
             })
+
             ->editColumn('tax_labels.code', function (Payment $payment) {
                 return $payment->code ?? '';
             })
