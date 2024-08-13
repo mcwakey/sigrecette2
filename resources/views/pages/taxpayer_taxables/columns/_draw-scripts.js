@@ -155,6 +155,7 @@ document.querySelectorAll('[data-kt-action="view_invoice"]').forEach(function (e
 // Add click event listener to update buttons
 document.querySelectorAll('[data-kt-action="update_invoice"]').forEach(function (element) {
     element.addEventListener('click', function () {
+        console.log([this.getAttribute('data-kt-user-id')])
         Livewire.dispatch('update_invoice', [this.getAttribute('data-kt-user-id')]);
     });
 });

@@ -1,32 +1,35 @@
-@if ($payment->status ==App\Enums\PaymentStatusEnums::PENDING )
-    <span
-        class="badge badge-light-primary">{{ __($payment->status) }}</span>
-    @can('peut accepter un paiement')
-        <button type="button"
-                class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
-                data-kt-user-id="{{ $payment->id }}"
-                data-kt-menu-target="#kt_payment_modal_add_status"
-                data-kt-menu-trigger="click"
-                data-kt-menu-placement="bottom-end"
-                data-kt-action="update_payment_status">
-            <i class="ki-duotone ki-setting-3 fs-3">
-                <span class="path1"></span>
-                <span class="path2"></span>
-                <span class="path3"></span>
-                <span class="path4"></span>
-                <span class="path5"></span>
-            </i>
-        </button>
-    @endcan
-@elseif($payment->status == App\Enums\PaymentStatusEnums::ACCOUNTED)
-    <span
-        class="badge badge-light-success">{{ __(App\Enums\PaymentStatusEnums::ACCOUNTED) }}</span>
-@elseif($payment->status == App\Enums\PaymentStatusEnums::DONE)
-    <span
-        class="badge badge-light-success">{{ __(App\Enums\PaymentStatusEnums::DONE)}}</span>
-    @else
-    <div class="badge badge-lg badge-light-danger d-inline">{{ __(App\Enums\PaymentStatusEnums::CANCELED) }}</div>
+
+    @if ($payment->status ==App\Enums\PaymentStatusEnums::PENDING )
+        <span
+            class="badge badge-light-primary">{{ __($payment->status) }}</span>
+        @can('peut accepter un paiement')
+            @if($payment->reference)
+                <button type="button"
+                        class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto"
+                        data-kt-user-id="{{ $payment->id }}"
+                        data-kt-menu-target="#kt_payment_modal_add_status"
+                        data-kt-menu-trigger="click"
+                        data-kt-menu-placement="bottom-end"
+                        data-kt-action="update_payment_status">
+                    <i class="ki-duotone ki-setting-3 fs-3">
+                        <span class="path1"></span>
+                        <span class="path2"></span>
+                        <span class="path3"></span>
+                        <span class="path4"></span>
+                        <span class="path5"></span>
+                    </i>
+                </button>
 @endif
+        @endcan
+    @elseif($payment->status == App\Enums\PaymentStatusEnums::ACCOUNTED)
+        <span
+            class="badge badge-light-success">{{ __(App\Enums\PaymentStatusEnums::ACCOUNTED) }}</span>
+    @elseif($payment->status == App\Enums\PaymentStatusEnums::DONE)
+        <span
+            class="badge badge-light-warning">{{ __(App\Enums\PaymentStatusEnums::DONE)}}</span>
+        @else
+        <div class="badge badge-lg badge-light-danger d-inline">{{ __(App\Enums\PaymentStatusEnums::CANCELED) }}</div>
+    @endif
 
 
 

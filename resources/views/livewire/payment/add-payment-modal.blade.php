@@ -152,6 +152,8 @@
                         <div class="row">
                             <div class="col">
                                 <label class="required fw-semibold fs-6 mb-2">{{ __("La matière taxable") }}</label>
+                                
+                                    <div class="input-group mb-2">
                                 <select wire:model=code" name="code" class="form-select" data-dropdown-parent="#kt_modal_add_payment" data-kt-action="update_payment_amount">
                                     <option value="">Selectionner une option</option>
                                     @if($paidAndCodeArray!=null)
@@ -164,10 +166,17 @@
 
 
                                 </select>
+                                <span class="input-group-text" id="basic-addon1">{{ __('currency') }}</span>
+                                    </div>
                                 @error('code')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col">
+
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('amount paid') }}</label>
                                 @if (!$edit_amount)
                                     <input wire:model="amount" name="amount" class="form-control mb-2 text-end" type="text" readonly/>
@@ -177,17 +186,8 @@
                                 @error('amount')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col-md-2">
-                                <label class="fw-semibold fs-6 mb-2">{{ __('.') }}</label>
-                                <input class="form-control form-control-flush mb-2" type="text" placeholder="FCFA" readonly />
-                            </div>
-
-
-                        </div>
-
-                        <div class="row">
                             <!--TODO CHEQUE implementation-->
-                            <div class="col">
+                            <div class="col-md-4">
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('payment type') }}</label>
                                 <select wire:model="payment_type" name="payment_type" class="form-select" data-dropdown-parent="#kt_modal_add_payment">
                                     <option value="">Selectionner une option</option>
@@ -198,7 +198,7 @@
                                 @error('payment_type')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col">
+                            <div class="col-md-4">
                                 <label class="fw-semibold fs-6 mb-2">{{ __('reference no') }}</label>
                                 <input wire:model="reference" name="reference" class="form-control mb-2 text-end" type="text" />
                                 @error('reference')

@@ -51,6 +51,7 @@ document.querySelectorAll('[data-kt-action="update_taxpayer"]').forEach(function
 
 document.querySelectorAll('[data-kt-action="update_invoice"]').forEach(function (element) {
     element.addEventListener('click', function () {
+        console.log([this.getAttribute('data-kt-user-id')])
         Livewire.dispatch('update_invoice', [this.getAttribute('data-kt-user-id')]);
     });
 });

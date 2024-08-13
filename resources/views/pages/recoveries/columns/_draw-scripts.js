@@ -37,6 +37,14 @@ document.querySelectorAll('[data-kt-action="update_payment_status"]').forEach(fu
     });
 });
 
+
+document.querySelectorAll('[data-kt-action="update_invoice"]').forEach(function (element) {
+    element.addEventListener('click', function () {
+        console.log([this.getAttribute('data-kt-user-id')])
+        Livewire.dispatch('update_invoice', [this.getAttribute('data-kt-user-id')]);
+    });
+});
+
 // Listen for 'success' event emitted by Livewire
 Livewire.on('success', (message) => {
     // Reload the users-table datatable
