@@ -6,6 +6,7 @@ use App\Enums\InvoicePayStatusEnums;
 use App\Enums\PrintNameEnums;
 use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
+use App\Helpers\InvoiceHelper;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\Year;
@@ -56,7 +57,7 @@ class InvoicesDataTable extends DataTable
                 return ($invoice->taxpayer->latitude ?? '-').' : '.($invoice->taxpayer->longitude ?? '-');
             })
             ->editColumn('tax_labels.code', function (Invoice $invoice) {
-                return $invoice->invoiceitems()->first()->taxpayer_taxable->taxable->tax_label->code ?? '';
+                return implode(',', array_keys(InvoiceHelper::sumAmountsByTaxCode($invoice)));
             })
             ->editColumn('total', function (Invoice $invoice) {
                 if ($invoice->reduce_amount != '')
@@ -188,7 +189,7 @@ class InvoicesDataTable extends DataTable
             Column::make('zones.name')->title(__('zone')),
             Column::make('taxpayers.address')->title(__('address'))->visible(false),
             Column::make('taxpayers.latitude')->title(__('gps'))->visible(false),
-            Column::make('tax_labels.code')->title(__('code'))->visible(false),
+            Column::make('tax_labels.code')->title(__('code')),
             Column::make('total')->title(__('amount'))->name('amount'),
             Column::make('paid')->title(__('Montant payé'))->name('paid')->searchable(false),
             Column::make('remains_to_be_paid')->title(__('Reste'))->name('remains_to_be_paid')->searchable(false),
@@ -241,6 +242,18 @@ class InvoicesDataTable extends DataTable
                         $column->visible(false);
                     }
                 }
+                if($this->type==Constants::INVOICE_TYPE_TITRE){
+                    if($this->delivery==Constants::INVOICE_DELIVERY_NON_LIV_KEY){
+                        if (in_array($column->name, ['paid', 'remains_to_be_paid', 'delivery_date', 'validity', 'to_date','reason_for_reject','type'])) {
+                            $column->visible(false);
+                        }
+                    }elseif ($this->delivery==Constants::INVOICE_DELIVERY_LIV_KEY){
+                        if (in_array($column->name, ['paid', 'remains_to_be_paid',  'validity', 'to_date','reason_for_reject','type'])) {
+                            $column->visible(false);
+                        }
+                    }
+                }
+
 
                 return $column;
             }, $columns);
