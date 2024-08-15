@@ -156,7 +156,7 @@
             @if($data->type ==App\Helpers\Constants::INVOICE_TYPE_TITRE)
                 <span>@if($action===1) AVIS DES SOMMES À PAYER @else AVIS DE REDUCTION OU D’ANNULATION @endif </span>
             @else
-                <span>AVIS AU COMPTANT</span>
+                <span>@if($action===1) AVIS AU COMPTANT @else AVIS AU COMPTANT DE REDUCTION OU D’ANNULATION @endif </span>
             @endif
 
 
@@ -169,7 +169,7 @@
     </div>
     <div class="sub-header">
         <p>
-            <span>Nom/Raison sociale: {{$data->taxpayer->social_work??$data->taxpayer->name}},</span>
+            <span>Nom/Raison sociale: {{ strlen($data->taxpayer->social_work) > 0 ? $data->taxpayer->social_work : $data->taxpayer->name }},</span>
             <span>Téléphone :{{$data->taxpayer->mobilephone}}</span>
         </p>
         <p>
