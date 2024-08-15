@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Enums\ExportTypeEnums;
 use App\Enums\InvoiceActionsEnums;
 use App\Enums\InvoiceStatusEnums;
 use App\Enums\PaymentStatusEnums;
@@ -43,6 +44,16 @@ class Constants
 
     const PAYMENT_STATE_CANCEL_KEY = "del";
     const PAYMENT_STATE_PENDING_KEY = self:: INVOICE_STATE_PENDING_KEY;
+
+    const EXPORT_TAXPAYER_KEY = "contribuables";
+    const EXPORT_INVOICE_KEY = "avis";
+    const EXPORT_PAYMENT_KEY = "recouvrement";
+
+    const EXPORT_VALIDATION_MAP = [
+       self::EXPORT_TAXPAYER_KEY => ExportTypeEnums::TAXPAYER,
+         self::EXPORT_INVOICE_KEY => ExportTypeEnums::INVOICE,
+        self::EXPORT_PAYMENT_KEY => ExportTypeEnums::PAYMENT,
+    ];
     const INVOICE_STATE_VALIDATION_MAP = [
         self::INVOICE_STATE_DRAFT_KEY => InvoiceStatusEnums::DRAFT,
         self::INVOICE_STATE_ACCEPTED_KEY => InvoiceStatusEnums::ACCEPTED,

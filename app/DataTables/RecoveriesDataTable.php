@@ -66,6 +66,9 @@ class RecoveriesDataTable extends DataTable
                 //return $payment->remaining_amount;
                 return view('pages/recoveries.columns._status', compact('payment'));
             })
+            ->editColumn('note', function (Payment $payment) {
+                return $payment->note;
+            })
             ->addColumn('action', function (Payment $payment) {
                 return view('pages/recoveries.columns._actions', compact('payment'));
             })
@@ -83,24 +86,23 @@ class RecoveriesDataTable extends DataTable
             ->join('tax_labels', 'tax_labels.code', '=', 'payments.code')
             ->select('payments.*')
             ->whereNotNull('payments.user_id')
-            ->orWhereNotIn('payments.reference', [Constants::ANNULATION, Constants::REDUCTION])
-            ->orWhereNull('payments.reference')
-            ->distinct()
+            ->where(function($q) {
+                $q->whereNull('payments.reference')
+                    ->orWhereNotIn('payments.reference', [Constants::ANNULATION, Constants::REDUCTION]);
+            })
             ->whereBetween('payments.created_at', [$this->startDate, $this->endDate])
             ->orderBy('payments.created_at', 'desc')
-            ->newQuery();
+            ->distinct();
 
-
-
-
-        if ($this->state!=null) {
+        if ($this->state != null) {
             $query->where('payments.status', '=', $this->state);
-        }else {
-            $query->whereIn('payments.status', [PaymentStatusEnums::DONE,PaymentStatusEnums::ACCOUNTED]);
+        } else {
+            $query->whereIn('payments.status', [PaymentStatusEnums::DONE, PaymentStatusEnums::ACCOUNTED]);
         }
 
         return $query;
     }
+
 
 
     /**
@@ -135,6 +137,7 @@ class RecoveriesDataTable extends DataTable
             Column::make('status')->title(__('status')),
             Column::make('users.name')->title(__('user'))->addClass('d-flex align-items-center'),
             Column::make('taxpayer_id')->visible(false),
+            Column::make('note'),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
                 ->exportable(false)
@@ -145,6 +148,10 @@ class RecoveriesDataTable extends DataTable
 
             if ($this->state!=PaymentStatusEnums::CANCELED) {
                 if (in_array($column->name, ['action'])) {
+                    $column->visible(false);
+                }
+            } if ($this->state == null) {
+                if (in_array($column->name, ['note'])) {
                     $column->visible(false);
                 }
             }

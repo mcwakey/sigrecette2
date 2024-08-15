@@ -544,7 +544,7 @@
                     </div>
                     <div class="menu-item">
                         <a class="menu-link {{request()->routeIs('prints') ? 'active' : '' }}"
-                           href="{{  App\Helpers\Constants::checkUrl(route('prints')) }}">
+                           href="{{  App\Helpers\Constants::checkUrl(route('exports', ['export_type' =>  App\Helpers\Constants::EXPORT_TAXPAYER_KEY])) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
@@ -554,7 +554,7 @@
                     </div>
                     <div class="menu-item">
                         <a class="menu-link {{request()->routeIs('prints') ? 'active' : '' }}"
-                           href="{{  App\Helpers\Constants::checkUrl(route('prints')) }}">
+                           href="{{  App\Helpers\Constants::checkUrl( route('exports', ['export_type' =>  App\Helpers\Constants::EXPORT_INVOICE_KEY]) ) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
@@ -564,7 +564,7 @@
                     </div>
                     <div class="menu-item">
                         <a class="menu-link {{request()->routeIs('prints') ? 'active' : '' }}"
-                           href="{{  App\Helpers\Constants::checkUrl(route('prints')) }}">
+                           href="{{  App\Helpers\Constants::checkUrl(route('exports', ['export_type' =>  App\Helpers\Constants::EXPORT_PAYMENT_KEY])) }}">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
@@ -750,7 +750,15 @@
                 <!--end:Menu link-->
             </div>
             @endhasanyrole
-
+            <div class="menu-item">
+                <!--begin:Menu link-->
+                <a class="menu-link {{ request()->routeIs('import-view') ? 'active' : '' }}"
+                   href="{{   App\Helpers\Constants::checkUrl(App\Helpers\Constants::checkUrl(route('import-view'))) }}">
+                    <span class="menu-icon">{!! getIcon('user', 'fs-2') !!}</span>
+                    <span class="menu-title">{{ __('Sauveugarde') }}</span>
+                </a>
+                <!--end:Menu link-->
+            </div>
             <!--end:Menu item-->
 
 
