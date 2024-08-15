@@ -41,7 +41,7 @@ class CollectorsDataTable extends DataTable
                 return $stock_transfer->created_at->format('d M Y');
             })
             ->editColumn('taxables.name', function (StockTransfer $stock_transfer) {
-                return $stock_transfer->taxable->name;
+                return $stock_transfer?->taxable?->name;
             })
             // ->editColumn('trans_desc', function (StockTransfer $stock_transfer) {
             //     return $stock_transfer->trans_desc;
