@@ -34,9 +34,6 @@ class RecoveryController extends Controller
         $zones = Zone::all();
         $tax_labels = TaxLabel::all();
         if($delivery==null){
-
-
-
             return $dataTable->with(
                 [
                 'state'=>$state,

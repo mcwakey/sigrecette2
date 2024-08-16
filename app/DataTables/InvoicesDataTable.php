@@ -244,7 +244,7 @@ class InvoicesDataTable extends DataTable
                 }
                 if($this->type==Constants::INVOICE_TYPE_TITRE){
                     if($this->delivery==Constants::INVOICE_DELIVERY_NON_LIV_KEY){
-                        if (in_array($column->name, ['paid', 'remains_to_be_paid', 'delivery_date', 'validity', 'to_date','reason_for_reject','type'])) {
+                        if (in_array($column->name, ['paid', 'remains_to_be_paid',  'validity', 'to_date','reason_for_reject','type'])) {
                             $column->visible(false);
                         }
                     }elseif ($this->delivery==Constants::INVOICE_DELIVERY_LIV_KEY){
