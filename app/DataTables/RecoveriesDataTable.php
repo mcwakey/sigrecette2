@@ -66,8 +66,8 @@ class RecoveriesDataTable extends DataTable
                 //return $payment->remaining_amount;
                 return view('pages/recoveries.columns._status', compact('payment'));
             })
-            ->editColumn('note', function (Payment $payment) {
-                return $payment->note;
+            ->editColumn('notes', function (Payment $payment) {
+                return $payment->notes;
             })
             ->addColumn('action', function (Payment $payment) {
                 return view('pages/recoveries.columns._actions', compact('payment'));
@@ -137,7 +137,7 @@ class RecoveriesDataTable extends DataTable
             Column::make('status')->title(__('status')),
             Column::make('users.name')->title(__('user'))->addClass('d-flex align-items-center'),
             Column::make('taxpayer_id')->visible(false),
-            Column::make('note'),
+            Column::make('notes'),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
                 ->exportable(false)
@@ -151,7 +151,7 @@ class RecoveriesDataTable extends DataTable
                     $column->visible(false);
                 }
             } if ($this->state == null) {
-                if (in_array($column->name, ['note'])) {
+                if (in_array($column->name, ['notes'])) {
                     $column->visible(false);
                 }
             }
