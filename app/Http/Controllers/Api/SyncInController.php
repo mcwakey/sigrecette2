@@ -7,6 +7,8 @@ use App\Models\Taxpayer;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Invoice;
+use App\Models\Payment;
 use App\Models\TaxpayerTaxable;
 
 class SyncInController extends Controller
@@ -32,25 +34,31 @@ class SyncInController extends Controller
                         if($value['dataStatus'] == $this->new){
                             // Set taxpayer creation source ??
                             $value['from_mobile_and_validate_state'] = '';
+                            Taxpayer::create($this->transformKeysToSnakeCase($value));
+                        }else{
+                            Taxpayer::find($taxpayerId)?->update($this->transformKeysToSnakeCase($value));
                         }
-                        Taxpayer::updateOrCreate(['id' => $taxpayerId], $this->transformKeysToSnakeCase($value));
                     }
 
                     foreach ($taxpayerTaxables as $taxpayerTaxable) {
                         if(empty($taxpayerTaxable['dataStatus']) || isset($taxpayerTaxable['dataStatus'])){
-                            TaxpayerTaxable::updateOrCreate(['id' => $taxpayerTaxable['_id']], $this->transformKeysToSnakeCase($taxpayerTaxable));
+                            if($value['dataStatus'] == $this->new){
+                                TaxpayerTaxable::create($this->transformKeysToSnakeCase($taxpayerTaxable));
+                            }else{
+                                TaxpayerTaxable::find($taxpayerTaxable['_id'])?->update($this->transformKeysToSnakeCase($taxpayerTaxable));
+                            }
                         }
                     }
 
                     foreach ($taxpayerInvoices as $taxpayerInvoice) {
                         if(empty($taxpayerInvoice['dataStatus']) || isset($taxpayerInvoice['dataStatus'])){
-                            TaxpayerTaxable::updateOrCreate(['id' => $taxpayerInvoice['_id']], $this->transformKeysToSnakeCase($taxpayerInvoice));
+                            Invoice::find($taxpayerInvoice['_id'])?->update($this->transformKeysToSnakeCase($taxpayerTaxable));
                         }
                     }
 
                     foreach ($taxpayerPayments as $taxpayerPayment) {
                         if(empty($taxpayerPayment['dataStatus']) || isset($taxpayerPayment['dataStatus'])){
-                            TaxpayerTaxable::updateOrCreate(['id' => $taxpayerPayment['_id']], $this->transformKeysToSnakeCase($taxpayerPayment));
+                            Payment::updateOrCreate(['id' => $taxpayerPayment['_id']], $this->transformKeysToSnakeCase($taxpayerPayment));
                         }
                     }
                 }
