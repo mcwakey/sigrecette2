@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\SearchInvoiceController;
 use App\Http\Controllers\Api\SearchTaxLabelController;
 use App\Http\Controllers\Api\SearchTaxpayerController;
 use App\Http\Controllers\Api\SearchTaxpayerTaxableController;
+use App\Http\Controllers\Api\SyncInController;
 use App\Http\Controllers\Api\TaxpayerController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Http\Request;
@@ -36,7 +37,9 @@ Route::post('/v1/check', [CheckIpAddress::class, 'check']);
 Route::Post('/v1/search/taxpayers', [SearchTaxpayerController::class, 'search']);
 Route::Post('/v1/search/taxpayerstaxables', [SearchTaxpayerTaxableController::class, 'search']);
 Route::Post('/v1/search/invoices', [SearchInvoiceController::class, 'search']);
+
 Route::Post('/v1/synchronisation/out', [SearchTaxpayersAndInvoiceAndTaxpayerTaxableController::class, 'search']);
+Route::post('/v1/synchronisation/in', [SyncInController::class, 'syncIn']);
 
 Route::post('/v1/user/notifications', [NotificationController::class, 'notifications']);
 Route::post('/v1/user/notification/update', [NotificationController::class, 'updateNotification']);
@@ -44,13 +47,13 @@ Route::post('/v1/user/notification/update', [NotificationController::class, 'upd
 Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
 
-    Route::resource('taxpayers', TaxpayerController::class)->only([
-        'show',
-        'index',
-        'store',
-    ]);
+    // Route::resource('taxpayers', TaxpayerController::class)->only([
+    //     'show',
+    //     'index',
+    //     'store',
+    // ]);
 
-    //Route::Post('/search/taxpayers', [SearchTaxpayerController::class, 'search']);
+    // //Route::Post('/search/taxpayers', [SearchTaxpayerController::class, 'search']);
 });
 
 
