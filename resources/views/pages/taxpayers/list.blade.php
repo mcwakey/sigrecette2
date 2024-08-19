@@ -61,16 +61,6 @@
                         </div>
                     @endcan
                         <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
-
-                            <div id="no-data-message" style="display: none;">
-                                <div class=" ms-5 mt-1 me-5">
-                                    <livewire:export-button :table-id="$dataTable->getTableId()" auto-download="true" type="xlsx" buttonName="Export Excel"/>
-                                </div>
-                            </div>
-
-
-                        </div>
-                        <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
                             <!--begin::Add user-->
                             <a href="#" class="ms-5 mt-1" data-bs-toggle="collapse" data-bs-target="#kt_tutorial_form">
                                 <span>
@@ -118,7 +108,7 @@
                             <select class="form-select" id="mySearchFour">
                                 <option value=""></option>
                                 @foreach ($cantons as $canton)
-                                    <option value="{{ $canton->id }}">{{ $canton->name }}</option>
+                                    <option value="{{ $canton->name }}">{{ $canton->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -127,7 +117,7 @@
                             <select class="form-select" id="mySearchFive">
                                 <option value=""></option>
                                 @foreach ($towns as $town)
-                                    <option value="{{ $town->id }}">{{ $town->name }}</option>
+                                    <option value="{{ $town->name }}">{{ $town->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -141,32 +131,10 @@
                             <select class="form-select" id="mySearchEight">
                                 <option value=""></option>
                                 @foreach ($zones as $zone)
-                                    <option value="{{ $zone->id }}">{{ $zone->name }}</option>
+                                    <option value="{{ $zone->name }}">{{ $zone->name }}</option>
                                 @endforeach
                             </select>
                             <!--end::Select-->
-                        </div>
-                        <div class="col-xxl-1">
-                            <label class="fs-6 form-label fw-bold text-dark">{{ __('Catégorie') }}</label>
-                            <!-- <input type="text" class="form-control" name="tags" /> -->
-
-                            <!--begin::Select-->
-                            <select class="form-select" id="myCat">
-                                <option value=""></option>
-                                @foreach ($categories as $cat)
-                                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
-                                @endforeach
-                            </select>
-                            <!--end::Select-->
-                        </div>
-                        <div class="col-xxl-1">
-                            <label class="fs-6 form-label fw-bold text-dark">{{ __('Activité') }}</label>
-                            <select class="form-select" id="myAct">
-                                <option value=""></option>
-                                @foreach ($activities as $activity)
-                                    <option value="{{$activity->id }}">{{ $activity->name }}</option>
-                                @endforeach
-                            </select>
                         </div>
                     </div>
 
@@ -307,9 +275,10 @@
                 window.LaravelDataTables['taxpayers-table'].column(3).search(this.value).draw();
             });
 
-            document.getElementById('mySearchFour').addEventListener('keyup', function() {
+            document.getElementById('mySearchFour').addEventListener('change', function() {
                 window.LaravelDataTables['taxpayers-table'].column(4).search(this.value).draw();
             });
+
 
             // document.getElementById('mySearchFour').addEventListener('keyup', function () {
             //     var query = this.value.toLowerCase(); // Convert search query to lowercase
@@ -346,17 +315,15 @@
 
 
 
-            document.getElementById('mySearchFive').addEventListener('keyup', function() {
+            document.getElementById('mySearchFive').addEventListener('change', function() {
                 window.LaravelDataTables['taxpayers-table'].column(5).search(this.value).draw();
             });
 
-            document.getElementById('mySearchSix').addEventListener('keyup', function() {
-                window.LaravelDataTables['taxpayers-table'].column(6).search(this.value).draw();
+            document.getElementById('mySearchEight').addEventListener('change', function() {
+                window.LaravelDataTables['taxpayers-table'].column(7).search(this.value).draw();
             });
 
-            document.getElementById('mySearchEight').addEventListener('change', function() {
-                window.LaravelDataTables['taxpayers-table'].column(8).search(this.value).draw();
-            });
+
 
             document.addEventListener('livewire:init', function() {
                 Livewire.on('success', function() {
