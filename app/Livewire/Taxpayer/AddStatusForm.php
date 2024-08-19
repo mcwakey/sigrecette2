@@ -63,8 +63,6 @@ class AddStatusForm extends Component
                 $taxpayer = Taxpayer::find($this->taxpayer_id);
                 $taxpayer->from_mobile_and_validate_state = $this->status;
 
-
-
                 $taxpayer->save();
 
                 $this->dispatchMessage('Taxpayer', 'update');

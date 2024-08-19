@@ -8,13 +8,15 @@
         @if ($status == App\Enums\TaxpayerStateEnums::PENDING)
             <select class="form-select form-select-solid" wire:model="status" name="status"
                     data-placeholder="Select option" data-allow-clear="true">
+                <option>{{ __('select an option') }}</option>
                 <option value="{{App\Enums\TaxpayerStateEnums::APPROVED}}">{{ __('valider') }}</option>
                 <option value="{{App\Enums\TaxpayerStateEnums::REJECTED}}">{{ __('rejeter') }}</option>
             </select>
         @endif
 
 
-        <!--end::Input-->
+        @error('status')
+        <span class="text-danger">{{ $message }}</span> @enderror
     </div>
     <!--end::Input group-->
     <!--begin::Actions-->
