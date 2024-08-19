@@ -254,8 +254,8 @@
 
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->input('type') ==    App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY  && !request()->has('state')? 'active' : '' }}"
-                           href="{{  App\Helpers\Constants::checkUrl( route('invoices.index', ['type' =>   App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY])) }}">
+                        <a class="menu-link {{ request()->routeIs('invoices.*') &&  request()->input('type') ==    App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY  && request()->has('state') & request()->input('state') ==  App\Helpers\Constants::INVOICE_STATE_APPROVE_KEY? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl( route('invoices.index', ['state' =>  App\Helpers\Constants::INVOICE_STATE_APPROVE_KEY,'type' =>   App\Helpers\Constants::INVOICE_TYPE_COMPTANT_KEY])) }}">
 		<span class="menu-bullet">
 			<span class="bullet bullet-dot"></span>
 		</span>
@@ -542,6 +542,8 @@
                         </a>
                         <!--end:Menu link-->
                     </div>
+
+                    @feature('export_taxpayer_feature')
                     <div class="menu-item">
                         <a class="menu-link {{request()->routeIs('prints') ? 'active' : '' }}"
                            href="{{  App\Helpers\Constants::checkUrl(route('exports', ['export_type' =>  App\Helpers\Constants::EXPORT_TAXPAYER_KEY])) }}">
@@ -550,8 +552,10 @@
 								</span>
                             <span class="menu-title">{{  __('Export Taxpayers') }}</span>
                         </a>
-                        <!--end:Menu link-->
                     </div>
+                    @endfeature
+
+                    @feature('export_invoice_feature')
                     <div class="menu-item">
                         <a class="menu-link {{request()->routeIs('prints') ? 'active' : '' }}"
                            href="{{  App\Helpers\Constants::checkUrl( route('exports', ['export_type' =>  App\Helpers\Constants::EXPORT_INVOICE_KEY]) ) }}">
@@ -562,6 +566,8 @@
                         </a>
                         <!--end:Menu link-->
                     </div>
+                    @endfeature
+                    @feature('export_recovery_feature')
                     <div class="menu-item">
                         <a class="menu-link {{request()->routeIs('prints') ? 'active' : '' }}"
                            href="{{  App\Helpers\Constants::checkUrl(route('exports', ['export_type' =>  App\Helpers\Constants::EXPORT_PAYMENT_KEY])) }}">
@@ -572,6 +578,7 @@
                         </a>
                         <!--end:Menu link-->
                     </div>
+                    @endfeature
                 </div>
                 <!--end:Menu sub-->
             </div>
@@ -637,7 +644,6 @@
             <!--begin:Menu item-->
             <div data-kt-menu-trigger="click"
                  class="menu-item menu-accordion {{ request()->routeIs('administratives.*') ? 'here show' : '' }}">
-
 					<span class="menu-link">
 						<span class="menu-icon">{!! getIcon('pointers', 'fs-2') !!}</span>
 						<span class="menu-title">{{ __('Découpage administratif') }}</span>
@@ -666,13 +672,8 @@
 								</span>
                             <span class="menu-title">{{ __('Villages/Quartiers') }}</span>
                         </a>
-                        <!--end:Menu link-->
                     </div>
-                    <!--end:Menu item-->
-                    <!--begin:Menu item-->
-
                     <div class="menu-item">
-                        <!--begin:Menu link-->
                         <a class="menu-link {{ request()->routeIs('administratives.zones.*') ? 'active' : '' }}"
                            href="{{  App\Helpers\Constants::checkUrl(route('administratives.zones.index')) }}">
 								<span class="menu-bullet">
@@ -680,7 +681,6 @@
 								</span>
                             <span class="menu-title">{{ __('zones') }}</span>
                         </a>
-                        <!--end:Menu link-->
                     </div>
                 </div>
             </div>
@@ -702,10 +702,8 @@
 								</span>
                             <span class="menu-title">{{ __('Catégories') }}</span>
                         </a>
-                        <!--end:Menu link-->
                     </div>
                     <div class="menu-item">
-                        <!--begin:Menu link-->
                         <a class="menu-link {{ request()->routeIs('economics.activities.*') ? 'active' : '' }}"
                            href="{{  App\Helpers\Constants::checkUrl(route('economics.activities.index')) }}">
 								<span class="menu-bullet">
@@ -713,7 +711,6 @@
 								</span>
                             <span class="menu-title">{{ __('Activités') }}</span>
                         </a>
-                        <!--end:Menu link-->
                     </div>
                 </div>
             </div>
@@ -726,7 +723,6 @@
 					</span>
                 <div class="menu-sub menu-sub-accordion pt-3">
                     <div class="menu-item">
-                        <!--begin:Menu link-->
                         <a class="menu-link {{ request()->routeIs('settings.communes.*') ? 'active' : '' }}"
                            href="{{  App\Helpers\Constants::checkUrl(route('settings.communes.index')) }}">
 								<span class="menu-bullet">
@@ -734,31 +730,12 @@
 								</span>
                             <span class="menu-title">{{ __('Voir les informations de la commune') }}</span>
                         </a>
-                        <!--end:Menu link-->
                     </div>
                 </div>
             </div>
 
-            @hasanyrole(['administrateur_system'])
-            <div class="menu-item">
-                <!--begin:Menu link-->
-                <a class="menu-link {{ request()->routeIs('import-view') ? 'active' : '' }}"
-                   href="{{   App\Helpers\Constants::checkUrl(App\Helpers\Constants::checkUrl(route('import-view'))) }}">
-                    <span class="menu-icon">{!! getIcon('user', 'fs-2') !!}</span>
-                    <span class="menu-title">{{ __('Importer des contribuables') }}</span>
-                </a>
-                <!--end:Menu link-->
-            </div>
-            @endhasanyrole
-            <div class="menu-item">
-                <!--begin:Menu link-->
-                <a class="menu-link {{ request()->routeIs('import-view') ? 'active' : '' }}"
-                   href="{{   App\Helpers\Constants::checkUrl(App\Helpers\Constants::checkUrl(route('import-view'))) }}">
-                    <span class="menu-icon">{!! getIcon('user', 'fs-2') !!}</span>
-                    <span class="menu-title">{{ __('Sauveugarde') }}</span>
-                </a>
-                <!--end:Menu link-->
-            </div>
+
+
             <!--end:Menu item-->
 
 
@@ -833,8 +810,28 @@
                 </div>
                 <!--end:Menu sub-->
             </div>
-            <!--end:Menu item-->
-
+            @feature('backup_feature')
+            <div class="menu-item">
+                <!--begin:Menu link-->
+                <a class="menu-link {{ request()->routeIs('export_backup') ? 'active' : '' }}"
+                   href="{{   App\Helpers\Constants::checkUrl(App\Helpers\Constants::checkUrl(route('export_backup'))) }}">
+                    <span class="menu-icon">{!! getIcon('user', 'fs-2') !!}</span>
+                    <span class="menu-title">{{ __('Sauvegarde') }}</span>
+                </a>
+                <!--end:Menu link-->
+            </div>
+            @endfeature
+            @hasanyrole(['administrateur_system'])
+            <div class="menu-item">
+                <!--begin:Menu link-->
+                <a class="menu-link {{ request()->routeIs('import-view') ? 'active' : '' }}"
+                   href="{{   App\Helpers\Constants::checkUrl(App\Helpers\Constants::checkUrl(route('import-view'))) }}">
+                    <span class="menu-icon">{!! getIcon('user', 'fs-2') !!}</span>
+                    <span class="menu-title">{{ __('Importer des contribuables') }}</span>
+                </a>
+                <!--end:Menu link-->
+            </div>
+            @endhasanyrole
             @endhasanyrole
 
 

@@ -21,7 +21,7 @@ use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 
-class AddTaxpayerStatusForm extends Component
+class AddStatusForm extends Component
 {
     use DispatchesMessages;
     public $taxpayer_id;
@@ -50,7 +50,7 @@ class AddTaxpayerStatusForm extends Component
     }
     public function render()
     {
-        return view('livewire.taxpayer.add-taxpayer-status-form',['status' => $this->status]);
+        return view('livewire.taxpayer.add-status-form',['status' => $this->status]);
     }
 
 
