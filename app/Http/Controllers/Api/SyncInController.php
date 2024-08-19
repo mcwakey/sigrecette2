@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use Exception;
 use App\Models\Taxpayer;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -32,8 +31,7 @@ class SyncInController extends Controller
                     
                     if (empty($value['dataStatus']) || isset($value['dataStatus'])) {
                         if($value['dataStatus'] == $this->new){
-                            // Set taxpayer creation source ??
-                            $value['from_mobile_and_validate_state'] = '';
+                            $value['from_mobile_and_validate_state'] = 'PENDING';
                             Taxpayer::create($this->transformKeysToSnakeCase($value));
                         }else{
                             Taxpayer::find($taxpayerId)?->update($this->transformKeysToSnakeCase($value));
@@ -52,7 +50,7 @@ class SyncInController extends Controller
 
                     foreach ($taxpayerInvoices as $taxpayerInvoice) {
                         if(empty($taxpayerInvoice['dataStatus']) || isset($taxpayerInvoice['dataStatus'])){
-                            Invoice::find($taxpayerInvoice['_id'])?->update($this->transformKeysToSnakeCase($taxpayerTaxable));
+                            Invoice::find($taxpayerInvoice['_id'])?->update($this->transformKeysToSnakeCase($taxpayerInvoice));
                         }
                     }
 
