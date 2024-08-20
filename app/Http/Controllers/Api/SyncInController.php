@@ -40,7 +40,7 @@ class SyncInController extends Controller
 
                     foreach ($taxpayerTaxables as $taxpayerTaxable) {
                         if(empty($taxpayerTaxable['dataStatus']) || isset($taxpayerTaxable['dataStatus'])){
-                            if($value['dataStatus'] == $this->new){
+                            if($taxpayerTaxable['dataStatus'] == $this->new){
                                 TaxpayerTaxable::create($this->transformKeysToSnakeCase($taxpayerTaxable));
                             }else{
                                 TaxpayerTaxable::find($taxpayerTaxable['_id'])?->update($this->transformKeysToSnakeCase($taxpayerTaxable));
