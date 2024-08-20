@@ -87,7 +87,7 @@
                             <select class="form-select" id="mySearchFour">
                                 <option value=""></option>
                                 @foreach ($cantons as $canton)
-                                    <option value="{{ $canton->id }}">{{ $canton->name }}</option>
+                                    <option value="{{ $canton->name }}">{{ $canton->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -96,7 +96,7 @@
                             <select class="form-select" id="mySearchFive">
                                 <option value=""></option>
                                 @foreach ($towns as $town)
-                                    <option value="{{ $town->id }}">{{ $town->name }}</option>
+                                    <option value="{{  $town->name }}">{{ $town->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -107,23 +107,20 @@
                             <!-- <input type="text" class="form-control" name="tags" /> -->
 
                             <!--begin::Select-->
-                            <select class="form-select" id="mySearchEight">
+                            <select class="form-select" id="mySearchSix">
                                 <option value=""></option>
                                 @foreach ($zones as $zone)
-                                    <option value="{{ $zone->id }}">{{ $zone->name }}</option>
+                                    <option value="{{ $zone->name }}">{{ $zone->name }}</option>
                                 @endforeach
                             </select>
                             <!--end::Select-->
                         </div>
                         <div class="col-xxl-1">
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('Catégorie') }}</label>
-                            <!-- <input type="text" class="form-control" name="tags" /> -->
-
-                            <!--begin::Select-->
                             <select class="form-select" id="myCat">
                                 <option value=""></option>
                                 @foreach ($categories as $cat)
-                                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                    <option value="{{ $cat->name }}">{{ $cat->name }}</option>
                                 @endforeach
                             </select>
                             <!--end::Select-->
@@ -133,7 +130,7 @@
                             <select class="form-select" id="myAct">
                                 <option value=""></option>
                                 @foreach ($activities as $activity)
-                                    <option value="{{$activity->id }}">{{ $activity->name }}</option>
+                                    <option value="{{ $activity->name }}">{{ $activity->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -270,23 +267,25 @@
                 window.LaravelDataTables['export-taxpayers-table'].column(3).search(this.value).draw();
             });
 
-            document.getElementById('mySearchFour').addEventListener('keyup', function() {
-                window.LaravelDataTables['export-taxpayers-table'].column(4).search(this.value).draw();
+            document.getElementById('mySearchFour').addEventListener('change', function() {
+                window.LaravelDataTables['export-taxpayers-table'].column(17).search(this.value).draw();
             });
 
 
-            document.getElementById('mySearchFive').addEventListener('keyup', function() {
-                window.LaravelDataTables['export-taxpayers-table'].column(5).search(this.value).draw();
+            document.getElementById('mySearchFive').addEventListener('change', function() {
+                window.LaravelDataTables['export-taxpayers-table'].column(18).search(this.value).draw();
             });
 
-            document.getElementById('mySearchSix').addEventListener('keyup', function() {
-                window.LaravelDataTables['export-taxpayers-table'].column(6).search(this.value).draw();
+            document.getElementById('mySearchSix').addEventListener('change', function() {
+                window.LaravelDataTables['export-taxpayers-table'].column(19).search(this.value).draw();
             });
 
             document.getElementById('mySearchEight').addEventListener('change', function() {
                 window.LaravelDataTables['export-taxpayers-table'].column(8).search(this.value).draw();
             });
-
+            document.getElementById('myCat').addEventListener('change', function() {
+                window.LaravelDataTables['export-taxpayers-table'].column(12).search(this.value).draw();
+            });
             document.addEventListener('livewire:init', function() {
                 Livewire.on('success', function() {
                     $('#kt_modal_add_taxpayer').modal('hide');

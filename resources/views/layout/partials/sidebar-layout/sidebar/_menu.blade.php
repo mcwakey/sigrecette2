@@ -815,7 +815,7 @@
                 <!--begin:Menu link-->
                 <a class="menu-link {{ request()->routeIs('export_backup') ? 'active' : '' }}"
                    href="{{   App\Helpers\Constants::checkUrl(App\Helpers\Constants::checkUrl(route('export_backup'))) }}">
-                    <span class="menu-icon">{!! getIcon('user', 'fs-2') !!}</span>
+                    <span class="menu-icon">{!! getIcon('folder-down', 'fs-2') !!}</span>
                     <span class="menu-title">{{ __('Sauvegarde') }}</span>
                 </a>
                 <!--end:Menu link-->

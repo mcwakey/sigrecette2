@@ -16,8 +16,10 @@ use App\Models\Year;
 use App\Models\Zone;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
-
+use Illuminate\Support\Str;
 class ExportController extends Controller
 {
     //public function index( string $type,ExportTaxpayersDataTable $exportTaxpayersDataTable)
@@ -67,5 +69,48 @@ class ExportController extends Controller
 
         }
 
+    }
+    public function backup()
+
+    {
+        return view('pages/export/backup.show');
+    }
+    public function backupDownload()
+    {
+
+        Artisan::call('backup:run');
+
+      //  $outputText = Artisan::output();
+
+
+       // dd($outputText);
+
+
+        $diskName = config('backup.backup.destination.disks')[0];
+
+        // Construire le chemin complet avec le nom de l'application
+        $rootPath = config('filesystems.disks.' . $diskName . '.root');
+        //$fullBackupPath = $rootPath . DIRECTORY_SEPARATOR . config('app.name');
+
+        // Lister les fichiers de sauvegarde
+        $file = collect(Storage::disk($diskName)->files(config('app.name')))
+            ->filter(fn($file) => Str::endsWith($file, '.zip'))
+            ->sortByDesc(fn($file) => Storage::disk($diskName)->lastModified($file))
+            ->first();
+
+        if (!$file) {
+            return response()->json([
+                'error' => 'Aucune sauvegarde trouvée',
+                'disk_name' => $diskName,
+            ], 404);
+        }
+        $fullPath = realpath($rootPath . DIRECTORY_SEPARATOR . $file);
+
+
+        if ($fullPath) {
+            return response()->download($fullPath);
+        } else {
+            return response()->json(['error' => 'File not found'], 404);
+        }
     }
 }

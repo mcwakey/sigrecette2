@@ -24,8 +24,8 @@ class LogsUserActivity
                     'method' => $request->method(),
                 ]),
                 'response' => json_encode([
-                    'status' => $response->status(),
-                    'status_text' => $response->statusText()
+                    'status' =>  method_exists($response, 'status') ?$response->status():null,
+                    'status_text' => method_exists($response, 'statusText') ?$response->statusText():null
                 ]),
             ];
 
@@ -36,7 +36,7 @@ class LogsUserActivity
                 } catch (\Exception $e) {
                     // Handle exception (optional)
                 }
-            } else if (!$request->routeIs('taxpayers.*') && $response->status() != 404) {
+            } else if (!$request->routeIs('taxpayers.*')&& method_exists($response, 'status') && $response->status() != 404) {
                 Queue::push(new LogUserActivity($data));
             }
         }

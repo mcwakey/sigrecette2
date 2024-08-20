@@ -152,6 +152,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/prints',   [PrintController::class, 'index'])->name("prints");
     Route::get('/exports',   [ExportController::class, 'index'])->name("exports");
     Route::get('/exports/backup',   [ExportController::class, 'backup'])->name("export_backup");
+    Route::get('/exports/backupdownload',   [ExportController::class, 'backupDownload'])->name("backupdownload");
     Route::get('/generate-pdf/{data}/{type?}/{action?}/{id?}', [PrintController::class, 'download'])->name("generatePdf");
     Route::get('/generatepdf/{printFile}/{type?}/{action?}', [PrintController::class, 'downloadWithPrintData'])->name("generateWithPrintData");
     Route::middleware(EnsureIsAdmin::class)->post('/import/taxpayer', [TaxpayerController::class, 'import'])->name('import.process');

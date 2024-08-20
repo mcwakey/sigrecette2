@@ -235,7 +235,7 @@ $filters = [
                             <select class="form-select" id="mySearchEight">
                                 <option value=""></option>
                                 @foreach ($tax_labels as $tax_label)
-                                    <option value="{{ $tax_label->id }}">{{ $tax_label->code }} --
+                                    <option value="{{ $tax_label->code }}">{{ $tax_label->code }} --
                                         {{ $tax_label->name }}</option>
                                 @endforeach
                             </select>

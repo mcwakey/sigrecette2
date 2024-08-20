@@ -152,11 +152,13 @@
 
                 <!--end:::Tab item-->
                 @hasanyrole(['administrateur_system','administrateur'])
-                    <!--begin:::Tab item-->
-                    <li class="nav-item">
-                        <a class="nav-link text-active-success pb-4" data-bs-toggle="tab"
-                        href="#kt_user_view_overview_events_and_logs_tab">{{ __('events logs') }}</a>
-                    </li>
+                @feature('taxpayer_event_feature')
+                <li class="nav-item">
+                    <a class="nav-link text-active-success pb-4" data-bs-toggle="tab"
+                       href="#kt_user_view_overview_events_and_logs_tab">{{ __('events logs') }}</a>
+                </li>
+                @endfeature
+
                     <!--end:::Tab item-->
                 @endhasanyrole
                 <!--begin:::Tab item-->
@@ -455,9 +457,7 @@
                     </div>
                     <!--end::Card-->
                 </div>
-
-                <!--end:::Tab pane-->
-                <!--begin:::Tab pane-->
+                @feature('taxpayer_event_feature')
                 <div class="tab-pane fade" id="kt_user_view_overview_events_and_logs_tab" role="tabpanel">
 
                     <div class="card pt-4 mb-6 mb-xl-9">
@@ -482,28 +482,28 @@
                             <div class="table-responsive">
                                 <!--begin::Table-->
                                 <table class="table align-middle table-row-dashed fw-semibold text-gray-600 fs-6 gy-5"
-                                    id="kt_table_users_logs">
+                                       id="kt_table_users_logs">
                                     <tbody>
-                                        @foreach ($taxpayerActionLog as $action)
-                                            <tr>
-                                                <td class="min-w-70px">
-                                                    <div
-                                                        class="badge {{ (int) json_decode($action->response)->status <= 300 ? 'badge-light-success' : 'badge-light-danger' }}">
-                                                        {{ json_decode($action->response)->status }}
-                                                        {{ json_decode($action->response)->status_text }}
-                                                        {{ ' : ' . $action->user->name }}
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    {{ json_decode($action->request)->method }}
-                                                    {{ json_decode($action->request)->path_info }}
-                                                    {{ $action->taxpayer ? ' : ' . $action->taxpayer->name : '' }}
-                                                </td>
-                                                <td class="pe-0 text-end min-w-200px">
-                                                    {{ $action->created_at }}
-                                                </td>
-                                            </tr>
-                                        @endforeach
+                                    @foreach ($taxpayerActionLog as $action)
+                                        <tr>
+                                            <td class="min-w-70px">
+                                                <div
+                                                    class="badge {{ (int) json_decode($action->response)->status <= 300 ? 'badge-light-success' : 'badge-light-danger' }}">
+                                                    {{ json_decode($action->response)->status }}
+                                                    {{ json_decode($action->response)->status_text }}
+                                                    {{ ' : ' . $action->user->name }}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                {{ json_decode($action->request)->method }}
+                                                {{ json_decode($action->request)->path_info }}
+                                                {{ $action->taxpayer ? ' : ' . $action->taxpayer->name : '' }}
+                                            </td>
+                                            <td class="pe-0 text-end min-w-200px">
+                                                {{ $action->created_at }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
 
                                     </tbody>
                                 </table>
@@ -514,6 +514,9 @@
                         <!--end::Card body-->
                     </div>
                 </div>
+                @endfeature
+
+
                 <!--end:::Tab pane-->
             </div>
 
@@ -625,7 +628,7 @@
                 var latitude = parseFloat(taxpayer.latitude.trim());
                 var longitude = parseFloat(taxpayer.longitude.trim());
 
-    
+
                 var popupContent = `
                 <div style="width:480px;min-height:200px;border-radius:8px;">
                                 <div style="padding:10px;text-align:center;display:flex;align-items:flex-start;flex-direction:column;">

@@ -13,8 +13,6 @@
                 <option value="{{App\Enums\TaxpayerStateEnums::REJECTED}}">{{ __('rejeter') }}</option>
             </select>
         @endif
-
-
         @error('status')
         <span class="text-danger">{{ $message }}</span> @enderror
     </div>

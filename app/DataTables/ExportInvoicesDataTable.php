@@ -85,7 +85,7 @@ class ExportInvoicesDataTable extends DataTable
     public function query(Invoice $model): QueryBuilder
     {
 
-            $query= $model->with(['taxpayer','taxpayer.zone','invoice_items.taxpayer_taxable.taxable.tax_label' ])
+            $query= $model->with(['taxpayer','taxpayer.zone'])
                 ->join('invoice_items', 'invoice_items.invoice_id', '=', 'invoices.id')
                         ->leftjoin('taxpayers', 'taxpayers.id', '=', 'invoices.taxpayer_id')
                         ->join('taxpayer_taxables', 'taxpayer_taxables.id', '=', 'invoice_items.taxpayer_taxable_id')

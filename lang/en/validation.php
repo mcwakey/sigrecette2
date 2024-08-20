@@ -112,6 +112,7 @@ return [
         'symbols'       => 'The :attribute field must contain at least one symbol.',
         'uncompromised' => 'The given :attribute has appeared in a data leak. Please choose a different :attribute.',
     ],
+    'phone'                => 'Le champ :attribute doit être un numéro valide.',
     'present'              => 'The :attribute field must be present.',
     'present_if'           => 'The :attribute field must be present when :other is :value.',
     'present_unless'       => 'The :attribute field must be present unless :other is :value.',
@@ -147,10 +148,8 @@ return [
     'uppercase'            => 'The :attribute field must be uppercase.',
     'url'                  => 'The :attribute must be a valid URL.',
     'uuid'                 => 'The :attribute must be a valid UUID.',
-    'phone'                => 'Le champ :attribute doit être un numéro valide.',
     'attributes'           => [
         'address'                  => 'address',
-        'phone' =>                  'téléphone',
         'affiliate_url'            => 'affiliate URL',
         'age'                      => 'age',
         'amount'                   => 'amount',

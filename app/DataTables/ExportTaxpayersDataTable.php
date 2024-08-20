@@ -101,18 +101,12 @@ class ExportTaxpayersDataTable extends DataTable
                     ->join('cantons', 'towns.canton_id', '=', 'cantons.id')
                     ->with('zone')
                     ->join('zones', 'taxpayers.zone_id', '=', 'zones.id')
-            ->where('taxpayers.type', '=',Constants::TITRE)->select('taxpayers.*')
-           ->newQuery();
+        ;
 
-        if ($this->state) {
-            $query->where('taxpayers.from_mobile_and_validate_state','=',TaxpayerStateEnums::PENDING);
-        }else{
-            $query->where('taxpayers.from_mobile_and_validate_state', TaxpayerStateEnums::APPROVED)
-                ->orWhereNull('taxpayers.from_mobile_and_validate_state');
-        }
-        if ($this->disable!==null && $this->disable) {
-            $query->onlyTrashed();
-        }
+        $query->whereNull('taxpayers.from_mobile_and_validate_state')
+            ->orWhere('taxpayers.from_mobile_and_validate_state', TaxpayerStateEnums::APPROVED)
+            ->select('taxpayers.*')
+            ->newQuery();
 
         return $query;
     }
@@ -158,6 +152,7 @@ class ExportTaxpayersDataTable extends DataTable
             Column::make('town.canton.name')->title(__('canton')),
             Column::make('town.name')->title(__('Villages/Quartiers')),
             Column::make('zone.name')->title(__('zone'))->name("zone.name"),
+            Column::make('type')->title(__('type'))->name("type"),
 
             Column::make('created_at')->title(__('created at')),
             Column::make('updated_at')->title(__('updated_at')),
