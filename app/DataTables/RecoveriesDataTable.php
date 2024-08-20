@@ -99,7 +99,9 @@ class RecoveriesDataTable extends DataTable
         } else {
             $query->whereIn('payments.status', [PaymentStatusEnums::DONE, PaymentStatusEnums::ACCOUNTED]);
         }
-
+        if($this->id){
+            $query->where('invoices.taxpayer_id','=',$this->id);
+        }
         return $query;
     }
 
