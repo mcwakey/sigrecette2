@@ -22,6 +22,8 @@ class Kernel extends ConsoleKernel
             DB::statement('CALL updateTaxpayerTaxables()');
         })->dailyAt('21:30'); // Adjust the time as needed
         $schedule->command('datatables:purge-export')->weekly();
+        $schedule->command('backup:clean')->daily()->at('15:30');
+        $schedule->command('backup:run')->daily()->at('16:00');
     }
 
     /**

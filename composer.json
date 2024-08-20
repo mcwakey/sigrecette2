@@ -18,10 +18,12 @@
         "laravel/tinker": "^2.7",
         "livewire/livewire": "^3.0",
         "propaganistas/laravel-phone": "^5.3",
+        "spatie/laravel-backup": "^9.0",
         "spatie/laravel-permission": "^5.10",
         "yajra/laravel-datatables": "^10.0",
         "yajra/laravel-datatables-export": "^10.1",
-        "zerodahero/laravel-workflow": "^5.0"
+        "zerodahero/laravel-workflow": "^5.0",
+        "ext-zip": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.10",
