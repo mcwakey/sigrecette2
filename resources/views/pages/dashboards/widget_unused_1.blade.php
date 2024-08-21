@@ -35,7 +35,7 @@
     <div class="card-body pt-6">
         <div class="card-title d-flex flex-column">
             <div class="rd-invoice1">
-                <span class="fw-bold me-2 lh-1 ls-n2">{{$count_invoices["NOEXPIRED"]}}</span>
+                <span class="fw-bold me-2 lh-1 ls-n2">0</span>
             </div>
             <span class="opacity-75 pt-1 fw-semibold fs-6" style="color:#000000;margin-bottom:16px;">Avis recouvré</span>
             <span
