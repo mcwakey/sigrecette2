@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\ExportInvoicesDataTable;
+use App\DataTables\ExportRecoveriesDataTable;
 use App\DataTables\ExportTaxpayersDataTable;
 use App\DataTables\PrintablesDataTable;
 use App\Enums\ExportTypeEnums;
@@ -22,8 +23,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 class ExportController extends Controller
 {
-    //public function index( string $type,ExportTaxpayersDataTable $exportTaxpayersDataTable)
-    public function index(Request $request,ExportTaxpayersDataTable $exportTaxpayersDataTable,ExportInvoicesDataTable $exportInvoicesDataTable)
+    public function index(Request $request,ExportTaxpayersDataTable $exportTaxpayersDataTable,ExportInvoicesDataTable $exportInvoicesDataTable,ExportRecoveriesDataTable $exportRecoveriesDataTable)
 
     {
         $year = Year::getActiveYear()->name;
@@ -35,6 +35,7 @@ class ExportController extends Controller
             'state'=>['nullable', 'string', Rule::in('at')],
         ]);
         $export_type = isset($validatedData['export_type'])?Constants::EXPORT_VALIDATION_MAP[$validatedData['export_type']] : null;
+        $tax_labels = TaxLabel::all();
         if($export_type==ExportTypeEnums::TAXPAYER){
             $disable =$validatedData['disable']??null;
             $state = $validatedData['state']??null;
@@ -57,7 +58,7 @@ class ExportController extends Controller
             $startDate = $validatedData['s_date'] ??  Carbon::parse("{$year}-01-01 00:00:00");
             $endDate = $validatedData['e_date'] ?? Carbon::parse("{$year}-12-31 23:59:59");
             $zones = Zone::all();
-            $tax_labels = TaxLabel::all();
+
             return $exportInvoicesDataTable->with(
 
                 [
@@ -67,6 +68,15 @@ class ExportController extends Controller
             )->render('pages/export.invoices.list', compact('zones', 'tax_labels'));
 
 
+        }else{
+            $startDate = $validatedData['s_date'] ??  Carbon::parse("{$year}-01-01 00:00:00");
+            $endDate = $validatedData['e_date'] ?? Carbon::parse("{$year}-12-31 23:59:59");
+            return $exportRecoveriesDataTable->with(
+                [
+                    'startDate' => $startDate,
+                    'endDate' => $endDate,
+                ]
+            )->render('pages/export.recoveries.list', compact( 'tax_labels'));
         }
 
     }

@@ -65,7 +65,7 @@ class ExportTaxpayersDataTable extends DataTable
                 return $taxpayer->other_work;
             })
             ->editColumn('authorisation', function (Taxpayer $taxpayer) {
-                return __( $taxpayer->authorisation);
+                return __($taxpayer->authorisation);
             })
             ->editColumn('auth_reference', function (Taxpayer $taxpayer) {
                 return $taxpayer->auth_reference;
@@ -101,12 +101,13 @@ class ExportTaxpayersDataTable extends DataTable
                     ->join('cantons', 'towns.canton_id', '=', 'cantons.id')
                     ->with('zone')
                     ->join('zones', 'taxpayers.zone_id', '=', 'zones.id')
+           ->select('taxpayers.*')
+           ->newQuery()
         ;
 
         $query->whereNull('taxpayers.from_mobile_and_validate_state')
             ->orWhere('taxpayers.from_mobile_and_validate_state', TaxpayerStateEnums::APPROVED)
-            ->select('taxpayers.*')
-            ->newQuery();
+            ;
 
         return $query;
     }
@@ -122,6 +123,7 @@ class ExportTaxpayersDataTable extends DataTable
             ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
+            ->orderBy(0)
             ->drawCallbackWithLivewire()
             ;
     }
@@ -144,7 +146,7 @@ class ExportTaxpayersDataTable extends DataTable
             Column::make('address')->title(__('address')),
             Column::make('longitude')->title(__('longitude')),
             Column::make('latitude')->title(__('latitude')),
-            Column::make('category.name')->title(__('taxpayer.category')),
+            Column::make('category.name')->title(__('activity_category')),
             Column::make('activity.name')->title(__('activity')),
             Column::make('other_work')->title(__('other_work'))->name("other_work"),
             Column::make('authorisation')->title(__('authorisation'))->name("authorisation"),
@@ -155,7 +157,6 @@ class ExportTaxpayersDataTable extends DataTable
             Column::make('type')->title(__('type'))->name("type"),
 
             Column::make('created_at')->title(__('created at')),
-            Column::make('updated_at')->title(__('updated_at')),
 
         ];
 

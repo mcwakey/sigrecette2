@@ -134,6 +134,14 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="col-xxl-1">
+                            <label class="fs-6 form-label fw-bold text-dark">{{ __('authorisation') }}</label>
+                            <select class="form-select" id="myAuth">
+                                <option></option>
+                                <option value="YES">{{ __('yes') }}</option>
+                                <option value="NO">{{ __('no') }}</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="separator separator-dashed mt-5 mb-5"></div>
@@ -280,51 +288,20 @@
                 window.LaravelDataTables['export-taxpayers-table'].column(19).search(this.value).draw();
             });
 
-            document.getElementById('mySearchEight').addEventListener('change', function() {
+            document.getElementById('myAct').addEventListener('change', function() {
                 window.LaravelDataTables['export-taxpayers-table'].column(8).search(this.value).draw();
             });
             document.getElementById('myCat').addEventListener('change', function() {
                 window.LaravelDataTables['export-taxpayers-table'].column(12).search(this.value).draw();
             });
+            document.getElementById('myAuth').addEventListener('change', function() {
+                window.LaravelDataTables['export-taxpayers-table'].column(15).search(this.value).draw();
+            });
             document.addEventListener('livewire:init', function() {
                 Livewire.on('success', function() {
-                    $('#kt_modal_add_taxpayer').modal('hide');
-                    window.LaravelDataTables['export-taxpayers-table'].ajax.reload();
+                                       window.LaravelDataTables['export-taxpayers-table'].ajax.reload();
                 });
             });
-
-            // const createdAtFieldCheckBox = document.getElementById('created_at');
-            // const genderFieldCheckBox = document.getElementById('gender');
-            // const townFieldCheckBox = document.getElementById('town');
-            // const zoneFieldCheckBox = document.getElementById('zone');
-            // const cantonFieldCheckBox = document.getElementById('canton');
-            // const addressFieldCheckBox = document.getElementById('address');
-            // const mobilePhoneFieldCheckBox = document.getElementById('mobilephone');
-
-            // /**
-            //  * Toggles the visibility of DOM elements with a given class name
-            //  * based on the checked state of a checkbox input.
-            //  *
-            //  * @param {HTMLInputElement} fieldCheckBoxInput - The checkbox input element.
-            //  */
-            // function toggleField(fieldCheckBoxInput) {
-            //     const inputState = fieldCheckBoxInput.checked;
-            //     const fields = document.querySelectorAll(`.${fieldCheckBoxInput.id}`);
-
-            //     fields.forEach((field) => {
-            //         if (inputState && field.classList.contains('d-none')) {
-            //             field.classList.replace('d-none', 'd-inline-block')
-            //         } else if (inputState) {
-            //             field.classList.add('d-inline-block')
-            //         } else {
-            //             field.classList.add('d-none');
-            //         }
-            //     });
-            // }
-
-            // createdAtFieldCheckBox.addEventListener('click', () => toggleField(createdAtFieldCheckBox));
-            // zoneFieldCheckBox.addEventListener('click', () => toggleField(zoneFieldCheckBox));
-            // genderFieldCheckBox.addEventListener('click', () => toggleField(genderFieldCheckBox));
         </script>
     @endpush
 

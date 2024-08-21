@@ -362,8 +362,6 @@
     "new zone": "Nouvelle Zone",
     "nic": "NIC",
     "nif": "NIF",
-    "no": "Non",
-    "No": "Non",
     "no account": "Pas encore de compte ? Contactez un administrateur",
     "No Content": "Pas de contenu",
     "no permissions given": "Aucune autorisation donnée",
@@ -659,8 +657,7 @@
     "width": "Largeur",
     "work": "Activité Principale",
     "work category": "Catégorie d'Activités",
-    "yes": "Oui",
-    "Yes": "Oui",
+
     "You are receiving this email because we received a password reset request for your account.": "Vous recevez cet e-mail car nous avons reçu une demande de réinitialisation de mot de passe pour votre compte.",
     "You are receiving this email because we received; a password reset request for your account.": "Vous recevez cet e-mail car nous avons reçu une demande de réinitialisation de mot de passe pour votre compte.",
     "You have to change your password to login.": "Vous devez changer votre mot de passe pour vous connecter.",
@@ -670,5 +667,15 @@
     "zone": "Zone fiscale",
     "zone geolocation": "Géolocalisation d'une zone",
     "zones": "Zones Fiscales",
-    "Export Taxpayers": "Exporter les contribuables"
+    "Export Taxpayers": "Exportation des contribuables",
+    "Export Invoice": "Exportation des avis",
+    "Export recoveries": "Exportation des recouvrement",
+    "taxpayer.social_work": "Raison social",
+    "NO": "Non",
+    "YES": "Oui",
+    "no": "Non",
+    "No": "Non",
+    "yes": "Oui",
+    "Yes": "Oui",
+    "other_work": "Autre activité"
 }

@@ -81,7 +81,7 @@ Breadcrumbs::for('taxations.taxables.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
     $trail->push(__('taxables'), route('taxations.taxables.index'));
 });
- 
+
 Breadcrumbs::for('taxations.tickets.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
     $trail->push(__('tickets'), route('taxations.tickets.index'));
@@ -146,6 +146,10 @@ Breadcrumbs::for('communes.show', function (BreadcrumbTrail $trail,Commune $comm
 Breadcrumbs::for('import-view', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
     $trail->push(__('importation de contribuables'), route('import-view'));
+});
+Breadcrumbs::for('export_backup', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push(__('Sauvegardes'), route('export_backup'));
 });
 Breadcrumbs::for('communes.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
