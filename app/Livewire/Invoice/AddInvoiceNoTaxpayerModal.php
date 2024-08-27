@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\Password;
 
 class AddInvoiceNoTaxpayerModal extends Component
 {
-    //use WithFileUploads;
+    //TODO Add backend validation on tarif
 
     use DispatchesMessages;
     public $invoice_id;
@@ -92,33 +92,7 @@ class AddInvoiceNoTaxpayerModal extends Component
 
     public $payment_type;
     public $reference;
-    // public function reduce($index)
-    // {
-    //     $product_id = $this->inputs[$index]['id'];
-    //     $this->inputs[$index]['qty'] -= 1;
-    //     $this->updateCart($product_id, $this->inputs[$index]['qty']);
-    // }
-    //public $created_at;
-    // public $mobilephone;
-    // public $email;
-    // public $latitude;
-    // public $canton;
-    // public $town;
-    // public $erea;
-    // public $address;
-    // public $zone_id;
 
-    //public $avatar;
-    //public $saved_avatar;
-
-    // public $selectedTaxpayerId;
-
-    // public function selectTaxpayer($taxpayerId)
-    // {
-    //     $this->selectedTaxpayerId = $taxpayerId;
-
-    //     dd($this->selectedTaxpayerId);
-    // }
     public $fullname;
     public $gender;
     public $id_type;
@@ -134,12 +108,6 @@ class AddInvoiceNoTaxpayerModal extends Component
     public $button_mode = false;
 
     protected $rules = [
-        // 'invoice_id' => 'required|string',
-        // 'invoice_no' => 'required',
-        // 'order_no' => 'required',
-        // 'nic' => 'required',
-        // 'status' => 'required|string',
-
         "name"=> "required|string",
         "s_amount" => 'required|numeric',
         "taxpayer_taxable_id" => "required|int",
@@ -238,8 +206,6 @@ class AddInvoiceNoTaxpayerModal extends Component
 
         // Assuming $value is valid, fetch taxables based on tax label ID
         $taxables = Taxable::find($value);
-        //$this->ereas = Erea::where('town_id', $value)->get(); // Load taxables based on tax label ID
-        //dd($taxables);
 
         $this->option_calculus = $taxables->unit_type;
         //if ($taxables)
@@ -258,7 +224,6 @@ class AddInvoiceNoTaxpayerModal extends Component
 
             $this->taxlabel_name = $taxables->name;
             $this->loadInvoice($this->qty);
-       // dd($this->tarisIsNull);
 
     }
     public function updatedLength($value)
@@ -573,37 +538,23 @@ class AddInvoiceNoTaxpayerModal extends Component
 
     public function changeTarrif($value)
     {
-        //$this->view_mode = true;
-
-        //$this->qty = $value;
-
-        //dd($this->qty);
-
-        //dd( $value, $this->qty, "loadInvoice");
-        //$taxpayer = Taxpayer::find($id);
-       // dd($this->tariff, $this->s_tariff);
-
-
-
+        $taxable =$this->taxpayer_taxable_id !=null? Taxable::find($this->taxpayer_taxable_id):null;
+       if($taxable){
+           if( $taxable->tariff==0){
+               $this->tarisIsNull=true;
+           }else{
+               $this->tarisIsNull=false;
+           }
+       }
        if($this->tarisIsNull){
            $this->s_tariff = $this->tariff;
        }else{
-           $this->tariff=$this->s_tariff;}
-if($this->taxpayer_taxable_id!=null){
-    $taxable = Taxable::find($this->taxpayer_taxable_id);
+           $this->tariff=$this->s_tariff;
+       }
+    if($this->taxpayer_taxable_id!=null){
+        $taxable = Taxable::find($this->taxpayer_taxable_id);
 
-    //$this->s_amount[$id] = 10;
-    // $this->name = $taxpayer->name;
-    // $this->tnif = $taxpayer->tnif;
-    // $this->zone = $taxpayer->zone_id;
 
-    // foreach ($taxpayer_taxables as $taxable) {
-    //     // Update the values in the component properties
-    //     $this->s_amount[$taxable->id] = 10;
-    // }
-    //foreach ($taxpayer_taxables as $index => $taxable) {
-    // Update the value in the component properties using the loop index as the key
-    // dd($taxable->taxable);
 
     if ($taxable->periodicity == "Mois"){
         $period = 1;
