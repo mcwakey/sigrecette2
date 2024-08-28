@@ -190,7 +190,8 @@ class AccountantDepositsSumDataTable extends DataTable
                  DB::raw('MAX(payments.updated_at) AS created_at')
                 //  DB::raw('MAX(stock_requests.taxable_id) AS taxable_id')
                 )
-                
+            ->where('status', '!=', PaymentStatusEnums::CANCELED)
+
         // ->where('status',PaymentStatusEnums::ACCOUNTED) // Filter collector_deposits by taxpayer_id
         ->groupBy('reference_deposit', 'status')
         ->orderBy('reference_deposit', 'asc');
