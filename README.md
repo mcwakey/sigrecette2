@@ -10,7 +10,7 @@ rapport à un serveur Windows. Suivez ces instructions pour configurer l'environ
 
 #### Prérequis
 
-- Un serveur Linux (Ubuntu est utilisé dans cet exemple)
+- Un serveur web (Ubuntu server et apache sont utilisé dans cet exemple)
 - Accès root ou utilisateur avec des privilèges sudo
 - Un nom de domaine pointant vers le serveur ou une adresse IP publique(facultatif)
 - Un serveur de base de données (MySQL/MariaDB)
