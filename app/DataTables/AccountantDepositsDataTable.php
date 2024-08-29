@@ -202,7 +202,7 @@ class AccountantDepositsDataTable extends DataTable
             // // // Column::make('total2')->title(__('sd total')),
             // // Column::make('tax_labels.code')->title(__('code')),
             // // Column::make('users.name')->title(__('collector')),
-            // // Column::make('payments.type')->title(__('status')),
+            // Column::make('payments.type')->title(__('status')),
             Column::computed('action')->title(__('action'))
                 ->addClass('text-end text-nowrap')
                 ->exportable(false)

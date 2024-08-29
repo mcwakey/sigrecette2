@@ -49,8 +49,9 @@ class AddRefnoForm extends Component
             DB::transaction(function () {
 
 
-                $payments_olds = Payment::where('status',PaymentStatusEnums::DONE )->where('reference_deposit', null )->get();
-
+                $payments_olds = Payment::where('status',PaymentStatusEnums::DONE )->where('status',PaymentStatusEnums::CANCELED )->where('reference_deposit', null )->get();
+                $payments_olds = Payment::where(function($query) {$query->where('status', PaymentStatusEnums::DONE)->orWhere('status', PaymentStatusEnums::CANCELED);})->where('reference_deposit', null)->get();
+                
 
 
                      foreach ($payments_olds as $payments_old) {

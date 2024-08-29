@@ -193,7 +193,8 @@ class AccountantDepositsSumDataTable extends DataTable
             ->where('status', '!=', PaymentStatusEnums::CANCELED)
 
         // ->where('status',PaymentStatusEnums::ACCOUNTED) // Filter collector_deposits by taxpayer_id
-        ->groupBy('reference_deposit', 'status')
+        // ->groupBy('reference_deposit', 'status')
+        ->groupBy('reference_deposit', 'reference_deposit')
         ->orderBy('reference_deposit', 'asc');
     }
 
