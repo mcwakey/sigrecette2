@@ -64,7 +64,7 @@
                                         @foreach($id_types as $id_type)
                                             <option value="{{ $id_type->name}}">{{ $id_type->name }}</option>
                                     @endforeach
-                              
+
                                     </select>
                                     <!--end::Input-->
                                     @error('id_type')
@@ -171,16 +171,11 @@
                                 @enderror
                             </div>
                             <div class="col-md-2">
-                                <!--begin::Label-->
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('tariff') }}</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
                                 <input type="text" wire:model="tariff" name="tariff"
                                     class="form-control mb-3 mb-lg-0" placeholder="{{ __('tariff') }}"
                                     data-kt-action="change_tarrif"
-
                                 />
-                                <!--end::Input-->
                                 @error('tariff')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -237,7 +232,7 @@
                                         id="basic-addon1">{{ $unit }}</span>
                                 </div>
                                 <!--begin::Input-->
-                                
+
                                 <!--end::Input-->
                                 @error('seize')
                                     <span class="text-danger">{{ $message }}</span>

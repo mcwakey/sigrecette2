@@ -134,7 +134,7 @@
                                 <!--begin::Input-->
                                 {{-- <input type="text" wire:model="seize" name="seize" class="form-control mb-3 mb-lg-0" placeholder="{{ __('seize') }}"/> --}}
                                 <div class="input-group mb-2">
-                                    <input type="text"wire:model.live.debounce.250ms="seize" name="seize"
+                                    <input type="text"wire:model.live.debounce.800ms="seize" name="seize"
                                     class="form-control mb-3 mb-lg-0" placeholder="{{ __('seize') }}"
                                        data-kt-action="change_tarrif"/>
                                     <span class="input-group-text"
@@ -160,7 +160,7 @@
                                 <label class="fs-6 fw-semibold mb-2">{{ __('length') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input wire:model.live.debounce.500ms="length" name="length" type="text" class="form-control mb-3 mb-lg-0" placeholder="{{ __('length') }}"/>
+                                <input wire:model.live.debounce.900ms="length" name="length" type="text" class="form-control mb-3 mb-lg-0" placeholder="{{ __('length') }}"/>
                                 <!--end::Input-->
                                 @error('length')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -170,7 +170,7 @@
                                 <label class="fs-6 fw-semibold mb-2">{{ __('width') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input wire:model.live.debounce.500ms="width" name="width" type="text" class="form-control mb-3 mb-lg-0" placeholder="{{ __('width') }}"/>
+                                <input wire:model.live.debounce.900ms="width" name="width" type="text" class="form-control mb-3 mb-lg-0" placeholder="{{ __('width') }}"/>
                                 <!--end::Input-->
                                 @error('width')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -182,7 +182,7 @@
                                 <!--begin::Input-->
                                 {{-- <input type="text" wire:model="seize" name="seize" class="form-control mb-3 mb-lg-0" placeholder="{{ __('seize') }}"/> --}}
                                 <div class="input-group mb-2">
-                                    <input type="text" wire:model.live.debounce.250ms="seize" name="seize"
+                                    <input type="text" wire:model.live.debounce.700ms="seize" name="seize"
                                     class="form-control mb-3 mb-lg-0" placeholder="{{ __('seize') }}"
                                        data-kt-action="change_tarrif"/>
                                     <span class="input-group-text"
