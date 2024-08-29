@@ -126,7 +126,11 @@ class SyncInController extends Controller
                         // Process taxpayer payments
                         foreach ($taxpayerPayments as $taxpayerPayment) {
                             if (empty($taxpayerPayment['dataStatus']) || isset($taxpayerPayment['dataStatus'])) {
-                                Payment::updateOrCreate(['id' => $taxpayerPayment['_id']], $this->transformKeysToSnakeCase($taxpayerPayment));
+                                $invoice = Invoice::find($taxpayerPayment['invoiceId']);
+                                // $taxpayerPayment['code'] = $invoice->taxpayer_taxables->first()->taxable->code;
+                                $taxpayerPayment['code'] = '705211';
+                                // Payment::updateOrCreate(['id' => $taxpayerPayment['_id']], $this->transformKeysToSnakeCase($taxpayerPayment));
+                                Payment::Create($this->transformKeysToSnakeCase($taxpayerPayment));
                             }
                         }
                     }
