@@ -67,7 +67,8 @@ class AddTaxpayerTaxableModal extends Component
         //'location' => 'required',
         'taxable_id' => 'required|int',
         // 'taxpayer_id' => 'required',
-
+        'width'=> 'nullable|numeric|min:0',
+        'length'=> 'nullable|numeric|min:0',
         // 'penalty' => 'nullable',
         // 'penalty_type' => 'nullable',
         //'tax_label' => 'required',
@@ -137,8 +138,9 @@ class AddTaxpayerTaxableModal extends Component
 
     public function updatedLength($value)
     {
-        if($value>0){
-            $this->length = doubleval($this->length);
+
+        if(is_numeric($value)&&$value>0){
+
             $this->makeCalculSeize();
         }
 
@@ -148,15 +150,20 @@ class AddTaxpayerTaxableModal extends Component
     public function updatedWidth($value)
     {
 
-        if($value>0){
-            $this->width =  doubleval($this->width);
+
+        if(is_numeric($value)&&$value>0){
+
             $this->makeCalculSeize();
         }
 
     }
     public function makeCalculSeize()
     {
+
+
         if($this->length>0 && $this->width>0){
+            $this->width =  doubleval($this->width);
+            $this->length = doubleval($this->length);
             $this->seize = $this->length * $this->width;
         }
 

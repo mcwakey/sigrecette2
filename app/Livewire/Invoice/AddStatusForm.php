@@ -60,7 +60,6 @@ class AddStatusForm extends Component
     public function validateData(){
         $this->validate();
         $invoice = Invoice::find($this->invoice_id);
-
         if($invoice && $invoice->reduce_amount == ''){
             if (($this->status==InvoiceStatusEnums::APPROVED ||$this->status==InvoiceStatusEnums::APPROVED_CANCELLATION || $this->status==InvoiceStatusEnums::REJECTED) ) {
                 if($invoice->type ==Constants::INVOICE_TYPE_TITRE && $invoice->edition_state != "bPRINT"){
@@ -70,9 +69,9 @@ class AddStatusForm extends Component
                     elseif($invoice->edition_state == "PRINT"){
                         $this->error_message="Veuillez au préalable ajouter l'avis à un bordereau.";
                     }else{
-                        $this->error_message="Veuillez au préalable imprimer l'avis.";
+                        $this->error_message= "Veuillez au préalable imprimer l'avis.";
                     }
-                    //$this->addError('status', $this->error_message);
+                    $this->addError('status', $this->error_message);
 
                 }
 
