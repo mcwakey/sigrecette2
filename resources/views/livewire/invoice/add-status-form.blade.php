@@ -14,14 +14,14 @@
                 <option>{{ __('select an option') }}</option>
 
                 @if ($status ==  App\Enums\InvoiceStatusEnums::PENDING)
-                    @if($type ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY)
+                    @if($type ==  App\Helpers\Constants::INVOICE_TYPE_TITRE)
                         @can('peut prendre en charge un avis sur titre')
                             <option value="{{App\Enums\InvoiceStatusEnums::APPROVED  }}">{{ __('APROVED') }}</option>
                         @endcan
                         @can('peut rejeter un avis sur titre (agent par délégation du receveur)')
                             <option value="{{ App\Enums\InvoiceStatusEnums::REJECTED }}">{{ __('REJECTED') }}</option>
                         @endcan
-                    @else
+                    @elseif(($type ==  App\Helpers\Constants::INVOICE_TYPE_COMPTANT))
                         @can('peut prendre en charge un avis au comptant')
                             <option value="{{App\Enums\InvoiceStatusEnums::APPROVED  }}">{{ __('APROVED') }}</option>
                         @endcan
@@ -30,8 +30,6 @@
                             <option value="{{ App\Enums\InvoiceStatusEnums::REJECTED }}">{{ __('REJECTED') }}</option>
                         @endcan
                     @endif
-
-
                 @elseif($status == App\Enums\InvoiceStatusEnums::DRAFT)
                     @can('peut accepter un avis sur titre')
                         <option value="{{App\Enums\InvoiceStatusEnums::ACCEPTED}}">{{ __('ACCEPTED') }}</option>
