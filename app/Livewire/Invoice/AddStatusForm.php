@@ -22,11 +22,11 @@ use Spatie\Permission\Models\Role;
 
 class AddStatusForm extends Component
 {
-    //use WithFileUploads;
     use DispatchesMessages;
     public $invoice_id;
 
     public $status;
+    public $type;
 
     public $edit_mode = false;
     public $reason_for_reject;
@@ -47,13 +47,12 @@ class AddStatusForm extends Component
     }
     private $error_message;
     protected $listeners = [
-        //'delete_user' => 'deleteUser',
         'update_status' => 'updateStatus',
-        //'add_invoice' => 'addInvoice',
     ];
     public function render()
     {
         $invoice = Invoice::find($this->invoice_id);
+        $this->type = $invoice->type;
         return view('livewire.invoice.add-status-form', compact('invoice'));
     }
 
@@ -85,14 +84,7 @@ class AddStatusForm extends Component
         $this->validateData();
         if ($this->getErrorBag()->isEmpty()) {
             DB::transaction(function () {
-
-                //  comment after
-                //$data = ['status' => $this->status];
-
-                //dd($invoiceData);
-
-                // Create or update Invoice record
-                $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
+                $invoice = Invoice::find($this->invoice_id);
 
 
                 $this->invoice_id = $invoice->id;
@@ -185,15 +177,6 @@ class AddStatusForm extends Component
 
     }
 
-    // public function updateInvoice($id)
-    // {
-    //     $this->edit_mode = true;
-
-    //     $this->invoice_id = $invoice->id;
-    //     $this->tnif = $invoice->taxpayer->tnif;
-    //     $this->zone = $invoice->taxpayer->zone_id;
-    // }
-
     public function updateStatus($id)
     {
 
@@ -201,11 +184,6 @@ class AddStatusForm extends Component
 
         $this->invoice_id = $invoice->id;
         $this->status = $invoice->status;
-
-        //$this->$invoice = $invoice;
-
-        //dd($this->invoice_id);
-
     }
 
     public function hydrate()
