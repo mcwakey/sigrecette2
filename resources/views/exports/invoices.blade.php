@@ -169,7 +169,7 @@
     </div>
     <div class="sub-header">
         <p>
-            <span>Nom/Raison sociale: {{ strlen($data->taxpayer->social_work) > 0 ? $data->taxpayer->social_work : $data->taxpayer->name }},</span>
+            <span>Nom/Raison sociale: {{ strlen($data->taxpayer->social_work) > 2 ? $data->taxpayer->social_work : $data->taxpayer->name }},</span>
             <span>Téléphone :{{$data->taxpayer->mobilephone}}</span>
         </p>
         <p>
