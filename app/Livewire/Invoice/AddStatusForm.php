@@ -49,11 +49,11 @@ class AddStatusForm extends Component
     protected $listeners = [
         'update_status' => 'updateStatus',
     ];
+
     public function render()
     {
-        $invoice = Invoice::find($this->invoice_id);
-        $this->type = $invoice->type;
-        return view('livewire.invoice.add-status-form', compact('invoice'));
+
+        return view('livewire.invoice.add-status-form');
     }
 
     public function validateData(){
@@ -184,6 +184,7 @@ class AddStatusForm extends Component
 
         $this->invoice_id = $invoice->id;
         $this->status = $invoice->status;
+        $this->type = $invoice->type;
     }
 
     public function hydrate()
