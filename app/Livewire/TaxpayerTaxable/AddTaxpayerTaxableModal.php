@@ -164,7 +164,7 @@ class AddTaxpayerTaxableModal extends Component
         if($this->length>0 && $this->width>0){
             $this->width =  doubleval($this->width);
             $this->length = doubleval($this->length);
-            $this->seize = $this->length * $this->width;
+            $this->seize = round($this->length * $this->width,2);
         }
 
     }

@@ -464,16 +464,10 @@ class AddInvoiceModal extends Component
             $this->qty = 1;
         }
 
-        // dd($this->edit_mode, 'loadInvoice');
 
-        //$taxpayer_taxables = $id ? TaxpayerTaxable::where('taxpayer_id', $id)->where('billable', 1)->get() : collect();
         $this->taxpayer_taxables = $taxpayer_taxables = TaxpayerTaxable::where('taxpayer_id', $id)->where('billable', 1)->get();
-
-        //dd($taxpayer_taxables);
-
         foreach ($taxpayer_taxables as $index => $taxable) {
 
-            // $this->unit_type = $taxable->taxable->unit_type;
 
             $this->taxpayer_taxable_id[$index] = $taxable->id;
             $this->taxpayer_taxable[$index] = $taxable->name;
@@ -486,7 +480,6 @@ class AddInvoiceModal extends Component
         $this->amount_ph = '';
         $this->amount = '';
 
-        //dd($this->taxpayer_taxables);
 
         $taxpayer = Taxpayer::find($id);
 
@@ -500,38 +493,12 @@ class AddInvoiceModal extends Component
 
     public function loadInvoice($value)
     {
-        //$this->view_mode = true;
 
         $this->qty = $value;
-        //dd( $value, $this->qty, "loadInvoice");
-        //$taxpayer = Taxpayer::find($id);
         $taxpayer_taxables = TaxpayerTaxable::where('taxpayer_id', $this->taxpayer_id)->where('billable', 1)->get();
-
-        //$this->s_amount[$id] = 10;
-        // $this->name = $taxpayer->name;
-        // $this->tnif = $taxpayer->tnif;
-        // $this->zone = $taxpayer->zone_id;
-
-        // foreach ($taxpayer_taxables as $taxable) {
-        //     // Update the values in the component properties
-        //     $this->s_amount[$taxable->id] = 10;
-        // }
         foreach ($taxpayer_taxables as $index => $taxable) {
-            // Update the value in the component properties using the loop index as the key
-            // dd($taxable->taxable);
-
-            // if ($taxable->taxable->periodicity == "Mois") {
-            //     $period = 1;
-            // } elseif ($taxable->taxable->periodicity == "Ans") {
-            //     $period = 0.083333;
-            //     // }elseif ($taxable->taxable->periodicity == "Jours") {
-            //     //     $period = 30;
-            // } else {
                 $period = 1;
-            // }
-
             $this->periodicity = $taxable->taxable->periodicity;
-            // $this->unit_type = $taxable->taxable->unit_type;
 
             $this->taxpayer_taxable_id[$index] = $taxable->id;
             $this->taxpayer_taxable[$index] = $taxable->name;
@@ -549,12 +516,11 @@ class AddInvoiceModal extends Component
             } else {
                 $this->s_amount[$index] = $temp_seize * $taxable->taxable->tariff * $this->qty * $period / 100;
             }
-            //$this->qty[$index] = $taxable->seize;
             $this->taxpayer_taxable_id[$index] = $taxable->id;
         }
 
-        $this->amount_ph = array_sum($this->s_amount);
-        $this->amount = array_sum($this->s_amount);
+        $this->amount_ph =  round(array_sum($this->s_amount),2);
+        $this->amount =  round(array_sum($this->s_amount),2);
     }
     #[On('updateSharedTaxpayerId')]
     public function updateSharedTaxpayerId($id){
