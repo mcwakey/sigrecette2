@@ -67,7 +67,7 @@ class AddStatusForm extends Component
                         $this->error_message="Veuillez au préalable imprimer l'avis.";
                     }
                     elseif($invoice->edition_state == "PRINT"){
-                        $this->error_message="Veuillez au préalable ajouter l'avis à un bordereau.";
+                      //  $this->error_message="Veuillez au préalable ajouter l'avis à un bordereau.";
                     }else{
                         $this->error_message= "Veuillez au préalable imprimer l'avis.";
                     }
