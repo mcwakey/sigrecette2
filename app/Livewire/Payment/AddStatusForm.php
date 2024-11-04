@@ -20,7 +20,7 @@ class AddStatusForm extends Component
     public $edit_mode = false;
 
     protected $rules = [
-        "status" =>"required",
+        "status" => "required",
     ];
 
     protected $listeners = [
@@ -28,6 +28,7 @@ class AddStatusForm extends Component
         'update_payment_status' => 'updateStatus',
         //'add_payment' => 'addPayment',
     ];
+
     public function render()
     {
         return view('livewire.payment.add-status-form');
@@ -45,7 +46,7 @@ class AddStatusForm extends Component
             // Prepare data for Payment
             $data = [
                 'status' => $this->status,
-                'r_user_id'=>  Auth::id()
+                'r_user_id' => Auth::id()
             ];
 
             //dd($paymentData);
@@ -60,7 +61,7 @@ class AddStatusForm extends Component
                 $payment->$k = $v;
             }
             $payment->save();
-                //$this->dispatch('success', __('Payment updated'));
+            //$this->dispatch('success', __('Payment updated'));
             $this->dispatchMessage('Paiement', 'update');
         });
 

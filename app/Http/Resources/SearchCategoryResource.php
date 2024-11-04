@@ -9,7 +9,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @property Category $resource
  */
-
 class SearchCategoryResource extends JsonResource
 {
     /**
@@ -20,7 +19,7 @@ class SearchCategoryResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'=>$this->resource->id,
+            'id' => $this->resource->id,
             'name' => $this->resource->name,
             // 'code' => $this->resource->code,
             // 'category_id' => $this->resource->category

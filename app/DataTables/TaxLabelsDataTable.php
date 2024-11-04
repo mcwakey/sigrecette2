@@ -21,10 +21,10 @@ class TaxLabelsDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->editColumn('category', function (TaxLabel $tax_label) {
-                $translatedCategories = array_map(function($category) {
+                $translatedCategories = array_map(function ($category) {
                     return __($category);
                 }, explode(',', $tax_label->category));
-                return  implode(', ', $translatedCategories);
+                return implode(', ', $translatedCategories);
             })
             ->editColumn('name', function (TaxLabel $tax_label) {
                 return $tax_label->name;
@@ -64,7 +64,7 @@ class TaxLabelsDataTable extends DataTable
             ->setTableId('tax_labels-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(1)

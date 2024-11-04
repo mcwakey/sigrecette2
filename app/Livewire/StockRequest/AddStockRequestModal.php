@@ -3,11 +3,15 @@
 namespace App\Livewire\StockRequest;
 
 use App\Models\StockRequest;
+use App\Models\StockTransfer;
 use App\Models\Taxable;
 use App\Models\TaxLabel;
 use App\Models\TaxpayerTaxable;
 use App\Traits\DispatchesMessages;
+use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +20,7 @@ class AddStockRequestModal extends Component
 {
     use WithFileUploads;
     use DispatchesMessages;
+
     public $stock_request_id;
     public $user_id;
     public $tariff;
@@ -27,8 +32,8 @@ class AddStockRequestModal extends Component
     public $taxable_id;
     public $taxlabel_id;
 
-    public $taxables=[];
-    public $stock_requests=[];
+    public $taxables = [];
+    public $stock_requests = [];
     public $taxable_name;
     public $taxlabel_name;
     public $taxable_idd;
@@ -36,6 +41,7 @@ class AddStockRequestModal extends Component
     public $remaining_qty;
 
     public $edit_mode = false;
+
     //public $option_calculus;
 
     protected function rules()
@@ -46,7 +52,7 @@ class AddStockRequestModal extends Component
             'taxable_id' => 'required|numeric',
             'start_no' => 'nullable|numeric|min:0|max:' . (intval($this->end_no) - 1),
             'end_no' => 'nullable|numeric|min:' . (intval($this->start_no) + 1),
-            'qty' => ['required', 'numeric','min:1', function ($attribute, $value, $fail) {
+            'qty' => ['required', 'numeric', 'min:1', function ($attribute, $value, $fail) {
                 if (!is_null($this->start_no) && !is_null($this->end_no)) {
                     if ($value !== intval($this->end_no) - intval($this->start_no) + 1) {
                         $fail('Les valeurs saisies dans n° de debut ou n° de fin sont incorrectes.');
@@ -58,7 +64,6 @@ class AddStockRequestModal extends Component
 
 
     protected $listeners = [
-        'delete_taxpayer' => 'deleteUser',
         'change_qty' => 'changeQty',
         'load_drop' => 'load_drop',
         'add_request' => 'addRequest',
@@ -90,15 +95,10 @@ class AddStockRequestModal extends Component
 
     public function makeCalcul()
     {
-        if (is_numeric($this->start_no) && is_numeric($this->end_no))
-        {
+        if (is_numeric($this->start_no) && is_numeric($this->end_no)) {
             $this->qty = intval($this->end_no) - intval($this->start_no) + 1;
         }
     }
-
-
-
-
 
     public function updatedReqNo($value)
     {
@@ -107,29 +107,22 @@ class AddStockRequestModal extends Component
 
     public function submit()
     {
-        // Validate the form input data
         $this->validate();
 
         DB::transaction(function () {
-            // Prepare the data for creating a new Taxable
             $data = [
                 'req_no' => $this->req_no,
                 //'req_id' => $this->seize,
-                'req_desc' => 'Demande d’approvisionnement N°'.$this->req_no,
+                'req_desc' => 'Demande d’approvisionnement N°' . $this->req_no,
                 'qty' => $this->qty,
-                'start_no' => $this->start_no ,
-                'last_no' => $this->start_no ,
-                'end_no' => $this->end_no ,
+                'start_no' => $this->start_no,
+                'last_no' => $this->start_no,
+                'end_no' => $this->end_no,
                 'taxable_id' => $this->taxable_id,
                 'req_type' => 'DEMANDE',
                 'user_id' => Auth::id(),
             ];
 
-            if ($this->edit_mode) {
-                $data['taxable_id'] = $this->taxable_idd;
-                $data['req_desc'] = 'Etat de comptabilité des VI N°'.$this->req_no;
-                $data['req_type'] = 'COMPTABILISE';
-            }
 
             $stock_request = StockRequest::create($data);
 
@@ -151,22 +144,40 @@ class AddStockRequestModal extends Component
 
             if ($this->edit_mode) {
                 // Emit a success event with a message
-                $this->dispatchMessage( __('Stock valeur inactive'),'update',);
-            }else{
+                $this->dispatchMessage(__('Stock valeur inactive'), 'update');
+            } else {
                 $this->dispatchMessage('Stock valeur inactive');
             }
             // }
         });
-
-        // Reset the form fields after successful submission
-        //$this->reset();
     }
 
+    /**
+     * @param $id
+     * @return void
+     */
     public function deleteStockRequest($id)
     {
-        StockRequest::destroy($id);
+        try {
+            $in_distribution = StockTransfer::where('stock_request_id', $id)->get();
+            if ($in_distribution->isEmpty()) {
+                StockRequest::destroy($id);
+                $this->dispatchMessage(__('Stock valeur inactive'), 'update');
+                return;
+            }
+            $this->dispatchMessage(__('Stock valeur inactive'), 'update', 'error', 'Mise à jour impossible car le stock est déjà distribué.');
+        } catch (QueryException $e) {
+            if ($e->getCode() == 23000) {
+                session()->flash('error', 'Erreur : Ce transfert de stock ne peut pas être supprimé car il est lié à d\'autres enregistrements.');
+            } else {
+                session()->flash('error', 'Erreur lors de la suppression du transfert de stock : ' . $e->getMessage());
+            }
+        } catch (Exception $e) {
+            session()->flash('error', 'Erreur lors de la suppression du stock : ' . $e->getMessage());
+        }
 
-       // $this->dispatchMessage('line', 'delete');
+
+        // $this->dispatchMessage('line', 'delete');
     }
 
     public function addRequest($id)
@@ -195,7 +206,7 @@ class AddStockRequestModal extends Component
 
         $this->start_no = $stock_request->last_no;
         $this->end_no = $stock_request->end_no;
-        $this->qty =$stock_request->end_no  - $stock_request->last_no + 1;
+        $this->qty = $stock_request->end_no - $stock_request->last_no + 1;
     }
 
     public function hydrate()

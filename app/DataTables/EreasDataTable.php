@@ -22,8 +22,9 @@ class EreasDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-
-            ->editColumn('name', function (Erea $erea) {return $erea->name;})
+            ->editColumn('name', function (Erea $erea) {
+                return $erea->name;
+            })
             // ->editColumn('status', function (Erea $erea) {
             //     return $erea->status;
             // })
@@ -64,7 +65,7 @@ class EreasDataTable extends DataTable
             ->setTableId('ereas')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(3)

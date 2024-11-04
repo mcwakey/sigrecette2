@@ -20,6 +20,7 @@ class LedgersDataTable extends DataTable
 {
 
     use WithExportQueue;
+
     /**
      * Build the DataTable class.
      *
@@ -28,11 +29,10 @@ class LedgersDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
 
-    $newAmount = 0;
+        $newAmount = 0;
 
         return (new EloquentDataTable($query))
             ->rawColumns(['status'])
-
             ->editColumn('payments.created_at', function (Payment $payment) {
                 return $payment->created_at->format('d M Y');
             })
@@ -45,15 +45,13 @@ class LedgersDataTable extends DataTable
             ->editColumn('amount', function (Payment $payment) {
                 return $payment->amount;
             })
+            ->editColumn('newAmount', function (Payment $payment) use (&$newAmount) {
+                // Add the amount of the current row to the accumulated amount
+                $newAmount += $payment->amount - $payment->deposit;
 
-        ->editColumn('newAmount', function (Payment $payment) use (&$newAmount) {
-            // Add the amount of the current row to the accumulated amount
-            $newAmount += $payment->amount - $payment->deposit;
-
-            // Return the accumulated amount
-            return $newAmount;
-        })
-
+                // Return the accumulated amount
+                return $newAmount;
+            })
             ->editColumn('stock_transfers.code', function (Payment $payment) {
                 return $payment->stock_transfers->first()->code ?? $payment->code;
                 //return $payment->code;
@@ -76,10 +74,10 @@ class LedgersDataTable extends DataTable
 
 
         return $model
-        // ->join('taxables', 'payments.taxable_id', '=', 'taxables.id')
-                    // ->with('taxable.tax_label')
-                    // ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
-                    // ->join('users', 'payments.to_user_id', '=', 'users.id')
+            // ->join('taxables', 'payments.taxable_id', '=', 'taxables.id')
+            // ->with('taxable.tax_label')
+            // ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
+            // ->join('users', 'payments.to_user_id', '=', 'users.id')
             ->whereNot('status', PaymentStatusEnums::PENDING) // Filter collector_deposits by taxpayer_id
             // ->whereNotIn('payments.reference', [Constants::ANNULATION, Constants::REDUCTION])
             ->whereBetween('payments.created_at', [$startOfYear, $endOfYear])
@@ -94,20 +92,20 @@ class LedgersDataTable extends DataTable
      */
     public function html(): HtmlBuilder
     {
-        
-        $columns= $this->getColumns();
+
+        $columns = $this->getColumns();
 
         return $this->builder()
             ->setTableId('collector_deposits-table')
             ->columns($columns)
             // ->language(public_path().'assets/js/datatable/datatable-fr.json')
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0, 'desc')
             ->pageLength(100) // Set the default number of rows per page to 3
-            ->lengthMenu([[100,300, 500,  -1], [100,300, 500, "All"]]) // Define options for the number of rows per page
+            ->lengthMenu([[100, 300, 500, -1], [100, 300, 500, "All"]]) // Define options for the number of rows per page
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/ledgers/columns/_draw-scripts.js')) . "}");
     }
 

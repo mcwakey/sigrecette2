@@ -2,18 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\RecoveriesDataTable;
-use App\Models\Commune;
-use App\Models\Taxpayer;
 use App\DataTables\CommuneDataTable;
 use App\DataTables\TaxpayerInvoicesDataTable;
 use App\DataTables\TaxpayerTaxablesDataTable;
-use App\Http\Controllers\Controller;
-use App\Models\UserLogs;
+use App\Models\Commune;
 use Illuminate\Http\Request;
-use App\Imports\TaxpayerImport;
-use Illuminate\Support\Facades\Storage;
-use Maatwebsite\Excel\Facades\Excel;
 
 class CommunesController extends Controller
 {
@@ -43,7 +36,6 @@ class CommunesController extends Controller
     // }
 
 
-
     /**
      * Show the form for creating a new resource.
      */
@@ -63,7 +55,7 @@ class CommunesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Commune $commune , TaxpayerInvoicesDataTable $invoicesDataTable, TaxpayerTaxablesDataTable $taxablesDataTable)
+    public function show(Commune $commune, TaxpayerInvoicesDataTable $invoicesDataTable, TaxpayerTaxablesDataTable $taxablesDataTable)
     {
         // Assuming you want to pass the $commune  to the show view
         // return view('pages.commune.show', compact('taxpayer'))
@@ -71,9 +63,8 @@ class CommunesController extends Controller
         //return $dataTable->render('pages/commune.show')-> with ('taxpayer', $commune );
 
 
-
-        return $taxablesDataTable->with('id', $commune ->id)
-                ->render('pages/communes.show', compact('commune'));
+        return $taxablesDataTable->with('id', $commune->id)
+            ->render('pages/communes.show', compact('commune'));
     }
 
     /**
@@ -123,7 +114,6 @@ class CommunesController extends Controller
     // }
 
 
-
 //     public function show($identifier, TaxablesDataTable $dataTable)
 // {
 //     // Check if $identifier is numeric, then assume it's the taxpayer ID
@@ -143,12 +133,10 @@ class CommunesController extends Controller
 // }
 
 
-
-
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Commune $commune )
+    public function edit(Commune $commune)
     {
         //
     }
@@ -156,7 +144,7 @@ class CommunesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Commune $commune )
+    public function update(Request $request, Commune $commune)
     {
         //
     }
@@ -164,7 +152,7 @@ class CommunesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Commune $commune )
+    public function destroy(Commune $commune)
     {
         //
     }

@@ -24,9 +24,9 @@ class TaxpayerTaxablesDataTable extends DataTable
             ->filter(function ($query) {
                 if (request()->filled('search.value')) {
                     $query->where('tax_labels.name', 'like', '%' . request('search.value') . '%')
-                    ->orWhere('taxables.name', 'like', '%' . request('search.value') . '%')
-                    ->orWhere('tax_labels.code', 'like', '%' . request('search.value') . '%')
-                    ->orWhere('bill_status', 'like', '%' . request('search.value') . '%');
+                        ->orWhere('taxables.name', 'like', '%' . request('search.value') . '%')
+                        ->orWhere('tax_labels.code', 'like', '%' . request('search.value') . '%')
+                        ->orWhere('bill_status', 'like', '%' . request('search.value') . '%');
                     // Add additional search conditions as needed for other columns
                 }
             })
@@ -47,8 +47,8 @@ class TaxpayerTaxablesDataTable extends DataTable
             //     return $taxpayer_taxable->;
             // })
             ->editColumn('seize', function (TaxpayerTaxable $taxpayer_taxable) {
-               // return $this->id;
-                return $taxpayer_taxable->seize. " ". $taxpayer_taxable->taxable->unit;
+                // return $this->id;
+                return $taxpayer_taxable->seize . " " . $taxpayer_taxable->taxable->unit;
                 // return view('pages.taxpayer_taxables.columns._seize', compact('taxpayer_taxable'));
             })
             ->editColumn('bill_status', function (TaxpayerTaxable $taxpayer_taxable) {
@@ -73,13 +73,13 @@ class TaxpayerTaxablesDataTable extends DataTable
     public function query(TaxpayerTaxable $model): QueryBuilder
     {
         return $model->with('taxable')
-                    ->join('taxables', 'taxpayer_taxables.taxable_id', '=', 'taxables.id')
-                    ->with('taxable.tax_label')
-                    ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
-                    ->where('taxpayer_taxables.taxpayer_id', $this->id) // Filter taxpayer_taxables by taxpayer_id
-                    ->select('taxpayer_taxables.*')
-                    //->orderBy('tax_labels.name')
-                    ->newQuery();
+            ->join('taxables', 'taxpayer_taxables.taxable_id', '=', 'taxables.id')
+            ->with('taxable.tax_label')
+            ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
+            ->where('taxpayer_taxables.taxpayer_id', $this->id) // Filter taxpayer_taxables by taxpayer_id
+            ->select('taxpayer_taxables.*')
+            //->orderBy('tax_labels.name')
+            ->newQuery();
 
         // return TaxpayerTaxable::where('taxpayer_id', $this->id); // Filter taxpayer_taxables by taxpayer_id
     }
@@ -92,8 +92,8 @@ class TaxpayerTaxablesDataTable extends DataTable
         return $this->builder()
             ->setTableId('taxpayer_taxables-table')
             ->columns($this->getColumns())
-            ->minifiedAjax(route("taxpayers.show",Taxpayer::find($this->id)))
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            ->minifiedAjax(route("taxpayers.show", Taxpayer::find($this->id)))
+            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(5)
@@ -125,13 +125,13 @@ class TaxpayerTaxablesDataTable extends DataTable
                 ->exportable(false)
                 ->printable(false)
                 ->width(60)
-                // ->buttons(
-                //     Button::make('create'),
-                //     Button::make('export'),
-                //     Button::make('print'),
-                //     Button::make('reset'),
-                //     Button::make('reload')
-                // )
+            // ->buttons(
+            //     Button::make('create'),
+            //     Button::make('export'),
+            //     Button::make('print'),
+            //     Button::make('reset'),
+            //     Button::make('reload')
+            // )
         ];
     }
 

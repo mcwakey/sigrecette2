@@ -34,9 +34,9 @@ class ExportRecoveriesDataTable extends DataTable
             ->editColumn('id', function (Payment $payment) {
                 return $payment->id;
             })
-        ->editColumn('user.name', function (Payment $payment) {
-            return $payment->user->name;
-        })
+            ->editColumn('user.name', function (Payment $payment) {
+                return $payment->user->name;
+            })
             ->editColumn('invoice.invoice_no', function (Payment $payment) {
                 return $payment->invoice->invoice_no;
             })
@@ -50,16 +50,14 @@ class ExportRecoveriesDataTable extends DataTable
                 return $payment->taxpayer->name;
             })
             ->editColumn('taxpayer.id', function (Payment $payment) {
-                return  $payment->taxpayer->id;
+                return $payment->taxpayer->id;
             })
-
             ->editColumn('amount', function (Payment $payment) {
-                return format_amount($payment->amount)  ;
+                return format_amount($payment->amount);
             })
             ->editColumn('remaining_amount', function (Payment $payment) {
                 return format_amount($payment->remaining_amount);
             })
-
             ->editColumn('status', function (Payment $payment) {
                 return view('pages/recoveries.columns._status', compact('payment'));
             })
@@ -67,10 +65,9 @@ class ExportRecoveriesDataTable extends DataTable
     }
 
 
-
     public function query(Payment $model): QueryBuilder
     {
-        $query = $model->with(['taxpayer','invoice','user'])
+        $query = $model->with(['taxpayer', 'invoice', 'user'])
             ->join('invoices', 'invoices.id', '=', 'payments.invoice_id')
             ->leftJoin('taxpayers', 'taxpayers.id', '=', 'payments.taxpayer_id')
             ->leftJoin('users', 'users.id', '=', 'payments.user_id')
@@ -104,6 +101,7 @@ class ExportRecoveriesDataTable extends DataTable
         ];
         return $columns;
     }
+
     /**
      * Optional method if you want to use the html builder.
      */
@@ -113,15 +111,14 @@ class ExportRecoveriesDataTable extends DataTable
             ->setTableId('recoveries-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(7)
             ->pageLength(100) // Set the default number of rows per page to 3
-            ->lengthMenu([[100,300, 500,  -1], [100,300, 500, "All"]]) // Define options for the number of rows per page
+            ->lengthMenu([[100, 300, 500, -1], [100, 300, 500, "All"]]) // Define options for the number of rows per page
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/recoveries/columns/_draw-scripts.js')) . "}");
     }
-
 
 
     /**

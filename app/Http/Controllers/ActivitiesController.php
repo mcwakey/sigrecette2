@@ -16,6 +16,7 @@ class ActivitiesController extends Controller
         //return view('pages/activities.list');
         return $dataTable->render('pages/activities.list');
     }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -35,9 +36,9 @@ class ActivitiesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Activity $activity,ActivityDataTable $activitiesDataTable)
+    public function show(Activity $activity, ActivityDataTable $activitiesDataTable)
     {
-        return $activitiesDataTable->with('id',$activity->id)->render('pages/activities.show', compact('activity'));
+        return $activitiesDataTable->with('id', $activity->id)->render('pages/activities.show', compact('activity'));
     }
 
     /**

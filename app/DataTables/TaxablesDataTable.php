@@ -12,10 +12,9 @@ use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Log;
 
 
-
 class TaxablesDataTable extends DataTable
 {
-public $query = false;
+    public $query = false;
 
     /**
      * Build the DataTable class.
@@ -31,13 +30,12 @@ public $query = false;
             ->filter(function ($query) {
                 if (request()->filled('search.value')) {
                     $query->where('tax_labels.name', 'like', '%' . request('search.value') . '%')
-                    ->orWhere('taxables.name', 'like', '%' . request('search.value') . '%')
-                    ->orWhere('tax_labels.code', 'like', '%' . request('search.value') . '%');
+                        ->orWhere('taxables.name', 'like', '%' . request('search.value') . '%')
+                        ->orWhere('tax_labels.code', 'like', '%' . request('search.value') . '%');
                     // Add additional search conditions as needed for other columns
                 }
             })
             ->rawColumns(['taxable', 'last_login_at'])
-
             ->editColumn('tax_label.name', function (Taxable $taxable) {
                 return view('pages/taxables.columns._taxable', compact('taxable'));
             })
@@ -107,10 +105,10 @@ public $query = false;
     public function query(Taxable $model): QueryBuilder
     {
         return $model->with('tax_label')
-                    ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
-                    ->select('taxables.*')
-                    //->orderBy('tax_labels.name')
-                    ->newQuery();
+            ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
+            ->select('taxables.*')
+            //->orderBy('tax_labels.name')
+            ->newQuery();
     }
 
     /**
@@ -125,7 +123,7 @@ public $query = false;
             ->setTableId('taxables-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(1)
@@ -139,8 +137,8 @@ public $query = false;
     {
         return [
             Column::make('tax_label.name')->addClass('d-flex align-items-center')->title(__('taxlabel')),
-        //     Column::make('tax_label_name')->title(__('Tax Label Name'))->name('tax_label_name'),
-        // Column::make('taxable_name')->title(__('Taxable Name'))->name('taxable_name'),
+            //     Column::make('tax_label_name')->title(__('Tax Label Name'))->name('tax_label_name'),
+            // Column::make('taxable_name')->title(__('Taxable Name'))->name('taxable_name'),
 
             Column::make('tax_label_code')->title(__('code'))->name('tax_label.code'),
             //Column::make('gender')->title('Tax Name'),

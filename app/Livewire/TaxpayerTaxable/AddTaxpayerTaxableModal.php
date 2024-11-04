@@ -43,7 +43,7 @@ class AddTaxpayerTaxableModal extends Component
     public $width;
 
     public $taxlabel_id;
-    public $taxables=[];
+    public $taxables = [];
     // public $penalty_type;
     // public $tax_label_id;
 
@@ -67,8 +67,8 @@ class AddTaxpayerTaxableModal extends Component
         //'location' => 'required',
         'taxable_id' => 'required|int',
         // 'taxpayer_id' => 'required',
-        'width'=> 'nullable|numeric|min:0',
-        'length'=> 'nullable|numeric|min:0',
+        'width' => 'nullable|numeric|min:0',
+        'length' => 'nullable|numeric|min:0',
         // 'penalty' => 'nullable',
         // 'penalty_type' => 'nullable',
         //'tax_label' => 'required',
@@ -95,9 +95,11 @@ class AddTaxpayerTaxableModal extends Component
     public $taxpayer_id;
 
 
-    public function mount($id){
-        $this->taxpayer_id=$id;
+    public function mount($id)
+    {
+        $this->taxpayer_id = $id;
     }
+
     public function render()
     {
         $taxlabels = TaxLabel::where('category', 'LIKE', '%CATEGORY 1%')->get();
@@ -139,7 +141,7 @@ class AddTaxpayerTaxableModal extends Component
     public function updatedLength($value)
     {
 
-        if(is_numeric($value)&&$value>0){
+        if (is_numeric($value) && $value > 0) {
 
             $this->makeCalculSeize();
         }
@@ -151,20 +153,21 @@ class AddTaxpayerTaxableModal extends Component
     {
 
 
-        if(is_numeric($value)&&$value>0){
+        if (is_numeric($value) && $value > 0) {
 
             $this->makeCalculSeize();
         }
 
     }
+
     public function makeCalculSeize()
     {
 
 
-        if($this->length>0 && $this->width>0){
-            $this->width =  doubleval($this->width);
+        if ($this->length > 0 && $this->width > 0) {
+            $this->width = doubleval($this->width);
             $this->length = doubleval($this->length);
-            $this->seize = round($this->length * $this->width,2);
+            $this->seize = round($this->length * $this->width, 2);
         }
 
     }
@@ -176,12 +179,12 @@ class AddTaxpayerTaxableModal extends Component
         $taxpayer_taxables = TaxpayerTaxable::findOrFail($id);
 
         // Update the invoice_id field based on the checkbox state
-            //dd($taxpayer_taxables->billable);
-        if ($taxpayer_taxables->billable == 0){
+        //dd($taxpayer_taxables->billable);
+        if ($taxpayer_taxables->billable == 0) {
             $taxpayer_taxables->update([
                 'billable' => '1'
             ]);
-        }else {
+        } else {
             $taxpayer_taxables->update([
                 'billable' => '0'
             ]);
@@ -190,7 +193,6 @@ class AddTaxpayerTaxableModal extends Component
         //$taxpayer_taxables = TaxpayerTaxable::findOrFail($id);
         //    dd($taxpayer_taxables->billable);
     }
-
 
 
     public function submit()
@@ -325,15 +327,17 @@ class AddTaxpayerTaxableModal extends Component
     //     return $this->taxlabel ? Taxable::where('taxlabel_id', $this->taxlabel)->get() : collect();
     // }
     #[On('updateSharedTaxpayerId')]
-    public function updateSharedTaxpayerId($id){
+    public function updateSharedTaxpayerId($id)
+    {
 
 
         $taxpayer = Taxpayer::find($id);
-        if($taxpayer instanceof Taxpayer){
+        if ($taxpayer instanceof Taxpayer) {
             $this->taxpayer_id = $taxpayer->id;
         }
 
     }
+
     public function hydrate()
     {
         $this->resetErrorBag();

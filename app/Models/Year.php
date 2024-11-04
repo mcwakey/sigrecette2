@@ -29,27 +29,28 @@ class Year extends Model
      *
      * @return Year
      */
-    public static function  getActiveYear():Year {
+    public static function getActiveYear(): Year
+    {
         $currentYear = date('Y');
         $current_mounth = Carbon::now()->format('m');
         $activeYear = Year::where('status', "ACTIVE")->first();
 
 
         if (!$activeYear) {
-            $activeYear = Year::where('name', $currentYear)->first()?? Year::getCurrentYear();
+            $activeYear = Year::where('name', $currentYear)->first() ?? Year::getCurrentYear();
             $activeYear->status = "ACTIVE";
             DB::transaction(function () use ($activeYear) {
                 $activeYear->save();
             });
         }
-        if($activeYear->auto_switch ==true){
-            if (intval($activeYear->name) < intval($currentYear) ) {
-                $activeYear= Year::autoUpdateActiveYear( $activeYear);
+        if ($activeYear->auto_switch == true) {
+            if (intval($activeYear->name) < intval($currentYear)) {
+                $activeYear = Year::autoUpdateActiveYear($activeYear);
             }
-            if(
+            if (
                 (intval($activeYear->name) == intval($currentYear))
-                && $activeYear->current_month!=$current_mounth ){
-                $activeYear = Year::autoUpdateOrCreateCurrentMonth($current_mounth,$activeYear);
+                && $activeYear->current_month != $current_mounth) {
+                $activeYear = Year::autoUpdateOrCreateCurrentMonth($current_mounth, $activeYear);
             }
         }
 
@@ -62,16 +63,17 @@ class Year extends Model
      * @param Year $active_year
      * @return Year
      */
-    public static function autoUpdateActiveYear(Year $active_year): Year{
-        $active_year->status="INACTIVE";
-        $next_year =intval( $active_year->name)+1;
+    public static function autoUpdateActiveYear(Year $active_year): Year
+    {
+        $active_year->status = "INACTIVE";
+        $next_year = intval($active_year->name) + 1;
         $data = [
             'name' => $next_year,
             'status' => "INACTIVE",
         ];
         Year::makeAllYearsInative();
-        $year = Year::where('name',$next_year)->first() ?? Year::create($data);
-        $year->status="ACTIVE";
+        $year = Year::where('name', $next_year)->first() ?? Year::create($data);
+        $year->status = "ACTIVE";
         DB::transaction(function () use ($active_year, $year) {
             $year->save();
             $active_year->save();
@@ -84,10 +86,11 @@ class Year extends Model
      * Makes all years inactive.
      *
      */
-    public static function makeAllYearsInative(){
-        DB::transaction(function ()  {
+    public static function makeAllYearsInative()
+    {
+        DB::transaction(function () {
             $activeYears = Year::where('status', "ACTIVE")->get();
-            foreach ($activeYears as $year){
+            foreach ($activeYears as $year) {
                 $year->status = "INACTIVE";
                 $year->save();
             }
@@ -102,7 +105,7 @@ class Year extends Model
      * @param Year $year
      * @return Year
      */
-    public static function autoUpdateOrCreateCurrentMonth($current_mounth,Year $year):Year
+    public static function autoUpdateOrCreateCurrentMonth($current_mounth, Year $year): Year
     {
         $year->current_month = $current_mounth;
         DB::transaction(function () use ($year) {
@@ -112,13 +115,12 @@ class Year extends Model
         return $year;
 
 
-
     }
 
     /**
      * @return Year
      */
-    private static function getCurrentYear():Year
+    private static function getCurrentYear(): Year
     {
         $currentYear = date('Y');
         $data = [
@@ -127,7 +129,7 @@ class Year extends Model
         ];
         $year = Year::where('name', $currentYear)->first() ?? Year::create($data);
         $year->status = "ACTIVE";
-        $year->auto_switch =true;
+        $year->auto_switch = true;
         DB::transaction(function () use ($year) {
             $year->save();
         });

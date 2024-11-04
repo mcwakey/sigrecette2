@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Taxpayer;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
 use App\Models\Payment;
+use App\Models\Taxpayer;
 use App\Models\TaxpayerTaxable;
-
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class SyncInController extends Controller
 {
@@ -19,7 +18,7 @@ class SyncInController extends Controller
     public function syncIn(Request $request)
     {
         $data = $request->input('data', []);
-        
+
         // foreach ($data as $taxpayer) {
         //     foreach ($taxpayer as $taxpayerData) {
         //         foreach ($taxpayerData as $value) {
@@ -28,13 +27,13 @@ class SyncInController extends Controller
         //             $taxpayerTaxables = $value['taxpayerTaxables'] ?? [];
         //             $taxpayerInvoices = $value['invoices'] ?? [];
         //             $taxpayerPayments = $value['payments'] ?? [];
-                    
+
         //             unset($value['ereaId']);
-                    
+
         //             if (empty($value['dataStatus']) || isset($value['dataStatus'])) {
         //                 if($value['dataStatus'] == $this->new){
         //                     $value['from_mobile_and_validate_state'] = 'PENDING';
-                            
+
         //                     $taxpayer = Taxpayer::create($this->transformKeysToSnakeCase($value));
         //                     //on doit avoir klk chose come xa pour reactualiser le taxpayerId si cest un nouveau taxpayer
         //                     $taxpayerId = $taxpayer->id;

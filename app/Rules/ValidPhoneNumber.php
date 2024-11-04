@@ -12,18 +12,18 @@ class ValidPhoneNumber implements Rule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed $value
      * @return bool
      */
     public function passes($attribute, $value)
     {
         try {
             $phone = new Phone();
-            $phone->country(['TG','GH','BJ'])->type('mobile');
+            $phone->country(['TG', 'GH', 'BJ'])->type('mobile');
             return true;
         } catch (Exception $e) {
-            return false; 
+            return false;
         }
     }
 

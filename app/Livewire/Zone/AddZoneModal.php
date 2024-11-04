@@ -35,7 +35,6 @@ class AddZoneModal extends Component
         $zones = Zone::all();
 
 
-
         return view('livewire.zone.add-zone-modal', compact('zones'));
     }
 

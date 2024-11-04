@@ -14,9 +14,12 @@
             </div>
         @endcan
     @endif
+        <div class="menu-item px-3">
+            <a href="#" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{ $stock_request->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_stock_request" data-kt-action="update_request">
+                {{ __('edit') }}
+            </a>
+        </div>
 
 
 
-    <!--end::Menu item-->
 </div>
-<!--end::Menu-->

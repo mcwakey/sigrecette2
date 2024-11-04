@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Hash;
 
 class Password extends Controller
 {
-    public function adminResetPassword(Request $request){
+    public function adminResetPassword(Request $request)
+    {
         $request->validate([
             'user_id' => 'required|integer|min:1',
         ]);

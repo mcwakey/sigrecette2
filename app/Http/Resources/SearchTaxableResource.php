@@ -10,7 +10,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @property Taxable $resource
  */
-
 class SearchTaxableResource extends JsonResource
 {
     /**
@@ -21,7 +20,7 @@ class SearchTaxableResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'=>$this->resource->id,
+            'id' => $this->resource->id,
             'name' => $this->resource->name,
             'tariff' => $this->resource->tariff,
             'tariffType' => $this->resource->tariff_type,

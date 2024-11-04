@@ -54,29 +54,28 @@ class InvoicesDataTable extends DataTable
                 return $invoice->taxpayer->address ?? '-';
             })
             ->editColumn('taxpayers.latitude', function (Invoice $invoice) {
-                return ($invoice->taxpayer->latitude ?? '-').' : '.($invoice->taxpayer->longitude ?? '-');
+                return ($invoice->taxpayer->latitude ?? '-') . ' : ' . ($invoice->taxpayer->longitude ?? '-');
             })
             ->editColumn('tax_labels.code', function (Invoice $invoice) {
                 return implode(',', array_keys(InvoiceHelper::sumAmountsByTaxCode($invoice)));
             })
             ->editColumn('total', function (Invoice $invoice) {
                 if ($invoice->reduce_amount != '')
-                    return '-'. format_amount($invoice->reduce_amount) ;
+                    return '-' . format_amount($invoice->reduce_amount);
                 else
-                   return format_amount($invoice->amount);
+                    return format_amount($invoice->amount);
             })
             ->editColumn('paid', function (Invoice $invoice) {
 
-                    return format_amount(Payment::getPaid($invoice->invoice_no));
+                return format_amount(Payment::getPaid($invoice->invoice_no));
             })
             ->editColumn('remains_to_be_paid', function (Invoice $invoice) {
-                    return  format_amount($invoice->get_remains_to_be_paid());
+                return format_amount($invoice->get_remains_to_be_paid());
             })
             ->editColumn('validity', function (Invoice $invoice) {
                 return view('pages/invoices.columns._validity', compact('invoice'));
                 //return ''; // Return empty string
             })
-
             ->editColumn('status', function (Invoice $invoice) {
                 return view('pages/invoices.columns._aproval', compact('invoice'));
             })
@@ -84,11 +83,13 @@ class InvoicesDataTable extends DataTable
                 //return $invoice->delivery_date;
                 return view('pages/invoices.columns._delivery', compact('invoice'));
             })
-           // ->editColumn('from_date', function (Invoice $invoice) {return $invoice->from_date;})
+            // ->editColumn('from_date', function (Invoice $invoice) {return $invoice->from_date;})
             ->editColumn('to_date', function (Invoice $invoice) {
-                return $invoice->to_date;})
+                return $invoice->to_date;
+            })
             ->editColumn('reason_for_reject', function (Invoice $invoice) {
-                return $invoice->reason_for_reject;})
+                return $invoice->reason_for_reject;
+            })
             ->addColumn('type', function (Invoice $invoice) {
                 return $invoice->type;
             })
@@ -99,50 +100,49 @@ class InvoicesDataTable extends DataTable
     }
 
 
-
     public function query(Invoice $model): QueryBuilder
     {
 
-            $query= $model->join('invoice_items', 'invoice_items.invoice_id', '=', 'invoices.id')
-                        ->leftjoin('taxpayers', 'taxpayers.id', '=', 'invoices.taxpayer_id')
-                        ->join('taxpayer_taxables', 'taxpayer_taxables.id', '=', 'invoice_items.taxpayer_taxable_id')
-                        ->join('taxables', 'taxables.id', '=', 'taxpayer_taxables.taxable_id')
-                        ->join('tax_labels', 'tax_labels.id', '=', 'taxables.tax_label_id')
-                        ->leftjoin('zones', 'zones.id', '=', 'taxpayers.zone_id')
-                        // ->where('taxpayers.zone_id', 'LIKE', '%' . ($this->zone ?? '') . '%')
-                        // ->where('taxables.tax_label_id', 'LIKE', '%' . ($this->taxlabel ?? '') . '%')
-                        // ->where('invoices.validity', 'EXPIRED')
-                        ->select('invoices.*')
-                ->where('invoices.status','!=',InvoiceStatusEnums::REJECTED_BY_OR)
-                        ->whereBetween('invoices.created_at', [$this->startDate, $this->endDate])
-                        ->distinct()
-                ->orderBy('invoices.created_at', 'desc')
-                        ->newQuery();
-        if($this->type!=null){
-            $query->where('invoices.type','=',$this->type);
+        $query = $model->join('invoice_items', 'invoice_items.invoice_id', '=', 'invoices.id')
+            ->leftjoin('taxpayers', 'taxpayers.id', '=', 'invoices.taxpayer_id')
+            ->join('taxpayer_taxables', 'taxpayer_taxables.id', '=', 'invoice_items.taxpayer_taxable_id')
+            ->join('taxables', 'taxables.id', '=', 'taxpayer_taxables.taxable_id')
+            ->join('tax_labels', 'tax_labels.id', '=', 'taxables.tax_label_id')
+            ->leftjoin('zones', 'zones.id', '=', 'taxpayers.zone_id')
+            // ->where('taxpayers.zone_id', 'LIKE', '%' . ($this->zone ?? '') . '%')
+            // ->where('taxables.tax_label_id', 'LIKE', '%' . ($this->taxlabel ?? '') . '%')
+            // ->where('invoices.validity', 'EXPIRED')
+            ->select('invoices.*')
+            ->where('invoices.status', '!=', InvoiceStatusEnums::REJECTED_BY_OR)
+            ->whereBetween('invoices.created_at', [$this->startDate, $this->endDate])
+            ->distinct()
+            ->orderBy('invoices.created_at', 'desc')
+            ->newQuery();
+        if ($this->type != null) {
+            $query->where('invoices.type', '=', $this->type);
         }
-        if ($this->startInvoiceId!== null && $this->endInvoiceId!== null) {
+        if ($this->startInvoiceId !== null && $this->endInvoiceId !== null) {
             $query->whereBetween('invoices.id', [$this->startInvoiceId, $this->endInvoiceId]);
         }
-        if($this->state!=null){
-            if($this->state==InvoiceStatusEnums::APPROVED){
-                $query->whereIn('invoices.status',[InvoiceStatusEnums::APPROVED,InvoiceStatusEnums::APPROVED_CANCELLATION]);
-            }else{
-                $query->where('invoices.status','=',$this->state);
+        if ($this->state != null) {
+            if ($this->state == InvoiceStatusEnums::APPROVED) {
+                $query->whereIn('invoices.status', [InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION]);
+            } else {
+                $query->where('invoices.status', '=', $this->state);
             }
 
 
         }
-        if($this->delivery){
-            if ($this->delivery==Constants::INVOICE_DELIVERY_LIV_KEY) {
+        if ($this->delivery) {
+            if ($this->delivery == Constants::INVOICE_DELIVERY_LIV_KEY) {
                 $query->whereNotNull('delivery_date');
-                if($this->to_paid){
-                    $query->whereIn('invoices.status',[InvoiceStatusEnums::APPROVED,InvoiceStatusEnums::APPROVED_CANCELLATION])
-                    ->where('invoices.pay_status','!=',InvoicePayStatusEnums::PAID);
+                if ($this->to_paid) {
+                    $query->whereIn('invoices.status', [InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION])
+                        ->where('invoices.pay_status', '!=', InvoicePayStatusEnums::PAID);
 
                 }
-            }elseif ( $this->delivery==Constants::INVOICE_DELIVERY_NON_LIV_KEY)  {
-                $query->whereIn('invoices.status',[InvoiceStatusEnums::APPROVED,InvoiceStatusEnums::APPROVED_CANCELLATION]);
+            } elseif ($this->delivery == Constants::INVOICE_DELIVERY_NON_LIV_KEY) {
+                $query->whereIn('invoices.status', [InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION]);
 
                 $query->whereNull('delivery_date');
 
@@ -150,13 +150,11 @@ class InvoicesDataTable extends DataTable
         }
 
 
-        if($this->id){
-            $query->where('invoices.taxpayer_id','=',$this->id);
+        if ($this->id) {
+            $query->where('invoices.taxpayer_id', '=', $this->id);
         }
         return $query;
     }
-
-
 
 
     /**
@@ -168,13 +166,13 @@ class InvoicesDataTable extends DataTable
         return $this->builder()
             ->setTableId('invoices-table')
             ->columns($this->getColumns())
-            ->minifiedAjax(route("invoices.index",request()->all()))
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            ->minifiedAjax(route("invoices.index", request()->all()))
+            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(3)
             ->pageLength(100) // Set the default number of rows per page to 3
-            ->lengthMenu([[100,300, 500,  -1], [100,300, 500, "All"]]) // Define options for the number of rows per page
+            ->lengthMenu([[100, 300, 500, -1], [100, 300, 500, "All"]]) // Define options for the number of rows per page
 
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/taxpayer_taxables/columns/_draw-scripts.js')) . "}");
     }
@@ -209,54 +207,52 @@ class InvoicesDataTable extends DataTable
         ];
 
 
-            $columns = array_map(function ($column) {
-                if ($this->type==Constants::INVOICE_TYPE_COMPTANT){
-                    if (in_array($column->name, ['zones.name','remains_to_be_paid','reason_for_reject','type'])) {
+        $columns = array_map(function ($column) {
+            if ($this->type == Constants::INVOICE_TYPE_COMPTANT) {
+                if (in_array($column->name, ['zones.name', 'remains_to_be_paid', 'reason_for_reject', 'type'])) {
+                    $column->visible(false);
+                }
+            }
+            if ($this->state != null) {
+                if ($this->state == InvoiceStatusEnums::DRAFT) {
+                    if (in_array($column->name, ['order_no', 'paid', 'remains_to_be_paid', 'delivery_date', 'to_date', 'validity', 'reason_for_reject', 'type'])) {
+                        $column->visible(false);
+                    }
+                } elseif ($this->state == InvoiceStatusEnums::ACCEPTED) {
+                    if (in_array($column->name, ['paid', 'remains_to_be_paid', 'delivery_date', 'validity', 'to_date', 'reason_for_reject', 'type'])) {
+                        $column->visible(false);
+                    }
+                } elseif ($this->state == InvoiceStatusEnums::PENDING) {
+                    if (in_array($column->name, ['paid', 'remains_to_be_paid', 'to_date', 'validity', 'delivery_date', 'reason_for_reject', 'type'])) {
+                        $column->visible(false);
+                    }
+                } elseif ($this->state == InvoiceStatusEnums::REJECTED) {
+                    if (in_array($column->name, ['paid', 'remains_to_be_paid', 'to_date', 'validity', 'delivery_date'])) {
                         $column->visible(false);
                     }
                 }
-                if ($this->state != null) {
-                    if ($this->state == InvoiceStatusEnums::DRAFT) {
-                        if (in_array($column->name, ['order_no', 'paid', 'remains_to_be_paid', 'delivery_date', 'to_date', 'validity','reason_for_reject','type'])) {
-                            $column->visible(false);
-                        }
-                    } elseif ($this->state == InvoiceStatusEnums::ACCEPTED) {
-                        if (in_array($column->name, ['paid', 'remains_to_be_paid', 'delivery_date', 'validity', 'to_date','reason_for_reject','type'])) {
-                            $column->visible(false);
-                        }
-                    }
 
-                    elseif ($this->state == InvoiceStatusEnums::PENDING) {
-                        if (in_array($column->name, ['paid', 'remains_to_be_paid', 'to_date', 'validity','delivery_date','reason_for_reject','type'])) {
-                            $column->visible(false);
-                        }
-                    }elseif ($this->state==InvoiceStatusEnums::REJECTED){
-                        if (in_array($column->name, ['paid', 'remains_to_be_paid', 'to_date', 'validity','delivery_date'])) {
-                            $column->visible(false);
-                        }
-                    }
-
+            }
+            if ($this->to_paid) {
+                if (in_array($column->name, ['to_date', 'delivery_date', 'reason_for_reject', 'order_no', 'status'])) {
+                    $column->visible(false);
                 }
-                if ($this->to_paid){
-                    if (in_array($column->name, [ 'to_date', 'delivery_date','reason_for_reject','order_no','status'])) {
+            }
+            if ($this->type == Constants::INVOICE_TYPE_TITRE) {
+                if ($this->delivery == Constants::INVOICE_DELIVERY_NON_LIV_KEY) {
+                    if (in_array($column->name, ['paid', 'remains_to_be_paid', 'validity', 'to_date', 'reason_for_reject', 'type'])) {
+                        $column->visible(false);
+                    }
+                } elseif ($this->delivery == Constants::INVOICE_DELIVERY_LIV_KEY) {
+                    if (in_array($column->name, ['paid', 'remains_to_be_paid', 'validity', 'to_date', 'reason_for_reject', 'type'])) {
                         $column->visible(false);
                     }
                 }
-                if($this->type==Constants::INVOICE_TYPE_TITRE){
-                    if($this->delivery==Constants::INVOICE_DELIVERY_NON_LIV_KEY){
-                        if (in_array($column->name, ['paid', 'remains_to_be_paid',  'validity', 'to_date','reason_for_reject','type'])) {
-                            $column->visible(false);
-                        }
-                    }elseif ($this->delivery==Constants::INVOICE_DELIVERY_LIV_KEY){
-                        if (in_array($column->name, ['paid', 'remains_to_be_paid',  'validity', 'to_date','reason_for_reject','type'])) {
-                            $column->visible(false);
-                        }
-                    }
-                }
+            }
 
 
-                return $column;
-            }, $columns);
+            return $column;
+        }, $columns);
 
 
         return $columns;

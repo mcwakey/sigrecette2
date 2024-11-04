@@ -42,17 +42,13 @@
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('type') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                    @if ($edit_mode == 'true')
-                                    <input type="text" wire:model="taxlabel_name" name="taxlabel_name" class="form-control form-control- mb-3 mb-lg-0" readonly/>
-                                    @else
                                 <select data-kt-action="load_drop" wire:model.live="taxlabel_id" name="taxlabel_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_request">
                                     <option>{{ __('select an option') }}</option>
                                     <option value="TICKET">TICKET</option>
                                     <option value="TIMBRE">TIMBRE</option>
                                     <option value="AUTRE">AUTRE</option>
                                 </select>
-                                    @endif
-                                <!--end::Input-->
+
                                 @error('taxlabel_id')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
@@ -68,17 +64,14 @@
                                 <label class="required fs-6 fw-semibold mb-2">{{ __('tickets') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                    @if ($edit_mode == 'true')
-                                    <input type="text" wire:model="taxable_name" name="taxable_name" class="form-control form-control- mb-3 mb-lg-0" readonly/>
-                                    <input type="text" wire:model="taxable_idd" name="taxable_idd" class="form-control form-control- mb-3 mb-lg-0" readonly/>
-                                    @else
+
                                     <select data-kt-action="load_drop" wire:model="taxable_id"  wire:change="handleTaxableChange" name="taxable_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_request">
                                     <option>{{ __('select an option') }}</option>
                                     @foreach($taxables as $taxable)
                                     <option value="{{ $taxable->id}}">{{ $taxable->name }}</option>
                                     @endforeach
-                                </select>
-                                    @endif
+                                    </select>
+
                                 <!--end::Input-->
                                 @error('taxable_id')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -128,65 +121,61 @@
                                 </div>
 
 
-
-                                @if (!$edit_mode)
-                                    <div class="col-md-3">
-                                        <!--begin::Label-->
-                                        <!-- <label class="fw-semibold fs-6 mb-2">{{ __('empty') }}.</label> -->
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <button type="submit" class="btn btn-success mt-8" data-kt-taxpayer-taxables-modal-action="submit"   wire:loading.attr="disabled" >
-                                            <span class="indicator-label" wire:loading.remove >{{ __('add') }}</span>
-                                            <span class="indicator-progress" wire:loading wire:target="submit" wire:loading.delay>
+                                <div class="col-md-3">
+                                    <!--begin::Label-->
+                                    <!-- <label class="fw-semibold fs-6 mb-2">{{ __('empty') }}.</label> -->
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <button type="submit" class="btn btn-success mt-8" data-kt-taxpayer-taxables-modal-action="submit"   wire:loading.attr="disabled" >
+                                        <span class="indicator-label" wire:loading.remove >{{ __('add') }}</span>
+                                        <span class="indicator-progress" wire:loading wire:target="submit" wire:loading.delay>
                                     {{ __('chargenment ...') }}
                                         <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                                     </span>
-                                        </button>
+                                    </button>
 
-                                        <!--end::Input-->
-                                    </div>
-                                @endif
+                                    <!--end::Input-->
+                                </div>
 
                             </div>
                         @endif
 
 
-                        @if ($edit_mode != 'true')
                         <div class="separator separator-content separator-dashed my-3">
                             <span class="w-250px text-gray-500 fw-semibold fs-7">{{ __('request summary') }}</span>
                         </div>
 
                         <table class="table g-5 gs-0 mb-0 fw-bolder text-gray-700" data-kt-element="items">
-                        <thead class="border-bottom border-gray-200 fs-7 fw-bold">
-                                            <tr class="text-start text-muted text-uppercase gs-0">
-                                                <th class="min-w-50px">{{ __('ticket') }}</th>
-                                                <th class="min-w-50px">{{ __('tariff') }}</th>
-                                                <th class="min-w-50px">{{ __('qty') }}</th>
-                                                <th class="min-w-50px">{{ __('amount') }}</th>
-                                                <th class="min-w-50px">{{ __('num') }}</th>
-                                                <th class="min-w-50px">{{ __('action') }}</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="fs-6 fw-semibold text-gray-600">
-                                        @foreach($stock_requests as $stock_request)
-                                        <tr class="border-bottom border-bottom-dashed" data-kt-element="item">
-                                            <td>
-                                                {{ $stock_request->taxable->name }}
-                                            </td>
-                                            <td class="ps-0">
-                                                {{ $stock_request->taxable->tariff }}
-                                            </td>
-                                            <td>
-                                                {{ $stock_request->qty }}
-                                            </td>
-                                            <td>
-                                                {{ $stock_request->qty*$stock_request->taxable?->tariff }}
-                                            </td>
-                                            <td>
-                                                {{ $stock_request->start_no." - ".$stock_request->end_no }}
-                                            </td>
-                                            <td>
-                                                <button type="button" wire:click="deleteStockRequest({{ $stock_request->id }})"  class="btn btn-sm btn-outline btn-outline-dashed btn-outline-danger btn-active-light-danger me-1" >
+                            <thead class="border-bottom border-gray-200 fs-7 fw-bold">
+                            <tr class="text-start text-muted text-uppercase gs-0">
+                                <th class="min-w-50px">{{ __('ticket') }}</th>
+                                <th class="min-w-50px">{{ __('tariff') }}</th>
+                                <th class="min-w-50px">{{ __('qty') }}</th>
+                                <th class="min-w-50px">{{ __('amount') }}</th>
+                                <th class="min-w-50px">{{ __('num') }}</th>
+                                <th class="min-w-50px">{{ __('action') }}</th>
+                            </tr>
+                            </thead>
+                            <tbody class="fs-6 fw-semibold text-gray-600">
+                            @foreach($stock_requests as $stock_request)
+                                <tr class="border-bottom border-bottom-dashed" data-kt-element="item">
+                                    <td>
+                                        {{ $stock_request->taxable->name }}
+                                    </td>
+                                    <td class="ps-0">
+                                        {{ $stock_request->taxable->tariff }}
+                                    </td>
+                                    <td>
+                                        {{ $stock_request->qty }}
+                                    </td>
+                                    <td>
+                                        {{ $stock_request->qty*$stock_request->taxable?->tariff }}
+                                    </td>
+                                    <td>
+                                        {{ $stock_request->start_no." - ".$stock_request->end_no }}
+                                    </td>
+                                    <td>
+                                        <button type="button" wire:click="deleteStockRequest({{ $stock_request->id }})"  class="btn btn-sm btn-outline btn-outline-dashed btn-outline-danger btn-active-light-danger me-1" >
                                                     <span class="indicator-label">
                                                         <i class="ki-duotone ki-trash">
                                                              <span class="path1"></span>
@@ -196,28 +185,16 @@
                                                              <span class="path5"></span>
                                                             </i>
                                                     </span>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                        </tbody>
-                            </table>
-
-                          @endif
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
 
 
 
-                            @if ($edit_mode)
-                            <div class="text-center pt-5">
-                                <button type="submit" class="btn btn-danger mt-5" data-kt-taxpayer-taxables-modal-action="submit">
-                                    <span class="indicator-label" wire:loading.remove>{{ __('account state') }}</span>
-                                    <span class="indicator-progress" wire:loading wire:target="submit">
-                                    {{ __('chargenment ...') }}
-                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                    </span>
-                                </button>
-                            </div>
-                            @endif
+
 
 
                         <!--end::Input group-->

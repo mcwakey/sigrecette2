@@ -19,9 +19,9 @@ class AuthController extends Controller
 
         /** @var \App\Models\User $user */
         $user = Auth::user();
-        if($user->zone==null){
+        if ($user->zone == null) {
             return response()->json([
-                "message"=>"Your user has not zone",
+                "message" => "Your user has not zone",
             ], 404);
         }
         $token = $user->createToken($user->email . '-AuthToken')->plainTextToken;
@@ -29,7 +29,7 @@ class AuthController extends Controller
             'access_token' => $token,
             'user_id' => $user->id,
             'name' => $user->name,
-            'email'=> $user->email,
+            'email' => $user->email,
             'role' => $user->getRoleNames()->first(),
             'zone' => $user->zone->name,
         ], 200);

@@ -16,6 +16,7 @@ use Yajra\DataTables\WithExportQueue;
 class ExportTaxpayersDataTable extends DataTable
 {
     use WithExportQueue;
+
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
@@ -71,43 +72,36 @@ class ExportTaxpayersDataTable extends DataTable
                 return $taxpayer->auth_reference;
             })
             ->editColumn('town.canton.name', function (Taxpayer $taxpayer) {
-                    return $taxpayer->town->canton->name;
+                return $taxpayer->town->canton->name;
             })
             ->editColumn('town.name', function (Taxpayer $taxpayer) {
-                    return $taxpayer->town->name;
+                return $taxpayer->town->name;
             })
             ->editColumn('zone.name', function (Taxpayer $taxpayer) {
-                    return $taxpayer->zone->name;
+                return $taxpayer->zone->name;
             })
-
-
-
-
             ->editColumn('created_at', function (Taxpayer $taxpayer) {
                 return $taxpayer->created_at->format('d M Y');
             })
             ->editColumn('updated_at', function (Taxpayer $taxpayer) {
                 return $taxpayer->updated_at->format('d M Y');
             })
-
             ->setRowId('id');
     }
 
     public function query(Taxpayer $model): QueryBuilder
     {
-       $query= $model->with(['category', 'activity', 'town.canton', 'zone'])
-                    ->join('towns', 'taxpayers.town_id', '=', 'towns.id')
-                    ->with('town.canton')
-                    ->join('cantons', 'towns.canton_id', '=', 'cantons.id')
-                    ->with('zone')
-                    ->join('zones', 'taxpayers.zone_id', '=', 'zones.id')
-           ->select('taxpayers.*')
-           ->newQuery()
-        ;
+        $query = $model->with(['category', 'activity', 'town.canton', 'zone'])
+            ->join('towns', 'taxpayers.town_id', '=', 'towns.id')
+            ->with('town.canton')
+            ->join('cantons', 'towns.canton_id', '=', 'cantons.id')
+            ->with('zone')
+            ->join('zones', 'taxpayers.zone_id', '=', 'zones.id')
+            ->select('taxpayers.*')
+            ->newQuery();
 
         $query->whereNull('taxpayers.from_mobile_and_validate_state')
-            ->orWhere('taxpayers.from_mobile_and_validate_state', TaxpayerStateEnums::APPROVED)
-            ;
+            ->orWhere('taxpayers.from_mobile_and_validate_state', TaxpayerStateEnums::APPROVED);
 
         return $query;
     }
@@ -120,12 +114,11 @@ class ExportTaxpayersDataTable extends DataTable
             ->setTableId('export-taxpayers-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0)
-            ->drawCallbackWithLivewire()
-            ;
+            ->drawCallbackWithLivewire();
     }
 
     /**

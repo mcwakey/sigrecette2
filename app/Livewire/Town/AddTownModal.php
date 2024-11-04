@@ -14,6 +14,7 @@ class AddTownModal extends Component
 {
     use WithFileUploads;
     use DispatchesMessages;
+
     public $canton_id;
     public $town_id;
 

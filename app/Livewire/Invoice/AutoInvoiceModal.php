@@ -36,7 +36,7 @@ class AutoInvoiceModal extends Component
 
     public $zone;
     public $taxlabel;
-    public $qty=12;
+    public $qty = 12;
     public $start_month;
 
     //public $s_amount = [];
@@ -165,7 +165,7 @@ class AutoInvoiceModal extends Component
 
         //return view('livewire.invoice.add-invoice-modal', ['taxpayer_id' => $this->taxpayer_id]);
 
-        return view('livewire.invoice.auto-invoice-modal', compact('zones','tax_labels'));
+        return view('livewire.invoice.auto-invoice-modal', compact('zones', 'tax_labels'));
     }
 
     // public function submit()
@@ -218,14 +218,14 @@ class AutoInvoiceModal extends Component
             // $invoices = Invoice::where('validity', 'EXPIRED')->get();
 
             $invoices = Invoice::join('invoice_items', 'invoice_items.invoice_id', '=', 'invoices.id')
-                                ->join('taxpayers', 'taxpayers.id', '=', 'invoices.taxpayer_id')
-                                ->join('taxpayer_taxables', 'taxpayer_taxables.id', '=', 'invoice_items.taxpayer_taxable_id')
-                                ->join('taxables', 'taxables.id', '=', 'taxpayer_taxables.taxable_id')
-                                ->where('taxpayers.zone_id', 'LIKE', '%' . ($this->zone ?? '') . '%')
-                                ->where('taxables.tax_label_id', 'LIKE', '%' . ($this->taxlabel ?? '') . '%')
-                                ->where('invoices.validity', 'EXPIRED')
-                                ->select('invoices.*')
-                                ->get();
+                ->join('taxpayers', 'taxpayers.id', '=', 'invoices.taxpayer_id')
+                ->join('taxpayer_taxables', 'taxpayer_taxables.id', '=', 'invoice_items.taxpayer_taxable_id')
+                ->join('taxables', 'taxables.id', '=', 'taxpayer_taxables.taxable_id')
+                ->where('taxpayers.zone_id', 'LIKE', '%' . ($this->zone ?? '') . '%')
+                ->where('taxables.tax_label_id', 'LIKE', '%' . ($this->taxlabel ?? '') . '%')
+                ->where('invoices.validity', 'EXPIRED')
+                ->select('invoices.*')
+                ->get();
 
 
             foreach ($invoices as $invoice) {
@@ -233,8 +233,8 @@ class AutoInvoiceModal extends Component
                 $invoiceData = [
                     'taxpayer_id' => $invoice->taxpayer_id,
                     // 'status' => 'PENDING',
-                    'from_date' => date('Y-').$this->start_month."-01",
-                    'to_date' => date('Y-').$this->start_month + $this->qty."-01",
+                    'from_date' => date('Y-') . $this->start_month . "-01",
+                    'to_date' => date('Y-') . $this->start_month + $this->qty . "-01",
                     'qty' => $this->qty,
                     'amount' => '0',
                 ];
@@ -264,19 +264,19 @@ class AutoInvoiceModal extends Component
                     $taxpayerTaxable = TaxpayerTaxable::find($invoiceitem->taxpayer_taxable_id);
 
                     // foreach ($taxpayerTaxables as $taxpayerTaxable) {
-                        // $taxpayerTaxable->update($taxpayer_taxableData);
+                    // $taxpayerTaxable->update($taxpayer_taxableData);
 
-                        $taxpayerTaxable->invoice_id = $created_invoice->id;
-                        $taxpayerTaxable->bill_status = 'BILLED';
+                    $taxpayerTaxable->invoice_id = $created_invoice->id;
+                    $taxpayerTaxable->bill_status = 'BILLED';
 
-                        $taxpayerTaxable->save();
+                    $taxpayerTaxable->save();
                     // }
 
                 }
 
                 $created_invoice->invoice_no = $created_invoice->id;
                 //$created_invoice->pay_status = $invoice->pay_status;
-                $created_invoice->nic = $created_invoice->taxpayer_id. $created_invoice->id;
+                $created_invoice->nic = $created_invoice->taxpayer_id . $created_invoice->id;
 
                 $created_invoice->amount = $this->amount;
 
@@ -286,7 +286,7 @@ class AutoInvoiceModal extends Component
 
                 $invoice->save();
             }
-                //$this->dispatch('success', __('New Invoice created'));
+            //$this->dispatch('success', __('New Invoice created'));
             $this->dispatchMessage('Avis');
             // }
         });
@@ -308,7 +308,7 @@ class AutoInvoiceModal extends Component
         Invoice::destroy($id);
 
         // Emit a success event with a message
-       // $this->dispatch('success', 'Invoice successfully deleted');
+        // $this->dispatch('success', 'Invoice successfully deleted');
         $this->dispatchMessage('Avis', 'delete');
     }
 
@@ -352,39 +352,39 @@ class AutoInvoiceModal extends Component
             // Update the value in the component properties using the loop index as the key
             //dd($taxable->taxable);
 
-            if ($invoice_item->taxpayer_taxable->taxable->periodicity == "Mois"){
+            if ($invoice_item->taxpayer_taxable->taxable->periodicity == "Mois") {
                 $period = 1;
             } elseif ($invoice_item->taxpayer_taxable->taxable->periodicity == "Ans") {
                 $period = 0.083333;
-            // }elseif ($taxable->taxable->periodicity == "Jours") {
-            //     $period = 30;
+                // }elseif ($taxable->taxable->periodicity == "Jours") {
+                //     $period = 30;
             } else {
                 $period = 1;
             }
 
             //dd($taxable->taxpayer_taxable->taxable->tax_label->name);
-                $this->periodicity = $invoice_item->taxpayer_taxable->taxable->periodicity;
+            $this->periodicity = $invoice_item->taxpayer_taxable->taxable->periodicity;
 
-                $this->taxable_taxlabel = $invoice_item->taxpayer_taxable->taxable->tax_label->code.' : '.$invoice_item->taxpayer_taxable->taxable->name;
+            $this->taxable_taxlabel = $invoice_item->taxpayer_taxable->taxable->tax_label->code . ' : ' . $invoice_item->taxpayer_taxable->taxable->name;
 
-                $this->taxpayer_taxable_id[$index] = $invoice_item->taxpayer_taxable->id;
-                $this->taxpayer_taxable[$index] = $invoice_item->taxpayer_taxable->name;
+            $this->taxpayer_taxable_id[$index] = $invoice_item->taxpayer_taxable->id;
+            $this->taxpayer_taxable[$index] = $invoice_item->taxpayer_taxable->name;
 
-                $this->s_seize[$index] = $invoice_item->ii_seize;
-                $this->s_seize_e[$index] = $invoice_item->taxpayer_taxable->seize;
+            $this->s_seize[$index] = $invoice_item->ii_seize;
+            $this->s_seize_e[$index] = $invoice_item->taxpayer_taxable->seize;
 
-                    //$this->s_tariff[$index] = $invoice_item->ii_tariff. ' %';
-                    $this->s_tariff[$index] = $invoice_item->ii_tariff;
-                    //$this->s_tariff_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff. ' %';
-                    $this->s_tariff_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff;
+            //$this->s_tariff[$index] = $invoice_item->ii_tariff. ' %';
+            $this->s_tariff[$index] = $invoice_item->ii_tariff;
+            //$this->s_tariff_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff. ' %';
+            $this->s_tariff_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff;
 
-                if ($invoice_item->taxpayer_taxable->taxable->tariff_type == "FIXED"){
-                    $this->s_amount[$index] = $invoice_item->amount;
-                    $this->s_amount_e[$index] =$invoice_item->taxpayer_taxable->taxable->tariff * $invoice_item->taxpayer_taxable->seize * $this->qty * $period;
-                } else {
-                    $this->s_amount[$index] = $invoice_item->amount / 100;
-                    $this->s_amount_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff * $invoice_item->taxpayer_taxable->seize * $this->qty * $period / 100;
-                }
+            if ($invoice_item->taxpayer_taxable->taxable->tariff_type == "FIXED") {
+                $this->s_amount[$index] = $invoice_item->amount;
+                $this->s_amount_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff * $invoice_item->taxpayer_taxable->seize * $this->qty * $period;
+            } else {
+                $this->s_amount[$index] = $invoice_item->amount / 100;
+                $this->s_amount_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff * $invoice_item->taxpayer_taxable->seize * $this->qty * $period / 100;
+            }
 
             // } else {
             //     $this->s_amount[$index] = $taxable->seize * $taxable->taxable->tariff * $value * $period / 100;
@@ -393,8 +393,8 @@ class AutoInvoiceModal extends Component
             //$this->taxpayer_taxable_id[$index] = $taxable->id;
         }
 
-        $this->amount_ph = array_sum($this->s_amount)." FCFA";
-        $this->amount_ph_e = array_sum($this->s_amount_e)." FCFA";
+        $this->amount_ph = array_sum($this->s_amount) . " FCFA";
+        $this->amount_ph_e = array_sum($this->s_amount_e) . " FCFA";
 
         $this->amount = array_sum($this->s_amount);
         $this->amount_e = array_sum($this->s_amount_e);

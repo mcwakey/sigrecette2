@@ -16,6 +16,7 @@ use Yajra\DataTables\WithExportQueue;
 class TaxpayersDataTable extends DataTable
 {
     use WithExportQueue;
+
     /**
      * Build the DataTable class.
      *
@@ -48,7 +49,7 @@ class TaxpayersDataTable extends DataTable
             })
             ->editColumn('town.canton.name', function (Taxpayer $taxpayer) {
                 // if ($taxpayer->town) {
-                    return $taxpayer->town->canton->name;
+                return $taxpayer->town->canton->name;
                 // } else {
                 //     return '';
                 // }
@@ -56,18 +57,17 @@ class TaxpayersDataTable extends DataTable
             })
             ->editColumn('town.name', function (Taxpayer $taxpayer) {
                 // if ($taxpayer->town){
-                    return $taxpayer->town->name;
+                return $taxpayer->town->name;
                 // } else {
                 //     return '';
                 // }
             })
-
             ->editColumn('address', function (Taxpayer $taxpayer) {
                 return $taxpayer->address;
             })
             ->editColumn('zone.name', function (Taxpayer $taxpayer) {
                 // if ($taxpayer->zone){
-                    return $taxpayer->zone->name;
+                return $taxpayer->zone->name;
                 // } else {
                 //     return '';
                 // }
@@ -100,24 +100,24 @@ class TaxpayersDataTable extends DataTable
 
     public function query(Taxpayer $model): QueryBuilder
     {
-       $query= $model->with('town')
-                    ->join('towns', 'taxpayers.town_id', '=', 'towns.id')
-                    ->with('town.canton')
-                    ->join('cantons', 'towns.canton_id', '=', 'cantons.id')
-                   // ->with('erea')
-                  //  ->join('ereas', 'taxpayers.erea_id', '=', 'ereas.id')
-                    ->with('zone')
-                    ->join('zones', 'taxpayers.zone_id', '=', 'zones.id')
-            ->where('taxpayers.type', '=',Constants::TITRE)->select('taxpayers.*') // Select columns from taxpayers table
-           ->newQuery();
+        $query = $model->with('town')
+            ->join('towns', 'taxpayers.town_id', '=', 'towns.id')
+            ->with('town.canton')
+            ->join('cantons', 'towns.canton_id', '=', 'cantons.id')
+            // ->with('erea')
+            //  ->join('ereas', 'taxpayers.erea_id', '=', 'ereas.id')
+            ->with('zone')
+            ->join('zones', 'taxpayers.zone_id', '=', 'zones.id')
+            ->where('taxpayers.type', '=', Constants::TITRE)->select('taxpayers.*') // Select columns from taxpayers table
+            ->newQuery();
 
         if ($this->state) {
-            $query->where('taxpayers.from_mobile_and_validate_state','=',TaxpayerStateEnums::PENDING);
-        }else{
+            $query->where('taxpayers.from_mobile_and_validate_state', '=', TaxpayerStateEnums::PENDING);
+        } else {
             $query->where('taxpayers.from_mobile_and_validate_state', TaxpayerStateEnums::APPROVED)
                 ->orWhereNull('taxpayers.from_mobile_and_validate_state');
         }
-        if ($this->disable!==null && $this->disable) {
+        if ($this->disable !== null && $this->disable) {
             $query->onlyTrashed();
         }
 
@@ -137,14 +137,13 @@ class TaxpayersDataTable extends DataTable
             ->minifiedAjax()
             // ->dom("") // Add pagination ('p') and other controls ('i') at the bottom
             // ->dom("<'d-flex justify-content-end'B> ".'rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0)
             ->drawCallbackWithLivewire()
             // ->buttons(['print','excel','csv','pdf',])
-            ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/taxpayers/columns/_draw-scripts.js')) . "}")
-            ;
+            ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/taxpayers/columns/_draw-scripts.js')) . "}");
     }
 
     /**
@@ -171,23 +170,21 @@ class TaxpayersDataTable extends DataTable
                 ->width(60)
         ];
 
-            $columns = array_map(function ($column) {
-                if (request()->has('rc')){
-                    if (in_array($column->name, ['action','status'])) {
-                        $column->visible(false);
-                    }
+        $columns = array_map(function ($column) {
+            if (request()->has('rc')) {
+                if (in_array($column->name, ['action', 'status'])) {
+                    $column->visible(false);
                 }
-                if(!request()->has('state')){
-                    if(in_array($column->name, ['status'])){
-                        $column->visible(false);
-                    }
+            }
+            if (!request()->has('state')) {
+                if (in_array($column->name, ['status'])) {
+                    $column->visible(false);
                 }
+            }
 
 
-
-                return $column;
-            }, $columns);
-
+            return $column;
+        }, $columns);
 
 
         return $columns;

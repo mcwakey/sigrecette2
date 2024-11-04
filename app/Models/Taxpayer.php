@@ -83,7 +83,6 @@ class Taxpayer extends Model
     }
 
 
-
     public function addresses()
     {
         return $this->hasMany(Address::class);
@@ -128,21 +127,22 @@ class Taxpayer extends Model
     {
         return $this->belongsTo(Activity::class);
     }
+
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
-    public static function getInvoiceAndPayments($id):array
+    public static function getInvoiceAndPayments($id): array
     {
         $result = [];
-        $items= [];
+        $items = [];
         $taxpayer = Taxpayer::find($id);
-        if($taxpayer instanceof  Taxpayer){
+        if ($taxpayer instanceof Taxpayer) {
             $result[] = $taxpayer;
             foreach ($taxpayer->invoices()->get() as $invoice) {
                 $items[] = $invoice;
-                foreach ($invoice->payments()->get() as $payment){
+                foreach ($invoice->payments()->get() as $payment) {
                     $items[] = $payment;
                 }
             }

@@ -47,35 +47,35 @@ class UsersDataTable extends DataTable
      */
     public function query(User $model): QueryBuilder
     {
-        $query= $model->newQuery();
+        $query = $model->newQuery();
 
         $role = Role::where('name', 'administrateur_system')->first();
         $roleUsers = $role->users()->pluck('id')->toArray();
         $query->whereNotIn('users.id', $roleUsers);
 
-        if(App::environment('production') && $role){
+        if (App::environment('production') && $role) {
 
             $roleUsers = $role->users()->pluck('id')->toArray();
             $query->whereNotIn('users.id', $roleUsers);
         }
 
-        if($this->disable !== null && $this->disable){
+        if ($this->disable !== null && $this->disable) {
             $query->onlyTrashed();
         }
         $role = Role::where('name', 'collecteur')->first();
 
-        if($role){
+        if ($role) {
             $roleUsers = $role->users()->pluck('id')->toArray();
-            if ($this->type != null){
+            if ($this->type != null) {
 
                 $query->whereIn('users.id', $roleUsers);
-            }else{
+            } else {
                 $query->whereNotIn('users.id', $roleUsers);
             }
         }
 
 
-       return $query;
+        return $query;
 
 
     }
@@ -89,7 +89,7 @@ class UsersDataTable extends DataTable
             ->setTableId('users-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(2)
@@ -113,18 +113,17 @@ class UsersDataTable extends DataTable
                 ->width(60)
         ];
         $columns = array_map(function ($column) {
-            if ($this->type){
-                if (in_array($column->name, ['role','last_login_at'])) {
+            if ($this->type) {
+                if (in_array($column->name, ['role', 'last_login_at'])) {
                     $column->visible(false);
                 }
             }
 
 
-
             return $column;
         }, $columns);
 
-       return $columns;
+        return $columns;
     }
 
     /**

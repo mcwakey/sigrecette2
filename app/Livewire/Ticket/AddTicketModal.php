@@ -21,9 +21,11 @@ class AddTicketModal extends Component
     public $unit;
 
     public $edit_mode = false;
-    protected function rules(){
+
+    protected function rules()
+    {
         $rules = [
-            'name' => 'required|string|unique:taxables,name,' . ($this->edit_mode ?  $this->taxable_id : ''),
+            'name' => 'required|string|unique:taxables,name,' . ($this->edit_mode ? $this->taxable_id : ''),
             'tariff' => 'required|numeric',
             'unit' => 'required',
         ];
@@ -31,9 +33,10 @@ class AddTicketModal extends Component
         if ($this->edit_mode) {
             $rules['name'] = 'required|string|unique:taxables,name,' . $this->taxable_id;
         }
-        
+
         return $rules;
     }
+
     protected $listeners = [
         'delete_user' => 'deleteUser',
         'update_user' => 'updateUser',
@@ -72,7 +75,7 @@ class AddTicketModal extends Component
             }
 
             if ($this->edit_mode) {
-  
+
                 // Emit a success event with a message
                 $this->dispatch('success', __('Valeur inactive mis a jour'));
             } else {

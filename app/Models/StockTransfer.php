@@ -33,6 +33,7 @@ class StockTransfer extends Model
     {
         return $this->belongsTo(Taxable::class);
     }
+
     public function stock_request()
     {
         return $this->belongsTo(StockRequest::class);
@@ -48,9 +49,10 @@ class StockTransfer extends Model
     {
         return $this->belongsTo(Payment::class);
     }
+
     public static function buildAndGetStockTransferWithQuery($id)
     {
-        $builder= StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')
+        $builder = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')
             ->join('users', 'stock_transfers.to_user_id', '=', 'users.id')
             ->select('stock_transfers.trans_id',
                 DB::raw('CASE WHEN trans_type = "RECU" THEN qty END AS rc_qty'),
@@ -68,7 +70,7 @@ class StockTransfer extends Model
                 DB::raw('stock_transfers.created_at AS created_at'),
                 DB::raw('stock_transfers.taxable_id AS taxable_id'))
             ->where('stock_transfers.to_user_id', $id)
-           // ->where('stock_transfers.type', "ACTIVE")
+            // ->where('stock_transfers.type', "ACTIVE")
             // ->groupBy('stock_transfers.trans_id')
             ->orderBy('trans_id', 'desc');
         return $builder->get();

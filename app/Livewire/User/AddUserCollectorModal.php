@@ -50,7 +50,7 @@ class AddUserCollectorModal extends Component
     public function submit()
     {
         $role = Role::where('name', 'collecteur')->first();
-        if($role){
+        if ($role) {
             $this->role = $role->name;
         }
 
@@ -59,7 +59,7 @@ class AddUserCollectorModal extends Component
         if (in_array(__($this->role), $roleNeedZone)) {
             $this->rules['zone_id'] = 'required|integer';
         } else if ($this->zone_id) {
-            $this->zone_id =  null;
+            $this->zone_id = null;
         }
 
         $this->validate();
@@ -68,7 +68,6 @@ class AddUserCollectorModal extends Component
             $data = [
                 'name' => $this->name,
             ];
-
 
 
             $data['zone_id'] = $this->zone_id;
@@ -149,7 +148,7 @@ class AddUserCollectorModal extends Component
     {
         $user = User::find($id);
 
-        if ($user && !$user ->trashed()) {
+        if ($user && !$user->trashed()) {
             $user->delete();
             $this->dispatch('success', 'Collecteur désactiver avec succès');
             return true;

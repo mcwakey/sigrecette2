@@ -16,6 +16,7 @@ class CantonsController extends Controller
         //return view('pages/cantons.list');
         return $dataTable->render('pages/cantons.list');
     }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -35,9 +36,9 @@ class CantonsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Canton $canton,CantonsDataTable $cantonsDataTable)
+    public function show(Canton $canton, CantonsDataTable $cantonsDataTable)
     {
-        return $cantonsDataTable->with('id',$canton->id)->render('pages/cantons.show', compact('canton'));
+        return $cantonsDataTable->with('id', $canton->id)->render('pages/cantons.show', compact('canton'));
     }
 
     /**

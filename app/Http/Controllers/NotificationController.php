@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
 use App\Models\Taxpayer;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Notification;
 
 class NotificationController extends Controller
 {
@@ -47,7 +46,7 @@ class NotificationController extends Controller
         $user = User::find($userId);
         $notifications = $user->unreadNotifications;
 
-        return response()->json(['notif_id' => $notifId,'size' => count($notifications)], 200);
+        return response()->json(['notif_id' => $notifId, 'size' => count($notifications)], 200);
     }
 
     public function clear()

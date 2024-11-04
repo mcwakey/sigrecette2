@@ -47,33 +47,36 @@ class ExportInvoicesDataTable extends DataTable
             })
             ->editColumn('total', function (Invoice $invoice) {
                 if ($invoice->reduce_amount != '')
-                    return '-'. format_amount($invoice->reduce_amount) ;
+                    return '-' . format_amount($invoice->reduce_amount);
                 else
-                   return format_amount($invoice->amount);
+                    return format_amount($invoice->amount);
             })
             ->editColumn('paid', function (Invoice $invoice) {
 
-                    return format_amount(Payment::getPaid($invoice->invoice_no));
+                return format_amount(Payment::getPaid($invoice->invoice_no));
             })
             ->editColumn('remains_to_be_paid', function (Invoice $invoice) {
-                    return  format_amount($invoice->get_remains_to_be_paid());
+                return format_amount($invoice->get_remains_to_be_paid());
             })
             ->editColumn('validity', function (Invoice $invoice) {
                 return __($invoice->validity);
 
             })
-
             ->editColumn('status', function (Invoice $invoice) {
                 return __($invoice->status);
             })
             ->editColumn('delivery_date', function (Invoice $invoice) {
                 return $invoice->delivery_date;
             })
-           ->editColumn('from_date', function (Invoice $invoice) {return $invoice->from_date;})
+            ->editColumn('from_date', function (Invoice $invoice) {
+                return $invoice->from_date;
+            })
             ->editColumn('to_date', function (Invoice $invoice) {
-                return $invoice->to_date;})
+                return $invoice->to_date;
+            })
             ->editColumn('reason_for_reject', function (Invoice $invoice) {
-                return $invoice->reason_for_reject;})
+                return $invoice->reason_for_reject;
+            })
             ->addColumn('type', function (Invoice $invoice) {
                 return $invoice->type;
             })
@@ -81,24 +84,24 @@ class ExportInvoicesDataTable extends DataTable
     }
 
 
-
     public function query(Invoice $model): QueryBuilder
     {
 
-            $query= $model->with(['taxpayer','taxpayer.zone'])
-                ->join('invoice_items', 'invoice_items.invoice_id', '=', 'invoices.id')
-                        ->leftjoin('taxpayers', 'taxpayers.id', '=', 'invoices.taxpayer_id')
-                        ->join('taxpayer_taxables', 'taxpayer_taxables.id', '=', 'invoice_items.taxpayer_taxable_id')
-                        ->join('taxables', 'taxables.id', '=', 'taxpayer_taxables.taxable_id')
-                        ->join('tax_labels', 'tax_labels.id', '=', 'taxables.tax_label_id')
-                        ->leftjoin('zones', 'zones.id', '=', 'taxpayers.zone_id')
-                        ->select('invoices.*')
-                        ->whereBetween('invoices.created_at', [$this->startDate, $this->endDate])
-                        ->distinct()
-                ->orderBy('invoices.created_at', 'desc')
-                        ->newQuery();
+        $query = $model->with(['taxpayer', 'taxpayer.zone'])
+            ->join('invoice_items', 'invoice_items.invoice_id', '=', 'invoices.id')
+            ->leftjoin('taxpayers', 'taxpayers.id', '=', 'invoices.taxpayer_id')
+            ->join('taxpayer_taxables', 'taxpayer_taxables.id', '=', 'invoice_items.taxpayer_taxable_id')
+            ->join('taxables', 'taxables.id', '=', 'taxpayer_taxables.taxable_id')
+            ->join('tax_labels', 'tax_labels.id', '=', 'taxables.tax_label_id')
+            ->leftjoin('zones', 'zones.id', '=', 'taxpayers.zone_id')
+            ->select('invoices.*')
+            ->whereBetween('invoices.created_at', [$this->startDate, $this->endDate])
+            ->distinct()
+            ->orderBy('invoices.created_at', 'desc')
+            ->newQuery();
         return $query;
     }
+
     public function getColumns(): array
     {
         $columns = [
@@ -127,7 +130,6 @@ class ExportInvoicesDataTable extends DataTable
     }
 
 
-
     /**
      * Optional method if you want to use the html builder.
      */
@@ -138,16 +140,13 @@ class ExportInvoicesDataTable extends DataTable
             ->setTableId('export-invoices-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->pageLength(100)
-            ->lengthMenu([[100,300, 500,  -1], [100,300, 500, "All"]])
-
+            ->lengthMenu([[100, 300, 500, -1], [100, 300, 500, "All"]])
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/taxpayer_taxables/columns/_draw-scripts.js')) . "}");
     }
-
-
 
 
     /**

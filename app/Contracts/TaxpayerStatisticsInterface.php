@@ -38,6 +38,7 @@ interface TaxpayerStatisticsInterface
      * @return array
      */
     public function countTaxpayersByTown(Year $year): array;
+
     /**
      * @return array
      */

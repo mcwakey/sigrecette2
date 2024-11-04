@@ -82,7 +82,7 @@ class AddActivityModal extends Component
         Activity::destroy($id);
 
         // Emit a success event with a message
-       // $this->dispatch('success', 'Activity successfully deleted');
+        // $this->dispatch('success', 'Activity successfully deleted');
         $this->dispatchMessage('Activité', 'delete');
     }
 

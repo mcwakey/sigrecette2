@@ -1,6 +1,7 @@
 <?php
 
 namespace App\DataTables;
+
 use Illuminate\Support\Facades\DB;
 
 use App\Models\StockRequest;
@@ -161,27 +162,25 @@ class StockRequestsSumDataTable extends DataTable
         //             ->orderBy('req_id', 'desc');
 
         return $model->join('taxables', 'stock_requests.taxable_id', '=', 'taxables.id')
-        ->join('users', 'stock_requests.user_id', '=', 'users.id')
-        ->select('stock_requests.req_no',
-                 DB::raw('SUM(CASE WHEN req_type = "DEMANDE" THEN qty*tariff END) AS pc_qty'),
-                 DB::raw('SUM(CASE WHEN req_type = "VENDU" THEN qty*tariff END) AS vd_qty'),
-                 DB::raw('SUM(CASE WHEN req_type = "RENDU" THEN qty*tariff END) AS rd_qty'),
-                 DB::raw('MAX(stock_requests.id) AS id'),
+            ->join('users', 'stock_requests.user_id', '=', 'users.id')
+            ->select('stock_requests.req_no',
+                DB::raw('SUM(CASE WHEN req_type = "DEMANDE" THEN qty*tariff END) AS pc_qty'),
+                DB::raw('SUM(CASE WHEN req_type = "VENDU" THEN qty*tariff END) AS vd_qty'),
+                DB::raw('SUM(CASE WHEN req_type = "RENDU" THEN qty*tariff END) AS rd_qty'),
+                DB::raw('MAX(stock_requests.id) AS id'),
                 //  DB::raw('MAX(stock_requests.req_no) AS req_no'),
-                 DB::raw('MAX(stock_requests.req_desc) AS req_desc'),
+                DB::raw('MAX(stock_requests.req_desc) AS req_desc'),
                 //  DB::raw('MAX(stock_requests.start_no) AS start_no'),
                 //  DB::raw('MAX(stock_requests.end_no) AS end_no'),
                 //  DB::raw('MAX(stock_requests.last_no) AS last_no'),
-                 DB::raw('MIN(stock_requests.req_type) AS req_type'),
-                 DB::raw('MIN(stock_requests.type) AS type'),
+                DB::raw('MIN(stock_requests.req_type) AS req_type'),
+                DB::raw('MIN(stock_requests.type) AS type'),
                 //  DB::raw('MAX(stock_requests.user_id) AS user_id'),
-                 DB::raw('MAX(stock_requests.created_at) AS created_at')
-                //  DB::raw('MAX(stock_requests.taxable_id) AS taxable_id')
-                )
-        ->groupBy('stock_requests.req_no')
-        ->orderBy('req_id', 'desc');
-
-
+                DB::raw('MAX(stock_requests.created_at) AS created_at')
+            //  DB::raw('MAX(stock_requests.taxable_id) AS taxable_id')
+            )
+            ->groupBy('stock_requests.req_no')
+            ->orderBy('req_id', 'desc');
 
 
         // return StockRequest::where('taxpayer_id', $this->id); // Filter stock_requests by taxpayer_id
@@ -196,7 +195,7 @@ class StockRequestsSumDataTable extends DataTable
             ->setTableId('stock_requests-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0, 'desc')
@@ -232,13 +231,13 @@ class StockRequestsSumDataTable extends DataTable
                 ->exportable(false)
                 ->printable(false)
                 ->width(60)
-                // ->buttons(
-                //     Button::make('create'),
-                //     Button::make('export'),
-                //     Button::make('print'),
-                //     Button::make('reset'),
-                //     Button::make('reload')
-                // )
+            // ->buttons(
+            //     Button::make('create'),
+            //     Button::make('export'),
+            //     Button::make('print'),
+            //     Button::make('reset'),
+            //     Button::make('reload')
+            // )
         ];
     }
 

@@ -96,7 +96,7 @@ class RoleModal extends Component
             $this->role->syncPermissions($this->checked_permissions);
             $this->dispatch('success', 'Permissions pour ' . ucwords($this->role->name) . ' mis a jour avec succès');
         } else {
-            /**@var App\Models\User*/
+            /**@var App\Models\User */
             $user = auth()->user();
 
             $role = Role::create([
@@ -112,9 +112,9 @@ class RoleModal extends Component
     public function deleteRole($id)
     {
         $role = Role::find($id);
-        
-        if($role->user_id === 0){
-            $this->dispatch('error',Constants::DEFAULT_ROLE_CAN_NOT_DELETE);
+
+        if ($role->user_id === 0) {
+            $this->dispatch('error', Constants::DEFAULT_ROLE_CAN_NOT_DELETE);
             return false;
         }
 

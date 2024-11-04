@@ -57,7 +57,7 @@ class AddUserModal extends Component
             $this->rules['email'] = 'required|email|unique:users,email,' . $this->user_id;
         }
 
-        $roleNeedZone = [__('agent_recouvrement'), __('collecteur'), ];
+        $roleNeedZone = [__('agent_recouvrement'), __('collecteur'),];
 
         if (in_array(__($this->role), $roleNeedZone)) {
             $this->rules['zone_id'] = 'required|integer';
@@ -163,7 +163,7 @@ class AddUserModal extends Component
     {
         $user = User::find($id);
 
-        if ($user && !$user ->trashed()) {
+        if ($user && !$user->trashed()) {
             $user->delete();
             $this->dispatch('success', 'Utilisateur désactiver avec succès.');
             return true;

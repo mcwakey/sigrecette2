@@ -22,7 +22,6 @@ class CategoryDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-
             ->rawColumns(['status'])
             ->editColumn('name', function (Category $category) {
                 return $category->name;
@@ -32,7 +31,6 @@ class CategoryDataTable extends DataTable
                 // return sprintf('<div class="badge badge-light fw-bold">%s</div>', $category->status);
                 return view('pages/categories.columns._status', compact('category'));
             })
-
             ->editColumn('created_at', function (Category $category) {
                 return $category->created_at->format('d M Y');
             })
@@ -59,7 +57,7 @@ class CategoryDataTable extends DataTable
             ->setTableId('categories')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(2)

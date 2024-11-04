@@ -23,7 +23,6 @@ class YearDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-
             ->rawColumns(['status'])
             ->editColumn('name', function (Year $year) {
                 return $year->name;
@@ -39,7 +38,6 @@ class YearDataTable extends DataTable
                 // return sprintf('<div class="badge badge-light fw-bold">%s</div>', $year->status);
                 return view('pages/years.columns._status', compact('year'));
             })
-
             ->editColumn('created_at', function (Year $year) {
                 return $year->created_at ? $year->created_at->format('d M Y') : null;
             })
@@ -66,7 +64,7 @@ class YearDataTable extends DataTable
             ->setTableId('years')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(1)

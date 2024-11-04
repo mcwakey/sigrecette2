@@ -1,6 +1,7 @@
 <?php
 
 namespace App\DataTables;
+
 use Illuminate\Support\Facades\DB;
 
 use App\Models\StockRequest;
@@ -47,12 +48,12 @@ class StockRequestsDataTable extends DataTable
                 return $stock_request->req_desc;
             })
             ->editColumn('taxables.tariff', function (StockRequest $stock_request) {
-               if ($stock_request->taxable->tariff > 0) {
-                   //Todo format all tarif in app
-                $tariff = number_format($stock_request->taxable->tariff);
-               }else{
-                $tariff = "";
-               }
+                if ($stock_request->taxable->tariff > 0) {
+                    //Todo format all tarif in app
+                    $tariff = number_format($stock_request->taxable->tariff);
+                } else {
+                    $tariff = "";
+                }
                 return $tariff;
             })
             // ->editColumn('stock_request', function (StockRequest $stock_request) {
@@ -62,15 +63,15 @@ class StockRequestsDataTable extends DataTable
             //     return $stock_request->;
             // })
             ->editColumn('stock_requests.start_no', function (StockRequest $stock_request) {
-                if($stock_request->start_no > 0 || $stock_request->end_no > 0) {
+                if ($stock_request->start_no > 0 || $stock_request->end_no > 0) {
                     $start_no = $stock_request->start_no;
                     $end_no = $stock_request->end_no;
-                }else{
+                } else {
                     $start_no = "";
                     $end_no = "";
                 }
 
-                return $start_no. " - ". $end_no;
+                return $start_no . " - " . $end_no;
                 // return view('pages.stock_requests.columns._seize', compact('stock_request'));
             })
             ->editColumn('pc_qty', function (StockRequest $stock_request) {
@@ -84,13 +85,13 @@ class StockRequestsDataTable extends DataTable
             })
             ->editColumn('pc_total', function (StockRequest $stock_request) {
                 // if ($stock_request->req_type == "DEMANDE") {
-                    $pc_total = $stock_request->pc_qty * $stock_request->taxable?->tariff; ;
+                $pc_total = $stock_request->pc_qty * $stock_request->taxable?->tariff;;
                 // } else {
                 //     $total =  "";
                 // }
                 if ($pc_total > 0) {
                     $pc_total = number_format($pc_total, 2);
-                }else{
+                } else {
                     $pc_total = "";
                 }
 
@@ -98,7 +99,7 @@ class StockRequestsDataTable extends DataTable
             })
             ->editColumn('vv_qty', function (StockRequest $stock_request) {
                 if (!$stock_request->pc_qty || !$stock_request->sd_qty) {
-                    $vv_qty =  "";
+                    $vv_qty = "";
                 } else {
                     $vv_qty = $stock_request->pc_qty - $stock_request->sd_qty;
                 }
@@ -107,7 +108,7 @@ class StockRequestsDataTable extends DataTable
             })
             ->editColumn('vv_total', function (StockRequest $stock_request) {
                 if (!$stock_request->pc_qty || !$stock_request->sd_qty) {
-                    $vv_total =  "";
+                    $vv_total = "";
                 } else {
                     $vv_total = ($stock_request->pc_qty - $stock_request->sd_qty) * $stock_request->taxable->tariff;
                 }
@@ -116,16 +117,16 @@ class StockRequestsDataTable extends DataTable
             })
             ->editColumn('sd_qty', function (StockRequest $stock_request) {
                 if (!$stock_request->pc_qty || !$stock_request->sd_qty) {
-                    $sd_qty =  "";
-                }else{
+                    $sd_qty = "";
+                } else {
                     $sd_qty = $stock_request->sd_qty;
                 }
-                return  $sd_qty;
+                return $sd_qty;
             })
             ->editColumn('sd_total', function (StockRequest $stock_request) {
                 if (!$stock_request->pc_qty || !$stock_request->sd_qty) {
-                    $sd_total =  "";
-                }else{
+                    $sd_total = "";
+                } else {
                     $sd_total = $stock_request->sd_qty * $stock_request->taxable->tariff;
                 }
                 return $sd_total;
@@ -161,26 +162,24 @@ class StockRequestsDataTable extends DataTable
         //             ->orderBy('req_id', 'desc');
 
         return $model->join('taxables', 'stock_requests.taxable_id', '=', 'taxables.id')
-        ->join('users', 'stock_requests.user_id', '=', 'users.id')
-        ->select('stock_requests.req_id',
-                 DB::raw('MAX(CASE WHEN req_type = "DEMANDE" THEN qty END) AS pc_qty'),
-                 DB::raw('MAX(CASE WHEN req_type = "COMPTABILISE" THEN qty END) AS sd_qty'),
-                 DB::raw('MAX(stock_requests.id) AS id'),
-                 DB::raw('MAX(stock_requests.req_no) AS req_no'),
-                 DB::raw('MAX(stock_requests.req_desc) AS req_desc'),
-                 DB::raw('MAX(stock_requests.start_no) AS start_no'),
-                 DB::raw('MAX(stock_requests.end_no) AS end_no'),
-                 DB::raw('MAX(stock_requests.last_no) AS last_no'),
-                 DB::raw('MIN(stock_requests.req_type) AS req_type'),
-                 DB::raw('MIN(stock_requests.type) AS type'),
-                 DB::raw('MAX(stock_requests.user_id) AS user_id'),
-                 DB::raw('MAX(stock_requests.created_at) AS created_at'),
-                 DB::raw('MAX(stock_requests.taxable_id) AS taxable_id'))
-        ->groupBy('stock_requests.req_id')
-        ->where('stock_requests.req_no', $this->reqNo)
-        ->orderBy('req_id', 'desc');
-
-
+            ->join('users', 'stock_requests.user_id', '=', 'users.id')
+            ->select('stock_requests.req_id',
+                DB::raw('MAX(CASE WHEN req_type = "DEMANDE" THEN qty END) AS pc_qty'),
+                DB::raw('MAX(CASE WHEN req_type = "COMPTABILISE" THEN qty END) AS sd_qty'),
+                DB::raw('MAX(stock_requests.id) AS id'),
+                DB::raw('MAX(stock_requests.req_no) AS req_no'),
+                DB::raw('MAX(stock_requests.req_desc) AS req_desc'),
+                DB::raw('MAX(stock_requests.start_no) AS start_no'),
+                DB::raw('MAX(stock_requests.end_no) AS end_no'),
+                DB::raw('MAX(stock_requests.last_no) AS last_no'),
+                DB::raw('MIN(stock_requests.req_type) AS req_type'),
+                DB::raw('MIN(stock_requests.type) AS type'),
+                DB::raw('MAX(stock_requests.user_id) AS user_id'),
+                DB::raw('MAX(stock_requests.created_at) AS created_at'),
+                DB::raw('MAX(stock_requests.taxable_id) AS taxable_id'))
+            ->groupBy('stock_requests.req_id')
+            ->where('stock_requests.req_no', $this->reqNo)
+            ->orderBy('req_id', 'desc');
 
 
         // return StockRequest::where('taxpayer_id', $this->id); // Filter stock_requests by taxpayer_id
@@ -195,7 +194,7 @@ class StockRequestsDataTable extends DataTable
             ->setTableId('stock_requests-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0, 'desc')
@@ -231,13 +230,13 @@ class StockRequestsDataTable extends DataTable
                 ->exportable(false)
                 ->printable(false)
                 ->width(60)
-                // ->buttons(
-                //     Button::make('create'),
-                //     Button::make('export'),
-                //     Button::make('print'),
-                //     Button::make('reset'),
-                //     Button::make('reload')
-                // )
+            // ->buttons(
+            //     Button::make('create'),
+            //     Button::make('export'),
+            //     Button::make('print'),
+            //     Button::make('reset'),
+            //     Button::make('reload')
+            // )
         ];
     }
 

@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Taxpayer;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use App\Mail\TaxpayerCreationMail;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\StoreTaxpayerRequest;
+use App\Http\Resources\TaxpayerIndexResource;
+use App\Http\Resources\TaxpayerShowResource;
+use App\Http\Resources\TaxpayerStoreResource;
+use App\Mail\TaxpayerCreationMail;
+use App\Models\Taxpayer;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use App\Http\Resources\TaxpayerShowResource;
-use App\Http\Resources\TaxpayerIndexResource;
-use App\Http\Resources\TaxpayerStoreResource;
-use App\Http\Requests\Api\StoreTaxpayerRequest;
+use Illuminate\Support\Str;
 
 class TaxpayerController extends Controller
 {
@@ -39,13 +39,13 @@ class TaxpayerController extends Controller
     {
         $validatedData = $request->validated();
 
-        $email =  $validatedData['email'];
+        $email = $validatedData['email'];
         $password = Str::random(8);
         $validatedData['password'] = Hash::make($password);
 
         $taxpayer = Taxpayer::create($validatedData);
 
-        if($email){
+        if ($email) {
             Mail::to($email)->send(new TaxpayerCreationMail(['data' => $taxpayer]));
         }
 

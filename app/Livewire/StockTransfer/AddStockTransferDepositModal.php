@@ -11,6 +11,8 @@ use App\Models\Taxable;
 use App\Models\TaxLabel;
 use App\Models\TaxpayerTaxable;
 use App\Models\User;
+use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -26,7 +28,7 @@ class AddStockTransferDepositModal extends Component
     public $user_id;
     public $collector_id;
     public $tariff;
-    public $qty=0;
+    public $qty = 0;
     public $start_no;
     public $end_no;
     public $trans_no;
@@ -39,10 +41,10 @@ class AddStockTransferDepositModal extends Component
     public $taxlabel_id;
 
 
-    public $taxables=[];
-    public $taxlabels=[];
-    public $stock_transfers=[];
-    public $request_nos=[];
+    public $taxables = [];
+    public $taxlabels = [];
+    public $stock_transfers = [];
+    public $request_nos = [];
     // public $stock_requests=[];
 
     public $taxable_name;
@@ -56,7 +58,7 @@ class AddStockTransferDepositModal extends Component
 
     public $edit_mode;
     public $deposit_mode;
-    public $remaining_qty=0;
+    public $remaining_qty = 0;
     public $option_calculus;
     public $stock_transfers_v;
     public $select_transfer;
@@ -70,12 +72,12 @@ class AddStockTransferDepositModal extends Component
 
         if ($this->deposit_mode) {
             if (trim($this->taxlabel_id) == '' || $this->taxlabel_id == null) {
-                 $rules['code'] = 'required';
-                $rules['start_no'] = 'nullable|numeric|min:' . $this->select_transfer->start_no . '|max:' . ($this->select_transfer->end_no-1);
-                $rules['end_no'] = 'nullable|numeric|min:' . ($this->select_transfer->start_no + 1) . '|max:' .$this->select_transfer->end_no;
+                $rules['code'] = 'required';
+                $rules['start_no'] = 'nullable|numeric|min:' . $this->select_transfer->start_no . '|max:' . ($this->select_transfer->end_no - 1);
+                $rules['end_no'] = 'nullable|numeric|min:' . ($this->select_transfer->start_no + 1) . '|max:' . $this->select_transfer->end_no;
                 $rules['qty'] = 'required|numeric|min:1';
                 $rules['taxable_id'] = 'required|numeric';
-            }else{
+            } else {
             }
         }
 
@@ -86,20 +88,20 @@ class AddStockTransferDepositModal extends Component
     public function validateData()
     {
         $this->validate();
-        if ($this->deposit_mode ) {
-            if( $this->start_no &&  $this->end_no==null || $this->start_no==null &&  $this->end_no){
-                if( $this->start_no==null){
+        if ($this->deposit_mode) {
+            if ($this->start_no && $this->end_no == null || $this->start_no == null && $this->end_no) {
+                if ($this->start_no == null) {
                     $this->addError('start_no', 'Le numéro de début est obligaoire quand le numéro de fin est défini');
 
-                }else{
+                } else {
                     $this->addError('end_no', 'Le numéro de fin est obligaoire quand le numéro de debut est défini ');
                 }
             }
-            if( $this->start_no !== null && $this->end_no !== null && $this->select_transfer!=null){
+            if ($this->start_no !== null && $this->end_no !== null && $this->select_transfer != null) {
                 if ($this->start_no >= $this->end_no) {
                     $this->addError('end_no', 'Le numéro de fin doit être supérieur au numéro de début.');
                 }
-                if ($this->start_no <  $this->select_transfer->start_no || $this->end_no >$this->select_transfer->end_no) {
+                if ($this->start_no < $this->select_transfer->start_no || $this->end_no > $this->select_transfer->end_no) {
                     $this->addError('start_no', 'Le numéro de début et le numéro de fin doivent se situer dans la plage des  allouée.');
                 }
                 $overlapExists = StockTransfer::where('type', '=', 'ACTIVE')
@@ -127,7 +129,6 @@ class AddStockTransferDepositModal extends Component
 
 
     protected $listeners = [
-        'delete_taxpayer' => 'deleteUser',
         'change_qty' => 'changeQty',
         'load_drop' => 'loadDrop',
         'add_transfer' => 'addTrnasfer',
@@ -135,18 +136,32 @@ class AddStockTransferDepositModal extends Component
         'add_deposit' => 'addDeposit',
     ];
 
-    public function mount($id){
-       $this->collector_id =$id;
+    public function mount($id)
+    {
+        $this->collector_id = $id;
     }
+
     public function deleteStockTransfer($id)
     {
-        $stock_transfert = StockTransfer::find($id);
-        $payment_id = $stock_transfert?->payment_id;
-        StockTransfer::destroy($id);
-        Payment::destroy($payment_id);
-        $this->updateStockTransfer();
+        try {
+            $stock_transfert = StockTransfer::find($id);
+            $payment_id = $stock_transfert?->payment_id;
+            StockTransfer::destroy($id);
+            Payment::destroy($payment_id);
+            $this->updateStockTransfer();
+        } catch (QueryException $e) {
+            if ($e->getCode() == 23000) {
+                session()->flash('error', 'Erreur : Ce transfert de stock ne peut pas être supprimé car il est lié à d\'autres enregistrements.');
+            } else {
+                session()->flash('error', 'Erreur lors de la suppression du transfert de stock : ' . $e->getMessage());
+            }
+        } catch (Exception $e) {
+            session()->flash('error', 'Erreur lors de la suppression du stock : ' . $e->getMessage());
+        }
+
 
     }
+
     public function render()
     {
 
@@ -154,13 +169,13 @@ class AddStockTransferDepositModal extends Component
 
 
         $taxlabel_list = TaxLabel::where('category', 'LIKE', '%CATEGORY 3%')->get();
-        $stock_requests= StockRequest::where('req_type','DEMANDE')->where('type','ACTIVE')->get();
+        $stock_requests = StockRequest::where('req_type', 'DEMANDE')->where('type', 'ACTIVE')->get();
 
         $collectors = User::select('users.id', 'users.name as user_name', 'roles.name as role_name')
-                            ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                            ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                            ->where('roles.name', 'collecteur')
-                            ->get();
+            ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+            ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+            ->where('roles.name', 'collecteur')
+            ->get();
 
         $this->request_nos = StockTransfer::select('trans_no')->groupBy('trans_no')->where('to_user_id', $this->collector_id)->get();
 
@@ -168,68 +183,66 @@ class AddStockTransferDepositModal extends Component
     }
 
 
-
-
     public function updatedTransNo($value)
     {
-        $this->stock_transfers = StockTransfer::where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->where('trans_no', $value)->where('type','ACTIVE')->get();
+        $this->stock_transfers = StockTransfer::where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->where('trans_no', $value)->where('type', 'ACTIVE')->get();
 
-      $this-> updateStockTransfer();
+        $this->updateStockTransfer();
     }
 
     public function updateStockTransfer()
     {
         $this->stock_transfers_v = StockTransfer::
         where('trans_type', 'VENDU')
-            ->where('type','ACTIVE')
+            ->where('type', 'ACTIVE')
             ->where('to_user_id', $this->collector_id)->get();
     }
+
     public function updatedStockTransferId($value)
     {
-        if($value==null){
+        if ($value == null) {
             return;
         }
-        $select_transfer= StockTransfer::find($value);
+        $select_transfer = StockTransfer::find($value);
         $this->select_transfer = $select_transfer;
         // $this->trans_no =  $select_transfer?->stock_request->req_no;
-        $this->stock_request_id=  $select_transfer?->stock_request->id;
-        $this->taxable_id= $select_transfer?->taxable->id;
-        $value= $select_transfer?->taxable->id;
+        $this->stock_request_id = $select_transfer?->stock_request->id;
+        $this->taxable_id = $select_transfer?->taxable->id;
+        $value = $select_transfer?->taxable->id;
         $this->tariff = $select_transfer?->taxable->tariff;
         $this->remaining_qty = 0;
 
 
         $stock_transfers_r = StockTransfer:: where("trans_id", $select_transfer?->trans_id)
-                                    ->where('type', 'ACTIVE')
-                                    // ->where('trans_type', 'RECU')
-                                    ->where('to_user_id', $this->collector_id)
-                                    ->orderBy('stock_transfers.id', 'DESC')
-                                    ->get();
+            ->where('type', 'ACTIVE')
+            // ->where('trans_type', 'RECU')
+            ->where('to_user_id', $this->collector_id)
+            ->orderBy('stock_transfers.id', 'DESC')
+            ->get();
 
-                                    if($this->collector_id < 1){
-                                        return;
-                                    }else{
-                                        $stock_transfers_v = $stock_transfers_r->first()->trans_type ?? "";
-                                        if($stock_transfers_v=="RECU"){
-                                            $this->start_no =  $select_transfer?->start_no;
-                                        }else{
-                                            if($stock_transfers_v !=""){
-                                            $this->start_no = $stock_transfers_r->first()->end_no + 1;
-                                            }
-                                        }
-                                    }
+        if ($this->collector_id < 1) {
+            return;
+        } else {
+            $stock_transfers_v = $stock_transfers_r->first()->trans_type ?? "";
+            if ($stock_transfers_v == "RECU") {
+                $this->start_no = $select_transfer?->start_no;
+            } else {
+                if ($stock_transfers_v != "") {
+                    $this->start_no = $stock_transfers_r->first()->end_no + 1;
+                }
+            }
+        }
 
-                                    // $this->start_no = $stock_transfers_r->first()->last_no ?? "";
+        // $this->start_no = $stock_transfers_r->first()->last_no ?? "";
 
-                                    foreach ($stock_transfers_r as $transfer){
-                                        // $qty+=$transfer->qty;
-                                        if($transfer->trans_type=="RECU"){
-                                            $this->remaining_qty += $transfer->qty;
-                                        }else{
-                                            $this->remaining_qty -= $transfer->qty;
-                                        }
-                                    }
-
+        foreach ($stock_transfers_r as $transfer) {
+            // $qty+=$transfer->qty;
+            if ($transfer->trans_type == "RECU") {
+                $this->remaining_qty += $transfer->qty;
+            } else {
+                $this->remaining_qty -= $transfer->qty;
+            }
+        }
 
 
         $this->trans_id = $this->stock_transfer_id;
@@ -246,128 +259,84 @@ class AddStockTransferDepositModal extends Component
 
         $this->request_nos = StockTransfer::select('trans_no')->groupBy('trans_no')->where('to_user_id', $this->collector_id)->get();
 
-        //  //dd($this->deposit_mode);
-        //     $this->taxlabels = TaxLabel::select('tax_labels.*')
-        //                         ->join('taxables', 'taxables.tax_label_id', '=', 'tax_labels.id')
-        //                         ->join('stock_requests', 'stock_requests.taxable_id', '=', 'taxables.id')
-        //                         ->distinct()
-        //                         ->get();
-
-        // if ($this->edit_mode) {
-        //     $this->taxlabels = TaxLabel::select('tax_labels.*')
-        //                         ->join('taxables', 'taxables.tax_label_id', '=', 'tax_labels.id')
-        //                         ->join('stock_transfers', 'stock_transfers.taxable_id', '=', 'taxables.id')
-        //                         ->where('to_user_id', $value)
-        //                         ->distinct()
-        //                         ->get();
-        // }
-
-        // if ($this->deposit_mode) {
-        //     $this->taxlabels = TaxLabel::select('tax_labels.*')
-        //                         ->join('taxables', 'taxables.tax_label_id', '=', 'tax_labels.id')
-        //                         ->join('stock_transfers', 'stock_transfers.taxable_id', '=', 'taxables.id')
-        //                         ->where('to_user_id', $value)
-        //                         ->distinct()
-        //                         ->get();
-
-        // //dd($this->deposit_mode, $this->taxlabels);
-        // }
-
-        // // if ($this->deposit_mode) {
-        // //     $this->taxables = Taxable::select('taxables.*')
-        // //                             ->join('stock_transfers', 'stock_transfers.taxable_id', '=', 'taxables.id')
-        // //                             ->where('tax_label_id', $this->taxlabel_id)
-        // //                             ->where('to_user_id', $value)
-        // //                             ->where('trans_type', "RECU")
-        // //                             ->get();
-        // // }
-
-        // $this->taxable_id = "";
-        // $this->trans_no = "";
 
         $this->stock_transfers_v = StockTransfer::
         where('trans_type', 'VENDU')
-            ->where('type','ACTIVE')
+            ->where('type', 'ACTIVE')
             ->where('to_user_id', $this->collector_id)->get();
 
         if ($this->deposit_mode) {
             $this->taxables = Taxable::select('taxables.*')
-                                        ->join('stock_transfers', 'stock_transfers.taxable_id', '=', 'taxables.id')
-                                        ->where('tax_label_id', null)
-                                        ->whereNot('unit', 'AUTRE')
-                                        //->where('unit', $value)
-                                        ->where('type', 'ACTIVE')
-                                        ->where('to_user_id', $this->collector_id)
-                                        ->distinct()
-                                        ->get();
-        }else{
+                ->join('stock_transfers', 'stock_transfers.taxable_id', '=', 'taxables.id')
+                ->where('tax_label_id', null)
+                ->whereNot('unit', 'AUTRE')
+                //->where('unit', $value)
+                ->where('type', 'ACTIVE')
+                ->where('to_user_id', $this->collector_id)
+                ->distinct()
+                ->get();
+        } else {
             $this->taxables = Taxable::select('taxables.*')
-                                        ->join('stock_requests', 'stock_requests.taxable_id', '=', 'taxables.id')
-                                        ->where('tax_label_id', null)
-                                        ->whereNot('unit', 'AUTRE')
-                                        //->where('unit', $value)
-                                        ->get();
+                ->join('stock_requests', 'stock_requests.taxable_id', '=', 'taxables.id')
+                ->where('tax_label_id', null)
+                ->whereNot('unit', 'AUTRE')
+                //->where('unit', $value)
+                ->get();
 
         }
 
-        // $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('unit', $value)->where('to_user_id', $this->collector_id)->get();
         $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('type', 'ACTIVE')->where('to_user_id', $this->collector_id)->get();
 
         if ($this->edit_mode == true) {
-             //$this->stock_transfers = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
             $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
         }
     }
 
     public function updatedEndNo($value)
     {
-        $this-> makeStartNoAndEndNoCalcul();
+        $this->makeStartNoAndEndNoCalcul();
     }
 
     public function updatedStartNo($value)
     {
-        $this-> makeStartNoAndEndNoCalcul();
+        $this->makeStartNoAndEndNoCalcul();
     }
-    public function makeStartNoAndEndNoCalcul(){
-        if($this->stock_request_id!=null && is_numeric($this->start_no) && is_numeric($this->end_no)&&$this->start_no < $this->end_no){
-                $this->qty = intval($this->end_no) - intval($this->start_no) + 1;
+
+    public function makeStartNoAndEndNoCalcul()
+    {
+        if ($this->stock_request_id != null && is_numeric($this->start_no) && is_numeric($this->end_no) && $this->start_no < $this->end_no) {
+            $this->qty = intval($this->end_no) - intval($this->start_no) + 1;
             $this->updatedQty("");
 
-        }else{
+        } else {
             $this->addError('trans_no', 'Le numéro de demande doit etre défini');
-            $this->end_no=null;
+            $this->end_no = null;
         }
     }
+
     public function updatedQty($value)
     {
 
-        if($this->qty==null && !is_numeric($this->qty)){
+        if ($this->qty == null && !is_numeric($this->qty)) {
             return;
-        }
-        elseif($this->qty >$this->remaining_qty){
-            $this->qty=$this->remaining_qty;
+        } elseif ($this->qty > $this->remaining_qty) {
+            $this->qty = $this->remaining_qty;
         }
         $this->total = $this->qty * $this->tariff;
     }
 
     public function submit()
     {
-      $this->validateData();
+        $this->validateData();
 
         if ($this->getErrorBag()->isEmpty()) {
             DB::transaction(function () {
-
-                //   $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('unit', $this->taxlabel_id)->where('to_user_id', $this->collector_id)->get();
-                //         $stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('trans_type', 'RECU')->where('unit', $this->taxlabel_id)->where('to_user_id', $this->collector_id)->get();
-
-                //         dd($this->edit_mode, $stock_transfers,$this->stock_transfers);
                 $stock_transfers = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
-
 
 
                 if ($this->edit_mode) {
                     $total_sold = 0;
-                    if ($stock_transfers){
+                    if ($stock_transfers) {
 
                         foreach ($stock_transfers as $stock_transfer) {
 
@@ -404,11 +373,11 @@ class AddStockTransferDepositModal extends Component
 
 
                             $stock_transfer_new->qty = $stock_transfer->qty - $stock_transfer_new->qty;
-                            if ($stock_transfer_olds->first()){
-                                $stock_transfer_new->start_no = $stock_transfer_olds->first()->last_no ?? $stock_transfer->start_no ;
-                            }else{
+                            if ($stock_transfer_olds->first()) {
+                                $stock_transfer_new->start_no = $stock_transfer_olds->first()->last_no ?? $stock_transfer->start_no;
+                            } else {
                                 // $stock_transfer_new->qty = $stock_transfer->qty;
-                                $stock_transfer_new->start_no = $stock_transfer->start_no ;
+                                $stock_transfer_new->start_no = $stock_transfer->start_no;
                                 $stock_transfer_new->last_no = $stock_transfer->start_no;
                             }
                             $stock_transfer_new->save();
@@ -420,7 +389,7 @@ class AddStockTransferDepositModal extends Component
                     }
 
                 } else {
-                    if (isset($this->taxlabel_id) && $this->taxlabel_id != ''){
+                    if (isset($this->taxlabel_id) && $this->taxlabel_id != '') {
                         // if ($this->deposit_mode) {
                         // }
 
@@ -429,19 +398,15 @@ class AddStockTransferDepositModal extends Component
 
                         foreach ($stock_transfers as $stock_transfer) {
 
-                            $payment = Payment::find( $stock_transfer->payment_id);
+                            $payment = Payment::find($stock_transfer->payment_id);
 
-                            if ($payment->reference == null ||  trim($payment->reference) == '') {
+                            if ($payment->reference == null || trim($payment->reference) == '') {
                                 $payment->reference = $this->taxlabel_id;
                                 $payment->save();
                             }
                         }
 
-                    }else{
-                        // dd('2');
-
-
-                        // Prepare the data for creating a new Taxable
+                    } else {
                         $data = [
                             'trans_no' => $this->trans_no,
                             'qty' => $this->qty,
@@ -452,7 +417,7 @@ class AddStockTransferDepositModal extends Component
                             'trans_type' => 'RECU',
                             'by_user_id' => $this->user_id,
                             'to_user_id' => $this->collector_id,
-                            'stock_request_id'=>$this->stock_request_id
+                            'stock_request_id' => $this->stock_request_id
                         ];
 
                         //dd($this->trans_id);
@@ -464,7 +429,7 @@ class AddStockTransferDepositModal extends Component
                                 'invoice_type' => Constants::INVOICE_TYPE_COMPTANT,
                                 'payment_type' => 'CASH',
                                 'status' => PaymentStatusEnums::ACCOUNTED,
-                                'description' => "Etat de versement collecteur ".User::find($this->collector_id)?->name,
+                                'description' => "Etat de versement collecteur " . User::find($this->collector_id)?->name,
                                 'user_id' => $this->user_id,
                                 'r_user_id' => $this->collector_id,
                                 'reference' => $this->taxlabel_id ?? " ",
@@ -477,12 +442,12 @@ class AddStockTransferDepositModal extends Component
                             $data['payment_id'] = $payment->id;
                             $data['trans_type'] = 'VENDU';
 
-                            $data['period_from'] =  $stock_transfers->first()->period_from;
-                            $data['period_to'] =  $stock_transfers->first()->period_to;
+                            $data['period_from'] = $stock_transfers->first()->period_from;
+                            $data['period_to'] = $stock_transfers->first()->period_to;
 
                             if ($this->end_no > 0) {
                                 $data['last_no'] = $this->end_no + 1;
-                            }else{
+                            } else {
                                 $data['last_no'] = null;
                             }
                             $data['trans_id'] = $this->trans_id;
@@ -495,7 +460,7 @@ class AddStockTransferDepositModal extends Component
 
                         $stock_transfer = StockTransfer::create($data);
                         ///reduce remaining qty
-                        $this->remaining_qty-=$this->qty;
+                        $this->remaining_qty -= $this->qty;
                         if (!$this->deposit_mode) {
                             $stock_transfer->trans_id = $stock_transfer->id;
                             $stock_transfer->save();
@@ -515,7 +480,7 @@ class AddStockTransferDepositModal extends Component
                     }
                 }
 
-                $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('type','ACTIVE')->where('to_user_id', $this->collector_id)->get();
+                $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('type', 'ACTIVE')->where('to_user_id', $this->collector_id)->get();
 
             });
 
@@ -523,7 +488,7 @@ class AddStockTransferDepositModal extends Component
 
         $this->stock_transfers_v = StockTransfer::
         where('trans_type', 'VENDU')
-            ->where('type','ACTIVE')
+            ->where('type', 'ACTIVE')
             ->where('to_user_id', $this->collector_id)->get();
 
 
@@ -538,65 +503,53 @@ class AddStockTransferDepositModal extends Component
     }
 
 
-
     public function addTrnasfer($id)
     {
         $this->collector_id = null;
         $this->taxlabel_id = null;
         $this->code = null;
         $this->taxable_id = null;
-        // $this->trans_no = null;
         $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
-
-        // $this->stock_transfer_id = '';
-        // $this->trans_no = '';
         $this->edit_mode = false;
         $this->deposit_mode = false;
-
-        //   dd($this->edit_mode,$this->deposit_mode);
     }
 
     public function addDeposit($id)
     {
-        //dd($id);
         $this->collector_id = $id;
         $this->taxlabel_id = null;
         $this->code = null;
         $this->taxable_id = null;
-        // $this->trans_no = null;
         $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
 
 
         $this->deposit_mode = true;
         $this->edit_mode = false;
 
-        // dd($this->edit_mode,$this->deposit_mode);
 
         if ($this->deposit_mode) {
             $this->taxables = Taxable::select('taxables.*')
-                                        ->join('stock_transfers', 'stock_transfers.taxable_id', '=', 'taxables.id')
-                                        ->where('tax_label_id', null)
-                                        ->whereNot('unit', 'AUTRE')
-                                        //->where('unit', $value)
-                                        ->where('type', 'ACTIVE')
-                                        ->where('to_user_id', $this->collector_id)
-                                        ->distinct()
-                                        ->get();
-        }else{
+                ->join('stock_transfers', 'stock_transfers.taxable_id', '=', 'taxables.id')
+                ->where('tax_label_id', null)
+                ->whereNot('unit', 'AUTRE')
+                //->where('unit', $value)
+                ->where('type', 'ACTIVE')
+                ->where('to_user_id', $this->collector_id)
+                ->distinct()
+                ->get();
+        } else {
             $this->taxables = Taxable::select('taxables.*')
-                                        ->join('stock_requests', 'stock_requests.taxable_id', '=', 'taxables.id')
-                                        ->where('tax_label_id', null)
-                                        ->whereNot('unit', 'AUTRE')
-                                        //->where('unit', $value)
-                                        ->get();
+                ->join('stock_requests', 'stock_requests.taxable_id', '=', 'taxables.id')
+                ->where('tax_label_id', null)
+                ->whereNot('unit', 'AUTRE')
+                //->where('unit', $value)
+                ->get();
 
         }
 
-        // $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('unit', $value)->where('to_user_id', $this->collector_id)->get();
         $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
 
         if ($this->edit_mode == true) {
-             //$this->stock_transfers = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
             $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
         }
     }
@@ -607,15 +560,12 @@ class AddStockTransferDepositModal extends Component
         $this->taxlabel_id = null;
         $this->code = null;
         $this->taxable_id = null;
-        // $this->trans_no = null;
         $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
-
         $this->edit_mode = true;
         $this->deposit_mode = false;
-
         if ($this->edit_mode == true) {
-           $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
-       }
+            $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
+        }
 
 
     }

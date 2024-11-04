@@ -4,21 +4,19 @@ namespace App\Http\Controllers;
 
 use App\DataTables\InvoicesDataTable;
 use App\DataTables\RecoveriesDataTable;
+use App\DataTables\TaxpayerInvoicesDataTable;
 use App\DataTables\TaxpayerInvoicesDataTableDataTableHtml;
-use App\Helpers\Constants;
+use App\DataTables\TaxpayersDataTable;
+use App\DataTables\TaxpayerTaxablesDataTable;
+use App\Imports\TaxpayerImport;
 use App\Models\Activity;
 use App\Models\Canton;
 use App\Models\Category;
 use App\Models\Taxpayer;
-use App\DataTables\TaxpayersDataTable;
-use App\DataTables\TaxpayerInvoicesDataTable;
-use App\DataTables\TaxpayerTaxablesDataTable;
-use App\Http\Controllers\Controller;
 use App\Models\Town;
 use App\Models\UserLogs;
 use App\Models\Zone;
 use Illuminate\Http\Request;
-use App\Imports\TaxpayerImport;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
@@ -28,14 +26,14 @@ class TaxpayerController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request,TaxpayersDataTable $dataTable)
+    public function index(Request $request, TaxpayersDataTable $dataTable)
     {
         $validatedData = $request->validate([
-            'disable'=>['nullable', 'integer', Rule::in(1)],
-            'state'=>['nullable', 'string', Rule::in('at')],
+            'disable' => ['nullable', 'integer', Rule::in(1)],
+            'state' => ['nullable', 'string', Rule::in('at')],
         ]);
-        $disable =$validatedData['disable']??null;
-        $state = $validatedData['state']??null;
+        $disable = $validatedData['disable'] ?? null;
+        $state = $validatedData['state'] ?? null;
         $zones = Zone::all();
         $categories = Category::all();
         $towns = Town::all();
@@ -44,10 +42,10 @@ class TaxpayerController extends Controller
 
         return $dataTable->with(
             [
-                'state'=>$state,
+                'state' => $state,
                 'disable' => $disable,
             ]
-        )->render('pages/taxpayers.list', compact('zones','categories','towns','cantons','activities'));
+        )->render('pages/taxpayers.list', compact('zones', 'categories', 'towns', 'cantons', 'activities'));
     }
 
     // public function index()
@@ -66,7 +64,6 @@ class TaxpayerController extends Controller
     //     // Pass both data tables HTML to the view
     //     return view('pages.taxpayers.list', compact('taxpayersDataTableHtml', 'invoicesDataTableHtml'));
     // }
-
 
 
     /**
@@ -88,7 +85,7 @@ class TaxpayerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Taxpayer $taxpayer, InvoicesDataTable $invoicesDataTable,RecoveriesDataTable $recoveriesDataTable, TaxpayerTaxablesDataTable $taxablesDataTable)
+    public function show(Taxpayer $taxpayer, InvoicesDataTable $invoicesDataTable, RecoveriesDataTable $recoveriesDataTable, TaxpayerTaxablesDataTable $taxablesDataTable)
     {
         // Assuming you want to pass the $taxpayer to the show view
         // return view('pages.taxpayers.show', compact('taxpayer'))
@@ -96,19 +93,19 @@ class TaxpayerController extends Controller
         //return $dataTable->render('pages/taxpayers.show')-> with ('taxpayer', $taxpayer);
 
 
-        $taxpayerActionLog = UserLogs::where('taxpayer_id',$taxpayer->id)
-        ->orderBy('id', 'desc')
-        ->limit(10)
-        ->get();
+        $taxpayerActionLog = UserLogs::where('taxpayer_id', $taxpayer->id)
+            ->orderBy('id', 'desc')
+            ->limit(10)
+            ->get();
 
 
         return $taxablesDataTable->with('id', $taxpayer->id)
-                ->render('pages/taxpayers.show', [
-                    'taxpayer'=>$taxpayer,
-                    'taxpayerActionLog'=>$taxpayerActionLog,
-                    'invoicesDataTable'=>$invoicesDataTable->with('id', $taxpayer->id)->html(),
-                    'recoveriesDataTable'=> $recoveriesDataTable->with('id', $taxpayer->id)->html(),
-                ]);
+            ->render('pages/taxpayers.show', [
+                'taxpayer' => $taxpayer,
+                'taxpayerActionLog' => $taxpayerActionLog,
+                'invoicesDataTable' => $invoicesDataTable->with('id', $taxpayer->id)->html(),
+                'recoveriesDataTable' => $recoveriesDataTable->with('id', $taxpayer->id)->html(),
+            ]);
     }
 
     /**
@@ -158,7 +155,6 @@ class TaxpayerController extends Controller
     // }
 
 
-
 //     public function show($identifier, TaxablesDataTable $dataTable)
 // {
 //     // Check if $identifier is numeric, then assume it's the taxpayer ID
@@ -176,8 +172,6 @@ class TaxpayerController extends Controller
 //     // If $identifier is not numeric, assume it's a DataTable request
 //     return $dataTable->render('pages.taxpayers.show');
 // }
-
-
 
 
     /**
@@ -203,20 +197,22 @@ class TaxpayerController extends Controller
     {
         //
     }
+
     public function showImportPage()
     {
         return view('pages/taxpayers/import.show');
     }
+
     public function import(Request $request)
     {
 
-        if($request->file('file')){
+        if ($request->file('file')) {
             Excel::queueImport(new TaxpayerImport,
                 $request->file('file')->store('files'));
             return redirect()->back();
         }
 
-        $filename= "data.xlsx";
+        $filename = "data.xlsx";
 
         if (!Storage::missing("imports")) {
             $filePath = Storage::path('imports') . DIRECTORY_SEPARATOR . $filename;

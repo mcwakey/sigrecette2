@@ -17,7 +17,7 @@ class AddOrdernoForm extends Component
     public $edit_mode = false;
 
     protected $rules = [
-        "orderno" =>"required",
+        "orderno" => "required",
     ];
 
     protected $listeners = [
@@ -25,43 +25,44 @@ class AddOrdernoForm extends Component
         'update_invoice' => 'updateInvoice',
         //'add_invoice' => 'addInvoice',
     ];
+
     public function render()
     {
         return view('livewire.invoice.add-orderno-form');
     }
 
     public function submit()
-{
-    //dd($this->validate());
+    {
+        //dd($this->validate());
 
-    // Validate the form input data
-    $this->validate();
+        // Validate the form input data
+        $this->validate();
 
-    DB::transaction(function () {
+        DB::transaction(function () {
 
-        // Prepare data for Invoice
-        $data = [
-            'order_no' => $this->orderno,
-        ];
+            // Prepare data for Invoice
+            $data = [
+                'order_no' => $this->orderno,
+            ];
 
-        //dd($invoiceData);
+            //dd($invoiceData);
 
-        // Create or update Invoice record
-        $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
+            // Create or update Invoice record
+            $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
 
-        
-        $this->invoice_id = $invoice->id;
 
-        foreach ($data as $k => $v) {
-            $invoice->$k = $v;
-        }
-        $invoice->save();
+            $this->invoice_id = $invoice->id;
+
+            foreach ($data as $k => $v) {
+                $invoice->$k = $v;
+            }
+            $invoice->save();
             $this->dispatch('success', __('Invoice updated'));
-    });
+        });
 
-    // Reset form fields after successful submission
-    $this->reset();
-}
+        // Reset form fields after successful submission
+        $this->reset();
+    }
 
     public function updateInvoice($id)
     {

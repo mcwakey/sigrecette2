@@ -86,8 +86,8 @@ class AddCommuneModal extends Component
                 'treasury_rib' => $this->treasury_rib,
                 'latitude' => $this->latitude,
                 'longitude' => $this->longitude,
-                'email'=>$this->email,
-                'url'=>$this->url
+                'email' => $this->email,
+                'url' => $this->url
             ];
 
             if ($this->logo) {
@@ -134,7 +134,7 @@ class AddCommuneModal extends Component
 
         $this->commune_id = $commune->id;
         $this->name = $commune->name;
-        $t_title = str_replace($this->name, '',  $commune->title);
+        $t_title = str_replace($this->name, '', $commune->title);
         $this->t_title = trim($t_title);
         $this->region_name = $commune->region_name;
 

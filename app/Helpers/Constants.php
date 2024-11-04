@@ -12,20 +12,20 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+
 class Constants
 {
     public const CURRENCY = " FCFA";
-    public  const DEMANDE="DEMANDE";
-    public  const  TITRE="TITRE";
-    public  const  REDUCTION="Réduction";
-    public  const  ANNULATION="Annulation";
-    public  const INVOICE_TYPE_TITRE ="TITRE";
-    public  const INVOICE_TYPE_COMPTANT ="COMPTANT";
+    public const DEMANDE = "DEMANDE";
+    public const  TITRE = "TITRE";
+    public const  REDUCTION = "Réduction";
+    public const  ANNULATION = "Annulation";
+    public const INVOICE_TYPE_TITRE = "TITRE";
+    public const INVOICE_TYPE_COMPTANT = "COMPTANT";
     const CANCELED = "CANCELED";
-    const REDUCED="REDUCED";
-    const NOT_PERMISSION_TO_PERFORM_ACTION ="Vous n'avez pas la permission pour effectuer cette action.";
+    const REDUCED = "REDUCED";
+    const NOT_PERMISSION_TO_PERFORM_ACTION = "Vous n'avez pas la permission pour effectuer cette action.";
     const DEFAULT_ROLE_CAN_NOT_DELETE = "Ce role par défaut ne peut etre supprimé.";
-
 
 
     const INVOICE_STATE_DRAFT_KEY = 'br';
@@ -50,8 +50,8 @@ class Constants
     const EXPORT_PAYMENT_KEY = "recouvrement";
 
     const EXPORT_VALIDATION_MAP = [
-       self::EXPORT_TAXPAYER_KEY => ExportTypeEnums::TAXPAYER,
-         self::EXPORT_INVOICE_KEY => ExportTypeEnums::INVOICE,
+        self::EXPORT_TAXPAYER_KEY => ExportTypeEnums::TAXPAYER,
+        self::EXPORT_INVOICE_KEY => ExportTypeEnums::INVOICE,
         self::EXPORT_PAYMENT_KEY => ExportTypeEnums::PAYMENT,
     ];
     const INVOICE_STATE_VALIDATION_MAP = [
@@ -78,66 +78,62 @@ class Constants
         self::INVOICE_TYPE_COMPTANT_KEY => Constants::INVOICE_TYPE_COMPTANT,
         self::INVOICE_TYPE_TITRE_KEY => Constants::INVOICE_TYPE_TITRE,
     ];
-    const REFERENCE_DEPOSIT_NULL ="ref_deposit_is_null";
-    public static function getMonths():array{
+    const REFERENCE_DEPOSIT_NULL = "ref_deposit_is_null";
+
+    public static function getMonths(): array
+    {
         $months = [];
-        for ($i = 1 ; $i <= 12; $i++) {
-            $monthName = Carbon::createFromFormat('m',$i)->monthName;
+        for ($i = 1; $i <= 12; $i++) {
+            $monthName = Carbon::createFromFormat('m', $i)->monthName;
             $monthNumber = str_pad($i, 2, '0', STR_PAD_LEFT);
             $months[$monthNumber] = $monthName;
         }
         return $months;
     }
-    public static function getInvoiceActionsBasedOnRouteNameAndStatut( string $state = null): array
+
+    public static function getInvoiceActionsBasedOnRouteNameAndStatut(string $state = null): array
     {
         $actions = [InvoiceActionsEnums::VIEW];
 
 
-            if(request()->routeIs('invoices.*')){
-                $actions = self::getInvoiceActions();
-            }
+        if (request()->routeIs('invoices.*')) {
+            $actions = self::getInvoiceActions();
+        }
 
         return $actions;
     }
 
     private static function getInvoiceActions(): array
     {
-        if(request()->has('state')){
-            if( request()->input('state') == self::INVOICE_STATE_DRAFT_KEY) {
-                return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::EDITSTATUT];
+        if (request()->has('state')) {
+            if (request()->input('state') == self::INVOICE_STATE_DRAFT_KEY) {
+                return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::EDITSTATUT];
+            } elseif (request()->input('state') == self::INVOICE_STATE_ACCEPTED_KEY) {
+                return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::PRINT, InvoiceActionsEnums::ADDORNO];
+            } elseif (request()->input('state') == self::INVOICE_STATE_PENDING_KEY) {
+                return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::EDITSTATUT, InvoiceActionsEnums::PRINT];
+            } elseif (request()->input('state') == self::INVOICE_STATE_APPROVE_KEY) {
+                return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::REDUCE];
             }
-            elseif(  request()->input('state') == self::INVOICE_STATE_ACCEPTED_KEY ){
-                return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::PRINT,InvoiceActionsEnums::ADDORNO];
-            }
-            elseif(request()->input('state') == self::INVOICE_STATE_PENDING_KEY ){
-                return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::EDITSTATUT,InvoiceActionsEnums::PRINT];
-            }
-            elseif(request()->input('state') == self::INVOICE_STATE_APPROVE_KEY ){
-                return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::REDUCE];
-            }
-        }else{
-        if (request()->has('delivery')){
-                if( request()->input('delivery')==Constants::INVOICE_DELIVERY_NON_LIV_KEY){
-                    return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::ADDDELIVERY];
+        } else {
+            if (request()->has('delivery')) {
+                if (request()->input('delivery') == Constants::INVOICE_DELIVERY_NON_LIV_KEY) {
+                    return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::ADDDELIVERY];
 
+                } elseif (request()->input('delivery') == Constants::INVOICE_DELIVERY_LIV_KEY && request()->input('to_paid') == "1") {
+                    return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::PAYMENT];
+                } elseif (request()->input('delivery') == Constants::INVOICE_DELIVERY_LIV_KEY) {
+                    return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::REDUCE, InvoiceActionsEnums::RELAUNCH];
                 }
-                elseif ( request()->input('delivery')==Constants::INVOICE_DELIVERY_LIV_KEY&& request()->input('to_paid')=="1"){
-                    return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::PAYMENT];
+            } else {
+                if (request()->input('type') == Constants::INVOICE_TYPE_TITRE_KEY) {
+                    return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::ZEROEDITION, InvoiceActionsEnums::PRINT];
                 }
-                elseif ( request()->input('delivery')==Constants::INVOICE_DELIVERY_LIV_KEY){
-                    return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::REDUCE,InvoiceActionsEnums::RELAUNCH];
-                }
-        }
-        else {
-                if(request()->input('type')==Constants::INVOICE_TYPE_TITRE_KEY){
-                    return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::ZEROEDITION,InvoiceActionsEnums::PRINT];
-                }
-                if(request()->input('type')==Constants::INVOICE_TYPE_COMPTANT_KEY){
-                    return [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::REDUCE,InvoiceActionsEnums::PRINT,InvoiceActionsEnums::ADDORNO,InvoiceActionsEnums::EDITSTATUT];
+                if (request()->input('type') == Constants::INVOICE_TYPE_COMPTANT_KEY) {
+                    return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::REDUCE, InvoiceActionsEnums::PRINT, InvoiceActionsEnums::ADDORNO, InvoiceActionsEnums::EDITSTATUT];
                 }
             }
         }
-
 
 
         return [InvoiceActionsEnums::VIEW];

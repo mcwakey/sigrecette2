@@ -1,6 +1,7 @@
 <?php
 
 namespace App\DataTables;
+
 use Illuminate\Support\Facades\DB;
 
 use App\Enums\PaymentStatusEnums;
@@ -172,13 +173,13 @@ class AccountantDepositsSumDataTable extends DataTable
         // // return Payment::where('taxpayer_id', $this->id); // Filter collector_deposits by taxpayer_id
 
         return $model
-        // ->join('taxables', 'stock_requests.taxable_id', '=', 'taxables.id')
-        // ->join('users', 'stock_requests.user_id', '=', 'users.id')
-        ->select('id',
-                 DB::raw('SUM(amount) AS amount'),
+            // ->join('taxables', 'stock_requests.taxable_id', '=', 'taxables.id')
+            // ->join('users', 'stock_requests.user_id', '=', 'users.id')
+            ->select('id',
+                DB::raw('SUM(amount) AS amount'),
                 //  DB::raw('SUM(CASE WHEN req_type = "VENDU" THEN qty*tariff END) AS vd_qty'),
                 //  DB::raw('SUM(CASE WHEN req_type = "RENDU" THEN qty*tariff END) AS rd_qty'),
-                 DB::raw('MAX(reference_deposit) AS reference_deposit'),
+                DB::raw('MAX(reference_deposit) AS reference_deposit'),
                 //  DB::raw('MAX(stock_requests.req_no) AS req_no'),
                 //  DB::raw('MAX(stock_requests.req_desc) AS req_desc'),
                 //  DB::raw('MAX(stock_requests.start_no) AS start_no'),
@@ -186,16 +187,16 @@ class AccountantDepositsSumDataTable extends DataTable
                 //  DB::raw('MAX(stock_requests.last_no) AS last_no'),
                 //  DB::raw('MIN(stock_requests.req_type) AS req_type'),
                 //  DB::raw('MIN(stock_requests.type) AS type'),
-                 DB::raw('MAX(status) AS status'),
-                 DB::raw('MAX(payments.updated_at) AS created_at')
-                //  DB::raw('MAX(stock_requests.taxable_id) AS taxable_id')
-                )
+                DB::raw('MAX(status) AS status'),
+                DB::raw('MAX(payments.updated_at) AS created_at')
+            //  DB::raw('MAX(stock_requests.taxable_id) AS taxable_id')
+            )
             ->where('status', '!=', PaymentStatusEnums::CANCELED)
 
-        // ->where('status',PaymentStatusEnums::ACCOUNTED) // Filter collector_deposits by taxpayer_id
-        // ->groupBy('reference_deposit', 'status')
-        ->groupBy('reference_deposit', 'reference_deposit')
-        ->orderBy('reference_deposit', 'asc');
+            // ->where('status',PaymentStatusEnums::ACCOUNTED) // Filter collector_deposits by taxpayer_id
+            // ->groupBy('reference_deposit', 'status')
+            ->groupBy('reference_deposit', 'reference_deposit')
+            ->orderBy('reference_deposit', 'asc');
     }
 
     /**
@@ -207,7 +208,7 @@ class AccountantDepositsSumDataTable extends DataTable
             ->setTableId('collector_deposits-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0, 'desc')
@@ -248,13 +249,13 @@ class AccountantDepositsSumDataTable extends DataTable
                 ->exportable(false)
                 ->printable(false)
                 ->width(60)
-                // ->buttons(
-                //     Button::make('create'),
-                //     Button::make('export'),
-                //     Button::make('print'),
-                //     Button::make('reset'),
-                //     Button::make('reload')
-                // )
+            // ->buttons(
+            //     Button::make('create'),
+            //     Button::make('export'),
+            //     Button::make('print'),
+            //     Button::make('reset'),
+            //     Button::make('reload')
+            // )
         ];
     }
 

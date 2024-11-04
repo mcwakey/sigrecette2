@@ -24,6 +24,6 @@ class AuthLayout extends Component
      */
     public function render()
     {
-        return view(config('settings.KT_THEME_LAYOUT_DIR').'._auth');
+        return view(config('settings.KT_THEME_LAYOUT_DIR') . '._auth');
     }
 }

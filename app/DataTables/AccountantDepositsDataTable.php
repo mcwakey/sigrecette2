@@ -152,9 +152,9 @@ class AccountantDepositsDataTable extends DataTable
     public function query(Payment $model): QueryBuilder
     {
         return $model
-                    ->where('invoice_type', '!=', 'VERSEMENT') // Filter collector_deposits by taxpayer_id
-                    ->where('reference_deposit', $this->ref==Constants::REFERENCE_DEPOSIT_NULL?null: $this->ref)
-                    ->newQuery();
+            ->where('invoice_type', '!=', 'VERSEMENT') // Filter collector_deposits by taxpayer_id
+            ->where('reference_deposit', $this->ref == Constants::REFERENCE_DEPOSIT_NULL ? null : $this->ref)
+            ->newQuery();
 
     }
 
@@ -167,7 +167,7 @@ class AccountantDepositsDataTable extends DataTable
             ->setTableId('collector_deposits-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0, 'desc')
@@ -208,13 +208,13 @@ class AccountantDepositsDataTable extends DataTable
                 ->exportable(false)
                 ->printable(false)
                 ->width(60)
-                // ->buttons(
-                //     Button::make('create'),
-                //     Button::make('export'),
-                //     Button::make('print'),
-                //     Button::make('reset'),
-                //     Button::make('reload')
-                // )
+            // ->buttons(
+            //     Button::make('create'),
+            //     Button::make('export'),
+            //     Button::make('print'),
+            //     Button::make('reset'),
+            //     Button::make('reload')
+            // )
         ];
     }
 

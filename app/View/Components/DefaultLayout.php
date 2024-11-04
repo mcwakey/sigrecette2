@@ -25,6 +25,6 @@ class DefaultLayout extends Component
     public function render()
     {
         // See also starterkit/app/Core/Bootstrap/BootstrapDefault.php
-        return view(config('settings.KT_THEME_LAYOUT_DIR').'._default');
+        return view(config('settings.KT_THEME_LAYOUT_DIR') . '._default');
     }
 }
