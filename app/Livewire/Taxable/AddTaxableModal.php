@@ -62,7 +62,7 @@ class AddTaxableModal extends Component
     public function render()
     {
         $tax_labels = TaxLabel::all();
-        return view('livewire.taxable.add-taxable-modal', compact('tax_labels'));
+        return view('livewire.taxable.add-taxable-modal', ['tax_labels' => $tax_labels]);
     }
 
     public function mount()

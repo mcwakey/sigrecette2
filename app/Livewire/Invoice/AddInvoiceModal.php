@@ -150,7 +150,7 @@ class AddInvoiceModal extends Component
         $year = Year::getActiveYear();
         $months = Constants::getMonths();
 
-        return view('livewire.invoice.add-invoice-modal', compact('taxpayers', 'months', 'year'));
+        return view('livewire.invoice.add-invoice-modal', ['taxpayers' => $taxpayers, 'months' => $months, 'year' => $year]);
     }
 
     public function mount($id = null)
@@ -460,11 +460,7 @@ class AddInvoiceModal extends Component
 
         $this->invoice_id = '';
 
-        if ($this->periodicity == "Mois") {
-            $this->qty = 12;
-        } else {
-            $this->qty = 1;
-        }
+        $this->qty = $this->periodicity == "Mois" ? 12 : 1;
 
 
         $this->taxpayer_taxables = $taxpayer_taxables = TaxpayerTaxable::where('taxpayer_id', $id)->where('billable', 1)->get();

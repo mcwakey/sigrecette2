@@ -41,7 +41,7 @@ class RoleManagementController extends Controller
         $this->authorize('view', $role);
 
         return $dataTable->with('role', $role)
-            ->render('pages/apps.user-management.roles.show', compact('role'));
+            ->render('pages/apps.user-management.roles.show', ['role' => $role]);
     }
 
     /**

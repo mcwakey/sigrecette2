@@ -71,7 +71,7 @@ class AddStockTransferDepositModal extends Component
         ];
 
         if ($this->deposit_mode) {
-            if (trim($this->taxlabel_id) == '' || $this->taxlabel_id == null) {
+            if (trim($this->taxlabel_id) === '' || $this->taxlabel_id == null) {
                 $rules['code'] = 'required';
                 $rules['start_no'] = 'nullable|numeric|min:' . $this->select_transfer->start_no . '|max:' . ($this->select_transfer->end_no - 1);
                 $rules['end_no'] = 'nullable|numeric|min:' . ($this->select_transfer->start_no + 1) . '|max:' . $this->select_transfer->end_no;
@@ -179,7 +179,7 @@ class AddStockTransferDepositModal extends Component
 
         $this->request_nos = StockTransfer::select('trans_no')->groupBy('trans_no')->where('to_user_id', $this->collector_id)->get();
 
-        return view('livewire.stock_transfer.add-stock-transfer-deposit-modal', compact('collectors', 'stock_requests', 'taxlabel_list'));
+        return view('livewire.stock_transfer.add-stock-transfer-deposit-modal', ['collectors' => $collectors, 'stock_requests' => $stock_requests, 'taxlabel_list' => $taxlabel_list]);
     }
 
 
@@ -226,10 +226,8 @@ class AddStockTransferDepositModal extends Component
             $stock_transfers_v = $stock_transfers_r->first()->trans_type ?? "";
             if ($stock_transfers_v == "RECU") {
                 $this->start_no = $select_transfer?->start_no;
-            } else {
-                if ($stock_transfers_v != "") {
-                    $this->start_no = $stock_transfers_r->first()->end_no + 1;
-                }
+            } elseif ($stock_transfers_v != "") {
+                $this->start_no = $stock_transfers_r->first()->end_no + 1;
             }
         }
 
@@ -387,97 +385,86 @@ class AddStockTransferDepositModal extends Component
 
                         $this->dispatch('success', __('Etat de comptabilité mis a jour avec succès'));
                     }
+                } elseif ($this->taxlabel_id !== null && $this->taxlabel_id != '') {
+                    // if ($this->deposit_mode) {
+                    // }
+                    $stock_transfers = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'VENDU')->where('to_user_id', $this->collector_id)->get();
+                    foreach ($stock_transfers as $stock_transfer) {
 
-                } else {
-                    if (isset($this->taxlabel_id) && $this->taxlabel_id != '') {
-                        // if ($this->deposit_mode) {
-                        // }
+                        $payment = Payment::find($stock_transfer->payment_id);
 
-                        $stock_transfers = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'VENDU')->where('to_user_id', $this->collector_id)->get();
-
-
-                        foreach ($stock_transfers as $stock_transfer) {
-
-                            $payment = Payment::find($stock_transfer->payment_id);
-
-                            if ($payment->reference == null || trim($payment->reference) == '') {
-                                $payment->reference = $this->taxlabel_id;
-                                $payment->save();
-                            }
+                        if ($payment->reference == null || trim($payment->reference) === '') {
+                            $payment->reference = $this->taxlabel_id;
+                            $payment->save();
                         }
+                    }
+                } else {
+                    $data = [
+                        'trans_no' => $this->trans_no,
+                        'qty' => $this->qty,
+                        'start_no' => $this->start_no,
+                        'end_no' => $this->end_no,
+                        'last_no' => $this->start_no,
+                        'taxable_id' => $this->taxable_id,
+                        'trans_type' => 'RECU',
+                        'by_user_id' => $this->user_id,
+                        'to_user_id' => $this->collector_id,
+                        'stock_request_id' => $this->stock_request_id
+                    ];
 
-                    } else {
-                        $data = [
-                            'trans_no' => $this->trans_no,
-                            'qty' => $this->qty,
-                            'start_no' => $this->start_no,
-                            'end_no' => $this->end_no,
-                            'last_no' => $this->start_no,
-                            'taxable_id' => $this->taxable_id,
-                            'trans_type' => 'RECU',
-                            'by_user_id' => $this->user_id,
-                            'to_user_id' => $this->collector_id,
-                            'stock_request_id' => $this->stock_request_id
+                    //dd($this->trans_id);
+
+                    if ($this->deposit_mode) {
+                        $paymentData = [
+                            'amount' => $this->total,
+                            'code' => $this->code,
+                            'invoice_type' => Constants::INVOICE_TYPE_COMPTANT,
+                            'payment_type' => 'CASH',
+                            'status' => PaymentStatusEnums::ACCOUNTED,
+                            'description' => "Etat de versement collecteur " . User::find($this->collector_id)?->name,
+                            'user_id' => $this->user_id,
+                            'r_user_id' => $this->collector_id,
+                            'reference' => $this->taxlabel_id ?? " ",
                         ];
 
-                        //dd($this->trans_id);
+                        //dd($paymentData);
 
-                        if ($this->deposit_mode) {
-                            $paymentData = [
-                                'amount' => $this->total,
-                                'code' => $this->code,
-                                'invoice_type' => Constants::INVOICE_TYPE_COMPTANT,
-                                'payment_type' => 'CASH',
-                                'status' => PaymentStatusEnums::ACCOUNTED,
-                                'description' => "Etat de versement collecteur " . User::find($this->collector_id)?->name,
-                                'user_id' => $this->user_id,
-                                'r_user_id' => $this->collector_id,
-                                'reference' => $this->taxlabel_id ?? " ",
-                            ];
+                        $payment = Payment::create($paymentData);
 
-                            //dd($paymentData);
+                        $data['payment_id'] = $payment->id;
+                        $data['trans_type'] = 'VENDU';
 
-                            $payment = Payment::create($paymentData);
+                        $data['period_from'] = $stock_transfers->first()->period_from;
+                        $data['period_to'] = $stock_transfers->first()->period_to;
 
-                            $data['payment_id'] = $payment->id;
-                            $data['trans_type'] = 'VENDU';
+                        $data['last_no'] = $this->end_no > 0 ? $this->end_no + 1 : null;
+                        $data['trans_id'] = $this->trans_id;
+                        $data['code'] = $this->code;
 
-                            $data['period_from'] = $stock_transfers->first()->period_from;
-                            $data['period_to'] = $stock_transfers->first()->period_to;
-
-                            if ($this->end_no > 0) {
-                                $data['last_no'] = $this->end_no + 1;
-                            } else {
-                                $data['last_no'] = null;
-                            }
-                            $data['trans_id'] = $this->trans_id;
-                            $data['code'] = $this->code;
-
-                            if ($this->start_no > 0) {
-                                $this->start_no = $this->end_no + 1;
-                            }
+                        if ($this->start_no > 0) {
+                            $this->start_no = $this->end_no + 1;
                         }
-
-                        $stock_transfer = StockTransfer::create($data);
-                        ///reduce remaining qty
-                        $this->remaining_qty -= $this->qty;
-                        if (!$this->deposit_mode) {
-                            $stock_transfer->trans_id = $stock_transfer->id;
-                            $stock_transfer->save();
-                        }
-
-                        if (!$this->deposit_mode) {
-                            $stock_request = StockRequest::find($this->stock_request_id);
-
-                            $stock_request->last_no = $this->end_no + 1;
-                            $stock_request->save();
-
-                            if ($this->start_no > 0) {
-                                $this->start_no = $this->end_no + 1;
-                            }
-                        }
-
                     }
+
+                    $stock_transfer = StockTransfer::create($data);
+                    ///reduce remaining qty
+                    $this->remaining_qty -= $this->qty;
+                    if (!$this->deposit_mode) {
+                        $stock_transfer->trans_id = $stock_transfer->id;
+                        $stock_transfer->save();
+                    }
+
+                    if (!$this->deposit_mode) {
+                        $stock_request = StockRequest::find($this->stock_request_id);
+
+                        $stock_request->last_no = $this->end_no + 1;
+                        $stock_request->save();
+
+                        if ($this->start_no > 0) {
+                            $this->start_no = $this->end_no + 1;
+                        }
+                    }
+
                 }
 
                 $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('type', 'ACTIVE')->where('to_user_id', $this->collector_id)->get();
@@ -563,7 +550,7 @@ class AddStockTransferDepositModal extends Component
         $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
         $this->edit_mode = true;
         $this->deposit_mode = false;
-        if ($this->edit_mode == true) {
+        if ($this->edit_mode) {
             $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
         }
 

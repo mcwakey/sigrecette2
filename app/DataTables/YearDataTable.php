@@ -31,18 +31,18 @@ class YearDataTable extends DataTable
                 return Carbon::createFromFormat('m', $year->current_month)->monthName;
             })
             ->editColumn('auto_switch', function (Year $year) {
-                return view('pages/years.columns._auto_switch', compact('year'));
+                return view('pages/years.columns._auto_switch', ['year' => $year]);
             })
             ->editColumn('status', function (Year $year) {
                 // return $year->status;
                 // return sprintf('<div class="badge badge-light fw-bold">%s</div>', $year->status);
-                return view('pages/years.columns._status', compact('year'));
+                return view('pages/years.columns._status', ['year' => $year]);
             })
             ->editColumn('created_at', function (Year $year) {
                 return $year->created_at ? $year->created_at->format('d M Y') : null;
             })
             ->addColumn('action', function (Year $year) {
-                return view('pages/years.columns._actions', compact('year'));
+                return view('pages/years.columns._actions', ['year' => $year]);
             })
             ->setRowId('id');
     }
@@ -64,7 +64,7 @@ class YearDataTable extends DataTable
             ->setTableId('years')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
+            ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(1)

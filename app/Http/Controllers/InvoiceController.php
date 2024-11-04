@@ -101,7 +101,7 @@ class InvoiceController extends Controller
                 'state' => $state,
                 'to_paid' => $to_paid,
             ]
-        )->render('pages/invoices.list', compact('zones', 'tax_labels', 'agent_recouvrements'));
+        )->render('pages/invoices.list', ['zones' => $zones, 'tax_labels' => $tax_labels, 'agent_recouvrements' => $agent_recouvrements]);
 
 
     }
@@ -129,7 +129,7 @@ class InvoiceController extends Controller
     {
         //return view('pages/invoices.show', compact('invoice'));
         //return $dataTable->render('pages/invoices.show');
-        return $dataTable->render('pages/invoices.show', compact('invoice'));
+        return $dataTable->render('pages/invoices.show', ['invoice' => $invoice]);
     }
 
     /**

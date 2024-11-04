@@ -49,7 +49,7 @@ class AddTicketModal extends Component
         $tax_labels = TaxLabel::all();
 
 
-        return view('livewire.ticket.add-ticket-modal', compact('tax_labels'));
+        return view('livewire.ticket.add-ticket-modal', ['tax_labels' => $tax_labels]);
     }
 
     public function submit()

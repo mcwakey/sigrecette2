@@ -102,7 +102,7 @@ class AddTaxpayerModal extends Component
             $rules['id_number'] = 'required';
         }
 
-        if (strtolower($this->authorisation) == 'yes') {
+        if (strtolower($this->authorisation) === 'yes') {
             $rules['auth_reference'] = 'required';
         }
 
@@ -123,7 +123,7 @@ class AddTaxpayerModal extends Component
         $zones = Zone::where('status', "ACTIVE")->get();;
         $categories = Category::all();
 
-        return view('livewire.taxpayer.add-taxpayer-modal', compact('cantons', 'genders', 'id_types', 'zones', 'categories'));
+        return view('livewire.taxpayer.add-taxpayer-modal', ['cantons' => $cantons, 'genders' => $genders, 'id_types' => $id_types, 'zones' => $zones, 'categories' => $categories]);
     }
 
     public function submit(Request $request)
@@ -159,11 +159,7 @@ class AddTaxpayerModal extends Component
             ];
 
 
-            if ($this->avatar) {
-                $data['profile_photo_path'] = $this->avatar->store('avatars', 'public');
-            } else {
-                $data['profile_photo_path'] = null;
-            }
+            $data['profile_photo_path'] = $this->avatar ? $this->avatar->store('avatars', 'public') : null;
 
             if (!$this->edit_mode) {
                 $data['password'] = Hash::make($this->email);

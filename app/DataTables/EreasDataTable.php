@@ -37,13 +37,13 @@ class EreasDataTable extends DataTable
                 return $erea->town->canton->name;
             })
             ->editColumn('status', function (Erea $erea) {
-                return view('pages/ereas.columns._status', compact('erea'));
+                return view('pages/ereas.columns._status', ['erea' => $erea]);
             })
             ->editColumn('created_at', function (Erea $erea) {
                 return $erea->created_at->format('d M Y');
             })
             ->addColumn('action', function (Erea $erea) {
-                return view('pages/ereas.columns._actions', compact('erea'));
+                return view('pages/ereas.columns._actions', ['erea' => $erea]);
             })
             ->setRowId('id');
     }
@@ -65,7 +65,7 @@ class EreasDataTable extends DataTable
             ->setTableId('ereas')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
+            ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(3)

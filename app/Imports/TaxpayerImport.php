@@ -63,7 +63,7 @@ class TaxpayerImport implements ToModel, WithProgressBar, WithBatchInserts, With
         $category = isset($row['categ_activite']) ? Category::firstOrCreate(['name' => $row['categ_activite']]) : Category::firstOrCreate(['name' => 'Non défini']);
         $activity = Activity::firstOrCreate(['name' => $row["activite"], 'category_id' => $category->id]);
         $taxpayer = new Taxpayer([
-            'file_no' => $row['n°'] ?? fake()->randomNumber(3, 1, 10) . Str::random(5) . fake()->randomNumber(3, 0, 9),
+            'file_no' => $row['n°'] ?? fake()->randomNumber(3, 1) . Str::random(5) . fake()->randomNumber(3, 0),
             'name' => $row['nom'] . " " . $row['prenoms'],
             'email' => isset($row['email']) ? $row['email'] : "",
             'email_verified_at' => now(),

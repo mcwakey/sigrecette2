@@ -45,14 +45,14 @@ class RecoveriesDataTable extends DataTable
             // })
 
             ->editColumn('reference', function (Payment $payment) {
-                return view('pages/recoveries.columns._reference', compact('payment'));
+                return view('pages/recoveries.columns._reference', ['payment' => $payment]);
             })
             ->editColumn('tax_labels.code', function (Payment $payment) {
                 return $payment->code ?? '';
             })
             ->editColumn('taxpayers.name', function (Payment $payment) {
                 //$invoice = $payment->invoice;
-                return view('pages/recoveries.columns._invoice', compact('payment'));
+                return view('pages/recoveries.columns._invoice', ['payment' => $payment]);
             })
             ->editColumn('amount', function (Payment $payment) {
                 return format_amount($payment->amount);
@@ -62,13 +62,13 @@ class RecoveriesDataTable extends DataTable
             })
             ->editColumn('status', function (Payment $payment) {
                 //return $payment->remaining_amount;
-                return view('pages/recoveries.columns._status', compact('payment'));
+                return view('pages/recoveries.columns._status', ['payment' => $payment]);
             })
             ->editColumn('notes', function (Payment $payment) {
                 return $payment->notes;
             })
             ->addColumn('action', function (Payment $payment) {
-                return view('pages/recoveries.columns._actions', compact('payment'));
+                return view('pages/recoveries.columns._actions', ['payment' => $payment]);
             })
             ->setRowId('uuid');
     }
@@ -112,7 +112,7 @@ class RecoveriesDataTable extends DataTable
             ->setTableId('recoveries-table')
             ->columns($this->getColumns())
             ->minifiedAjax(route('recoveries.index', request()->all()))
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
+            ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(7)
@@ -144,15 +144,11 @@ class RecoveriesDataTable extends DataTable
         ];
         $columns = array_map(function ($column) {
 
-            if ($this->state != PaymentStatusEnums::CANCELED) {
-                if (in_array($column->name, ['action'])) {
-                    $column->visible(false);
-                }
+            if ($this->state != PaymentStatusEnums::CANCELED && $column->name == 'action') {
+                $column->visible(false);
             }
-            if ($this->state == null) {
-                if (in_array($column->name, ['notes'])) {
-                    $column->visible(false);
-                }
+            if ($this->state == null && $column->name == 'notes') {
+                $column->visible(false);
             }
             return $column;
         }, $columns);

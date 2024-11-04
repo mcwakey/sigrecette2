@@ -78,20 +78,12 @@ class CollectorsDataTable extends DataTable
                 return $rc_total;
             })
             ->editColumn('vv_qty', function (StockTransfer $stock_transfer) {
-                if (!$stock_transfer->vv_qty) {
-                    $vv_qty = "";
-                } else {
-                    $vv_qty = $stock_transfer->vv_qty;
-                }
+                $vv_qty = $stock_transfer->vv_qty ? $stock_transfer->vv_qty : "";
 
                 return $vv_qty;
             })
             ->editColumn('vv_total', function (StockTransfer $stock_transfer) {
-                if (!$stock_transfer->vv_qty) {
-                    $vv_total = "";
-                } else {
-                    $vv_total = $stock_transfer->vv_qty * $stock_transfer->taxable->tariff;
-                }
+                $vv_total = $stock_transfer->vv_qty ? $stock_transfer->vv_qty * $stock_transfer->taxable->tariff : "";
 
                 return $vv_total;
             })
@@ -117,11 +109,7 @@ class CollectorsDataTable extends DataTable
                 //     $rd_total = $stock_transfer->rd_qty * $stock_transfer->taxable->tariff;
                 // }
 
-                if (is_null($stock_transfer->rd_qty)) {
-                    $rd_total = null;
-                } else {
-                    $rd_total = $stock_transfer->rd_qty * $stock_transfer->taxable->tariff;
-                }
+                $rd_total = is_null($stock_transfer->rd_qty) ? null : $stock_transfer->rd_qty * $stock_transfer->taxable->tariff;
 
                 return $rd_total;
             })
@@ -142,16 +130,16 @@ class CollectorsDataTable extends DataTable
                 // return view('pages.stock_transfers.columns._collector', compact('stock_transfer'));
             })
             ->editColumn('stock_transfers.type', function (StockTransfer $stock_transfer) {
-                return view('pages.stock_transfers.columns._status', compact('stock_transfer'));
+                return view('pages.stock_transfers.columns._status', ['stock_transfer' => $stock_transfer]);
                 //return $stock_request->type;
             })
             ->editColumn('period', function (StockTransfer $stock_transfer) {
                 // return $stock_transfer->period_from->format('d M Y')." - ".$stock_transfer->period_to->format('d M Y');
                 // return $stock_transfer->period_from." - ".$stock_transfer->period_to;
-                return view('pages.stock_transfers.columns._collector', compact('stock_transfer'));
+                return view('pages.stock_transfers.columns._collector', ['stock_transfer' => $stock_transfer]);
             })
             ->addColumn('action', function (StockTransfer $stock_transfer) {
-                return view('pages.stock_transfers.columns._collector_actions', compact('stock_transfer'));
+                return view('pages.stock_transfers.columns._collector_actions', ['stock_transfer' => $stock_transfer]);
             })
             ->setRowId('id');
     }
@@ -209,7 +197,7 @@ class CollectorsDataTable extends DataTable
             ->setTableId('stock_transfers-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
+            ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0, 'desc')

@@ -104,7 +104,7 @@ class AddPaymentModal extends Component
         $paidAndCodeArray = $this->paidAndCodeArray;
 
 
-        return view('livewire.payment.add-payment-modal', compact('taxpayers', 'paidAndCodeArray', 'invoice'));
+        return view('livewire.payment.add-payment-modal', ['taxpayers' => $taxpayers, 'paidAndCodeArray' => $paidAndCodeArray, 'invoice' => $invoice]);
     }
 
     public function submit()
@@ -129,10 +129,8 @@ class AddPaymentModal extends Component
 
             if (($this->paid + $this->amount) <= $invoice->amount) {
 
-                if ($this->code != null) {
-                    if ($this->amount >= $this->paidAndCodeArray[$this->code]['amount']) {
-                        $this->amount = $this->paidAndCodeArray[$this->code]['amount'];
-                    }
+                if ($this->code != null && $this->amount >= $this->paidAndCodeArray[$this->code]['amount']) {
+                    $this->amount = $this->paidAndCodeArray[$this->code]['amount'];
                 }
 
                 $paymentData = [
@@ -173,11 +171,7 @@ class AddPaymentModal extends Component
                 }
 
 
-                if ($this->amount + $this->paid >= $this->bill) {
-                    $paystatus = "PAID";
-                } else {
-                    $paystatus = "PART PAID";
-                }
+                $paystatus = $this->amount + $this->paid >= $this->bill ? "PAID" : "PART PAID";
                 $data = [
                     'pay_status' => $paystatus,
                 ];
@@ -272,11 +266,7 @@ class AddPaymentModal extends Component
             ->first();
         Payment::destroy($id);
         $paid = Payment::getPaid($invoice->invoice_no);
-        if ($paid == 0) {
-            $paystatus = PaymentStatusEnums::PENDING;
-        } else {
-            $paystatus = "PART PAID";
-        }
+        $paystatus = $paid == 0 ? PaymentStatusEnums::PENDING : "PART PAID";
         $invoice->pay_status = $paystatus;
         $invoice->save();
         $this->dispatchMessage('Paiement', 'delete');

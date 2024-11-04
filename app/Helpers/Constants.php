@@ -115,23 +115,21 @@ class Constants
             } elseif (request()->input('state') == self::INVOICE_STATE_APPROVE_KEY) {
                 return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::REDUCE];
             }
-        } else {
-            if (request()->has('delivery')) {
-                if (request()->input('delivery') == Constants::INVOICE_DELIVERY_NON_LIV_KEY) {
-                    return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::ADDDELIVERY];
+        } elseif (request()->has('delivery')) {
+            if (request()->input('delivery') == Constants::INVOICE_DELIVERY_NON_LIV_KEY) {
+                return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::ADDDELIVERY];
 
-                } elseif (request()->input('delivery') == Constants::INVOICE_DELIVERY_LIV_KEY && request()->input('to_paid') == "1") {
-                    return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::PAYMENT];
-                } elseif (request()->input('delivery') == Constants::INVOICE_DELIVERY_LIV_KEY) {
-                    return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::REDUCE, InvoiceActionsEnums::RELAUNCH];
-                }
-            } else {
-                if (request()->input('type') == Constants::INVOICE_TYPE_TITRE_KEY) {
-                    return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::ZEROEDITION, InvoiceActionsEnums::PRINT];
-                }
-                if (request()->input('type') == Constants::INVOICE_TYPE_COMPTANT_KEY) {
-                    return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::REDUCE, InvoiceActionsEnums::PRINT, InvoiceActionsEnums::ADDORNO, InvoiceActionsEnums::EDITSTATUT];
-                }
+            } elseif (request()->input('delivery') == Constants::INVOICE_DELIVERY_LIV_KEY && request()->input('to_paid') == "1") {
+                return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::PAYMENT];
+            } elseif (request()->input('delivery') == Constants::INVOICE_DELIVERY_LIV_KEY) {
+                return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::REDUCE, InvoiceActionsEnums::RELAUNCH];
+            }
+        } else {
+            if (request()->input('type') == Constants::INVOICE_TYPE_TITRE_KEY) {
+                return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::ZEROEDITION, InvoiceActionsEnums::PRINT];
+            }
+            if (request()->input('type') == Constants::INVOICE_TYPE_COMPTANT_KEY) {
+                return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::REDUCE, InvoiceActionsEnums::PRINT, InvoiceActionsEnums::ADDORNO, InvoiceActionsEnums::EDITSTATUT];
             }
         }
 

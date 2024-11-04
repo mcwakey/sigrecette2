@@ -53,10 +53,8 @@ class AddStockRequestModal extends Component
             'start_no' => 'nullable|numeric|min:0|max:' . (intval($this->end_no) - 1),
             'end_no' => 'nullable|numeric|min:' . (intval($this->start_no) + 1),
             'qty' => ['required', 'numeric', 'min:1', function ($attribute, $value, $fail) {
-                if (!is_null($this->start_no) && !is_null($this->end_no)) {
-                    if ($value !== intval($this->end_no) - intval($this->start_no) + 1) {
-                        $fail('Les valeurs saisies dans n° de debut ou n° de fin sont incorrectes.');
-                    }
+                if (!is_null($this->start_no) && !is_null($this->end_no) && $value !== intval($this->end_no) - intval($this->start_no) + 1) {
+                    $fail('Les valeurs saisies dans n° de debut ou n° de fin sont incorrectes.');
                 }
             }],
         ];
@@ -77,7 +75,7 @@ class AddStockRequestModal extends Component
 
         $this->user_id = Auth::id();
         $this->stock_requests = StockRequest::where('req_no', $this->req_no)->where('req_type', 'DEMANDE')->get();
-        return view('livewire.stock_request.add-stock-request-modal', compact('taxlabels'));
+        return view('livewire.stock_request.add-stock-request-modal', ['taxlabels' => $taxlabels]);
     }
 
     public function updatedTaxlabelId($value)

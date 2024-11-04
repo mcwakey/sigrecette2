@@ -38,7 +38,7 @@ class ZonesController extends Controller
      */
     public function show(Zone $zone, ZonesDataTable $zonesDataTable)
     {
-        return $zonesDataTable->with('id', $zone->id)->render('pages/zones.show', compact('zone'));
+        return $zonesDataTable->with('id', $zone->id)->render('pages/zones.show', ['zone' => $zone]);
     }
 
     /**

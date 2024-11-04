@@ -44,7 +44,7 @@ class AddUserCollectorModal extends Component
 
         $zones = Zone::all();
 
-        return view('livewire.user.add-user-collector-modal', compact('zones'));
+        return view('livewire.user.add-user-collector-modal', ['zones' => $zones]);
     }
 
     public function submit()
@@ -58,7 +58,7 @@ class AddUserCollectorModal extends Component
 
         if (in_array(__($this->role), $roleNeedZone)) {
             $this->rules['zone_id'] = 'required|integer';
-        } else if ($this->zone_id) {
+        } elseif ($this->zone_id) {
             $this->zone_id = null;
         }
 
@@ -85,7 +85,7 @@ class AddUserCollectorModal extends Component
                     $user->$k = $v;
                 }
                 $user->save();
-            } else if ($this->edit_mode) {
+            } elseif ($this->edit_mode) {
                 $this->dispatch('error', Constants::NOT_PERMISSION_TO_PERFORM_ACTION);
                 return false;
             }
@@ -122,7 +122,7 @@ class AddUserCollectorModal extends Component
         // Prevent deletion of current user
         if ($id == Auth::id()) {
             $this->dispatch('error', 'La session courant ne peut etre supprimé.');
-            return;
+            return null;
         }
 
         // Delete the user record with the specified ID
@@ -130,6 +130,7 @@ class AddUserCollectorModal extends Component
 
         // Emit a success event with a message
         $this->dispatch('success', 'Collecteur supprimer avec succès');
+        return null;
     }
 
     public function updateUser($id)
@@ -153,6 +154,7 @@ class AddUserCollectorModal extends Component
             $this->dispatch('success', 'Collecteur désactiver avec succès');
             return true;
         }
+        return null;
 
     }
 

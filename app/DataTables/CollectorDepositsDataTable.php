@@ -80,20 +80,12 @@ class CollectorDepositsDataTable extends DataTable
             //     return $total;
             // })
             ->editColumn('qty', function (StockTransfer $stock_transfer) {
-                if ($stock_transfer->trans_type == "VENDU") {
-                    $qty = $stock_transfer->qty;
-                } else {
-                    $qty = "";
-                }
+                $qty = $stock_transfer->trans_type == "VENDU" ? $stock_transfer->qty : "";
 
                 return $qty;
             })
             ->editColumn('total', function (StockTransfer $stock_transfer) {
-                if ($stock_transfer->trans_type == "VENDU") {
-                    $total = $stock_transfer->qty * $stock_transfer->taxable->tariff;;
-                } else {
-                    $total = "";
-                }
+                $total = $stock_transfer->trans_type == "VENDU" ? $stock_transfer->qty * $stock_transfer->taxable->tariff : "";
 
                 return $total;
             })
@@ -131,7 +123,7 @@ class CollectorDepositsDataTable extends DataTable
                 return $stock_transfer->user->name ?? '-';
             })
             ->editColumn('stock_transfers.type', function (StockTransfer $stock_transfer) {
-                return view('pages.stock_transfers.columns._status', compact('stock_transfer'));
+                return view('pages.stock_transfers.columns._status', ['stock_transfer' => $stock_transfer]);
                 //return $stock_request->type;
             })
             ->editColumn('payments.reference', function (StockTransfer $stock_transfer) {
@@ -139,7 +131,7 @@ class CollectorDepositsDataTable extends DataTable
                 // return view('pages.collector_deposits.columns._seize', compact('collector_deposit'));
             })
             ->addColumn('action', function (StockTransfer $stock_transfer) {
-                return view('pages.collector_deposits.columns._actions', compact('stock_transfer'));
+                return view('pages.collector_deposits.columns._actions', ['stock_transfer' => $stock_transfer]);
             })
             ->setRowId('id');
     }
@@ -179,7 +171,7 @@ class CollectorDepositsDataTable extends DataTable
             // ->columns($this->getColumns())
             ->columns($columns)
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
+            ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0, 'desc')

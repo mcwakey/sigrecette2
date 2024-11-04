@@ -38,7 +38,7 @@ class TaxLabelController extends Controller
      */
     public function show(TaxLabel $taxlabel)
     {
-        return view('pages/tax_labels.show', compact('tax_label'));
+        return view('pages/tax_labels.show', ['tax_label' => $tax_label]);
     }
 
     /**

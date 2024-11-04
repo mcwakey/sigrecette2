@@ -59,7 +59,7 @@ class ExportRecoveriesDataTable extends DataTable
                 return format_amount($payment->remaining_amount);
             })
             ->editColumn('status', function (Payment $payment) {
-                return view('pages/recoveries.columns._status', compact('payment'));
+                return view('pages/recoveries.columns._status', ['payment' => $payment]);
             })
             ->setRowId('uuid');
     }
@@ -111,7 +111,7 @@ class ExportRecoveriesDataTable extends DataTable
             ->setTableId('recoveries-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
+            ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(7)

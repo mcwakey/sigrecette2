@@ -70,10 +70,8 @@ class AddStockTransferModal extends Component
             'start_no' => 'nullable|numeric|min:' . $this->select_stock->start_no . '|max:' . ($this->select_stock->end_no - 1),
             'end_no' => 'nullable|numeric|min:' . ($this->select_stock->start_no + 1) . '|max:' . $this->select_stock->end_no,
             'qty' => ['required', 'numeric', 'min:1', function ($attribute, $value, $fail) {
-                if (!is_null($this->start_no) && !is_null($this->end_no)) {
-                    if ($value !== intval($this->end_no) - intval($this->start_no) + 1) {
-                        $fail('Les valeurs saisies dans n° de debut ou n° de fin sont incorrectes.');
-                    }
+                if (!is_null($this->start_no) && !is_null($this->end_no) && $value !== intval($this->end_no) - intval($this->start_no) + 1) {
+                    $fail('Les valeurs saisies dans n° de debut ou n° de fin sont incorrectes.');
                 }
             }],
         ];
@@ -158,7 +156,7 @@ class AddStockTransferModal extends Component
 
 
         // dd($taxlabel_list);
-        return view('livewire.stock_transfer.add-stock-transfer-modal', compact('collectors', 'taxlabel_list', 'request_nos'));
+        return view('livewire.stock_transfer.add-stock-transfer-modal', ['collectors' => $collectors, 'taxlabel_list' => $taxlabel_list, 'request_nos' => $request_nos]);
     }
 
 
@@ -390,13 +388,9 @@ class AddStockTransferModal extends Component
                         $data['period_from'] = $stock_transfers->first()->period_from;
                         $data['period_to'] = $stock_transfers->first()->period_to;
 
-                        dd($data['period_from'], $data['period_to']);
 
-                        if ($this->end_no > 0) {
-                            $data['last_no'] = $this->end_no + 1;
-                        } else {
-                            $data['last_no'] = null;
-                        }
+
+                        $data['last_no'] = $this->end_no > 0 ? $this->end_no + 1 : null;
                         $data['trans_id'] = $this->trans_id;
                         $data['code'] = $this->code;
 
@@ -528,7 +522,7 @@ class AddStockTransferModal extends Component
         $this->edit_mode = true;
         $this->deposit_mode = false;
 
-        if ($this->edit_mode == true) {
+        if ($this->edit_mode) {
             //$this->stock_transfers = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
             $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
         }

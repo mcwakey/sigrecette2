@@ -53,7 +53,7 @@ class ExportController extends Controller
                     'startDate' => $startDate,
                     'endDate' => $endDate,
                 ]
-            )->render('pages/export.taxpayers.list', compact('zones', 'categories', 'towns', 'cantons', 'activities'));
+            )->render('pages/export.taxpayers.list', ['zones' => $zones, 'categories' => $categories, 'towns' => $towns, 'cantons' => $cantons, 'activities' => $activities]);
         } elseif ($export_type == ExportTypeEnums::INVOICE) {
             $startDate = $validatedData['s_date'] ?? Carbon::parse("{$year}-01-01 00:00:00");
             $endDate = $validatedData['e_date'] ?? Carbon::parse("{$year}-12-31 23:59:59");
@@ -65,7 +65,7 @@ class ExportController extends Controller
                     'startDate' => $startDate,
                     'endDate' => $endDate,
                 ]
-            )->render('pages/export.invoices.list', compact('zones', 'tax_labels'));
+            )->render('pages/export.invoices.list', ['zones' => $zones, 'tax_labels' => $tax_labels]);
 
 
         } else {
@@ -76,7 +76,7 @@ class ExportController extends Controller
                     'startDate' => $startDate,
                     'endDate' => $endDate,
                 ]
-            )->render('pages/export.recoveries.list', compact('tax_labels'));
+            )->render('pages/export.recoveries.list', ['tax_labels' => $tax_labels]);
         }
 
     }

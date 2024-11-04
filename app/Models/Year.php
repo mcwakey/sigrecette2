@@ -48,7 +48,7 @@ class Year extends Model
                 $activeYear = Year::autoUpdateActiveYear($activeYear);
             }
             if (
-                (intval($activeYear->name) == intval($currentYear))
+                (intval($activeYear->name) === intval($currentYear))
                 && $activeYear->current_month != $current_mounth) {
                 $activeYear = Year::autoUpdateOrCreateCurrentMonth($current_mounth, $activeYear);
             }

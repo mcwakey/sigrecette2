@@ -174,7 +174,7 @@ class AddInvoiceNoTaxpayerModal extends Component
         $this->start_month = $monthNumber;
 
 
-        return view('livewire.invoice.add-invoice-no-taxpayer-modal', compact('taxpayers', 'taxlabels', 'genders', 'id_types', 'months', 'year'));
+        return view('livewire.invoice.add-invoice-no-taxpayer-modal', ['taxpayers' => $taxpayers, 'taxlabels' => $taxlabels, 'genders' => $genders, 'id_types' => $id_types, 'months' => $months, 'year' => $year]);
     }
 
     // public function loadDrop($value)
@@ -215,11 +215,7 @@ class AddInvoiceNoTaxpayerModal extends Component
         if ($taxables->tariff_type != 'FIXED') {
             $this->tariff_type = '%';
         }
-        if ($taxables->tariff == 0) {
-            $this->tarisIsNull = true;
-        } else {
-            $this->tarisIsNull = false;
-        }
+        $this->tarisIsNull = $taxables->tariff == 0;
         $this->taxpayer_taxable_id = $taxables->id;
 
         $this->taxlabel_name = $taxables->name;
@@ -538,11 +534,7 @@ class AddInvoiceNoTaxpayerModal extends Component
     {
         $taxable = $this->taxpayer_taxable_id != null ? Taxable::find($this->taxpayer_taxable_id) : null;
         if ($taxable) {
-            if ($taxable->tariff == 0) {
-                $this->tarisIsNull = true;
-            } else {
-                $this->tarisIsNull = false;
-            }
+            $this->tarisIsNull = $taxable->tariff == 0;
         }
         if ($this->tarisIsNull) {
             $this->s_tariff = $this->tariff;

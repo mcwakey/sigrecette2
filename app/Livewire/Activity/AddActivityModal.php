@@ -39,7 +39,7 @@ class AddActivityModal extends Component
     {
         $categories = Category::all();
 
-        return view('livewire.activity.add-activity-modal', compact('categories'));
+        return view('livewire.activity.add-activity-modal', ['categories' => $categories]);
     }
 
     public function submit()

@@ -38,7 +38,7 @@ class CategoriesController extends Controller
      */
     public function show(Category $category, CategoryDataTable $categoriesDataTable)
     {
-        return $categoriesDataTable->with('id', $category->id)->render('pages/categories.show', compact('category'));
+        return $categoriesDataTable->with('id', $category->id)->render('pages/categories.show', ['category' => $category]);
     }
 
     /**

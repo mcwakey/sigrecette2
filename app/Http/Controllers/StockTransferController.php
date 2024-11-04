@@ -20,7 +20,7 @@ class StockTransferController extends Controller
             ->where('roles.name', 'collecteur')
             ->get();
 
-        return $dataTable->render('pages/stock_transfers.list', compact('collectors'));
+        return $dataTable->render('pages/stock_transfers.list', ['collectors' => $collectors]);
     }
 
     /**
@@ -45,7 +45,7 @@ class StockTransferController extends Controller
         //                             ->where('roles.name', 'collecteur')
         //                             ->get();
 
-        return $dataTable->with('id', $user->id)->with('dateFrom', $dateFrom)->render('pages/stock_transfers.show', compact('user', 'dateFrom', 'dateTo'));
+        return $dataTable->with('id', $user->id)->with('dateFrom', $dateFrom)->render('pages/stock_transfers.show', ['user' => $user, 'dateFrom' => $dateFrom, 'dateTo' => $dateTo]);
     }
 }
 

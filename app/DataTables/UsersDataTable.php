@@ -24,7 +24,7 @@ class UsersDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->rawColumns(['user', 'last_login_at'])
             ->editColumn('user', function (User $user) {
-                return view('pages/apps.user-management.users.columns._user', compact('user'));
+                return view('pages/apps.user-management.users.columns._user', ['user' => $user]);
             })
             ->editColumn('role', function (User $user) {
                 return ucwords(__($user->roles->first()?->name));
@@ -36,7 +36,7 @@ class UsersDataTable extends DataTable
                 return \Carbon\Carbon::parse($user->created_at)->locale('fr')->isoFormat('LL');
             })
             ->addColumn('action', function (User $user) {
-                return view('pages/apps.user-management.users.columns._actions', compact('user'));
+                return view('pages/apps.user-management.users.columns._actions', ['user' => $user]);
             })
             ->setRowId('id');
     }
@@ -89,7 +89,7 @@ class UsersDataTable extends DataTable
             ->setTableId('users-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
+            ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(2)
@@ -113,10 +113,8 @@ class UsersDataTable extends DataTable
                 ->width(60)
         ];
         $columns = array_map(function ($column) {
-            if ($this->type) {
-                if (in_array($column->name, ['role', 'last_login_at'])) {
-                    $column->visible(false);
-                }
+            if ($this->type && in_array($column->name, ['role', 'last_login_at'])) {
+                $column->visible(false);
             }
 
 

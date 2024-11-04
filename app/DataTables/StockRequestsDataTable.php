@@ -48,12 +48,7 @@ class StockRequestsDataTable extends DataTable
                 return $stock_request->req_desc;
             })
             ->editColumn('taxables.tariff', function (StockRequest $stock_request) {
-                if ($stock_request->taxable->tariff > 0) {
-                    //Todo format all tarif in app
-                    $tariff = number_format($stock_request->taxable->tariff);
-                } else {
-                    $tariff = "";
-                }
+                $tariff = $stock_request->taxable->tariff > 0 ? number_format($stock_request->taxable->tariff) : "";
                 return $tariff;
             })
             // ->editColumn('stock_request', function (StockRequest $stock_request) {
@@ -89,20 +84,12 @@ class StockRequestsDataTable extends DataTable
                 // } else {
                 //     $total =  "";
                 // }
-                if ($pc_total > 0) {
-                    $pc_total = number_format($pc_total, 2);
-                } else {
-                    $pc_total = "";
-                }
+                $pc_total = $pc_total > 0 ? number_format($pc_total, 2) : "";
 
                 return $pc_total;
             })
             ->editColumn('vv_qty', function (StockRequest $stock_request) {
-                if (!$stock_request->pc_qty || !$stock_request->sd_qty) {
-                    $vv_qty = "";
-                } else {
-                    $vv_qty = $stock_request->pc_qty - $stock_request->sd_qty;
-                }
+                $vv_qty = !$stock_request->pc_qty || !$stock_request->sd_qty ? "" : $stock_request->pc_qty - $stock_request->sd_qty;
 
                 return $vv_qty;
             })
@@ -116,11 +103,7 @@ class StockRequestsDataTable extends DataTable
                 return $vv_total;
             })
             ->editColumn('sd_qty', function (StockRequest $stock_request) {
-                if (!$stock_request->pc_qty || !$stock_request->sd_qty) {
-                    $sd_qty = "";
-                } else {
-                    $sd_qty = $stock_request->sd_qty;
-                }
+                $sd_qty = !$stock_request->pc_qty || !$stock_request->sd_qty ? "" : $stock_request->sd_qty;
                 return $sd_qty;
             })
             ->editColumn('sd_total', function (StockRequest $stock_request) {
@@ -138,11 +121,11 @@ class StockRequestsDataTable extends DataTable
                 return $stock_request->user->name;
             })
             ->editColumn('stock_requests.type', function (StockRequest $stock_request) {
-                return view('pages.stock_requests.columns._status', compact('stock_request'));
+                return view('pages.stock_requests.columns._status', ['stock_request' => $stock_request]);
                 //return $stock_request->type;
             })
             ->addColumn('action', function (StockRequest $stock_request) {
-                return view('pages.stock_requests.columns._actions', compact('stock_request'));
+                return view('pages.stock_requests.columns._actions', ['stock_request' => $stock_request]);
             })
             ->setRowId('id');
     }
@@ -194,7 +177,7 @@ class StockRequestsDataTable extends DataTable
             ->setTableId('stock_requests-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
+            ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0, 'desc')

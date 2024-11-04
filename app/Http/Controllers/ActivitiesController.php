@@ -38,7 +38,7 @@ class ActivitiesController extends Controller
      */
     public function show(Activity $activity, ActivityDataTable $activitiesDataTable)
     {
-        return $activitiesDataTable->with('id', $activity->id)->render('pages/activities.show', compact('activity'));
+        return $activitiesDataTable->with('id', $activity->id)->render('pages/activities.show', ['activity' => $activity]);
     }
 
     /**

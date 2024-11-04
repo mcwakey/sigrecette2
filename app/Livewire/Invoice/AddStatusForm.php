@@ -62,20 +62,16 @@ class AddStatusForm extends Component
     {
         $this->validate();
         $invoice = Invoice::find($this->invoice_id);
-        if ($invoice && $invoice->reduce_amount == '') {
-            if (($this->status == InvoiceStatusEnums::APPROVED || $this->status == InvoiceStatusEnums::APPROVED_CANCELLATION || $this->status == InvoiceStatusEnums::REJECTED)) {
-                if ($invoice->type == Constants::INVOICE_TYPE_TITRE && $invoice->edition_state != "bPRINT") {
-                    if (!$invoice->edition_state) {
-                        $this->error_message = "Veuillez au préalable imprimer l'avis.";
-                    } elseif ($invoice->edition_state == "PRINT") {
-                        $this->error_message = "Veuillez au préalable ajouter l'avis à un bordereau.";
-                    } else {
-                        $this->error_message = "Veuillez au préalable imprimer l'avis.";
-                    }
-                    $this->addError('status', $this->error_message);
-
+        if ($invoice && $invoice->reduce_amount == '' && ($this->status == InvoiceStatusEnums::APPROVED || $this->status == InvoiceStatusEnums::APPROVED_CANCELLATION || $this->status == InvoiceStatusEnums::REJECTED)) {
+            if ($invoice->type == Constants::INVOICE_TYPE_TITRE && $invoice->edition_state != "bPRINT") {
+                if (!$invoice->edition_state) {
+                    $this->error_message = "Veuillez au préalable imprimer l'avis.";
+                } elseif ($invoice->edition_state == "PRINT") {
+                    $this->error_message = "Veuillez au préalable ajouter l'avis à un bordereau.";
+                } else {
+                    $this->error_message = "Veuillez au préalable imprimer l'avis.";
                 }
-
+                $this->addError('status', $this->error_message);
 
             }
         }
@@ -115,11 +111,7 @@ class AddStatusForm extends Component
                     foreach ($payments as $payment) {
                         Payment::create($payment);
                     }
-                    if ($invoice->reduce_amount == $invoice->amount) {
-                        $invoice->pay_status = "PAID";
-                    } else {
-                        $invoice->pay_status = "PART PAID";
-                    }
+                    $invoice->pay_status = $invoice->reduce_amount == $invoice->amount ? "PAID" : "PART PAID";
                     $this->status = InvoiceStatusEnums::APPROVED_CANCELLATION;
                 }
 
@@ -145,14 +137,10 @@ class AddStatusForm extends Component
                         if ($invoice->type == Constants::INVOICE_TYPE_COMPTANT) {
                             $invoice->setDeliveryToNow($this->status);
                             $invoice->save();
+                        } elseif ($this->status == InvoiceStatusEnums::APPROVED) {
+                            $invoice->submitToState("submit_for_approved");
                         } else {
-
-                            if ($this->status == InvoiceStatusEnums::APPROVED) {
-                                $invoice->submitToState("submit_for_approved");
-                            } else {
-                                $invoice->submitToState("submit_for_approved_cancellation");
-                            }
-
+                            $invoice->submitToState("submit_for_approved_cancellation");
                         }
 
                         break;

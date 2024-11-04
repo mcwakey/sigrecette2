@@ -27,13 +27,13 @@ class TownsDataTable extends DataTable
                 return $town->canton->name;
             })
             ->editColumn('status', function (Town $town) {
-                return view('pages/towns.columns._status', compact('town'));
+                return view('pages/towns.columns._status', ['town' => $town]);
             })
             ->editColumn('created_at', function (Town $town) {
                 return $town->created_at->format('d M Y');
             })
             ->addColumn('action', function (Town $town) {
-                return view('pages/towns.columns._actions', compact('town'));
+                return view('pages/towns.columns._actions', ['town' => $town]);
             })
             ->setRowId('id');
     }
@@ -55,7 +55,7 @@ class TownsDataTable extends DataTable
             ->setTableId('towns')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
+            ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(3)

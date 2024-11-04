@@ -48,7 +48,7 @@ class AddUserModal extends Component
         $roles = Role::all();
         $zones = Zone::all();
 
-        return view('livewire.user.add-user-modal', compact('roles', 'zones'));
+        return view('livewire.user.add-user-modal', ['roles' => $roles, 'zones' => $zones]);
     }
 
     public function submit()
@@ -61,7 +61,7 @@ class AddUserModal extends Component
 
         if (in_array(__($this->role), $roleNeedZone)) {
             $this->rules['zone_id'] = 'required|integer';
-        } else if ($this->zone_id && $this->role != 'regisseur') {
+        } elseif ($this->zone_id && $this->role != 'regisseur') {
             // $this->zone_id =  null;
         }
 
@@ -72,11 +72,7 @@ class AddUserModal extends Component
             // Prepare the data for creating a new user
             $data = ['name' => $this->name,];
 
-            if ($this->avatar) {
-                $data['profile_photo_path'] = $this->avatar->store('avatars', 'public');
-            } else {
-                $data['profile_photo_path'] = null;
-            }
+            $data['profile_photo_path'] = $this->avatar ? $this->avatar->store('avatars', 'public') : null;
 
             if (!$this->edit_mode) {
                 $data['password'] = Hash::make($this->email);
@@ -98,7 +94,7 @@ class AddUserModal extends Component
                     $user->$k = $v;
                 }
                 $user->save();
-            } else if ($this->edit_mode) {
+            } elseif ($this->edit_mode) {
                 $this->dispatch('error', Constants::NOT_PERMISSION_TO_PERFORM_ACTION);
                 return false;
             }
@@ -135,7 +131,7 @@ class AddUserModal extends Component
         // Prevent deletion of current user
         if ($id == Auth::id()) {
             $this->dispatch('error', 'La session courant ne peut etre supprimé.');
-            return;
+            return null;
         }
 
         // Delete the user record with the specified ID
@@ -143,6 +139,7 @@ class AddUserModal extends Component
 
         // Emit a success event with a message
         $this->dispatch('success', 'Utilisateur supprimer avec succès.');
+        return null;
     }
 
     public function updateUser($id)
@@ -168,6 +165,7 @@ class AddUserModal extends Component
             $this->dispatch('success', 'Utilisateur désactiver avec succès.');
             return true;
         }
+        return null;
 
     }
 

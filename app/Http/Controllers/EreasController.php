@@ -40,7 +40,7 @@ class EreasController extends Controller
     {
         //return view('pages/invoices.show', compact('invoice'));
         //return $dataTable->render('pages/invoices.show');
-        return $dataTable->render('pages/towns.show', compact('erea'));
+        return $dataTable->render('pages/towns.show', ['erea' => $erea]);
     }
 
     /**

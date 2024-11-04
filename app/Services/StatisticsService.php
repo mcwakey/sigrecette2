@@ -241,7 +241,7 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
             $paid = Payment::where('invoice_id', $invoice->invoice_no)
                 ->where('status', PaymentStatusEnums::ACCOUNTED)
                 ->sum('amount');
-            $restToPay = $invoice->amount - doubleval($invoice->reduce_amount) - $paid;
+            $restToPay = $invoice->amount - floatval($invoice->reduce_amount) - $paid;
             $totalRemaining += max($restToPay, 0);
         }
 

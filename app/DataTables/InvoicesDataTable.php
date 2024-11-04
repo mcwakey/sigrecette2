@@ -35,13 +35,13 @@ class InvoicesDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->rawColumns(['invoice', 'status'])
             ->editColumn('taxpayers.name', function (Invoice $invoice) {
-                return view('pages/invoices.columns._invoice', compact('invoice'));
+                return view('pages/invoices.columns._invoice', ['invoice' => $invoice]);
             })
             ->editColumn('invoice_no', function (Invoice $invoice) {
                 return $invoice->invoice_no;
             })
             ->editColumn('order_no', function (Invoice $invoice) {
-                return view('pages/invoices.columns._order_no', compact('invoice'));
+                return view('pages/invoices.columns._order_no', ['invoice' => $invoice]);
                 //return $invoice->order_no;
             })
             ->editColumn('nic', function (Invoice $invoice) {
@@ -60,10 +60,11 @@ class InvoicesDataTable extends DataTable
                 return implode(',', array_keys(InvoiceHelper::sumAmountsByTaxCode($invoice)));
             })
             ->editColumn('total', function (Invoice $invoice) {
-                if ($invoice->reduce_amount != '')
+                if ($invoice->reduce_amount != '') {
                     return '-' . format_amount($invoice->reduce_amount);
-                else
+                } else {
                     return format_amount($invoice->amount);
+                }
             })
             ->editColumn('paid', function (Invoice $invoice) {
 
@@ -73,15 +74,15 @@ class InvoicesDataTable extends DataTable
                 return format_amount($invoice->get_remains_to_be_paid());
             })
             ->editColumn('validity', function (Invoice $invoice) {
-                return view('pages/invoices.columns._validity', compact('invoice'));
+                return view('pages/invoices.columns._validity', ['invoice' => $invoice]);
                 //return ''; // Return empty string
             })
             ->editColumn('status', function (Invoice $invoice) {
-                return view('pages/invoices.columns._aproval', compact('invoice'));
+                return view('pages/invoices.columns._aproval', ['invoice' => $invoice]);
             })
             ->editColumn('delivery_date', function (Invoice $invoice) {
                 //return $invoice->delivery_date;
-                return view('pages/invoices.columns._delivery', compact('invoice'));
+                return view('pages/invoices.columns._delivery', ['invoice' => $invoice]);
             })
             // ->editColumn('from_date', function (Invoice $invoice) {return $invoice->from_date;})
             ->editColumn('to_date', function (Invoice $invoice) {
@@ -94,7 +95,7 @@ class InvoicesDataTable extends DataTable
                 return $invoice->type;
             })
             ->addColumn('action', function (Invoice $invoice) {
-                return view('pages/invoices.columns._actions', compact('invoice'));
+                return view('pages/invoices.columns._actions', ['invoice' => $invoice]);
             })
             ->setRowId('uuid');
     }
@@ -167,7 +168,7 @@ class InvoicesDataTable extends DataTable
             ->setTableId('invoices-table')
             ->columns($this->getColumns())
             ->minifiedAjax(route("invoices.index", request()->all()))
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
+            ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(3)
@@ -208,10 +209,8 @@ class InvoicesDataTable extends DataTable
 
 
         $columns = array_map(function ($column) {
-            if ($this->type == Constants::INVOICE_TYPE_COMPTANT) {
-                if (in_array($column->name, ['zones.name', 'remains_to_be_paid', 'reason_for_reject', 'type'])) {
-                    $column->visible(false);
-                }
+            if ($this->type == Constants::INVOICE_TYPE_COMPTANT && in_array($column->name, ['zones.name', 'remains_to_be_paid', 'reason_for_reject', 'type'])) {
+                $column->visible(false);
             }
             if ($this->state != null) {
                 if ($this->state == InvoiceStatusEnums::DRAFT) {
@@ -233,10 +232,8 @@ class InvoicesDataTable extends DataTable
                 }
 
             }
-            if ($this->to_paid) {
-                if (in_array($column->name, ['to_date', 'delivery_date', 'reason_for_reject', 'order_no', 'status'])) {
-                    $column->visible(false);
-                }
+            if ($this->to_paid && in_array($column->name, ['to_date', 'delivery_date', 'reason_for_reject', 'order_no', 'status'])) {
+                $column->visible(false);
             }
             if ($this->type == Constants::INVOICE_TYPE_TITRE) {
                 if ($this->delivery == Constants::INVOICE_DELIVERY_NON_LIV_KEY) {

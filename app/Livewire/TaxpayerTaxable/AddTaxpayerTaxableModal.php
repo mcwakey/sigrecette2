@@ -109,7 +109,7 @@ class AddTaxpayerTaxableModal extends Component
 
         //$ereas = $this->town ? Erea::where('town_id', $this->town)->get() : collect();
 
-        return view('livewire.taxpayer_taxable.add-taxpayer-taxable-modal', compact('taxlabels'));
+        return view('livewire.taxpayer_taxable.add-taxpayer-taxable-modal', ['taxlabels' => $taxlabels]);
     }
 
     public function updatedTaxlabelId($value)
@@ -165,8 +165,8 @@ class AddTaxpayerTaxableModal extends Component
 
 
         if ($this->length > 0 && $this->width > 0) {
-            $this->width = doubleval($this->width);
-            $this->length = doubleval($this->length);
+            $this->width = floatval($this->width);
+            $this->length = floatval($this->length);
             $this->seize = round($this->length * $this->width, 2);
         }
 

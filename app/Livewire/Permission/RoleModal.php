@@ -77,7 +77,7 @@ class RoleModal extends Component
         }
 
         // Return the view with the permissions_by_group variable passed in.
-        return view('livewire.permission.role-modal', compact('permissions_by_group'));
+        return view('livewire.permission.role-modal', ['permissions_by_group' => $permissions_by_group]);
     }
 
     // This function submits the form and updates the role's permissions.
@@ -121,18 +121,14 @@ class RoleModal extends Component
         $name = $role?->name;
         $role->delete();
         $this->dispatch('success', 'Role ' . ucwords($name) . ' supprimé avec succès');
+        return null;
     }
 
     // This function checks all of the permissions.
     public function checkAll()
     {
         // If the check_all property is true, set the checked permissions property to all of the permissions.
-        if ($this->check_all) {
-            $this->checked_permissions = $this->permissions->pluck('name');
-        } else {
-            // Otherwise, set the checked permissions property to an empty array.
-            $this->checked_permissions = [];
-        }
+        $this->checked_permissions = $this->check_all ? $this->permissions->pluck('name') : [];
     }
 
     public function hydrate()

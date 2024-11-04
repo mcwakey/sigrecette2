@@ -27,7 +27,7 @@ class NotificationController extends Controller
                 'date' => $date,
             ];
 
-            array_push($data, $tempData);
+            $data[] = $tempData;
         }
 
         return response()->json([['data' => $data, 'size' => count($notifications)], 200]);

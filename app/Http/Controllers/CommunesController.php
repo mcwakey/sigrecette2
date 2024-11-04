@@ -64,7 +64,7 @@ class CommunesController extends Controller
 
 
         return $taxablesDataTable->with('id', $commune->id)
-            ->render('pages/communes.show', compact('commune'));
+            ->render('pages/communes.show', ['commune' => $commune]);
     }
 
     /**

@@ -35,13 +35,13 @@ class TaxpayerTaxablesDataTable extends DataTable
                 return $taxpayer_taxable->id;
             })
             ->editColumn('billable', function (TaxpayerTaxable $taxpayer_taxable) {
-                return view('pages.taxpayer_taxables.columns._bill', compact('taxpayer_taxable'));
+                return view('pages.taxpayer_taxables.columns._bill', ['taxpayer_taxable' => $taxpayer_taxable]);
             })
             ->editColumn('name', function (TaxpayerTaxable $taxpayer_taxable) {
                 return $taxpayer_taxable->name;
             })
             ->editColumn('taxpayer_taxable', function (TaxpayerTaxable $taxpayer_taxable) {
-                return view('pages.taxpayer_taxables.columns._label', compact('taxpayer_taxable'));
+                return view('pages.taxpayer_taxables.columns._label', ['taxpayer_taxable' => $taxpayer_taxable]);
             })
             // ->editColumn('tax_type', function (TaxpayerTaxable $taxpayer_taxable) {
             //     return $taxpayer_taxable->;
@@ -52,7 +52,7 @@ class TaxpayerTaxablesDataTable extends DataTable
                 // return view('pages.taxpayer_taxables.columns._seize', compact('taxpayer_taxable'));
             })
             ->editColumn('bill_status', function (TaxpayerTaxable $taxpayer_taxable) {
-                return view('pages.taxpayer_taxables.columns._status', compact('taxpayer_taxable'));
+                return view('pages.taxpayer_taxables.columns._status', ['taxpayer_taxable' => $taxpayer_taxable]);
             })
             // ->editColumn('location', function (TaxpayerTaxable $taxpayer_taxable) {
             //     return view('pages.taxpayer_taxables.columns._location', compact('taxpayer_taxable'));
@@ -61,7 +61,7 @@ class TaxpayerTaxablesDataTable extends DataTable
                 return $taxpayer_taxable->created_at->format('d M Y');
             })
             ->addColumn('action', function (TaxpayerTaxable $taxpayer_taxable) {
-                return view('pages.taxpayer_taxables.columns._actions', compact('taxpayer_taxable'));
+                return view('pages.taxpayer_taxables.columns._actions', ['taxpayer_taxable' => $taxpayer_taxable]);
             })
             ->setRowId('id');
     }
@@ -93,7 +93,7 @@ class TaxpayerTaxablesDataTable extends DataTable
             ->setTableId('taxpayer_taxables-table')
             ->columns($this->getColumns())
             ->minifiedAjax(route("taxpayers.show", Taxpayer::find($this->id)))
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
+            ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(5)

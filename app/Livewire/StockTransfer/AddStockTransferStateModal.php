@@ -85,7 +85,7 @@ class AddStockTransferStateModal extends Component
         $stock_requests = StockRequest::where('req_type', 'DEMANDE')->where('type', 'ACTIVE')->get();
 
         // dd($taxlabel_list);
-        return view('livewire.stock_transfer.add-stock-transfer-state-modal', compact('stock_requests'));
+        return view('livewire.stock_transfer.add-stock-transfer-state-modal', ['stock_requests' => $stock_requests]);
     }
 
 
@@ -185,7 +185,7 @@ class AddStockTransferStateModal extends Component
         $this->edit_mode = true;
         $this->deposit_mode = false;
 
-        if ($this->edit_mode == true) {
+        if ($this->edit_mode) {
             //$this->stock_transfers = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
             $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
         }

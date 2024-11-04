@@ -39,7 +39,7 @@ class RecoveryController extends Controller
                     'startDate' => $startDate,
                     'endDate' => $endDate,
                 ]
-            )->render('pages/recoveries.list', compact('zones', 'tax_labels'));
+            )->render('pages/recoveries.list', ['zones' => $zones, 'tax_labels' => $tax_labels]);
 
         } else {
             $year = Year::getActiveYear()->name;
@@ -58,7 +58,7 @@ class RecoveryController extends Controller
                     'type' => null,
                     'to_paid' => $to_paid,
                 ]
-            )->render('pages/invoices.list', compact('zones', 'tax_labels', 'agent_recouvrements'));
+            )->render('pages/invoices.list', ['zones' => $zones, 'tax_labels' => $tax_labels, 'agent_recouvrements' => $agent_recouvrements]);
         }
     }
 }

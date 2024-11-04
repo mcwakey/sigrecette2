@@ -38,7 +38,7 @@ class AddTownModal extends Component
     {
         $cantons = Canton::all();
 
-        return view('livewire.town.add-town-modal', compact('cantons'));
+        return view('livewire.town.add-town-modal', ['cantons' => $cantons]);
     }
 
     public function submit()

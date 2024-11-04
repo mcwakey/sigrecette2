@@ -38,7 +38,7 @@ class CantonsController extends Controller
      */
     public function show(Canton $canton, CantonsDataTable $cantonsDataTable)
     {
-        return $cantonsDataTable->with('id', $canton->id)->render('pages/cantons.show', compact('canton'));
+        return $cantonsDataTable->with('id', $canton->id)->render('pages/cantons.show', ['canton' => $canton]);
     }
 
     /**

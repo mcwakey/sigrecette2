@@ -25,6 +25,6 @@ class StockRequestController extends Controller
         //                             ->where('roles.name', 'collecteur')
         //                             ->get();
 
-        return $dataTable->with('reqNo', $reqNo)->render('pages/stock_requests.show', compact('reqNo'));
+        return $dataTable->with('reqNo', $reqNo)->render('pages/stock_requests.show', ['reqNo' => $reqNo]);
     }
 }

@@ -81,7 +81,7 @@ class AddAccountantDepositModal extends Component
             ->where('roles.name', 'collecteur')
             ->get();
 
-        return view('livewire.accountant_deposit.add-accountant-deposit-modal', compact('collectors'));
+        return view('livewire.accountant_deposit.add-accountant-deposit-modal', ['collectors' => $collectors]);
     }
 
 

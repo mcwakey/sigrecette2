@@ -39,7 +39,7 @@ class YearsController extends Controller
      */
     public function show(Year $year, YearDataTable $yearsDataTable)
     {
-        return $yearsDataTable->with('id', $year->id)->render('pages/years.show', compact('year'));
+        return $yearsDataTable->with('id', $year->id)->render('pages/years.show', ['year' => $year]);
     }
 
     /**

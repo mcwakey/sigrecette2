@@ -38,14 +38,14 @@ class TaxpayersDataTable extends DataTable
                 return $taxpayer->id;
             })
             ->editColumn('taxpayer.name', function (Taxpayer $taxpayerinfo) {
-                return view('pages/taxpayers.columns._taxpayer', compact('taxpayerinfo'));
+                return view('pages/taxpayers.columns._taxpayer', ['taxpayerinfo' => $taxpayerinfo]);
                 //return $taxpayerinfo->name;
             })
             ->editColumn('gender', function (Taxpayer $taxpayer) {
                 return $taxpayer->gender;
             })
             ->editColumn('mobilephone', function (Taxpayer $taxpayerinfo) {
-                return view('pages/taxpayers.columns._phone', compact('taxpayerinfo'));
+                return view('pages/taxpayers.columns._phone', ['taxpayerinfo' => $taxpayerinfo]);
             })
             ->editColumn('town.canton.name', function (Taxpayer $taxpayer) {
                 // if ($taxpayer->town) {
@@ -74,7 +74,7 @@ class TaxpayersDataTable extends DataTable
                 //return $taxpayer->zone->name;
             })
             ->editColumn('status', function (Taxpayer $taxpayerinfo) {
-                return view('pages/taxpayers.columns._aproval', compact('taxpayerinfo'));
+                return view('pages/taxpayers.columns._aproval', ['taxpayerinfo' => $taxpayerinfo]);
             })
             ->editColumn('created_at', function (Taxpayer $taxpayer) {
                 return $taxpayer->created_at->format('d M Y');
@@ -83,7 +83,7 @@ class TaxpayersDataTable extends DataTable
                 return $taxpayer->created_at->format('d M Y');
             })
             ->addColumn('action', function (Taxpayer $taxpayer) {
-                return view('pages/taxpayers.columns._actions', compact('taxpayer'));
+                return view('pages/taxpayers.columns._actions', ['taxpayer' => $taxpayer]);
             })
             ->setRowId('id');
     }
@@ -137,7 +137,7 @@ class TaxpayersDataTable extends DataTable
             ->minifiedAjax()
             // ->dom("") // Add pagination ('p') and other controls ('i') at the bottom
             // ->dom("<'d-flex justify-content-end'B> ".'rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
+            ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0)
@@ -171,15 +171,11 @@ class TaxpayersDataTable extends DataTable
         ];
 
         $columns = array_map(function ($column) {
-            if (request()->has('rc')) {
-                if (in_array($column->name, ['action', 'status'])) {
-                    $column->visible(false);
-                }
+            if (request()->has('rc') && in_array($column->name, ['action', 'status'])) {
+                $column->visible(false);
             }
-            if (!request()->has('state')) {
-                if (in_array($column->name, ['status'])) {
-                    $column->visible(false);
-                }
+            if (!request()->has('state') && $column->name == 'status') {
+                $column->visible(false);
             }
 
 

@@ -45,7 +45,7 @@ class TaxpayerController extends Controller
                 'state' => $state,
                 'disable' => $disable,
             ]
-        )->render('pages/taxpayers.list', compact('zones', 'categories', 'towns', 'cantons', 'activities'));
+        )->render('pages/taxpayers.list', ['zones' => $zones, 'categories' => $categories, 'towns' => $towns, 'cantons' => $cantons, 'activities' => $activities]);
     }
 
     // public function index()

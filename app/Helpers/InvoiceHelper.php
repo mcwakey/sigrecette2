@@ -39,7 +39,7 @@ class InvoiceHelper
     {
         $invoices = [];
 
-        if (empty($uuids)) {
+        if ($uuids === []) {
             return [];
         }
 
@@ -83,9 +83,9 @@ class InvoiceHelper
 
         foreach ($invoices as $invoice) {
 
-            if ($type == PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS && $invoice->ondistributionprint == false) {
+            if ($type === PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS && $invoice->ondistributionprint == false) {
                 $invoices_return[] = $invoice;
-            } else if ($type == PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES && $invoice->onrecoveryprint == false) {
+            } elseif ($type === PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES && $invoice->onrecoveryprint == false) {
                 $invoices_return[] = $invoice;
             }
         }
@@ -200,7 +200,7 @@ class InvoiceHelper
                         $paymentData["code"] = $code;
                     }//elseif ($amount> $sumsByTaxCode[ $paymentData["code"] ]['amount']){$amount=$sumsByTaxCode[$paymentData["code"]]['amount'];}
                     $paymentData['amount'] = min($amount, $code_amount['amount']);
-                    if (count($paymentArray) > 0) {
+                    if ($paymentArray !== []) {
                         $paymentData['remaining_amount'] = $invoice->amount - ($paidTotal + $paymentData['amount']) + end($paymentArray)['amount'];
 
                     } else {
@@ -286,22 +286,21 @@ class InvoiceHelper
             ->whereBetween('invoices.created_at', [$startOfYear, $endOfYear]);
 
         if ($type != null) {
-            if ($type == PrintNameEnums::BORDEREAU_REDUCTION) {
+            if ($type === PrintNameEnums::BORDEREAU_REDUCTION) {
                 $query = $query->whereNot("invoices.reduce_amount", "=", '')
                     ->WhereDoesntHave('printFiles', function ($query) use ($type) {
                         $query->where('name', $type);
                     });
-            } else if ($type == PrintNameEnums::BORDEREAU) {
+            } elseif ($type === PrintNameEnums::BORDEREAU) {
                 $query = $query->where("invoices.reduce_amount", "=", '')
                     ->WhereDoesntHave('printFiles', function ($query) use ($type) {
                         $query->where('name', $type);
                     });
-
-            } else if ($type == PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS) {
+            } elseif ($type === PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS) {
                 $query = $query->whereNot("invoices.ondistributionprint", "=", false)->WhereDoesntHave('printFiles', function ($query) use ($type) {
                     $query->where('name', $type);
                 });
-            } else if ($type == PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES) {
+            } elseif ($type === PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES) {
                 $query = $query->whereNot("invoices.onrecoveryprint", "=", false)->WhereDoesntHave('printFiles', function ($query) use ($type) {
                     $query->where('name', $type);
                 });

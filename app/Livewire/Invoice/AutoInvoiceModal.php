@@ -165,7 +165,7 @@ class AutoInvoiceModal extends Component
 
         //return view('livewire.invoice.add-invoice-modal', ['taxpayer_id' => $this->taxpayer_id]);
 
-        return view('livewire.invoice.auto-invoice-modal', compact('zones', 'tax_labels'));
+        return view('livewire.invoice.auto-invoice-modal', ['zones' => $zones, 'tax_labels' => $tax_labels]);
     }
 
     // public function submit()
@@ -251,7 +251,7 @@ class AutoInvoiceModal extends Component
                         'ii_tariff' => $invoiceitem->taxpayer_taxable->taxable->tariff,
                         'ii_seize' => $invoiceitem->taxpayer_taxable->seize,
                         'amount' => $invoiceitem->taxpayer_taxable->taxable->tariff * $this->qty * $invoiceitem->taxpayer_taxable->seize,
-                        $this->amount = $this->amount + ($invoiceitem->taxpayer_taxable->taxable->tariff * $this->qty * $invoiceitem->taxpayer_taxable->seize),
+                        $this->amount += $invoiceitem->taxpayer_taxable->taxable->tariff * $this->qty * $invoiceitem->taxpayer_taxable->seize,
                     ];
 
                     InvoiceItem::create($invoiceItemsData);

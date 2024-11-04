@@ -36,7 +36,7 @@ class StockRequestsSumDataTable extends DataTable
             //     return $stock_request->id;
             // })
             ->editColumn('req_no', function (StockRequest $stock_request) {
-                return view('pages.stock_requests.columns._bill', compact('stock_request'));
+                return view('pages.stock_requests.columns._bill', ['stock_request' => $stock_request]);
             })
             ->editColumn('stock_requests.created_at', function (StockRequest $stock_request) {
                 return $stock_request->created_at->format('d M Y');
@@ -138,11 +138,11 @@ class StockRequestsSumDataTable extends DataTable
             //     return $stock_request->user->name;
             // })
             ->editColumn('stock_requests.type', function (StockRequest $stock_request) {
-                return view('pages.stock_requests.columns._status', compact('stock_request'));
+                return view('pages.stock_requests.columns._status', ['stock_request' => $stock_request]);
                 //return $stock_request->type;
             })
             ->addColumn('action', function (StockRequest $stock_request) {
-                return view('pages.stock_requests.columns._actions', compact('stock_request'));
+                return view('pages.stock_requests.columns._actions', ['stock_request' => $stock_request]);
             })
             ->setRowId('id');
     }
@@ -195,7 +195,7 @@ class StockRequestsSumDataTable extends DataTable
             ->setTableId('stock_requests-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
+            ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0, 'desc')

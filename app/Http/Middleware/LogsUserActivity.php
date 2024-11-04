@@ -34,7 +34,7 @@ class LogsUserActivity
                 } catch (\Exception $e) {
                     // Handle exception (optional)
                 }
-            } else if (!$request->routeIs('taxpayers.*') && method_exists($response, 'status') && $response->status() != 404) {
+            } elseif (!$request->routeIs('taxpayers.*') && method_exists($response, 'status') && $response->status() != 404) {
                 Queue::push(new LogUserActivity($data));
             }
         }

@@ -41,12 +41,12 @@ class Geolocation extends Controller
 
         $commune = Commune::getFirstCommune();
 
-        return View('pages.geolocation.taxpayers', compact('taxpayers', 'zones', 'commune'));
+        return View('pages.geolocation.taxpayers', ['taxpayers' => $taxpayers, 'zones' => $zones, 'commune' => $commune]);
     }
 
     public function users()
     {
         $users = User::all();
-        return View('pages.geolocation.users', compact('users'));
+        return View('pages.geolocation.users', ['users' => $users]);
     }
 }

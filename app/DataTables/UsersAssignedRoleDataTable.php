@@ -23,13 +23,13 @@ class UsersAssignedRoleDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->rawColumns(['user'])
             ->editColumn('user', function (User $user) {
-                return view('pages/apps.user-management.roles.columns._user', compact('user'));
+                return view('pages/apps.user-management.roles.columns._user', ['user' => $user]);
             })
             ->editColumn('created_at', function (User $user) {
                 return \Carbon\Carbon::parse($user->created_at)->locale('fr')->isoFormat('LL');
             })
             ->addColumn('action', function (User $user) {
-                return view('pages/apps.user-management.roles.columns._actions', compact('user'));
+                return view('pages/apps.user-management.roles.columns._actions', ['user' => $user]);
             })
             ->setRowId('id');
     }
@@ -53,7 +53,7 @@ class UsersAssignedRoleDataTable extends DataTable
             ->setTableId('usersassingedrole-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
+            ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(1)

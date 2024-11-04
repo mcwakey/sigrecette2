@@ -33,6 +33,6 @@ class CollectorDepositController extends Controller
         // ->get();
 
         return $dataTable->with('id', $payment->id)
-            ->render('pages/collector_deposits.show', compact('payment'));
+            ->render('pages/collector_deposits.show', ['payment' => $payment]);
     }
 }

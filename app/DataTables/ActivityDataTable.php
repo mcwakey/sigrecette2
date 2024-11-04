@@ -27,13 +27,13 @@ class ActivityDataTable extends DataTable
                 return $activity->category->name;
             })
             ->editColumn('status', function (Activity $activity) {
-                return view('pages/activities.columns._status', compact('activity'));
+                return view('pages/activities.columns._status', ['activity' => $activity]);
             })
             ->editColumn('created_at', function (Activity $activity) {
                 return $activity->created_at->format('d M Y');
             })
             ->addColumn('action', function (Activity $activity) {
-                return view('pages/activities.columns._actions', compact('activity'));
+                return view('pages/activities.columns._actions', ['activity' => $activity]);
             })
             ->setRowId('id');
     }
@@ -55,7 +55,7 @@ class ActivityDataTable extends DataTable
             ->setTableId('activities')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
+            ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(3)

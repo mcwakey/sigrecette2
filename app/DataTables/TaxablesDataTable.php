@@ -37,7 +37,7 @@ class TaxablesDataTable extends DataTable
             })
             ->rawColumns(['taxable', 'last_login_at'])
             ->editColumn('tax_label.name', function (Taxable $taxable) {
-                return view('pages/taxables.columns._taxable', compact('taxable'));
+                return view('pages/taxables.columns._taxable', ['taxable' => $taxable]);
             })
 
             // ->editColumn('tax_label_name', function (Taxable $taxable) {
@@ -82,7 +82,7 @@ class TaxablesDataTable extends DataTable
                 return $taxable->created_at->format('d M Y');
             })
             ->addColumn('action', function (Taxable $taxable) {
-                return view('pages/taxables.columns._actions', compact('taxable'));
+                return view('pages/taxables.columns._actions', ['taxable' => $taxable]);
             })
             ->orderColumn('tax_label_name', function ($query, $order) {
                 $query->orderBy('tax_labels.name', $order);
@@ -123,7 +123,7 @@ class TaxablesDataTable extends DataTable
             ->setTableId('taxables-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
+            ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(1)

@@ -38,7 +38,7 @@ class TaxableController extends Controller
      */
     public function show(Taxable $taxable)
     {
-        return view('pages/taxables.show', compact('taxable'));
+        return view('pages/taxables.show', ['taxable' => $taxable]);
     }
 
     /**
