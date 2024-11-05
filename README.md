@@ -17,6 +17,7 @@ rapport à un serveur Windows. Suivez ces instructions pour configurer l'environ
 - PHP 8.0.2 ou supérieur
 - Composer
 - Node.js
+  
 
 #### Étape 1 : Mettre à jour le Système
 
