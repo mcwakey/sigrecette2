@@ -53,7 +53,12 @@ class AddStockRequestModal extends Component
             'start_no' => 'nullable|numeric|min:0|max:' . (intval($this->end_no) - 1),
             'end_no' => 'nullable|numeric|min:' . (intval($this->start_no) + 1),
             'qty' => ['required', 'numeric', 'min:1', function ($attribute, $value, $fail) {
-                if (!is_null($this->start_no) && !is_null($this->end_no) && $value !== intval($this->end_no) - intval($this->start_no) + 1) {
+
+                try {
+                    if (!is_null($this->start_no) && !is_null($this->end_no) && $value !== intval($this->end_no) - intval($this->start_no) + 1) {
+                        $fail('Les valeurs saisies dans n° de debut ou n° de fin sont incorrectes.');
+                    }
+                }catch (Exception $e) {
                     $fail('Les valeurs saisies dans n° de debut ou n° de fin sont incorrectes.');
                 }
             }],

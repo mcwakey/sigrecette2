@@ -386,8 +386,6 @@ class AddStockTransferDepositModal extends Component
                         $this->dispatch('success', __('Etat de comptabilité mis a jour avec succès'));
                     }
                 } elseif ($this->taxlabel_id !== null && $this->taxlabel_id != '') {
-                    // if ($this->deposit_mode) {
-                    // }
                     $stock_transfers = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'VENDU')->where('to_user_id', $this->collector_id)->get();
                     foreach ($stock_transfers as $stock_transfer) {
 
