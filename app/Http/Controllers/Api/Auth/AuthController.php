@@ -31,6 +31,7 @@ class AuthController extends Controller
             'name' => $user->name,
             'email' => $user->email,
             'role' => $user->getRoleNames()->first(),
+            'permissions' => $user->getAllPermissions()->pluck('name'),
             'zone' => $user->zone->name,
         ], 200);
     }
