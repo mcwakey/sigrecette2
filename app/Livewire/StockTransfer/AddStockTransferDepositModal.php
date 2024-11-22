@@ -553,16 +553,7 @@ class AddStockTransferDepositModal extends Component
 
 
     }
-    public function deleteStockTransfer($id)
-    {
-        $stock_transfert = StockTransfer::find($id);
-        $payment_id = $stock_transfert?->payment_id;
-        $this->remaining_qty += $stock_transfert?->qty;
-        StockTransfer::destroy($id);
-        Payment::destroy($payment_id);
-        $this->updateStockTransfer();
 
-    }
     public function hydrate()
     {
         $this->resetErrorBag();
