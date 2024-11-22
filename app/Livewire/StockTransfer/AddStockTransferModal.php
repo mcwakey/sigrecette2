@@ -77,6 +77,7 @@ class AddStockTransferModal extends Component
                 'required',
                 'numeric',
                 'min:1',
+                'max:'.$this->remaining_qty,
                 function ($attribute, $value, $fail) {
                     try {
                         $startNo = $this->start_no ?? null;
@@ -97,7 +98,7 @@ class AddStockTransferModal extends Component
         return $rules;
     }
 
-    public function validateData()
+    public function validateData(): void
     {
         $this->validate();
 
@@ -116,7 +117,6 @@ class AddStockTransferModal extends Component
             if ($this->start_no < $this->select_stock->start_no || $this->end_no > $this->select_stock->end_no) {
                 $this->addError('start_no', 'Le numéro de début et le numéro de fin doivent se situer dans la plage des  allouée.');
             }
-
             $overlapExists = StockTransfer::where('type', '=', 'ACTIVE')
                 ->where('stock_request_id', '=', $this->stock_request_id)
                 ->where('trans_type', '=', 'RECU')

@@ -64,6 +64,8 @@ class AddStockTransferDepositModal extends Component
 
     public function rules()
     {
+        $this->select_transfer->start_no =$this->select_transfer->start_no === "" ? null : $this->select_transfer->start_no;
+        $this->select_transfer->end_no = $this->select_transfer->end_no === "" ? null : $this->select_transfer->end_no;
         $rules = [
             'collector_id' => 'required',
             'trans_no' => 'required',
@@ -72,9 +74,15 @@ class AddStockTransferDepositModal extends Component
         if ($this->deposit_mode) {
             if (trim($this->taxlabel_id) === '' || $this->taxlabel_id == null) {
                 $rules['code'] = 'required';
-                $rules['start_no'] = 'nullable|numeric|min:' . $this->select_transfer->start_no . '|max:' . ($this->select_transfer->end_no - 1);
-                $rules['end_no'] = 'nullable|numeric|min:' . ($this->select_transfer->start_no + 1) . '|max:' . $this->select_transfer->end_no;
-                $rules['qty'] = 'required|numeric|min:1';
+                $rules['start_no'] = 'nullable|numeric|min:' .
+                    (!is_null($this->select_transfer->start_no) ? $this->select_transfer->start_no : 0) .
+                    (!is_null($this->select_transfer->end_no) ? '|max:' . ($this->select_transfer->end_no - 1) : '');
+
+                $rules['end_no'] = 'nullable|numeric|min:' .
+                    (!is_null($this->select_transfer->start_no) ? $this->select_transfer->start_no + 1 : 0) .
+                    (!is_null($this->select_transfer->end_no) ? '|max:' . $this->select_transfer->end_no : '');
+
+                $rules['qty'] = 'required|numeric|min:1'.'|max:'.$this->remaining_qty ;
                 $rules['taxable_id'] = 'required|numeric';
             } else {
             }

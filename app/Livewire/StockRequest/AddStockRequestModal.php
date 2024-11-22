@@ -46,16 +46,21 @@ class AddStockRequestModal extends Component
 
     protected function rules()
     {
+        $this->start_no = $this->start_no === "" ? null : $this->start_no;
+        $this->end_no = $this->end_no === "" ? null : $this->end_no;
         return [
             'req_no' => 'required|string',
             'taxlabel_id' => 'required',
             'taxable_id' => 'required|numeric',
-            'start_no' => 'nullable|numeric|min:0|max:' . (intval($this->end_no) - 1),
-            'end_no' => 'nullable|numeric|min:' . (intval($this->start_no) + 1),
+            'start_no' => 'nullable|numeric|min:0' .
+                (!is_null($this->end_no) ? '|max:' . (intval($this->end_no) - 1) : ''),
+            'end_no' => 'nullable|numeric' .
+                (!is_null($this->start_no) ? '|min:' . (intval($this->start_no) + 1) : ''),
             'qty' => ['required', 'numeric', 'min:1', function ($attribute, $value, $fail) {
 
                 try {
                     if (!is_null($this->start_no) && !is_null($this->end_no) && $value !== intval($this->end_no) - intval($this->start_no) + 1) {
+                        dump($this->start_no, $this->end_no);
                         $fail('Les valeurs saisies dans n° de debut ou n° de fin sont incorrectes.');
                     }
                 }catch (Exception $e) {
