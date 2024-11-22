@@ -12,6 +12,7 @@ class AddDeliveryForm extends Component
 {
     //use WithFileUploads;
     use DispatchesMessages;
+
     public $invoice_id;
 
     //public $delivery;
@@ -22,8 +23,8 @@ class AddDeliveryForm extends Component
     private $error_message;
     protected $rules = [
         //"delivery" =>"required",
-        "delivery_date" =>"required|string",
-        "delivery_to"=>"required|string",
+        "delivery_date" => "required|string",
+        "delivery_to" => "required|string",
     ];
 
     protected $listeners = [
@@ -31,63 +32,62 @@ class AddDeliveryForm extends Component
         'update_status' => 'updateStatus',
         //'add_invoice' => 'addInvoice',
     ];
+
     public function render()
     {
         return view('livewire.invoice.add-delivery-form');
     }
-    public function validateData(){
+
+    public function validateData()
+    {
         $this->validate();
         $invoice = Invoice::find($this->invoice_id);
-        if($invoice && $invoice->reduce_amount == ''){
-            if (
-                $invoice  ) {
-                if($invoice->type ==Constants::INVOICE_TYPE_TITRE &&  (!$invoice->ondistributionprint) || (!$invoice->onrecoveryprint) ){
-                    if(!$invoice->ondistributionprint){
-                        $this->error_message="Veuillez au préalable imprimer une fiche de distribution contenant l'avis.";
-                    }else{
-                        $this->error_message="Veuillez au préalable imprimer une fiche de recouvrement contenant l'avis.";
-                    }
-                    $this->addError('delivery_to', $this->error_message);
-
+        if ($invoice && $invoice->reduce_amount == '' && $invoice) {
+            if ($invoice->type == Constants::INVOICE_TYPE_TITRE && (!$invoice->ondistributionprint) || (!$invoice->onrecoveryprint)) {
+                if (!$invoice->ondistributionprint) {
+                    $this->error_message = "Veuillez au préalable imprimer une fiche de distribution contenant l'avis.";
+                } else {
+                    $this->error_message = "Veuillez au préalable imprimer une fiche de recouvrement contenant l'avis.";
                 }
-
+                $this->addError('delivery_to', $this->error_message);
 
             }
         }
 
     }
+
     public function submit()
     {
         $this->validateData();
         if ($this->getErrorBag()->isEmpty()) {
 
-        DB::transaction(function () {
+            DB::transaction(function () {
 
-            // Prepare data for Invoice
-            $data = [
-                'delivery' => "DELIVERED",
-                'delivery_date' => $this->delivery_date,
-                "delivery_to"=> $this->delivery_to
+                // Prepare data for Invoice
+                $data = [
+                    'delivery' => "DELIVERED",
+                    'delivery_date' => $this->delivery_date,
+                    "delivery_to" => $this->delivery_to
 
-            ];
+                ];
 
-            //dd($invoiceData);
+                //dd($invoiceData);
 
-            // Create or update Invoice record
-            $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
+                // Create or update Invoice record
+                $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
 
-            $this->invoice_id = $invoice->id;
+                $this->invoice_id = $invoice->id;
 
-            foreach ($data as $k => $v) {
-                $invoice->$k = $v;
-            }
-            $invoice->save();
-            $this->dispatchMessage('Avis', 'update');
-        });
+                foreach ($data as $k => $v) {
+                    $invoice->$k = $v;
+                }
+                $invoice->save();
+                $this->dispatchMessage('Avis', 'update');
+            });
 
             $this->reset();
-        }else{
-            $this->dispatchMessage('Avis', 'update', 'error',$this->error_message);
+        } else {
+            $this->dispatchMessage('Avis', 'update', 'error', $this->error_message);
 
         }
     }

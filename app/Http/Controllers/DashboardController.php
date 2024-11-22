@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\Constants;
 use App\Models\Year;
 use App\Services\StatisticsService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class DashboardController extends Controller
 {
@@ -27,10 +25,10 @@ class DashboardController extends Controller
         addVendors(['amcharts', 'amcharts-maps', 'amcharts-stock']);
         $this->statisticsService = new StatisticsService();
 
-        return view('pages/dashboards.index',[
-            'stats'=>$this->statisticsService->getStats(),
-            's_date'=>$startDate,
-            'e_date'=>$endDate
+        return view('pages/dashboards.index', [
+            'stats' => $this->statisticsService->getStats(),
+            's_date' => $startDate,
+            'e_date' => $endDate
 
         ]);
     }

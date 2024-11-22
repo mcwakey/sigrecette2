@@ -8,7 +8,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @property Taxpayer $resource
  */
-
 class TaxpayerStoreResource extends JsonResource
 {
     /**
@@ -29,8 +28,8 @@ class TaxpayerStoreResource extends JsonResource
             'erea' => new EreaResource($this->erea),
             'zone' => new ZoneResource($this->zone),
             'email' => $this->resource->email,
-            'last_login_at' =>  $this->resource->last_login_at,
-            'last_login_ip' =>  $this->resource->last_login_ip,
+            'last_login_at' => $this->resource->last_login_at,
+            'last_login_ip' => $this->resource->last_login_ip,
             'profile_photo_path' => $this->resource->profile_photo_path,
         ];
     }

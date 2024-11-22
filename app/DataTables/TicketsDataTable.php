@@ -12,10 +12,9 @@ use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Log;
 
 
-
 class TicketsDataTable extends DataTable
 {
-public $query = false;
+    public $query = false;
 
     /**
      * Build the DataTable class.
@@ -24,7 +23,7 @@ public $query = false;
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
-        
+
         //dump($query);
 
         return (new EloquentDataTable($query))
@@ -84,7 +83,7 @@ public $query = false;
                 return $taxable->created_at->format('d M Y');
             })
             ->addColumn('action', function (Taxable $taxable) {
-                return view('pages/tickets.columns._actions', compact('taxable'));
+                return view('pages/tickets.columns._actions', ['taxable' => $taxable]);
             })
             // ->orderColumn('tax_label_name', function ($query, $order) {
             //     $query->orderBy('tax_labels.name', $order);
@@ -104,10 +103,10 @@ public $query = false;
     public function query(Taxable $model): QueryBuilder
     {
         return $model //->with('tax_label')
-                    // ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
-                    ->where('tax_label_id', '=', null)
-                    //->orderBy('tax_labels.name')
-                    ->newQuery();
+        // ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
+        ->where('tax_label_id', '=', null)
+            //->orderBy('tax_labels.name')
+            ->newQuery();
     }
 
     /**
@@ -122,7 +121,7 @@ public $query = false;
             ->setTableId('tickets-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(1)

@@ -30,7 +30,8 @@ class TaxpayerAction
     }
 
 
-    private function createUserLogsActivity(){
+    private function createUserLogsActivity()
+    {
 
         $data = [
             'user_id' => auth()->id(),
@@ -45,7 +46,7 @@ class TaxpayerAction
                 'status' => $this->data['status'],
                 'status_text' => $this->data['statusText'],
             ]),
-        ];    
+        ];
 
         UserLogs::create($data);
     }

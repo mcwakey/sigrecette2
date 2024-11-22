@@ -46,51 +46,51 @@ class InvoiceWorkflowSubscriber
         $invoice = $event->getSubject();
         $place = $event->getTransition()->getTos()[0];
         //dump($place);
-       switch ($place){
-           case InvoiceStatusEnums::ACCEPTED:
-               $permissions = ['peut émettre un avis sur titre', 'peut accepter un avis sur titre', 'peut ajouter le numéro d\'ordre de recette d\'un avis'];
-               $users = Constants::getUserWithPermission($permissions);;
-               if ($users && count($users)>0) {
-                   Notification::send($users, new InvoiceAccepted($invoice,Auth::user(),'agent_delegation'));
-               }
-               break;
-           case InvoiceStatusEnums::REJECTED_BY_OR:
-               $permissions = ['peut émettre un avis sur titre'];
-              $users = Constants::getUserWithPermission($permissions);
-               if ($users && count($users)>0) {
-                   Notification::send($users, new  InvoiceRejected($invoice,Auth::user(),'agent_delegation'));
-               }
-               foreach ( $invoice->taxpayer_taxables as $taxpayerTaxable){
-                   $taxpayerTaxable->billable ='0';
-                   $taxpayerTaxable->bill_status ="NOT BILLED";
-                   $taxpayerTaxable->invoice_id = null;
-                   $taxpayerTaxable->save();
-               }
-               break;
-           case  InvoiceStatusEnums::PENDING:
-               $permissions = ['peut prendre en charge un avis sur titre', 'peut rejeter un avis sur titre (agent par délégation du receveur)'];
-               $users = Constants::getUserWithPermission($permissions);
-               if ($users && count($users)>0) {
-                   Notification::send($users, new InvoiceAccepted($invoice, Auth::user(), "agent_recette"));
-               }
-           break;
-           case   InvoiceStatusEnums::APPROVED:
-           case     InvoiceStatusEnums::APPROVED_CANCELLATION:
-           $permissions = ['peut prendre en charge un avis sur titre', 'peut rejeter un avis sur titre (agent par délégation du receveur)','peut comptabiliser un paiement'];
-           $users = Constants::getUserWithPermission($permissions);
-           if ($users && count($users)>0) {
-                       Notification::send($users, new InvoiceApproved($invoice, Auth::user(), "regisseur"));
-                   }
-               break;
-           case InvoiceStatusEnums::CANCELED:
-               //dump(InvoiceStatusEnums::CANCELED);
-               break;
-           case InvoiceStatusEnums::REDUCED:
-               //dump(InvoiceStatusEnums::REDUCED);
-               break;
-           default :
-              // dump($place);
-       }
+        switch ($place) {
+            case InvoiceStatusEnums::ACCEPTED:
+                $permissions = ['peut émettre un avis sur titre', 'peut accepter un avis sur titre', 'peut ajouter le numéro d\'ordre de recette d\'un avis'];
+                $users = Constants::getUserWithPermission($permissions);;
+                if ($users && count($users) > 0) {
+                    Notification::send($users, new InvoiceAccepted($invoice, Auth::user(), 'agent_delegation'));
+                }
+                break;
+            case InvoiceStatusEnums::REJECTED_BY_OR:
+                $permissions = ['peut émettre un avis sur titre'];
+                $users = Constants::getUserWithPermission($permissions);
+                if ($users && count($users) > 0) {
+                    Notification::send($users, new  InvoiceRejected($invoice, Auth::user(), 'agent_delegation'));
+                }
+                foreach ($invoice->taxpayer_taxables as $taxpayerTaxable) {
+                    $taxpayerTaxable->billable = '0';
+                    $taxpayerTaxable->bill_status = "NOT BILLED";
+                    $taxpayerTaxable->invoice_id = null;
+                    $taxpayerTaxable->save();
+                }
+                break;
+            case  InvoiceStatusEnums::PENDING:
+                $permissions = ['peut prendre en charge un avis sur titre', 'peut rejeter un avis sur titre (agent par délégation du receveur)'];
+                $users = Constants::getUserWithPermission($permissions);
+                if ($users && count($users) > 0) {
+                    Notification::send($users, new InvoiceAccepted($invoice, Auth::user(), "agent_recette"));
+                }
+                break;
+            case   InvoiceStatusEnums::APPROVED:
+            case     InvoiceStatusEnums::APPROVED_CANCELLATION:
+                $permissions = ['peut prendre en charge un avis sur titre', 'peut rejeter un avis sur titre (agent par délégation du receveur)', 'peut comptabiliser un paiement'];
+                $users = Constants::getUserWithPermission($permissions);
+                if ($users && count($users) > 0) {
+                    Notification::send($users, new InvoiceApproved($invoice, Auth::user(), "regisseur"));
+                }
+                break;
+            case InvoiceStatusEnums::CANCELED:
+                //dump(InvoiceStatusEnums::CANCELED);
+                break;
+            case InvoiceStatusEnums::REDUCED:
+                //dump(InvoiceStatusEnums::REDUCED);
+                break;
+            default :
+                // dump($place);
+        }
     }
 
     public function onLeave(Event $event)
@@ -107,7 +107,7 @@ class InvoiceWorkflowSubscriber
         $invoice = $event->getSubject();
         $transition = $event->getTransition()->getName();
 
-       // logger()->info("Transitioning via: " . $transition);
+        // logger()->info("Transitioning via: " . $transition);
     }
 
     public function onGuard(Event $event)

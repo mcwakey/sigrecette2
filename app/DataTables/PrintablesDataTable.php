@@ -26,19 +26,17 @@ class PrintablesDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
 
-    $newAmount = 0;
+        $newAmount = 0;
 
         return (new EloquentDataTable($query))
-
             ->editColumn('created_at', function (PrintFile $printFile) {
-                return  $printFile->created_at->format('d M Y');
+                return $printFile->created_at->format('d M Y');
             })
-            ->editColumn('name', function (PrintFile  $printFile) {
-                return  $printFile->name;
+            ->editColumn('name', function (PrintFile $printFile) {
+                return $printFile->name;
             })
-
-            ->addColumn('action', function (PrintFile  $printFile) {
-                return view('pages.printables.columns._actions', compact('printFile'));
+            ->addColumn('action', function (PrintFile $printFile) {
+                return view('pages.printables.columns._actions', ['printFile' => $printFile]);
             })
             ->setRowId('id');
     }
@@ -56,9 +54,8 @@ class PrintablesDataTable extends DataTable
 
         return $model
             ->whereBetween('print_files.created_at', [$startOfYear, $endOfYear])
-
-            ->orderBy('created_at','desc' )
-                    ->newQuery();
+            ->orderBy('created_at', 'desc')
+            ->newQuery();
 
     }
 
@@ -71,12 +68,12 @@ class PrintablesDataTable extends DataTable
             ->setTableId('printables-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0, 'desc')
             ->pageLength(100) // Set the default number of rows per page to 3
-            ->lengthMenu([[100,300, 500,  -1], [100,300, 500, "All"]]) // Define options for the number of rows per page
+            ->lengthMenu([[100, 300, 500, -1], [100, 300, 500, "All"]]) // Define options for the number of rows per page
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/printables/columns/_draw-scripts.js')) . "}");
     }
 

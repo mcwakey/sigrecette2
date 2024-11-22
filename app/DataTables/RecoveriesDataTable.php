@@ -31,12 +31,12 @@ class RecoveriesDataTable extends DataTable
     {
 
         return (new EloquentDataTable($query))
-        ->editColumn('users.name', function (Payment $payment) {
-            return $payment->user->name;
-            // $user = $payment->user;
-            // return view('pages/apps.user-management.users.columns._user', compact('user'));
-            //return view('pages/recoveries.columns._user', compact('user'));
-        })
+            ->editColumn('users.name', function (Payment $payment) {
+                return $payment->user->name;
+                // $user = $payment->user;
+                // return view('pages/apps.user-management.users.columns._user', compact('user'));
+                //return view('pages/recoveries.columns._user', compact('user'));
+            })
             ->editColumn('invoices.invoice_no', function (Payment $payment) {
                 return $payment->invoice->invoice_no;
             })
@@ -45,36 +45,33 @@ class RecoveriesDataTable extends DataTable
             // })
 
             ->editColumn('reference', function (Payment $payment) {
-                return view('pages/recoveries.columns._reference', compact('payment'));
+                return view('pages/recoveries.columns._reference', ['payment' => $payment]);
             })
-
             ->editColumn('tax_labels.code', function (Payment $payment) {
                 return $payment->code ?? '';
             })
             ->editColumn('taxpayers.name', function (Payment $payment) {
                 //$invoice = $payment->invoice;
-                return view('pages/recoveries.columns._invoice', compact('payment'));
+                return view('pages/recoveries.columns._invoice', ['payment' => $payment]);
             })
             ->editColumn('amount', function (Payment $payment) {
-                return format_amount($payment->amount)  ;
+                return format_amount($payment->amount);
             })
             ->editColumn('remaining_amount', function (Payment $payment) {
                 return format_amount($payment->remaining_amount);
             })
-
             ->editColumn('status', function (Payment $payment) {
                 //return $payment->remaining_amount;
-                return view('pages/recoveries.columns._status', compact('payment'));
+                return view('pages/recoveries.columns._status', ['payment' => $payment]);
             })
             ->editColumn('notes', function (Payment $payment) {
                 return $payment->notes;
             })
             ->addColumn('action', function (Payment $payment) {
-                return view('pages/recoveries.columns._actions', compact('payment'));
+                return view('pages/recoveries.columns._actions', ['payment' => $payment]);
             })
             ->setRowId('uuid');
     }
-
 
 
     public function query(Payment $model): QueryBuilder
@@ -86,7 +83,7 @@ class RecoveriesDataTable extends DataTable
             ->join('tax_labels', 'tax_labels.code', '=', 'payments.code')
             ->select('payments.*')
             ->whereNotNull('payments.user_id')
-            ->where(function($q) {
+            ->where(function ($q) {
                 $q->whereNull('payments.reference')
                     ->orWhereNotIn('payments.reference', [Constants::ANNULATION, Constants::REDUCTION]);
             })
@@ -99,12 +96,11 @@ class RecoveriesDataTable extends DataTable
         } else {
             $query->whereIn('payments.status', [PaymentStatusEnums::DONE, PaymentStatusEnums::ACCOUNTED]);
         }
-        if($this->id){
-            $query->where('invoices.taxpayer_id','=',$this->id);
+        if ($this->id) {
+            $query->where('invoices.taxpayer_id', '=', $this->id);
         }
         return $query;
     }
-
 
 
     /**
@@ -115,13 +111,13 @@ class RecoveriesDataTable extends DataTable
         return $this->builder()
             ->setTableId('recoveries-table')
             ->columns($this->getColumns())
-            ->minifiedAjax(route('recoveries.index',request()->all()))
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            ->minifiedAjax(route('recoveries.index', request()->all()))
+            ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(7)
             ->pageLength(100) // Set the default number of rows per page to 3
-            ->lengthMenu([[100,300, 500,  -1], [100,300, 500, "All"]]) // Define options for the number of rows per page
+            ->lengthMenu([[100, 300, 500, -1], [100, 300, 500, "All"]]) // Define options for the number of rows per page
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/recoveries/columns/_draw-scripts.js')) . "}");
     }
 
@@ -148,14 +144,11 @@ class RecoveriesDataTable extends DataTable
         ];
         $columns = array_map(function ($column) {
 
-            if ($this->state!=PaymentStatusEnums::CANCELED) {
-                if (in_array($column->name, ['action'])) {
-                    $column->visible(false);
-                }
-            } if ($this->state == null) {
-                if (in_array($column->name, ['notes'])) {
-                    $column->visible(false);
-                }
+            if ($this->state != PaymentStatusEnums::CANCELED && $column->name == 'action') {
+                $column->visible(false);
+            }
+            if ($this->state == null && $column->name == 'notes') {
+                $column->visible(false);
             }
             return $column;
         }, $columns);

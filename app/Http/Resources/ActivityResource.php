@@ -9,7 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @property Activity $resource
  */
-class ActivityResource extends  JsonResource
+class ActivityResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,7 +19,7 @@ class ActivityResource extends  JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'=> $this->resource->id,
+            'id' => $this->resource->id,
             'name' => $this->resource->name,
             'status' => $this->resource->status,
         ];

@@ -6,5 +6,5 @@ class ExportTypeEnums
 {
     public const INVOICE = "INVOICE";
     public const PAYMENT = "PAYMENT";
-public const TAXPAYER = "TAXPAYER";
+    public const TAXPAYER = "TAXPAYER";
 }

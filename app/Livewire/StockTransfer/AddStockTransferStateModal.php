@@ -24,7 +24,7 @@ class AddStockTransferStateModal extends Component
     public $user_id;
     public $collector_id;
     public $tariff;
-    public $qty=0;
+    public $qty = 0;
     public $start_no;
     public $end_no;
     public $trans_no;
@@ -37,9 +37,9 @@ class AddStockTransferStateModal extends Component
     public $taxlabel_id;
 
 
-    public $taxables=[];
-    public $taxlabels=[];
-    public $stock_transfers=[];
+    public $taxables = [];
+    public $taxlabels = [];
+    public $stock_transfers = [];
 
     public $taxable_name;
     public $taxable_idd;
@@ -52,10 +52,11 @@ class AddStockTransferStateModal extends Component
 
     public $edit_mode;
     public $deposit_mode;
-    public $remaining_qty=0;
+    public $remaining_qty = 0;
     public $option_calculus;
     public $period_from;
     public $period_to;
+
     protected function rules()
     {
         $rules = [
@@ -70,19 +71,21 @@ class AddStockTransferStateModal extends Component
     protected $listeners = [
         'update_transfer' => 'updateTransfer',
     ];
-    public function mount($id){
-        $this->collector_id =$id;
+
+    public function mount($id)
+    {
+        $this->collector_id = $id;
     }
+
     public function render()
     {
         $this->user_id = Auth::id();
 
 
+        $stock_requests = StockRequest::where('req_type', 'DEMANDE')->where('type', 'ACTIVE')->get();
 
-        $stock_requests= StockRequest::where('req_type','DEMANDE')->where('type','ACTIVE')->get();
-
-       // dd($taxlabel_list);
-        return view('livewire.stock_transfer.add-stock-transfer-state-modal', compact('stock_requests'));
+        // dd($taxlabel_list);
+        return view('livewire.stock_transfer.add-stock-transfer-state-modal', ['stock_requests' => $stock_requests]);
     }
 
 
@@ -94,7 +97,7 @@ class AddStockTransferStateModal extends Component
             $stock_transfers = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
             if ($this->edit_mode) {
                 $total_sold = 0;
-                if ($stock_transfers){
+                if ($stock_transfers) {
 
                     foreach ($stock_transfers as $stock_transfer) {
 
@@ -102,7 +105,7 @@ class AddStockTransferStateModal extends Component
                             'trans_no' => $stock_transfer->trans_no,
                             'trans_id' => $stock_transfer->trans_id,
                             'period_from' => $stock_transfer->period_from,
-                            'period_to' =>  $stock_transfer->period_to,
+                            'period_to' => $stock_transfer->period_to,
                             //'qty' => $stock_transfer->qty,
                             'type' => 'ARCHIVED',
                             'end_no' => $stock_transfer->end_no,
@@ -115,7 +118,7 @@ class AddStockTransferStateModal extends Component
                         $stock_transfer_new = StockTransfer::create($stockTtransferData);
 
                         // $stock_transfer_old = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'VENDU')->where('to_user_id', $this->collector_id)->get();
-                        $stock_transfer_olds = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'VENDU')->where('taxable_id', $stock_transfer->taxable_id)->where('trans_id',  $stock_transfer->trans_id)->orderBy('end_no', 'DESC')->get();
+                        $stock_transfer_olds = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'VENDU')->where('taxable_id', $stock_transfer->taxable_id)->where('trans_id', $stock_transfer->trans_id)->orderBy('end_no', 'DESC')->get();
 
                         // dd($stock_transfer->end_no, $stock_transfer_olds->first()->end_no);
                         //dd($stock_transfer_olds->first()->last_no);
@@ -133,11 +136,11 @@ class AddStockTransferStateModal extends Component
 
 
                         $stock_transfer_new->qty = $stock_transfer->qty - $stock_transfer_new->qty;
-                        if ($stock_transfer_olds->first()){
-                            $stock_transfer_new->start_no = $stock_transfer_olds->first()->last_no ?? $stock_transfer->start_no ;
-                        }else{
+                        if ($stock_transfer_olds->first()) {
+                            $stock_transfer_new->start_no = $stock_transfer_olds->first()->last_no ?? $stock_transfer->start_no;
+                        } else {
                             // $stock_transfer_new->qty = $stock_transfer->qty;
-                            $stock_transfer_new->start_no = $stock_transfer->start_no ;
+                            $stock_transfer_new->start_no = $stock_transfer->start_no;
                             $stock_transfer_new->last_no = $stock_transfer->start_no;
                         }
                         $stock_transfer_new->save();
@@ -150,11 +153,11 @@ class AddStockTransferStateModal extends Component
 
             }
 
-                $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
+            $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
 
-                if ($this->deposit_mode) {
-                    $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'VENDU')->where('to_user_id', $this->collector_id)->get();
-                }
+            if ($this->deposit_mode) {
+                $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'VENDU')->where('to_user_id', $this->collector_id)->get();
+            }
         });
 
         // Reset the form fields after successful submission
@@ -163,13 +166,11 @@ class AddStockTransferStateModal extends Component
         $this->taxlabel_id = null;
         $this->code = null;
         $this->taxable_id = null;
-       // $this->trans_no = null;
+        // $this->trans_no = null;
         $this->end_no = null;
         $this->start_no = null;
         $this->qty = null;
     }
-
-
 
 
     public function updateTransfer($id)
@@ -184,10 +185,10 @@ class AddStockTransferStateModal extends Component
         $this->edit_mode = true;
         $this->deposit_mode = false;
 
-        if ($this->edit_mode == true) {
+        if ($this->edit_mode) {
             //$this->stock_transfers = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
-           $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
-       }
+            $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
+        }
 
         // dd($this->edit_mode,$this->deposit_mode);
 

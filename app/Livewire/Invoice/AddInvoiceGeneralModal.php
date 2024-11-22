@@ -42,20 +42,23 @@ class AddInvoiceGeneralModal extends Component
     }
 
 
-    public function mount($id){
-       $this->taxpayer_id = $id;
+    public function mount($id)
+    {
+        $this->taxpayer_id = $id;
         $this->loadTaxpayerData();
     }
+
     public function render()
     {
 
 
         return view('livewire.invoice.add-invoice-general-modal',
-        [
-            'taxpayer'=>Taxpayer::find($this->taxpayer_id)
+            [
+                'taxpayer' => Taxpayer::find($this->taxpayer_id)
 
-        ]);
+            ]);
     }
+
     public function loadTaxpayerData()
     {
         $taxpayer = Taxpayer::find($this->taxpayer_id);
@@ -64,6 +67,7 @@ class AddInvoiceGeneralModal extends Component
             $this->dispatch('updateSharedTaxpayerId', ['id' => $this->taxpayer_id]);
         }
     }
+
     public function updateCheckbox($taxpayerTaxableId, $value)
     {
         foreach ($this->taxpayer_taxables as &$taxpayer_taxable) {
@@ -75,27 +79,31 @@ class AddInvoiceGeneralModal extends Component
 
         TaxpayerTaxable::where('id', $taxpayerTaxableId)->update(['billable' => $value]);
     }
+
     public function hhpaginationView()
     {
         return 'layout.partials.custom_pagination';
     }
+
     public function updating()
     {
         $this->loadTaxpayerData();
     }
+
     #[On('updatesTaxpayerTaxables')]
-    public function updatesTaxpayerTaxables($id){
-        if($this->taxpayer_id == $id ){
+    public function updatesTaxpayerTaxables($id)
+    {
+        if ($this->taxpayer_id == $id) {
             $this->loadTaxpayerData();
         }
 
     }
+
     public function submit()
     {
 
 
-
-       $this->validate();
+        $this->validate();
 
         DB::transaction(function () {
 
@@ -107,8 +115,6 @@ class AddInvoiceGeneralModal extends Component
 
         $this->reset();
     }
-
-
 
 
     public function hydrate()

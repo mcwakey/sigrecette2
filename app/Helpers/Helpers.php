@@ -1,7 +1,6 @@
 <?php
 
 
-
 if (!function_exists('theme')) {
     function theme()
     {
@@ -415,7 +414,7 @@ if (!function_exists('image')) {
      */
     function image($path)
     {
-        return asset('assets/media/'.$path);
+        return asset('assets/media/' . $path);
     }
 }
 
@@ -435,18 +434,19 @@ if (!function_exists('getIcon')) {
 }
 
 if (!function_exists('number_to_words')) {
-        function number_to_words($number=null, $locale = 'fr_FR') {
-            if($number!=null){
-                if (!is_numeric($number)) {
-                    return '';
-                }
-                $formatter = new NumberFormatter($locale, NumberFormatter::SPELLOUT);
-
-                // Retourner le résultat de la conversion
-                return ucfirst($formatter->format($number));
+    function number_to_words($number = null, $locale = 'fr_FR')
+    {
+        if ($number != null) {
+            if (!is_numeric($number)) {
+                return '';
             }
-            return "";
+            $formatter = new NumberFormatter($locale, NumberFormatter::SPELLOUT);
+
+            // Retourner le résultat de la conversion
+            return ucfirst($formatter->format($number));
         }
+        return "";
+    }
 }
 if (!function_exists('format_amount')) {
 
@@ -454,11 +454,12 @@ if (!function_exists('format_amount')) {
      * @param $amount
      * @return mixed|string
      */
-    function format_amount($amount) {
-      if(is_numeric($amount )){
-           return number_format($amount, 2, ',', ' ');
-      }
-      return $amount;
+    function format_amount($amount)
+    {
+        if (is_numeric($amount)) {
+            return number_format($amount, 2, ',', ' ');
+        }
+        return $amount;
     }
 }
 

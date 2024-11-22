@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use App\DataTables\InvoicesDataTable;
 use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
-use Illuminate\Validation\Rule;
 use App\Models\Invoice;
 use App\Models\TaxLabel;
 use App\Models\Year;
 use App\Models\Zone;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
 
 class InvoiceController extends Controller
@@ -46,7 +46,7 @@ class InvoiceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request,InvoicesDataTable $dataTable)
+    public function index(Request $request, InvoicesDataTable $dataTable)
     {
 
         $year = Year::getActiveYear()->name;
@@ -57,37 +57,35 @@ class InvoiceController extends Controller
             's_date' => 'nullable|date_format:Y-m-d H:i:s',
             'e_date' => 'nullable|date_format:Y-m-d H:i:s',
             'type' => ['nullable', 'string', Rule::in(array_keys(Constants::INVOICE_TYPE_VALIDATION_MAP))],
-            'state' => ['nullable', 'string', Rule::in(array_keys( Constants::INVOICE_STATE_VALIDATION_MAP))],
-            'to_paid' =>['nullable', 'integer', Rule::in([0,1])],
-            'invoice_id'=>['nullable', 'integer'],
+            'state' => ['nullable', 'string', Rule::in(array_keys(Constants::INVOICE_STATE_VALIDATION_MAP))],
+            'to_paid' => ['nullable', 'integer', Rule::in([0, 1])],
+            'invoice_id' => ['nullable', 'integer'],
         ]);
         $state = isset($validatedData['state']) ? Constants::INVOICE_STATE_VALIDATION_MAP[$validatedData['state']] : null;
-        $to_paid = isset($validatedData['to_paid']) ? $validatedData['to_paid']: null;
-        $type = isset($validatedData['type'])?Constants::INVOICE_TYPE_VALIDATION_MAP[$validatedData['type']] : null;
+        $to_paid = isset($validatedData['to_paid']) ? $validatedData['to_paid'] : null;
+        $type = isset($validatedData['type']) ? Constants::INVOICE_TYPE_VALIDATION_MAP[$validatedData['type']] : null;
         $delivery = isset($validatedData['delivery']) ? $validatedData['delivery'] : null;
         $startInvoiceId = $validatedData['startInvoiceId'] ?? null;
         $endInvoiceId = $validatedData['endInvoiceId'] ?? null;
-        $startDate = $validatedData['s_date'] ??  Carbon::parse("{$year}-01-01 00:00:00");
+        $startDate = $validatedData['s_date'] ?? Carbon::parse("{$year}-01-01 00:00:00");
         $endDate = $validatedData['e_date'] ?? Carbon::parse("{$year}-12-31 23:59:59");
         $zones = Zone::all();
         $tax_labels = TaxLabel::all();
         $role = Role::where('name', 'agent_recouvrement')->first();
         $agent_recouvrements = $role->users()->get();
-        $invoice_id =  isset($validatedData['invoice_id']) ? $validatedData['invoice_id'] : null;
+        $invoice_id = isset($validatedData['invoice_id']) ? $validatedData['invoice_id'] : null;
 
 
-
-        if(  $invoice_id){
+        if ($invoice_id) {
             $invoice = Invoice::find($invoice_id);
-            if ($invoice){
-                if($invoice->status == InvoiceStatusEnums::PENDING){
-                   return redirect()->route('invoices.index', ['state' =>  Constants::INVOICE_STATE_DRAFT_KEY,'type' => Constants::INVOICE_TYPE_TITRE_KEY]);
-                }elseif ($invoice->status == InvoiceStatusEnums::ACCEPTED){
-                    return redirect()->route('invoices.index',  ['state' =>  Constants::INVOICE_STATE_ACCEPTED_KEY,'type' => Constants::INVOICE_TYPE_TITRE_KEY]);
+            if ($invoice) {
+                if ($invoice->status == InvoiceStatusEnums::PENDING) {
+                    return redirect()->route('invoices.index', ['state' => Constants::INVOICE_STATE_DRAFT_KEY, 'type' => Constants::INVOICE_TYPE_TITRE_KEY]);
+                } elseif ($invoice->status == InvoiceStatusEnums::ACCEPTED) {
+                    return redirect()->route('invoices.index', ['state' => Constants::INVOICE_STATE_ACCEPTED_KEY, 'type' => Constants::INVOICE_TYPE_TITRE_KEY]);
 
-                }
-                elseif ($invoice->status == InvoiceStatusEnums::PENDING){
-                    return redirect()->route('invoices.index', ['state' =>  Constants::INVOICE_STATE_PENDING_KEY,'type' => Constants::INVOICE_TYPE_TITRE_KEY]);
+                } elseif ($invoice->status == InvoiceStatusEnums::PENDING) {
+                    return redirect()->route('invoices.index', ['state' => Constants::INVOICE_STATE_PENDING_KEY, 'type' => Constants::INVOICE_TYPE_TITRE_KEY]);
                 }
             }
         }
@@ -97,13 +95,13 @@ class InvoiceController extends Controller
                 'delivery' => $delivery,
                 'startDate' => $startDate,
                 'endDate' => $endDate,
-                'startInvoiceId'=>$startInvoiceId ,
-                'endInvoiceId'=>$endInvoiceId,
-                'type'=>$type,
-                'state'=>$state,
-                'to_paid'=>$to_paid,
+                'startInvoiceId' => $startInvoiceId,
+                'endInvoiceId' => $endInvoiceId,
+                'type' => $type,
+                'state' => $state,
+                'to_paid' => $to_paid,
             ]
-        )->render('pages/invoices.list', compact('zones', 'tax_labels','agent_recouvrements'));
+        )->render('pages/invoices.list', ['zones' => $zones, 'tax_labels' => $tax_labels, 'agent_recouvrements' => $agent_recouvrements]);
 
 
     }
@@ -131,7 +129,7 @@ class InvoiceController extends Controller
     {
         //return view('pages/invoices.show', compact('invoice'));
         //return $dataTable->render('pages/invoices.show');
-        return $dataTable->render('pages/invoices.show', compact('invoice'));
+        return $dataTable->render('pages/invoices.show', ['invoice' => $invoice]);
     }
 
     /**

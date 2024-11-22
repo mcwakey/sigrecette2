@@ -56,12 +56,12 @@ class CollectorsDataTable extends DataTable
             //     return $stock_transfer->;
             // })
             ->editColumn('stock_transfers.start_no', function (StockTransfer $stock_transfer) {
-                return $stock_transfer->start_no. " - ". $stock_transfer->end_no;
+                return $stock_transfer->start_no . " - " . $stock_transfer->end_no;
                 // return view('pages.stock_transfers.columns._seize', compact('stock_transfer'));
             })
             ->editColumn('rc_qty', function (StockTransfer $stock_transfer) {
                 // if ($stock_transfer->trans_type == "RECU") {
-                    $qty = $stock_transfer->rc_qty ;
+                $qty = $stock_transfer->rc_qty;
                 // } else {
                 //     $qty =  "";
                 // }
@@ -70,36 +70,28 @@ class CollectorsDataTable extends DataTable
             })
             ->editColumn('rc_total', function (StockTransfer $stock_transfer) {
                 //if ($stock_transfer->trans_type == "RECU") {
-                    $rc_total = $stock_transfer->rc_qty * $stock_transfer->taxable->tariff; ;
+                $rc_total = $stock_transfer->rc_qty * $stock_transfer->taxable->tariff;;
                 // } else {
-                    // $rc_total =  "";
+                // $rc_total =  "";
                 // }
 
                 return $rc_total;
             })
             ->editColumn('vv_qty', function (StockTransfer $stock_transfer) {
-                if (!$stock_transfer->vv_qty) {
-                    $vv_qty =  "";
-                } else {
-                    $vv_qty = $stock_transfer->vv_qty ;
-                }
+                $vv_qty = $stock_transfer->vv_qty ? $stock_transfer->vv_qty : "";
 
                 return $vv_qty;
             })
             ->editColumn('vv_total', function (StockTransfer $stock_transfer) {
-                if (!$stock_transfer->vv_qty) {
-                    $vv_total =  "";
-                } else {
-                    $vv_total = $stock_transfer->vv_qty * $stock_transfer->taxable->tariff;
-                }
+                $vv_total = $stock_transfer->vv_qty ? $stock_transfer->vv_qty * $stock_transfer->taxable->tariff : "";
 
                 return $vv_total;
             })
             ->editColumn('rd_qty', function (StockTransfer $stock_transfer) {
                 // if (!$stock_transfer->rd_qty) {
-                    // $rd_qty =  "";
+                // $rd_qty =  "";
                 // } else {
-                    $rd_qty = $stock_transfer->rd_qty ;
+                $rd_qty = $stock_transfer->rd_qty;
                 // }
 
                 // if (is_null($stock_transfer->rd_qty)) {
@@ -117,11 +109,7 @@ class CollectorsDataTable extends DataTable
                 //     $rd_total = $stock_transfer->rd_qty * $stock_transfer->taxable->tariff;
                 // }
 
-                if (is_null($stock_transfer->rd_qty)) {
-                    $rd_total = null;
-                } else {
-                    $rd_total = $stock_transfer->rd_qty * $stock_transfer->taxable->tariff;
-                }
+                $rd_total = is_null($stock_transfer->rd_qty) ? null : $stock_transfer->rd_qty * $stock_transfer->taxable->tariff;
 
                 return $rd_total;
             })
@@ -141,18 +129,17 @@ class CollectorsDataTable extends DataTable
                 return $stock_transfer->user->name;
                 // return view('pages.stock_transfers.columns._collector', compact('stock_transfer'));
             })
-
             ->editColumn('stock_transfers.type', function (StockTransfer $stock_transfer) {
-                return view('pages.stock_transfers.columns._status', compact('stock_transfer'));
+                return view('pages.stock_transfers.columns._status', ['stock_transfer' => $stock_transfer]);
                 //return $stock_request->type;
             })
             ->editColumn('period', function (StockTransfer $stock_transfer) {
                 // return $stock_transfer->period_from->format('d M Y')." - ".$stock_transfer->period_to->format('d M Y');
                 // return $stock_transfer->period_from." - ".$stock_transfer->period_to;
-                return view('pages.stock_transfers.columns._collector', compact('stock_transfer'));
+                return view('pages.stock_transfers.columns._collector', ['stock_transfer' => $stock_transfer]);
             })
             ->addColumn('action', function (StockTransfer $stock_transfer) {
-                return view('pages.stock_transfers.columns._collector_actions', compact('stock_transfer'));
+                return view('pages.stock_transfers.columns._collector_actions', ['stock_transfer' => $stock_transfer]);
             })
             ->setRowId('id');
     }
@@ -173,27 +160,27 @@ class CollectorsDataTable extends DataTable
         //             ->newQuery();
 
         return $model->join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')
-                    ->join('users', 'stock_transfers.to_user_id', '=', 'users.id')
-                    ->select('stock_transfers.to_user_id',
-                            DB::raw('SUM(CASE WHEN trans_type = "RECU" THEN qty*tariff END) AS rc_qty'),
-                            DB::raw('SUM(CASE WHEN trans_type = "VENDU" THEN qty*tariff END) AS vv_qty'),
-                            DB::raw('SUM(CASE WHEN trans_type = "RENDU" THEN qty*tariff END) AS rd_qty'),
-                            DB::raw('MAX(stock_transfers.id) AS id'),
-                            // DB::raw('MAX(users.name) AS trans_no'),
-                            //DB::raw('MAX(stock_transfers.trans_desc) AS trans_desc'),
-                            DB::raw('MAX(stock_transfers.start_no) AS start_no'),
-                            DB::raw('MAX(stock_transfers.end_no) AS end_no'),
-                            DB::raw('MAX(stock_transfers.last_no) AS last_no'),
-                            DB::raw('MIN(stock_transfers.trans_type) AS trans_type'),
-                            DB::raw('MIN(stock_transfers.type) AS type'),
-                            //DB::raw('MAX(stock_transfers.to_user_id) AS to_user_id'),
-                            DB::raw('MAX(stock_transfers.period_from) AS period_from'),
-                            DB::raw('MAX(stock_transfers.period_to) AS period_to'),
-                            DB::raw('MAX(stock_transfers.created_at) AS created_at'),
-                            DB::raw('MAX(stock_transfers.taxable_id) AS taxable_id'))
-                    // ->where('stock_transfers.to_user_id', $this->id)
-                    ->groupBy( 'stock_transfers.to_user_id', 'stock_transfers.period_to')
-                    ->orderBy('trans_id', 'desc')
+            ->join('users', 'stock_transfers.to_user_id', '=', 'users.id')
+            ->select('stock_transfers.to_user_id',
+                DB::raw('SUM(CASE WHEN trans_type = "RECU" THEN qty*tariff END) AS rc_qty'),
+                DB::raw('SUM(CASE WHEN trans_type = "VENDU" THEN qty*tariff END) AS vv_qty'),
+                DB::raw('SUM(CASE WHEN trans_type = "RENDU" THEN qty*tariff END) AS rd_qty'),
+                DB::raw('MAX(stock_transfers.id) AS id'),
+                // DB::raw('MAX(users.name) AS trans_no'),
+                //DB::raw('MAX(stock_transfers.trans_desc) AS trans_desc'),
+                DB::raw('MAX(stock_transfers.start_no) AS start_no'),
+                DB::raw('MAX(stock_transfers.end_no) AS end_no'),
+                DB::raw('MAX(stock_transfers.last_no) AS last_no'),
+                DB::raw('MIN(stock_transfers.trans_type) AS trans_type'),
+                DB::raw('MIN(stock_transfers.type) AS type'),
+                //DB::raw('MAX(stock_transfers.to_user_id) AS to_user_id'),
+                DB::raw('MAX(stock_transfers.period_from) AS period_from'),
+                DB::raw('MAX(stock_transfers.period_to) AS period_to'),
+                DB::raw('MAX(stock_transfers.created_at) AS created_at'),
+                DB::raw('MAX(stock_transfers.taxable_id) AS taxable_id'))
+            // ->where('stock_transfers.to_user_id', $this->id)
+            ->groupBy('stock_transfers.to_user_id', 'stock_transfers.period_to')
+            ->orderBy('trans_id', 'desc')
             //mask olders
             // ->where('stock_transfers.type','!=', 'ARCHIVED')
             ;
@@ -210,7 +197,7 @@ class CollectorsDataTable extends DataTable
             ->setTableId('stock_transfers-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0, 'desc')
@@ -250,13 +237,13 @@ class CollectorsDataTable extends DataTable
                 ->exportable(false)
                 ->printable(false)
                 ->width(60)
-                // ->buttons(
-                //     Button::make('create'),
-                //     Button::make('export'),
-                //     Button::make('print'),
-                //     Button::make('reset'),
-                //     Button::make('reload')
-                // )
+            // ->buttons(
+            //     Button::make('create'),
+            //     Button::make('export'),
+            //     Button::make('print'),
+            //     Button::make('reset'),
+            //     Button::make('reload')
+            // )
         ];
     }
 

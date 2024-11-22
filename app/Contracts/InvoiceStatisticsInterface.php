@@ -10,7 +10,7 @@ interface InvoiceStatisticsInterface
      * @param Year $year
      * @return array
      */
-    public function countInvoices(Year $year):array;
+    public function countInvoices(Year $year): array;
 
     /**
      * @param array $validatedData

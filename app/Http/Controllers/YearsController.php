@@ -17,6 +17,7 @@ class YearsController extends Controller
         //return view('pages/years.list');
         return $dataTable->render('pages/years.list');
     }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -36,9 +37,9 @@ class YearsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Year $year,YearDataTable $yearsDataTable)
+    public function show(Year $year, YearDataTable $yearsDataTable)
     {
-        return $yearsDataTable->with('id',$year->id)->render('pages/years.show', compact('year'));
+        return $yearsDataTable->with('id', $year->id)->render('pages/years.show', ['year' => $year]);
     }
 
     /**

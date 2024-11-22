@@ -16,7 +16,7 @@ class InvoiceCreated extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct(private Invoice $invoice,private User $user,private string $type="regisseur")
+    public function __construct(private Invoice $invoice, private User $user, private string $type = "regisseur")
     {
         //
     }

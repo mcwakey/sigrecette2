@@ -19,15 +19,16 @@ class AddTaxLabelModal extends Component
     public $edit_mode = false;
     public $categories = [];
     public $allCategories = ['CATEGORY 1', 'CATEGORY 2', 'CATEGORY 3'];
+
     protected function rules()
     {
-        return  [
-        'name' => 'required|string',
-        'code' => 'required',
+        return [
+            'name' => 'required|string',
+            'code' => 'required',
             'categories' => 'required|array|min:1',
             'categories.*' => 'in:' . implode(',', $this->allCategories),
 
-    ];
+        ];
     }
 
     protected $listeners = [
@@ -50,7 +51,7 @@ class AddTaxLabelModal extends Component
             $categoryString = implode(',', $this->categories);
             $data = [
                 'name' => $this->name,
-                'category' =>  $categoryString,
+                'category' => $categoryString,
                 'code' => $this->code,
             ];
 

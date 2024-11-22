@@ -11,18 +11,18 @@ class InvoiceItem extends Model
 
     protected $fillable = [
         'taxpayer_taxable_id',
-        'qty',	 	 	
+        'qty',
         'amount',
         'ii_tariff',
         'ii_seize',
         'invoice_id',
     ];
-    
+
     public function invoice()
     {
         return $this->belongsTo(Invoice::class);
     }
-    
+
     public function taxpayer_taxable()
     {
         return $this->belongsTo(TaxpayerTaxable::class);

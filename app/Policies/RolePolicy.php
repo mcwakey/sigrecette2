@@ -21,7 +21,7 @@ class RolePolicy
      */
     public function view(User $user, Role $role): bool
     {
-        if(!$user->hasRole('administrateur_system') && $role->id == 1) {
+        if (!$user->hasRole('administrateur_system') && $role->id == 1) {
             return false;
         }
 

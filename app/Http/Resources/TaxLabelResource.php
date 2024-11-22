@@ -3,8 +3,8 @@
 namespace App\Http\Resources;
 
 use App\Models\Taxable;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @property Taxable $resource
@@ -19,7 +19,7 @@ class TaxLabelResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'=>$this->resource->id,
+            'id' => $this->resource->id,
             'name' => $this->resource->name,
             'category' => $this->resource->category,
             'code' => $this->resource->code,

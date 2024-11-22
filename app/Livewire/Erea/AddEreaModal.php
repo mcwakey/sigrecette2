@@ -53,7 +53,7 @@ class AddEreaModal extends Component
     {
         $cantons = Canton::all();
 
-        return view('livewire.erea.add-erea-modal', compact('cantons'));
+        return view('livewire.erea.add-erea-modal', ['cantons' => $cantons]);
     }
 
     public function submit()

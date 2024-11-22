@@ -11,14 +11,13 @@ class EnsureIsAdmin
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response) $next
      */
     public function handle(Request $request, Closure $next): Response
     {
         if (!$request->user()->hasAnyRole(['administrateur_system', 'administrateur',])
-         && (!$request->has('type') || !$request->user()->hasAnyRole(['regisseur',]))
-        ) 
-        {
+            && (!$request->has('type') || !$request->user()->hasAnyRole(['regisseur',]))
+        ) {
             return redirect()->route('dashboard');
         }
 

@@ -11,7 +11,7 @@ interface PdfGeneratorInterface
      * @param int|null $action
      * @return array
      */
-    public function generateInvoiceListPdf(array $data,string $template,int $action=null):array;
+    public function generateInvoiceListPdf(array $data, string $template, int $action = null): array;
 
     /**
      * @param array $data
@@ -19,7 +19,7 @@ interface PdfGeneratorInterface
      * @param int|null $action
      * @return array
      */
-    public function generateInvoicePdf(array $data,string $templateName,int $action=null ):array;
+    public function generateInvoicePdf(array $data, string $templateName, int $action = null): array;
 
     /**
      * @param $data
@@ -27,7 +27,7 @@ interface PdfGeneratorInterface
      * @param $action
      * @return array
      */
-    public function generateStateValueCollectorPdf($data, string $template, $action):array;
+    public function generateStateValueCollectorPdf($data, string $template, $action): array;
 
     /**
      * @param $data
@@ -35,14 +35,14 @@ interface PdfGeneratorInterface
      * @param $action
      * @return array
      */
-    public function generateStateValueReciepientPdf($data, $template, $action):array;
+    public function generateStateValueReciepientPdf($data, $template, $action): array;
 
     /**
      * @param $data
      * @param string $template
      * @return array
      */
-    public function generataxpayerFormPdf($data, string $template):array;
+    public function generataxpayerFormPdf($data, string $template): array;
 
 
 }

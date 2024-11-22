@@ -36,6 +36,7 @@ class AddRefnoForm extends Component
         'update_invoice' => 'updateInvoice',
         //'add_invoice' => 'addInvoice',
     ];
+
     public function render()
     {
         return view('livewire.accountant_deposit.add-refno-form');
@@ -46,42 +47,41 @@ class AddRefnoForm extends Component
     {
         $this->validate();
 
-            DB::transaction(function () {
+        DB::transaction(function () {
 
 
-                $payments_olds = Payment::where('status',PaymentStatusEnums::DONE )->where('status',PaymentStatusEnums::CANCELED )->where('reference_deposit', null )->get();
-                $payments_olds = Payment::where(function($query) {$query->where('status', PaymentStatusEnums::DONE)->orWhere('status', PaymentStatusEnums::CANCELED);})->where('reference_deposit', null)->get();
-                
+            $payments_olds = Payment::where('status', PaymentStatusEnums::DONE)->where('status', PaymentStatusEnums::CANCELED)->where('reference_deposit', null)->get();
+            $payments_olds = Payment::where(function ($query) {
+                $query->where('status', PaymentStatusEnums::DONE)->orWhere('status', PaymentStatusEnums::CANCELED);
+            })->where('reference_deposit', null)->get();
 
 
-                     foreach ($payments_olds as $payments_old) {
+            foreach ($payments_olds as $payments_old) {
 
-                        // $paymentsData = [
-                        //     'status' => 'DONE',
-                        //     // 'trans_id' => $stock_transfer->trans_id,
-                        //     // //'qty' => $stock_transfer->qty,
-                        //     // 'type' => 'ARCHIVED',
-                        //     // 'end_no' => $stock_transfer->end_no,
-                        //     // 'taxable_id' => $stock_transfer->taxable_id,
-                        //     // 'trans_type' => 'RENDU',
-                        //     // 'payment_id' => $payment->id,
-                        //     // 'by_user_id' => $this->user_id,
-                        //     // 'to_user_id' => $stock_transfer->to_user_id,
-                        // ];
+                // $paymentsData = [
+                //     'status' => 'DONE',
+                //     // 'trans_id' => $stock_transfer->trans_id,
+                //     // //'qty' => $stock_transfer->qty,
+                //     // 'type' => 'ARCHIVED',
+                //     // 'end_no' => $stock_transfer->end_no,
+                //     // 'taxable_id' => $stock_transfer->taxable_id,
+                //     // 'trans_type' => 'RENDU',
+                //     // 'payment_id' => $payment->id,
+                //     // 'by_user_id' => $this->user_id,
+                //     // 'to_user_id' => $stock_transfer->to_user_id,
+                // ];
 
-                        // $stock_transfer_new = StockTransfer::create($stockTtransferData);
-                        $payments_old->reference_deposit = $this->refno;
-                        // $payments_old->status = 'DONE';
-                        $payments_old->save();
-                    }
-            });
-            $this->reset();
+                // $stock_transfer_new = StockTransfer::create($stockTtransferData);
+                $payments_old->reference_deposit = $this->refno;
+                // $payments_old->status = 'DONE';
+                $payments_old->save();
+            }
+        });
+        $this->reset();
         // }else{
-            $this->dispatchMessage('Numéro de quitance', 'update');
+        $this->dispatchMessage('Numéro de quitance', 'update');
 
         // }
-
-
 
 
     }

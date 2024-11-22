@@ -58,7 +58,7 @@ class CollectorDepositsDataTable extends DataTable
             //     return $stock_transfer->;
             // })
             ->editColumn('stock_transfers.start_no', function (StockTransfer $stock_transfer) {
-                return $stock_transfer->start_no. " - ". $stock_transfer->end_no;
+                return $stock_transfer->start_no . " - " . $stock_transfer->end_no;
                 // return view('pages.collector_deposits.columns._seize', compact('collector_deposit'));
             })
             // ->editColumn('qty', function (StockTransfer $stock_transfer) {
@@ -80,20 +80,12 @@ class CollectorDepositsDataTable extends DataTable
             //     return $total;
             // })
             ->editColumn('qty', function (StockTransfer $stock_transfer) {
-                if ($stock_transfer->trans_type == "VENDU") {
-                    $qty = $stock_transfer->qty ;
-                } else {
-                    $qty =  "";
-                }
+                $qty = $stock_transfer->trans_type == "VENDU" ? $stock_transfer->qty : "";
 
                 return $qty;
             })
             ->editColumn('total', function (StockTransfer $stock_transfer) {
-                if ($stock_transfer->trans_type == "VENDU") {
-                    $total = $stock_transfer->qty * $stock_transfer->taxable->tariff; ;
-                } else {
-                    $total =  "";
-                }
+                $total = $stock_transfer->trans_type == "VENDU" ? $stock_transfer->qty * $stock_transfer->taxable->tariff : "";
 
                 return $total;
             })
@@ -131,7 +123,7 @@ class CollectorDepositsDataTable extends DataTable
                 return $stock_transfer->user->name ?? '-';
             })
             ->editColumn('stock_transfers.type', function (StockTransfer $stock_transfer) {
-                return view('pages.stock_transfers.columns._status', compact('stock_transfer'));
+                return view('pages.stock_transfers.columns._status', ['stock_transfer' => $stock_transfer]);
                 //return $stock_request->type;
             })
             ->editColumn('payments.reference', function (StockTransfer $stock_transfer) {
@@ -139,7 +131,7 @@ class CollectorDepositsDataTable extends DataTable
                 // return view('pages.collector_deposits.columns._seize', compact('collector_deposit'));
             })
             ->addColumn('action', function (StockTransfer $stock_transfer) {
-                return view('pages.collector_deposits.columns._actions', compact('stock_transfer'));
+                return view('pages.collector_deposits.columns._actions', ['stock_transfer' => $stock_transfer]);
             })
             ->setRowId('id');
     }
@@ -151,17 +143,16 @@ class CollectorDepositsDataTable extends DataTable
     public function query(StockTransfer $model): QueryBuilder
     {
         $query = $model->join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')
-                    // ->with('taxable.tax_label')
-                    // ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
-                    ->join('users', 'stock_transfers.to_user_id', '=', 'users.id')
-                    ->leftjoin('payments', 'stock_transfers.payment_id', '=', 'payments.id')
-                    ->where('stock_transfers.trans_type', 'VENDU') // Filter collector_deposits by taxpayer_id
-                    ->select('stock_transfers.*')
-                    //->orderBy('tax_labels.name')
-                    ;
+            // ->with('taxable.tax_label')
+            // ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
+            ->join('users', 'stock_transfers.to_user_id', '=', 'users.id')
+            ->leftjoin('payments', 'stock_transfers.payment_id', '=', 'payments.id')
+            ->where('stock_transfers.trans_type', 'VENDU') // Filter collector_deposits by taxpayer_id
+            ->select('stock_transfers.*')//->orderBy('tax_labels.name')
+        ;
 
-        if($this->id){
-            $query=$query->where('to_user_id','=',$this->id);
+        if ($this->id) {
+            $query = $query->where('to_user_id', '=', $this->id);
         }
         return $query->newQuery();
         // return StockTransfer::where('taxpayer_id', $this->id); // Filter collector_deposits by taxpayer_id
@@ -172,7 +163,7 @@ class CollectorDepositsDataTable extends DataTable
      */
     public function html(): HtmlBuilder
     {
-        $columns=$this->getColumns();
+        $columns = $this->getColumns();
 
         return $this->builder()
             ->setTableId('collector_deposits-table')
@@ -180,7 +171,7 @@ class CollectorDepositsDataTable extends DataTable
             // ->columns($this->getColumns())
             ->columns($columns)
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
+            ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0, 'desc')
@@ -221,13 +212,13 @@ class CollectorDepositsDataTable extends DataTable
                 ->exportable(false)
                 ->printable(false)
                 ->width(60)
-                // ->buttons(
-                //     Button::make('create'),
-                //     Button::make('export'),
-                //     Button::make('print'),
-                //     Button::make('reset'),
-                //     Button::make('reload')
-                // )
+            // ->buttons(
+            //     Button::make('create'),
+            //     Button::make('export'),
+            //     Button::make('print'),
+            //     Button::make('reset'),
+            //     Button::make('reload')
+            // )
         ];
     }
 

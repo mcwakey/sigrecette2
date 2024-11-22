@@ -22,7 +22,7 @@ class AddYearModal extends Component
     protected $rules = [
         'name' => 'required|int',
         'status' => 'required|string',
-        'auto_switch'=>'required|boolean'
+        'auto_switch' => 'required|boolean'
     ];
 
     protected $listeners = [
@@ -45,10 +45,10 @@ class AddYearModal extends Component
             $data = [
                 'name' => $this->name,
                 'status' => $this->status,
-                'auto_switch'=> $this->auto_switch
+                'auto_switch' => $this->auto_switch
             ];
-            if($this->status=="ACTIVE"){
-               Year::makeAllYearsInative();
+            if ($this->status == "ACTIVE") {
+                Year::makeAllYearsInative();
             }
             $year = Year::find($this->year_id) ?? Year::create($data);
 

@@ -24,6 +24,7 @@ use Spatie\Permission\Models\Role;
 class AddStatusForm extends Component
 {
     use DispatchesMessages;
+
     public $taxpayer_id;
 
     public $status;
@@ -38,19 +39,23 @@ class AddStatusForm extends Component
                 TaxpayerStateEnums::REJECTED)],
         ];
     }
+
     private $error_message;
     protected $listeners = [
         'update_status' => 'updateStatus',
     ];
-    public function mount($id){
+
+    public function mount($id)
+    {
         $taxpayer = Taxpayer::find($id);
 
         $this->taxpayer_id = $taxpayer?->id;
-        $this->status =  $taxpayer?->from_mobile_and_validate_state;
+        $this->status = $taxpayer?->from_mobile_and_validate_state;
     }
+
     public function render()
     {
-        return view('livewire.taxpayer.add-status-form',['status' => $this->status]);
+        return view('livewire.taxpayer.add-status-form', ['status' => $this->status]);
     }
 
 
@@ -68,13 +73,10 @@ class AddStatusForm extends Component
                 $this->dispatchMessage('Taxpayer', 'update');
             });
             $this->reset();
-        }else{
-            $this->dispatchMessage('Taxpayer', 'update', 'error',"erreur");
+        } else {
+            $this->dispatchMessage('Taxpayer', 'update', 'error', "erreur");
 
         }
-
-
-
 
 
     }
@@ -86,7 +88,7 @@ class AddStatusForm extends Component
         $taxpayer = Taxpayer::find($id);
 
         $this->taxpayer_id = $taxpayer->id;
-        $this->status =  $taxpayer->from_mobile_and_validate_state;
+        $this->status = $taxpayer->from_mobile_and_validate_state;
     }
 
     public function hydrate()

@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Invoice;
-use App\Models\Zone;
-use App\Models\Taxpayer;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SearchInvoiceResource;
+use App\Models\Invoice;
+use App\Models\Zone;
+use Illuminate\Http\Request;
 
 class SearchInvoiceController extends Controller
 {
@@ -15,15 +14,15 @@ class SearchInvoiceController extends Controller
     {
         $zoneName = $request->input('zone', null);
 
-        $quer_r=Invoice::query();
+        $quer_r = Invoice::query();
         if ($zoneName) {
-            $zone = Zone::where('name' ,$zoneName)->first();
-          // dd($zone,$zoneName);
+            $zone = Zone::where('name', $zoneName)->first();
+            // dd($zone,$zoneName);
             if ($zone) {
-                $quer_r=   $quer_r->whereHas('taxpayer', function ($query) use ($zone) {
+                $quer_r = $quer_r->whereHas('taxpayer', function ($query) use ($zone) {
                     $query->where('zone_id', $zone->id);
                 });
-            }else {
+            } else {
                 return SearchInvoiceResource::collection(collect([]));
             }
         }

@@ -20,7 +20,7 @@ class AddStatusForm extends Component
     public $edit_mode = false;
 
     protected $rules = [
-        "status" =>"required",
+        "status" => "required",
     ];
 
     protected $listeners = [
@@ -28,6 +28,7 @@ class AddStatusForm extends Component
         'update_request_status' => 'updateRequestStatus',
         //'add_request' => 'addrequest',
     ];
+
     public function render()
     {
         return view('livewire.stock_request.add-status-form');
@@ -48,7 +49,6 @@ class AddStatusForm extends Component
             ];
 
 
-
             // Create or update request record
             $requests = StockRequest::where("req_id", $this->request_id)->get(); //?? request::create($request_id);
 
@@ -61,7 +61,6 @@ class AddStatusForm extends Component
 
         $this->reset();
     }
-
 
 
     public function updateRequestStatus($id)

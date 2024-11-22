@@ -34,20 +34,24 @@ class AddOrdernoForm extends Component
         'update_invoice' => 'updateInvoice',
         //'add_invoice' => 'addInvoice',
     ];
+
     public function render()
     {
         return view('livewire.invoice.add-orderno-form');
     }
-    public function validateData(){
+
+    public function validateData()
+    {
         $this->validate();
         //$invoice = Invoice::find($this->invoice_id);
         //if($invoice && $invoice->reduce_amount == ''){
         //    if ($invoice) {
         //        if($invoice->type ==Constants::INVOICE_TYPE_TITRE && $invoice->edition_state != "PRINT"){
 
-         //           $this->addError('orderno', $this->error_message);}}}
+        //           $this->addError('orderno', $this->error_message);}}}
 
     }
+
     public function submit()
     {
         $this->validateData();
@@ -58,7 +62,7 @@ class AddOrdernoForm extends Component
 
 
                 $this->invoice_id = $invoice->id;
-                $invoice->order_no =$this->orderno;
+                $invoice->order_no = $this->orderno;
 
 
                 $invoice->submitToState("submit_for_pending");
@@ -66,12 +70,10 @@ class AddOrdernoForm extends Component
                 $this->dispatchMessage('Avis', 'update');
             });
             $this->reset();
-        }else{
-            $this->dispatchMessage('Avis', 'update', 'error',$this->error_message);
+        } else {
+            $this->dispatchMessage('Avis', 'update', 'error', $this->error_message);
 
         }
-
-
 
 
     }

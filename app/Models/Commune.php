@@ -34,6 +34,7 @@ class Commune extends Model
     {
         return Commune::orderBy('id')->first();
     }
+
     /**
      * Get the full URL of the image.
      *
@@ -44,8 +45,9 @@ class Commune extends Model
 
 
         //dump();
-        return $this->logo_path!=null?asset("storage/".$this->logo_path):null;
+        return $this->logo_path != null ? asset("storage/" . $this->logo_path) : null;
     }
+
     /**
      * Get the full URL of the image.
      *

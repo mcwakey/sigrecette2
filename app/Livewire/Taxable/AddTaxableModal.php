@@ -27,14 +27,15 @@ class AddTaxableModal extends Component
     public $penalty;
     public $penalty_type;
     public $tax_label_id;
-    public $use_second_formula=false;
+    public $use_second_formula = false;
 
 
     public $edit_mode = false;
 
-    protected function rules(){
+    protected function rules()
+    {
         $rules = [
-            'name' => 'required|string|unique:taxables,name,' . ($this->edit_mode ?  $this->taxable_id : ''),
+            'name' => 'required|string|unique:taxables,name,' . ($this->edit_mode ? $this->taxable_id : ''),
             'tariff' => 'required|numeric',
             'tariff_type' => 'required|string',
             'unit' => 'required|string',
@@ -61,19 +62,21 @@ class AddTaxableModal extends Component
     public function render()
     {
         $tax_labels = TaxLabel::all();
-        return view('livewire.taxable.add-taxable-modal', compact('tax_labels'));
+        return view('livewire.taxable.add-taxable-modal', ['tax_labels' => $tax_labels]);
     }
+
     public function mount()
 
     {
-        if($this->edit_mode){
+        if ($this->edit_mode) {
             $taxable = Taxable::find($this->taxable_id);
 
-            if($taxable){
-                $this->use_second_formula =(bool)$taxable->use_second_formula;
+            if ($taxable) {
+                $this->use_second_formula = (bool)$taxable->use_second_formula;
             }
         }
     }
+
     public function submit()
     {
         // Validate the form input data
@@ -90,7 +93,7 @@ class AddTaxableModal extends Component
                 'penalty' => $this->penalty,
                 'penalty_type' => $this->penalty_type,
                 'tax_label_id' => $this->tax_label_id,
-                'use_second_formula'=>$this->use_second_formula
+                'use_second_formula' => $this->use_second_formula
             ];
 
             $taxable = Taxable::find($this->taxable_id) ?? Taxable::create($data);
@@ -141,6 +144,7 @@ class AddTaxableModal extends Component
         $this->penalty_type = $taxable->penalty_type;
 
     }
+
     public function rendering($view, $data)
     {
         //
@@ -149,18 +153,18 @@ class AddTaxableModal extends Component
     public function closeTaxableModal()
     {
         $this->edit_mode = false;
-        $this->taxable_id='';
-        $this->name='';
-        $this->tariff='';
-        $this->tariff_type='';
-        $this->unit='';
-        $this->unit_type='';
-        $this->modality='';
-        $this->periodicity='';
-        $this->penalty='';
-        $this->penalty_type='';
-        $this->tax_label_id='';
-        $this->use_second_formula=false;
+        $this->taxable_id = '';
+        $this->name = '';
+        $this->tariff = '';
+        $this->tariff_type = '';
+        $this->unit = '';
+        $this->unit_type = '';
+        $this->modality = '';
+        $this->periodicity = '';
+        $this->penalty = '';
+        $this->penalty_type = '';
+        $this->tax_label_id = '';
+        $this->use_second_formula = false;
     }
 
     public function hydrate()

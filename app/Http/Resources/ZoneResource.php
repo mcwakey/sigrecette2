@@ -9,7 +9,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @property Zone $resource
  */
-
 class ZoneResource extends JsonResource
 {
     /**
@@ -20,7 +19,7 @@ class ZoneResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'=> $this->resource->id,
+            'id' => $this->resource->id,
             'name' => $this->resource->name,
             'status' => $this->resource->status,
         ];

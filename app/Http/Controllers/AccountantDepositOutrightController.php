@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\AccountantDepositsDataTable;
 use App\DataTables\AccountantDepositsOutrightDataTable;
-use Illuminate\Http\Request;
 
 class AccountantDepositOutrightController extends Controller
 {

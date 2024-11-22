@@ -38,10 +38,10 @@ class RoleManagementController extends Controller
      */
     public function show(Role $role, UsersAssignedRoleDataTable $dataTable)
     {
-        $this->authorize('view',$role);
-        
+        $this->authorize('view', $role);
+
         return $dataTable->with('role', $role)
-            ->render('pages/apps.user-management.roles.show', compact('role'));
+            ->render('pages/apps.user-management.roles.show', ['role' => $role]);
     }
 
     /**

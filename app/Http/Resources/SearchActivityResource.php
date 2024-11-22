@@ -9,7 +9,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @property Activity $resource
  */
-
 class SearchActivityResource extends JsonResource
 {
     /**
@@ -20,7 +19,7 @@ class SearchActivityResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'=>$this->resource->id,
+            'id' => $this->resource->id,
             'name' => $this->resource->name,
             // 'code' => $this->resource->code,
             'categoryId' => $this->resource->category_id

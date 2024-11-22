@@ -23,22 +23,24 @@ use App\Models\Year;
 use App\Models\Zone;
 use Carbon\Carbon;
 
-class StatisticsService implements TaxpayerStatisticsInterface,InvoiceStatisticsInterface
+class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatisticsInterface
 {
     private Year $year;
-    protected string $NoneMessage='Non défini';
+    protected string $NoneMessage = 'Non défini';
+
     public function __construct(Year $year = null)
     {
         $this->year = $year ?? Year::getActiveYear();
     }
-    public function getTaxpayerQuery (Year $year)
+
+    public function getTaxpayerQuery(Year $year)
     {
         return Taxpayer::whereYear('created_at', $year->name);
     }
 
-    public function getStats(string|null $type=null):array
+    public function getStats(string|null $type = null): array
     {
-        switch ($type){
+        switch ($type) {
             case TaxpayerStaticsEnums::BY_GENDER:
                 return $this->countTaxpayers($this->year);
             case TaxpayerStaticsEnums::BY_CATEGORY:
@@ -61,15 +63,16 @@ class StatisticsService implements TaxpayerStatisticsInterface,InvoiceStatistics
 
     }
 
-    public  function countTaxpayers(Year $year): array{
+    public function countTaxpayers(Year $year): array
+    {
         return $this->getTaxpayerQuery($year)->selectRaw('gender, count(*) as count')
             ->groupBy('gender')
             ->pluck('count', 'gender')
-            ->merge(['Total' =>  $this->getTaxpayerQuery($year)->count()])
+            ->merge(['Total' => $this->getTaxpayerQuery($year)->count()])
             ->toArray();
     }
 
-    public  function countTaxpayersByCategory(Year $year): array
+    public function countTaxpayersByCategory(Year $year): array
     {
         $categories = Category::all()->pluck('name', 'id');
 
@@ -84,11 +87,12 @@ class StatisticsService implements TaxpayerStatisticsInterface,InvoiceStatistics
 
         return $counts;
     }
-    public  function countTaxpayersByActivity(Year $year): array
+
+    public function countTaxpayersByActivity(Year $year): array
     {
         $activities = Activity::all()->pluck('name', 'id');
 
-        $counts =  $this->getTaxpayerQuery($year)->selectRaw('activity_id, count(*) as count')
+        $counts = $this->getTaxpayerQuery($year)->selectRaw('activity_id, count(*) as count')
             ->groupBy('category_id')
             ->get()
             ->map(function ($item) use ($activities) {
@@ -101,10 +105,10 @@ class StatisticsService implements TaxpayerStatisticsInterface,InvoiceStatistics
     }
 
 
-    public  function countTaxpayersByCanton(Year $year): array
+    public function countTaxpayersByCanton(Year $year): array
     {
         $cantons = Canton::all()->pluck('name', 'id');
-        $counts =  $this->getTaxpayerQuery($year)->selectRaw('town_id, count(*) as count')
+        $counts = $this->getTaxpayerQuery($year)->selectRaw('town_id, count(*) as count')
             ->groupBy('town_id')
             ->get()
             ->map(function ($item) use ($cantons) {
@@ -118,7 +122,8 @@ class StatisticsService implements TaxpayerStatisticsInterface,InvoiceStatistics
 
         return array_values($counts);
     }
-    public  function countTaxpayersByTown(Year $year): array
+
+    public function countTaxpayersByTown(Year $year): array
     {
         $cantons = Town::all()->pluck('name', 'id');
         $counts = $this->getTaxpayerQuery($year)->selectRaw('town_id, count(*) as count')
@@ -135,7 +140,8 @@ class StatisticsService implements TaxpayerStatisticsInterface,InvoiceStatistics
 
         return array_values($counts);
     }
-    public  function countTaxpayersByZone(Year $year): array
+
+    public function countTaxpayersByZone(Year $year): array
     {
         $cantons = Zone::all()->pluck('name', 'id');
         $counts = $this->getTaxpayerQuery($year)->selectRaw('zone_id, count(*) as count')
@@ -153,29 +159,29 @@ class StatisticsService implements TaxpayerStatisticsInterface,InvoiceStatistics
         return array_values($counts);
     }
 
-    public  function countTaxpayersState(Year $year): array
+    public function countTaxpayersState(Year $year): array
     {
         $count_valid = 0;
         $count_no_valid = 0;
-        $taxpayers_without_invoices=0;
+        $taxpayers_without_invoices = 0;
 
         $taxpayers = $this->getTaxpayerQuery($year)->get();
         foreach ($taxpayers as $taxpayer) {
             if ($taxpayer->invoices->isNotEmpty()) {
                 $is_valid = true;
                 foreach ($taxpayer->invoices as $invoice) {
-                    if ($invoice->pay_status == 'OWING'|| $invoice->pay_status == 'PART PAID') {
+                    if ($invoice->pay_status == 'OWING' || $invoice->pay_status == 'PART PAID') {
                         $is_valid = false;
                         break;
                     }
                 }
                 if ($is_valid) {
                     $count_valid++;
-                }else {
+                } else {
                     $count_no_valid++;
                 }
-            }else{
-                $taxpayers_without_invoices+=1;
+            } else {
+                $taxpayers_without_invoices += 1;
             }
         }
 
@@ -207,7 +213,8 @@ class StatisticsService implements TaxpayerStatisticsInterface,InvoiceStatistics
         return array_values($counts);
     }
 
-    public function countInvoices(Year $year):array{
+    public function countInvoices(Year $year): array
+    {
         return Invoice::whereYear('created_at', $year->name)
             ->selectRaw('status, count(*) as count')
             ->groupBy('status')
@@ -219,10 +226,11 @@ class StatisticsService implements TaxpayerStatisticsInterface,InvoiceStatistics
                 ->where('status', '!=', 'EXPIRED')
                 ->where('delivery', '=', 'NOT DELIVERED')
                 ->count()])
-            ->merge(['Total' => Invoice::whereYear('created_at', $year->name) ->count()])
+            ->merge(['Total' => Invoice::whereYear('created_at', $year->name)->count()])
             ->toArray();
     }
-    public  function getTotalRemainingToBeCollected( $startDate, $endDate): float|int
+
+    public function getTotalRemainingToBeCollected($startDate, $endDate): float|int
     {
         $invoices = Invoice::whereIn('status', [InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION])
             ->whereBetween('invoices.created_at', [$startDate, $endDate])
@@ -231,14 +239,15 @@ class StatisticsService implements TaxpayerStatisticsInterface,InvoiceStatistics
         $totalRemaining = 0;
         foreach ($invoices as $invoice) {
             $paid = Payment::where('invoice_id', $invoice->invoice_no)
-                ->where('status',PaymentStatusEnums::ACCOUNTED)
+                ->where('status', PaymentStatusEnums::ACCOUNTED)
                 ->sum('amount');
-            $restToPay = $invoice->amount - doubleval($invoice->reduce_amount) - $paid;
+            $restToPay = $invoice->amount - floatval($invoice->reduce_amount) - $paid;
             $totalRemaining += max($restToPay, 0);
         }
 
         return $totalRemaining;
     }
+
     protected function getAllStatistics(): array
     {
         return [

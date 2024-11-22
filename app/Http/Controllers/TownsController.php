@@ -40,7 +40,7 @@ class TownsController extends Controller
     {
         //return view('pages/invoices.show', compact('invoice'));
         //return $dataTable->render('pages/invoices.show');
-        return $dataTable->render('pages/towns.show', compact('town'));
+        return $dataTable->render('pages/towns.show', ['town' => $town]);
     }
 
     /**

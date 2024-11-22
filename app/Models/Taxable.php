@@ -29,6 +29,7 @@ class Taxable extends Model
             'use_second_formula' => 'boolean',
         ];
     }
+
     public function tax_label()
     {
         return $this->belongsTo(TaxLabel::class);

@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Commune;
+use App\Models\Taxpayer;
 use App\Models\User;
 use App\Models\Zone;
-use App\Models\Taxpayer;
 use Illuminate\Http\Request;
-use Illuminate\Contracts\View\View;
 
 class Geolocation extends Controller
 {
@@ -42,12 +41,12 @@ class Geolocation extends Controller
 
         $commune = Commune::getFirstCommune();
 
-        return View('pages.geolocation.taxpayers', compact('taxpayers','zones','commune'));
+        return View('pages.geolocation.taxpayers', ['taxpayers' => $taxpayers, 'zones' => $zones, 'commune' => $commune]);
     }
 
     public function users()
     {
         $users = User::all();
-        return View('pages.geolocation.users', compact('users'));
+        return View('pages.geolocation.users', ['users' => $users]);
     }
 }

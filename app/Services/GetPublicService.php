@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
@@ -32,7 +33,7 @@ class GetPublicService
         ];
 
         $ips = [];
-        $error=null;
+        $error = null;
 
         foreach ($services as $service) {
             try {
@@ -45,13 +46,13 @@ class GetPublicService
                     }
                 }
             } catch (\Illuminate\Http\Client\RequestException $e) {
-                $error= self::handleError('HTTP request error: ' . $e->getMessage());
+                $error = self::handleError('HTTP request error: ' . $e->getMessage());
             } catch (\Exception $e) {
-                $error= self::handleError('General error: ' . $e->getMessage());
+                $error = self::handleError('General error: ' . $e->getMessage());
             }
         }
 
-        return self::processIPs($ips,$error);
+        return self::processIPs($ips, $error);
     }
 
     /**
@@ -88,10 +89,10 @@ class GetPublicService
      * @param array $ips The list of collected IP addresses.
      * @return string The consistent IP address or an error message/null if inconsistent.
      */
-    private static function processIPs(array $ips,string|null $errors):string
+    private static function processIPs(array $ips, string|null $errors): string
     {
         if (count($ips) === 0) {
-            return self::handleError('No IP addresses could be retrieved.'.$errors);
+            return self::handleError('No IP addresses could be retrieved.' . $errors);
         }
 
         if (count(array_unique($ips)) === 1) {

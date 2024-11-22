@@ -39,7 +39,7 @@ class AddActivityModal extends Component
     {
         $categories = Category::all();
 
-        return view('livewire.activity.add-activity-modal', compact('categories'));
+        return view('livewire.activity.add-activity-modal', ['categories' => $categories]);
     }
 
     public function submit()
@@ -82,7 +82,7 @@ class AddActivityModal extends Component
         Activity::destroy($id);
 
         // Emit a success event with a message
-       // $this->dispatch('success', 'Activity successfully deleted');
+        // $this->dispatch('success', 'Activity successfully deleted');
         $this->dispatchMessage('Activité', 'delete');
     }
 

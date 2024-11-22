@@ -4,9 +4,9 @@ namespace App\Enums;
 
 class InvoiceStatusEnums
 {
-    public const DRAFT  ='DRAFT';//after draft invoice can be go to Pending or REJECTED_BY_OR
-    public const P_ACCEPTED ="ACCEPTED WITHOUT ORDER NO";
-    public const ACCEPTED ="ACCEPTED";
+    public const DRAFT = 'DRAFT';//after draft invoice can be go to Pending or REJECTED_BY_OR
+    public const P_ACCEPTED = "ACCEPTED WITHOUT ORDER NO";
+    public const ACCEPTED = "ACCEPTED";
     public const REJECTED_BY_OR = 'REJECTED_BY_OR';
     public const PENDING = 'PENDING';// after pending invoices can be REJECTED or  APPROVED or APPROVED_CANCELLATION
     public const REJECTED = 'REJECTED';

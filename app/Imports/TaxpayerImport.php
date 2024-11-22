@@ -20,11 +20,12 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithProgressBar;
 
-class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithChunkReading, WithHeadingRow, ShouldQueue
+class TaxpayerImport implements ToModel, WithProgressBar, WithBatchInserts, WithChunkReading, WithHeadingRow, ShouldQueue
 {
     use Importable;
     use RemembersRowNumber;
     use RemembersChunkOffset;
+
     /**
      * @param array $row
      *
@@ -34,7 +35,7 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
     public function model(array $row)
     {
 
-        $faker =  fake();
+        $faker = fake();
         if (!isset($row['nom'])
             || !isset($row['adresse'])
             || !isset($row['zone'])
@@ -43,7 +44,7 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
             return null;
         }
         $existingTaxpayer = Taxpayer::where(
-            'name', $row['nom'] . " ". isset($row['prenoms']) ??$row['prenoms']
+            'name', $row['nom'] . " " . isset($row['prenoms']) ?? $row['prenoms']
         )
             ->where('address', $row["adresse"])
             ->first();
@@ -51,7 +52,7 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
         if ($existingTaxpayer) {
             return null;
         }
-        $canton = isset($row['canton'])?Canton::firstOrCreate(['name' =>  $row['canton']]): Canton::firstOrCreate(['name' => "Aneho"]);
+        $canton = isset($row['canton']) ? Canton::firstOrCreate(['name' => $row['canton']]) : Canton::firstOrCreate(['name' => "Aneho"]);
         $town = Town::firstOrCreate([
             'name' => (isset($row['ville_village']) ? $row['ville_village'] : '') .
                 (isset($row['quartier']) ? $row['quartier'] : ''),
@@ -59,31 +60,31 @@ class TaxpayerImport implements ToModel, WithProgressBar,WithBatchInserts, WithC
         ]);
 
         $zone = Zone::firstOrCreate(['name' => $row['zone']]);
-        $category =  isset($row['categ_activite'])?Category::firstOrCreate(['name' => $row['categ_activite']]): Category::firstOrCreate(['name' => 'Non défini']);
-        $activity= Activity::firstOrCreate(['name' => $row["activite"], 'category_id' => $category->id]);
+        $category = isset($row['categ_activite']) ? Category::firstOrCreate(['name' => $row['categ_activite']]) : Category::firstOrCreate(['name' => 'Non défini']);
+        $activity = Activity::firstOrCreate(['name' => $row["activite"], 'category_id' => $category->id]);
         $taxpayer = new Taxpayer([
-            'file_no' => $row['n°'] ?? fake()->randomNumber(3, 1, 10) . Str::random(5) . fake()->randomNumber(3, 0, 9),
-            'name' => $row['nom'] . " ".$row['prenoms'],
-            'email' => isset($row['email'])?$row['email']:"",
+            'file_no' => $row['n°'] ?? fake()->randomNumber(3, 1) . Str::random(5) . fake()->randomNumber(3, 0),
+            'name' => $row['nom'] . " " . $row['prenoms'],
+            'email' => isset($row['email']) ? $row['email'] : "",
             'email_verified_at' => now(),
             'gender' => $row["sexe"] ?? $faker->randomElement(['Homme', 'Femme']),
             'id_number' => $row["num_identification"] ?? $row["num_carte_electeur"] ?? random_int(1000000, 6000000),
             'id_type' => $faker->randomElement(['CNI', 'CARTE D\'ELECTEUR']),
             'mobilephone' => $row["telephone_1"] ?? " ",
             'telephone' => $row["telephone_2"] ?? " ",
-            'longitude' => $row["longitude"]?? " ",
-            'latitude' => $row["latitude"]?? " ",
-            'address' => $row["adresse"]?? " ",
+            'longitude' => $row["longitude"] ?? " ",
+            'latitude' => $row["latitude"] ?? " ",
+            'address' => $row["adresse"] ?? " ",
             'town_id' => $town->id,
             'zone_id' => $zone->id,
-            'category_id'=>$category->id,
-            'activity_id'=>$activity->id,
-            "other_work"=>isset($row["autre_activite"])?$row["autre_activite"]:"" ,
+            'category_id' => $category->id,
+            'activity_id' => $activity->id,
+            "other_work" => isset($row["autre_activite"]) ? $row["autre_activite"] : "",
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
-            'social_work'=>isset($row["raison sociale"])??$row["raison sociale"],
+            'social_work' => isset($row["raison sociale"]) ?? $row["raison sociale"],
         ]);
-        if(isset($row['state'])&&$row['state']!=null){
+        if (isset($row['state']) && $row['state'] != null) {
             $taxpayer->delete();
         }
 

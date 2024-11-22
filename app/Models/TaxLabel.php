@@ -19,8 +19,10 @@ class TaxLabel extends Model
     {
         return $this->hasMany(Taxable::class);
     }
-    public static function getNameByCode($code){
-        $taxLabel= TaxLabel::where('code', $code)->first(); // Correction de la méthode first()
+
+    public static function getNameByCode($code)
+    {
+        $taxLabel = TaxLabel::where('code', $code)->first(); // Correction de la méthode first()
         return $taxLabel ? $taxLabel->name : "";
     }
 

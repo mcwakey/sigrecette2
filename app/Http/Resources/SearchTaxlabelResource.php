@@ -10,7 +10,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @property TaxLabel $resource
  */
-
 class SearchTaxlabelResource extends JsonResource
 {
     /**
@@ -21,7 +20,7 @@ class SearchTaxlabelResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'=>$this->resource->id,
+            'id' => $this->resource->id,
             'name' => $this->resource->name,
             'code' => $this->resource->code,
             'category' => $this->resource->category

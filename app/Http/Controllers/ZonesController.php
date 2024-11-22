@@ -16,6 +16,7 @@ class ZonesController extends Controller
         //return view('pages/zones.list');
         return $dataTable->render('pages/zones.list');
     }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -35,9 +36,9 @@ class ZonesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Zone $zone,ZonesDataTable $zonesDataTable)
+    public function show(Zone $zone, ZonesDataTable $zonesDataTable)
     {
-        return $zonesDataTable->with('id',$zone->id)->render('pages/zones.show', compact('zone'));
+        return $zonesDataTable->with('id', $zone->id)->render('pages/zones.show', ['zone' => $zone]);
     }
 
     /**

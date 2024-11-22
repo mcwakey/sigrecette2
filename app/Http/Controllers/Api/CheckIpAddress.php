@@ -10,17 +10,17 @@ class CheckIpAddress extends Controller
 {
     public function check(Request $request)
     {
-        $commune  = Commune::getFirstCommune();
+        $commune = Commune::getFirstCommune();
         $serverip = $request->input('serverip');
 
-        if($commune==null){
+        if ($commune == null) {
             return response()->json([
                 'message' => "commune not find",
-            ],404);
+            ], 404);
         }
         return response()->json([
-            'commune' =>  $commune->name,
+            'commune' => $commune->name,
             'serverip' => $serverip,
-        ],200);
+        ], 200);
     }
 }

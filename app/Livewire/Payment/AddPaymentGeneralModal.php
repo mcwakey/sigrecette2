@@ -24,12 +24,15 @@ class AddPaymentGeneralModal extends Component
     //use WithFileUploads;
     use DispatchesMessages;
     use WithPagination;
+
     public $invoice_id;
     public $invoice;
     public $search = '';
 
-    public $perPages=10;
-    protected function rules(){
+    public $perPages = 10;
+
+    protected function rules()
+    {
         $rules = [
 
 
@@ -42,7 +45,7 @@ class AddPaymentGeneralModal extends Component
     protected $listeners = [
         'delete_user' => 'deleteUser',
         'update_payment' => 'updatePayment',
-        'update_payment_amount'=>'updatePaymentAmount'
+        'update_payment_amount' => 'updatePaymentAmount'
         //'add_invoice' => 'addPayment',
         //'load_invoice' => 'loadPayment',
     ];
@@ -53,29 +56,30 @@ class AddPaymentGeneralModal extends Component
 
         //$this->invoices = Invoice::search($this->search)->take(10)->get();
 
-        if ( $this->invoice ) {
-           // $this->invoice = $this->invoices[0];
-            $this->invoice_id =$this->invoice->id;
-            $this->dispatch('updateSharedInvoiceId', id:  $this->invoice_id);
+        if ($this->invoice) {
+            // $this->invoice = $this->invoices[0];
+            $this->invoice_id = $this->invoice->id;
+            $this->dispatch('updateSharedInvoiceId', id: $this->invoice_id);
 
         }
 
 
-
-        return view('livewire.payment.add-payment-general-modal',[
-            'invoices'=> InvoiceHelper::search($this->search)->paginate($this->perPages, pageName: 'payment-modal')
+        return view('livewire.payment.add-payment-general-modal', [
+            'invoices' => InvoiceHelper::search($this->search)->paginate($this->perPages, pageName: 'payment-modal')
         ]);
     }
 
-    public function select_invoice($value){
+    public function select_invoice($value)
+    {
 
 
-        $this->invoice= Invoice::find($value);
-        if($this->invoice){
+        $this->invoice = Invoice::find($value);
+        if ($this->invoice) {
             $this->search = '';
             $this->invoice_id = $this->invoice->id;
         }
     }
+
     public function hydrate()
     {
         $this->resetErrorBag();

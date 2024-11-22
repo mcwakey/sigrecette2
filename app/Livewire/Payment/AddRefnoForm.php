@@ -36,6 +36,7 @@ class AddRefnoForm extends Component
         'update_invoice' => 'updateInvoice',
         //'add_invoice' => 'addInvoice',
     ];
+
     public function render()
     {
         return view('livewire.payment.add-refno-form');
@@ -46,37 +47,35 @@ class AddRefnoForm extends Component
     {
         $this->validate();
 
-            DB::transaction(function () {
+        DB::transaction(function () {
 
-                // Prepare data for Payment
-                $data = [
-                    'reference' => $this->refno,
-                    // 'r_user_id'=>  Auth::id()
-                ];
-    
-                //dd($paymentData);
-    
-                // Create or update Payment record
-                $payment = Payment::find($this->payment_id); //?? Payment::create($payment_id);
-    
-    
-                $this->payment_id = $payment->id;
-    
-                foreach ($data as $k => $v) {
-                    $payment->$k = $v;
-                }
-                $payment->save();
-                    //$this->dispatch('success', __('Payment updated'));
-                // $this->dispatchMessage('Paiement', 'update');
-            });
+            // Prepare data for Payment
+            $data = [
+                'reference' => $this->refno,
+                // 'r_user_id'=>  Auth::id()
+            ];
 
-            $this->reset();
+            //dd($paymentData);
+
+            // Create or update Payment record
+            $payment = Payment::find($this->payment_id); //?? Payment::create($payment_id);
+
+
+            $this->payment_id = $payment->id;
+
+            foreach ($data as $k => $v) {
+                $payment->$k = $v;
+            }
+            $payment->save();
+            //$this->dispatch('success', __('Payment updated'));
+            // $this->dispatchMessage('Paiement', 'update');
+        });
+
+        $this->reset();
         // }else{
-            $this->dispatchMessage('Numéro de quitance', 'update');
+        $this->dispatchMessage('Numéro de quitance', 'update');
 
         // }
-
-
 
 
     }

@@ -29,7 +29,7 @@ class PaymentHelper
      */
     public static function getPaid($invoice_id): float|int
     {
-        $payments = self::getPaymentsByStatus($invoice_id, [PaymentStatusEnums::PENDING,PaymentStatusEnums::ACCOUNTED,PaymentStatusEnums::DONE]);
+        $payments = self::getPaymentsByStatus($invoice_id, [PaymentStatusEnums::PENDING, PaymentStatusEnums::ACCOUNTED, PaymentStatusEnums::DONE]);
         $s_amount = [];
 
         foreach ($payments as $index => $payment) {
@@ -39,6 +39,7 @@ class PaymentHelper
         }
         return array_sum($s_amount) ?? 0;
     }
+
     /**
      * @param $invoice_id
      * @return float|int
@@ -62,7 +63,7 @@ class PaymentHelper
      */
     public static function getRestToPaid(Invoice $invoice): float|int
     {
-        $paid = self::getPaymentsByStatus($invoice->invoice_no, [PaymentStatusEnums::PENDING,PaymentStatusEnums::ACCOUNTED,PaymentStatusEnums::DONE])
+        $paid = self::getPaymentsByStatus($invoice->invoice_no, [PaymentStatusEnums::PENDING, PaymentStatusEnums::ACCOUNTED, PaymentStatusEnums::DONE])
             ->sum('amount');
         $restToPay = $invoice->amount - $paid;
 

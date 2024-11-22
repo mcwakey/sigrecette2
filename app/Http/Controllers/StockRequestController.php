@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\DataTables\StockRequestsSumDataTable;
 use App\DataTables\StockRequestsDataTable;
-use App\Models\User;
+use App\DataTables\StockRequestsSumDataTable;
 
 class StockRequestController extends Controller
 {
@@ -14,11 +12,11 @@ class StockRequestController extends Controller
         return $dataTable->render('pages/stock_requests.list');
     }
 
-    
+
     public function show(string $reqNo, StockRequestsDataTable $dataTable)
     {
         //  $user = User::find($userId);
-         //dd($user, $dataTable);
+        //dd($user, $dataTable);
         //return view('pages/stock_transfers.show', compact('user'));
 
         // $collectors = User::select('users.id', 'users.name as user_name', 'roles.name as role_name')
@@ -27,6 +25,6 @@ class StockRequestController extends Controller
         //                             ->where('roles.name', 'collecteur')
         //                             ->get();
 
-        return $dataTable->with('reqNo', $reqNo)->render('pages/stock_requests.show', compact('reqNo'));
+        return $dataTable->with('reqNo', $reqNo)->render('pages/stock_requests.show', ['reqNo' => $reqNo]);
     }
 }

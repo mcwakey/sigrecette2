@@ -54,15 +54,16 @@ class AddPaymentModal extends Component
     public $paidAndCodeArray;
     public $validCodes;
 
-    public $edit_amount =true;
+    public $edit_amount = true;
     public $notes;
 
-    protected function rules(){
+    protected function rules()
+    {
         $rules = [
 
             "amount" => "required|numeric",
             "payment_type" => "required",
-            'code'=>[
+            'code' => [
                 'nullable',
                 'sometimes',
                 'numeric'
@@ -72,19 +73,18 @@ class AddPaymentModal extends Component
             //'taxpayer_id' => 'required',
             'invoice_id' => 'required',
         ];
-        if($this->code!=null){
-            $rules['code']=Rule::in($this->validCodes);
+        if ($this->code != null) {
+            $rules['code'] = Rule::in($this->validCodes);
         }
         return $rules;
     }
 
     protected $listeners = [
         'update_payment' => 'updatePayment',
-        'update_payment_amount'=>'updatePaymentAmount',
-        'update_local_amount'=> 'updateLocalAmount',
+        'update_payment_amount' => 'updatePaymentAmount',
+        'update_local_amount' => 'updateLocalAmount',
 
     ];
-
 
 
     public function render()
@@ -93,29 +93,29 @@ class AddPaymentModal extends Component
         $invoice = Invoice::find($this->invoice_id);
 
         if ($invoice != null) {
-            if( $invoice->type == Constants::INVOICE_TYPE_COMPTANT){
+            if ($invoice->type == Constants::INVOICE_TYPE_COMPTANT) {
                 $this->amount = $invoice->amount;
-                $this->edit_amount=false;
+                $this->edit_amount = false;
             }
-            $this->paidAndCodeArray= InvoiceHelper::returnPaidAndSumByCode($invoice)[0];
+            $this->paidAndCodeArray = InvoiceHelper::returnPaidAndSumByCode($invoice)[0];
             $this->validCodes = array_keys($this->paidAndCodeArray);
         }
 
-        $paidAndCodeArray =$this->paidAndCodeArray;
+        $paidAndCodeArray = $this->paidAndCodeArray;
 
 
-        return view('livewire.payment.add-payment-modal', compact('taxpayers','paidAndCodeArray','invoice'));
+        return view('livewire.payment.add-payment-modal', ['taxpayers' => $taxpayers, 'paidAndCodeArray' => $paidAndCodeArray, 'invoice' => $invoice]);
     }
 
     public function submit()
     {
-        $is_regisseur=false;
+        $is_regisseur = false;
         $role = Role::where('name', 'regisseur')->first();
         if ($role) {
-            /**@var App\Models\User $user  */
+            /**@var App\Models\User $user */
             $user = auth()->user();
             if ($user->hasRole('regisseur')) {
-                $is_regisseur =true;
+                $is_regisseur = true;
             }
         }
 
@@ -127,12 +127,10 @@ class AddPaymentModal extends Component
 
             $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
 
-            if (($this->paid + $this->amount) <= $invoice->amount  ) {
+            if (($this->paid + $this->amount) <= $invoice->amount) {
 
-                if($this->code!=null){
-                    if ($this->amount>=$this->paidAndCodeArray[ $this->code ]['amount']){
-                        $this->amount=$this->paidAndCodeArray[ $this->code ]['amount'];
-                    }
+                if ($this->code != null && $this->amount >= $this->paidAndCodeArray[$this->code]['amount']) {
+                    $this->amount = $this->paidAndCodeArray[$this->code]['amount'];
                 }
 
                 $paymentData = [
@@ -141,19 +139,19 @@ class AddPaymentModal extends Component
                     'amount' => $invoice->type == Constants::INVOICE_TYPE_COMPTANT ? $invoice->amount : $this->amount,
                     'payment_type' => $this->payment_type,
                     'reference' => $this->reference,
-                    'code'=>$this->code,
-                    'description' =>  $invoice->type == Constants::INVOICE_TYPE_COMPTANT ? "Avis " . $this->invoice_no : "Avis " . $this->invoice_no . ", OR " . $this->order_no,
+                    'code' => $this->code,
+                    'description' => $invoice->type == Constants::INVOICE_TYPE_COMPTANT ? "Avis " . $this->invoice_no : "Avis " . $this->invoice_no . ", OR " . $this->order_no,
                     'remaining_amount' => $this->bill - ($this->amount + $this->paid),
-                    'user_id' =>  Auth::id(),
+                    'user_id' => Auth::id(),
                     'invoice_type' => $invoice->type,
-                    'notes'=>$this->notes
+                    'notes' => $this->notes
 
                 ];
 
 
                 if ($is_regisseur) {
                     $paymentData['status'] = PaymentStatusEnums::ACCOUNTED;
-                }else{
+                } else {
 
                 }
 
@@ -167,24 +165,16 @@ class AddPaymentModal extends Component
                         $tempPay = Payment::create($payment);
                         if ($is_regisseur) {
                             $users = $role->users()->get();
-                            Notification::send($users, new InvoicePaid($tempPay , Auth::user()));
+                            Notification::send($users, new InvoicePaid($tempPay, Auth::user()));
                         }
                     }
                 }
 
 
-
-
-                if ($this->amount + $this->paid >= $this->bill) {
-                    $paystatus = "PAID";
-                } else {
-                    $paystatus = "PART PAID";
-                }
+                $paystatus = $this->amount + $this->paid >= $this->bill ? "PAID" : "PART PAID";
                 $data = [
                     'pay_status' => $paystatus,
                 ];
-
-
 
 
                 $this->invoice_id = $invoice->id;
@@ -206,8 +196,6 @@ class AddPaymentModal extends Component
 
         $this->reset();
     }
-
-
 
 
     public function updatePayment($id)
@@ -240,49 +228,50 @@ class AddPaymentModal extends Component
         $this->paid = Payment::getPaid($invoice->invoice_no);
 
 
-
-        $this->periodicity = ' / '.$invoice->taxpayer->taxpayer_taxables->first()->taxable->periodicity;
+        $this->periodicity = ' / ' . $invoice->taxpayer->taxpayer_taxables->first()->taxable->periodicity;
 
         $this->balance = $this->bill - $this->paid;
 
 
     }
 
-    public function updatePaymentAmount($code){
+    public function updatePaymentAmount($code)
+    {
 
         //dump($code);
-        if($code){
+        if ($code) {
             $this->code = $code;
             $this->amount = $this->paidAndCodeArray[$code]['amount'];
         }
 
     }
-    public function updateLocalPayment(){
+
+    public function updateLocalPayment()
+    {
         //dump($this->amount);
     }
 
     #[On('updateSharedInvoiceId')]
-    public function updateSharedTaxpayerId($id){
+    public function updateSharedTaxpayerId($id)
+    {
         $this->updatePayment($id);
     }
+
     #[On('delete_payment')]
     public function deletePayment($id)
     {
         $payment = Payment::find($id);
-        $invoice = Invoice::where('invoice_no',  $payment->invoice_id)
+        $invoice = Invoice::where('invoice_no', $payment->invoice_id)
             ->where('validity', 'VALID')
             ->first();
         Payment::destroy($id);
-        $paid= Payment::getPaid($invoice->invoice_no);
-        if ($paid ==0) {
-            $paystatus = PaymentStatusEnums::PENDING;
-        } else {
-            $paystatus =  "PART PAID";
-        }
-        $invoice->pay_status =$paystatus;
+        $paid = Payment::getPaid($invoice->invoice_no);
+        $paystatus = $paid == 0 ? PaymentStatusEnums::PENDING : "PART PAID";
+        $invoice->pay_status = $paystatus;
         $invoice->save();
         $this->dispatchMessage('Paiement', 'delete');
     }
+
     public function hydrate()
     {
         $this->resetErrorBag();

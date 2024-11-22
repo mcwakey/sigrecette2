@@ -4,5 +4,5 @@ namespace App\Contracts;
 
 interface FormatDateInterface
 {
-    public function getCreatedDate():string;
+    public function getCreatedDate(): string;
 }

@@ -231,11 +231,6 @@
                 window.LaravelDataTables['stock_requests-table'].search(this.value).draw();
             });
 
-
-            // document.getElementById('mySearchInput').addEventListener('keyup', function() {
-            //     window.LaravelDataTables['stock_requests-table'].search(this.value).draw();
-            // });
-
             document.getElementById('mySearchZero').addEventListener('keyup', function() {
                 window.LaravelDataTables['stock_requests-table'].column(2).search(this.value).draw();
             });
