@@ -181,6 +181,10 @@
             <span class="write">Adresse complète :{{$data->taxpayer->address}}</span>
             <span class="write"> Coordonnées GPS :{{$data->taxpayer->longitude}} , {{$data->taxpayer->latitude}}</span>
         </p>
+        <p>
+            <span class="write">Catégorie d'activité :{{$data->taxpayer->category?->name}},</span>
+            <span class="write"> Activté économique :{{$data->taxpayer->activity?->name}}</span>
+        </p>
         <p>Nic :<span class="write"> {{$data->nic}}</span></p>
     </div>
     <div class="avis-content">
@@ -196,7 +200,7 @@
                 class="write">{{$data->order_no}}</p>
 
 
-        <table border="1">
+        <table >
 
             <tr>
                 <th>Matière taxable</th>
@@ -256,7 +260,7 @@
                         $last_code= $item->taxpayer_taxable->taxable->tax_label->code;
                     @endphp
                     <tr>
-                        <th colspan="3">Libellé de la
+                        <th colspan="4">Libellé de la
                             recette:{{$item->taxpayer_taxable->taxable->tax_label->name}} </th>
                         <th colspan="4">Imputation budgétaire
                             : {{$item->taxpayer_taxable->taxable->tax_label->code}}</th>
