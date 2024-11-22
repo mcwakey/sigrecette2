@@ -67,18 +67,31 @@ class AddStockTransferModal extends Component
             'trans_no' => 'required',
             'period_from' => 'required',
             'period_to' => 'required',
-            'start_no' => 'nullable|numeric|min:' . ($this->select_stock->start_no ?? 1) . '|max:' . (($this->select_stock->end_no ?? PHP_INT_MAX) - 1),
-            'end_no' => 'nullable|numeric|min:' . (($this->select_stock->start_no ?? 1) + 1) . '|max:' . ($this->select_stock->end_no ?? PHP_INT_MAX),
-            'qty' => ['required', 'numeric', 'min:1', function ($attribute, $value, $fail) {
-                try {
-                    if (!is_null($this->start_no)  && is_null($this->end_no) && $value !== intval($this->end_no) - intval($this->start_no) + 1) {
-                        $fail('Les valeurs saisies dans n° de debut ou n° de fin sont incorrectes.');
+            'start_no' => 'nullable|numeric' .
+                (isset($this->select_stock->start_no) ? '|min:' . $this->select_stock->start_no : '') .
+                (isset($this->select_stock->end_no) ? '|max:' . ($this->select_stock->end_no - 1) : ''),
+            'end_no' => 'nullable|numeric' .
+                (isset($this->select_stock->start_no) ? '|min:' . ($this->select_stock->start_no + 1) : '') .
+                (isset($this->select_stock->end_no) ? '|max:' . $this->select_stock->end_no : ''),
+            'qty' => [
+                'required',
+                'numeric',
+                'min:1',
+                function ($attribute, $value, $fail) {
+                    try {
+                        $startNo = $this->start_no ?? null;
+                        $endNo = $this->end_no ?? null;
+
+                        if (!is_null($startNo) && !is_null($endNo) && $value !== intval($endNo) - intval($startNo) + 1) {
+                            $fail('Les valeurs saisies dans n° de début ou n° de fin sont incorrectes.');
+                        }
+                    } catch (Exception $exception) {
+                        $fail('Les valeurs saisies sont incorrectes.');
                     }
-                }catch (Exception $exception){
-                    $fail('Les valeurs saisies sont incorrectes.');
-                }
-            }],
+                },
+            ],
         ];
+
 
 
         return $rules;
