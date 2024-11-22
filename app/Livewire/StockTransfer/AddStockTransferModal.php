@@ -67,8 +67,8 @@ class AddStockTransferModal extends Component
             'trans_no' => 'required',
             'period_from' => 'required',
             'period_to' => 'required',
-            'start_no' => 'nullable|numeric|min:' . $this->select_stock->start_no . '|max:' . ($this->select_stock->end_no - 1),
-            'end_no' => 'nullable|numeric|min:' . ($this->select_stock->start_no + 1) . '|max:' . $this->select_stock->end_no,
+            'start_no' => 'nullable|numeric|min:' . ($this->select_stock->start_no ?? 1) . '|max:' . (($this->select_stock->end_no ?? PHP_INT_MAX) - 1),
+            'end_no' => 'nullable|numeric|min:' . (($this->select_stock->start_no ?? 1) + 1) . '|max:' . ($this->select_stock->end_no ?? PHP_INT_MAX),
             'qty' => ['required', 'numeric', 'min:1', function ($attribute, $value, $fail) {
                 try {
                     if (!is_null($this->start_no)  && is_null($this->end_no) && $value !== intval($this->end_no) - intval($this->start_no) + 1) {
@@ -531,24 +531,7 @@ class AddStockTransferModal extends Component
             $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
         }
 
-        // dd($this->edit_mode,$this->deposit_mode);
 
-        // $taxpayer = Taxpayer::find($id);
-        // $stock_transfer = StockTransfer::find($id);
-        // //dd($stock_transfer->taxable->tax_label);
-
-        // $this->stock_transfer_id = $id;
-        // $this->trans_no = $stock_transfer->trans_no;
-
-        // $this->taxlabel_idd = $stock_transfer->taxable->tax_label->id;
-        // $this->taxlabel_name = $stock_transfer->taxable->tax_label->name;
-
-        // $this->taxable_idd = $stock_transfer->taxable_id;
-        // $this->taxable_name = $stock_transfer->taxable->name;
-
-        // $this->collector_idd = $stock_transfer->to_user_id;
-        // //dd($stock_transfer);
-        // $this->collector_name = $stock_transfer->user->name;
     }
 
     public function hydrate()
