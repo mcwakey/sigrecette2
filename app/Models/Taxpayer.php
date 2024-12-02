@@ -50,7 +50,8 @@ class Taxpayer extends Model
         'last_login_ip',
         'profile_photo_path',
         'activity_id',
-        'category_id'
+        'category_id',
+        'deleted_at'
     ];
 
     /**
