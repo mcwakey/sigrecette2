@@ -140,12 +140,12 @@ class SyncInController extends Controller
             DB::commit();
 
             return response()->json(true, 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Rollback the transaction if any operation fails
             DB::rollBack();
 
             // Log the error (optional)
-            \Log::error('Error in syncIn: ' . $e->getMessage());
+            Log::error('Error in syncIn: ' . $e->getMessage());
 
             return response()->json(['error' => 'Data sync failed'. $e], 500);
         }
