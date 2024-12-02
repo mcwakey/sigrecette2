@@ -38,7 +38,7 @@ Route::Post('/v1/search/taxpayers', [SearchTaxpayerController::class, 'search'])
 Route::Post('/v1/search/taxpayerstaxables', [SearchTaxpayerTaxableController::class, 'search']);
 Route::Post('/v1/search/invoices', [SearchInvoiceController::class, 'search']);
 
-Route::post('/v1/synchronisation/out', [SearchTaxpayersAndInvoiceAndTaxpayerTaxableController::class, 'search']);
+Route::post('/v1/synchronisation/out', [SyncOutController::class, 'search']);
 Route::post('/v1/synchronisation/in', [SyncInController::class, 'syncIn']);
 
 Route::post('/v1/user/notifications', [NotificationController::class, 'notifications']);

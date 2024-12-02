@@ -145,9 +145,9 @@ class SyncInController extends Controller
             DB::rollBack();
 
             // Log the error (optional)
-            // \Log::error('Error in syncIn: ' . $e->getMessage());
+            \Log::error('Error in syncIn: ' . $e->getMessage());
 
-            return response()->json(['error' => 'Data sync failed'], 500);
+            return response()->json(['error' => 'Data sync failed'. $e], 500);
         }
     }
 
