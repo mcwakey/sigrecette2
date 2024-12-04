@@ -61,7 +61,7 @@ class SyncOutController extends Controller
 
                 $queryIdTypes = IdType::select('id_types.*');
 
-                $queryTaxlabels = TaxLabel::where('category', 'CATEGORY 1');
+                $queryTaxlabels = TaxLabel::where('category', 'LIKE', '%CATEGORY 1%');
 
                 $queryTaxables = Taxable::join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
                     ->where('category', 'CATEGORY 1')
