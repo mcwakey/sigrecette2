@@ -51,6 +51,8 @@ class Taxpayer extends Model
         'profile_photo_path',
         'activity_id',
         'category_id',
+        'from_mobile_and_validate_state'
+        'category_id',
         'deleted_at'
     ];
 
