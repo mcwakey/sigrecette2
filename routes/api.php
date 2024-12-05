@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\SearchTaxLabelController;
 use App\Http\Controllers\Api\SearchTaxpayerController;
 use App\Http\Controllers\Api\SearchTaxpayerTaxableController;
 use App\Http\Controllers\Api\SyncInController;
+use App\Http\Controllers\Api\SyncOutController;
 use App\Http\Controllers\Api\TaxpayerController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Http\Request;

@@ -44,7 +44,7 @@ class SyncOutController extends Controller
         if ($zoneName) {
 
             $zone = Zone::where('name', 'like', '%' . $zoneName . '%')->first();
-
+            $queryZones =Zone::select('zones.*');
             if ($zone) {
 
                 $queryZones = Zone::select('zones.*');
@@ -103,25 +103,32 @@ class SyncOutController extends Controller
             //         // 'taxlabels' =>   SearchTaxpayerTaxableResource::collection(collect([])),
             //     ];
             // }
+            return [
+                'zones' => SearchZoneResource::collection($queryZones->get()),
+                'activities' => SearchActivityResource::collection($queryActivities->get()),
+                'categories' => SearchCategoryResource::collection($queryCategories->get()),
+                'ereas' => SearchEreaResource::collection($queryEreas->get()),
+                'towns' => SearchTownResource::collection($queryTowns->get()),
+                'genders' => SearchGenderResource::collection($queryGenders->get()),
+                'id_types' => SearchIdTypeResource::collection($queryIdTypes->get()),
+
+                'taxlabels' => SearchTaxlabelResource::collection($queryTaxlabels->get()),
+                'taxables' => SearchTaxableResource::collection($queryTaxables->get()),
+
+                'taxpayers' => SearchTaxpayerResource::collection($queryTaxpayers->get()),
+                'taxpayer_taxables' => SearchTaxpayerTaxableResource::collection($queryTaxpayerTaxables->get()),
+                'invoices' => SearchInvoiceResource::collection($queryInvoices->get()),
+
+                'payments' => SearchPaymentResource::collection($queryPayments->get()),
+            ];
         }
+        return  [
+                    'taxpayers'=> SearchTaxpayerResource::collection(collect([])),
+                     'taxpayer_taxables' =>   SearchTaxpayerTaxableResource::collection(collect([])),
+                     'invoices' => SearchInvoiceResource::collection(collect([])),
 
-        return [
-            'zones' => SearchZoneResource::collection($queryZones->get()),
-            'activities' => SearchActivityResource::collection($queryActivities->get()),
-            'categories' => SearchCategoryResource::collection($queryCategories->get()),
-            'ereas' => SearchEreaResource::collection($queryEreas->get()),
-            'towns' => SearchTownResource::collection($queryTowns->get()),
-            'genders' => SearchGenderResource::collection($queryGenders->get()),
-            'id_types' => SearchIdTypeResource::collection($queryIdTypes->get()),
-
-            'taxlabels' => SearchTaxlabelResource::collection($queryTaxlabels->get()),
-            'taxables' => SearchTaxableResource::collection($queryTaxables->get()),
-
-            'taxpayers' => SearchTaxpayerResource::collection($queryTaxpayers->get()),
-            'taxpayer_taxables' => SearchTaxpayerTaxableResource::collection($queryTaxpayerTaxables->get()),
-            'invoices' => SearchInvoiceResource::collection($queryInvoices->get()),
-
-            'payments' => SearchPaymentResource::collection($queryPayments->get()),
-        ];
+                     'taxables' =>   SearchTaxpayerTaxableResource::collection(collect([])),
+                  'taxlabels' =>   SearchTaxpayerTaxableResource::collection(collect([])),
+            ];
     }
 }
