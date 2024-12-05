@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Constants;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SearchActivityResource;
 use App\Http\Resources\SearchCategoryResource;
@@ -68,6 +69,7 @@ class SyncOutController extends Controller
                     ->select('taxables.*');
 
                 $queryTaxpayers = Taxpayer::where('zone_id', $zone->id)
+                    ->where('type', Constants::TITRE)
                     ->where('deleted_at', null);
 
                 $queryTaxpayerTaxables = TaxpayerTaxable::join('taxpayers', 'taxpayer_taxables.taxpayer_id', '=', 'taxpayers.id')

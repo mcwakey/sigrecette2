@@ -15,6 +15,8 @@ class Taxpayer extends Model
     use SoftDeletes;
 
 
+
+
     /**
      * The attributes that are mass assignable.
      *
@@ -52,7 +54,9 @@ class Taxpayer extends Model
         'activity_id',
         'category_id',
         'from_mobile_and_validate_state',
-        'deleted_at'
+        'deleted_at',
+        'created_by',
+        'updated_by',
     ];
 
     /**
@@ -74,6 +78,18 @@ class Taxpayer extends Model
         'email_verified_at' => 'datetime',
         'last_login_at' => 'datetime',
     ];
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->created_by = auth()->id();
+        });
+
+        static::updating(function ($model) {
+            $model->updated_by = auth()->id();
+        });
+    }
 
     public function getProfilePhotoUrlAttribute()
     {

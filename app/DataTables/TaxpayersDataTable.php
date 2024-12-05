@@ -5,6 +5,7 @@ namespace App\DataTables;
 use App\Enums\TaxpayerStateEnums;
 use App\Helpers\Constants;
 use App\Models\Taxpayer;
+use App\Models\User;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
@@ -81,6 +82,19 @@ class TaxpayersDataTable extends DataTable
             })
             ->editColumn('created_at', function (Taxpayer $taxpayer) {
                 return $taxpayer->created_at->format('d M Y');
+            })
+            ->editColumn('created_by', function (Taxpayer $taxpayer) {
+                $name='Non defini';
+                if($taxpayer->created_by){
+                   $user= User::find($taxpayer->created_by);
+                    if ($user){
+                        $name=$user->name;
+                    }
+                }
+                return $name;
+                // $user = $payment->user;
+                // return view('pages/apps.user-management.users.columns._user', compact('user'));
+                //return view('pages/recoveries.columns._user', compact('user'));
             })
             ->addColumn('action', function (Taxpayer $taxpayer) {
                 return view('pages/taxpayers.columns._actions', ['taxpayer' => $taxpayer]);
@@ -163,6 +177,7 @@ class TaxpayersDataTable extends DataTable
             Column::make('zone.name')->title(__('zone'))->name("zone.name"),
             Column::make('status')->title(__('aproval'))->searchable(false),
             //Column::make('created_at')->title(__('created at'))->addClass('text-nowrap created_at')->visible(false),
+            Column::make('created_by')->title(__('user'))->addClass('d-flex align-items-center'),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
                 ->exportable(false)
@@ -174,7 +189,7 @@ class TaxpayersDataTable extends DataTable
             if (request()->has('rc') && in_array($column->name, ['action', 'status'])) {
                 $column->visible(false);
             }
-            if (!request()->has('state') && $column->name == 'status') {
+            if (!request()->has('state') &&  in_array($column->name,['created_by','status'])) {
                 $column->visible(false);
             }
 

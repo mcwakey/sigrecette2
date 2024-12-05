@@ -48,6 +48,8 @@ class SearchTaxpayerResource extends JsonResource
             'ereaId' => $this->resource->erea_id,
             'zoneId' => $this->resource->zone_id,
             'deletedAt' => $this->resource->deleted_at,
+            'created_by'=> $this->resource->created_by,
+            'updatedBy'=>$this->resource->updated_by
 
             // 'town' => $this->resource->town!=null?new TownResource($this->resource->town):null,
             // 'erea' => $this->resource->erea!=null?new EreaResource( $this->resource->erea)  :null,
