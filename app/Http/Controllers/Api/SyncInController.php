@@ -90,13 +90,9 @@ class SyncInController extends Controller
                         $value['from_mobile_and_validate_state'] = TaxpayerStateEnums::PENDING;
                         if (empty($value['dataStatus']) || isset($value['dataStatus'])) {
                             if ($value['dataStatus'] == $this->new) {
-
-                                // Create a new taxpayer
                                 $taxpayer = Taxpayer::create($this->transformKeysToSnakeCase($value));
-                                // Update taxpayerId if it's a new taxpayer
                                 $taxpayerId = $taxpayer->id;
                             } else {
-                                // Update existing taxpayer
                                 Taxpayer::find($taxpayerId)?->update($this->transformKeysToSnakeCase($value));
                             }
                         }
