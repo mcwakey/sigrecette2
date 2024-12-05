@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Enums\TaxpayerStateEnums;
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
 use App\Models\Payment;
@@ -87,9 +86,10 @@ class SyncInController extends Controller
                         $taxpayerPayments = $value['payments'] ?? [];
 
                         unset($value['ereaId']);
-                        $value['from_mobile_and_validate_state'] = TaxpayerStateEnums::PENDING;
+
                         if (empty($value['dataStatus']) || isset($value['dataStatus'])) {
                             if ($value['dataStatus'] == $this->new) {
+                                $value['from_mobile_and_validate_state'] = 'PENDING';
 
                                 // Create a new taxpayer
                                 $taxpayer = Taxpayer::create($this->transformKeysToSnakeCase($value));

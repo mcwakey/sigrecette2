@@ -10,7 +10,6 @@ use App\Enums\InvoiceStatusEnums;
 use App\Enums\PaymentStatusEnums;
 use App\Enums\StatisticKeysEnums;
 use App\Enums\TaxpayerStaticsEnums;
-use App\Helpers\Constants;
 use App\Models\Activity;
 use App\Models\Canton;
 use App\Models\Category;
@@ -36,7 +35,7 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
 
     public function getTaxpayerQuery(Year $year)
     {
-        return Taxpayer::whereYear('created_at', $year->name)->where('type',Constants::TITRE);
+        return Taxpayer::whereYear('created_at', $year->name);
     }
 
     public function getStats(string|null $type = null): array
