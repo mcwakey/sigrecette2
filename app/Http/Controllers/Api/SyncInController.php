@@ -91,13 +91,13 @@ class SyncInController extends Controller
                         $value['from_mobile_and_validate_state'] = TaxpayerStateEnums::PENDING;
                         if (empty($value['dataStatus']) || isset($value['dataStatus'])) {
                             if ($value['dataStatus'] == $this->new) {
-                                $value['created_at'] = now();
-                                $value['created_by'] = $userId;
+                                //$value['created_at'] = now();
+                                $value['createdBy'] = $userId;
                                 $taxpayer = Taxpayer::create($this->transformKeysToSnakeCase($value));
                                 $taxpayerId = $taxpayer->id;
                             } else {
-                                $value['updated_at'] = now();
-                                $value['updated_by'] = $userId;
+                                //$value['updated_at'] = now();
+                                $value['updatedBy'] = $userId;
                                 Taxpayer::find($taxpayerId)?->update($this->transformKeysToSnakeCase($value));
                             }
                         }
