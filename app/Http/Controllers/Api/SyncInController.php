@@ -20,58 +20,58 @@ class SyncInController extends Controller
     {
         $data = $request->input('data', []);
 
-        // foreach ($data as $taxpayer) {
-        //     foreach ($taxpayer as $taxpayerData) {
-        //         foreach ($taxpayerData as $value) {
 
-        //             $taxpayerId = $value['_id'] ?? null;
-        //             $taxpayerTaxables = $value['taxpayerTaxables'] ?? [];
-        //             $taxpayerInvoices = $value['invoices'] ?? [];
-        //             $taxpayerPayments = $value['payments'] ?? [];
 
-        //             unset($value['ereaId']);
 
-        //             if (empty($value['dataStatus']) || isset($value['dataStatus'])) {
-        //                 if($value['dataStatus'] == $this->new){
-        //                     $value['from_mobile_and_validate_state'] = 'PENDING';
 
-        //                     $taxpayer = Taxpayer::create($this->transformKeysToSnakeCase($value));
-        //                     //on doit avoir klk chose come xa pour reactualiser le taxpayerId si cest un nouveau taxpayer
-        //                     $taxpayerId = $taxpayer->id;
-        //                 }else{
-        //                     Taxpayer::find($taxpayerId)?->update($this->transformKeysToSnakeCase($value));
-        //                 }
-        //             }
 
-        //             foreach ($taxpayerTaxables as $taxpayerTaxable) {
-        //                 if(empty($taxpayerTaxable['dataStatus']) || isset($taxpayerTaxable['dataStatus'])){
 
-        //                     $taxpayerTaxable['taxpayer_id'] = $taxpayerId;
 
-        //                     if($taxpayerTaxable['dataStatus'] == $this->new){
-        //                         TaxpayerTaxable::create($this->transformKeysToSnakeCase($taxpayerTaxable));
-        //                     }else{
-        //                         TaxpayerTaxable::find($taxpayerTaxable['_id'])?->update($this->transformKeysToSnakeCase($taxpayerTaxable));
-        //                     }
-        //                 }
-        //             }
 
-        //             foreach ($taxpayerInvoices as $taxpayerInvoice) {
-        //                 if(empty($taxpayerInvoice['dataStatus']) || isset($taxpayerInvoice['dataStatus'])){
-        //                     Invoice::find($taxpayerInvoice['_id'])?->update($this->transformKeysToSnakeCase($taxpayerInvoice));
-        //                 }
-        //             }
 
-        //             foreach ($taxpayerPayments as $taxpayerPayment) {
-        //                 if(empty($taxpayerPayment['dataStatus']) || isset($taxpayerPayment['dataStatus'])){
-        //                     Payment::updateOrCreate(['id' => $taxpayerPayment['_id']], $this->transformKeysToSnakeCase($taxpayerPayment));
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
 
-        // return response()->json(true, 200);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         // Start the transaction
         DB::beginTransaction();
@@ -81,6 +81,7 @@ class SyncInController extends Controller
                 foreach ($taxpayer as $taxpayerData) {
                     foreach ($taxpayerData as $value) {
 
+                        $userId = $value['userId'] ?? null;
                         $taxpayerId = $value['_id'] ?? null;
                         $taxpayerTaxables = $value['taxpayerTaxables'] ?? [];
                         $taxpayerInvoices = $value['invoices'] ?? [];
@@ -90,9 +91,13 @@ class SyncInController extends Controller
                         $value['from_mobile_and_validate_state'] = TaxpayerStateEnums::PENDING;
                         if (empty($value['dataStatus']) || isset($value['dataStatus'])) {
                             if ($value['dataStatus'] == $this->new) {
+                                $value['created_at'] = now();
+                                $value['created_by'] = $userId;
                                 $taxpayer = Taxpayer::create($this->transformKeysToSnakeCase($value));
                                 $taxpayerId = $taxpayer->id;
                             } else {
+                                $value['updated_at'] = now();
+                                $value['updated_by'] = $userId;
                                 Taxpayer::find($taxpayerId)?->update($this->transformKeysToSnakeCase($value));
                             }
                         }
@@ -122,8 +127,8 @@ class SyncInController extends Controller
                         foreach ($taxpayerPayments as $taxpayerPayment) {
                             if (empty($taxpayerPayment['dataStatus']) || isset($taxpayerPayment['dataStatus'])) {
                                 $invoice = Invoice::find($taxpayerPayment['invoiceId']);
-                                // $taxpayerPayment['code'] = $invoice->taxpayer_taxables->first()->taxable->code;
-                                $taxpayerPayment['code'] = '705211';
+                                $taxpayerPayment['code'] = $invoice->taxpayer_taxables->first()->taxable->code;
+                                //$taxpayerPayment['code'] = '705211';
                                 // Payment::updateOrCreate(['id' => $taxpayerPayment['_id']], $this->transformKeysToSnakeCase($taxpayerPayment));
                                 Payment::Create($this->transformKeysToSnakeCase($taxpayerPayment));
                             }
@@ -136,14 +141,14 @@ class SyncInController extends Controller
             DB::commit();
 
             return response()->json(true, 200);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // Rollback the transaction if any operation fails
             DB::rollBack();
 
             // Log the error (optional)
-            Log::error('Error in syncIn: ' . $e->getMessage());
+            \Illuminate\Support\Facades\Log::error('Error in syncIn: ' . $e->getMessage());
 
-            return response()->json(['error' => 'Data sync failed'. $e], 500);
+            return response()->json(['error' => 'Data sync failed' . $e], 500);
         }
     }
 
