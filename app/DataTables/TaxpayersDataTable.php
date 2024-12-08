@@ -84,22 +84,44 @@ class TaxpayersDataTable extends DataTable
                 return $taxpayer->created_at->format('d M Y');
             })
             ->editColumn('created_by', function (Taxpayer $taxpayer) {
-                $name='Non defini';
-                if($taxpayer->created_by&& !$taxpayer->updated_by){
-                   $user= User::find($taxpayer->created_by);
-                    if ($user){
-                        $name=$user->name;
+                $createdByName = null;
+                $updatedByName = null;
+                $createdAt = null;
+                $updatedAt = null;
+
+                if ($taxpayer->created_by) {
+                    $createdByUser = User::find($taxpayer->created_by);
+                    if ($createdByUser) {
+                        $createdByName = $createdByUser->name;
                     }
-                }elseif ($taxpayer->updated_by){
-                    $user= User::find($taxpayer->updated_by);
-                    if ($user){
-                        $name=$user->name;
-                    }
+                    $createdAt = $taxpayer->created_at ? $taxpayer->created_at->format('d/m/Y H:i:s') : null;
                 }
-                return $name;
-                // $user = $payment->user;
-                // return view('pages/apps.user-management.users.columns._user', compact('user'));
-                //return view('pages/recoveries.columns._user', compact('user'));
+
+                if ($taxpayer->updated_by) {
+                    $updatedByUser = User::find($taxpayer->updated_by);
+                    if ($updatedByUser) {
+                        $updatedByName = $updatedByUser->name;
+                    }
+                    $updatedAt = $taxpayer->updated_at ? $taxpayer->updated_at->format('d/m/Y H:i:s') : null;
+                }
+
+                if ($createdByName && !$updatedByName) {
+                    $name = "Créé par: " . $createdByName;
+                    $date = "Le: " . $createdAt;
+                } elseif ($updatedByName && $createdByName) {
+                    $name = "Créé par: " . $createdByName . " | Dernière édition par: " . $updatedByName;
+                    $date = "Créé le: " . $createdAt . " | Dernière édition le: " . $updatedAt;
+                } elseif (!$createdByName && $updatedByName) {
+                    $name = "Dernière édition par: " . $updatedByName;
+                    $date = "Le: " . $updatedAt;
+                } else {
+                    $name = "Inconnu";
+                    $date = "Inconnu";
+                }
+                $finalResult = $name . " " . $date;
+
+
+                return $finalResult;
             })
             ->addColumn('action', function (Taxpayer $taxpayer) {
                 return view('pages/taxpayers.columns._actions', ['taxpayer' => $taxpayer]);

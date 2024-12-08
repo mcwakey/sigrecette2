@@ -91,7 +91,7 @@ class Taxpayer extends Model
                 $model->updated_by = $auth_id;
             });
         }
-       
+
     }
 
     public function getProfilePhotoUrlAttribute()
