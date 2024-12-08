@@ -85,8 +85,13 @@ class TaxpayersDataTable extends DataTable
             })
             ->editColumn('created_by', function (Taxpayer $taxpayer) {
                 $name='Non defini';
-                if($taxpayer->created_by){
+                if($taxpayer->created_by&& !$taxpayer->updated_by){
                    $user= User::find($taxpayer->created_by);
+                    if ($user){
+                        $name=$user->name;
+                    }
+                }elseif ($taxpayer->updated_by){
+                    $user= User::find($taxpayer->updated_by);
                     if ($user){
                         $name=$user->name;
                     }

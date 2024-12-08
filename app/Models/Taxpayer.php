@@ -81,14 +81,17 @@ class Taxpayer extends Model
     protected static function boot()
     {
         parent::boot();
+        $auth_id = auth()->id();
+        if($auth_id){
+            static::creating(function ($model) use ($auth_id) {
+                $model->created_by = $auth_id;
+            });
 
-        static::creating(function ($model) {
-            $model->created_by = auth()->id();
-        });
-
-        static::updating(function ($model) {
-            $model->updated_by = auth()->id();
-        });
+            static::updating(function ($model) use ($auth_id) {
+                $model->updated_by = $auth_id;
+            });
+        }
+       
     }
 
     public function getProfilePhotoUrlAttribute()

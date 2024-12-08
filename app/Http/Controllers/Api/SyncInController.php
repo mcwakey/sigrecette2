@@ -77,6 +77,7 @@ class SyncInController extends Controller
         DB::beginTransaction();
 
         try {
+
             foreach ($data as $taxpayer) {
                 foreach ($taxpayer as $taxpayerData) {
                     foreach ($taxpayerData as $value) {
@@ -86,13 +87,14 @@ class SyncInController extends Controller
                         $taxpayerTaxables = $value['taxpayerTaxables'] ?? [];
                         $taxpayerInvoices = $value['invoices'] ?? [];
                         $taxpayerPayments = $value['payments'] ?? [];
-
+                        //dd($userId);
                         unset($value['ereaId']);
                         $value['from_mobile_and_validate_state'] = TaxpayerStateEnums::PENDING;
                         if (empty($value['dataStatus']) || isset($value['dataStatus'])) {
                             if ($value['dataStatus'] == $this->new) {
                                 //$value['created_at'] = now();
                                 $value['createdBy'] = $userId;
+                                //dd($this->transformKeysToSnakeCase($value));
                                 $taxpayer = Taxpayer::create($this->transformKeysToSnakeCase($value));
                                 $taxpayerId = $taxpayer->id;
                             } else {
