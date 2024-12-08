@@ -19,17 +19,69 @@ class SyncInController extends Controller
     public function syncIn(Request $request)
     {
         $data = $request->input('data', []);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         // Start the transaction
         DB::beginTransaction();
 
         try {
-            foreach ($data as $dataItem) {
-                $userId = $dataItem['userId'] ?? null;
-                $taxpayers = $dataItem['taxpayer'] ?? [];
-                foreach ($taxpayers as $taxpayerData) {
+            foreach ($data as $taxpayer) {
+                foreach ($taxpayer as $taxpayerData) {
                     foreach ($taxpayerData as $value) {
 
-                       // $userId = $value['userId'] ?? null;
+                        $userId = $value['userId'] ?? null;
                         $taxpayerId = $value['_id'] ?? null;
                         $taxpayerTaxables = $value['taxpayerTaxables'] ?? [];
                         $taxpayerInvoices = $value['invoices'] ?? [];
