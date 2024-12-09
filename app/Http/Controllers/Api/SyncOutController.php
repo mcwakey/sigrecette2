@@ -37,6 +37,10 @@ class SyncOutController extends Controller
     public function search(Request $request)
     {
         $zoneName = $request->input('zone', null);
+        $categorieName = $request->input('category', null);
+        if($categorieName==null){
+            $categorieName='CATEGORY 1';
+        }
 
         // $queryTaxpayer = Taxpayer::query();
         // $queryTaxpayerTaxable = TaxpayerTaxable::query();
@@ -62,7 +66,8 @@ class SyncOutController extends Controller
 
                 $queryIdTypes = IdType::select('id_types.*');
 
-                $queryTaxlabels = TaxLabel::where('category', 'LIKE', '%CATEGORY 1%');
+                //$queryTaxlabels = TaxLabel::where('category', 'LIKE', '%$categorieName%');
+                $queryTaxlabels = TaxLabel::where('category', 'LIKE', '%' . $categorieName . '%');
 
                 $queryTaxables = Taxable::join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
                     ->where('category', 'CATEGORY 1')

@@ -18,7 +18,7 @@ class AddTaxLabelModal extends Component
 
     public $edit_mode = false;
     public $categories = [];
-    public $allCategories = ['CATEGORY 1', 'CATEGORY 2', 'CATEGORY 3'];
+    public $allCategories = ['CATEGORY 1', 'CATEGORY 2', 'CATEGORY 3','CATEGORY 4'];
 
     protected function rules()
     {
