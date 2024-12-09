@@ -70,7 +70,7 @@ class SyncOutController extends Controller
                 $queryTaxlabels = TaxLabel::where('category', 'LIKE', '%' . $categorieName . '%');
 
                 $queryTaxables = Taxable::join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
-                    ->where('category', 'CATEGORY 1')
+                    ->where('category', 'LIKE', '%' . $categorieName . '%')
                     ->select('taxables.*');
 
                 $queryTaxpayers = Taxpayer::where('zone_id', $zone->id)
