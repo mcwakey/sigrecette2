@@ -31,8 +31,9 @@ class SearchTaxpayerTaxableResource extends JsonResource
             'taxableId' => $this->resource->taxable_id,
             'invoiceId' => $this->resource->invoice_id,
             'billStatus' => $this->resource->bill_status,
-
             'taxpayerId' => $this->resource->taxpayer_id,
+            'width'=>$this->resource->width,
+            'length'=>$this->resource->length,
             // 'taxable'=> new TaxableResource($this->resource->taxable),
         ];
     }
