@@ -127,6 +127,7 @@ class ExportTaxpayersDataTable extends DataTable
     public function getColumns(): array
     {
         $columns = [
+            Column::make('created_at')->title(__('created_at'))->addClass('text-nowrap'),
             Column::make('id')->title(__('id')),
             Column::make('name')->title(__('taxpayer')),
             Column::make('social_work')->title(__('taxpayer.social_work')),

@@ -9,6 +9,7 @@ use App\Helpers\Constants;
 use App\Helpers\InvoiceHelper;
 use App\Models\Invoice;
 use App\Models\Payment;
+use App\Models\Taxpayer;
 use App\Models\Year;
 use Carbon\Carbon;
 use Yajra\DataTables\Html\Button;
@@ -45,7 +46,7 @@ class ExportInvoicesDataTable extends DataTable
             ->editColumn('tax_labels.code', function (Invoice $invoice) {
                 return implode(',', array_keys(InvoiceHelper::sumAmountsByTaxCode($invoice)));
             })
-            ->editColumn('total', function (Invoice $invoice) {
+            ->editColumn('amount', function (Invoice $invoice) {
                 if ($invoice->reduce_amount != '') {
                     return '-' . format_amount($invoice->reduce_amount);
                 } else {
@@ -74,6 +75,9 @@ class ExportInvoicesDataTable extends DataTable
             })
             ->editColumn('to_date', function (Invoice $invoice) {
                 return $invoice->to_date;
+            })
+            ->editColumn('created_at', function (Invoice $invoice) {
+                return $invoice->created_at;
             })
             ->editColumn('reason_for_reject', function (Invoice $invoice) {
                 return $invoice->reason_for_reject;
@@ -113,13 +117,14 @@ class ExportInvoicesDataTable extends DataTable
             Column::make('nic')->title(__('nic')),
             Column::make('taxpayer.zone.name')->title(__('zone')),
             Column::make('tax_labels.code')->title(__('code')),
-            Column::make('total')->title(__('amount'))->name('amount'),
+            Column::make('amount')->title(__('amount'))->name('amount'),
             Column::make('paid')->title(__('Montant payé'))->name('paid')->searchable(false),
             Column::make('remains_to_be_paid')->title(__('Reste'))->name('remains_to_be_paid')->searchable(false),
             Column::make('status')->title(__('aproval')),
             Column::make('delivery_date')->title(__('delivery date'))->addClass('text-nowrap'),
             Column::make('from_date')->title(__('from_date'))->addClass('text-nowrap'),
             Column::make('to_date')->title(__('expiry date'))->addClass('text-nowrap'),
+            Column::make('created_at')->title(__('created_at'))->addClass('text-nowrap'),
             Column::make('validity')->title(__('status')),
             Column::make('taxpayer_id')->visible(false),
             Column::make('reason_for_reject')->title(__('reason_for_reject')),
