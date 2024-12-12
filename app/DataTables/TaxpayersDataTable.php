@@ -149,7 +149,10 @@ class TaxpayersDataTable extends DataTable
             //  ->join('ereas', 'taxpayers.erea_id', '=', 'ereas.id')
             ->with('zone')
             ->join('zones', 'taxpayers.zone_id', '=', 'zones.id')
-            ->where('taxpayers.type', '=', Constants::TITRE)->select('taxpayers.*') // Select columns from taxpayers table
+            ->where('taxpayers.type', '=', Constants::TITRE)->select('taxpayers.*')
+            ->orderByRaw('GREATEST(COALESCE(taxpayers.updated_at, 0), COALESCE(taxpayers.created_at, 0)) DESC')
+            ->orderBy('taxpayers.name')
+            // Select columns from taxpayers table
             ->newQuery();
 
         if ($this->state) {

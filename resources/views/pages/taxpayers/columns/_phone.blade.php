@@ -1,8 +1,10 @@
 <div class="d-flex flex-column">
     <div class="text-gray-800 mb-1">
-        @if ( $taxpayerinfo->telephone )
+        @if ( $taxpayerinfo->telephone && $taxpayerinfo->telephone )
             {{ $taxpayerinfo->mobilephone }} / {{ $taxpayerinfo->telephone }}
-        @else
+        @elseif($taxpayerinfo->telephone)
+            {{ $taxpayerinfo->telephone }}
+        @elseif($taxpayerinfo->mobilephone)
             {{ $taxpayerinfo->mobilephone }}
         @endif
 </div>
