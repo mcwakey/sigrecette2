@@ -158,8 +158,10 @@ class TaxpayersDataTable extends DataTable
         if ($this->state) {
             $query->where('taxpayers.from_mobile_and_validate_state', '=', TaxpayerStateEnums::PENDING);
         } else {
-            $query->where('taxpayers.from_mobile_and_validate_state', TaxpayerStateEnums::APPROVED)
-                ->orWhereNull('taxpayers.from_mobile_and_validate_state');
+           $query->where('taxpayers.from_mobile_and_validate_state', '!=',TaxpayerStateEnums::PENDING)
+              // ->orWhere('taxpayers.from_mobile_and_validate_state', '=','')
+               //->orWhereNull('taxpayers.from_mobile_and_validate_state')
+           ;
         }
         if ($this->disable !== null && $this->disable) {
             $query->onlyTrashed();
