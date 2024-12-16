@@ -21,6 +21,7 @@ use App\Notifications\InvoiceCreated;
 use App\Notifications\InvoicePaid;
 use App\Traits\DispatchesMessages;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -200,7 +201,10 @@ class AddInvoiceModal extends Component
     {
 
 
-        // Validate the form input data
+        if (Gate::denies('peut émettre un avis sur titre')) {
+            abort(403, 'Accès refusé.');
+        }
+
 
         DB::transaction(function () {
 

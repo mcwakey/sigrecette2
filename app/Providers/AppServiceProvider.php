@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -44,6 +45,12 @@ class AppServiceProvider extends ServiceProvider
             $view->with('commune', Commune::getFirstCommune());
             $view->with('public_ip', '');
         });
+        if(env('APP_ENV') == 'local') {
+            Url::forceScheme('http');
+        }
+        if (env('APP_ENV') == 'production') {
+            $this->app['request']->server->set('HTTPS', 'on');
+        }
         KTBootstrap::init();
     }
 }
