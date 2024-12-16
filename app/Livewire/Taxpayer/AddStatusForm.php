@@ -47,6 +47,9 @@ class AddStatusForm extends Component
 
     public function mount($id)
     {
+        if (!auth()->user()->hasPermissionTo('peut valider un contribuable')) {
+            abort(403, 'Accès interdit');
+        }
         $taxpayer = Taxpayer::find($id);
 
         $this->taxpayer_id = $taxpayer?->id;
@@ -61,6 +64,9 @@ class AddStatusForm extends Component
 
     public function submit()
     {
+        if (!auth()->user()->hasPermissionTo('peut valider un contribuable')) {
+            abort(403, 'Accès interdit');
+        }
         $this->validate();
         if ($this->getErrorBag()->isEmpty()) {
             DB::transaction(function () {

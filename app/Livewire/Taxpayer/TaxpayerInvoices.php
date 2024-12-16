@@ -27,7 +27,7 @@ class TaxpayerInvoices extends Component
     public function render()
     {
 
-        dump("render call");
+
         return view('livewire.taxpayer.taxpayer-invoices');
     }
 

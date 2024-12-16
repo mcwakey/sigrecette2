@@ -32,7 +32,12 @@ class AddDeliveryForm extends Component
         'update_status' => 'updateStatus',
         //'add_invoice' => 'addInvoice',
     ];
-
+    public function mount()
+    {
+        if (!auth()->user()->hasPermissionTo('peut ajouter la date de livraison d\'un avis')) {
+            abort(403, 'Accès interdit');
+        }
+    }
     public function render()
     {
         return view('livewire.invoice.add-delivery-form');
@@ -58,6 +63,9 @@ class AddDeliveryForm extends Component
 
     public function submit()
     {
+        if (!auth()->user()->hasPermissionTo('peut ajouter la date de livraison d\'un avis')) {
+            abort(403, 'Accès interdit');
+        }
         $this->validateData();
         if ($this->getErrorBag()->isEmpty()) {
 

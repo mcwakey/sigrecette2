@@ -39,7 +39,12 @@ class AddOrdernoForm extends Component
     {
         return view('livewire.invoice.add-orderno-form');
     }
-
+    public function mount()
+    {
+        if (!auth()->user()->hasPermissionTo('peut ajouter le numéro d\'ordre de recette d\'un avis')) {
+            abort(403, 'Accès interdit');
+        }
+    }
     public function validateData()
     {
         $this->validate();
@@ -54,6 +59,9 @@ class AddOrdernoForm extends Component
 
     public function submit()
     {
+        if (!auth()->user()->hasPermissionTo('peut ajouter le numéro d\'ordre de recette d\'un avis')) {
+            abort(403, 'Accès interdit');
+        }
         $this->validateData();
         if ($this->getErrorBag()->isEmpty()) {
             DB::transaction(function () {

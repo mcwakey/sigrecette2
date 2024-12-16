@@ -86,7 +86,11 @@ class AddPaymentModal extends Component
 
     ];
 
-
+    public function mount(){
+        if (!auth()->user()->hasPermissionTo('peut ajouter un paiement')) {
+            abort(403, 'Accès interdit');
+        }
+    }
     public function render()
     {
         $taxpayers = Taxpayer::all();
@@ -109,6 +113,9 @@ class AddPaymentModal extends Component
 
     public function submit()
     {
+        if (!auth()->user()->hasPermissionTo('peut ajouter un paiement')) {
+        abort(403, 'Accès interdit');
+        }
         $is_regisseur = false;
         $role = Role::where('name', 'regisseur')->first();
         if ($role) {

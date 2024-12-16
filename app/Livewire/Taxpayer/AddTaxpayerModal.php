@@ -126,10 +126,17 @@ class AddTaxpayerModal extends Component
         return view('livewire.taxpayer.add-taxpayer-modal', ['cantons' => $cantons, 'genders' => $genders, 'id_types' => $id_types, 'zones' => $zones, 'categories' => $categories]);
     }
 
+    public function mount(){
+        if (!auth()->user()->hasPermissionTo('peut créer un contribuable')) {
+            abort(403, 'Accès interdit');
+        }
+    }
     public function submit(Request $request)
     {
 
-        // Validate the form input data
+        if (!auth()->user()->hasPermissionTo('peut créer un contribuable')) {
+            abort(403, 'Accès interdit');
+        }
         $this->validate();
 
         DB::transaction(function () {

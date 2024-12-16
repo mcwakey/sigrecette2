@@ -167,6 +167,12 @@ class AutoInvoiceModal extends Component
 
         return view('livewire.invoice.auto-invoice-modal', ['zones' => $zones, 'tax_labels' => $tax_labels]);
     }
+    public function mount()
+    {
+        if (!auth()->user()->hasPermissionTo('peut générer automatiquement les avis sur titre')) {
+            abort(403, 'Accès interdit');
+        }
+    }
 
     // public function submit()
     // {
@@ -210,7 +216,9 @@ class AutoInvoiceModal extends Component
     {
         // Validate the form input data
         //$this->validate();
-
+        if (!auth()->user()->hasPermissionTo('peut générer automatiquement les avis sur titre')) {
+            abort(403, 'Accès interdit');
+        }
         DB::transaction(function () {
 
             //dd($this->qty, $this->start_month, $this->taxlabel, $this->zone);

@@ -68,6 +68,9 @@ class AddTaxableModal extends Component
     public function mount()
 
     {
+        if (!auth()->user()->hasPermissionTo('peut créer une taxation')) {
+            abort(403, 'Accès interdit');
+        }
         if ($this->edit_mode) {
             $taxable = Taxable::find($this->taxable_id);
 
@@ -79,7 +82,9 @@ class AddTaxableModal extends Component
 
     public function submit()
     {
-        // Validate the form input data
+        if (!auth()->user()->hasPermissionTo('peut créer une taxation')) {
+            abort(403, 'Accès interdit');
+        }
         $this->validate();
         DB::transaction(function () {
             $data = [

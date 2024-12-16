@@ -157,7 +157,12 @@ class AddInvoiceNoTaxpayerModal extends Component
     private $tarisIsNull = null;
     public $option_calculus;
 
-
+    public function mount()
+    {
+        if (!auth()->user()->hasPermissionTo('peut émettre un avis au comptant')) {
+            abort(403, 'Accès interdit');
+        }
+    }
     public function render()
     {
 
@@ -237,7 +242,9 @@ class AddInvoiceNoTaxpayerModal extends Component
     {
 
 
-        // Validate the form input data
+        if (!auth()->user()->hasPermissionTo('peut émettre un avis au comptant')) {
+            abort(403, 'Accès interdit');
+        }
         $this->validate();
         DB::transaction(function () {
             $taxpayersData = [

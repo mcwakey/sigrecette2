@@ -79,34 +79,6 @@ class AddInvoiceModal extends Component
 
     public $taxable_taxlabel;
 
-    // public function reduce($index)
-    // {
-    //     $product_id = $this->inputs[$index]['id'];
-    //     $this->inputs[$index]['qty'] -= 1;
-    //     $this->updateCart($product_id, $this->inputs[$index]['qty']);
-    // }
-    //public $created_at;
-    // public $mobilephone;
-    // public $email;
-    // public $latitude;
-    // public $canton;
-    // public $town;
-    // public $erea;
-    // public $address;
-    // public $zone_id;
-
-    //public $avatar;
-    //public $saved_avatar;
-
-    // public $selectedTaxpayerId;
-
-    // public function selectTaxpayer($taxpayerId)
-    // {
-    //     $this->selectedTaxpayerId = $taxpayerId;
-
-    //     dd($this->selectedTaxpayerId);
-    // }
-
     public $cancel_reduct;
 
     public $edit_mode = false;
@@ -134,13 +106,7 @@ class AddInvoiceModal extends Component
         'load_invoice' => 'loadInvoice',
     ];
 
-    // public $taxpayer_id; // Define public property to hold taxpayer_id
 
-    // // Constructor to accept taxpayer_id
-    // public function mount($taxpayer_id)
-    // {
-    //     $this->taxpayer_id = $taxpayer_id;
-    // }
 
     public function render()
     {
@@ -156,56 +122,19 @@ class AddInvoiceModal extends Component
 
     public function mount($id = null)
     {
+        if (!auth()->user()->hasPermissionTo('peut émettre un avis sur titre')) {
+            abort(403, 'Accès interdit');
+        }
         $this->taxpayer_id = $id;
     }
 
-    // public function submit()
-    // {
-    //     // Validate the form input data
-    //     $this->validate();
-
-    //     DB::transaction(function () {
-
-    //         $data = [
-    //             //save into Invoice_items table
-    //             "taxpayer_taxable_id" => $this->taxpayer_taxable_id,
-    //             "qty" => $this->qty,
-    //             "s_amount" => $this->s_amount,
-
-    //             //save into Invoice table
-    //             'taxpayer_id' => $this->taxpayer_id,
-    //             'amount' => $this->amount,
-
-    //         ];
-
-    //         $invoice = Invoice::find($this->invoice_id) ?? Invoice::create($data);
-
-    //         if ($this->edit_mode) {
-    //             foreach ($data as $k => $v) {
-    //                 $invoice->$k = $v;
-    //             }
-    //             $invoice->save();
-    //         }
-
-    //         if ($this->edit_mode) {
-    //             $this->dispatch('success', __('Invoice updated'));
-    //         } else {
-    //             $this->dispatch('success', __('New Invoice created'));
-    //         }
-    //     });
-
-    //     $this->reset();
-    // }
 
     public function submit()
     {
 
-
-        if (Gate::denies('peut émettre un avis sur titre')) {
-            abort(403, 'Accès refusé.');
+        if (!auth()->user()->hasPermissionTo('peut émettre un avis sur titre')) {
+            abort(403, 'Accès interdit');
         }
-
-
         DB::transaction(function () {
 
             if (!$this->edit_mode) {
