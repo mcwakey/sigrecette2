@@ -154,17 +154,19 @@ class TaxpayersDataTable extends DataTable
             ->orderBy('taxpayers.name')
             // Select columns from taxpayers table
             ->newQuery();
-
-            if ($this->disable !== null && $this->disable) {
-                $query->onlyTrashed();
+        $query->when(
+            $this->state,
+            function ($q) {
+                $q->where('taxpayers.from_mobile_and_validate_state', '=', TaxpayerStateEnums::PENDING);},
+            function ($q) {
+                $q->where('taxpayers.from_mobile_and_validate_state', '!=', TaxpayerStateEnums::PENDING)
+                    ->orWhereNull('taxpayers.from_mobile_and_validate_state');
             }
-            
-            $query->when($this->state, function ($q) {
-                $q->where('taxpayers.from_mobile_and_validate_state', '=', TaxpayerStateEnums::PENDING);
-            }, function ($q) {
-                $q->where('taxpayers.from_mobile_and_validate_state', '!=', TaxpayerStateEnums::PENDING);
-            });
-            
+        );
+        if ($this->disable !== null && $this->disable) {
+            $query->onlyTrashed();
+        }
+
 
         return $query;
     }
