@@ -78,11 +78,9 @@ class TaxpayersDataTable extends DataTable
                 return view('pages/taxpayers.columns._aproval', ['taxpayerinfo' => $taxpayerinfo]);
             })
             ->editColumn('created_at', function (Taxpayer $taxpayer) {
-                return $taxpayer->created_at->format('d M Y');
+                return "Créé le: ".$taxpayer->created_at->format('d M Y');
             })
-            ->editColumn('created_at', function (Taxpayer $taxpayer) {
-                return $taxpayer->created_at->format('d M Y');
-            })
+            //->editColumn('updated_at', function (Taxpayer $taxpayer) {return $taxpayer->created_at->format('d M Y');})
             ->editColumn('created_by', function (Taxpayer $taxpayer) {
                 $createdByName = null;
                 $updatedByName = null;
@@ -130,7 +128,7 @@ class TaxpayersDataTable extends DataTable
     }
 
     /**
-     * Get the query source of dataTable.
+     * Get the query source of dataTable.e
      */
     // public function query(Taxpayer $model): QueryBuilder
     // {
@@ -150,9 +148,6 @@ class TaxpayersDataTable extends DataTable
             ->with('zone')
             ->join('zones', 'taxpayers.zone_id', '=', 'zones.id')
             ->where('taxpayers.type', '=', Constants::TITRE)->select('taxpayers.*')
-            ->orderByRaw('GREATEST(COALESCE(taxpayers.updated_at, 0), COALESCE(taxpayers.created_at, 0)) DESC')
-            ->orderBy('taxpayers.name')
-            // Select columns from taxpayers table
             ->newQuery();
         $query->when(
             $this->state,
@@ -187,8 +182,11 @@ class TaxpayersDataTable extends DataTable
             ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
-            ->orderBy(0)
+            //->orderBy(0)
             ->drawCallbackWithLivewire()
+            ->orderBy(0, 'desc')
+            ->pageLength(100)
+            ->lengthMenu([[100, 300, 500, -1], [100, 300, 500, "All"]])
             // ->buttons(['print','excel','csv','pdf',])
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/taxpayers/columns/_draw-scripts.js')) . "}");
     }
@@ -209,7 +207,7 @@ class TaxpayersDataTable extends DataTable
             Column::make('address')->title(__('address')),
             Column::make('zone.name')->title(__('zone'))->name("zone.name"),
             Column::make('status')->title(__('aproval'))->searchable(false),
-            //Column::make('created_at')->title(__('created at'))->addClass('text-nowrap created_at')->visible(false),
+            Column::make('created_at')->title(__('created at'))->addClass('text-nowrap created_at'),
             Column::make('created_by')->title(__('user'))->addClass('d-flex align-items-center'),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
@@ -222,7 +220,7 @@ class TaxpayersDataTable extends DataTable
             if (request()->has('rc') && in_array($column->name, ['action', 'status'])) {
                 $column->visible(false);
             }
-            if (!request()->has('state') &&  in_array($column->name,['created_by','status'])) {
+            if (!request()->has('state') &&  in_array($column->name,['created_by','status','town.canton.name'])) {
                 $column->visible(false);
             }
 
