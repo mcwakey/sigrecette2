@@ -149,21 +149,23 @@ class TaxpayersDataTable extends DataTable
             ->join('zones', 'taxpayers.zone_id', '=', 'zones.id')
             ->where('taxpayers.type', '=', Constants::TITRE)->select('taxpayers.*')
             ->newQuery();
-        $query->when(
-            $this->state,
-            function ($q) {
-                $q->where('taxpayers.from_mobile_and_validate_state', '=', TaxpayerStateEnums::PENDING);},
-            function ($q) {
-                $q->where('taxpayers.from_mobile_and_validate_state', '!=', TaxpayerStateEnums::PENDING)
-                    ->orWhereNull('taxpayers.from_mobile_and_validate_state');
-            }
-        );
+
         if ($this->disable !== null && $this->disable) {
-            $query->onlyTrashed();
+            return $query->onlyTrashed();
+        }else{
+           return  $query->when(
+                $this->state,
+                function ($q) {
+                    $q->where('taxpayers.from_mobile_and_validate_state', '=', TaxpayerStateEnums::PENDING);},
+                function ($q) {
+                    $q->where('taxpayers.from_mobile_and_validate_state', '!=', TaxpayerStateEnums::PENDING)
+                        ->orWhereNull('taxpayers.from_mobile_and_validate_state');
+                }
+            );
         }
 
 
-        return $query;
+        //return $query;
     }
 
 
