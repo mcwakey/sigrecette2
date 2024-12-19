@@ -11,4 +11,5 @@ class TaxpayerStaticsEnums
     public const BY_TOWN = 'town';
     public const BY_ZONE = 'zone';
     public const BY_TAXABLE = 'taxable';
+    const BY_LABEL = 'label';
 }

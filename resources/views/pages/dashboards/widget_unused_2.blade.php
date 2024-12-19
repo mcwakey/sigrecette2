@@ -27,7 +27,7 @@
     <!--begin::Header-->
     <div class="card-header pt-5">
         <h3 class="card-title align-items-start flex-column">
-            <span class="card-label fw-bold text-white">Graphique</span>
+            <span class="card-label fw-bold text-white">Graphique(Avis sur titre)</span>
         </h3>
     </div>
     <!--end::Header-->
@@ -36,10 +36,12 @@
             <div class="rd-invoice2">
                 <span class="fw-bold me-2 lh-1 ls-n2">{{$count_invoices["NOEXPIRED"]}}</span>
             </div>
-            <span class="opacity-75 pt-1 fw-semibold fs-6" style="color:#000000;margin-bottom:16px;">Avis emis</span>
+            <span class="opacity-75 pt-1 fw-semibold fs-6" style="color:#000000;margin-bottom:16px;">Avis émis</span>
             <span
-                class="fw-bold text-white me-2 lh-1 ls-n2" style="font-size: 32px;">{{ '0,00'.\App\Helpers\Constants::CURRENCY}}</span>
-            <span class="opacity-75 pt-1 fw-bold fs-6" style="color:#000000">Solde</span>
+                class="fw-bold text-white me-2 lh-1 ls-n2" style="font-size: 32px;">
+                {{format_amount($invoice_count) .\App\Helpers\Constants::CURRENCY}}
+            </span>
+            <span class="opacity-75 pt-1 fw-bold fs-6" style="color:#000000">Solde(Validé et prise en charge)</span>
         </div>
     </div>
 </div>

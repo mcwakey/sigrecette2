@@ -27,7 +27,7 @@
     <!--begin::Header-->
     <div class="card-header pt-5">
         <h3 class="card-title align-items-start flex-column">
-            <span class="card-label fw-bold text-white">Graphique</span>
+            <span class="card-label fw-bold text-white">Graphique(Avis sur titre)</span>
         </h3>
     </div>
     <!--end::Header-->
@@ -35,11 +35,11 @@
     <div class="card-body pt-6">
         <div class="card-title d-flex flex-column">
             <div class="rd-invoice1">
-                <span class="fw-bold me-2 lh-1 ls-n2">0</span>
+                <span class="fw-bold me-2 lh-1 ls-n2">{{$invoice_count_collected['count_titre']}}</span>
             </div>
-            <span class="opacity-75 pt-1 fw-semibold fs-6" style="color:#000000;margin-bottom:16px;">Avis recouvré</span>
+            <span class="opacity-75 pt-1 fw-semibold fs-6" style="color:#000000;margin-bottom:16px;">Paiements</span>
             <span
-                class="fw-bold text-white me-2 lh-1 ls-n2" style="font-size: 32px;">{{ '0,00'.\App\Helpers\Constants::CURRENCY}}</span>
+                class="fw-bold text-white me-2 lh-1 ls-n2" style="font-size: 32px;">{{ format_amount($invoice_count_collected['titre_total']).\App\Helpers\Constants::CURRENCY}}</span>
             <span class="opacity-75 pt-1 fw-bold fs-6" style="color:#000000">Montant recouvrer</span>
         </div>
     </div>

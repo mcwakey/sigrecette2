@@ -41,6 +41,8 @@ class Statistics extends Component
         $endDate = Carbon::parse($this->endDate);
         return view('livewire.stats.statistics', [
             'invoice_count' => $this->statisticsService->getTotalRemainingToBeCollected($startDate, $endDate),
+            'invoice_count_collected' => $this->statisticsService->getTotalCollected($startDate, $endDate),
+            'invoice_estimation'=> $this->statisticsService->getTotalSoldToBeCollected($startDate, $endDate),
             'stats_reactive' => [
                 StatisticKeysEnums::BY_INVOICE => $this->statisticsService->getStats(InvoiceStaticsEnums::BY_INVOICE),
                 StatisticKeysEnums::BY_GENDER => $this->statisticsService->getStats(TaxpayerStaticsEnums::BY_GENDER)

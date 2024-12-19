@@ -130,13 +130,6 @@ class TaxpayersDataTable extends DataTable
     /**
      * Get the query source of dataTable.e
      */
-    // public function query(Taxpayer $model): QueryBuilder
-    // {
-    //     //return $model->newQuery();
-    //     return $model->newQuery()
-    //     ->with('town.canton', 'town', 'erea','zone');
-    // }
-
     public function query(Taxpayer $model): QueryBuilder
     {
         $query = $model->with('town')
@@ -151,21 +144,21 @@ class TaxpayersDataTable extends DataTable
             ->newQuery();
 
         if ($this->disable !== null && $this->disable) {
-            return $query->onlyTrashed();
-        }else{
-           return  $query->when(
-                $this->state,
-                function ($q) {
-                    $q->where('taxpayers.from_mobile_and_validate_state', '=', TaxpayerStateEnums::PENDING);},
-                function ($q) {
-                    $q->where('taxpayers.from_mobile_and_validate_state', '!=', TaxpayerStateEnums::PENDING)
+            $query = $query->onlyTrashed();
+        }
+        else{
+            if ($this->state) {
+                $query = $query->where('taxpayers.from_mobile_and_validate_state', '=', TaxpayerStateEnums::PENDING);
+            } else {
+                $query = $query->where(function ($q) {
+                    $q->where('taxpayers.from_mobile_and_validate_state', '!=', TaxpayerStateEnums::REJECTED)
                         ->orWhereNull('taxpayers.from_mobile_and_validate_state');
-                }
-            );
+                });
+            }
         }
 
 
-        //return $query;
+        return $query;
     }
 
 
@@ -187,11 +180,13 @@ class TaxpayersDataTable extends DataTable
             //->orderBy(0)
             ->drawCallbackWithLivewire()
             ->orderBy(0, 'desc')
-            ->pageLength(100)
-            ->lengthMenu([[100, 300, 500, -1], [100, 300, 500, "All"]])
+            ->pageLength(50)
+            ->lengthMenu([[50,100, 300, 500, -1], [50,100, 300, 500, "All"]])
             // ->buttons(['print','excel','csv','pdf',])
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/taxpayers/columns/_draw-scripts.js')) . "}");
     }
+
+
 
     /**
      * Get the dataTable columns definition.
@@ -217,6 +212,7 @@ class TaxpayersDataTable extends DataTable
                 ->printable(false)
                 ->width(60)
         ];
+
 
         $columns = array_map(function ($column) {
             if (request()->has('rc') && in_array($column->name, ['action', 'status'])) {

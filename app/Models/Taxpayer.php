@@ -57,6 +57,7 @@ class Taxpayer extends Model
         'deleted_at',
         'created_by',
         'updated_by',
+        'type'
     ];
 
     /**

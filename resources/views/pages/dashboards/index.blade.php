@@ -41,7 +41,6 @@
                 @include('pages.dashboards.widget_root')
             </div>
 
-
             <div style="margin-bottom: 20px;">
                 @include('pages.dashboards.widget_activity_and_category')
             </div>
