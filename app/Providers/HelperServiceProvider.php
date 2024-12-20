@@ -1,9 +1,6 @@
 <?php
-
 namespace App\Providers;
-
 use Illuminate\Support\ServiceProvider;
-
 class HelperServiceProvider extends ServiceProvider
 {
     /**
@@ -18,7 +15,6 @@ class HelperServiceProvider extends ServiceProvider
             require_once $file;
         }
     }
-
     /**
      * Bootstrap services.
      *

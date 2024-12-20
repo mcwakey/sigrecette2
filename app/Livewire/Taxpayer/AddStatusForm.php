@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Livewire\Taxpayer;
-
 use App\Enums\InvoiceStatusEnums;
 use App\Enums\TaxpayerStateEnums;
 use App\Helpers\Constants;
@@ -20,17 +18,12 @@ use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
-
 class AddStatusForm extends Component
 {
     use DispatchesMessages;
-
     public $taxpayer_id;
-
     public $status;
-
     public $edit_mode = false;
-
     public function rules()
     {
         return [
@@ -39,29 +32,23 @@ class AddStatusForm extends Component
                 TaxpayerStateEnums::REJECTED)],
         ];
     }
-
     private $error_message;
     protected $listeners = [
         'update_status' => 'updateStatus',
     ];
-
     public function mount($id)
     {
         if (!auth()->user()->hasPermissionTo('peut valider un contribuable')) {
             abort(403, 'Accès interdit');
         }
         $taxpayer = Taxpayer::find($id);
-
         $this->taxpayer_id = $taxpayer?->id;
         $this->status = $taxpayer?->from_mobile_and_validate_state;
     }
-
     public function render()
     {
         return view('livewire.taxpayer.add-status-form', ['status' => $this->status]);
     }
-
-
     public function submit()
     {
         if (!auth()->user()->hasPermissionTo('peut valider un contribuable')) {
@@ -70,33 +57,22 @@ class AddStatusForm extends Component
         $this->validate();
         if ($this->getErrorBag()->isEmpty()) {
             DB::transaction(function () {
-
                 $taxpayer = Taxpayer::find($this->taxpayer_id);
                 $taxpayer->from_mobile_and_validate_state = $this->status;
-
                 $taxpayer->save();
-
                 $this->dispatchMessage('Taxpayer', 'update');
             });
             $this->reset();
         } else {
             $this->dispatchMessage('Taxpayer', 'update', 'error', "erreur");
-
         }
-
-
     }
-
-
     public function updateStatus($id)
     {
-
         $taxpayer = Taxpayer::find($id);
-
         $this->taxpayer_id = $taxpayer->id;
         $this->status = $taxpayer->from_mobile_and_validate_state;
     }
-
     public function hydrate()
     {
         $this->resetErrorBag();

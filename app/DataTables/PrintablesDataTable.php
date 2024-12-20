@@ -1,7 +1,5 @@
 <?php
-
 namespace App\DataTables;
-
 use App\Enums\PaymentStatusEnums;
 use App\Enums\PaymentTypeEnums;
 use App\Helpers\Constants;
@@ -14,10 +12,8 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
-
 class PrintablesDataTable extends DataTable
 {
-
     /**
      * Build the DataTable class.
      *
@@ -25,9 +21,6 @@ class PrintablesDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
-
-        $newAmount = 0;
-
         return (new EloquentDataTable($query))
             ->editColumn('created_at', function (PrintFile $printFile) {
                 return $printFile->created_at->format('d M Y');
@@ -40,25 +33,19 @@ class PrintablesDataTable extends DataTable
             })
             ->setRowId('id');
     }
-
     /**
      * Get the query source of dataTable.
      */
-    // public function query(): QueryBuilder // Remove $request parameter
     public function query(PrintFile $model): QueryBuilder
     {
         $activeYear = Year::getActiveYear();
         $startOfYear = Carbon::parse("{$activeYear->name}-01-01 00:00:00");
         $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
-
-
         return $model
             ->whereBetween('print_files.created_at', [$startOfYear, $endOfYear])
             ->orderBy('created_at', 'desc')
             ->newQuery();
-
     }
-
     /**
      * Optional method if you want to use the html builder.
      */
@@ -76,7 +63,6 @@ class PrintablesDataTable extends DataTable
             ->lengthMenu([[100, 300, 500, -1], [100, 300, 500, "All"]]) // Define options for the number of rows per page
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/printables/columns/_draw-scripts.js')) . "}");
     }
-
     /**
      * Get the dataTable columns definition.
      */
@@ -94,7 +80,6 @@ class PrintablesDataTable extends DataTable
                 ->width(60)
         ];
     }
-
     /**
      * Get the filename for export.
      */

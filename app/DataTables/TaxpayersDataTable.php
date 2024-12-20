@@ -1,7 +1,5 @@
 <?php
-
 namespace App\DataTables;
-
 use App\Enums\TaxpayerStateEnums;
 use App\Helpers\Constants;
 use App\Models\Taxpayer;
@@ -13,11 +11,9 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\WithExportQueue;
-
 class TaxpayersDataTable extends DataTable
 {
     use WithExportQueue;
-
     /**
      * Build the DataTable class.
      *
@@ -26,21 +22,12 @@ class TaxpayersDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            // ->filter(function ($query) {
-            //     if (request()->filled('search.value')) {
-            //         $query->where('taxpayers.name', 'like', '%' . request('search.value') . '%')
-            //         ->orWhere('taxables.name', 'like', '%' . request('search.value') . '%')
-            //         ->orWhere('tax_labels.code', 'like', '%' . request('search.value') . '%');
-            //         // Add additional search conditions as needed for other columns
-            //     }
-            // })
             ->rawColumns(['name', 'last_login_at'])
             ->editColumn('taxpayers.id', function (Taxpayer $taxpayer) {
                 return $taxpayer->id;
             })
             ->editColumn('taxpayer.name', function (Taxpayer $taxpayerinfo) {
                 return view('pages/taxpayers.columns._taxpayer', ['taxpayerinfo' => $taxpayerinfo]);
-                //return $taxpayerinfo->name;
             })
             ->editColumn('gender', function (Taxpayer $taxpayer) {
                 return $taxpayer->gender;
@@ -49,30 +36,16 @@ class TaxpayersDataTable extends DataTable
                 return view('pages/taxpayers.columns._phone', ['taxpayerinfo' => $taxpayerinfo]);
             })
             ->editColumn('town.canton.name', function (Taxpayer $taxpayer) {
-                // if ($taxpayer->town) {
                 return $taxpayer->town->canton->name;
-                // } else {
-                //     return '';
-                // }
-                //return $taxpayer->town->canton->name;
             })
             ->editColumn('town.name', function (Taxpayer $taxpayer) {
-                // if ($taxpayer->town){
                 return $taxpayer->town->name;
-                // } else {
-                //     return '';
-                // }
             })
             ->editColumn('address', function (Taxpayer $taxpayer) {
                 return $taxpayer->address;
             })
             ->editColumn('zone.name', function (Taxpayer $taxpayer) {
-                // if ($taxpayer->zone){
                 return $taxpayer->zone->name;
-                // } else {
-                //     return '';
-                // }
-                //return $taxpayer->zone->name;
             })
             ->editColumn('status', function (Taxpayer $taxpayerinfo) {
                 return view('pages/taxpayers.columns._aproval', ['taxpayerinfo' => $taxpayerinfo]);
@@ -80,13 +53,11 @@ class TaxpayersDataTable extends DataTable
             ->editColumn('created_at', function (Taxpayer $taxpayer) {
                 return "Créé le: ".$taxpayer->created_at->format('d M Y');
             })
-            //->editColumn('updated_at', function (Taxpayer $taxpayer) {return $taxpayer->created_at->format('d M Y');})
             ->editColumn('created_by', function (Taxpayer $taxpayer) {
                 $createdByName = null;
                 $updatedByName = null;
                 $createdAt = null;
                 $updatedAt = null;
-
                 if ($taxpayer->created_by) {
                     $createdByUser = User::find($taxpayer->created_by);
                     if ($createdByUser) {
@@ -94,7 +65,6 @@ class TaxpayersDataTable extends DataTable
                     }
                     $createdAt = $taxpayer->created_at ? $taxpayer->created_at->format('d/m/Y H:i:s') : null;
                 }
-
                 if ($taxpayer->updated_by) {
                     $updatedByUser = User::find($taxpayer->updated_by);
                     if ($updatedByUser) {
@@ -102,7 +72,6 @@ class TaxpayersDataTable extends DataTable
                     }
                     $updatedAt = $taxpayer->updated_at ? $taxpayer->updated_at->format('d/m/Y H:i:s') : null;
                 }
-
                 if ($createdByName && !$updatedByName) {
                     $name = "Créé par: " . $createdByName;
                     $date = "Le: " . $createdAt;
@@ -116,17 +85,13 @@ class TaxpayersDataTable extends DataTable
                     $name = "Inconnu";
                     $date = "Inconnu";
                 }
-                $finalResult = $name . " " . $date;
-
-
-                return $finalResult;
+                return $name . " " . $date;
             })
             ->addColumn('action', function (Taxpayer $taxpayer) {
                 return view('pages/taxpayers.columns._actions', ['taxpayer' => $taxpayer]);
             })
             ->setRowId('id');
     }
-
     /**
      * Get the query source of dataTable.e
      */
@@ -136,58 +101,40 @@ class TaxpayersDataTable extends DataTable
             ->join('towns', 'taxpayers.town_id', '=', 'towns.id')
             ->with('town.canton')
             ->join('cantons', 'towns.canton_id', '=', 'cantons.id')
-            // ->with('erea')
-            //  ->join('ereas', 'taxpayers.erea_id', '=', 'ereas.id')
             ->with('zone')
             ->join('zones', 'taxpayers.zone_id', '=', 'zones.id')
             ->where('taxpayers.type', '=', Constants::TITRE)->select('taxpayers.*')
             ->newQuery();
-
         if ($this->disable !== null && $this->disable) {
             $query = $query->onlyTrashed();
+        } elseif ($this->state) {
+            $query = $query->where('taxpayers.from_mobile_and_validate_state', '=', TaxpayerStateEnums::PENDING);
+        } else {
+            $query = $query->where(function ($q) {
+                $q->where('taxpayers.from_mobile_and_validate_state', '!=', TaxpayerStateEnums::REJECTED)
+                    ->orWhereNull('taxpayers.from_mobile_and_validate_state');
+            });
         }
-        else{
-            if ($this->state) {
-                $query = $query->where('taxpayers.from_mobile_and_validate_state', '=', TaxpayerStateEnums::PENDING);
-            } else {
-                $query = $query->where(function ($q) {
-                    $q->where('taxpayers.from_mobile_and_validate_state', '!=', TaxpayerStateEnums::REJECTED)
-                        ->orWhereNull('taxpayers.from_mobile_and_validate_state');
-                });
-            }
-        }
-
-
         return $query;
     }
-
-
     /**
      * Optional method if you want to use the html builder.
      */
     public function html(): HtmlBuilder
     {
-
         return $this->builder()
             ->setTableId('taxpayers-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            // ->dom("") // Add pagination ('p') and other controls ('i') at the bottom
-            // ->dom("<'d-flex justify-content-end'B> ".'rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
             ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
-            //->orderBy(0)
             ->drawCallbackWithLivewire()
             ->orderBy(0, 'desc')
             ->pageLength(50)
             ->lengthMenu([[50,100, 300, 500, -1], [50,100, 300, 500, "All"]])
-            // ->buttons(['print','excel','csv','pdf',])
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/taxpayers/columns/_draw-scripts.js')) . "}");
     }
-
-
-
     /**
      * Get the dataTable columns definition.
      */
@@ -200,7 +147,6 @@ class TaxpayersDataTable extends DataTable
             Column::make('mobilephone')->title(__('mobilephone'))->name("taxpayers.mobilephone"),
             Column::make('town.canton.name')->title(__('canton')),
             Column::make('town.name')->title(__('Villages/Quartiers')),
-            //Column::make('erea.name')->title(__('erea')),
             Column::make('address')->title(__('address')),
             Column::make('zone.name')->title(__('zone'))->name("zone.name"),
             Column::make('status')->title(__('aproval'))->searchable(false),
@@ -212,24 +158,16 @@ class TaxpayersDataTable extends DataTable
                 ->printable(false)
                 ->width(60)
         ];
-
-
-        $columns = array_map(function ($column) {
+        return array_map(function ($column) {
             if (request()->has('rc') && in_array($column->name, ['action', 'status'])) {
                 $column->visible(false);
             }
             if (!request()->has('state') &&  in_array($column->name,['created_by','status','town.canton.name'])) {
                 $column->visible(false);
             }
-
-
             return $column;
         }, $columns);
-
-
-        return $columns;
     }
-
     /**
      * Get the filename for export.
      */

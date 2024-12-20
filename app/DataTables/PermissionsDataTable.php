@@ -1,14 +1,11 @@
 <?php
-
 namespace App\DataTables;
-
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Spatie\Permission\Models\Permission;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
-
 class PermissionsDataTable extends DataTable
 {
     /**
@@ -24,17 +21,16 @@ class PermissionsDataTable extends DataTable
             })
             ->addColumn('assigned_to', function (Permission $permission) {
                 $roles = $permission->roles;
-                return view('pages/apps.user-management.permissions.columns._assign-to', compact('roles'));
+                return view('pages/apps.user-management.permissions.columns._assign-to', ['roles' => $roles]);
             })
             ->editColumn('created_at', function (Permission $permission) {
                 return \Carbon\Carbon::parse($permission->created_at)->locale('fr')->isoFormat('LL');
             })
             ->addColumn('actions', function (Permission $permission) {
-                return view('pages/apps.user-management.permissions.columns._actions', compact('permission'));
+                return view('pages/apps.user-management.permissions.columns._actions', ['permission' => $permission]);
             })
             ->setRowId('id');
     }
-
     /**
      * Get the query source of dataTable.
      */
@@ -42,7 +38,6 @@ class PermissionsDataTable extends DataTable
     {
         return $model->newQuery();
     }
-
     /**
      * Optional method if you want to use the html builder.
      */
@@ -52,13 +47,12 @@ class PermissionsDataTable extends DataTable
             ->setTableId('permissions-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>")
+            ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0)
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/apps/user-management/permissions/columns/_draw-scripts.js')) . "}");
     }
-
     /**
      * Get the dataTable columns definition.
      */
@@ -68,13 +62,8 @@ class PermissionsDataTable extends DataTable
             Column::make('name')->title('Nom de la permission'),
             Column::make('assigned_to')->title('Assigner a '),
             Column::make('created_at')->addClass('text-nowrap')->title('CEER le'),
-            // Column::computed('actions')
-            //     ->addClass('text-end text-nowrap')
-            //     ->exportable(false)
-            //     ->printable(false),
         ];
     }
-
     /**
      * Get the filename for export.
      */

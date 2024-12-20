@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Listeners;
-
 use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
 use App\Models\User;
@@ -15,7 +13,6 @@ use Spatie\Permission\Models\Role;
 use Symfony\Component\Workflow\Event\GuardEvent;
 use Symfony\Component\Workflow\Event\Event;
 use Illuminate\Contracts\Events\Dispatcher;
-
 class InvoiceWorkflowSubscriber
 {
     public function subscribe(Dispatcher $events)
@@ -24,28 +21,23 @@ class InvoiceWorkflowSubscriber
             'workflow.invoice.enter',
             [self::class, 'onEnter']
         );
-
         $events->listen(
             'workflow.invoice.leave',
             [self::class, 'onLeave']
         );
-
         $events->listen(
             'workflow.invoice.transition',
             [self::class, 'onTransition']
         );
-
         $events->listen(
             'workflow.invoice.guard',
             [self::class, 'onGuard']
         );
     }
-
     public function onEnter(Event $event)
     {
         $invoice = $event->getSubject();
         $place = $event->getTransition()->getTos()[0];
-        //dump($place);
         switch ($place) {
             case InvoiceStatusEnums::ACCEPTED:
                 $permissions = ['peut émettre un avis sur titre', 'peut accepter un avis sur titre', 'peut ajouter le numéro d\'ordre de recette d\'un avis'];
@@ -83,39 +75,24 @@ class InvoiceWorkflowSubscriber
                 }
                 break;
             case InvoiceStatusEnums::CANCELED:
-                //dump(InvoiceStatusEnums::CANCELED);
-                break;
             case InvoiceStatusEnums::REDUCED:
-                //dump(InvoiceStatusEnums::REDUCED);
                 break;
             default :
-                // dump($place);
         }
     }
-
     public function onLeave(Event $event)
     {
-        $invoice = $event->getSubject();
-        $place = $event->getTransition()->getFroms();
-
-
-        //dump("Leaving state: " . implode(', ', $place));
+        $event->getSubject();
+        $event->getTransition()->getFroms();
     }
-
     public function onTransition(Event $event)
     {
-        $invoice = $event->getSubject();
-        $transition = $event->getTransition()->getName();
-
-        // logger()->info("Transitioning via: " . $transition);
+        $event->getSubject();
+        $event->getTransition()->getName();
     }
-
     public function onGuard(Event $event)
     {
-        $invoice = $event->getSubject();
-        $transition = $event->getTransition()->getName();
-
-
-        //dump("Guard for transition: " . $transition);
+        $event->getSubject();
+        $event->getTransition()->getName();
     }
 }

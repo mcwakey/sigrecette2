@@ -1,7 +1,5 @@
 <?php
-
 namespace App\DataTables;
-
 use App\Helpers\Constants;
 use App\Models\User;
 use Illuminate\Support\Facades\App;
@@ -11,7 +9,6 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-
 class UsersDataTable extends DataTable
 {
     /**
@@ -40,46 +37,33 @@ class UsersDataTable extends DataTable
             })
             ->setRowId('id');
     }
-
-
     /**
      * Get the query source of dataTable.
      */
     public function query(User $model): QueryBuilder
     {
         $query = $model->newQuery();
-
         $role = Role::where('name', 'administrateur_system')->first();
         $roleUsers = $role->users()->pluck('id')->toArray();
         $query->whereNotIn('users.id', $roleUsers);
-
         if (App::environment('production') && $role) {
-
             $roleUsers = $role->users()->pluck('id')->toArray();
             $query->whereNotIn('users.id', $roleUsers);
         }
-
         if ($this->disable !== null && $this->disable) {
             $query->onlyTrashed();
         }
         $role = Role::where('name', 'collecteur')->first();
-
         if ($role) {
             $roleUsers = $role->users()->pluck('id')->toArray();
             if ($this->type != null) {
-
                 $query->whereIn('users.id', $roleUsers);
             } else {
                 $query->whereNotIn('users.id', $roleUsers);
             }
         }
-
-
         return $query;
-
-
     }
-
     /**
      * Optional method if you want to use the html builder.
      */
@@ -95,7 +79,6 @@ class UsersDataTable extends DataTable
             ->orderBy(2)
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/apps/user-management/users/columns/_draw-scripts.js')) . "}");
     }
-
     /**
      * Get the dataTable columns definition.
      */
@@ -112,18 +95,13 @@ class UsersDataTable extends DataTable
                 ->printable(false)
                 ->width(60)
         ];
-        $columns = array_map(function ($column) {
+        return array_map(function ($column) {
             if ($this->type && in_array($column->name, ['role', 'last_login_at'])) {
                 $column->visible(false);
             }
-
-
             return $column;
         }, $columns);
-
-        return $columns;
     }
-
     /**
      * Get the filename for export.
      */

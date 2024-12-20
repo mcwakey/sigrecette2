@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Models;
-
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
@@ -10,14 +8,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
     use HasRoles;
     use Notifiable;
     use SoftDeletes;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -34,7 +30,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'latitude',
         'longitude',
     ];
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -44,7 +39,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'remember_token',
     ];
-
     /**
      * The attributes that should be cast.
      *
@@ -55,36 +49,29 @@ class User extends Authenticatable implements MustVerifyEmail
         'last_login_at' => 'datetime',
         'password' => 'hashed',
     ];
-
     public function getProfilePhotoUrlAttribute()
     {
         if ($this->profile_photo_path) {
             return asset('storage/' . $this->profile_photo_path);
         }
-
         return $this->profile_photo_path;
     }
-
     public function addresses()
     {
         return $this->hasMany(Address::class);
     }
-
     public function zone()
     {
         return $this->belongsTo(Zone::class);
     }
-
     public function getDefaultAddressAttribute()
     {
         return $this->addresses?->first();
     }
-
     public function logs()
     {
         return $this->hasMany(UserLogs::class);
     }
-
     public static function getRegisseurName(): string
     {
         $role = Role::where('name', 'regisseur')->first();

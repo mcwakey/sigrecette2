@@ -1,5 +1,8 @@
 @php
     use Carbon\Carbon;
+    use App\Models\Commune;
+
+    $commune= Commune::getFirstCommune();
     $year = \App\Models\Year::getActiveYear();
     $month = Carbon::createFromFormat('m', $year->current_month)->monthName;
 @endphp
@@ -408,7 +411,7 @@
             let showStatsDate = true;
             let statsDate = document.getElementById('stats-date');
 
-            
+
             statsDateBtn?.addEventListener('click', (event) => {
                 // event.stopPropagation();
                 if (!showStatsDate) {
@@ -419,7 +422,7 @@
                     showStatsDate = false;
                 }
             });
-            
+
             // statsDate.addEventListener('click', (event) => {
             //     event.stopPropagation();
             // });

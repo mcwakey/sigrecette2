@@ -1,17 +1,13 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\DataTables\AccountantDepositsDataTable;
 use App\DataTables\AccountantDepositsSumDataTable;
-
 class AccountantDepositController extends Controller
 {
     public function index(AccountantDepositsSumDataTable $dataTable)
     {
         return $dataTable->render('pages/accountant_deposits.list');
     }
-
     /**
      * Display the specified resource.
      */

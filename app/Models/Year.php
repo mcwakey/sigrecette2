@@ -1,14 +1,11 @@
 <?php
-
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Date;
 use Carbon\Carbon;
 use Throwable;
-
 class Year extends Model
 {
     /**
@@ -23,19 +20,14 @@ class Year extends Model
         'auto_switch'
     ];
     use HasFactory;
-
     /**
      * Get the active year.
-     *
-     * @return Year
      */
     public static function getActiveYear(): Year
     {
         $currentYear = date('Y');
         $current_mounth = Carbon::now()->format('m');
         $activeYear = Year::where('status', "ACTIVE")->first();
-
-
         if (!$activeYear) {
             $activeYear = Year::where('name', $currentYear)->first() ?? Year::getCurrentYear();
             $activeYear->status = "ACTIVE";
@@ -53,15 +45,10 @@ class Year extends Model
                 $activeYear = Year::autoUpdateOrCreateCurrentMonth($current_mounth, $activeYear);
             }
         }
-
         return $activeYear;
     }
-
     /**
      * Automatically updates the active year.
-     *
-     * @param Year $active_year
-     * @return Year
      */
     public static function autoUpdateActiveYear(Year $active_year): Year
     {
@@ -79,9 +66,7 @@ class Year extends Model
             $active_year->save();
         });
         return $year;
-
     }
-
     /**
      * Makes all years inactive.
      *
@@ -95,15 +80,11 @@ class Year extends Model
                 $year->save();
             }
         });
-
     }
-
     /**
      * Met à jour ou crée le mois actuel dans la base de données.
      *
      * @param $current_mounth
-     * @param Year $year
-     * @return Year
      */
     public static function autoUpdateOrCreateCurrentMonth($current_mounth, Year $year): Year
     {
@@ -111,15 +92,8 @@ class Year extends Model
         DB::transaction(function () use ($year) {
             $year->save();
         });
-
         return $year;
-
-
     }
-
-    /**
-     * @return Year
-     */
     private static function getCurrentYear(): Year
     {
         $currentYear = date('Y');
@@ -135,13 +109,8 @@ class Year extends Model
         });
         return $year;
     }
-
-    /**
-     * @return Year|null
-     */
     public static function getOldestYear(): ?Year
     {
         return Year::orderBy('name')->first();
     }
-
 }

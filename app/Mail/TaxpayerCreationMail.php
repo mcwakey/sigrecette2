@@ -1,19 +1,14 @@
 <?php
-
 namespace App\Mail;
-
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-
 class TaxpayerCreationMail extends Mailable
 {
     use Queueable, SerializesModels;
-
     private array $data;
-
     /**
      * Create a new message instance.
      */
@@ -21,7 +16,6 @@ class TaxpayerCreationMail extends Mailable
     {
         $this->data = $data;
     }
-
     /**
      * Get the message envelope.
      */
@@ -31,7 +25,6 @@ class TaxpayerCreationMail extends Mailable
             subject: 'Taxpayer Creation Mail',
         );
     }
-
     /**
      * Get the message content definition.
      */
@@ -42,7 +35,6 @@ class TaxpayerCreationMail extends Mailable
             with: ['data' => $this->data],
         );
     }
-
     /**
      * Get the attachments for the message.
      *

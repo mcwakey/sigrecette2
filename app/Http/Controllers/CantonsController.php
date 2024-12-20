@@ -1,11 +1,8 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\DataTables\CantonsDataTable;
 use App\Models\Canton;
 use Illuminate\Http\Request;
-
 class CantonsController extends Controller
 {
     /**
@@ -13,10 +10,8 @@ class CantonsController extends Controller
      */
     public function index(CantonsDataTable $dataTable)
     {
-        //return view('pages/cantons.list');
         return $dataTable->render('pages/cantons.list');
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -24,7 +19,6 @@ class CantonsController extends Controller
     {
         //
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -32,7 +26,6 @@ class CantonsController extends Controller
     {
         //
     }
-
     /**
      * Display the specified resource.
      */
@@ -40,14 +33,12 @@ class CantonsController extends Controller
     {
         return $cantonsDataTable->with('id', $canton->id)->render('pages/cantons.show', ['canton' => $canton]);
     }
-
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Canton $canton)
     {
     }
-
     /**
      * Update the specified resource in storage.
      */
@@ -55,7 +46,6 @@ class CantonsController extends Controller
     {
         //
     }
-
     /**
      * Remove the specified resource from storage.
      */
@@ -64,4 +54,3 @@ class CantonsController extends Controller
         //
     }
 }
-

@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\DataTables\ExportInvoicesDataTable;
 use App\DataTables\ExportRecoveriesDataTable;
 use App\DataTables\ExportTaxpayersDataTable;
@@ -20,11 +18,9 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-
 class ExportController extends Controller
 {
     public function index(Request $request, ExportTaxpayersDataTable $exportTaxpayersDataTable, ExportInvoicesDataTable $exportInvoicesDataTable, ExportRecoveriesDataTable $exportRecoveriesDataTable)
-
     {
         $year = Year::getActiveYear()->name;
         $validatedData = $request->validate([
@@ -58,16 +54,12 @@ class ExportController extends Controller
             $startDate = $validatedData['s_date'] ?? Carbon::parse("{$year}-01-01 00:00:00");
             $endDate = $validatedData['e_date'] ?? Carbon::parse("{$year}-12-31 23:59:59");
             $zones = Zone::all();
-
             return $exportInvoicesDataTable->with(
-
                 [
                     'startDate' => $startDate,
                     'endDate' => $endDate,
                 ]
             )->render('pages/export.invoices.list', ['zones' => $zones, 'tax_labels' => $tax_labels]);
-
-
         } else {
             $startDate = $validatedData['s_date'] ?? Carbon::parse("{$year}-01-01 00:00:00");
             $endDate = $validatedData['e_date'] ?? Carbon::parse("{$year}-12-31 23:59:59");
@@ -78,34 +70,25 @@ class ExportController extends Controller
                 ]
             )->render('pages/export.recoveries.list', ['tax_labels' => $tax_labels]);
         }
-
     }
-
     public function backup()
-
     {
         return view('pages/export/backup.show');
     }
-
     public function backupDownload()
     {
-
         if (PHP_OS_FAMILY !== 'Linux') {
             return response()->json([
                 'error' => 'Cette action est uniquement disponible sur un environnement Linux.'
             ], 403);
         }
-
         Artisan::call('backup:run');
-
         $diskName = config('backup.backup.destination.disks')[0];
-
         $rootPath = config('filesystems.disks.' . $diskName . '.root');
         $file = collect(Storage::disk($diskName)->files(config('app.name')))
             ->filter(fn($file) => Str::endsWith($file, '.zip'))
             ->sortByDesc(fn($file) => Storage::disk($diskName)->lastModified($file))
             ->first();
-
         if (!$file) {
             return response()->json([
                 'error' => 'Aucune sauvegarde trouvée',
@@ -113,8 +96,6 @@ class ExportController extends Controller
             ], 404);
         }
         $fullPath = realpath($rootPath . DIRECTORY_SEPARATOR . $file);
-
-
         if ($fullPath) {
             return response()->download($fullPath);
         } else {

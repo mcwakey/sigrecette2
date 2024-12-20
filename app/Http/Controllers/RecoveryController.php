@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\DataTables\InvoicesDataTable;
 use App\DataTables\RecoveriesDataTable;
 use App\Helpers\Constants;
@@ -12,7 +10,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
-
 class RecoveryController extends Controller
 {
     public function index(Request $request, RecoveriesDataTable $dataTable, InvoicesDataTable $invoicesDataTable)
@@ -40,14 +37,12 @@ class RecoveryController extends Controller
                     'endDate' => $endDate,
                 ]
             )->render('pages/recoveries.list', ['zones' => $zones, 'tax_labels' => $tax_labels]);
-
         } else {
             $year = Year::getActiveYear()->name;
             $startDate = $validatedData['s_date'] ?? Carbon::parse("{$year}-01-01 00:00:00");
             $endDate = $validatedData['e_date'] ?? Carbon::parse("{$year}-12-31 23:59:59");
             $role = Role::where('name', 'agent_recouvrement')->first();
             $agent_recouvrements = $role->users()->get();
-
             return $invoicesDataTable->with(
                 [
                     'delivery' => $delivery,

@@ -1,11 +1,8 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\DataTables\ZonesDataTable;
 use App\Models\Zone;
 use Illuminate\Http\Request;
-
 class ZonesController extends Controller
 {
     /**
@@ -13,10 +10,8 @@ class ZonesController extends Controller
      */
     public function index(ZonesDataTable $dataTable)
     {
-        //return view('pages/zones.list');
         return $dataTable->render('pages/zones.list');
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -24,7 +19,6 @@ class ZonesController extends Controller
     {
         //
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -32,7 +26,6 @@ class ZonesController extends Controller
     {
         //
     }
-
     /**
      * Display the specified resource.
      */
@@ -40,14 +33,12 @@ class ZonesController extends Controller
     {
         return $zonesDataTable->with('id', $zone->id)->render('pages/zones.show', ['zone' => $zone]);
     }
-
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Zone $zone)
     {
     }
-
     /**
      * Update the specified resource in storage.
      */
@@ -55,7 +46,6 @@ class ZonesController extends Controller
     {
         //
     }
-
     /**
      * Remove the specified resource from storage.
      */

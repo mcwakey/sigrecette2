@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers\Apps;
-
 use App\DataTables\UsersDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\PasswordActionLog;
@@ -9,7 +7,6 @@ use App\Models\User;
 use App\Models\UserLogs;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-
 class UserManagementController extends Controller
 {
     /**
@@ -21,16 +18,13 @@ class UserManagementController extends Controller
             'disable' => 'nullable|integer',
             'type' => ['nullable', 'string', Rule::in(['col'])]
         ]);
-
         $disable = $validatedData['disable'] ?? null;
         $type = $validatedData['type'] ?? null;
-
         return $dataTable->with([
             'disable' => $disable,
             'type' => $type
         ])->render('pages/apps.user-management.users.list');
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -38,7 +32,6 @@ class UserManagementController extends Controller
     {
         //
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -46,7 +39,6 @@ class UserManagementController extends Controller
     {
         //
     }
-
     /**
      * Display the specified resource.
      */
@@ -56,12 +48,9 @@ class UserManagementController extends Controller
             ->orderBy('id', 'desc')
             ->limit(3)
             ->get();
-
         $passwordActionLog = PasswordActionLog::where('user_id', $user->id)->get();
-
         return view('pages/apps.user-management.users.show', ['user' => $user, 'userActionLog' => $userActionLog, 'passwordActionLog' => $passwordActionLog]);
     }
-
     /**
      * Show the form for editing the specified resource.
      */
@@ -69,7 +58,6 @@ class UserManagementController extends Controller
     {
         //
     }
-
     /**
      * Update the specified resource in storage.
      */
@@ -77,7 +65,6 @@ class UserManagementController extends Controller
     {
         //
     }
-
     /**
      * Remove the specified resource from storage.
      */

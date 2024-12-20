@@ -1,7 +1,5 @@
 <?php
-
 namespace App\DataTables;
-
 use App\Enums\InvoicePayStatusEnums;
 use App\Enums\PrintNameEnums;
 use App\Enums\InvoiceStatusEnums;
@@ -20,11 +18,9 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
 use Yajra\DataTables\WithExportQueue;
-
 class ExportInvoicesDataTable extends DataTable
 {
     use WithExportQueue;
-
     public function dataTable(QueryBuilder $query, Request $request): EloquentDataTable
     {
         return (new EloquentDataTable($query))
@@ -54,7 +50,6 @@ class ExportInvoicesDataTable extends DataTable
                 }
             })
             ->editColumn('paid', function (Invoice $invoice) {
-
                 return format_amount(Payment::getPaid($invoice->invoice_no));
             })
             ->editColumn('remains_to_be_paid', function (Invoice $invoice) {
@@ -62,7 +57,6 @@ class ExportInvoicesDataTable extends DataTable
             })
             ->editColumn('validity', function (Invoice $invoice) {
                 return __($invoice->validity);
-
             })
             ->editColumn('status', function (Invoice $invoice) {
                 return __($invoice->status);
@@ -87,12 +81,9 @@ class ExportInvoicesDataTable extends DataTable
             })
             ->setRowId('uuid');
     }
-
-
     public function query(Invoice $model): QueryBuilder
     {
-
-        $query = $model->with(['taxpayer', 'taxpayer.zone'])
+        return $model->with(['taxpayer', 'taxpayer.zone'])
             ->join('invoice_items', 'invoice_items.invoice_id', '=', 'invoices.id')
             ->leftjoin('taxpayers', 'taxpayers.id', '=', 'invoices.taxpayer_id')
             ->join('taxpayer_taxables', 'taxpayer_taxables.id', '=', 'invoice_items.taxpayer_taxable_id')
@@ -104,13 +95,10 @@ class ExportInvoicesDataTable extends DataTable
             ->distinct()
             ->orderBy('invoices.created_at', 'desc')
             ->newQuery();
-        return $query;
     }
-
     public function getColumns(): array
     {
-        $columns = [
-
+        return [
             Column::make('invoice_no')->title(__('invoice no')),
             Column::make('order_no')->title(__('order no')),
             Column::make('taxpayer.name')->title(__('taxpayer')),
@@ -130,18 +118,12 @@ class ExportInvoicesDataTable extends DataTable
             Column::make('reason_for_reject')->title(__('reason_for_reject')),
             Column::make('type')->title(__('invoice_type')),
         ];
-
-
-        return $columns;
     }
-
-
     /**
      * Optional method if you want to use the html builder.
      */
     public function html(): HtmlBuilder
     {
-
         return $this->builder()
             ->setTableId('export-invoices-table')
             ->columns($this->getColumns())
@@ -153,8 +135,6 @@ class ExportInvoicesDataTable extends DataTable
             ->lengthMenu([[100, 300, 500, -1], [100, 300, 500, "All"]])
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/taxpayer_taxables/columns/_draw-scripts.js')) . "}");
     }
-
-
     /**
      * Get the filename for export.
      */

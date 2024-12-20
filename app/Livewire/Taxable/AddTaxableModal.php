@@ -1,21 +1,15 @@
 <?php
-
 namespace App\Livewire\Taxable;
-
-
 use App\Models\Taxable;
 use App\Models\TaxLabel;
 use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
-
-
 class AddTaxableModal extends Component
 {
     use WithFileUploads;
     use DispatchesMessages;
-
     public $taxable_id;
     public $name;
     public $tariff;
@@ -28,10 +22,7 @@ class AddTaxableModal extends Component
     public $penalty_type;
     public $tax_label_id;
     public $use_second_formula = false;
-
-
     public $edit_mode = false;
-
     protected function rules()
     {
         $rules = [
@@ -43,43 +34,34 @@ class AddTaxableModal extends Component
             'periodicity' => 'required|string',
             'tax_label_id' => 'required|int',
         ];
-
         if ($this->edit_mode) {
             // En mode d'édition, nous ignorons l'ID actuel pour la validation d'unicité
             $rules['name'] = 'required|string|unique:taxables,name,' . $this->taxable_id;
         }
-
         return $rules;
     }
-
-
     protected $listeners = [
         'delete_user' => 'deleteUser',
         'update_user' => 'updateUser',
         'close_taxable_modal' => 'closeTaxableModal',
     ];
-
     public function render()
     {
         $tax_labels = TaxLabel::all();
         return view('livewire.taxable.add-taxable-modal', ['tax_labels' => $tax_labels]);
     }
-
     public function mount()
-
     {
         if (!auth()->user()->hasPermissionTo('peut créer une taxation')) {
             abort(403, 'Accès interdit');
         }
         if ($this->edit_mode) {
             $taxable = Taxable::find($this->taxable_id);
-
             if ($taxable) {
                 $this->use_second_formula = (bool)$taxable->use_second_formula;
             }
         }
     }
-
     public function submit()
     {
         if (!auth()->user()->hasPermissionTo('peut créer une taxation')) {
@@ -100,41 +82,31 @@ class AddTaxableModal extends Component
                 'tax_label_id' => $this->tax_label_id,
                 'use_second_formula' => $this->use_second_formula
             ];
-
             $taxable = Taxable::find($this->taxable_id) ?? Taxable::create($data);
-
             if ($this->edit_mode) {
                 foreach ($data as $k => $v) {
                     $taxable->$k = $v;
                 }
                 $taxable->save();
             }
-
-
             if ($this->edit_mode) {
-
                 $this->dispatchMessage('Matière Taxable', 'update');
             } else {
                 $this->dispatchMessage('Matière Taxable');
             }
         });
-
         // Reset the form fields after successful submission
         $this->reset();
     }
-
     public function deleteUser($id)
     {
         Taxable::destroy($id);
         $this->dispatchMessage('Matière Taxable', 'delete');
     }
-
     public function updateUser($id)
     {
         $this->edit_mode = true;
-
         $taxable = Taxable::find($id);
-
         $this->taxable_id = $taxable->id;
         $this->use_second_formula = $taxable->use_second_formula;
         $this->tax_label_id = $taxable->tax_label_id;
@@ -147,14 +119,11 @@ class AddTaxableModal extends Component
         $this->periodicity = $taxable->periodicity;
         $this->penalty = $taxable->penalty;
         $this->penalty_type = $taxable->penalty_type;
-
     }
-
     public function rendering($view, $data)
     {
         //
     }
-
     public function closeTaxableModal()
     {
         $this->edit_mode = false;
@@ -171,7 +140,6 @@ class AddTaxableModal extends Component
         $this->tax_label_id = '';
         $this->use_second_formula = false;
     }
-
     public function hydrate()
     {
         $this->resetErrorBag();

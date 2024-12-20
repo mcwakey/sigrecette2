@@ -1,12 +1,8 @@
 <?php
-
 namespace App\Http\Resources;
-
-
 use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-
 /**
  * @property Invoice $resource
  */
@@ -35,8 +31,6 @@ class SearchInvoiceResource extends JsonResource
             'deliveryDate' => $this->resource->delivery_date,
             'deliveryTo' => $this->resource->delivery_to,
             'type' => $this->resource->type,
-            // 'invoiceitems'=> InvoiceItemResource::collection($this->invoiceitems)
-
         ];
     }
 }

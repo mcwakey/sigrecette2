@@ -1,7 +1,5 @@
 <?php
-
 namespace App\DataTables;
-
 use App\Enums\PaymentStatusEnums;
 use App\Helpers\Constants;
 use App\Models\Invoice;
@@ -16,12 +14,9 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
 use Yajra\DataTables\WithExportQueue;
-
 class RecoveriesDataTable extends DataTable
 {
     use WithExportQueue;
-
-
     /**
      * Build the DataTable class.
      *
@@ -29,21 +24,13 @@ class RecoveriesDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query, Request $request): EloquentDataTable
     {
-
         return (new EloquentDataTable($query))
             ->editColumn('users.name', function (Payment $payment) {
                 return $payment->user->name;
-                // $user = $payment->user;
-                // return view('pages/apps.user-management.users.columns._user', compact('user'));
-                //return view('pages/recoveries.columns._user', compact('user'));
             })
             ->editColumn('invoices.invoice_no', function (Payment $payment) {
                 return $payment->invoice->invoice_no;
             })
-            // ->editColumn('reference', function (Payment $payment) {
-            //     return $payment->reference;
-            // })
-
             ->editColumn('reference', function (Payment $payment) {
                 return view('pages/recoveries.columns._reference', ['payment' => $payment]);
             })
@@ -51,7 +38,6 @@ class RecoveriesDataTable extends DataTable
                 return $payment->code ?? '';
             })
             ->editColumn('taxpayers.name', function (Payment $payment) {
-                //$invoice = $payment->invoice;
                 return view('pages/recoveries.columns._invoice', ['payment' => $payment]);
             })
             ->editColumn('amount', function (Payment $payment) {
@@ -61,7 +47,6 @@ class RecoveriesDataTable extends DataTable
                 return format_amount($payment->remaining_amount);
             })
             ->editColumn('status', function (Payment $payment) {
-                //return $payment->remaining_amount;
                 return view('pages/recoveries.columns._status', ['payment' => $payment]);
             })
             ->editColumn('notes', function (Payment $payment) {
@@ -72,8 +57,6 @@ class RecoveriesDataTable extends DataTable
             })
             ->setRowId('uuid');
     }
-
-
     public function query(Payment $model): QueryBuilder
     {
         $query = $model
@@ -90,7 +73,6 @@ class RecoveriesDataTable extends DataTable
             ->whereBetween('payments.created_at', [$this->startDate, $this->endDate])
             ->orderBy('payments.created_at', 'desc')
             ->distinct();
-
         if ($this->state != null) {
             $query->where('payments.status', '=', $this->state);
         } else {
@@ -101,8 +83,6 @@ class RecoveriesDataTable extends DataTable
         }
         return $query;
     }
-
-
     /**
      * Optional method if you want to use the html builder.
      */
@@ -120,7 +100,6 @@ class RecoveriesDataTable extends DataTable
             ->lengthMenu([[100, 300, 500, -1], [100, 300, 500, "All"]]) // Define options for the number of rows per page
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/recoveries/columns/_draw-scripts.js')) . "}");
     }
-
     /**
      * Get the dataTable columns definition.
      */
@@ -142,8 +121,7 @@ class RecoveriesDataTable extends DataTable
                 ->printable(false)
                 ->width(60)
         ];
-        $columns = array_map(function ($column) {
-
+        return array_map(function ($column) {
             if ($this->state != PaymentStatusEnums::CANCELED && $column->name == 'action') {
                 $column->visible(false);
             }
@@ -152,9 +130,7 @@ class RecoveriesDataTable extends DataTable
             }
             return $column;
         }, $columns);
-        return $columns;
     }
-
     /**
      * Get the filename for export.
      */

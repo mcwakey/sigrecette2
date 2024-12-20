@@ -1,12 +1,8 @@
 <?php
-
 namespace App\Http\Resources;
-
-
 use App\Models\Zone;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-
 /**
  * @property Zone $resource
  */
@@ -22,8 +18,6 @@ class SearchZoneResource extends JsonResource
         return [
             'id' => $this->resource->id,
             'name' => $this->resource->name,
-            // 'code' => $this->resource->code,
-            // 'category' => $this->resource->category
         ];
     }
 }

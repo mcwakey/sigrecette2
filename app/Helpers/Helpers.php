@@ -1,14 +1,10 @@
 <?php
-
-
 if (!function_exists('theme')) {
     function theme()
     {
         return app(App\Core\Theme::class);
     }
 }
-
-
 if (!function_exists('getName')) {
     /**
      * Get product name
@@ -20,8 +16,6 @@ if (!function_exists('getName')) {
         return config('settings.KT_THEME');
     }
 }
-
-
 if (!function_exists('addHtmlAttribute')) {
     /**
      * Add HTML attributes by scope
@@ -37,8 +31,6 @@ if (!function_exists('addHtmlAttribute')) {
         theme()->addHtmlAttribute($scope, $name, $value);
     }
 }
-
-
 if (!function_exists('addHtmlAttributes')) {
     /**
      * Add multiple HTML attributes by scope
@@ -53,8 +45,6 @@ if (!function_exists('addHtmlAttributes')) {
         theme()->addHtmlAttributes($scope, $attributes);
     }
 }
-
-
 if (!function_exists('addHtmlClass')) {
     /**
      * Add HTML class by scope
@@ -69,8 +59,6 @@ if (!function_exists('addHtmlClass')) {
         theme()->addHtmlClass($scope, $value);
     }
 }
-
-
 if (!function_exists('printHtmlAttributes')) {
     /**
      * Print HTML attributes for the HTML template
@@ -84,8 +72,6 @@ if (!function_exists('printHtmlAttributes')) {
         return theme()->printHtmlAttributes($scope);
     }
 }
-
-
 if (!function_exists('printHtmlClasses')) {
     /**
      * Print HTML classes for the HTML template
@@ -100,8 +86,6 @@ if (!function_exists('printHtmlClasses')) {
         return theme()->printHtmlClasses($scope, $full);
     }
 }
-
-
 if (!function_exists('getSvgIcon')) {
     /**
      * Get SVG icon content
@@ -117,8 +101,6 @@ if (!function_exists('getSvgIcon')) {
         return theme()->getSvgIcon($path, $classNames, $folder);
     }
 }
-
-
 if (!function_exists('setModeSwitch')) {
     /**
      * Set dark mode enabled status
@@ -132,8 +114,6 @@ if (!function_exists('setModeSwitch')) {
         theme()->setModeSwitch($flag);
     }
 }
-
-
 if (!function_exists('isModeSwitchEnabled')) {
     /**
      * Check dark mode status
@@ -145,8 +125,6 @@ if (!function_exists('isModeSwitchEnabled')) {
         return theme()->isModeSwitchEnabled();
     }
 }
-
-
 if (!function_exists('setModeDefault')) {
     /**
      * Set the mode to dark or light
@@ -160,8 +138,6 @@ if (!function_exists('setModeDefault')) {
         theme()->setModeDefault($mode);
     }
 }
-
-
 if (!function_exists('getModeDefault')) {
     /**
      * Get current mode
@@ -173,8 +149,6 @@ if (!function_exists('getModeDefault')) {
         return theme()->getModeDefault();
     }
 }
-
-
 if (!function_exists('setDirection')) {
     /**
      * Set style direction
@@ -188,8 +162,6 @@ if (!function_exists('setDirection')) {
         theme()->setDirection($direction);
     }
 }
-
-
 if (!function_exists('getDirection')) {
     /**
      * Get style direction
@@ -201,8 +173,6 @@ if (!function_exists('getDirection')) {
         return theme()->getDirection();
     }
 }
-
-
 if (!function_exists('isRtlDirection')) {
     /**
      * Check if style direction is RTL
@@ -214,8 +184,6 @@ if (!function_exists('isRtlDirection')) {
         return theme()->isRtlDirection();
     }
 }
-
-
 if (!function_exists('extendCssFilename')) {
     /**
      * Extend CSS file name with RTL or dark mode
@@ -229,8 +197,6 @@ if (!function_exists('extendCssFilename')) {
         return theme()->extendCssFilename($path);
     }
 }
-
-
 if (!function_exists('includeFavicon')) {
     /**
      * Include favicon from settings
@@ -242,8 +208,6 @@ if (!function_exists('includeFavicon')) {
         return theme()->includeFavicon();
     }
 }
-
-
 if (!function_exists('includeFonts')) {
     /**
      * Include the fonts from settings
@@ -255,8 +219,6 @@ if (!function_exists('includeFonts')) {
         return theme()->includeFonts();
     }
 }
-
-
 if (!function_exists('getGlobalAssets')) {
     /**
      * Get the global assets
@@ -270,8 +232,6 @@ if (!function_exists('getGlobalAssets')) {
         return theme()->getGlobalAssets($type);
     }
 }
-
-
 if (!function_exists('addVendors')) {
     /**
      * Add multiple vendors to the page by name. Refer to settings KT_THEME_VENDORS
@@ -285,8 +245,6 @@ if (!function_exists('addVendors')) {
         theme()->addVendors($vendors);
     }
 }
-
-
 if (!function_exists('addVendor')) {
     /**
      * Add single vendor to the page by name. Refer to settings KT_THEME_VENDORS
@@ -300,8 +258,6 @@ if (!function_exists('addVendor')) {
         theme()->addVendor($vendor);
     }
 }
-
-
 if (!function_exists('addJavascriptFile')) {
     /**
      * Add custom javascript file to the page
@@ -315,8 +271,6 @@ if (!function_exists('addJavascriptFile')) {
         theme()->addJavascriptFile($file);
     }
 }
-
-
 if (!function_exists('addCssFile')) {
     /**
      * Add custom CSS file to the page
@@ -330,8 +284,6 @@ if (!function_exists('addCssFile')) {
         theme()->addCssFile($file);
     }
 }
-
-
 if (!function_exists('getVendors')) {
     /**
      * Get vendor files from settings. Refer to settings KT_THEME_VENDORS
@@ -345,8 +297,6 @@ if (!function_exists('getVendors')) {
         return theme()->getVendors($type);
     }
 }
-
-
 if (!function_exists('getCustomJs')) {
     /**
      * Get custom js files from the settings
@@ -358,8 +308,6 @@ if (!function_exists('getCustomJs')) {
         return theme()->getCustomJs();
     }
 }
-
-
 if (!function_exists('getCustomCss')) {
     /**
      * Get custom css files from the settings
@@ -371,8 +319,6 @@ if (!function_exists('getCustomCss')) {
         return theme()->getCustomCss();
     }
 }
-
-
 if (!function_exists('getHtmlAttribute')) {
     /**
      * Get HTML attribute based on the scope
@@ -387,8 +333,6 @@ if (!function_exists('getHtmlAttribute')) {
         return theme()->getHtmlAttribute($scope, $attribute);
     }
 }
-
-
 if (!function_exists('isUrl')) {
     /**
      * Get HTML attribute based on the scope
@@ -402,8 +346,6 @@ if (!function_exists('isUrl')) {
         return filter_var($url, FILTER_VALIDATE_URL);
     }
 }
-
-
 if (!function_exists('image')) {
     /**
      * Get image url by path
@@ -417,8 +359,6 @@ if (!function_exists('image')) {
         return asset('assets/media/' . $path);
     }
 }
-
-
 if (!function_exists('getIcon')) {
     /**
      * Get icon
@@ -432,7 +372,6 @@ if (!function_exists('getIcon')) {
         return theme()->getIcon($name, $class, $type, $tag);
     }
 }
-
 if (!function_exists('number_to_words')) {
     function number_to_words($number = null, $locale = 'fr_FR')
     {
@@ -441,7 +380,6 @@ if (!function_exists('number_to_words')) {
                 return '';
             }
             $formatter = new NumberFormatter($locale, NumberFormatter::SPELLOUT);
-
             // Retourner le résultat de la conversion
             return ucfirst($formatter->format($number));
         }
@@ -449,7 +387,6 @@ if (!function_exists('number_to_words')) {
     }
 }
 if (!function_exists('format_amount')) {
-
     /**
      * @param $amount
      * @return mixed|string
@@ -462,4 +399,3 @@ if (!function_exists('format_amount')) {
         return $amount;
     }
 }
-

@@ -1,11 +1,8 @@
 <?php
-
 namespace App\Http\Middleware;
-
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 class EnsureIsSystemAdmin
 {
     /**
@@ -18,7 +15,6 @@ class EnsureIsSystemAdmin
         if (!$request->user()->hasAnyRole(['administrateur_system', 'regisseur'])) {
             return redirect()->route('dashboard');
         }
-
         return $next($request);
     }
 }

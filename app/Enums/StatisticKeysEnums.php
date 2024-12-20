@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Enums;
-
 class StatisticKeysEnums
 {
     public const BY_GENDER = 'by_gender';

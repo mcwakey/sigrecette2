@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Enums;
-
 class PrintNameEnums
 {
     public const BORDEREAU_REDUCTION = 'Bordereau journal des avis de réduction ou d’annulation';

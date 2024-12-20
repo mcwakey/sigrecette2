@@ -1,7 +1,5 @@
 <?php
-
 namespace App\DataTables;
-
 use App\Enums\PaymentStatusEnums;
 use App\Helpers\Constants;
 use App\Models\Invoice;
@@ -16,12 +14,9 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
 use Yajra\DataTables\WithExportQueue;
-
 class ExportRecoveriesDataTable extends DataTable
 {
     use WithExportQueue;
-
-
     /**
      * Build the DataTable class.
      *
@@ -29,7 +24,6 @@ class ExportRecoveriesDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query, Request $request): EloquentDataTable
     {
-
         return (new EloquentDataTable($query))
             ->editColumn('id', function (Payment $payment) {
                 return $payment->id;
@@ -63,32 +57,27 @@ class ExportRecoveriesDataTable extends DataTable
             })
             ->setRowId('uuid');
     }
-
-
     public function query(Payment $model): QueryBuilder
     {
-        $query = $model->with(['taxpayer', 'invoice', 'user'])
+        return $model->with(['taxpayer', 'invoice', 'user'])
             ->join('invoices', 'invoices.id', '=', 'payments.invoice_id')
             ->leftJoin('taxpayers', 'taxpayers.id', '=', 'payments.taxpayer_id')
             ->leftJoin('users', 'users.id', '=', 'payments.user_id')
             ->join('tax_labels', 'tax_labels.code', '=', 'payments.code')
             ->select('payments.*')
-            //->whereNotNull('payments.user_id')
             ->orWhereNotIn('payments.reference', [Constants::ANNULATION, Constants::REDUCTION])
             ->orWhereNull('payments.reference')
             ->distinct()
             ->whereBetween('payments.created_at', [$this->startDate, $this->endDate])
             ->orderBy('payments.created_at', 'desc')
             ->newQuery();
-        return $query;
     }
-
     /**
      * Get the dataTable columns definition.
      */
     public function getColumns(): array
     {
-        $columns = [
+        return [
             Column::make('id')->title(__('id')),
             Column::make('taxpayer.name')->title(__('taxpayer')),
             Column::make('invoice.invoice_no')->title(__('invoice no')),
@@ -99,9 +88,7 @@ class ExportRecoveriesDataTable extends DataTable
             Column::make('user.name')->title(__('user'))->addClass('d-flex align-items-center'),
             Column::make('taxpayer_id')->visible(false),
         ];
-        return $columns;
     }
-
     /**
      * Optional method if you want to use the html builder.
      */
@@ -119,8 +106,6 @@ class ExportRecoveriesDataTable extends DataTable
             ->lengthMenu([[100, 300, 500, -1], [100, 300, 500, "All"]]) // Define options for the number of rows per page
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/recoveries/columns/_draw-scripts.js')) . "}");
     }
-
-
     /**
      * Get the filename for export.
      */

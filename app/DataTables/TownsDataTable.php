@@ -1,7 +1,5 @@
 <?php
-
 namespace App\DataTables;
-
 use App\Models\Town;
 use App\Models\Taxpayer;
 use Yajra\DataTables\Html\Column;
@@ -9,7 +7,6 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-
 class TownsDataTable extends DataTable
 {
     /**
@@ -37,7 +34,6 @@ class TownsDataTable extends DataTable
             })
             ->setRowId('id');
     }
-
     /**
      * Get the query source of dataTable.
      */
@@ -45,7 +41,6 @@ class TownsDataTable extends DataTable
     {
         return $model->newQuery();
     }
-
     /**
      * Optional method if you want to use the html builder.
      */
@@ -61,20 +56,14 @@ class TownsDataTable extends DataTable
             ->orderBy(3)
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/towns/columns/_draw-scripts.js')) . "}");
     }
-
     /**
      * Get the dataTable columns definition.
      */
     public function getColumns(): array
     {
         return [
-            // Column::make('taxable')->addClass('d-flex align-items-center')->name('name'),
-            //Column::make('gender')->title('Tax Name'),
             Column::make('name')->title(__('Villages/Quartiers')),
             Column::make('canton_id')->title(__('canton'))->width(400),
-            // Column::make('periodicity')->title('periodicity'),
-            // Column::make('modality')->title('modality'),
-            // Column::make('penalty')->title('penalty'),
             Column::make('status')->title(__(__('status')))->width(150),
             Column::make('created_at')->title(__('created at'))->addClass('text-nowrap')->width(150),
             Column::computed('action')
@@ -84,7 +73,6 @@ class TownsDataTable extends DataTable
                 ->width(60)
         ];
     }
-
     /**
      * Get the filename for export.
      */

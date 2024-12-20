@@ -1,11 +1,7 @@
 <?php
-
 namespace App\Traits;
-
 trait DispatchesMessages
 {
-
-
     /**
      * Dispatch an event with a message.
      *
@@ -23,12 +19,10 @@ trait DispatchesMessages
             'restore' => __(':resource restoré', ['resource' => $resourceName]),
             default => __(':resource créé', ['resource' => $resourceName]),
         };
-        if ($type == "error" && $custom_message != null) {
+        if ($type === "error" && $custom_message != null) {
             $this->dispatch($type, $custom_message);
         } else {
             $this->dispatch($type, $message);
         }
-
     }
-
 }

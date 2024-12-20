@@ -1,13 +1,10 @@
 <?php
-
 namespace App\Models;
-
 use App\Enums\PrintNameEnums;
 use App\Helpers\InvoiceHelper;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-
 class PrintFile extends Model
 {
     protected $fillable = [
@@ -15,14 +12,11 @@ class PrintFile extends Model
         'last_sequence_number',
         'total_last_sequence',
         'user_id',
-
     ];
-
     public function invoices()
     {
         return $this->belongsToMany(Invoice::class);
     }
-
     public static function getLastPrintFileByType($type): PrintFile|null
     {
         $activeYear = Year::getActiveYear();
@@ -33,7 +27,6 @@ class PrintFile extends Model
             ->orderBy('created_at', 'desc')
             ->first();
     }
-
     public static function createPrintFile(string $type, $data, $total = 0, User $user = null): PrintFile
     {
         $last_print = PrintFile::getLastPrintFileByType($type);
@@ -46,7 +39,6 @@ class PrintFile extends Model
         $print = PrintFile::create($print_data);
         return InvoiceHelper::addPrintableToInvoices($data, $print);
     }
-
     public static function getPrintTotal(PrintFile $file): int
     {
         $data = $file->invoices()->get();
@@ -62,10 +54,8 @@ class PrintFile extends Model
         }
         return $total;
     }
-
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
 }

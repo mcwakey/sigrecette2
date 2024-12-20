@@ -1,11 +1,8 @@
 <?php
-
 namespace App\Guards;
-
 use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
 use Symfony\Component\Workflow\Event\GuardEvent;
-
 class InvoiceGuard
 {
     public function canSubmitForPending(GuardEvent $event)

@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Enums;
-
 class TaxpayerStaticsEnums
 {
     public const BY_GENDER = 'gender';

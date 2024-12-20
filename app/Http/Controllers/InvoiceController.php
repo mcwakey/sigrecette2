@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\DataTables\InvoicesDataTable;
 use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
@@ -13,42 +11,13 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
-
 class InvoiceController extends Controller
 {
-
-
-    // UPDATE taxpayer_taxables
-    // INNER JOIN invoices ON taxpayer_taxables.invoice_id = invoices.invoice_no
-    // AND validity = "VALID"
-    // SET taxpayer_taxables.invoice_id = NULL,
-    // taxpayer_taxables.bill_status = "NOT BILLED",
-    // invoices.validity = "EXPIRED",
-    // invoices.status = "APROVED"
-    // WHERE invoices.to_date = "2024-07-07" AND
-    // invoices.type = "TITRE";
-
-    // BEGIN
-    //             DECLARE today DATE;
-    //             SET today = CURDATE();
-
-    //             UPDATE taxpayer_taxables
-    //             INNER JOIN invoices ON taxpayer_taxables.invoice_id = invoices.invoice_no
-    //             AND validity = "VALID"
-    //             SET taxpayer_taxables.invoice_id = NULL,
-    //             taxpayer_taxables.bill_status = "NOT BILLED",
-    //             invoices.validity = "EXPIRED",
-    //             invoices.status = "APROVED"
-    //             WHERE invoices.to_date = today AND
-    //             invoices.type = "TITRE";
-    //         END
-
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request, InvoicesDataTable $dataTable)
     {
-
         $year = Year::getActiveYear()->name;
         $validatedData = $request->validate([
             'delivery' => ['nullable', 'string', Rule::in(Constants::INVOICE_DELIVERY_STATE_VALIDATION_MAP)],
@@ -74,8 +43,6 @@ class InvoiceController extends Controller
         $role = Role::where('name', 'agent_recouvrement')->first();
         $agent_recouvrements = $role->users()->get();
         $invoice_id = isset($validatedData['invoice_id']) ? $validatedData['invoice_id'] : null;
-
-
         if ($invoice_id) {
             $invoice = Invoice::find($invoice_id);
             if ($invoice) {
@@ -83,14 +50,12 @@ class InvoiceController extends Controller
                     return redirect()->route('invoices.index', ['state' => Constants::INVOICE_STATE_DRAFT_KEY, 'type' => Constants::INVOICE_TYPE_TITRE_KEY]);
                 } elseif ($invoice->status == InvoiceStatusEnums::ACCEPTED) {
                     return redirect()->route('invoices.index', ['state' => Constants::INVOICE_STATE_ACCEPTED_KEY, 'type' => Constants::INVOICE_TYPE_TITRE_KEY]);
-
                 } elseif ($invoice->status == InvoiceStatusEnums::PENDING) {
                     return redirect()->route('invoices.index', ['state' => Constants::INVOICE_STATE_PENDING_KEY, 'type' => Constants::INVOICE_TYPE_TITRE_KEY]);
                 }
             }
         }
         return $dataTable->with(
-
             [
                 'delivery' => $delivery,
                 'startDate' => $startDate,
@@ -102,10 +67,7 @@ class InvoiceController extends Controller
                 'to_paid' => $to_paid,
             ]
         )->render('pages/invoices.list', ['zones' => $zones, 'tax_labels' => $tax_labels, 'agent_recouvrements' => $agent_recouvrements]);
-
-
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -113,7 +75,6 @@ class InvoiceController extends Controller
     {
         //
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -121,24 +82,19 @@ class InvoiceController extends Controller
     {
         //
     }
-
     /**
      * Display the specified resource.
      */
     public function show(Invoice $invoice, InvoicesDataTable $dataTable)
     {
-        //return view('pages/invoices.show', compact('invoice'));
-        //return $dataTable->render('pages/invoices.show');
         return $dataTable->render('pages/invoices.show', ['invoice' => $invoice]);
     }
-
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Invoice $invoice)
     {
     }
-
     /**
      * Update the specified resource in storage.
      */
@@ -146,7 +102,6 @@ class InvoiceController extends Controller
     {
         //
     }
-
     /**
      * Remove the specified resource from storage.
      */

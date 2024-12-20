@@ -1,11 +1,8 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\DataTables\ActivityDataTable;
 use App\Models\Activity;
 use Illuminate\Http\Request;
-
 class ActivitiesController extends Controller
 {
     /**
@@ -13,10 +10,8 @@ class ActivitiesController extends Controller
      */
     public function index(ActivityDataTable $dataTable)
     {
-        //return view('pages/activities.list');
         return $dataTable->render('pages/activities.list');
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -24,7 +19,6 @@ class ActivitiesController extends Controller
     {
         //
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -32,7 +26,6 @@ class ActivitiesController extends Controller
     {
         //
     }
-
     /**
      * Display the specified resource.
      */
@@ -40,14 +33,12 @@ class ActivitiesController extends Controller
     {
         return $activitiesDataTable->with('id', $activity->id)->render('pages/activities.show', ['activity' => $activity]);
     }
-
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Activity $activity)
     {
     }
-
     /**
      * Update the specified resource in storage.
      */
@@ -55,7 +46,6 @@ class ActivitiesController extends Controller
     {
         //
     }
-
     /**
      * Remove the specified resource from storage.
      */
@@ -64,4 +54,3 @@ class ActivitiesController extends Controller
         //
     }
 }
-

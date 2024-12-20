@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Livewire\Invoice;
-
 use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
 use App\Helpers\InvoiceHelper;
@@ -19,19 +17,14 @@ use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
-
 class AddStatusForm extends Component
 {
     use DispatchesMessages;
-
     public $invoice_id;
-
     public $status;
     public $type;
-
     public $edit_mode = false;
     public $reason_for_reject;
-
     public function rules()
     {
         return [
@@ -46,48 +39,36 @@ class AddStatusForm extends Component
                 InvoiceStatusEnums::REDUCED)],
         ];
     }
-
     private $error_message;
     protected $listeners = [
         'update_status' => 'updateStatus',
     ];
-
     public function render()
     {
-
         return view('livewire.invoice.add-status-form');
     }
-
     public function validateData()
     {
         $this->validate();
         $invoice = Invoice::find($this->invoice_id);
-        if ($invoice && $invoice->reduce_amount == '' && ($this->status == InvoiceStatusEnums::APPROVED || $this->status == InvoiceStatusEnums::APPROVED_CANCELLATION || $this->status == InvoiceStatusEnums::REJECTED)) {
-            if ($invoice->type == Constants::INVOICE_TYPE_TITRE && $invoice->edition_state != "bPRINT") {
-                if (!$invoice->edition_state) {
-                    $this->error_message = "Veuillez au préalable imprimer l'avis.";
-                } elseif ($invoice->edition_state == "PRINT") {
-                    $this->error_message = "Veuillez au préalable ajouter l'avis à un bordereau.";
-                } else {
-                    $this->error_message = "Veuillez au préalable imprimer l'avis.";
-                }
-                $this->addError('status', $this->error_message);
-
+        if ($invoice && $invoice->reduce_amount == '' && ($this->status == InvoiceStatusEnums::APPROVED || $this->status == InvoiceStatusEnums::APPROVED_CANCELLATION || $this->status == InvoiceStatusEnums::REJECTED) && ($invoice->type == Constants::INVOICE_TYPE_TITRE && $invoice->edition_state != "bPRINT")) {
+            if (!$invoice->edition_state) {
+                $this->error_message = "Veuillez au préalable imprimer l'avis.";
+            } elseif ($invoice->edition_state == "PRINT") {
+                $this->error_message = "Veuillez au préalable ajouter l'avis à un bordereau.";
+            } else {
+                $this->error_message = "Veuillez au préalable imprimer l'avis.";
             }
+            $this->addError('status', $this->error_message);
         }
-
     }
-
     public function submit()
     {
         $this->validateData();
         if ($this->getErrorBag()->isEmpty()) {
             DB::transaction(function () {
                 $invoice = Invoice::find($this->invoice_id);
-
-
                 $this->invoice_id = $invoice->id;
-
                 if ($invoice->type == Constants::INVOICE_TYPE_TITRE && $this->status == InvoiceStatusEnums::REJECTED) {
                     $invoice->reason_for_reject = $this->reason_for_reject;
                 }
@@ -105,7 +86,6 @@ class AddStatusForm extends Component
                         'status' => $description_str,
                         'payment_type' => $description_str,
                         'code' => null
-
                     ];
                     $payments = InvoiceHelper::getCode($invoice->invoice_no, $invoice->reduce_amount, $paymentData);
                     foreach ($payments as $payment) {
@@ -114,17 +94,13 @@ class AddStatusForm extends Component
                     $invoice->pay_status = $invoice->reduce_amount == $invoice->amount ? "PAID" : "PART PAID";
                     $this->status = InvoiceStatusEnums::APPROVED_CANCELLATION;
                 }
-
-
                 $invoice->save();
-
                 switch ($this->status) {
                     case InvoiceStatusEnums::ACCEPTED:
                         $invoice->submitToState("submit_for_accepted");
                         break;
                     case InvoiceStatusEnums::REJECTED_BY_OR:
                         $invoice->submitToState("submit_for_reject_by_ord");
-
                         break;
                     case  InvoiceStatusEnums::PENDING:
                         $invoice->submitToState("submit_for_pending");
@@ -142,39 +118,26 @@ class AddStatusForm extends Component
                         } else {
                             $invoice->submitToState("submit_for_approved_cancellation");
                         }
-
                         break;
                     case InvoiceStatusEnums::CANCELED:
-                        //dump(InvoiceStatusEnums::CANCELED);
-                        break;
                     case InvoiceStatusEnums::REDUCED:
-                        //dump(InvoiceStatusEnums::REDUCED);
                         break;
-
                     default :
-                        // dump($place);
                 }
                 $this->dispatchMessage('Avis', 'update');
             });
             $this->reset();
         } else {
             $this->dispatchMessage('Avis', 'update', 'error', $this->error_message);
-
         }
-
-
     }
-
     public function updateStatus($id)
     {
-
         $invoice = Invoice::find($id);
-
         $this->invoice_id = $invoice->id;
         $this->status = $invoice->status;
         $this->type = $invoice->type;
     }
-
     public function hydrate()
     {
         $this->resetErrorBag();

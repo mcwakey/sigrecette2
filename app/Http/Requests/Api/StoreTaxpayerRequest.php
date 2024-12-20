@@ -1,9 +1,6 @@
 <?php
-
 namespace App\Http\Requests\Api;
-
 use Illuminate\Foundation\Http\FormRequest;
-
 class StoreTaxpayerRequest extends FormRequest
 {
     /**
@@ -13,7 +10,6 @@ class StoreTaxpayerRequest extends FormRequest
     {
         return true;
     }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -27,7 +23,6 @@ class StoreTaxpayerRequest extends FormRequest
             'gender' => 'required',
             'id_type' => 'required',
             'id_number' => 'required|string',
-
             'mobilephone' => [
                 'required',
                 'string',
@@ -35,14 +30,12 @@ class StoreTaxpayerRequest extends FormRequest
                 'max:8',
                 new \App\Rules\ValidPhoneNumber,
             ],
-
             'telephone' => [
                 'string',
                 'min:8',
                 'max:8',
                 new \App\Rules\ValidPhoneNumber,
             ],
-
             'longitude' => 'nullable',
             'latitude' => 'nullable',
             'address' => 'required|string',

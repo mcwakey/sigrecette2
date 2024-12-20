@@ -1,13 +1,9 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\DataTables\TaxLabelsDataTable;
 use App\Models\TaxLabel;
 use Illuminate\Http\Request;
-
 class TaxLabelController extends Controller
-
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +12,6 @@ class TaxLabelController extends Controller
     {
         return $dataTable->render('pages/tax_labels.list');
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -24,7 +19,6 @@ class TaxLabelController extends Controller
     {
         //
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -32,7 +26,6 @@ class TaxLabelController extends Controller
     {
         //
     }
-
     /**
      * Display the specified resource.
      */
@@ -40,7 +33,6 @@ class TaxLabelController extends Controller
     {
         return view('pages/tax_labels.show', ['tax_label' => $tax_label]);
     }
-
     /**
      * Show the form for editing the specified resource.
      */
@@ -48,7 +40,6 @@ class TaxLabelController extends Controller
     {
         //
     }
-
     /**
      * Update the specified resource in storage.
      */
@@ -56,7 +47,6 @@ class TaxLabelController extends Controller
     {
         //
     }
-
     /**
      * Remove the specified resource from storage.
      */

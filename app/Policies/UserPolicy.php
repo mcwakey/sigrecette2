@@ -1,10 +1,7 @@
 <?php
-
 namespace App\Policies;
-
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
-
 class UserPolicy
 {
     /**
@@ -14,7 +11,6 @@ class UserPolicy
     {
         return true;
     }
-
     /**
      * Determine whether the user can view the model.
      */
@@ -22,7 +18,6 @@ class UserPolicy
     {
         return true;
     }
-
     /**
      * Determine whether the user can create models.
      */
@@ -30,7 +25,6 @@ class UserPolicy
     {
         return $user->hasPermissionTo('peut créer un utilisateur');
     }
-
     /**
      * Determine whether the user can update the model.
      */
@@ -38,7 +32,6 @@ class UserPolicy
     {
         return $user->hasPermissionTo('peut modifier un utilisateur') || $user->id == $model->id;
     }
-
     /**
      * Determine whether the user can delete the model.
      */
@@ -46,7 +39,6 @@ class UserPolicy
     {
         return $user->hasPermissionTo('peut désactiver un utilisateur') || $user->id == $model->id;
     }
-
     /**
      * Determine whether the user can restore the model.
      */
@@ -54,7 +46,6 @@ class UserPolicy
     {
         return false;
     }
-
     /**
      * Determine whether the user can permanently delete the model.
      */

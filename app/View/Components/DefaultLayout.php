@@ -1,9 +1,6 @@
 <?php
-
 namespace App\View\Components;
-
 use Illuminate\View\Component;
-
 class DefaultLayout extends Component
 {
     /**
@@ -16,7 +13,6 @@ class DefaultLayout extends Component
         // Init layout file
         app(config('settings.KT_THEME_BOOTSTRAP.default'))->init();
     }
-
     /**
      * Get the view / contents that represent the component.
      *
