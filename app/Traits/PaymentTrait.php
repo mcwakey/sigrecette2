@@ -1,15 +1,18 @@
 <?php
-namespace App\Helpers;
+namespace App\Traits;
 use App\Enums\PaymentStatusEnums;
+use App\Helpers\Constants;
 use App\Models\Invoice;
 use App\Models\Payment;
 use Illuminate\Database\Eloquent\Collection;
-class PaymentHelper
+
+trait PaymentTrait
 {
     /**
      * Obtenir les paiements filtrés par statut
      *
      * @param $invoice_id
+     * @param array $status
      * @return Collection
      */
     public static function getPaymentsByStatus($invoice_id, array $status)
@@ -18,8 +21,10 @@ class PaymentHelper
             ->whereIn('status', $status)
             ->get();
     }
+
     /**
      * @param $invoice_id
+     * @return float|int
      */
     public static function getPaid($invoice_id): float|int
     {

@@ -150,6 +150,7 @@ Route::middleware(['auth'])->group(function () {
     // Route::get('/import/taxpayer', [TaxpayerController::class, 'showImportPage'])->name('import-view');
 
     Route::get('/prints',   [PrintController::class, 'index'])->name("prints");
+    Route::get('/print-all-invoice',   [PrintController::class, 'downloadMultipleInvoicePdf'])->name("print-all-invoice");
     Route::get('/exports',   [ExportController::class, 'index'])->name("exports");
     Route::get('/exports/backup',   [ExportController::class, 'backup'])->name("export_backup");
     Route::get('/exports/backupdownload',   [ExportController::class, 'backupDownload'])->name("backupdownload");

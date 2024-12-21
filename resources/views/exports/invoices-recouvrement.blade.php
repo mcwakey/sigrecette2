@@ -1,4 +1,6 @@
-@php use App\Helpers\InvoiceHelper; @endphp
+@php
+    use  App\Models\Invoice;
+@endphp
         <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -114,7 +116,7 @@
 
     @foreach($data as $index => $item)
         @if($item instanceof \App\Models\Invoice)
-            @foreach(InvoiceHelper::sumAmountsByTaxCode($item) as $code => $tax)
+            @foreach(Invoice::sumAmountsByTaxCode($item) as $code => $tax)
 
                 @php
                     $paid = \App\Models\Payment::getSumPaymentByCode($code,$item);

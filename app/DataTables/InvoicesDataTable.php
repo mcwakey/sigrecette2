@@ -4,7 +4,6 @@ use App\Enums\InvoicePayStatusEnums;
 use App\Enums\PrintNameEnums;
 use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
-use App\Helpers\InvoiceHelper;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\Year;
@@ -51,7 +50,7 @@ class InvoicesDataTable extends DataTable
                 return ($invoice->taxpayer->latitude ?? '-') . ' : ' . ($invoice->taxpayer->longitude ?? '-');
             })
             ->editColumn('tax_labels.code', function (Invoice $invoice) {
-                return implode(',', array_keys(InvoiceHelper::sumAmountsByTaxCode($invoice)));
+                return implode(',', array_keys(Invoice::sumAmountsByTaxCode($invoice)));
             })
             ->editColumn('total', function (Invoice $invoice) {
                 if ($invoice->reduce_amount != '') {

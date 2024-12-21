@@ -1,9 +1,10 @@
 <?php
-namespace App\Helpers;
+namespace App\Traits;
 use App\Enums\InvoicePayStatusEnums;
 use App\Enums\InvoiceStatusEnums;
 use App\Enums\PaymentStatusEnums;
 use App\Enums\PrintNameEnums;
+use App\Helpers\Constants;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\PrintFile;
@@ -12,9 +13,10 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
-class InvoiceHelper
+
+trait InvoiceTrait
 {
-    public static function getReceiverName($id)
+    public static  function getReceiverName($id)
     {
         $invoice = Invoice::find($id);
         if ($invoice && $invoice->delivery_date !== null) {
@@ -28,7 +30,7 @@ class InvoiceHelper
      * @return array Returns a collection of invoices if all UUIDs are found,
      *                               `false` if any UUID is not found, or an empty array if `$uuids` is empty.
      */
-    public static function retrieveByUUIDs(array $uuids, string|null $type = null): array
+    public static  function retrieveByUUIDs(array $uuids, string|null $type = null): array
     {
         $invoices = [];
         if ($uuids === []) {
@@ -62,7 +64,7 @@ class InvoiceHelper
      * @return array Returns a collection of invoices if all UUIDs are found,
      *                               `false` if any UUID is not found, or an empty array if `$uuids` is empty.
      */
-    public static function filterByType(array $invoices, string $type): array
+    public static  function filterByType(array $invoices, string $type): array
     {
         $invoices_return = [];
         foreach ($invoices as $invoice) {
@@ -83,7 +85,7 @@ class InvoiceHelper
      * @param Invoice $invoice The invoice object.
      * @return array An associative array where keys are tax codes and values are the total amounts.
      */
-    public static function sumAmountsByTaxCode(Invoice $invoice): array
+    public static  function sumAmountsByTaxCode(Invoice $invoice): array
     {
         $sumsByTaxCode = [];
         foreach ($invoice->invoiceitems as $item) {
@@ -102,9 +104,14 @@ class InvoiceHelper
         asort($sumsByTaxCode);
         return $sumsByTaxCode;
     }
-    public static function isuperFunction(array $uuids)
+
+    /**
+     * @param array $uuids
+     * @return void
+     */
+    public static function isuperFunction(array $uuids): void
     {
-        $data = InvoiceHelper::retrieveByUUIDs($uuids);
+        $data = Invoice::retrieveByUUIDs($uuids);
         usort($data, function ($a, $b) {
             $codeA = $a->taxpayer_taxable->taxable->tax_label->code;
             $codeB = $b->taxpayer_taxable->taxable->tax_label->code;
@@ -156,7 +163,7 @@ class InvoiceHelper
         $invoice = Invoice::find($id);
         if ($invoice instanceof Invoice) {
             $paymentArray = [];
-            [$sumsByTaxCode, $paidAmounts] = InvoiceHelper::returnPaidAndSumByCode($invoice);
+            [$sumsByTaxCode, $paidAmounts] = Invoice::returnPaidAndSumByCode($invoice);
             $paidTotal = array_sum($paidAmounts) ?? 0;
             foreach ($sumsByTaxCode as $code => $code_amount) {
                 if ($amount > 0 && $code_amount['amount'] > 0) {
@@ -180,7 +187,7 @@ class InvoiceHelper
     public static function returnPaidAndSumByCode(Invoice $invoice): array
     {
         $last_payments = Payment::where('invoice_id', $invoice->invoice_no)->where('status', PaymentStatusEnums::ACCOUNTED)->get();
-        $sumsByTaxCode = InvoiceHelper::sumAmountsByTaxCode($invoice);
+        $sumsByTaxCode = Invoice::sumAmountsByTaxCode($invoice);
         $paidAmounts = [];
         foreach ($sumsByTaxCode as $code => &$totalAmount) {
             foreach ($last_payments as $index => $payment) {
@@ -215,7 +222,7 @@ class InvoiceHelper
             'id',
             'invoice_no'
         ];
-        $query = Model::query()->whereIn('invoices.status', [InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION])
+        $query = Invoice::query()->whereIn('invoices.status', [InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION])
             ->where('invoices.pay_status', '!=', InvoicePayStatusEnums::PAID);
         foreach ($columns as $column) {
             $query->orWhere($column, 'like', "%{$value}%");
@@ -253,5 +260,10 @@ class InvoiceHelper
         }
         return $query
             ->get();
+    }
+    public static function getPrintableUuid(): array
+    {
+       return Invoice::where('invoices.status', InvoiceStatusEnums::ACCEPTED)->pluck('uuid')
+           ->toArray();
     }
 }

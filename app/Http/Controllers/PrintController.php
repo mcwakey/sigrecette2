@@ -2,11 +2,14 @@
 namespace App\Http\Controllers;
 use App\DataTables\PrintablesDataTable;
 use App\Helpers\PdfGenerator;
+use App\Models\Invoice;
 use App\Models\PrintFile;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
+use ZipArchive;
+
 class PrintController extends Controller
 {
     public function __construct(private PdfGenerator $pdfGenerator)
@@ -48,6 +51,7 @@ class PrintController extends Controller
         session()->flash('status', "Erreur lors de la géneration du ficher");
         return back()->with('error', $result['message']);
     }
+
     /**
      * @param $type
      * @param $data
@@ -97,5 +101,29 @@ class PrintController extends Controller
             default:
                 return $this->pdfGenerator->generateInvoicePdf($data, 'invoices', $action);
         }
+    }
+    public function downloadMultipleInvoicePdf(int $action = null): \Symfony\Component\HttpFoundation\BinaryFileResponse
+    {
+        $uuid = Invoice::getPrintableUuid();
+        $zip = new ZipArchive();
+        $zipFileName = storage_path('app/public/multiples_pdf.zip');
+        if (file_exists($zipFileName)) {
+            unlink($zipFileName);
+        }
+        if ($zip->open($zipFileName, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+            foreach ($uuid as $invoiceUid){
+                $result =$this->pdfGenerator->generateInvoicePdf([$invoiceUid],'invoices',$action);
+                if($result['success']){
+                    $filename = "invoice_{$invoiceUid}_" . date('Ymd_His') . ".pdf";
+                    $zip->addFromString($result['filename'], $result['pdf']);
+                }else {
+                    \Log::warning("Impossible de générer le PDF pour l'UUID: {$invoiceUid}");
+                }
+            }
+            $zip->close();
+        }else {
+            abort(500, "Impossible de créer l'archive ZIP.");
+        }
+        return response()->download($zipFileName)->deleteFileAfterSend(true);
     }
 }

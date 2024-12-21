@@ -12,23 +12,25 @@ use App\Models\Taxpayer;
 use App\Models\User;
 use App\Models\Year;
 use Carbon\Carbon;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
+use ZipArchive;
+
 class PdfGenerator implements PdfGeneratorInterface
 {
     public function __construct(public Commune|null $commune = null)
     {
         $this->commune = Commune::first();
     }
+
     /**
      * @param int|null $action
      */
     public function generateInvoicePdf(array $data, string $templateName, int $action = null): array
     {
-        $data = InvoiceHelper::retrieveByUUIDs($data);
+
+        $data = Invoice::retrieveByUUIDs($data);
         usort($data, function ($a, $b) {
             $codeA = $a->taxpayer_taxable->taxable->tax_label->code;
             $codeB = $b->taxpayer_taxable->taxable->tax_label->code;
@@ -58,7 +60,7 @@ class PdfGenerator implements PdfGeneratorInterface
                 $invoice->edition_state = "PRINT";
                 $invoice->save();
             }
-            return ['success' => true, 'pdf' => $pdf];
+            return ['success' => true, 'pdf' => $pdf,"filename" => $filename];
         }
         return ['success' => false, 'message' => 'Invalid data structure.'];
     }
@@ -68,9 +70,9 @@ class PdfGenerator implements PdfGeneratorInterface
     public function generateInvoiceListPdf(array $data, string $template, int $action = null): array
     {
         if ($action == 42) {
-            $data = InvoiceHelper::retrieveByUUIDs($data, 'payment');
+            $data = Invoice::retrieveByUUIDs($data, 'payment');
         } else {
-            $data = InvoiceHelper::retrieveByUUIDs($data);
+            $data = Invoice::retrieveByUUIDs($data);
         }
         if ($this->checkIfCommuneIsNotNull() && $data !== []) {
             $filename = "Avis-liste-" . count($data) . '-' . date('Ymd_His') . ".pdf";
@@ -85,19 +87,7 @@ class PdfGenerator implements PdfGeneratorInterface
         }
         return ['success' => false, 'message' => 'Invalid data structure.'];
     }
-    public function downloadMultiple($data)
-    {
-        $data = json_decode($data, true);
-        foreach ($data as $key => $subdata) {
-            if (count($subdata) > 4) {
-                $filename = 'document_' . $key . '.pdf';
-                $pdf = PDF::loadView('exports.invoices', ['data' => $subdata])
-                    ->save(Storage::path('exports') . DIRECTORY_SEPARATOR . $filename)
-                    ->stream($filename);
-            }
-        }
-        return back();
-    }
+
     public function downloadReceipt($data)
     {
         $data = json_decode($data, true);
@@ -217,7 +207,7 @@ class PdfGenerator implements PdfGeneratorInterface
             $type = PrintNameEnums::BORDEREAU_REDUCTION;
         }
         if ($type != null && $printFile == null) {
-            $data = InvoiceHelper::getPrintData([InvoiceStatusEnums::PENDING], $type);
+            $data = Invoice::getPrintData([InvoiceStatusEnums::PENDING], $type);
             if (count($data) > 0) {
                 $total = 0;
                 foreach ($data as $datum) {
@@ -258,7 +248,7 @@ class PdfGenerator implements PdfGeneratorInterface
      */
     public function generateJournalInvoiceListPdf(array $data, string $template, int $action = null): array
     {
-        $data = InvoiceHelper::getPrintData(
+        $data = Invoice::getPrintData(
             [InvoiceStatusEnums::CANCELED,
                 InvoiceStatusEnums::REDUCED,
                 InvoiceStatusEnums::APPROVED,
@@ -275,7 +265,7 @@ class PdfGenerator implements PdfGeneratorInterface
      */
     public function generateInvoiceRegistrePdf(string $template, int $action = null): array
     {
-        $data = InvoiceHelper::getPrintData(
+        $data = Invoice::getPrintData(
             [InvoiceStatusEnums::CANCELED,
                 InvoiceStatusEnums::REDUCED,
                 InvoiceStatusEnums::APPROVED,
@@ -299,7 +289,7 @@ class PdfGenerator implements PdfGeneratorInterface
             $printFile = $data;
             $data = $data->invoices()->get();
         } elseif ($type != null && $user instanceof User) {
-            $data = InvoiceHelper::filterByType(InvoiceHelper::retrieveByUUIDs($data), $type);
+            $data = Invoice::filterByType(Invoice::retrieveByUUIDs($data), $type);
             if ($data !== []) {
                 $printFile = PrintFile::createPrintFile($type, $data, 0, $user);
                 if ($type === PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS) {

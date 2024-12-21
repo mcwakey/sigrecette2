@@ -3,15 +3,17 @@ namespace App\Models;
 use App\Enums\PaymentStatusEnums;
 use App\Enums\PaymentTypeEnums;
 use App\Helpers\Constants;
-use App\Helpers\PaymentHelper;
+use App\Traits\PaymentTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Database\Eloquent\Collection;
 class Payment extends Model
 {
     use HasFactory;
+    use PaymentTrait;
     protected $fillable = [
         'amount',
         'payment_type',
@@ -30,17 +32,7 @@ class Payment extends Model
         'invoice_type',
         'notes'
     ];
-    /**
-     * @param $invoice_id
-     */
-    public static function getPaid($invoice_id): float|int
-    {
-        return PaymentHelper::getPaid($invoice_id);
-    }
-    public static function getRestToPaid(Invoice $invoice): float|int
-    {
-        return PaymentHelper::getRestToPaid($invoice);
-    }
+
     public function invoice()
     {
         return $this->belongsTo(Invoice::class);

@@ -3,24 +3,18 @@ namespace App\Models;
 use App\Contracts\FormatDateInterface;
 use App\Enums\InvoicePayStatusEnums;
 use App\Enums\InvoiceStatusEnums;
-use App\Enums\PaymentStatusEnums;
-use App\Enums\PrintNameEnums;
 use App\Helpers\Constants;
-use App\Helpers\InvoiceHelper;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use Illuminate\Database\Eloquent\Collection;
+use App\Traits\InvoiceTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 use Spatie\Permission\Models\Role;
-use Symfony\Component\Workflow\Workflow;
 use ZeroDaHero\LaravelWorkflow\Traits\WorkflowTrait;
 class Invoice extends Model implements FormatDateInterface
 {
     use HasFactory;
     use WorkflowTrait;
+    use InvoiceTrait;
     protected $fillable = [
         'invoice_id',
         'taxpayer_id',

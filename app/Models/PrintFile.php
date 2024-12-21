@@ -1,7 +1,6 @@
 <?php
 namespace App\Models;
 use App\Enums\PrintNameEnums;
-use App\Helpers\InvoiceHelper;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -37,7 +36,7 @@ class PrintFile extends Model
             'user_id' => $user?->id
         ];
         $print = PrintFile::create($print_data);
-        return InvoiceHelper::addPrintableToInvoices($data, $print);
+        return Invoice::addPrintableToInvoices($data, $print);
     }
     public static function getPrintTotal(PrintFile $file): int
     {

@@ -1,6 +1,5 @@
 <?php
 namespace App\Livewire\Payment;
-use App\Helpers\InvoiceHelper;
 use App\Models\Invoice;
 use App\Models\Payment;
 use Livewire\Component;
@@ -43,7 +42,7 @@ class AddPaymentGeneralModal extends Component
             $this->dispatch('updateSharedInvoiceId', id: $this->invoice_id);
         }
         return view('livewire.payment.add-payment-general-modal', [
-            'invoices' => InvoiceHelper::search($this->search)->paginate($this->perPages, pageName: 'payment-modal')
+            'invoices' => Invoice::search($this->search)->paginate($this->perPages, pageName: 'payment-modal')
         ]);
     }
     public function select_invoice($value)

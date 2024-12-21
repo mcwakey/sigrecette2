@@ -1,6 +1,5 @@
 <?php
 namespace App\Livewire\Payment;
-use App\Helpers\InvoiceHelper;
 use App\Models\Invoice;
 use App\Models\Payment;
 use Livewire\Attributes\On;
@@ -81,7 +80,7 @@ class AddPaymentModal extends Component
                 $this->amount = $invoice->amount;
                 $this->edit_amount = false;
             }
-            $this->paidAndCodeArray = InvoiceHelper::returnPaidAndSumByCode($invoice)[0];
+            $this->paidAndCodeArray = Invoice::returnPaidAndSumByCode($invoice)[0];
             $this->validCodes = array_keys($this->paidAndCodeArray);
         }
         $paidAndCodeArray = $this->paidAndCodeArray;
@@ -128,7 +127,7 @@ class AddPaymentModal extends Component
                     $paymentData['status'] = PaymentStatusEnums::ACCOUNTED;
                 } else {
                 }
-                $payments = InvoiceHelper::getCode($this->invoice_no, $this->amount, $paymentData);
+                $payments = Invoice::getCode($this->invoice_no, $this->amount, $paymentData);
                 $payment = Payment::find($this->payment_id);
                 if ($payment == null) {
                     foreach ($payments as $payment) {
