@@ -321,8 +321,8 @@
 
                 </td>
                 <td class="">
-                    <div class="text-center mb-6">
-                        @if($commune->url)
+                    <div>
+                        @if($commune->url || config('app.debug'))
                             <img src="{{ $qrcodeSvg }}" alt="QR Code" style="width: 90px; height: auto;">
                         @endif
                     </div>
