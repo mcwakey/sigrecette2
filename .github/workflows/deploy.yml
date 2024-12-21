@@ -43,7 +43,7 @@ jobs:
           fi
 
       - name: Deploy to production
-        if: github.ref == 'refs/heads/main' && steps.check-ips.outputs.ips != "[]"
+        if: github.ref == 'refs/heads/main' && steps.check-ips.outputs.ips
         run: |
           IPS=${{ steps.get-ips.outputs.ips }}
           for IP in ${IPS[@]}; do
@@ -52,10 +52,11 @@ jobs:
             ssh user@$IP 'cd /path/to/your/app && php artisan migrate --force'
           done
 
+    # Message d'échec en cas de problème
+  failure-message:
+    runs-on: ubuntu-latest
     if: failure()
     steps:
       - name: Afficher un message d'échec détaillé
-        if: failure()
         run: |
           echo "::error::🚨 CI/CD Failed during ${{ github.job }}. Branche: ${{ github.ref }}. Commit: ${{ github.sha }}."
-
