@@ -58,7 +58,6 @@ $filters = [
             <!--begin::Card title-->
             <div class="card-title">
                 <div class="d-flex align-items-center">
-                    <!--begin::Input group-->
                     <div class="d-flex align-items-center position-relative my-1">
                         {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
                         <input type="text" data-kt-invoice-table-filter="search" class="form-control w-250px ps-13"
@@ -269,8 +268,6 @@ $filters = [
                                         <option value="{{ App\Enums\InvoiceStatusEnums::DRAFT}}">{{ __('DRAFT') }}</option>
                                     @endif
                                 </select>
-                                <!--end::Select-->
-                                <!--end::Row-->
                             </div>
 
 
@@ -360,12 +357,9 @@ $filters = [
                                         <i class="ki-duotone ki-down fs-5 ms-1"></i>
                                     </a>
 
-                                    <!--begin::Menu-->
                                     <div
                                         class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
                                         data-kt-menu="true" data-kt-menu-id="#kt-users-actions">
-                                        <!--begin::Menu item-->
-
                                         <div class="menu-item px-3">
                                             <a href="#" class="menu-link px-3">
                                                 {{ __('view') }}
@@ -550,6 +544,9 @@ $filters = [
                             url = url.replace(':r_type', encodeURIComponent(r_type));
                             url = url.replace(':selectedValue', encodeURIComponent(selectedValue));
                         }
+                        if(selectedValue==='00'){
+                            url = "{{ route('print-all-invoice') }}";
+                        }
 
 
                         window.open(url,'_blank');
@@ -558,11 +555,24 @@ $filters = [
             }
             function onSelectedValueChanged(selectedValue) {
                 removePrintMenuItems();
-                const array = ['liv','{{App\Enums\InvoiceStatusEnums::APPROVED}}','{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}','{{  App\Enums\InvoiceStatusEnums::CANCELED }}','{{ App\Enums\InvoiceStatusEnums::PENDING}}',"{{ App\Enums\InvoiceStatusEnums::REJECTED }}",'{{ App\Enums\InvoiceStatusEnums::REDUCED}}'];
+                const array = ['liv',
+                    '{{App\Enums\InvoiceStatusEnums::APPROVED}}',
+                    '{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}',
+                    '{{  App\Enums\InvoiceStatusEnums::CANCELED }}',
+                    '{{ App\Enums\InvoiceStatusEnums::PENDING}}',
+                    "{{ App\Enums\InvoiceStatusEnums::REJECTED }}",
+                    '{{ App\Enums\InvoiceStatusEnums::REDUCED}}',
+                    '{{ App\Enums\InvoiceStatusEnums::ACCEPTED}}',
+                ];
                 if (array.includes(selectedValue)) {
                     printButton.classList.add('btn-active-light-primary');
                     printButton.classList.remove( "d-none");
-                    const approve_array = ['{{App\Enums\InvoiceStatusEnums::APPROVED}}','{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}','{{  App\Enums\InvoiceStatusEnums::CANCELED }}','{{ App\Enums\InvoiceStatusEnums::REDUCED}}'];
+                    const approve_array = [
+                        '{{App\Enums\InvoiceStatusEnums::APPROVED}}',
+                        '{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}',
+                        '{{  App\Enums\InvoiceStatusEnums::CANCELED }}',
+                        '{{ App\Enums\InvoiceStatusEnums::REDUCED}}'
+                    ];
                     if (
                         approve_array.includes(selectedValue)
                     ) {
@@ -577,7 +587,10 @@ $filters = [
 
 
                         }
-                    }else if(  selectedValue ==="{{ App\Enums\InvoiceStatusEnums::PENDING}}" && !aucomptant){
+                    } else if(selectedValue === '{{ App\Enums\InvoiceStatusEnums::ACCEPTED}}'){
+                        addPrintMenuItem('{{ __('Imprimer tous les avis') }}', '00');
+                    }
+                    else if(  selectedValue ==="{{ App\Enums\InvoiceStatusEnums::PENDING}}" && !aucomptant){
                         addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
                         addPrintMenuItem('{{ __('Bordereau journal des avis de réduction ou d’annulation') }}', '2');
                         agentDiv.classList.add( "d-none")
@@ -588,6 +601,7 @@ $filters = [
                         addPrintMenuItem('{{ __('Journal des avis des sommes à payer confiés par le receveur') }}', '5');
                         addPrintMenuItem('{{ __('Registre-journal des avis distribués') }}', '3');
                     }
+
                     else addPrintMenuItem('', '1');
 
                 }
@@ -610,7 +624,7 @@ $filters = [
             let filters =@json($filters);
 
             onSelectedValueChanged(filters.state);
-            ///console.log(filters)
+           // console.log(filters)
             if(!filters.state && filters.delivery=='nonliv' && filters.type== "TITRE"){
                 onSelectedValueChanged("{{ App\Enums\InvoiceStatusEnums::APPROVED}}");
             }
@@ -618,6 +632,8 @@ $filters = [
                 onSelectedValueChanged("{{ App\Enums\InvoiceStatusEnums::APPROVED}}");
             }else if(!filters.state && filters.delivery=='liv' && filters.type== "TITRE"){
                 onSelectedValueChanged('liv');
+            }else if(filters.state==="ACCEPTED" && filters.type== "TITRE"){
+                onSelectedValueChanged("{{ App\Enums\InvoiceStatusEnums::ACCEPTED}}");
             }
 
         </script>
