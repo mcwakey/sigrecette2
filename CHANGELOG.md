@@ -2,6 +2,43 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.8.11](https://github.com/mcwakey/sigrecette2/compare/v0.8.10...v0.8.11) (2024-12-21)
+
+
+### Features
+
+* added user who registered taxpayer ([e79f9c9](https://github.com/mcwakey/sigrecette2/commit/e79f9c910fc0f719cf8e20c9d97ae8e1a03d926d))
+* display user Name ([70432bd](https://github.com/mcwakey/sigrecette2/commit/70432bdc06cabfec6656b989f5a1acc80789ed53))
+* make dynamic taxlabel on mobile app ([fb990d6](https://github.com/mcwakey/sigrecette2/commit/fb990d6d2b4e45087a8af19026db42cc3a961998))
+* make tapayers to fix errors with mobile app synchronisation ([0d32cf8](https://github.com/mcwakey/sigrecette2/commit/0d32cf8fad5a7e8c5da7275592eb584e7f9b74a7))
+* print all invoice in one click ([250d927](https://github.com/mcwakey/sigrecette2/commit/250d927638459fd2a5844011ba14dd6ffd2853fc))
+* send model name ([fd8f94f](https://github.com/mcwakey/sigrecette2/commit/fd8f94fbf496deec3ae3de2f0d04c714e9cfbe7d))
+* send users roles on api ([ef091e4](https://github.com/mcwakey/sigrecette2/commit/ef091e47ae5d6a5c42cc4b419115230f2c86bdca))
+* super feat ([e5f86c7](https://github.com/mcwakey/sigrecette2/commit/e5f86c7cb32f266a59b455b5e1ddc689feec895a))
+
+
+### Bug Fixes
+
+*  check permission in submit and mount ([60735f8](https://github.com/mcwakey/sigrecette2/commit/60735f8898140cb76d6aaefd2c6930797ca1005c))
+* bug in api ([4f52314](https://github.com/mcwakey/sigrecette2/commit/4f523141a157f73f9caf8ce6af414d677ed5dc85))
+* bug of validation when star_no and end_no is null ([8cca0a9](https://github.com/mcwakey/sigrecette2/commit/8cca0a9dd2309d114ee063c96509ba9f6dc6d98f))
+* en attente de validation ([5a1d80c](https://github.com/mcwakey/sigrecette2/commit/5a1d80c856de46733de1e701bf7dda38a53d3f34))
+* end of temp fix ([ce06c5c](https://github.com/mcwakey/sigrecette2/commit/ce06c5c817e483f5829f18958f37f97d046d7f37))
+* error createdBy ([903bfc5](https://github.com/mcwakey/sigrecette2/commit/903bfc570f93520ade6e48551c557d08351a873b))
+* IV error on validator ([a42cb28](https://github.com/mcwakey/sigrecette2/commit/a42cb280029c4180be7a52e8cf8deec43fda34e4))
+* key name ([79a7dcb](https://github.com/mcwakey/sigrecette2/commit/79a7dcb3a41fc6e86e8907929e50854de0b0fd60))
+* mobile taxpayes to contribuables en attente de validation ([4d77823](https://github.com/mcwakey/sigrecette2/commit/4d7782312747c1d92a65826e1d5e2b2ec60cae6e))
+* some bug ([9f3e1f0](https://github.com/mcwakey/sigrecette2/commit/9f3e1f0ab3d08eb249ed0bb60d98d0e5f629dddf))
+* stock transfert deposit not save ([a21d6a7](https://github.com/mcwakey/sigrecette2/commit/a21d6a74b887f30a70fb58e5c1de29fe2bbce484))
+* taxpayer datable query ([b548792](https://github.com/mcwakey/sigrecette2/commit/b548792e008d5aadf01114b1014da4359997eec0))
+* taxpayer delete on mobile app ([4727c8a](https://github.com/mcwakey/sigrecette2/commit/4727c8a1df64b16f3332eb24337f3520a962e37c))
+* taxpayer diable feature bug fixed ([08bdb23](https://github.com/mcwakey/sigrecette2/commit/08bdb234f9e6424bece606a4790bbd0cac0eb7c6))
+* taxpayer disable feature bug fixed ([8dff8a5](https://github.com/mcwakey/sigrecette2/commit/8dff8a5b8463c8d72b808962beebd6e627439707))
+* taxpayers dataTable render and stats ([d771b93](https://github.com/mcwakey/sigrecette2/commit/d771b939a90bed01d9dc9ee4fd8e16815bc9004b))
+* taxpayersdataTable query ([ea2d5d5](https://github.com/mcwakey/sigrecette2/commit/ea2d5d5982ca21706edff9d48a860caf13201419))
+* validation bug ([943a6f7](https://github.com/mcwakey/sigrecette2/commit/943a6f7a00c22f515a5737120857ecdf12d04692))
+* validation not secure on IV gestion ([3af0ce9](https://github.com/mcwakey/sigrecette2/commit/3af0ce9f79cfd9397a1e4a39f15c86d93e45647c))
+
 ### 0.8.10 (2024-11-04)
 
 
