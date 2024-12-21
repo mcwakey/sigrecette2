@@ -12,7 +12,7 @@ class CommunesController extends Controller
      */
     public function index(CommuneDataTable $dataTable)
     {
-        return $dataTable->render('pages/communes.list');
+        return $dataTable->render('pages/communes.list',['commune'=>Commune::first()]);
     }
     /**
      * Show the form for creating a new resource.

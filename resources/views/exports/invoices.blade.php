@@ -321,14 +321,39 @@
 
                 </td>
                 <td class="">
-                    <p><span
-                            class="write"> </span></p>
+                    <div class="text-center mb-6">
+                        @if($commune->url)
+                            <img src="{{ $qrcodeSvg }}" alt="QR Code" style="width: 90px; height: auto;">
+                        @endif
+                    </div>
                 </td>
                 <td class="">
 
                 </td>
                 <td class="">
                     <p><span> </span></p>
+                </td>
+            </tr>
+            <tr style="margin-top: 5px" >
+                <td class="">
+
+                </td>
+                <td class="">
+
+                </td>
+                <td class="">
+                </td>
+                <td class="">
+
+                </td>
+                <td class="">
+
+                </td>
+                <td class="">
+
+                </td>
+                <td class="">
+
                 </td>
             </tr>
         </table>
@@ -340,6 +365,7 @@
                 est délivrée à la réception des espèces, du
                 chèque ou de l’ordre de virement par le Régisseur de recettes.</p>
         @endif
+
     </div>
 </div>
 

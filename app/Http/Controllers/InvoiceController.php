@@ -3,10 +3,12 @@ namespace App\Http\Controllers;
 use App\DataTables\InvoicesDataTable;
 use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
+use App\Models\Commune;
 use App\Models\Invoice;
 use App\Models\TaxLabel;
 use App\Models\Year;
 use App\Models\Zone;
+use App\Services\QrcodeGeneratorService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -85,9 +87,13 @@ class InvoiceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Invoice $invoice, InvoicesDataTable $dataTable)
+    public function show(Invoice $invoice, QrcodeGeneratorService $qrcodeGeneratorService)
     {
-        return $dataTable->render('pages/invoices.show', ['invoice' => $invoice]);
+        return view('exports/invoices', [
+            'data' => $invoice,
+            'action' => 1, "commune" => Commune::first(),
+            'qrcodeSvg' =>$qrcodeGeneratorService->generate(route('invoices.show', [ $invoice]))
+        ]);
     }
     /**
      * Show the form for editing the specified resource.

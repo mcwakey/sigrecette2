@@ -1,5 +1,5 @@
 <?php
-namespace App\Helpers;
+namespace App\Services;
 use App\Contracts\PdfGeneratorInterface;
 use App\Enums\InvoiceStatusEnums;
 use App\Enums\PrintNameEnums;
@@ -17,9 +17,10 @@ use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
 use ZipArchive;
 
-class PdfGenerator implements PdfGeneratorInterface
+class PdfGeneratorService implements PdfGeneratorInterface
 {
-    public function __construct(public Commune|null $commune = null)
+    public function __construct(private  Commune|null $commune = null,
+                                private  QrcodeGeneratorService $qrcodeGeneratorService)
     {
         $this->commune = Commune::first();
     }
@@ -37,6 +38,9 @@ class PdfGenerator implements PdfGeneratorInterface
             return strcmp($codeA, $codeB);
         });
         if ($data && count($data) == 1 && $this->checkIfCommuneIsNotNull()) {
+            /**
+             * @var Invoice $data
+             */
             $default_invoice = $data[0];
             if ($action == 2 || (intval($default_invoice->invoice_no) !== $default_invoice->id)) {
                 $action = 2;
@@ -47,13 +51,20 @@ class PdfGenerator implements PdfGeneratorInterface
                 $action = 1;
                 $pdf = PDF::loadView(
                     "exports." . $templateName,
-                    ['data' => $default_invoice, 'action' => $action, "commune" => $this->commune])
+                    ['data' => $default_invoice, 'action' => $action, "commune" => $this->commune,
+                    'qrcodeSvg' =>$this->qrcodeGeneratorService->generate(
+                        route('invoices.show', [$default_invoice]),
+                        $this->commune->getImageUrlAttribute()
+                    )])
                     ->stream($filename);
                 $invoice = $default_invoice;
             } else {
                 $pdf = PDF::loadView(
                     "exports." . $templateName,
-                    ['data' => $default_invoice, 'action' => $action, 'invoice' => $invoice, "commune" => $this->commune])
+                    ['data' => $default_invoice, 'action' => $action,
+                        'invoice' => $invoice,
+                        "commune" => $this->commune,
+                     'qrcodeSvg' =>$this->qrcodeGeneratorService->generate($invoice->invoice_no)])
                     ->stream($filename);
             }
             if (isset($invoice) && $invoice->edition_state == null) {

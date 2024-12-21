@@ -1,10 +1,10 @@
 <?php
 namespace App\Http\Controllers;
 use App\DataTables\PrintablesDataTable;
-use App\Helpers\PdfGenerator;
 use App\Models\Invoice;
 use App\Models\PrintFile;
 use App\Models\User;
+use App\Services\PdfGeneratorService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
@@ -12,7 +12,7 @@ use ZipArchive;
 
 class PrintController extends Controller
 {
-    public function __construct(private PdfGenerator $pdfGenerator)
+    public function __construct(private PdfGeneratorService $pdfGenerator)
     {
     }
     public function index(PrintablesDataTable $printablesDataTable)
@@ -114,7 +114,6 @@ class PrintController extends Controller
             foreach ($uuid as $invoiceUid){
                 $result =$this->pdfGenerator->generateInvoicePdf([$invoiceUid],'invoices',$action);
                 if($result['success']){
-                    $filename = "invoice_{$invoiceUid}_" . date('Ymd_His') . ".pdf";
                     $zip->addFromString($result['filename'], $result['pdf']);
                 }else {
                     \Log::warning("Impossible de générer le PDF pour l'UUID: {$invoiceUid}");
