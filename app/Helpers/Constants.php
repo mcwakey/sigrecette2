@@ -37,10 +37,12 @@ class Constants
     const EXPORT_TAXPAYER_KEY = "contribuables";
     const EXPORT_INVOICE_KEY = "avis";
     const EXPORT_PAYMENT_KEY = "recouvrement";
+    const EXPORT_TAXPAYERTAXABLE_KEY="taxation";
     const EXPORT_VALIDATION_MAP = [
         self::EXPORT_TAXPAYER_KEY => ExportTypeEnums::TAXPAYER,
         self::EXPORT_INVOICE_KEY => ExportTypeEnums::INVOICE,
         self::EXPORT_PAYMENT_KEY => ExportTypeEnums::PAYMENT,
+        self::EXPORT_TAXPAYERTAXABLE_KEY => ExportTypeEnums::TAXPAYER_TAXABLE
     ];
     const INVOICE_STATE_VALIDATION_MAP = [
         self::INVOICE_STATE_DRAFT_KEY => InvoiceStatusEnums::DRAFT,

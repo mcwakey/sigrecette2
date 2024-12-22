@@ -88,16 +88,6 @@ class AddInvoiceNoTaxpayerModal extends Component
         // 'taxpayer_id' => 'required',
         'amount' => 'required|numeric',
         'id_type' => "required",
-        // 'notes' => 'required',
-        // 'telephone' => 'required|string|min:10|max:10',
-        // 'longitude' => 'nullable',
-        // 'latitude' => 'nullable',
-        // 'canton' => 'required',
-        // 'town' => 'required',
-        // 'erea' => 'required',
-        // 'address' => 'required|string',
-        // 'zone_id' => 'required',
-        // 'avatar' => 'nullable|sometimes|image|max:1024',
     ];
     protected $listeners = [
         'delete_user' => 'deleteUser',
@@ -215,12 +205,7 @@ class AddInvoiceNoTaxpayerModal extends Component
                 'ii_seize' => $this->s_seize,
             ];
             InvoiceItem::create($invoiceItemsData);
-            $paymentData = [
-                'invoice_id' => $invoice->id,
-                'amount' => $this->amount,
-                'payment_type' => $this->payment_type,
-                'reference' => $this->reference,
-            ];
+           // $paymentData = ['invoice_id' => $invoice->id, 'amount' => $this->amount, 'payment_type' => $this->payment_type, 'reference' => $this->reference,];
             $this->dispatchMessage('Avis au comptant');
         });
         // Reset form fields after successful submission

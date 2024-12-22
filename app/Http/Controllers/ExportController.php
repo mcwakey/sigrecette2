@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 use App\DataTables\ExportInvoicesDataTable;
 use App\DataTables\ExportRecoveriesDataTable;
 use App\DataTables\ExportTaxpayersDataTable;
+use App\DataTables\ExportTaxpayerTaxablesDataTable;
 use App\Enums\ExportTypeEnums;
 use App\Helpers\Constants;
 use App\Models\Activity;
@@ -20,7 +21,11 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 class ExportController extends Controller
 {
-    public function index(Request $request, ExportTaxpayersDataTable $exportTaxpayersDataTable, ExportInvoicesDataTable $exportInvoicesDataTable, ExportRecoveriesDataTable $exportRecoveriesDataTable)
+    public function index(Request $request,
+                          ExportTaxpayersDataTable $exportTaxpayersDataTable,
+                          ExportInvoicesDataTable $exportInvoicesDataTable,
+                          ExportRecoveriesDataTable $exportRecoveriesDataTable,
+    ExportTaxpayerTaxablesDataTable $exportTaxpayerTaxablesDataTable,)
     {
         $year = Year::getActiveYear()->name;
         $validatedData = $request->validate([
@@ -60,7 +65,17 @@ class ExportController extends Controller
                     'endDate' => $endDate,
                 ]
             )->render('pages/export.invoices.list', ['zones' => $zones, 'tax_labels' => $tax_labels]);
-        } else {
+        } elseif ($export_type == ExportTypeEnums::TAXPAYER_TAXABLE){
+            $startDate = $validatedData['s_date'] ?? Carbon::parse("{$year}-01-01 00:00:00");
+            $endDate = $validatedData['e_date'] ?? Carbon::parse("{$year}-12-31 23:59:59");
+            return $exportTaxpayerTaxablesDataTable->with(
+                [
+                    'startDate' => $startDate,
+                    'endDate' => $endDate,
+                ]
+            )->render('pages/export.taxpayer_taxables.list', []);
+        }
+        else {
             $startDate = $validatedData['s_date'] ?? Carbon::parse("{$year}-01-01 00:00:00");
             $endDate = $validatedData['e_date'] ?? Carbon::parse("{$year}-12-31 23:59:59");
             return $exportRecoveriesDataTable->with(

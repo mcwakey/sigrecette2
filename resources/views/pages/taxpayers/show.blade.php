@@ -251,8 +251,6 @@
 
 
                         </div>
-                        <!--end::Card header-->
-                        <!--begin::Card body-->
                         <div class="card">
 
                             <div class="card-header border-0 pt-6">
@@ -282,10 +280,6 @@
 
                                     <form action="#">
                                         <div class="collapse" id="kt_advanced_search_form">
-                                            <!--begin::Separator-->
-                                            <!-- <div class="separator separator-dashed mt-5 mb-5"></div> -->
-                                            <!--end::Separator-->
-                                            <!--begin::Row-->
                                             <div class="row mb-8">
                                                 <!--begin::Col-->
                                                 <!-- <div class="col-xxl-6"> -->
@@ -619,8 +613,7 @@
 
             let taxpayer = @json($taxpayer); // Convert Laravel object to JSON
 
-            // Log the taxpayer data to the console
-            console.log('Taxpayer data:', taxpayer);
+
 
             // Check if taxpayer has latitude and longitude properties
             if (taxpayer.latitude && taxpayer.longitude) {
@@ -774,8 +767,6 @@
                         }
 
                     } else {
-                        // Log a message when there is missing or invalid latitude or longitude
-                        console.log('taxpayer_taxable does not have valid latitude or longitude:', taxpayer_taxable);
                     }
                 });
             }
