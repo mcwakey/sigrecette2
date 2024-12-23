@@ -1,11 +1,13 @@
 <?php
 namespace App\Http\Controllers;
 use App\DataTables\PrintablesDataTable;
+use App\Helpers\Constants;
 use App\Models\Invoice;
 use App\Models\PrintFile;
 use App\Models\User;
 use App\Services\PdfGeneratorService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use ZipArchive;
@@ -102,27 +104,43 @@ class PrintController extends Controller
                 return $this->pdfGenerator->generateInvoicePdf($data, 'invoices', $action);
         }
     }
-    public function downloadMultipleInvoicePdf(int $action = null): \Symfony\Component\HttpFoundation\BinaryFileResponse
+    public function downloadMultipleInvoicePdf(Request $request,int $action = null,): \Symfony\Component\HttpFoundation\BinaryFileResponse|RedirectResponse
     {
-        $uuid = Invoice::getPrintableUuid();
         $zip = new ZipArchive();
-        $zipFileName = storage_path('app/public/multiples_pdf.zip');
+        $zipFileName = storage_path('app/public/multiples_avis.zip');
+        $previousUrl = url()->previous();
+        $urlParts = parse_url($previousUrl);
+        $state = null;
+        parse_str($urlParts['query'] ?? '', $queryParams);
+        if (isset($queryParams['state']) && array_key_exists($queryParams['state'], Constants::INVOICE_STATE_PRINTABLE_MAP)) {
+            $state = Constants::INVOICE_STATE_PRINTABLE_MAP[$queryParams['state']];
+        }
+        if($state){
+            $uuid = Invoice::getPrintableUuid($state);
+        }else{
+        $uuid = Invoice::getPrintableUuid();
+        }
         if (file_exists($zipFileName)) {
             unlink($zipFileName);
         }
-        if ($zip->open($zipFileName, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
-            foreach ($uuid as $invoiceUid){
-                $result =$this->pdfGenerator->generateInvoicePdf([$invoiceUid],'invoices',$action);
-                if($result['success']){
-                    $zip->addFromString($result['filename'], $result['pdf']);
-                }else {
-                    \Log::warning("Impossible de générer le PDF pour l'UUID: {$invoiceUid}");
+        if(count($uuid)==0){
+            return back()->with('error','no Data');
+        }else{
+            if ($zip->open($zipFileName, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+                foreach ($uuid as $invoiceUid){
+                    $result =$this->pdfGenerator->generateInvoicePdf([$invoiceUid],'invoices',$action);
+                    if($result['success']){
+                        $zip->addFromString($result['filename'], $result['pdf']);
+                    }else {
+                        \Log::warning("Impossible de générer le PDF pour l'UUID: {$invoiceUid}");
+                    }
                 }
+                $zip->close();
+            }else {
+                abort(500, "Impossible de créer l'archive ZIP.");
             }
-            $zip->close();
-        }else {
-            abort(500, "Impossible de créer l'archive ZIP.");
+            return response()->download($zipFileName)->deleteFileAfterSend(true);
         }
-        return response()->download($zipFileName)->deleteFileAfterSend(true);
+
     }
 }

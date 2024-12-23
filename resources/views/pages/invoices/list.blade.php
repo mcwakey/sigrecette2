@@ -591,6 +591,7 @@ $filters = [
                         addPrintMenuItem('{{ __('Imprimer tous les avis') }}', '00');
                     }
                     else if(  selectedValue ==="{{ App\Enums\InvoiceStatusEnums::PENDING}}" && !aucomptant){
+                        addPrintMenuItem('{{ __('Imprimer tous les avis') }}', '00');
                         addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
                         addPrintMenuItem('{{ __('Bordereau journal des avis de réduction ou d’annulation') }}', '2');
                         agentDiv.classList.add( "d-none")

@@ -51,6 +51,10 @@ class Constants
         self::INVOICE_STATE_REJECT_KEY => InvoiceStatusEnums::REJECTED,
         self::INVOICE_STATE_APPROVE_KEY => InvoiceStatusEnums::APPROVED,
     ];
+    const INVOICE_STATE_PRINTABLE_MAP = [
+        self::INVOICE_STATE_ACCEPTED_KEY => InvoiceStatusEnums::ACCEPTED,
+        self::INVOICE_STATE_PENDING_KEY => InvoiceStatusEnums::PENDING,
+    ];
     const PAYMENT_STATE_VALIDATION_MAP = [
         self::PAYMENT_STATE_PENDING_KEY => InvoiceStatusEnums::PENDING,
         self::PAYMENT_STATE_CANCEL_KEY => PaymentStatusEnums::CANCELED,

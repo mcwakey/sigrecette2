@@ -136,8 +136,8 @@
         <td colspan="4" style="border: none; margin: 5;padding: 5;"> Le Régisseur</td>
     </tr>
     <tr>
-        <td colspan="4" style="border: none; margin: 5;padding: 5;"> [Signature, nom]</td>
-        <td colspan="4" style="border: none; margin: 5;padding: 5;">[Signature, nom]</td>
+        <td colspan="4" style="border: none; margin: 5;padding: 5;">______ </td>
+        <td colspan="4" style="border: none; margin: 5;padding: 5;">______</td>
     </tr>
 
 </table>

@@ -261,9 +261,11 @@ trait InvoiceTrait
         return $query
             ->get();
     }
-    public static function getPrintableUuid(): array
+    public static function getPrintableUuid(string $status=InvoiceStatusEnums::ACCEPTED): array
     {
-       return Invoice::where('invoices.status', InvoiceStatusEnums::ACCEPTED)->pluck('uuid')
+       return Invoice::where('invoices.status', $status)
+           ->where('invoices.type', '=', Constants::TITRE)
+           ->pluck('uuid')
            ->toArray();
     }
 }

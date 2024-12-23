@@ -105,6 +105,7 @@ class InvoicesDataTable extends DataTable
         if ($this->type != null) {
             $query->where('invoices.type', '=', $this->type);
         }
+        //else{$query->where('invoices.type', '=', Constants::TITRE);}
         if ($this->startInvoiceId !== null && $this->endInvoiceId !== null) {
             $query->whereBetween('invoices.id', [$this->startInvoiceId, $this->endInvoiceId]);
         }

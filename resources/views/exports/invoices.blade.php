@@ -200,22 +200,21 @@
                 class="write">{{$data->order_no}}</p>
 
 
-        <table >
+        <table  style="border-collapse: collapse; width: 100%;">
 
             <tr>
-                <th>Matière taxable</th>
-                <th>Nom de la Taxation</th>
-                <th>Unité d’assiette</th>
-                <th>Valeur d’assiette</th>
-                <th>Tarif (FCFA)</th>
-                <th>Nombre de taxation par an</th>
-                <th>Somme due</th>
+                <th style="border: 1px solid black;">Matière taxable</th>
+                <th style="border: 1px solid black;">Nom de la Taxation</th>
+                <th style="border: 1px solid black;width: 8%;">Unité d’assiette</th>
+                <th style="border: 1px solid black;width: 8%;">Valeur d’assiette</th>
+                <th style="border: 1px solid black;">Tarif (FCFA)</th>
+                <th style="border: 1px solid black; width: 8%;">Nombre de taxation par an</th>
+                <th colspan="7" style="border: 1px solid black; width: 20%;">Somme due</th>
             </tr>
-
 
             @if($action==2)
                 <tr>
-                    <th colspan="7">Tableau de l’ancien décompte</th>
+                    <th colspan="13" style="border: 1px solid black;">Tableau de l’ancien décompte</th>
                 </tr>
                 @php
                     $last_code=0;
@@ -226,29 +225,29 @@
                             $last_code= $item->taxpayer_taxable->taxable->tax_label->code;
                         @endphp
                         <tr>
-                            <th colspan="3">Libellé de la
+                            <th colspan="4" style="border: 1px solid black;">Libellé de la
                                 recette:{{$item->taxpayer_taxable->taxable->tax_label->name}} </th>
-                            <th colspan="4">Imputation budgétaire
+                            <th colspan="9" style="border: 1px solid black;">Imputation budgétaire
                                 : {{$item->taxpayer_taxable->taxable->tax_label->code}}</th>
                         </tr>
 
                     @endif
                     <tr>
-                        <td style="text-align: center">{{$item->taxpayer_taxable->taxable->name}}</td>
-                        <td style="text-align: center">{{$item->taxpayer_taxable->name}}</td>
-                        <td style="text-align: center"> {{$item->taxpayer_taxable->taxable->unit}}</td>
-                        <td style="text-align: center">{{$item->ii_seize}}</td>
-                        <td style="text-align: center">{{format_amount($item->ii_tariff)}}</td>
-                        <td style="text-align: center">{{$item->qty}}</td>
-                        <td style="text-align: center">{{format_amount($item->amount) }}</td>
+                        <td style="text-align: center;; border: 1px solid black;">{{$item->taxpayer_taxable->taxable->name}}</td>
+                        <td style="text-align: center; border: 1px solid black;">{{$item->taxpayer_taxable->name}}</td>
+                        <td style="text-align: center; border: 1px solid black;"> {{$item->taxpayer_taxable->taxable->unit}}</td>
+                        <td style="text-align: center; border: 1px solid black;">{{$item->ii_seize}}</td>
+                        <td style="text-align: center; border: 1px solid black;">{{format_amount($item->ii_tariff)}}</td>
+                        <td style="text-align: center; border: 1px solid black;">{{$item->qty}}</td>
+                        <td colspan="7" style="text-align: center; border: 1px solid black;">{{format_amount($item->amount) }}</td>
                     </tr>
                 @endforeach
                 <tr>
-                    <th colspan="6" style="text-align: right;">Total:</th>
-                    <td style="text-align: center;">{{ format_amount($invoice->amount) }}</td>
+                    <th colspan="6" style="text-align: right;  border: 1px solid black;">Total:</th>
+                    <td colspan="7" style="text-align: center;  border: 1px solid black;">{{ format_amount($invoice->amount) }}</td>
                 </tr>
                 <tr>
-                    <th colspan="7">Tableau du nouveau décompte</th>
+                    <th colspan="13" >Tableau du nouveau décompte</th>
                 </tr>
             @endif
             @php
@@ -260,29 +259,28 @@
                         $last_code= $item->taxpayer_taxable->taxable->tax_label->code;
                     @endphp
                     <tr>
-                        <th colspan="4">Libellé de la
+                        <th colspan="4" style="border: 1px solid black;">Libellé de la
                             recette:{{$item->taxpayer_taxable->taxable->tax_label->name}} </th>
-                        <th colspan="4">Imputation budgétaire
+                        <th colspan="9" style="border: 1px solid black;">Imputation budgétaire
                             : {{$item->taxpayer_taxable->taxable->tax_label->code}}</th>
                     </tr>
 
                 @endif
                 <tr>
-                    <td style="text-align: center">{{$item->taxpayer_taxable->taxable->name}}</td>
-                    <td style="text-align: center">{{$item->taxpayer_taxable->name}}</td>
-                    <td style="text-align: center"> {{$item->taxpayer_taxable->taxable->unit}}</td>
-                    <td style="text-align: center">{{$item->ii_seize}}</td>
-                    <td style="text-align: center">{{$item->ii_tariff}}</td>
-                    <td style="text-align: center">{{$item->qty}}</td>
-                    <td style="text-align: center">{{format_amount($item->amount)}}</td>
+                    <td style="text-align: center;; border: 1px solid black;">{{$item->taxpayer_taxable->taxable->name}}</td>
+                    <td style="text-align: center;; border: 1px solid black;">{{$item->taxpayer_taxable->name}}</td>
+                    <td style="text-align: center;; border: 1px solid black;"> {{$item->taxpayer_taxable->taxable->unit}}</td>
+                    <td style="text-align: center;; border: 1px solid black;">{{$item->ii_seize}}</td>
+                    <td style="text-align: center;; border: 1px solid black;">{{$item->ii_tariff}}</td>
+                    <td style="text-align: center;; border: 1px solid black;">{{$item->qty}}</td>
+                    <td colspan="7" style="text-align: center;; border: 1px solid black;">{{format_amount($item->amount)}}</td>
                 </tr>
             @endforeach
 
             <tr>
-                <td colspan="6" style="text-align: right;"><strong>Total :</strong></td>
+                <td colspan="6" style="text-align: right; border: 1px solid black;"><strong>Total :</strong></td>
 
-                <td style="text-align: center;">{{format_amount($data->amount)}}</td>
-
+                <td colspan="7" style="text-align: center; border: 1px solid black;">{{format_amount($data->amount)}}</td>
 
             </tr>
 
