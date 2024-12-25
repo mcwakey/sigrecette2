@@ -3,6 +3,7 @@
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\Password;
 use App\Http\Controllers\Geolocation;
+use App\Http\Controllers\UserActivityController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\EnsureIsAdmin;
 use App\Http\Controllers\EreasController;
@@ -66,6 +67,8 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('/user-management/users', UserManagementController::class);
         Route::resource('/user-management/roles', RoleManagementController::class);
         Route::resource('/user-management/permissions', PermissionManagementController::class);
+        Route::get('/user-activity', [UserActivityController::class, 'index'])->name('user-activity.index');
+
     });
 
     Route::resource('/taxpayers', TaxpayerController::class);

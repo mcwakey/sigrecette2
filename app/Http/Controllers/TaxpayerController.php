@@ -14,7 +14,10 @@ use App\Models\Category;
 use App\Models\Taxpayer;
 use App\Models\Town;
 use App\Models\UserLogs;
+use App\Models\Year;
 use App\Models\Zone;
+use App\Services\StatisticsService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -57,22 +60,37 @@ class TaxpayerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Taxpayer $taxpayer, InvoicesDataTable $invoicesDataTable, RecoveriesDataTable $recoveriesDataTable, TaxpayerTaxablesDataTable $taxablesDataTable)
+    public function show(Taxpayer $taxpayer, InvoicesDataTable $invoicesDataTable,Request $request,
+                         RecoveriesDataTable $recoveriesDataTable, TaxpayerTaxablesDataTable $taxablesDataTable,
+    StatisticsService $statisticsService)
     {
         if($taxpayer->type ==Constants::INVOICE_TYPE_COMPTANT){
             return redirect()->back();
 
         }
+        $year = Year::getActiveYear()->name;
+        $validatedData = $request->validate([
+            's_date' => 'nullable|date_format:Y-m-d H:i:s',
+            'e_date' => 'nullable|date_format:Y-m-d H:i:s',
+        ]);
+        $startDate = $validatedData['s_date'] ?? Carbon::parse("{$year}-01-01 00:00:00");
+        $endDate = $validatedData['e_date'] ?? Carbon::parse("{$year}-12-31 23:59:59");
+        addVendors(['amcharts', 'amcharts-maps', 'amcharts-stock']);
         $taxpayerActionLog = UserLogs::where('taxpayer_id', $taxpayer->id)
             ->orderBy('id', 'desc')
             ->limit(10)
             ->get();
+        $superData = $statisticsService->getPaymentStats($startDate,$endDate,$taxpayer->id);
         return $taxablesDataTable->with('id', $taxpayer->id)
             ->render('pages/taxpayers.show', [
                 'taxpayer' => $taxpayer,
                 'taxpayerActionLog' => $taxpayerActionLog,
                 'invoicesDataTable' => $invoicesDataTable->with('id', $taxpayer->id)->html(),
                 'recoveriesDataTable' => $recoveriesDataTable->with('id', $taxpayer->id)->html(),
+                'payments' => $superData['payments'],
+                'totalMonthlyPayments' => $superData['totalMonthlyPayments'],
+                'totalOwing' => $superData['totalOwing'],
+                'paidPercentage' =>$superData['paidPercentage'],
             ]);
     }
     /**

@@ -345,32 +345,47 @@
                         </div>
                     </div>
 
-                    <!--end::Card-->
-                    <!--begin::Tasks-->
                     <div class="card card-flush mb-6 mb-xl-9">
-                        <!--begin::Card header-->
                         <div class="card-header mt-6">
-                            <!--begin::Card title-->
                             <div class="card-title flex-column">
                                 <h2 class="mb-1">{{ __('taxpayers geolocation') }}</h2>
                                 <div class="fs-6 fw-semibold text-muted">Long: {{ $taxpayer->longitude }} Lat:
                                     {{ $taxpayer->latitude }}</div>
                             </div>
                         </div>
-                        <!--end::Card header-->
-                        <!--begin::Card body-->
-
                         <div class="card-body d-flex flex-column">
-                            <!--begin::Item-->
                             <div class="card-body">
                                 <div id="location_map" class="w-100 rounded" style="height:350px"></div>
                             </div>
-                            <!--end::Item-->
                         </div>
-                        <!--end::Card body-->
+                    </div>
+                    <div class="card card-flush mb-6 mb-xl-9">
+                        <div class="card-header mt-6">
+                            <div class="card-title flex-column">
+                                <h2 class="mb-1">{{ __('Statistique sur les paiement du contribuables') }}</h2>
+                            </div>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <div class="kpi-container">
+                                <div class="kpi-card">
+                                    <h3>Total Paiements</h3>
+                                    <p id="totalMonthlyPayments">0 FCFA</p>
+                                </div>
+                                <div class="kpi-card" id="owingAlert">
+                                    <h3>Montant En attente</h3>
+                                    <p id="totalOwing">0 FCFA</p>
+                                </div>
+
+                                <div class="kpi-card">
+                                    <h3>Factures Payées (%)</h3>
+                                    <p id="paidPercentage">0%</p>
+                                </div>
+                            </div>
+
+                            <canvas id="paymentEvolutionChart"></canvas>
+                        </div>
                     </div>
 
-                    <!--end::Tasks-->
                 </div>
 
                 <!--end:::Tab pane-->
@@ -401,26 +416,17 @@
                                             class="form-control form-control-solid w-250px ps-13"
                                             placeholder="Rechercher un avis" id="mySearchInput1" />
                                     </div>
-                                    <!--end::Search-->
                                 </div>
 
                             </div>
-                            <!--end::Card header-->
-
-                            <!--begin::Card body-->
 
                             <div class="card-body pt-0 pb-5">
-                                <!--begin::Table wrapper-->
                                 <div class="table-responsive">
-                                    <!--begin::Table-->
                                 {{$invoicesDataTable->table()}}
-                                    <!--end::Table-->
                                 </div>
 
                             </div>
-                            <!--end::Card body-->
                         </div>
-                        <!--end::Card body-->
                     </div>
 
 
@@ -552,6 +558,41 @@
                 margin-right: 4px;
                 min-width: 20px;
             }
+            .kpi-container {
+                display: flex;
+                justify-content: space-around;
+                margin-bottom: 20px;
+            }
+
+            .kpi-card {
+                background-color: #f4f4f4;
+                border-radius: 10px;
+                padding: 15px;
+                text-align: center;
+                width: 30%;
+            }
+
+            .alert {
+                background-color: #ffcccc !important;
+                border: 1px solid red;
+            }
+
+            .kpi-card h3 {
+                margin: 0;
+                font-size: 1.2rem;
+                color: #333;
+            }
+
+            .kpi-card p {
+                margin: 10px 0 0;
+                font-size: 1.5rem;
+                font-weight: bold;
+            }
+            #paymentEvolutionChart {
+                max-width: 100%;
+                max-height: 500px;
+            }
+
         </style>
 
         <!--end::Content-->
@@ -564,7 +605,9 @@
 
 
     @push('scripts')
-        <script>
+
+
+            <script>
             var map_render = L.map('location_map').setView([8.2, 1.1], 8); // Set initial coordinates and zoom level
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
@@ -840,6 +883,103 @@
             // });
         </script>
 
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
+            <script>
 
-    @endpush
+                document.addEventListener('DOMContentLoaded', function () {
+                    const ctx = document.getElementById('paymentEvolutionChart').getContext('2d');
+
+                    const rawData = {!! json_encode($payments) !!};
+                    const totalOwingAmount = {!! json_encode($totalOwing) !!};
+                    const totalPaidPercentage = {!! json_encode($paidPercentage) !!};
+                    const totalMonthlyPayments = {!! json_encode($totalMonthlyPayments) !!};
+
+                    document.getElementById('totalMonthlyPayments').innerText = `${totalMonthlyPayments} FCFA`;
+                    document.getElementById('totalOwing').innerText = `${totalOwingAmount} FCFA`;
+                    document.getElementById('paidPercentage').innerText = `${totalPaidPercentage}%`;
+
+                    if (totalOwingAmount > 5000) {
+                        document.getElementById('owingAlert').classList.add('alert');
+                    }
+
+                    const labels = rawData.map(log => log.date);
+                    const dataCreate = rawData.map(log => log.total_create);
+                    const dataUpdate = rawData.map(log => log.total_update);
+
+                    const chart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [
+                                {
+                                    label: 'Paiements créés',
+                                    data: dataCreate,
+                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                    borderColor: 'rgba(54, 162, 235, 1)',
+                                    borderWidth: 2,
+                                    tension: 0.3,
+                                    fill: true
+                                },
+                                {
+                                    label: 'Paiements mis à jour',
+                                    data: dataUpdate,
+                                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                                    borderColor: 'rgba(255, 159, 64, 1)',
+                                    borderWidth: 2,
+                                    tension: 0.3,
+                                    fill: true
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: true,
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'top'
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        afterLabel: function (tooltipItem) {
+                                            const paymentCode = rawData[tooltipItem.dataIndex].payment_code;
+                                            return `Code: ${paymentCode}`;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Date'
+                                    }
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Nombre de paiements'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                });
+
+
+
+
+
+
+
+
+            </script>
+
+
+
+
+
+        @endpush
 </x-default-layout>

@@ -18,8 +18,13 @@ class DashboardController extends Controller
         $endDate = $validatedData['e_date'] ?? Carbon::parse("{$year}-12-31 23:59:59");
         addVendors(['amcharts', 'amcharts-maps', 'amcharts-stock']);
         $this->statisticsService = new StatisticsService();
+        //dd($this->statisticsService->getInvoiceByCreatedAt($startDate, $endDate)[0]);
         return view('pages/dashboards.index', [
             'stats' => $this->statisticsService->getStats(),
+            'taxpayer_by_created_at' => $this->statisticsService->getTaxpayerByCreatedAt($startDate, $endDate),
+            'invoice_by_created_at'=>$this->statisticsService->getInvoiceByCreatedAt($startDate, $endDate),
+            'payment_by_created_at'=>$this->statisticsService->getPaymentByCreatedAt($startDate, $endDate),
+            'payments_data'=>$this->statisticsService->getPaymentsEvolution(null,null),
             's_date' => $startDate,
             'e_date' => $endDate
         ]);

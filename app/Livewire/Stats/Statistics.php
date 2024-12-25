@@ -31,6 +31,7 @@ class Statistics extends Component
     {
         $startDate = Carbon::parse($this->startDate);
         $endDate = Carbon::parse($this->endDate);
+       // dd($this->statisticsService->getTaxpayerByCreatedAt($startDate, $endDate)[0]);
         return view('livewire.stats.statistics', [
             'invoice_count' => $this->statisticsService->getTotalRemainingToBeCollected($startDate, $endDate),
             'invoice_count_collected' => $this->statisticsService->getTotalCollected($startDate, $endDate),

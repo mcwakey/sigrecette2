@@ -23,6 +23,8 @@ use App\Models\Town;
 use App\Models\Year;
 use App\Models\Zone;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
+
 class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatisticsInterface
 {
     private Year $year;
@@ -284,6 +286,147 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
             'count_titre' => $count_titre,
         ];
     }
+    public function getTaxpayerByCreatedAt($startDate, $endDate): Collection
+    {
+
+
+        return Taxpayer::selectRaw('
+                DATE(taxpayers.created_at) as date,
+                COUNT(*) as total_create,
+                SUM(CASE WHEN taxpayers.updated_at > taxpayers.created_at THEN 1 ELSE 0 END) as total_update,
+
+                created_by,
+                MAX(users.name) as user_name
+            ')
+            ->leftJoin('users', 'users.id', '=', 'taxpayers.created_by')
+            ->whereBetween('taxpayers.created_at', [$startDate, $endDate])
+            ->whereNotNull('taxpayers.created_by')
+            ->groupBy('date', 'created_by')
+            ->orderBy('date', 'asc')
+            ->get();
+
+
+    }
+    public function getInvoiceByCreatedAt($startDate, $endDate,string $type=Constants::INVOICE_TYPE_TITRE): Collection
+    {
+
+
+        return Invoice::selectRaw('
+                DATE(invoices.created_at) as date,
+                COUNT(*) as total_create,
+                SUM(CASE WHEN invoices.updated_at > invoices.created_at THEN 1 ELSE 0 END) as total_update,
+                MAX(taxpayers.name) as name
+            ')
+            ->leftJoin('taxpayers', 'taxpayers.id', '=', 'invoices.taxpayer_id')
+            ->whereBetween('invoices.created_at', [$startDate, $endDate])
+           ->where('invoices.type', '=', $type)
+            ->groupBy('date', 'created_by')
+            ->orderBy('date', 'asc')
+            ->get();
+
+
+    }
+    public function getPaymentByCreatedAt($startDate, $endDate,string $type=Constants::INVOICE_TYPE_COMPTANT): Collection
+    {
+
+        return Payment::selectRaw('
+        DATE(payments.created_at) as date,
+        COUNT(*) as total_create,
+        MAX(payments.code) as most_frequent_payment_code,
+        MAX(taxpayers.name) as top_taxpayer
+    ')
+            ->leftJoin('taxpayers', 'taxpayers.id', '=', 'payments.taxpayer_id')
+            ->whereBetween('payments.created_at', [$startDate, $endDate])
+            ->where('payments.invoice_type', '=', $type)
+            ->groupBy('date')
+            ->orderBy('date', 'asc')
+            ->get();
+
+    }
+
+    public function getPaymentsEvolution($taxpayerId=null, $invoiceId = null)
+    {
+        $query = Payment::selectRaw('
+            DATE(payments.created_at) as date,
+            COUNT(*) as total_payments,
+            SUM(payments.amount) as total_amount,
+            invoices.pay_status as pay_status
+        ')
+            ->leftJoin('invoices', 'invoices.id', '=', 'payments.invoice_id')
+            ->leftJoin('taxpayers', 'taxpayers.id', '=', 'invoices.taxpayer_id')
+            ->groupBy('date', 'invoices.pay_status')
+            ->orderBy('date', 'asc');
+
+        if($taxpayerId){
+            $query->where('taxpayers.id', '=', $taxpayerId);
+        }
+        if ($invoiceId) {
+            $query->where('invoices.id', $invoiceId);
+        }
+
+        return $query->get();
+    }
+    public function getPaymentStats($startDate, $endDate, $taxpayerId = null, $invoiceId = null): array
+    {
+        $query = Payment::selectRaw('
+            DATE(payments.created_at) as date,
+            COUNT(*) as total_create,
+            SUM(CASE WHEN payments.updated_at > payments.created_at THEN 1 ELSE 0 END) as total_update,
+            payments.invoice_id,
+            MAX(payments.code) as payment_code,
+            MAX(taxpayers.name) as name,
+            invoices.pay_status as pay_status
+        ')
+            ->leftJoin('taxpayers', 'taxpayers.id', '=', 'payments.taxpayer_id')
+            ->leftJoin('invoices', 'invoices.id', '=', 'payments.invoice_id')
+            ->whereBetween('payments.created_at', [$startDate, $endDate])
+        ->whereIn('invoices.status', [InvoiceStatusEnums::ACCEPTED, InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION]);
+
+        if ($taxpayerId) {
+            $query->where('payments.taxpayer_id', $taxpayerId);
+        }
+
+        if ($invoiceId) {
+            $query->where('payments.invoice_id', $invoiceId);
+        }
+
+        $query->groupBy('date', 'payments.invoice_id', 'invoices.pay_status')
+            ->orderBy('date', 'asc');
+
+        $payments = $query->get();
+
+        $totalMonthlyPayments = Payment::whereBetween('created_at', [$startDate, $endDate])
+            ->when($taxpayerId, fn($q) => $q->where('taxpayer_id', $taxpayerId))
+            ->sum('amount');
+
+        $totalOwing = Invoice::where('pay_status', InvoicePayStatusEnums::OWING)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereIn('invoices.status', [InvoiceStatusEnums::ACCEPTED, InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION])
+            ->when($taxpayerId, fn($q) => $q->where('taxpayer_id', $taxpayerId))
+            ->sum('amount');
+
+        $totalPaidCount = Invoice::where('pay_status', InvoicePayStatusEnums::PAID)
+            ->whereBetween('created_at', [$startDate, $endDate])
+          ->when($taxpayerId, fn($q) => $q->where('taxpayer_id', $taxpayerId))
+            ->count();
+
+        $totalInvoiceCount = Invoice::whereBetween('created_at', [$startDate, $endDate])
+           ->when($taxpayerId, fn($q) => $q->where('taxpayer_id', $taxpayerId))
+            ->count();
+
+        $paidPercentage = $totalInvoiceCount > 0
+            ? round(($totalPaidCount / $totalInvoiceCount) * 100, 2)
+            : 0;
+
+        return [
+            'payments' => $payments,
+            'totalMonthlyPayments' => $totalMonthlyPayments,
+            'totalOwing' => $totalOwing,
+            'paidPercentage' => $paidPercentage,
+        ];
+    }
+
+
     protected function getAllStatistics(): array
     {
         return [

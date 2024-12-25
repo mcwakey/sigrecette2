@@ -52,4 +52,8 @@
             </div>
 
         </div>
+    @include('pages.dashboards.widget_taxpayer_created')
+        @include('pages.dashboards.widget_invoice_created')
+        @include('pages.dashboards.widget_payment_created')
+
 </x-default-layout>

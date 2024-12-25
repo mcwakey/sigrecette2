@@ -818,6 +818,17 @@
                         </a>
                         <!--end:Menu link-->
                     </div>
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('user-management.user-activity.index') ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('user-management.user-activity.index')) }}">
+								<span class="menu-bullet">
+									<span class="bullet bullet-dot"></span>
+								</span>
+                            <span class="menu-title">{{ __("Statistiques d'utilisation") }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
                     <!--end:Menu item-->
                 </div>
                 <!--end:Menu sub-->
