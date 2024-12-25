@@ -10,7 +10,6 @@
     </div>
     <div class="card-body">
         <div class="chart-payment_taxpayer" style="position: relative; width: 100%; height: 400px;">
-            <canvas id="paymentChart"></canvas>
             <canvas id="paymentEvolutionChart"></canvas>
         </div>
     </div>
@@ -22,90 +21,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const ctx = document.getElementById('paymentChart').getContext('2d');
-
-            const rawData = {!! json_encode($payment_by_created_at) !!};
-
-            // Extraction des labels (dates) et des données
-            const labels = rawData.map(log => log.date);
-            const data = rawData.map(log => log.total_create);
-            const mostFrequentCodes = rawData.map(log => log.most_frequent_payment_code);
-            const topTaxpayers = rawData.map(log => log.top_taxpayer);
-
-            const chart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Total des paiements créés par jour',
-                        data: data,
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.3,
-                        pointRadius: 5,
-                        pointHoverRadius: 7
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top'
-                        },
-                        tooltip: {
-                            callbacks: {
-                                afterLabel: function (tooltipItem) {
-                                    const paymentCode = mostFrequentCodes[tooltipItem.dataIndex];
-                                    const taxpayer = topTaxpayers[tooltipItem.dataIndex];
-
-                                    return `Code de paiement fréquent : ${paymentCode}, Contribuable : ${taxpayer}`;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Date'
-                            },
-                            ticks: {
-                                maxRotation: 45,
-                                minRotation: 0
-                            }
-                        },
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Nombre de paiements'
-                            }
-                        }
-                    }
-                }
-            });
-        });
-
-
-
-
-
-
-
-    </script>
-
-    <script>
-        function initializeCharts() {
-
-        }
-        initializeCharts();
-    </script>
     <script>
 
 

@@ -23,7 +23,6 @@ class DashboardController extends Controller
             'stats' => $this->statisticsService->getStats(),
             'taxpayer_by_created_at' => $this->statisticsService->getTaxpayerByCreatedAt($startDate, $endDate),
             'invoice_by_created_at'=>$this->statisticsService->getInvoiceByCreatedAt($startDate, $endDate),
-            'payment_by_created_at'=>$this->statisticsService->getPaymentByCreatedAt($startDate, $endDate),
             'payments_data'=>$this->statisticsService->getPaymentsEvolution(null,null),
             's_date' => $startDate,
             'e_date' => $endDate
