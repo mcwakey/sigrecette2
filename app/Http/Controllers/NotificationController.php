@@ -30,7 +30,7 @@ class NotificationController extends Controller
         $notifId = $request->input('notif_id');
         $user = Auth::user();
         if ($notifId) {
-            $user->notifications->where('id', $notifId)->markAsRead();
+            $user->notifications->where('id', "=",$notifId)->markAsRead();
         }
         $userId = $user->id;
         $user = User::find($userId);

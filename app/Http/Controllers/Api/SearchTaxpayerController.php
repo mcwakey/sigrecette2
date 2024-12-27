@@ -18,15 +18,15 @@ class SearchTaxpayerController extends Controller
             $query->where('name', 'like', '%' . $taxpayerName . '%');
         }
         if ($mobilePhone) {
-            $query->where('mobilephone', $mobilePhone);
+            $query->where('mobilephone',"=", $mobilePhone);
         }
         if ($town) {
-            $query->where('town', $town);
+            $query->where('town',"=", $town);
         }
         if ($zoneName) {
             $zone = Zone::where('name', 'like', '%' . $zoneName . '%')->first();
             if ($zone) {
-                $query->where('zone_id', $zone->id);
+                $query->where('zone_id',"=", $zone->id);
             }
         }
         return SearchTaxpayerResource::collection($query->get());

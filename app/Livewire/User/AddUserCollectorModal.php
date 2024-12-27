@@ -36,7 +36,7 @@ class AddUserCollectorModal extends Component
     }
     public function submit()
     {
-        $role = Role::where('name', 'collecteur')->first();
+        $role = Role::where('name', "=",'collecteur')->first();
         if ($role) {
             $this->role = $role->name;
         }
