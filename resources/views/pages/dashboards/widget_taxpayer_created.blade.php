@@ -17,8 +17,6 @@
 </div>
 
 @push('scripts')
-
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
     <script>
@@ -27,7 +25,7 @@
 
             const rawData = {!! json_encode($taxpayer_by_created_at) !!};
 
-            // Préparation des données
+
             const labels = rawData.map(log => log.date);
             const dataCreate = rawData.map(log => log.total_create);
             const dataUpdate = rawData.map(log => log.total_update);

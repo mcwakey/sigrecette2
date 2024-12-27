@@ -18,8 +18,6 @@
 </div>
 
 @push('scripts')
-
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
     <script>
@@ -28,7 +26,6 @@
 
             const rawData = {!! json_encode($invoice_by_created_at) !!};
 
-            // Préparation des données
             const labels = rawData.map(invoice => invoice.date);
             const dataCreate = rawData.map(invoice => invoice.total_create);
             const dataUpdate = rawData.map(invoice => invoice.total_update);
@@ -66,7 +63,7 @@
             }));
 
             const chart = new Chart(ctx, {
-                type: 'line',
+                type: 'bar',
                 data: {
                     labels: labels,
                     datasets: datasets
@@ -87,6 +84,19 @@
                                     return `Contribuable : ${taxpayer}\nStatut : ${status}`;
                                 }
                             }
+                        },
+                        zoom: {
+                            pan: {
+                                enabled: true,
+                                mode: 'x'
+                            },
+                            zoom: {
+                                wheel: {
+                                    enabled: true
+                                },
+                                mode: 'x',
+                                speed: 0.1
+                            }
                         }
                     },
                     scales: {
@@ -94,6 +104,10 @@
                             title: {
                                 display: true,
                                 text: 'Date'
+                            },
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 0
                             }
                         },
                         y: {

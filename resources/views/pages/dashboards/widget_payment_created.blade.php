@@ -66,6 +66,7 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+
                     plugins: {
                         legend: {
                             display: true,
@@ -81,6 +82,19 @@
                                     return `🗓️ Date: ${date}\n💵 Paiements: ${paymentsOnDate}\n💰 Total: ${amount} FR CFA\n🔢 Code: ${paymentCode}`;
 
                                 }
+                            }
+                        },
+                        zoom: {
+                            pan: {
+                                enabled: true,
+                                mode: 'x'
+                            },
+                            zoom: {
+                                wheel: {
+                                    enabled: true
+                                },
+                                mode: 'x',
+                                speed: 0.1
                             }
                         }
                     },
