@@ -9,24 +9,25 @@ use App\Models\TaxLabel;
 use App\Models\Year;
 use App\Models\Zone;
 use App\Services\QrcodeGeneratorService;
+use App\Traits\HandlesDateFilters;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
 class InvoiceController extends Controller
 {
+    use  HandlesDateFilters;
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request, InvoicesDataTable $dataTable)
     {
-        $year = Year::getActiveYear()->name;
+        //dd(request()->all());
+        $this->handleDateFilters($request);
         $validatedData = $request->validate([
             'delivery' => ['nullable', 'string', Rule::in(Constants::INVOICE_DELIVERY_STATE_VALIDATION_MAP)],
             'startInvoiceId' => 'nullable|integer',
             'endInvoiceId' => 'nullable|integer',
-            's_date' => 'nullable|date_format:Y-m-d H:i:s',
-            'e_date' => 'nullable|date_format:Y-m-d H:i:s',
             'type' => ['nullable', 'string', Rule::in(array_keys(Constants::INVOICE_TYPE_VALIDATION_MAP))],
             'state' => ['nullable', 'string', Rule::in(array_keys(Constants::INVOICE_STATE_VALIDATION_MAP))],
             'to_paid' => ['nullable', 'integer', Rule::in([0, 1])],
@@ -38,11 +39,9 @@ class InvoiceController extends Controller
         $delivery = isset($validatedData['delivery']) ? $validatedData['delivery'] : null;
         $startInvoiceId = $validatedData['startInvoiceId'] ?? null;
         $endInvoiceId = $validatedData['endInvoiceId'] ?? null;
-        $startDate = $validatedData['s_date'] ?? Carbon::parse("{$year}-01-01 00:00:00");
-        $endDate = $validatedData['e_date'] ?? Carbon::parse("{$year}-12-31 23:59:59");
         $zones = Zone::all();
         $tax_labels = TaxLabel::all();
-        $role = Role::where('name', 'agent_recouvrement')->first();
+        $role = Role::where('name',"=", 'agent_recouvrement')->first();
         $agent_recouvrements = $role->users()->get();
         $invoice_id = isset($validatedData['invoice_id']) ? $validatedData['invoice_id'] : null;
         if ($invoice_id) {
@@ -60,8 +59,8 @@ class InvoiceController extends Controller
         return $dataTable->with(
             [
                 'delivery' => $delivery,
-                'startDate' => $startDate,
-                'endDate' => $endDate,
+                'startDate' => $this->s_date,
+                'endDate' => $this->e_date,
                 'startInvoiceId' => $startInvoiceId,
                 'endInvoiceId' => $endInvoiceId,
                 'type' => $type,

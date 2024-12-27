@@ -4,7 +4,7 @@
     <div class="card-header pt-5">
         <h3 class="card-title align-items-start flex-column">
             <span class="card-label fw-bold text-gray-900">Graphique - avis</span>
-            <span class="text-gray-500 mt-1 fw-semibold fs-6">Par date</span>
+            <span class="text-gray-500 mt-1 fw-semibold fs-6">Par date recouvrement</span>
         </h3>
         <!--end::Toolbar-->
     </div>
@@ -35,10 +35,10 @@
             const totalPayments = rawData.map(log => log.total_payments);
             const totalAmount = rawData.map(log => log.total_amount);
             const payStatuses = rawData.map(log => log.pay_status);
-
+            const mostFrequentCodes = rawData.map(log => log.payment_code);
             const colors = {
                 'OWING': 'rgba(255, 99, 132, 0.5)',
-                'PART PAID': 'rgba(255, 159, 64, 0.5)',
+                'PART PAID': 'rgba(255, 193, 7, 0.7)',
                 'PAID': 'rgba(75, 192, 192, 0.5)'
             };
 
@@ -76,8 +76,10 @@
                                 afterLabel: function (tooltipItem) {
                                     const date = labels[tooltipItem.dataIndex];
                                     const paymentsOnDate = totalPayments[tooltipItem.dataIndex];
+                                    const paymentCode = mostFrequentCodes[tooltipItem.dataIndex];
                                     const amount = totalAmount[tooltipItem.dataIndex];
-                                    return `Date : ${date}, Paiements : ${paymentsOnDate} ${amount}`;
+                                    return `🗓️ Date: ${date}\n💵 Paiements: ${paymentsOnDate}\n💰 Total: ${amount} FR CFA\n🔢 Code: ${paymentCode}`;
+
                                 }
                             }
                         }
