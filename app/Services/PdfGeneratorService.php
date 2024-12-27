@@ -28,7 +28,7 @@ class PdfGeneratorService implements PdfGeneratorInterface
     /**
      * @param int|null $action
      */
-    public function generateInvoicePdf(array $data, string $templateName, int $action = null): array
+    public function generateInvoicePdf(array $data, string $templateName, int $action = null,$is_relance=false): array
     {
 
         $data = Invoice::retrieveByUUIDs($data);
@@ -55,7 +55,8 @@ class PdfGeneratorService implements PdfGeneratorInterface
                     'qrcodeSvg' =>$this->qrcodeGeneratorService->generate(
                         route('invoices.show', [$default_invoice]),
                         $this->commune->getImageUrlAttribute()
-                    )])
+                    ),
+                    'is_relance'=>$is_relance,])
                     ->stream($filename);
                 $invoice = $default_invoice;
             } else {
@@ -64,7 +65,10 @@ class PdfGeneratorService implements PdfGeneratorInterface
                     ['data' => $default_invoice, 'action' => $action,
                         'invoice' => $invoice,
                         "commune" => $this->commune,
-                     'qrcodeSvg' =>$this->qrcodeGeneratorService->generate($invoice->invoice_no)])
+                     'qrcodeSvg' =>$this->qrcodeGeneratorService->generate($invoice->invoice_no)
+                        ,
+                        'is_relance'=>$is_relance,
+                    ])
                     ->stream($filename);
             }
             if (isset($invoice) && $invoice->edition_state == null) {

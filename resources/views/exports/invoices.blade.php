@@ -115,6 +115,19 @@
 
 
         }
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 120px;
+            color: rgba(255, 0, 0, 0.1);
+            font-weight: bold;
+            z-index: -1;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
     </style>
 </head>
 
@@ -122,6 +135,12 @@
 
 
 <div class="container avis-container">
+    @if(request()->routeIs('invoices.show'))
+    <div class="watermark">Avis Affichage</div>
+    @elseif($is_relance)
+        <div class="watermark">Relance</div>
+    @endif
+
     <table>
         <tr class="text-start">
             <td class="boder-div-blaw">

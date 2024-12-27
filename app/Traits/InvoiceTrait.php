@@ -268,4 +268,24 @@ trait InvoiceTrait
            ->pluck('uuid')
            ->toArray();
     }
+    public function canSubmitToRelaunch(): bool{
+        return $this->isInvoiceLastPaymentOlderThanThreeMonths($this->invoice_id);
+    }
+    public  function isInvoiceLastPaymentOlderThanThreeMonths($invoice_id,int $month=3): bool
+    {
+        $invoice = Invoice::find($invoice_id);
+
+        if (!$invoice || $invoice->pay_status === InvoicePayStatusEnums::PAID) {
+            return false;
+        }
+        $lastPayment = Payment::where('invoice_id', $invoice_id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+        if (!$lastPayment) {
+            return true;
+        }
+        return $lastPayment->created_at->lt(now()->subMonths($month));
+    }
+
+
 }

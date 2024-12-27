@@ -1,5 +1,6 @@
 <?php
 namespace App\Traits;
+use App\Enums\InvoicePayStatusEnums;
 use App\Enums\PaymentStatusEnums;
 use App\Helpers\Constants;
 use App\Models\Invoice;

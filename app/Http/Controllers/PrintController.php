@@ -100,6 +100,8 @@ class PrintController extends Controller
                 return $this->pdfGenerator->generateLedgersPdf('livre-journal-regie');
             case 15:
                 return $this->pdfGenerator->generateStateValueCollectorPdf($data, 'state-iv-regisseur', $action);
+            case 77:
+                return $this->pdfGenerator->generateInvoicePdf($data, 'invoices', $action,true);
             default:
                 return $this->pdfGenerator->generateInvoicePdf($data, 'invoices', $action);
         }
@@ -143,4 +145,5 @@ class PrintController extends Controller
         }
 
     }
+
 }
