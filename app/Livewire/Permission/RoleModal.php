@@ -31,7 +31,7 @@ class RoleModal extends Component
             return;
         }
         // Get the role by name.
-        $role = Role::where('name', $role_name)->first();
+        $role = Role::where('name',"=", $role_name)->first();
         if (is_null($role)) {
             $this->dispatch('error', 'Le role séléctioner [' . $role_name . '] est introuvable');
             return;

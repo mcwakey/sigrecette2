@@ -43,21 +43,21 @@ class SearchTaxpayersAndInvoiceAndTaxpayerTaxableController extends Controller
                 $queryTowns = Town::select('towns.*');
                 $queryGenders = Gender::select('genders.*');
                 $queryIdTypes = IdType::select('id_types.*');
-                $queryTaxlabels = TaxLabel::where('category', 'CATEGORY 1');
+                $queryTaxlabels = TaxLabel::where('category',"=", 'CATEGORY 1');
                 $queryTaxables = Taxable::join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
-                    ->where('category', 'CATEGORY 1')
+                    ->where('category',"=",'CATEGORY 1')
                     ->select('taxables.*');
-                $queryTaxpayers = Taxpayer::where('zone_id', $zone->id);
+                $queryTaxpayers = Taxpayer::where('zone_id',"=", $zone->id);
                 $queryTaxpayerTaxables = TaxpayerTaxable::join('taxpayers', 'taxpayer_taxables.taxpayer_id', '=', 'taxpayers.id')
-                    ->where('taxpayers.zone_id', $zone->id)
+                    ->where('taxpayers.zone_id',"=", $zone->id)
                     ->select('taxpayer_taxables.*');
                 $queryInvoices = Invoice::join('taxpayers', 'invoices.taxpayer_id', '=', 'taxpayers.id')
-                    ->where('taxpayers.zone_id', $zone->id)
-                    ->where('status', 'APPROVED')
-                    ->where('validity', 'VALID')
+                    ->where('taxpayers.zone_id',"=", $zone->id)
+                    ->where('status',"=",'APPROVED')
+                    ->where('validity',"=",'VALID')
                     ->select('invoices.*');
                 $queryPayments = Payment::join('taxpayers', 'payments.taxpayer_id', '=', 'taxpayers.id')
-                    ->where('taxpayers.zone_id', $zone->id)
+                    ->where('taxpayers.zone_id',"=",$zone->id)
                     ->select('payments.*');
             }
         }

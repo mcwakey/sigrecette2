@@ -81,7 +81,7 @@ class AutoInvoiceModal extends Component
                 ->join('taxables', 'taxables.id', '=', 'taxpayer_taxables.taxable_id')
                 ->where('taxpayers.zone_id', 'LIKE', '%' . ($this->zone ?? '') . '%')
                 ->where('taxables.tax_label_id', 'LIKE', '%' . ($this->taxlabel ?? '') . '%')
-                ->where('invoices.validity', 'EXPIRED')
+                ->where('invoices.validity', "=",'EXPIRED')
                 ->select('invoices.*')
                 ->get();
             foreach ($invoices as $invoice) {
@@ -146,7 +146,7 @@ class AutoInvoiceModal extends Component
         $this->name = $invoice->taxpayer->name;
         $this->tnif = $invoice->taxpayer->id;
         $this->zone = $invoice->taxpayer->zone->name;
-        $this->taxpayer_taxables = $taxpayer_taxables = InvoiceItem::where('invoice_id', $id)->get();
+        $this->taxpayer_taxables = $taxpayer_taxables = InvoiceItem::where('invoice_id',"=", $id)->get();
         foreach ($taxpayer_taxables as $index => $invoice_item) {
             if ($invoice_item->taxpayer_taxable->taxable->periodicity == "Mois") {
                 $period = 1;
@@ -184,7 +184,7 @@ class AutoInvoiceModal extends Component
         $this->button_mode = true;
         $this->invoice_id = '';
         $this->qty = '';
-        $this->taxpayer_taxables = $taxpayer_taxables = TaxpayerTaxable::where('taxpayer_id', $id)->where('billable', 1)->get();
+        $this->taxpayer_taxables = $taxpayer_taxables = TaxpayerTaxable::where('taxpayer_id',"=", $id)->where('billable', "=",1)->get();
         foreach ($taxpayer_taxables as $index => $taxable) {
             $this->taxpayer_taxable_id[$index] = $taxable->id;
             $this->taxpayer_taxable[$index] = $taxable->name;

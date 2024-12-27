@@ -16,7 +16,7 @@ class TaxLabel extends Model
     }
     public static function getNameByCode($code)
     {
-        $taxLabel = TaxLabel::where('code', $code)->first(); // Correction de la méthode first()
+        $taxLabel = TaxLabel::where('code', "=",$code)->first(); // Correction de la méthode first()
         return $taxLabel ? $taxLabel->name : "";
     }
 }

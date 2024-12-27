@@ -30,7 +30,7 @@ class AddEreaModal extends Component
     ];
     public function updatedCantonId($value)
     {
-        $this->towns = Town::where('canton_id', $value)->get(); // Load taxables based on tax label ID
+        $this->towns = Town::where('canton_id',"=", $value)->get(); // Load taxables based on tax label ID
     }
     public function render()
     {

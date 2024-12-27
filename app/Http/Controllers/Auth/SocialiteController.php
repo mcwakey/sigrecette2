@@ -14,7 +14,7 @@ class SocialiteController extends Controller
             // get user info from social site
             $user = Socialite::driver($provider)->stateless()->user();
             // check for existing user
-            $existingUser = User::where('email', $user->getEmail())->first();
+            $existingUser = User::where('email',"=", $user->getEmail())->first();
             if ($existingUser) {
                 auth()->login($existingUser, true);
                 return redirect()->to('/');

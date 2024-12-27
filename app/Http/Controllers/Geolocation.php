@@ -18,11 +18,11 @@ class Geolocation extends Controller
             'invoices'
         ]);
         if ($request->has('zone')) {
-            $taxpayers->where('zone_id', $request->zone);
+            $taxpayers->where('zone_id',"=", $request->zone);
         }
         if ($request->has('status')) {
             $taxpayers->whereHas('invoices', function ($invoiceQuery) use ($request) {
-                $invoiceQuery->where('pay_status', $request->invoice_status);
+                $invoiceQuery->where('pay_status',"=", $request->invoice_status);
             });
         }
         if ($request->has('taxpayer')) {

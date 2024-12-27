@@ -27,9 +27,9 @@ class Year extends Model
     {
         $currentYear = date('Y');
         $current_mounth = Carbon::now()->format('m');
-        $activeYear = Year::where('status', "ACTIVE")->first();
+        $activeYear = Year::where('status',"=", "ACTIVE")->first();
         if (!$activeYear) {
-            $activeYear = Year::where('name', $currentYear)->first() ?? Year::getCurrentYear();
+            $activeYear = Year::where('name',"=", $currentYear)->first() ?? Year::getCurrentYear();
             $activeYear->status = "ACTIVE";
             DB::transaction(function () use ($activeYear) {
                 $activeYear->save();
@@ -59,7 +59,7 @@ class Year extends Model
             'status' => "INACTIVE",
         ];
         Year::makeAllYearsInative();
-        $year = Year::where('name', $next_year)->first() ?? Year::create($data);
+        $year = Year::where('name',"=", $next_year)->first() ?? Year::create($data);
         $year->status = "ACTIVE";
         DB::transaction(function () use ($active_year, $year) {
             $year->save();
@@ -74,7 +74,7 @@ class Year extends Model
     public static function makeAllYearsInative()
     {
         DB::transaction(function () {
-            $activeYears = Year::where('status', "ACTIVE")->get();
+            $activeYears = Year::where('status',"=", "ACTIVE")->get();
             foreach ($activeYears as $year) {
                 $year->status = "INACTIVE";
                 $year->save();

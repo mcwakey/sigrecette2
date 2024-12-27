@@ -53,19 +53,19 @@ class SyncOutController extends Controller
                 $queryTaxables = Taxable::join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
                     ->where('category', 'LIKE', '%' . $categorieName . '%')
                     ->select('taxables.*');
-                $queryTaxpayers = Taxpayer::where('zone_id', $zone->id)
-                    ->where('type', Constants::TITRE)
-                    ->where('deleted_at', null);
+                $queryTaxpayers = Taxpayer::where('zone_id',"=", $zone->id)
+                    ->where('type',"=",Constants::TITRE)
+                    ->where('deleted_at', "=",null);
                 $queryTaxpayerTaxables = TaxpayerTaxable::join('taxpayers', 'taxpayer_taxables.taxpayer_id', '=', 'taxpayers.id')
-                    ->where('taxpayers.zone_id', $zone->id)
+                    ->where('taxpayers.zone_id', "=",$zone->id)
                     ->select('taxpayer_taxables.*');
                 $queryInvoices = Invoice::join('taxpayers', 'invoices.taxpayer_id', '=', 'taxpayers.id')
-                    ->where('taxpayers.zone_id', $zone->id)
-                    ->where('status', 'APPROVED')
-                    ->where('validity', 'VALID')
+                    ->where('taxpayers.zone_id',"=", $zone->id)
+                    ->where('status', "=",'APPROVED')
+                    ->where('validity', "=",'VALID')
                     ->select('invoices.*');
                 $queryPayments = Payment::join('taxpayers', 'payments.taxpayer_id', '=', 'taxpayers.id')
-                    ->where('taxpayers.zone_id', $zone->id)
+                    ->where('taxpayers.zone_id',"=", $zone->id)
                     ->select('payments.*');
             }
             return [

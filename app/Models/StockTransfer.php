@@ -58,7 +58,7 @@ class StockTransfer extends Model
                 DB::raw('stock_transfers.to_user_id AS to_user_id'),
                 DB::raw('stock_transfers.created_at AS created_at'),
                 DB::raw('stock_transfers.taxable_id AS taxable_id'))
-            ->where('stock_transfers.to_user_id', $id)
+            ->where('stock_transfers.to_user_id', "=",$id)
             ->orderBy('trans_id', 'desc');
         return $builder->get();
     }

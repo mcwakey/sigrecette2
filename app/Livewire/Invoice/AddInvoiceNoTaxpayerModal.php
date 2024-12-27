@@ -123,7 +123,7 @@ class AddInvoiceNoTaxpayerModal extends Component
     }
     public function updatedTaxlabelId($value)
     {
-        $this->taxables = Taxable::where('tax_label_id', $value)->get(); // Load taxables based on tax label ID
+        $this->taxables = Taxable::where('tax_label_id',"=", $value)->get(); // Load taxables based on tax label ID
         TaxLabel::find($value); // Load taxables based on tax label ID
         $this->taxable_id = null;
         $this->tariff = null;
@@ -235,7 +235,7 @@ class AddInvoiceNoTaxpayerModal extends Component
         $this->name = $invoice->taxpayer->name ?? '';
         $this->tnif = $invoice->taxpayer->id ?? '';
         $this->zone = $invoice->taxpayer->zone->name ?? '';
-        $this->taxpayer_taxables = $taxpayer_taxables = InvoiceItem::where('invoice_id', $id)->get();
+        $this->taxpayer_taxables = $taxpayer_taxables = InvoiceItem::where('invoice_id',"=", $id)->get();
         foreach ($taxpayer_taxables as $index => $invoice_item) {
             if ($invoice_item->taxpayer_taxable->taxable->periodicity == "Mois") {
                 $period = 1;

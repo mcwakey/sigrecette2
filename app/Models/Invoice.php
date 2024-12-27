@@ -132,7 +132,7 @@ class Invoice extends Model implements FormatDateInterface
     }
     public function processOnInvoicesByUser(string $roleName): Invoice
     {
-        $role = Role::where('name', $roleName)->first();
+        $role = Role::where('name', "=",$roleName)->first();
         if ($role) {
             $user = auth()->user();
             if ($user->hasRole($roleName)) {

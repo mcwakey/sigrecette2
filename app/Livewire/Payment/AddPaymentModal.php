@@ -92,7 +92,7 @@ class AddPaymentModal extends Component
         abort(403, 'Accès interdit');
         }
         $is_regisseur = false;
-        $role = Role::where('name', 'regisseur')->first();
+        $role = Role::where('name', "=",'regisseur')->first();
         if ($role) {
             /**@var App\Models\User $user */
             $user = auth()->user();

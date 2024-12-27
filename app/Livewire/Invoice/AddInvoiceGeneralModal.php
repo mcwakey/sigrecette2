@@ -57,7 +57,7 @@ class AddInvoiceGeneralModal extends Component
                 break;
             }
         }
-        TaxpayerTaxable::where('id', $taxpayerTaxableId)->update(['billable' => $value]);
+        TaxpayerTaxable::where('id', "=",$taxpayerTaxableId)->update(['billable' => $value]);
     }
     public function hhpaginationView()
     {

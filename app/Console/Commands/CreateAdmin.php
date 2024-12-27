@@ -29,7 +29,7 @@ class CreateAdmin extends Command
             $this->error('Veuillez fournir une adresse e-mail, un mot de passe et un nom complet valides.');
             return;
         }
-        if (User::where('email', $email)->exists()) {
+        if (User::where('email',"=", $email)->exists()) {
             $this->error('Un utilisateur avec cette adresse e-mail existe déjà.');
             return;
         }

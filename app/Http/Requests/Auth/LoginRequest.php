@@ -43,7 +43,7 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
         $credentials = $this->only('email', 'password');
-        $user = User::where('email', $credentials['email'])->first();
+        $user = User::where('email',"=", $credentials['email'])->first();
         if ($user && Hash::check($user->email, $user->password)) {
             $token = Password::createToken($user);
             throw ValidationException::withMessages([

@@ -44,11 +44,11 @@ class UserManagementController extends Controller
      */
     public function show(User $user)
     {
-        $userActionLog = UserLogs::where('user_id', $user->id)
+        $userActionLog = UserLogs::where('user_id',"=", $user->id)
             ->orderBy('id', 'desc')
             ->limit(3)
             ->get();
-        $passwordActionLog = PasswordActionLog::where('user_id', $user->id)->get();
+        $passwordActionLog = PasswordActionLog::where('user_id',"=", $user->id)->get();
         return view('pages/apps.user-management.users.show', ['user' => $user, 'userActionLog' => $userActionLog, 'passwordActionLog' => $passwordActionLog]);
     }
     /**

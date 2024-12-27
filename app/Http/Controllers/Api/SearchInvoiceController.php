@@ -12,10 +12,10 @@ class SearchInvoiceController extends Controller
         $zoneName = $request->input('zone', null);
         $quer_r = Invoice::query();
         if ($zoneName) {
-            $zone = Zone::where('name', $zoneName)->first();
+            $zone = Zone::where('name',"=", $zoneName)->first();
             if ($zone) {
                 $quer_r = $quer_r->whereHas('taxpayer', function ($query) use ($zone) {
-                    $query->where('zone_id', $zone->id);
+                    $query->where('zone_id',"=", $zone->id);
                 });
             } else {
                 return SearchInvoiceResource::collection(collect([]));

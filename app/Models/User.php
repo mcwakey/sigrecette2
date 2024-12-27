@@ -74,7 +74,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
     public static function getRegisseurName(): string
     {
-        $role = Role::where('name', 'regisseur')->first();
+        $role = Role::where('name', "=",'regisseur')->first();
         if ($role) {
             $user = $role->users()->first();
             return $user->name;

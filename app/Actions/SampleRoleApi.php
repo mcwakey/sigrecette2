@@ -60,7 +60,7 @@ class SampleRoleApi
         $orderColumn = $request->input('order.0.column', 0); // Get the order column index
         $orderDir = $request->input('order.0.dir', 'asc'); // Get the order direction (ASC or DESC)
         $query = User::whereHas('roles', function ($query) use ($role_id) {
-            $query->where('id', $role_id);
+            $query->where('id',"=", $role_id);
         })->with('roles');
         if ($searchValue) {
             $searchColumns = ['name'];

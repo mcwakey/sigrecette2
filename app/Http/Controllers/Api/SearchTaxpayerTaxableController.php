@@ -15,7 +15,7 @@ class SearchTaxpayerTaxableController extends Controller
             $zone = Zone::where('name', 'like', '%' . $zoneName . '%')->first();
             if ($zone) {
                 $quer_r = $quer_r->whereHas('taxpayer', function ($query) use ($zone) {
-                    $query->where('zone_id', $zone->id);
+                    $query->where('zone_id',"=", $zone->id);
                 });
             } else {
                 return SearchTaxpayerTaxableResource::collection(collect([]));

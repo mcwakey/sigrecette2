@@ -38,9 +38,9 @@ class TaxpayerImport implements ToModel, WithProgressBar, WithBatchInserts, With
             return null;
         }
         $existingTaxpayer = Taxpayer::where(
-            'name', $row['nom'] . " " . isset($row['prenoms']) ?? $row['prenoms']
+            'name',"=", $row['nom'] . " " . isset($row['prenoms']) ?? $row['prenoms']
         )
-            ->where('address', $row["adresse"])
+            ->where('address',"=", $row["adresse"])
             ->first();
         if ($existingTaxpayer) {
             return null;
