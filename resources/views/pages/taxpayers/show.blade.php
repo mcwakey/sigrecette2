@@ -817,8 +817,9 @@
 
 
         {{ $dataTable->scripts() }}
-        {{$invoicesDataTable->scripts()}}
             {{ $recoveriesDataTable->scripts()}}
+        {{$invoicesDataTable->scripts()}}
+
 
         <script>
 
@@ -829,7 +830,7 @@
                 window.LaravelDataTables['invoices-table'].column(0).visible(false);
                 window.LaravelDataTables['invoices-table'].column(16).search(taxpayer.id).draw();
                 window.LaravelDataTables['recoveries-table'].column(0).visible(false);
-                window.LaravelDataTables['recoveries-table'].column(8).search(taxpayer.id).draw();
+                window.LaravelDataTables['recoveries-table'].column(7).search(taxpayer.id).draw();
 
 
             })

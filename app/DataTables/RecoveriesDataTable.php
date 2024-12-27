@@ -5,7 +5,9 @@ use App\Helpers\Constants;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\Year;
+use App\Traits\HandlesTaxpayerFilters;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Route;
 use PHPUnit\TextUI\Configuration\Constant;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
@@ -17,6 +19,7 @@ use Yajra\DataTables\WithExportQueue;
 class RecoveriesDataTable extends DataTable
 {
     use WithExportQueue;
+    use HandlesTaxpayerFilters;
     /**
      * Build the DataTable class.
      *
@@ -59,6 +62,9 @@ class RecoveriesDataTable extends DataTable
     }
     public function query(Payment $model): QueryBuilder
     {
+
+        $this->id=$this->getTaxpayerId($this->id);
+
         $query = $model
             ->join('invoices', 'invoices.id', '=', 'payments.invoice_id')
             ->leftJoin('taxpayers', 'taxpayers.id', '=', 'payments.taxpayer_id')
@@ -73,14 +79,16 @@ class RecoveriesDataTable extends DataTable
             ->whereBetween('payments.created_at', [$this->startDate, $this->endDate])
             ->orderBy('payments.created_at', 'desc')
             ->distinct();
+       // $this->id=11463;
+        if ($this->id) {
+            $query->where('invoices.taxpayer_id', '=', $this->id);
+        }
         if ($this->state != null) {
             $query->where('payments.status', '=', $this->state);
         } else {
             $query->whereIn('payments.status', [PaymentStatusEnums::DONE, PaymentStatusEnums::ACCOUNTED]);
         }
-        if ($this->id) {
-            $query->where('invoices.taxpayer_id', '=', $this->id);
-        }
+       // dd($query->get());
         return $query;
     }
     /**
@@ -131,6 +139,9 @@ class RecoveriesDataTable extends DataTable
             return $column;
         }, $columns);
     }
+
+
+
     /**
      * Get the filename for export.
      */
