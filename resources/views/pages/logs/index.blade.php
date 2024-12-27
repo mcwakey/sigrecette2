@@ -92,11 +92,13 @@
 
                     const rawData = {!! json_encode($logs) !!};
 
-                    console.log(rawData);
-                    // Préparation des données
                     const labels = rawData.map(log => log.date);
                     const data = rawData.map(log => log.total_requests);
-                    const topUsers = rawData.map(log => log.top_user);  // top_user contient id et name
+                    const topUsers = rawData.map(log => ({
+                        name:log.user_name,
+                        id:log.user_id
+                    }));
+
 
                     const chart = new Chart(ctx, {
                         type: 'line',

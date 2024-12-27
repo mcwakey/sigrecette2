@@ -2,8 +2,6 @@
 namespace App\Http\Controllers;
 use App\DataTables\InvoicesDataTable;
 use App\DataTables\RecoveriesDataTable;
-use App\DataTables\TaxpayerInvoicesDataTable;
-use App\DataTables\TaxpayerInvoicesDataTableDataTableHtml;
 use App\DataTables\TaxpayersDataTable;
 use App\DataTables\TaxpayerTaxablesDataTable;
 use App\Helpers\Constants;
@@ -17,6 +15,7 @@ use App\Models\UserLogs;
 use App\Models\Year;
 use App\Models\Zone;
 use App\Services\StatisticsService;
+use App\Traits\HandlesDateFilters;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -24,6 +23,7 @@ use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 class TaxpayerController extends Controller
 {
+    use  HandlesDateFilters;
     /**
      * Display a listing of the resource.
      */
@@ -61,26 +61,20 @@ class TaxpayerController extends Controller
      * Display the specified resource.
      */
     public function show(Taxpayer $taxpayer, InvoicesDataTable $invoicesDataTable,Request $request,
-                         RecoveriesDataTable $recoveriesDataTable, TaxpayerTaxablesDataTable $taxablesDataTable,
-    StatisticsService $statisticsService)
+                         RecoveriesDataTable $recoveriesDataTable, TaxpayerTaxablesDataTable $taxablesDataTable)
     {
         if($taxpayer->type ==Constants::INVOICE_TYPE_COMPTANT){
             return redirect()->back();
 
         }
-        $year = Year::getActiveYear()->name;
-        $validatedData = $request->validate([
-            's_date' => 'nullable|date_format:Y-m-d H:i:s',
-            'e_date' => 'nullable|date_format:Y-m-d H:i:s',
-        ]);
-        $startDate = $validatedData['s_date'] ?? Carbon::parse("{$year}-01-01 00:00:00");
-        $endDate = $validatedData['e_date'] ?? Carbon::parse("{$year}-12-31 23:59:59");
+        $this->handleDateFilters($request);
+        $statisticsService = new StatisticsService($this->s_date, $this->e_date);
         addVendors(['amcharts', 'amcharts-maps', 'amcharts-stock']);
-        $taxpayerActionLog = UserLogs::where('taxpayer_id', $taxpayer->id)
+        $taxpayerActionLog = UserLogs::where('taxpayer_id',"=", $taxpayer->id)
             ->orderBy('id', 'desc')
             ->limit(10)
             ->get();
-        $superData = $statisticsService->getPaymentStats($startDate,$endDate,$taxpayer->id);
+        $superData = $statisticsService->getPaymentStats($taxpayer->id);
         return $taxablesDataTable->with('id', $taxpayer->id)
             ->render('pages/taxpayers.show', [
                 'taxpayer' => $taxpayer,

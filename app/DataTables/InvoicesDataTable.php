@@ -1,14 +1,12 @@
 <?php
 namespace App\DataTables;
 use App\Enums\InvoicePayStatusEnums;
-use App\Enums\PrintNameEnums;
 use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
 use App\Models\Invoice;
 use App\Models\Payment;
-use App\Models\Year;
-use Carbon\Carbon;
-use Yajra\DataTables\Html\Button;
+use App\Traits\HandlesTaxpayerFilters;
+use Illuminate\Support\Facades\Route;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
@@ -19,6 +17,7 @@ use Yajra\DataTables\WithExportQueue;
 class InvoicesDataTable extends DataTable
 {
     use WithExportQueue;
+    use HandlesTaxpayerFilters;
     /**
      * Build the DataTable class.
      *
@@ -90,6 +89,7 @@ class InvoicesDataTable extends DataTable
     }
     public function query(Invoice $model): QueryBuilder
     {
+        $this->id=$this->getTaxpayerId($this->id);
         $query = $model->join('invoice_items', 'invoice_items.invoice_id', '=', 'invoices.id')
             ->leftjoin('taxpayers', 'taxpayers.id', '=', 'invoices.taxpayer_id')
             ->join('taxpayer_taxables', 'taxpayer_taxables.id', '=', 'invoice_items.taxpayer_taxable_id')
@@ -225,4 +225,5 @@ class InvoicesDataTable extends DataTable
     {
         return 'Invoices_' . date('YmdHis');
     }
+
 }
