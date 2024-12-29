@@ -7,6 +7,7 @@ use App\DataTables\ExportTaxpayerTaxablesDataTable;
 use App\Enums\ExportTypeEnums;
 use App\Helpers\Constants;
 use App\Models\Activity;
+use App\Models\BackupLog;
 use App\Models\Canton;
 use App\Models\Category;
 use App\Models\TaxLabel;
@@ -88,51 +89,116 @@ class ExportController extends Controller
     }
     public function backup()
     {
-        return view('pages/export/backup.show');
+        return view('pages/export/backup.show',[
+            'backup' => $this->getLastBackup()
+        ]);
     }
-    public function backupDownload()
+    public function backupDownload(Request $request)
     {
+        $request->merge([
+            'created_at' => $request->created_at ? Carbon::parse($request->created_at)->format('Y-m-d H:i:s') : null,
+        ]);
+
+        $validatedData = $request->validate([
+            'created_at' => 'nullable|date_format:Y-m-d H:i:s',
+        ]);
+        $last_date = $validatedData['created_at'];
         if (PHP_OS_FAMILY !== 'Linux') {
             return response()->json([
                 'error' => 'Cette action est uniquement disponible sur un environnement Linux.'
             ], 403);
         }
+        if($last_date==null){
+            $diskName = config('backup.backup.destination.disks')[0];
+            $rootPath = config('filesystems.disks.' . $diskName . '.root');
 
-        $diskName = config('backup.backup.destination.disks')[0];
-        $rootPath = config('filesystems.disks.' . $diskName . '.root');
-
-        $files = collect(Storage::disk($diskName)->files(config('app.name')))
-            ->filter(fn($file) => Str::endsWith($file, '.zip'))
-            ->sortByDesc(fn($file) => Storage::disk($diskName)->lastModified($file));
-
-        $latestBackup = $files->first(fn($file) =>
-            now()->diffInHours(
-                date('Y-m-d H:i:s', Storage::disk($diskName)->lastModified($file))
-            ) < 2
-        );
-
-        if (!$latestBackup) {
-            Artisan::call('backup:run');
-
-            $latestBackup = collect(Storage::disk($diskName)->files(config('app.name')))
+            $files = collect(Storage::disk($diskName)->files(config('app.name')))
                 ->filter(fn($file) => Str::endsWith($file, '.zip'))
-                ->sortByDesc(fn($file) => Storage::disk($diskName)->lastModified($file))
-                ->first();
+                ->sortByDesc(fn($file) => Storage::disk($diskName)->lastModified($file));
+
+            $latestBackup = $files->first(fn($file) =>
+                now()->diffInHours(
+                    date('Y-m-d H:i:s', Storage::disk($diskName)->lastModified($file))
+                ) < 2
+            );
+
+            if (!$latestBackup) {
+                Artisan::call('backup:run');
+
+                $latestBackup = collect(Storage::disk($diskName)->files(config('app.name')))
+                    ->filter(fn($file) => Str::endsWith($file, '.zip'))
+                    ->sortByDesc(fn($file) => Storage::disk($diskName)->lastModified($file))
+                    ->first();
+            }
+
+            if (!$latestBackup) {
+                return response()->json([
+                    'error' => 'Aucune sauvegarde trouvée',
+                    'disk_name' => $diskName,
+                ], 404);
+            }
+            $file_name= basename($latestBackup);
+            $fullPath = realpath($rootPath . DIRECTORY_SEPARATOR . $latestBackup);
+        }else{
+            $last=$this->getLastBackup();
+            $file_name=$last['name'];
+            $diskName=$last['disk_name'];
+            if($last_date==$last['created_at']){
+                $fullPath=$last['url'];
+            }
+
         }
-
-        if (!$latestBackup) {
-            return response()->json([
-                'error' => 'Aucune sauvegarde trouvée',
-                'disk_name' => $diskName,
-            ], 404);
-        }
-
-        $fullPath = realpath($rootPath . DIRECTORY_SEPARATOR . $latestBackup);
-
         if ($fullPath) {
+            $this->saveBackupLog($file_name,$diskName,$fullPath);
             return response()->download($fullPath);
         } else {
             return response()->json(['error' => 'Fichier introuvable'], 404);
         }
     }
+    public function getLastBackup()
+    {
+        $diskName = config('backup.backup.destination.disks')[0];
+        $rootPath = config('filesystems.disks.' . $diskName . '.root');
+
+        $file = collect(Storage::disk($diskName)->files(config('app.name')))
+            ->filter(fn($file) => Str::endsWith($file, '.zip'))
+            ->sortByDesc(fn($file) => Storage::disk($diskName)->lastModified($file))
+            ->first();
+
+        if (!$file) {
+            return null;
+        }
+
+        $fullPath = realpath($rootPath . DIRECTORY_SEPARATOR . $file);
+        $lastModified = Storage::disk($diskName)->lastModified($file);
+        $formattedDate = date('Y-m-d H:i:s', $lastModified);
+
+        return [
+            'disk_name' => $diskName,
+            'url' => $fullPath,
+            'name' => basename($file),
+            'created_at' => $formattedDate,
+        ];
+    }
+    function saveBackupLog($name,$diskName,$fullPath):BackupLog
+    {
+        $userBackupsCount = BackupLog::where('user_id', auth()->id())->count();
+
+        if ($userBackupsCount > 3) {
+            BackupLog::where('user_id', auth()->id())
+                ->orderBy('downloaded_at', 'desc')
+                ->skip(3)
+                ->take(PHP_INT_MAX)
+                ->delete();
+        }
+
+        return BackupLog::create([
+            'file_name' => $name,
+            'disk_name' => $diskName,
+            'downloaded_at' => now(),
+            'user_id' => auth()->id() ?? null,
+            'full_path' => $fullPath,
+        ]);
+    }
+
 }
