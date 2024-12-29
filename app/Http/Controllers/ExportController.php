@@ -97,24 +97,42 @@ class ExportController extends Controller
                 'error' => 'Cette action est uniquement disponible sur un environnement Linux.'
             ], 403);
         }
-        Artisan::call('backup:run');
+
         $diskName = config('backup.backup.destination.disks')[0];
         $rootPath = config('filesystems.disks.' . $diskName . '.root');
-        $file = collect(Storage::disk($diskName)->files(config('app.name')))
+
+        $files = collect(Storage::disk($diskName)->files(config('app.name')))
             ->filter(fn($file) => Str::endsWith($file, '.zip'))
-            ->sortByDesc(fn($file) => Storage::disk($diskName)->lastModified($file))
-            ->first();
-        if (!$file) {
+            ->sortByDesc(fn($file) => Storage::disk($diskName)->lastModified($file));
+
+        $latestBackup = $files->first(fn($file) =>
+            now()->diffInHours(
+                date('Y-m-d H:i:s', Storage::disk($diskName)->lastModified($file))
+            ) < 2
+        );
+
+        if (!$latestBackup) {
+            Artisan::call('backup:run');
+
+            $latestBackup = collect(Storage::disk($diskName)->files(config('app.name')))
+                ->filter(fn($file) => Str::endsWith($file, '.zip'))
+                ->sortByDesc(fn($file) => Storage::disk($diskName)->lastModified($file))
+                ->first();
+        }
+
+        if (!$latestBackup) {
             return response()->json([
                 'error' => 'Aucune sauvegarde trouvée',
                 'disk_name' => $diskName,
             ], 404);
         }
-        $fullPath = realpath($rootPath . DIRECTORY_SEPARATOR . $file);
+
+        $fullPath = realpath($rootPath . DIRECTORY_SEPARATOR . $latestBackup);
+
         if ($fullPath) {
             return response()->download($fullPath);
         } else {
-            return response()->json(['error' => 'File not found'], 404);
+            return response()->json(['error' => 'Fichier introuvable'], 404);
         }
     }
 }
