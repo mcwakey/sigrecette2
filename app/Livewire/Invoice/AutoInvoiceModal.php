@@ -1,5 +1,6 @@
 <?php
 namespace App\Livewire\Invoice;
+use App\Helpers\Constants;
 use App\Models\Canton;
 use App\Models\Erea;
 use App\Models\Gender;
@@ -10,6 +11,7 @@ use App\Models\TaxLabel;
 use App\Models\Taxpayer;
 use App\Models\TaxpayerTaxable;
 use App\Models\Town;
+use App\Models\Year;
 use App\Models\Zone;
 use App\Traits\DispatchesMessages;
 use Livewire\Component;
@@ -60,8 +62,10 @@ class AutoInvoiceModal extends Component
     public function render()
     {
         $zones = Zone::all();
-        $tax_labels = TaxLabel::all();
-        return view('livewire.invoice.auto-invoice-modal', ['zones' => $zones, 'tax_labels' => $tax_labels]);
+        $tax_labels = TaxLabel::where('category', 'LIKE', '%CATEGORY 1%')->get();
+        $year = Year::getActiveYear();
+        $months = Constants::getMonths();
+        return view('livewire.invoice.auto-invoice-modal', ['zones' => $zones, 'tax_labels' => $tax_labels,'months' => $months, 'year' => $year]);
     }
     public function mount()
     {
@@ -84,6 +88,7 @@ class AutoInvoiceModal extends Component
                 ->where('invoices.validity', "=",'EXPIRED')
                 ->select('invoices.*')
                 ->get();
+            //dd($invoices);
             foreach ($invoices as $invoice) {
                 $invoiceData = [
                     'taxpayer_id' => $invoice->taxpayer_id,

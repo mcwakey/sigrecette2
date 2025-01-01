@@ -20,7 +20,7 @@ class CreateStoredProcedures extends Migration
                 SET taxpayer_taxables.invoice_id = NULL,
                 taxpayer_taxables.bill_status = "NOT BILLED",
                 invoices.validity = "EXPIRED",
-                invoices.status = "APROVED"
+                invoices.status = "APPROVED"
                 WHERE invoices.to_date = today AND
                 invoices.taxpayer_id <> NULL;
             END
