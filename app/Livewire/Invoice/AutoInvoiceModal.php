@@ -14,6 +14,7 @@ use App\Models\Town;
 use App\Models\Year;
 use App\Models\Zone;
 use App\Traits\DispatchesMessages;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
@@ -79,16 +80,28 @@ class AutoInvoiceModal extends Component
             abort(403, 'Accès interdit');
         }
         DB::transaction(function () {
-            $invoices = Invoice::join('invoice_items', 'invoice_items.invoice_id', '=', 'invoices.id')
-                ->join('taxpayers', 'taxpayers.id', '=', 'invoices.taxpayer_id')
-                ->join('taxpayer_taxables', 'taxpayer_taxables.id', '=', 'invoice_items.taxpayer_taxable_id')
-                ->join('taxables', 'taxables.id', '=', 'taxpayer_taxables.taxable_id')
-                ->where('taxpayers.zone_id', 'LIKE', '%' . ($this->zone ?? '') . '%')
-                ->where('taxables.tax_label_id', 'LIKE', '%' . ($this->taxlabel ?? '') . '%')
-                ->where('invoices.validity', "=",'EXPIRED')
-                ->select('invoices.*')
-                ->get();
-            //dd($invoices);
+            $year=Year::getBeforeCurrentYear()?->name;
+            if($year){
+                $s_date = Carbon::parse("{$year}-01-01 00:00:00");
+                $e_date = Carbon::parse("{$year}-12-31 23:59:59");
+                $invoices = Invoice::join('invoice_items', 'invoice_items.invoice_id', '=', 'invoices.id')
+                    ->join('taxpayers', 'taxpayers.id', '=', 'invoices.taxpayer_id')
+                    ->join('taxpayer_taxables', 'taxpayer_taxables.id', '=', 'invoice_items.taxpayer_taxable_id')
+                    ->join('taxables', 'taxables.id', '=', 'taxpayer_taxables.taxable_id')
+                    ->where('taxpayers.zone_id', 'LIKE', '%' . ($this->zone ?? '') . '%')
+                    ->where('taxables.tax_label_id', 'LIKE', '%' . ($this->taxlabel ?? '') . '%')
+                    ->where('invoices.validity', "=",'EXPIRED')
+                    ->whereBetween('invoices.created_at', [$s_date, $e_date])
+                    ->select('invoices.*')
+                    ->get();
+            }
+            else{
+                $invoices=[];
+            }
+
+
+            //dd($request->all());
+           // dd($invoices);
             foreach ($invoices as $invoice) {
                 $invoiceData = [
                     'taxpayer_id' => $invoice->taxpayer_id,

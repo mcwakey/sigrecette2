@@ -14,6 +14,7 @@ use App\Models\TaxLabel;
 use App\Models\Town;
 use App\Models\Year;
 use App\Models\Zone;
+use App\Traits\HandlesDateFilters;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -22,16 +23,15 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 class ExportController extends Controller
 {
+    use  HandlesDateFilters;
     public function index(Request $request,
                           ExportTaxpayersDataTable $exportTaxpayersDataTable,
                           ExportInvoicesDataTable $exportInvoicesDataTable,
                           ExportRecoveriesDataTable $exportRecoveriesDataTable,
     ExportTaxpayerTaxablesDataTable $exportTaxpayerTaxablesDataTable,)
     {
-        $year = Year::getActiveYear()->name;
+        $this->handleDateFilters($request);
         $validatedData = $request->validate([
-            's_date' => 'nullable|date_format:Y-m-d H:i:s',
-            'e_date' => 'nullable|date_format:Y-m-d H:i:s',
             'export_type' => ['string', Rule::in(array_keys(Constants::EXPORT_VALIDATION_MAP))],
             'disable' => ['nullable', 'integer', Rule::in(1)],
             'state' => ['nullable', 'string', Rule::in('at')],
@@ -41,8 +41,6 @@ class ExportController extends Controller
         if ($export_type == ExportTypeEnums::TAXPAYER) {
             $disable = $validatedData['disable'] ?? null;
             $state = $validatedData['state'] ?? null;
-            $startDate = $validatedData['s_date'] ?? null;
-            $endDate = $validatedData['e_date'] ?? null;
             $zones = Zone::all();
             $categories = Category::all();
             $towns = Town::all();
@@ -52,37 +50,31 @@ class ExportController extends Controller
                 [
                     'state' => $state,
                     'disable' => $disable,
-                    'startDate' => $startDate,
-                    'endDate' => $endDate,
+                    'startDate' => $this->s_date,
+                    'endDate' => $this->e_date,
                 ]
             )->render('pages/export.taxpayers.list', ['zones' => $zones, 'categories' => $categories, 'towns' => $towns, 'cantons' => $cantons, 'activities' => $activities]);
         } elseif ($export_type == ExportTypeEnums::INVOICE) {
-            $startDate = $validatedData['s_date'] ?? Carbon::parse("{$year}-01-01 00:00:00");
-            $endDate = $validatedData['e_date'] ?? Carbon::parse("{$year}-12-31 23:59:59");
             $zones = Zone::all();
             return $exportInvoicesDataTable->with(
                 [
-                    'startDate' => $startDate,
-                    'endDate' => $endDate,
+                    'startDate' => $this->s_date,
+                    'endDate' => $this->e_date,
                 ]
             )->render('pages/export.invoices.list', ['zones' => $zones, 'tax_labels' => $tax_labels]);
         } elseif ($export_type == ExportTypeEnums::TAXPAYER_TAXABLE){
-            $startDate = $validatedData['s_date'] ?? Carbon::parse("{$year}-01-01 00:00:00");
-            $endDate = $validatedData['e_date'] ?? Carbon::parse("{$year}-12-31 23:59:59");
             return $exportTaxpayerTaxablesDataTable->with(
                 [
-                    'startDate' => $startDate,
-                    'endDate' => $endDate,
+                    'startDate' => $this->s_date,
+                    'endDate' => $this->e_date,
                 ]
             )->render('pages/export.taxpayer_taxables.list', []);
         }
         else {
-            $startDate = $validatedData['s_date'] ?? Carbon::parse("{$year}-01-01 00:00:00");
-            $endDate = $validatedData['e_date'] ?? Carbon::parse("{$year}-12-31 23:59:59");
             return $exportRecoveriesDataTable->with(
                 [
-                    'startDate' => $startDate,
-                    'endDate' => $endDate,
+                    'startDate' => $this->s_date,
+                    'endDate' => $this->e_date,
                 ]
             )->render('pages/export.recoveries.list', ['tax_labels' => $tax_labels]);
         }

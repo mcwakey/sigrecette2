@@ -109,6 +109,11 @@ class Year extends Model
         });
         return $year;
     }
+    public static function getBeforeCurrentYear(): ?Year
+    {
+        $currentYear = date('Y');
+        return Year::where('name', $currentYear-1)->first();
+    }
     public static function getOldestYear(): ?Year
     {
         return Year::orderBy('name')->first();

@@ -3,6 +3,7 @@ namespace App\Services;
 use App\Contracts\PdfGeneratorInterface;
 use App\Enums\InvoiceStatusEnums;
 use App\Enums\PrintNameEnums;
+use App\Helpers\Constants;
 use App\Models\Commune;
 use App\Models\Invoice;
 use App\Models\Payment;
@@ -198,8 +199,9 @@ class PdfGeneratorService implements PdfGeneratorInterface
     }
     public function generataxpayerFormPdf($data, string $template): array
     {
-        $data = Taxpayer::getInvoiceAndPayments($data[0]);
-        if ($this->checkIfCommuneIsNotNull()) {
+
+        if ($this->checkIfCommuneIsNotNull()&& count($data) > 1) {
+            $data = Taxpayer::getInvoiceAndPayments($data[0]);
             $filename = "Fiche-contribuable" . Str::random(8) . ".pdf";
             $pdf = PDF::loadView("exports." . $template, ['data' => $data, "commune" => $this->commune])->setPaper('a4')->stream($filename);
             return ['success' => true, 'pdf' => $pdf];
@@ -353,11 +355,14 @@ class PdfGeneratorService implements PdfGeneratorInterface
     }
     public function generateStateAcountIvCollectorPdf($data, string $template): array
     {
-        $user = User::find($data[0]);
-        $period = $data[1];
-        $data = StockTransfer::buildAndGetStockTransferWithQuery($period);
-        $filename = "ETAT_DE_COMPTABILITE_DES_VALEURS_INACTIVES_DU_COLLECTEUR" . Str::random(8) . ".pdf";
-        $pdf = PDF::loadView("exports." . $template, ['data' => $data, "commune" => $this->commune, 'user' => $user, 'period' => $data[1]])->setPaper('a4', 'landscape')->stream($filename);
-        return ['success' => true, 'pdf' => $pdf];
+        if(count($data) > 2) {
+            $user = User::find($data[0]);
+            $period = $data[1];
+            $data = StockTransfer::buildAndGetStockTransferWithQuery($period);
+            $filename = "ETAT_DE_COMPTABILITE_DES_VALEURS_INACTIVES_DU_COLLECTEUR" . Str::random(8) . ".pdf";
+            $pdf = PDF::loadView("exports." . $template, ['data' => $data, "commune" => $this->commune, 'user' => $user, 'period' => $data[1]])->setPaper('a4', 'landscape')->stream($filename);
+            return ['success' => true, 'pdf' => $pdf];
+        }
+        return ['success' => false, 'message' => 'Invalid data structure.'];
     }
 }

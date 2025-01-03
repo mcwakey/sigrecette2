@@ -22,7 +22,6 @@ class InvoiceController extends Controller
      */
     public function index(Request $request, InvoicesDataTable $dataTable)
     {
-        //dd(request()->all());
         $this->handleDateFilters($request);
         $validatedData = $request->validate([
             'delivery' => ['nullable', 'string', Rule::in(Constants::INVOICE_DELIVERY_STATE_VALIDATION_MAP)],
