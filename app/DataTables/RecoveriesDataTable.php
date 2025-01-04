@@ -76,10 +76,12 @@ class RecoveriesDataTable extends DataTable
                 $q->whereNull('payments.reference')
                     ->orWhereNotIn('payments.reference', [Constants::ANNULATION, Constants::REDUCTION]);
             })
-            ->whereBetween('payments.created_at', [$this->startDate, $this->endDate])
             ->orderBy('payments.created_at', 'desc')
             ->distinct();
        // $this->id=11463;
+        if(!$this->profile_page){
+            $query->whereBetween('payments.created_at', [$this->startDate, $this->endDate]);
+        }
         if ($this->id) {
             $query->where('invoices.taxpayer_id', '=', $this->id);
         }

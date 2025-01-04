@@ -15,6 +15,9 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+
 class AddPaymentModal extends Component
 {
     use DispatchesMessages;
@@ -43,6 +46,8 @@ class AddPaymentModal extends Component
     public $validCodes;
     public $edit_amount = true;
     public $notes;
+
+
     protected function rules()
     {
         $rules = [
@@ -160,10 +165,17 @@ class AddPaymentModal extends Component
     }
     public function updatePayment($id)
     {
+
         $this->edit_mode = true;
         $invoice = Invoice::where('invoice_no', $id)
             ->where('validity', 'VALID')
             ->first();
+        $previousRoute = Route::getRoutes()->match(Request::create(url()->previous()));
+        if ($invoice == null&& $previousRoute->getName()=="taxpayers.show") {
+            $invoice = Invoice::where('invoice_no', $id)
+                ->where('validity', 'EXPIRED')
+                ->first();
+        }
         $this->invoice_id = $invoice->id;
         $this->taxpayer_id = $invoice->taxpayer->id ?? "";
         $this->name = $invoice->taxpayer->name ?? "";

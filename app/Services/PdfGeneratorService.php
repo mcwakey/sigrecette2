@@ -199,8 +199,9 @@ class PdfGeneratorService implements PdfGeneratorInterface
     }
     public function generataxpayerFormPdf($data, string $template): array
     {
+       // dd($data,$this->checkIfCommuneIsNotNull()&& count($data) > 0);
+        if ($this->checkIfCommuneIsNotNull()&& count($data) > 0) {
 
-        if ($this->checkIfCommuneIsNotNull()&& count($data) > 1) {
             $data = Taxpayer::getInvoiceAndPayments($data[0]);
             $filename = "Fiche-contribuable" . Str::random(8) . ".pdf";
             $pdf = PDF::loadView("exports." . $template, ['data' => $data, "commune" => $this->commune])->setPaper('a4')->stream($filename);

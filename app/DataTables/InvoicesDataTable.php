@@ -98,10 +98,12 @@ class InvoicesDataTable extends DataTable
             ->leftjoin('zones', 'zones.id', '=', 'taxpayers.zone_id')
             ->select('invoices.*')
             ->where('invoices.status', '!=', InvoiceStatusEnums::REJECTED_BY_OR)
-            ->whereBetween('invoices.created_at', [$this->startDate, $this->endDate])
             ->distinct()
             ->orderBy('invoices.created_at', 'desc')
             ->newQuery();
+        if(!$this->profile_page){
+            $query->whereBetween('invoices.created_at', [$this->startDate, $this->endDate]);
+        }
         if ($this->type != null) {
             $query->where('invoices.type', '=', $this->type);
         }

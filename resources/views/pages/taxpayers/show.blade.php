@@ -602,6 +602,7 @@
         <livewire:taxpayer_taxable.add-taxpayer-taxable-modal :id="$taxpayer->id"/>
         <livewire:invoice.add-invoice-modal :id="$taxpayer->id"/>
         <livewire:invoice.add-invoice-general-modal :id="$taxpayer->id" />
+        <livewire:payment.add-payment-modal />
 
 
     @push('scripts')

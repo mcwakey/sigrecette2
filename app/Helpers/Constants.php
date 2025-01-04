@@ -10,6 +10,8 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
 class Constants
 {
     public const CURRENCY = " FCFA";
@@ -81,9 +83,17 @@ class Constants
     public static function getInvoiceActionsBasedOnRouteNameAndStatut(string $state = null): array
     {
         $actions = [InvoiceActionsEnums::VIEW];
-        if (request()->routeIs('invoices.*')) {
-            $actions = self::getInvoiceActions();
-        }
+        $previousUrl = url()->previous();
+        $previousRoute = Route::getRoutes()->match(Request::create($previousUrl));
+       if ($previousRoute->getName() === "taxpayers.show"){
+            $actions = [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::PRINT,
+                InvoiceActionsEnums::PAYMENT,
+                InvoiceActionsEnums::RELAUNCH
+            ];
+        }elseif (request()->routeIs('invoices.*')) {
+        $actions = self::getInvoiceActions();
+       }
+       // dd($actions,$previousRoute->getName() === "taxpayers.show");
         return $actions;
     }
     private static function getInvoiceActions(): array
@@ -111,7 +121,8 @@ class Constants
                 return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::ZEROEDITION, InvoiceActionsEnums::PRINT];
             }
             if (request()->input('type') == Constants::INVOICE_TYPE_COMPTANT_KEY) {
-                return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::REDUCE, InvoiceActionsEnums::PRINT, InvoiceActionsEnums::ADDORNO, InvoiceActionsEnums::EDITSTATUT];
+                return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::REDUCE,
+                    InvoiceActionsEnums::PRINT, InvoiceActionsEnums::ADDORNO, InvoiceActionsEnums::EDITSTATUT];
             }
         }
         return [InvoiceActionsEnums::VIEW];
