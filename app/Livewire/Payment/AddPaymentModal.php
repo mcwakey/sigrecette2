@@ -173,6 +173,7 @@ class AddPaymentModal extends Component
         $previousRoute = Route::getRoutes()->match(Request::create(url()->previous()));
         if ($invoice == null&& $previousRoute->getName()=="taxpayers.show") {
             $invoice = Invoice::where('invoice_no', $id)
+                ->OrWhere('validity', 'ARCHIVED')
                 ->where('validity', 'EXPIRED')
                 ->first();
         }
