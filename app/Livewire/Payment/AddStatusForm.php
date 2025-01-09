@@ -25,8 +25,13 @@ class AddStatusForm extends Component
     }
     public function submit()
     {
-        // Validate the form input data
         $this->validate();
+        $user = auth()->user();
+        if (!$user->hasRole('regisseur')) {
+            $this->dispatchMessage('Paiement', 'update', 'error',"Action non authorize");
+            $this->reset();
+            return;
+        }
         DB::transaction(function () {
             // Prepare data for Payment
             $data = [
@@ -41,7 +46,6 @@ class AddStatusForm extends Component
             $payment->save();
             $this->dispatchMessage('Paiement', 'update');
         });
-        // Reset form fields after successful submission
         $this->reset();
     }
     public function updateStatus($id)
