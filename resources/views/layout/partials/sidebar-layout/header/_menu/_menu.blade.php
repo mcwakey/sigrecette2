@@ -286,7 +286,7 @@
 
 
         </div>
-        <form method="GET" action="{{ request()->fullUrl()  }}">
+        <form method="GET" action="{{ request()->url()   }}">
         <div class="shadow-sm bg-white" id="stats-date"
             style="position:fixed;max-width:620px;display:none;align-items:center;height:100px;padding:16px 20px;gap:16px;top:60px;border-radius:6px;">
 
