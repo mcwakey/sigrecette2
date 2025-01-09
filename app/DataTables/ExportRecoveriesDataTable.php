@@ -53,7 +53,7 @@ class ExportRecoveriesDataTable extends DataTable
                 return format_amount($payment->remaining_amount);
             })
             ->editColumn('status', function (Payment $payment) {
-                return view('pages/recoveries.columns._status', ['payment' => $payment]);
+                return __($payment->status);
             })
             ->setRowId('uuid');
     }
