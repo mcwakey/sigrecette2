@@ -266,16 +266,27 @@
                     </span>
                     @endif
                     <span class="text-gray-500 text-hover-primary"></span>
-                    Année d'exercice:{{ ' ' . $year->name }}, Mois:{{ ' ' . $month }}
+                    Année d'exercice:{{ ' ' . $year->name }}, Mois:{{ ' ' . $month.' ' }}
                 </span>
-                {{--  --}}
                 <span class="menu-arrow d-lg-none"></span>
+                @if( session()->get('s_date',null)&& session()->get('e_date',null) )
+                    <span class="menu-title">
+                            |
+                    <span style="display:block;margin:0px 4px 0px 4px">
+                        Filtre date activé
+                    </span>
+
+                    <span class="text-gray-500 text-hover-primary"></span>
+                    ({{ session()->get('s_date') }}, {{ session()->get('e_date') }})
+                </span>
+                @endif
+
             </span>
             <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown p-0 w-100 w-lg-850px"></div>
 
 
         </div>
-        <form method="GET" action="{{ request()->url() }}">
+        <form method="GET" action="{{ request()->fullUrl()  }}">
         <div class="shadow-sm bg-white" id="stats-date"
             style="position:fixed;max-width:620px;display:none;align-items:center;height:100px;padding:16px 20px;gap:16px;top:60px;border-radius:6px;">
 
@@ -389,7 +400,7 @@
                     <span class="indicator-label" wire:loading.remove>{{ __('Soumettre') }}</span>
                 </button>
 
-                <a href="{{ request()->url() }}" class="btn badge-light mt-8">
+                <a href="{{ request()->fullUrlWithQuery(['reset_filters' => 1]) }}" class="btn badge-light mt-8">
                     <span class="indicator-label" >{{ __('Rénitialiser') }}</span>
                 </a>
             </div>

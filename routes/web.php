@@ -155,6 +155,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/prints',   [PrintController::class, 'index'])->name("prints");
     Route::get('/print-all-invoice',   [PrintController::class, 'downloadMultipleInvoicePdf'])->name("print-all-invoice");
     Route::get('/exports',   [ExportController::class, 'index'])->name("exports");
+    Route::get('/exports-invoice',   [ExportController::class, 'downloadExportInvoice'])->name("exports-invoice");
     Route::get('/exports/backup',   [ExportController::class, 'backup'])->name("export_backup");
     Route::get('/exports/backupdownload',   [ExportController::class, 'backupDownload'])->name("backupdownload");
     Route::get('/generate-pdf/{data}/{type?}/{action?}/{id?}', [PrintController::class, 'download'])->name("generatePdf");

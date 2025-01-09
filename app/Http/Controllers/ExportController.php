@@ -5,6 +5,7 @@ use App\DataTables\ExportRecoveriesDataTable;
 use App\DataTables\ExportTaxpayersDataTable;
 use App\DataTables\ExportTaxpayerTaxablesDataTable;
 use App\Enums\ExportTypeEnums;
+use App\Exports\InvoiceExport;
 use App\Helpers\Constants;
 use App\Models\Activity;
 use App\Models\BackupLog;
@@ -21,6 +22,8 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
+
 class ExportController extends Controller
 {
     use  HandlesDateFilters;
@@ -28,9 +31,10 @@ class ExportController extends Controller
                           ExportTaxpayersDataTable $exportTaxpayersDataTable,
                           ExportInvoicesDataTable $exportInvoicesDataTable,
                           ExportRecoveriesDataTable $exportRecoveriesDataTable,
-    ExportTaxpayerTaxablesDataTable $exportTaxpayerTaxablesDataTable,)
+    ExportTaxpayerTaxablesDataTable $exportTaxpayerTaxablesDataTable)
     {
         $this->handleDateFilters($request);
+
         $validatedData = $request->validate([
             'export_type' => ['string', Rule::in(array_keys(Constants::EXPORT_VALIDATION_MAP))],
             'disable' => ['nullable', 'integer', Rule::in(1)],
@@ -78,6 +82,15 @@ class ExportController extends Controller
                 ]
             )->render('pages/export.recoveries.list', ['tax_labels' => $tax_labels]);
         }
+    }
+    public function downloadExportInvoice(Request $request)
+    {
+
+        $invoiceIds = $request->input('ids', null);
+        $this->handleDateFilters($request);
+
+        return Excel::download(new InvoiceExport($this->s_date,$this->e_date,$invoiceIds), 'avis.xlsx');
+
     }
     public function backup()
     {

@@ -1,15 +1,7 @@
 <?php
 namespace App\DataTables;
-use App\Enums\InvoicePayStatusEnums;
-use App\Enums\PrintNameEnums;
-use App\Enums\InvoiceStatusEnums;
-use App\Helpers\Constants;
 use App\Models\Invoice;
 use App\Models\Payment;
-use App\Models\Taxpayer;
-use App\Models\Year;
-use Carbon\Carbon;
-use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
@@ -87,7 +79,7 @@ class ExportInvoicesDataTable extends DataTable
             ->leftjoin('taxpayers', 'taxpayers.id', '=', 'invoices.taxpayer_id')
             ->join('taxpayer_taxables', 'taxpayer_taxables.id', '=', 'invoice_items.taxpayer_taxable_id')
             ->join('taxables', 'taxables.id', '=', 'taxpayer_taxables.taxable_id')
-            ->join('tax_labels', 'tax_labels.id', '=', 'taxables.tax_label_id')
+            ->leftJoin('tax_labels', 'tax_labels.id', '=', 'taxables.tax_label_id')
             ->leftjoin('zones', 'zones.id', '=', 'taxpayers.zone_id')
             ->select('invoices.*')
             ->whereBetween('invoices.created_at', [$this->startDate, $this->endDate])
