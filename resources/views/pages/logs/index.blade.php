@@ -66,7 +66,7 @@
                             </div>
                             <div class="d-flex flex-column">
                                 <a href="{{ route('user-management.users.show', $log->user) }}" class="text-gray-800 text-hover-primary mb-1">
-                                    {{ $log->user->name }}
+                                    {{ $log->user->name }}-{{ $log->user->id}}
                                 </a>
                                 <span>{{ $log->user->email }}</span>
                             </div></td>

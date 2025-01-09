@@ -24,7 +24,7 @@ class UserActivityController extends Controller
         $logs_tab = UserLogs::with('user')
             ->when(
                 $user_id, function ($query) use ( $user_id) {
-                $query->where('user_id', $user_id);
+                $query->OrWhere('user_id', $user_id);
             })
             ->whereBetween('created_at', [ $this->s_date,$this->e_date])
             ->orderBy('created_at', 'desc')

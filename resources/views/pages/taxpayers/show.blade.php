@@ -344,21 +344,6 @@
                             <!--end::Card body-->
                         </div>
                     </div>
-
-                    <div class="card card-flush mb-6 mb-xl-9">
-                        <div class="card-header mt-6">
-                            <div class="card-title flex-column">
-                                <h2 class="mb-1">{{ __('taxpayers geolocation') }}</h2>
-                                <div class="fs-6 fw-semibold text-muted">Long: {{ $taxpayer->longitude }} Lat:
-                                    {{ $taxpayer->latitude }}</div>
-                            </div>
-                        </div>
-                        <div class="card-body d-flex flex-column">
-                            <div class="card-body">
-                                <div id="location_map" class="w-100 rounded" style="height:350px"></div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="card card-flush mb-6 mb-xl-9">
                         <div class="card-header mt-6">
                             <div class="card-title flex-column">
@@ -385,6 +370,21 @@
                             <canvas id="paymentEvolutionChart"></canvas>
                         </div>
                     </div>
+                    <div class="card card-flush mb-6 mb-xl-9">
+                        <div class="card-header mt-6">
+                            <div class="card-title flex-column">
+                                <h2 class="mb-1">{{ __('taxpayers geolocation') }}</h2>
+                                <div class="fs-6 fw-semibold text-muted">Long: {{ $taxpayer->longitude }} Lat:
+                                    {{ $taxpayer->latitude }}</div>
+                            </div>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <div class="card-body">
+                                <div id="location_map" class="w-100 rounded" style="height:350px"></div>
+                            </div>
+                        </div>
+                    </div>
+
 
                 </div>
 
@@ -901,7 +901,7 @@
                     document.getElementById('totalOwing').innerText = `${totalOwingAmount} FCFA`;
                     document.getElementById('paidPercentage').innerText = `${totalPaidPercentage}%`;
 
-                    if (totalOwingAmount > 5000) {
+                    if (totalOwingAmount > 1000) {
                         document.getElementById('owingAlert').classList.add('alert');
                     }
 

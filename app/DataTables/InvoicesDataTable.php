@@ -6,7 +6,6 @@ use App\Helpers\Constants;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Traits\HandlesTaxpayerFilters;
-use Illuminate\Support\Facades\Route;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
