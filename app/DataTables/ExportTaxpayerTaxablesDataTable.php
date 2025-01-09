@@ -117,6 +117,7 @@ class ExportTaxpayerTaxablesDataTable extends DataTable
             ->with('taxable.tax_label')
             ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
             ->select('taxpayer_taxables.*')
+            ->whereBetween('taxpayer_taxables.created_at', [$this->startDate, $this->endDate])
            // ->where(function ($query) {$query->whereNull('invoices.id')->orWhere('invoices.type', 'TITRE');})
             ->newQuery();
     }

@@ -128,6 +128,7 @@ class ExportTaxpayersDataTable extends DataTable
             ->with('zone')
             ->join('zones', 'taxpayers.zone_id', '=', 'zones.id')
             ->select('taxpayers.*')
+            ->whereBetween('taxpayers.created_at', [$this->startDate, $this->endDate])
             ->newQuery();
         $query
             ->where('taxpayers.from_mobile_and_validate_state', '!=',TaxpayerStateEnums::REJECTED);
