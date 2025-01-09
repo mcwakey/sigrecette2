@@ -25,6 +25,7 @@
         "yajra/laravel-datatables": "^10.0",
         "yajra/laravel-datatables-export": "^10.1",
         "zerodahero/laravel-workflow": "^5.0",
+        "maatwebsite/excel": "^3.1",
         "ext-gd": "*"
     },
     "require-dev": {
@@ -33,7 +34,6 @@
         "laravel/breeze": "^1.14",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.0.1",
-        "maatwebsite/excel": "^3.1",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
         "phpunit/phpunit": "^10.0",
