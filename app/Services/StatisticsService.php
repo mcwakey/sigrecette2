@@ -31,8 +31,11 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     public function __construct(private $startDate,private $endDate,protected string $NoneMessage = 'Non défini')
     {
     }
-    public function getTaxpayerQuery()
+    public function getTaxpayerQuery($dateFilter=true)
     {
+        if(!$dateFilter){
+            return Taxpayer::where('type','=',Constants::TITRE);
+        }
         return Taxpayer::whereBetween('created_at', [$this->startDate, $this->endDate])
             ->where('type','=',Constants::TITRE);
     }
@@ -63,7 +66,7 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     }
     public function countTaxpayers(): array
     {
-        $baseQuery = $this->getTaxpayerQuery();
+        $baseQuery = $this->getTaxpayerQuery(false);
         $mobileCount = (clone $baseQuery)
             ->where('taxpayers.from_mobile_and_validate_state', '=', TaxpayerStateEnums::APPROVED)
             ->count();
@@ -84,7 +87,7 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     public function countTaxpayersByCategory(): array
     {
         $categories = Category::all()->pluck('name', 'id');
-        return $this->getTaxpayerQuery()->selectRaw('category_id, count(*) as count')
+        return $this->getTaxpayerQuery(false)->selectRaw('category_id, count(*) as count')
             ->groupBy('category_id')
             ->get()
             ->map(function ($item) use ($categories) {
@@ -96,7 +99,7 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     public function countTaxpayersByActivity(): array
     {
         $activities = Activity::all()->pluck('name', 'id');
-        return $this->getTaxpayerQuery()->selectRaw('activity_id, count(*) as count')
+        return $this->getTaxpayerQuery(false)->selectRaw('activity_id, count(*) as count')
             ->groupBy('category_id')
             ->get()
             ->map(function ($item) use ($activities) {
@@ -108,7 +111,7 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     public function countTaxpayersByCanton(): array
     {
         $cantons = Canton::all()->pluck('name', 'id');
-        $counts = $this->getTaxpayerQuery()->selectRaw('town_id, count(*) as count')
+        $counts = $this->getTaxpayerQuery(false)->selectRaw('town_id, count(*) as count')
             ->groupBy('town_id')
             ->get()
             ->map(function ($item) use ($cantons) {
@@ -124,7 +127,7 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     public function countTaxpayersByTown(): array
     {
         $cantons = Town::all()->pluck('name', 'id');
-        $counts = $this->getTaxpayerQuery()->selectRaw('town_id, count(*) as count')
+        $counts = $this->getTaxpayerQuery(false)->selectRaw('town_id, count(*) as count')
             ->groupBy('town_id')
             ->get()
             ->map(function ($item) use ($cantons) {
@@ -140,7 +143,7 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     public function countTaxpayersByZone(): array
     {
         $cantons = Zone::all()->pluck('name', 'id');
-        $counts = $this->getTaxpayerQuery()->selectRaw('zone_id, count(*) as count')
+        $counts = $this->getTaxpayerQuery(false)->selectRaw('zone_id, count(*) as count')
             ->groupBy('town_id')
             ->get()
             ->map(function ($item) use ($cantons) {
