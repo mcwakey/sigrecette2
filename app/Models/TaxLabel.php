@@ -19,4 +19,9 @@ class TaxLabel extends Model
         $taxLabel = TaxLabel::where('code', "=",$code)->first(); // Correction de la méthode first()
         return $taxLabel ? $taxLabel->name : "";
     }
+    public function budgets()
+    {
+        return $this->hasMany(Budget::class);
+    }
+
 }

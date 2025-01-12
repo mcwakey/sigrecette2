@@ -11,6 +11,7 @@ use App\Enums\TaxpayerStateEnums;
 use App\Enums\TaxpayerStaticsEnums;
 use App\Helpers\Constants;
 use App\Models\Activity;
+use App\Models\Budget;
 use App\Models\Canton;
 use App\Models\Category;
 use App\Models\Invoice;
@@ -435,7 +436,37 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
         ];
     }
 
+    /**
+     * Récupère les statistiques de budgets et paiements pour une année spécifique.
+     *
+     * @param Year $year
+     * @return array
+     */
+    public function getStatisticsByYear(Year $year): array
+    {
+        $budgets = Budget::with('tax_label')
+            ->where('year_id', $year->id)
+            ->get();
 
+        $data = [];
+        foreach ($budgets as $budget) {
+            $totalPayments = Payment::where('code', $budget->tax_label->code)
+                ->whereBetween('payments.created_at', [
+                    Carbon::parse("{$year->name}-01-01 00:00:00") ,
+                    Carbon::parse("{$year->name}-12-31 23:59:59")])
+                ->sum('amount');
+
+            $data[] = [
+                'tax_label' => $budget->tax_label->name,
+                'expected_amount' => $budget->expected_amount,
+                'actual_amount' => $totalPayments,
+                'difference' => $budget->expected_amount - $totalPayments,
+            ];
+        }
+
+        //dd($data);
+        return $data;
+    }
     protected function getAllStatistics(): array
     {
         return [

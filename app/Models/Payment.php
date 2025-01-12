@@ -82,4 +82,8 @@ class Payment extends Model
             ->newQuery()
             ->get();
     }
+    public function tax_label()
+    {
+        return $this->belongsTo(TaxLabel::class, 'code', 'code');
+    }
 }
