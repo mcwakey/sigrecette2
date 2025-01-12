@@ -38,9 +38,7 @@ class AddStatusForm extends Component
     ];
     public function mount($id)
     {
-        if (!auth()->user()->hasPermissionTo('peut valider un contribuable')) {
-            abort(403, 'Accès interdit');
-        }
+
         $taxpayer = Taxpayer::find($id);
         $this->taxpayer_id = $taxpayer?->id;
         $this->status = $taxpayer?->from_mobile_and_validate_state;

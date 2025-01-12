@@ -31,27 +31,12 @@ class AutoInvoiceModal extends Component
     public $amount = 0;
     public $taxpayer_id;
     protected $rules = [
-        // 'invoice_id' => 'required|string',
-        // 'invoice_no' => 'required',
-        // 'order_no' => 'required',
-        // 'nic' => 'required',
-        // 'status' => 'required|string',
         "s_amount" => "required|numeric",
         "taxpayer_taxable_id" => "required|int",
         "qty" => "required|numeric",
         "start_month" => "required|string",
         'taxpayer_id' => 'required|int',
         'amount' => 'required|numeric',
-        //'cancel_reduct' => 'required',
-        // 'telephone' => 'required|string|min:10|max:10',
-        // 'longitude' => 'nullable',
-        // 'latitude' => 'nullable',
-        // 'canton' => 'required',
-        // 'town' => 'required',
-        // 'erea' => 'required',
-        // 'address' => 'required|string',
-        // 'zone_id' => 'required',
-        // 'avatar' => 'nullable|sometimes|image|max:1024',
     ];
     protected $listeners = [
         // 'delete_user' => 'deleteUser',
@@ -70,9 +55,7 @@ class AutoInvoiceModal extends Component
     }
     public function mount()
     {
-        if (!auth()->user()->hasPermissionTo('peut générer automatiquement les avis sur titre')) {
-            abort(403, 'Accès interdit');
-        }
+
     }
     public function submit()
     {

@@ -52,9 +52,7 @@ class AddTaxableModal extends Component
     }
     public function mount()
     {
-        if (!auth()->user()->hasPermissionTo('peut créer une taxation')) {
-            abort(403, 'Accès interdit');
-        }
+
         if ($this->edit_mode) {
             $taxable = Taxable::find($this->taxable_id);
             if ($taxable) {

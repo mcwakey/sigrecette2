@@ -25,9 +25,7 @@ class AddDeliveryForm extends Component
     ];
     public function mount()
     {
-        if (!auth()->user()->hasPermissionTo('peut ajouter la date de livraison d\'un avis')) {
-            abort(403, 'Accès interdit');
-        }
+
     }
     public function render()
     {

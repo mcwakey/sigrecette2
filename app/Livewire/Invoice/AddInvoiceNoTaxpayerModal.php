@@ -102,9 +102,7 @@ class AddInvoiceNoTaxpayerModal extends Component
     public $option_calculus;
     public function mount()
     {
-        if (!auth()->user()->hasPermissionTo('peut émettre un avis au comptant')) {
-            abort(403, 'Accès interdit');
-        }
+
     }
     public function render()
     {

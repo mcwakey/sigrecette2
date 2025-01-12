@@ -86,9 +86,7 @@ class AddInvoiceModal extends Component
     }
     public function mount($id = null)
     {
-        if (!auth()->user()->hasPermissionTo('peut émettre un avis sur titre')) {
-            abort(403, 'Accès interdit');
-        }
+
         $this->taxpayer_id = $id;
     }
     public function submit()

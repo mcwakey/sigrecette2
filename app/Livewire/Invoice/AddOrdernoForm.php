@@ -31,9 +31,7 @@ class AddOrdernoForm extends Component
     }
     public function mount()
     {
-        if (!auth()->user()->hasPermissionTo('peut ajouter le numéro d\'ordre de recette d\'un avis')) {
-            abort(403, 'Accès interdit');
-        }
+
     }
     public function validateData()
     {

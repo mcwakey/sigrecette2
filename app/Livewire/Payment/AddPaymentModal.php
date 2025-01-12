@@ -72,9 +72,7 @@ class AddPaymentModal extends Component
         'update_local_amount' => 'updateLocalAmount',
     ];
     public function mount(){
-        if (!auth()->user()->hasPermissionTo('peut ajouter un paiement')) {
-            abort(403, 'Accès interdit');
-        }
+
     }
     public function render()
     {
@@ -105,10 +103,13 @@ class AddPaymentModal extends Component
                 $is_regisseur = true;
             }
         }
-        if ($is_regisseur) {
-            $this->rules()["reference"] = "required";
-        }
         $this->validate();
+        if ($is_regisseur) {
+            $this->validateOnly('reference', [
+                'reference' => 'required',
+            ]);
+        }
+
         DB::transaction(function () use ($role, $is_regisseur) {
             $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
             if (($this->paid + $this->amount) <= $invoice->amount) {
