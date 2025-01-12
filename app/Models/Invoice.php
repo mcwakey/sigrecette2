@@ -33,7 +33,6 @@ class Invoice extends Model implements FormatDateInterface
         'delivery',
         'edition_state',
         'notes'
-        // 'profile_photo_path',
     ];
     protected $attributes = [
         'status' => InvoiceStatusEnums::DRAFT,
@@ -140,5 +139,52 @@ class Invoice extends Model implements FormatDateInterface
             }
         }
         return $this;
+    }
+    public static function saveNotes(int $previousInvoiceId=null, string $remainingAmount=null, $freeText=null)
+    {
+       return json_encode([
+            'previous_invoice_id' => $previousInvoiceId,
+            'remaining_amount' => $remainingAmount,
+            'free_text' => $freeText,
+        ]);
+    }
+    /**
+     * Vérifie si le champ `notes` suit la structure JSON attendue.
+     *
+     * @return bool
+     */
+    public function hasValidNotesStructure()
+    {
+        $notesData = json_decode($this->notes, true);
+
+        if (is_array($notesData)) {
+            return array_key_exists('previous_invoice_id', $notesData)
+                && array_key_exists('remaining_amount', $notesData)
+                && array_key_exists('free_text', $notesData);
+        }
+
+        return false;
+    }
+    public  function migrateNotes()
+    {
+
+        if (!$this->hasValidNotesStructure()) {
+            $structuredNotes = [
+                'previous_invoice_id' => null,
+                'remaining_amount' => null,
+                'free_text' => $this->notes,
+            ];
+            $this->notes = json_encode($structuredNotes);
+            $this->save();
+        }
+    }
+
+    public function getNotes()
+    {
+        if($this->hasValidNotesStructure()) {
+            return json_decode($this->notes, true) ;
+        }else{
+            return $this->notes;
+        }
     }
 }

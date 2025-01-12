@@ -74,6 +74,7 @@ class AutoInvoiceModal extends Component
                     ->where('taxpayers.zone_id', 'LIKE', '%' . ($this->zone ?? '') . '%')
                     ->where('taxables.tax_label_id', 'LIKE', '%' . ($this->taxlabel ?? '') . '%')
                     ->where('invoices.validity', "=",'EXPIRED')
+                    ->where('invoices.type', '=', Constants::TITRE)
                     ->whereBetween('invoices.created_at', [$s_date, $e_date])
                     ->select('invoices.*')
                     ->get();
@@ -88,11 +89,11 @@ class AutoInvoiceModal extends Component
             foreach ($invoices as $invoice) {
                 $invoiceData = [
                     'taxpayer_id' => $invoice->taxpayer_id,
-                    // 'status' => 'PENDING',
                     'from_date' => date('Y-') . $this->start_month . "-01",
                     'to_date' => date('Y-') . $this->start_month + $this->qty . "-01",
                     'qty' => $this->qty,
                     'amount' => '0',
+                    'notes'=>Invoice::saveNotes($invoice->id,$invoice->get_remains_to_be_paid(),''),
                 ];
                 $created_invoice = Invoice::create($invoiceData);
                 foreach ($invoice->invoiceitems as $invoiceitem) {
@@ -100,7 +101,6 @@ class AutoInvoiceModal extends Component
                         'invoice_id' => $created_invoice->id,
                         'taxpayer_taxable_id' => $invoiceitem->taxpayer_taxable_id,
                         'qty' => $this->qty,
-                        //'qty' => "6",
                         'ii_tariff' => $invoiceitem->taxpayer_taxable->taxable->tariff,
                         'ii_seize' => $invoiceitem->taxpayer_taxable->seize,
                         'amount' => $invoiceitem->taxpayer_taxable->taxable->tariff * $this->qty * $invoiceitem->taxpayer_taxable->seize,

@@ -302,12 +302,38 @@
                 <td colspan="7" style="text-align: center; border: 1px solid black;">{{format_amount($data->amount)}}</td>
 
             </tr>
+            @php
+                $last_amount =0;
+                $sum_amount=0;
+            @endphp
 
+        @if($data->hasValidNotesStructure())
+                @php
+                    $last_amount =$data-> getNotes()['remaining_amount'];
+                @endphp
+                <tr>
+                    <td colspan="6" style="text-align: right; border: 1px solid black;"><strong>Total reste avis année précédente({{$data-> getNotes()['previous_invoice_id']}}) :</strong></td>
+
+                    <td colspan="7" style="text-align: center; border: 1px solid black;">{{format_amount($data-> getNotes()['remaining_amount'])}}</td>
+
+                </tr>
+            @endif
+            @if($last_amount!=0)
+                @php
+                $sum_amount=doubleval($data->amount)+doubleval($last_amount);
+                @endphp
+                <tr>
+                    <td colspan="6" style="text-align: right; border: 1px solid black;"><strong>Total cumulé </strong></td>
+
+                    <td colspan="7" style="text-align: center; border: 1px solid black;">{{format_amount( $sum_amount)}}</td>
+
+                </tr>
+            @endif
 
 
         </table>
         <p>Arrêté le présent @if($action!=1) avis d'annulation ou de réduction @else avis @endifà la somme de:<span
-                class="write">@if($action==1){{number_to_words($data->amount) }}
+                class="write">@if($action==1){{number_to_words($sum_amount!=0?$sum_amount:$data->amount) }}
                 @else
                     @if($invoice->amount ==$data->amount)
                         {{number_to_words($invoice->amount) }}
