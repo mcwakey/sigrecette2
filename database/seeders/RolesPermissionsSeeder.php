@@ -60,12 +60,17 @@ class RolesPermissionsSeeder extends Seeder
                 'peut modifier un utilisateur',
                 'peut activer un utilisateur',
                 'peut désactiver un utilisateur',
+
+
                 'peut créer un collecteur',
+                'peut modifier un collecteur',
+                'peut activer un collecteur',
+                'peut désactiver un collecteur',
 
                 // Geolocatoion permissions
                 'peut voir la geolocalisation d\'un contribuable',
 
-                // Account permissions 
+                // Account permissions
                 'peut voir la comptabilité',
                 'peut effectuer une demande d\'approvisionement de valeur inactive',
                 'peut effectuer un versement au régisseur',
@@ -114,7 +119,7 @@ class RolesPermissionsSeeder extends Seeder
                 'peut modifier une activité',
                 'peut supprimer une activité',
 
-                // Category 
+                // Category
                 'peut créer une catégorie',
                 'peut modifier une catégorie',
                 'peut supprimer une catégorie',
@@ -177,7 +182,7 @@ class RolesPermissionsSeeder extends Seeder
                 'peut modifier une activité',
                 'peut supprimer une activité',
 
-                // Category 
+                // Category
                 'peut créer une catégorie',
                 'peut modifier une catégorie',
                 'peut supprimer une catégorie',
@@ -197,7 +202,7 @@ class RolesPermissionsSeeder extends Seeder
             ],
 
             'ordonateur' => [
-                // Account permissions 
+                // Account permissions
                 'peut voir la comptabilité',
 
                 // Recovery permissions
@@ -226,7 +231,7 @@ class RolesPermissionsSeeder extends Seeder
             ],
 
             'regisseur' => [
-                // Account permissions 
+                // Account permissions
                 'peut voir la comptabilité',
                 'peut effectuer un versement au receveur',
                 'peut effectuer un versement au régisseur',

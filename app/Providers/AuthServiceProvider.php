@@ -1,6 +1,7 @@
 <?php
 namespace App\Providers;
 use App\Models\User;
+use App\Policies\CollectorPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Support\Facades\Gate;
@@ -15,6 +16,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         User::class => UserPolicy::class,
+        User::class => CollectorPolicy::class,
         Role::class => RolePolicy::class,
     ];
     /**
@@ -31,5 +33,10 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('update-role', [UserPolicy::class, 'update']);
         Gate::define('create-role', [UserPolicy::class, 'create']);
         Gate::define('delete-role', [UserPolicy::class, 'delete']);
+
+        Gate::define('update-collector', [CollectorPolicy::class, 'update']);
+        Gate::define('create-collector', [CollectorPolicy::class, 'create']);
+        Gate::define('delete-collector', [CollectorPolicy::class, 'delete']);
+
     }
 }

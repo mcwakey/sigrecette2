@@ -40,7 +40,7 @@ class AddUserCollectorModal extends Component
         if ($role) {
             $this->role = $role->name;
         }
-        $roleNeedZone = [__('agent_recouvrement'), __('collecteur')];
+        $roleNeedZone = [__('agent_recouvrement')];
         if (in_array(__($this->role), $roleNeedZone)) {
             $this->rules['zone_id'] = 'required|integer';
         } elseif ($this->zone_id) {
@@ -52,13 +52,14 @@ class AddUserCollectorModal extends Component
                 'name' => $this->name,
             ];
             $data['zone_id'] = $this->zone_id;
-            if (!$this->edit_mode && !Gate::forUser(auth()->user())->allows('create-user', User::class)) {
+            //edit to add collector
+            if (!$this->edit_mode && !Gate::forUser(auth()->user())->allows('create-collector', User::class)) {
                 $this->dispatch('error', Constants::NOT_PERMISSION_TO_PERFORM_ACTION);
                 return false;
             }
-            // Update or Create a new user record in the database
+            //edit to add collector
             $user = User::find($this->user_id) ?? User::create($data);
-            if ($this->edit_mode && Gate::forUser(auth()->user())->allows('update-user', $user)) {
+            if ($this->edit_mode && Gate::forUser(auth()->user())->allows('update-collector', $user)) {
                 foreach ($data as $k => $v) {
                     $user->$k = $v;
                 }
@@ -85,7 +86,7 @@ class AddUserCollectorModal extends Component
     public function deleteUser($id)
     {
         $user = User::find($id);
-        if (!Gate::forUser(auth()->user())->allows('delete-user', $user)) {
+        if (!Gate::forUser(auth()->user())->allows('delete-collector', $user)) {
             $this->dispatch('error', Constants::NOT_PERMISSION_TO_PERFORM_ACTION);
             return false;
         }
