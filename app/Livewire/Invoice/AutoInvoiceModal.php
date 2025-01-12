@@ -27,23 +27,15 @@ class AutoInvoiceModal extends Component
     public $zone;
     public $taxlabel;
     public $qty = 12;
-    public $start_month;
+    public $start_month=01;
     public $amount = 0;
     public $taxpayer_id;
     protected $rules = [
-        "s_amount" => "required|numeric",
         "taxpayer_taxable_id" => "required|int",
-        "qty" => "required|numeric",
         "start_month" => "required|string",
-        'taxpayer_id' => 'required|int',
-        'amount' => 'required|numeric',
     ];
     protected $listeners = [
-        // 'delete_user' => 'deleteUser',
-        // 'update_invoice' => 'updateInvoice',
         'auto_invoice' => 'autoInvoice',
-        // 'view_invoice' => 'viewInvoice',
-        //'load_invoice' => 'loadInvoice',
     ];
     public function render()
     {
@@ -85,37 +77,42 @@ class AutoInvoiceModal extends Component
 
 
             //dd($request->all());
-           // dd($invoices);
+           //dd($invoices);
+            $from_date = Carbon::createFromDate(date('Y'), $this->start_month, 1);
+            $to_date = $from_date->copy()->addMonths($this->qty - 1)->endOfMonth();
             foreach ($invoices as $invoice) {
                 $invoiceData = [
                     'taxpayer_id' => $invoice->taxpayer_id,
-                    'from_date' => date('Y-') . $this->start_month . "-01",
-                    'to_date' => date('Y-') . $this->start_month + $this->qty . "-01",
+                    'from_date' => $from_date->toDateString(),
+                    'to_date' => $to_date->toDateString(),
                     'qty' => $this->qty,
                     'amount' => '0',
                     'notes'=>Invoice::saveNotes($invoice->id,$invoice->get_remains_to_be_paid(),''),
                 ];
                 $created_invoice = Invoice::create($invoiceData);
+                $totalAmount = 0;
                 foreach ($invoice->invoiceitems as $invoiceitem) {
+                    $itemAmount = $invoiceitem->taxpayer_taxable->taxable->tariff * $this->qty * $invoiceitem->taxpayer_taxable->seize;
                     $invoiceItemsData = [
                         'invoice_id' => $created_invoice->id,
                         'taxpayer_taxable_id' => $invoiceitem->taxpayer_taxable_id,
                         'qty' => $this->qty,
                         'ii_tariff' => $invoiceitem->taxpayer_taxable->taxable->tariff,
                         'ii_seize' => $invoiceitem->taxpayer_taxable->seize,
-                        'amount' => $invoiceitem->taxpayer_taxable->taxable->tariff * $this->qty * $invoiceitem->taxpayer_taxable->seize,
-                        $this->amount += $invoiceitem->taxpayer_taxable->taxable->tariff * $this->qty * $invoiceitem->taxpayer_taxable->seize,
+                        'amount' => $itemAmount,
                     ];
                     InvoiceItem::create($invoiceItemsData);
                     $taxpayerTaxable = TaxpayerTaxable::find($invoiceitem->taxpayer_taxable_id);
                     $taxpayerTaxable->invoice_id = $created_invoice->id;
                     $taxpayerTaxable->bill_status = 'BILLED';
                     $taxpayerTaxable->save();
+                    $totalAmount += $itemAmount;
                 }
                 $created_invoice->invoice_no = $created_invoice->id;
                 $created_invoice->nic = $created_invoice->taxpayer_id . $created_invoice->id;
-                $created_invoice->amount = $this->amount;
+                $created_invoice->amount = $totalAmount;;
                 $created_invoice->save();
+                
                 $invoice->validity = 'ARCHIVED';
                 $invoice->save();
             }
@@ -124,83 +121,8 @@ class AutoInvoiceModal extends Component
         // Reset form fields after successful submission
         $this->reset();
     }
-    public function deleteUser($id)
-    {
-        Invoice::destroy($id);
-        $this->dispatchMessage('Avis', 'delete');
-    }
-    public function viewInvoice($id)
-    {
-        $this->updateInvoice($id);
-        $this->view_mode = false;
-        $this->button_mode = false;
-    }
-    public function updateInvoice($id)
-    {
-        $this->view_mode = true;
-        $this->edit_mode = true;
-        $this->button_mode = true;
-        $invoice = Invoice::find($id);
-        $this->taxpayer_id = $invoice->taxpayer->id;
-        $this->invoice_id = $invoice->id;
-        $this->qty = $invoice->qty;
-        $this->name = $invoice->taxpayer->name;
-        $this->tnif = $invoice->taxpayer->id;
-        $this->zone = $invoice->taxpayer->zone->name;
-        $this->taxpayer_taxables = $taxpayer_taxables = InvoiceItem::where('invoice_id',"=", $id)->get();
-        foreach ($taxpayer_taxables as $index => $invoice_item) {
-            if ($invoice_item->taxpayer_taxable->taxable->periodicity == "Mois") {
-                $period = 1;
-            } elseif ($invoice_item->taxpayer_taxable->taxable->periodicity == "Ans") {
-                $period = 0.083333;
-            } else {
-                $period = 1;
-            }
-            $this->periodicity = $invoice_item->taxpayer_taxable->taxable->periodicity;
-            $this->taxable_taxlabel = $invoice_item->taxpayer_taxable->taxable->tax_label->code . ' : ' . $invoice_item->taxpayer_taxable->taxable->name;
-            $this->taxpayer_taxable_id[$index] = $invoice_item->taxpayer_taxable->id;
-            $this->taxpayer_taxable[$index] = $invoice_item->taxpayer_taxable->name;
-            $this->s_seize[$index] = $invoice_item->ii_seize;
-            $this->s_seize_e[$index] = $invoice_item->taxpayer_taxable->seize;
-            $this->s_tariff[$index] = $invoice_item->ii_tariff;
-            $this->s_tariff_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff;
-            if ($invoice_item->taxpayer_taxable->taxable->tariff_type == "FIXED") {
-                $this->s_amount[$index] = $invoice_item->amount;
-                $this->s_amount_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff * $invoice_item->taxpayer_taxable->seize * $this->qty * $period;
-            } else {
-                $this->s_amount[$index] = $invoice_item->amount / 100;
-                $this->s_amount_e[$index] = $invoice_item->taxpayer_taxable->taxable->tariff * $invoice_item->taxpayer_taxable->seize * $this->qty * $period / 100;
-            }
-        }
-        $this->amount_ph = array_sum($this->s_amount) . " FCFA";
-        $this->amount_ph_e = array_sum($this->s_amount_e) . " FCFA";
-        $this->amount = array_sum($this->s_amount);
-        $this->amount_e = array_sum($this->s_amount_e);
-        $this->amount_red_e = $this->amount - $this->amount_e;
-    }
-    public function addInvoice($id)
-    {
-        $this->edit_mode = false;
-        $this->view_mode = false;
-        $this->button_mode = true;
-        $this->invoice_id = '';
-        $this->qty = '';
-        $this->taxpayer_taxables = $taxpayer_taxables = TaxpayerTaxable::where('taxpayer_id',"=", $id)->where('billable', "=",1)->get();
-        foreach ($taxpayer_taxables as $index => $taxable) {
-            $this->taxpayer_taxable_id[$index] = $taxable->id;
-            $this->taxpayer_taxable[$index] = $taxable->name;
-            $this->s_seize[$index] = $taxable->seize;
-            $this->s_tariff[$index] = $taxable->taxable->tariff;
-            $this->s_amount[$index] = '';
-        }
-        $this->amount_ph = " FCFA";
-        $this->amount = '';
-        $taxpayer = Taxpayer::find($id);
-        $this->taxpayer_id = $taxpayer->id;
-        $this->name = $taxpayer->name;
-        $this->tnif = $taxpayer->id;
-        $this->zone = $taxpayer->zone->name;
-    }
+
+
     public function autoInvoice($value)
     {
         $this->qty = $value;
