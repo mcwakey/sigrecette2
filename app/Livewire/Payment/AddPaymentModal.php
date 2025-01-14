@@ -178,6 +178,10 @@ class AddPaymentModal extends Component
                 ->where('validity', 'EXPIRED')
                 ->first();
         }
+        if(!$invoice){
+            $this->dispatchMessage('Paiment', 'update', 'error', "Erreur lors de la mise à jour du paiement,avis non retrouvé.");
+            return;
+        }
         $this->invoice_id = $invoice->id;
         $this->taxpayer_id = $invoice->taxpayer->id ?? "";
         $this->name = $invoice->taxpayer->name ?? "";

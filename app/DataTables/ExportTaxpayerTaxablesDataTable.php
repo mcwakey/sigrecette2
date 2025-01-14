@@ -1,5 +1,7 @@
 <?php
 namespace App\DataTables;
+use App\Enums\InvoiceStatusEnums;
+use App\Helpers\Constants;
 use App\Models\Invoice;
 use App\Models\Taxpayer;
 use App\Models\TaxpayerTaxable;
@@ -118,6 +120,7 @@ class ExportTaxpayerTaxablesDataTable extends DataTable
             ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
             ->select('taxpayer_taxables.*')
             ->whereBetween('taxpayer_taxables.created_at', [$this->startDate, $this->endDate])
+            ->where('invoices.type','=',Constants::TITRE)
            // ->where(function ($query) {$query->whereNull('invoices.id')->orWhere('invoices.type', 'TITRE');})
             ->newQuery();
     }

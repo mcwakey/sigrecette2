@@ -90,7 +90,7 @@
                                     <tr>
                                         <td class="text-gray-500">Report des restes de l'année d'exercice  précédente :</td>
                                         <td class="text-gray-800">
-                                            @if($commune->carry_over_enabled)
+                                            @if($commune->carry_forward_previous_year)
                                                 Activé
                                             @else
                                                 Désactivé

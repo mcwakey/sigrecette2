@@ -37,7 +37,7 @@ class ExportRecoveriesDataTable extends DataTable
             ->editColumn('reference', function (Payment $payment) {
                 return $payment->reference;
             })
-            ->editColumn('tax_labels.code', function (Payment $payment) {
+            ->editColumn('code', function (Payment $payment) {
                 return $payment->code ?? '';
             })
             ->editColumn('taxpayer.name', function (Payment $payment) {
@@ -65,12 +65,14 @@ class ExportRecoveriesDataTable extends DataTable
             ->leftJoin('users', 'users.id', '=', 'payments.user_id')
             ->join('tax_labels', 'tax_labels.code', '=', 'payments.code')
             ->select('payments.*')
-            ->orWhereNotIn('payments.reference', [Constants::ANNULATION, Constants::REDUCTION])
-            ->orWhereNull('payments.reference')
-            ->distinct()
-            ->whereBetween('payments.created_at', [$this->startDate, $this->endDate])
+            ->whereNotNull('payments.user_id')
+            ->where(function ($q) {
+                $q->whereNull('payments.reference')
+                    ->orWhereNotIn('payments.reference', [Constants::ANNULATION, Constants::REDUCTION]);
+            })
             ->orderBy('payments.created_at', 'desc')
-            ->newQuery();
+            ->distinct()
+            ->whereBetween('payments.created_at', [$this->startDate, $this->endDate]);
     }
     /**
      * Get the dataTable columns definition.
@@ -82,7 +84,7 @@ class ExportRecoveriesDataTable extends DataTable
             Column::make('taxpayer.name')->title(__('taxpayer')),
             Column::make('invoice.invoice_no')->title(__('invoice no')),
             Column::make('reference')->title(__("reference no"))->name("reference"),
-            Column::make('tax_labels.code')->title(__('code')),
+            Column::make('code')->title(__('code')),
             Column::make('amount')->title(__('amount paid')),
             Column::make('status')->title(__('status')),
             Column::make('user.name')->title(__('user'))->addClass('d-flex align-items-center'),

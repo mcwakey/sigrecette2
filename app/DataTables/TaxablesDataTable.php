@@ -52,6 +52,9 @@ class TaxablesDataTable extends DataTable
             ->editColumn('created_at', function (Taxable $taxable) {
                 return $taxable->created_at->format('d M Y');
             })
+            ->editColumn('updated_at', function (Taxable $taxable) {
+                return $taxable->updated_at->format('d M Y');
+            })
             ->addColumn('action', function (Taxable $taxable) {
                 return view('pages/taxables.columns._actions', ['taxable' => $taxable]);
             })
@@ -105,7 +108,8 @@ class TaxablesDataTable extends DataTable
             Column::make('unit')->title(__('unit')),
             Column::make('periodicity')->title(__('periodicity')),
             Column::make('penalty')->title(__('penalty')),
-            Column::make('created_at')->title(__('created at'))->addClass('text-nowrap')->visible(false),
+            Column::make('created_at')->title(__('created at'))->addClass('text-nowrap'),
+            Column::make('updated_at')->title(__('updated at'))->addClass('text-nowrap'),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
                 ->exportable(true)

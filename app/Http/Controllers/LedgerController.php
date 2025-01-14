@@ -1,10 +1,22 @@
 <?php
 namespace App\Http\Controllers;
 use App\DataTables\LedgersDataTable;
+use App\Traits\HandlesDateFilters;
+use Illuminate\Http\Request;
+
 class LedgerController extends Controller
 {
-    public function index(LedgersDataTable $dataTable)
+    use  HandlesDateFilters;
+
+    public function index(Request $request,LedgersDataTable $dataTable)
     {
-        return $dataTable->render('pages/ledgers.list');
+        $this->handleDateFilters($request);
+
+        return $dataTable->with(
+            [
+                'startDate' => $this->s_date,
+                'endDate' => $this->e_date,
+            ]
+        )->render('pages/ledgers.list');
     }
 }
