@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 use App\DataTables\ExportInvoicesDataTable;
 use App\DataTables\ExportRecoveriesDataTable;
+use App\DataTables\ExportTaxablesDataTable;
 use App\DataTables\ExportTaxpayersDataTable;
 use App\DataTables\ExportTaxpayerTaxablesDataTable;
 use App\Enums\ExportTypeEnums;
@@ -31,7 +32,8 @@ class ExportController extends Controller
                           ExportTaxpayersDataTable $exportTaxpayersDataTable,
                           ExportInvoicesDataTable $exportInvoicesDataTable,
                           ExportRecoveriesDataTable $exportRecoveriesDataTable,
-    ExportTaxpayerTaxablesDataTable $exportTaxpayerTaxablesDataTable)
+    ExportTaxpayerTaxablesDataTable $exportTaxpayerTaxablesDataTable,
+    ExportTaxablesDataTable $exportTaxablesDataTable,)
     {
         $this->handleDateFilters($request);
 
@@ -73,6 +75,14 @@ class ExportController extends Controller
                     'endDate' => $this->e_date,
                 ]
             )->render('pages/export.taxpayer_taxables.list', []);
+        }
+        elseif ($export_type == ExportTypeEnums::TAXABLE){
+            return $exportTaxablesDataTable->with(
+                [
+                    'startDate' => $this->s_date,
+                    'endDate' => $this->e_date,
+                ]
+            )->render('pages/export.taxables.list', []);
         }
         else {
             return $exportRecoveriesDataTable->with(
