@@ -13,7 +13,6 @@ return new class extends Migration
     {
         if (config('database.default') !== 'sqlite') {
             DB::unprepared('
-                DROP PROCEDURE IF EXISTS updateTaxpayerTaxables;
                 CREATE PROCEDURE updateTaxpayerTaxables()
                 BEGIN
                     DECLARE today DATE;
