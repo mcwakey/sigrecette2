@@ -307,7 +307,7 @@
                 $sum_amount=0;
             @endphp
 
-        @if($data->hasValidNotesStructure())
+        @if($data->carry_forward_previous_year && $data->hasValidNotesStructure())
                 @php
                     $last_amount =$data-> getNotes()['remaining_amount'];
                 @endphp
@@ -365,7 +365,7 @@
                 </td>
                 <td class="">
                     <div>
-                        @if($commune->url || config('app.debug'))
+                        @if($commune->qr_code_enabled)
                             <img src="{{ $qrcodeSvg }}" alt="QR Code" style="width: 90px; height: auto;">
                         @endif
                     </div>

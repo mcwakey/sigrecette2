@@ -19,7 +19,9 @@ class Commune extends Model
         'limit_json',
         'logo_path',
         'email',
-        'url'
+        'url',
+        'qr_code_enabled',
+        'carry_forward_previous_year',
     ];
     /**
      * Get the first commune.

@@ -25,6 +25,8 @@ class AddCommuneModal extends Component
     public $limit_json;
     public $edit_mode = false;
     public $url;
+    public $qr_code_enabled=false;
+    public $carry_forward_previous_year=false;
     public $email;
     public $logo;
     public $saved_logo;
@@ -39,6 +41,8 @@ class AddCommuneModal extends Component
         'treasury_address' => 'required|string',
         'logo' => 'nullable|sometimes|image|mimes:jpeg,png,jpg|max:1024',
         'treasury_rib' => 'nullable|sometimes|string',
+        'qr_code_enabled' => 'required|boolean',
+        'carry_forward_previous_year' => 'required|boolean',
     ];
     protected $listeners = [
         'delete_user' => 'deleteUser',
@@ -73,7 +77,9 @@ class AddCommuneModal extends Component
                 'latitude' => $this->latitude,
                 'longitude' => $this->longitude,
                 'email' => $this->email,
-                'url' => $this->url
+                'url' => $this->url,
+                'qr_code_enabled' => $this->qr_code_enabled,
+                'carry_forward_previous_year' => $this->carry_forward_previous_year,
             ];
             if ($this->logo) {
                 $data['logo_path'] = $this->logo->store('logo', 'public');
@@ -123,6 +129,8 @@ class AddCommuneModal extends Component
         $this->longitude = $commune->longitude;
         $this->url = $commune->url;
         $this->email = $commune->email;
+        $this->qr_code_enabled= $commune->qr_code_enabled;
+        $this->carry_forward_previous_year= $commune->carry_forward_previous_year;
     }
     public function hydrate()
     {
