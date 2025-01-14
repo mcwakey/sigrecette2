@@ -227,18 +227,20 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     public function countInvoices(string $type=Constants::INVOICE_TYPE_TITRE): array
     {
         return Invoice::whereBetween('invoices.created_at', [$this->startDate, $this->endDate])
-            ->where('invoices.type', '=',$type)
+
             ->selectRaw('status, count(*) as count')
             ->groupBy('status')
             ->pluck('count', 'status')
             ->merge(['NOEXPIRED' => Invoice::whereBetween('created_at', [$this->startDate, $this->endDate])
+                ->where('invoices.type', '=',$type)
                 ->where('status', '!=', 'EXPIRED')
                 ->count()])
             ->merge(['Pending' => Invoice::whereBetween('created_at', [$this->startDate, $this->endDate])
+                ->where('invoices.type', '=',$type)
                 ->where('status', '!=', 'EXPIRED')
                 ->where('delivery', '=', 'NOT DELIVERED')
                 ->count()])
-            ->merge(['Total' => Invoice::whereBetween('created_at', [$this->startDate, $this->endDate])
+            ->merge(['Total' => Invoice::whereBetween('created_at', [$this->startDate, $this->endDate])->where('invoices.type', '=',$type)
                 ->count()])
             ->toArray();
     }
