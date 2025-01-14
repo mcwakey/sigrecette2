@@ -79,33 +79,12 @@
         {{ $dataTable->scripts() }}
         <script>
             document.getElementById('mySearchInput').addEventListener('keyup', function () {
-                window.LaravelDataTables['collector_deposits-table'].search(this.value).draw();
+                window.LaravelDataTables['ledgers-table'].search(this.value).draw();
             });
-
-            document.getElementById('mySearchZero').addEventListener('keyup', function() {
-                window.LaravelDataTables['collector_deposits-table'].column(1).search(this.value).draw();
-            });
-
-            // document.getElementById('mySearchOne').addEventListener('change', function() {
-            //     window.LaravelDataTables['collector_deposits-table'].column(2).search(this.value).draw();
-            // });
-
-            document.getElementById('mySearchTwo').addEventListener('keyup', function() {
-                window.LaravelDataTables['collector_deposits-table'].column(2).search(this.value).draw();
-            });
-
-            document.getElementById('mySearchFour').addEventListener('keyup', function() {
-                window.LaravelDataTables['collector_deposits-table'].column(11).search(this.value).draw();
-            });
-
-            document.getElementById('mySearchFive').addEventListener('change', function() {
-                window.LaravelDataTables['collector_deposits-table'].column(12).search(this.value).draw();
-            });
-
             document.addEventListener('livewire:init', function () {
                 Livewire.on('success', function () {
                     $('#kt_modal_add_stock_transfer').modal('hide');
-                    window.LaravelDataTables['collector_deposits-table'].ajax.reload();
+                    window.LaravelDataTables['ledgers-table'].ajax.reload();
                 });
             });
             document.querySelectorAll('.print-link').forEach(function(link) {

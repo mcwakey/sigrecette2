@@ -57,12 +57,10 @@ class LedgersDataTable extends DataTable
      */
     public function query(Payment $model): QueryBuilder
     {
-        $activeYear = Year::getActiveYear();
-        $startOfYear = Carbon::parse("{$activeYear->name}-01-01 00:00:00");
-        $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
+
         return $model
             ->whereNot('status', PaymentStatusEnums::PENDING) // Filter collector_deposits by taxpayer_id
-            ->whereBetween('payments.created_at', [$startOfYear, $endOfYear])
+            ->whereBetween('payments.created_at', [$this->startDate, $this->endDate])
             ->orderBy('created_at', 'asc')
             ->newQuery();
     }
@@ -73,7 +71,7 @@ class LedgersDataTable extends DataTable
     {
         $columns = $this->getColumns();
         return $this->builder()
-            ->setTableId('collector_deposits-table')
+            ->setTableId('ledgers-table')
             ->columns($columns)
             ->minifiedAjax()
             ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
@@ -91,9 +89,9 @@ class LedgersDataTable extends DataTable
     {
         return [
             Column::make('id')->title(__('id'))->exportable(false)->printable(false)->visible(false),
-            Column::make('payments.created_at')->title(__('date'))->addClass('text-nowrap'),
+            Column::make('created_at')->title(__('date'))->addClass('text-nowrap'),
             Column::make('description')->title(__('description')),
-            Column::make('stock_transfers.code')->title(__('code')),
+            Column::make('code')->title(__('code')),
             Column::make('reference')->title(__('reference no')),
             Column::make('amount')->title(__('amount')),
             Column::make('deposit')->title(__('versement')),

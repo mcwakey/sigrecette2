@@ -27,11 +27,7 @@ class AddStatusForm extends Component
     {
         $this->validate();
         $user = auth()->user();
-        if (!$user->hasRole('regisseur')) {
-            $this->dispatchMessage('Paiement', 'update', 'error',"Action non authorize");
-            $this->reset();
-            return;
-        }
+
         DB::transaction(function () {
             // Prepare data for Payment
             $data = [

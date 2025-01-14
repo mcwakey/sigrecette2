@@ -64,9 +64,8 @@
 
     @endif
     @if( in_array(App\Enums\InvoiceActionsEnums::PAYMENT,$actions))
-        @if( $invoice->can( "submit_for_reduced") ||  $invoice->can("submit_for_canceled") && $invoice->validity == 'VALID')
+        @if( $invoice->can( "submit_for_reduced") ||  $invoice->can("submit_for_canceled"))
             @if( $invoice->canGetPayment())
-
                 @can('peut ajouter un paiement')
                     <div class="menu-item px-3">
                         <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->invoice_no }}"
