@@ -118,4 +118,18 @@ class Year extends Model
     {
         return Year::orderBy('name')->first();
     }
+    public function budgets()
+    {
+        return $this->hasMany(Budget::class);
+    }
+    public function getTotalBudget()
+    {
+        return $this->budgets()->sum('expected_amount');
+    }
+
+    public function getBudgetsByTaxLabel()
+    {
+        return $this->budgets()->with('tax_label')->get();
+    }
+
 }
