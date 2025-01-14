@@ -306,13 +306,12 @@
                 $last_amount =0;
                 $sum_amount=0;
             @endphp
-
-        @if($data->carry_forward_previous_year && $data->hasValidNotesStructure())
+        @if($commune->carry_forward_previous_year && $data->hasValidNotesStructure())
                 @php
                     $last_amount =$data-> getNotes()['remaining_amount'];
                 @endphp
                 <tr>
-                    <td colspan="6" style="text-align: right; border: 1px solid black;"><strong>Total reste avis année précédente({{$data-> getNotes()['previous_invoice_id']}}) :</strong></td>
+                    <td colspan="6" style="text-align: right; border: 1px solid black;"><strong>Total reste avis année précédente({{'id :'.$data-> getNotes()['previous_invoice_id']}}) :</strong></td>
 
                     <td colspan="7" style="text-align: center; border: 1px solid black;">{{format_amount($data-> getNotes()['remaining_amount'])}}</td>
 
