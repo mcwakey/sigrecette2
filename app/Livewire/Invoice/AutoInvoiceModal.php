@@ -80,6 +80,10 @@ class AutoInvoiceModal extends Component
            //dd($invoices);
             $from_date = Carbon::createFromDate(date('Y'), $this->start_month, 1);
             $to_date = $from_date->copy()->addMonths($this->qty - 1)->endOfMonth();
+            $end_of_year = Carbon::createFromDate(date('Y'), 12, 31);
+            if ($to_date->greaterThan($end_of_year)) {
+                $to_date = $end_of_year;
+            }
             foreach ($invoices as $invoice) {
                 $invoiceData = [
                     'taxpayer_id' => $invoice->taxpayer_id,
