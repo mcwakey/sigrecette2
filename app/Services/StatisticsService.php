@@ -224,9 +224,10 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
             ->toArray();
         return array_values($counts);
     }
-    public function countInvoices(): array
+    public function countInvoices(string $type=Constants::INVOICE_TYPE_TITRE): array
     {
         return Invoice::whereBetween('invoices.created_at', [$this->startDate, $this->endDate])
+            ->where('invoices.type', '=',$type)
             ->selectRaw('status, count(*) as count')
             ->groupBy('status')
             ->pluck('count', 'status')
