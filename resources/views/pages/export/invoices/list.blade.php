@@ -1,7 +1,7 @@
 <x-default-layout>
     @section('title')
 
-        {{ "Liste générale des avis sur titre " }}
+        {{ "Liste générale des avis " }}
 
     @endsection
 
@@ -40,18 +40,39 @@
 
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
-
-                <div class="d-flex justify-content-end" data-kt-stock_request-table-toolbar="base">
+                <div class="d-flex justify-content-end" >
 
 
                     <div id="no-data-message" style="display: none;">
                         <div class=" ms-5 mt-1 me-5">
-                            <livewire:export-button :table-id="$dataTable->getTableId()" auto-download="true" type="xlsx" buttonName="Export Excel"/>
+                            <div
+                                class="card-toolbar flex-row-fluid justify-content-end gap-5">
+                                <button type="button" class="btn btn-light-primary" data-kt-menu-trigger="click"
+                                        data-kt-menu-placement="bottom-end">
+                                    <i class="ki-duotone ki-exit-down fs-2"><span class="path1"></span><span
+                                            class="path2"></span></i>
+                                    Export Report
+                                </button>
+                                <div id="kt_datatable_example_export_menu"
+                                     class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-200px py-4"
+                                     data-kt-menu="true">
+                                    <div class="menu-item px-3">
+                                        <div class="d-grid gap-2">
+                                            <a  class="btn btn-link btn-lg" href="{{route('exports-invoice')}}" target="_blank" >
+                                                <span class="menu-link px-3">
+                                                Exporter en XLSX
+                                                </span>
+                                            </a>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-
 
 
             </div>
@@ -113,12 +134,17 @@
                             <select class="form-select" id="mySearchTen">
                                 <option value=""></option>
                                 <option value="{{App\Enums\InvoiceStatusEnums::APPROVED}}">{{ __('APROVED') }}</option>
-                                <option value="{{ App\Enums\InvoiceStatusEnums::REJECTED }}">{{ __('REJECTED') }}</option>
-                                <option value="{{  App\Enums\InvoiceStatusEnums::CANCELED }}">{{ __('CANCELED') }}</option>
-                                <option value="{{  App\Enums\InvoiceStatusEnums::REDUCED }}">{{ __('REDUCED') }}</option>
-                                <option value="{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}">{{ __("AVIS D'ANNULATION/REDUCTION") }}</option>
+                                <option
+                                    value="{{ App\Enums\InvoiceStatusEnums::REJECTED }}">{{ __('REJECTED') }}</option>
+                                <option
+                                    value="{{  App\Enums\InvoiceStatusEnums::CANCELED }}">{{ __('CANCELED') }}</option>
+                                <option
+                                    value="{{  App\Enums\InvoiceStatusEnums::REDUCED }}">{{ __('REDUCED') }}</option>
+                                <option
+                                    value="{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}">{{ __("AVIS D'ANNULATION/REDUCTION") }}</option>
                                 <option value="{{ App\Enums\InvoiceStatusEnums::PENDING}}">{{ __('PENDING') }}</option>
-                                <option value="{{ App\Enums\InvoiceStatusEnums::ACCEPTED}}">{{ __('ACCEPTED') }}</option>
+                                <option
+                                    value="{{ App\Enums\InvoiceStatusEnums::ACCEPTED}}">{{ __('ACCEPTED') }}</option>
                                 <option value="{{ App\Enums\InvoiceStatusEnums::DRAFT}}">{{ __('DRAFT') }}</option>
                             </select>
                         </div>
@@ -139,7 +165,6 @@
                     </div>
 
 
-
                     <div class="separator separator-dashed mt-5 mb-5"></div>
                 </div>
 
@@ -154,13 +179,13 @@
         <!--end::Card body-->
     </div>
 
-@push('scripts')
+    @push('scripts')
         {{ $dataTable->scripts() }}
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
                 var table = $('#export-invoices-table').DataTable();
 
-                table.on('xhr', function() {
+                table.on('xhr', function () {
                     var json = table.ajax.json();
                     if (json.data.length === 0) {
                         $('#no-data-message').hide();

@@ -1,10 +1,9 @@
 <?php
-
 namespace App\DataTables;
-
 use App\Enums\TaxpayerStateEnums;
 use App\Helpers\Constants;
 use App\Models\Taxpayer;
+use App\Models\User;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
@@ -12,11 +11,9 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\WithExportQueue;
-
 class ExportTaxpayersDataTable extends DataTable
 {
     use WithExportQueue;
-
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
@@ -83,12 +80,45 @@ class ExportTaxpayersDataTable extends DataTable
             ->editColumn('created_at', function (Taxpayer $taxpayer) {
                 return $taxpayer->created_at->format('d M Y');
             })
+            ->editColumn('created_by', function (Taxpayer $taxpayer) {
+                $createdByName = null;
+                $updatedByName = null;
+                $createdAt = null;
+                $updatedAt = null;
+                if ($taxpayer->created_by) {
+                    $createdByUser = User::find($taxpayer->created_by);
+                    if ($createdByUser) {
+                        $createdByName = $createdByUser->name;
+                    }
+                    $createdAt = $taxpayer->created_at ? $taxpayer->created_at->format('d/m/Y H:i:s') : null;
+                }
+                if ($taxpayer->updated_by) {
+                    $updatedByUser = User::find($taxpayer->updated_by);
+                    if ($updatedByUser) {
+                        $updatedByName = $updatedByUser->name;
+                    }
+                    $updatedAt = $taxpayer->updated_at ? $taxpayer->updated_at->format('d/m/Y H:i:s') : null;
+                }
+                if ($createdByName && !$updatedByName) {
+                    $name = "Créé par: " . $createdByName;
+                    $date = "Le: " . $createdAt;
+                } elseif ($updatedByName && $createdByName) {
+                    $name = "Créé par: " . $createdByName . " | Dernière édition par: " . $updatedByName;
+                    $date = "Créé le: " . $createdAt . " | Dernière édition le: " . $updatedAt;
+                } elseif (!$createdByName && $updatedByName) {
+                    $name = "Dernière édition par: " . $updatedByName;
+                    $date = "Le: " . $updatedAt;
+                } else {
+                    $name = "Inconnu";
+                    $date = "Inconnu";
+                }
+                return $name . " " . $date;
+            })
             ->editColumn('updated_at', function (Taxpayer $taxpayer) {
                 return $taxpayer->updated_at->format('d M Y');
             })
             ->setRowId('id');
     }
-
     public function query(Taxpayer $model): QueryBuilder
     {
         $query = $model->with(['category', 'activity', 'town.canton', 'zone'])
@@ -98,18 +128,14 @@ class ExportTaxpayersDataTable extends DataTable
             ->with('zone')
             ->join('zones', 'taxpayers.zone_id', '=', 'zones.id')
             ->select('taxpayers.*')
+            ->whereBetween('taxpayers.created_at', [$this->startDate, $this->endDate])
             ->newQuery();
-
-        $query->whereNull('taxpayers.from_mobile_and_validate_state')
-            ->orWhere('taxpayers.from_mobile_and_validate_state', TaxpayerStateEnums::APPROVED);
-
+        $query
+            ->where('taxpayers.from_mobile_and_validate_state', '!=',TaxpayerStateEnums::REJECTED);
         return $query;
     }
-
-
     public function html(): HtmlBuilder
     {
-
         return $this->builder()
             ->setTableId('export-taxpayers-table')
             ->columns($this->getColumns())
@@ -120,14 +146,12 @@ class ExportTaxpayersDataTable extends DataTable
             ->orderBy(0)
             ->drawCallbackWithLivewire();
     }
-
     /**
      * Get the dataTable columns definition.
      */
     public function getColumns(): array
     {
-        $columns = [
-            Column::make('created_at')->title(__('created_at'))->addClass('text-nowrap'),
+        return [
             Column::make('id')->title(__('id')),
             Column::make('name')->title(__('taxpayer')),
             Column::make('social_work')->title(__('taxpayer.social_work')),
@@ -148,16 +172,11 @@ class ExportTaxpayersDataTable extends DataTable
             Column::make('town.canton.name')->title(__('canton')),
             Column::make('town.name')->title(__('Villages/Quartiers')),
             Column::make('zone.name')->title(__('zone'))->name("zone.name"),
+            Column::make('created_by')->title(__('user'))->addClass('d-flex align-items-center'),
             Column::make('type')->title(__('type'))->name("type"),
-
             Column::make('created_at')->title(__('created at')),
-
         ];
-
-
-        return $columns;
     }
-
     /**
      * Get the filename for export.
      */

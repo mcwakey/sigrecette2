@@ -1,11 +1,8 @@
 <?php
-
 namespace App\Providers;
-
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use App\Services\PackageVersionService;
-
 class VersionServiceProvider extends ServiceProvider
 {
     /**
@@ -17,7 +14,6 @@ class VersionServiceProvider extends ServiceProvider
     {
         // Register the service here if necessary
     }
-
     /**
      * Bootstrap services.
      *

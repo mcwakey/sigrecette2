@@ -1,5 +1,6 @@
 <div class="modal fade" id="kt_modal_add_accountant_deposit" tabindex="-1" aria-hidden="true" wire:ignore.self>
     <!--begin::Modal dialog-->
+    @can('peut faire un etat de compte du régisseur')
     <div class="modal-dialog modal-dialog-centered mw-1000px">
         <!--begin::Modal content-->
         <div class="modal-content">
@@ -123,5 +124,6 @@
         </div>
         <!--end::Modal content-->
     </div>
+    @endcan
     <!--end::Modal dialog-->
 </div>

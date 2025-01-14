@@ -42,6 +42,15 @@
                 </a>
             </div>
         @endcan
+            @can('peut activer un collecteur')
+                @if (!request()->has('disable') && request()->has('type'))
+                    <div class="menu-item px-3">
+                        <a href="#" class="menu-link px-3" data-kt-user-id="{{ $user->id }}" data-kt-action="restore_row">
+                            {{ __('Activer') }}
+                        </a>
+                    </div>
+                @endif
+            @endcan
     @else
         @can('peut désactiver un utilisateur')
             <div class="menu-item px-3">
@@ -51,6 +60,16 @@
                 </a>
             </div>
         @endcan
+            @can('peut désactiver un collecteur')
+                @if (!request()->has('disable') && request()->has('type'))
+                    <div class="menu-item px-3">
+                        <a href="#" class="menu-link px-3" data-kt-user-id="{{ $user->id }}"
+                           data-kt-action="disabeld_row">
+                            {{ __('Désactiver') }}
+                        </a>
+                    </div>
+                @endif
+            @endcan
     @endif
 
 </div>

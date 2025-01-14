@@ -1,75 +1,55 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\DataTables\PrintablesDataTable;
-use App\Helpers\PdfGenerator;
+use App\Helpers\Constants;
+use App\Models\Invoice;
 use App\Models\PrintFile;
 use App\Models\User;
+use App\Services\PdfGeneratorService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
-
+use ZipArchive;
 
 class PrintController extends Controller
 {
-
-    public function __construct(private PdfGenerator $pdfGenerator)
+    public function __construct(private PdfGeneratorService $pdfGenerator)
     {
     }
-
     public function index(PrintablesDataTable $printablesDataTable)
     {
         return $printablesDataTable->render('pages/printables.list');
     }
-
     /**
      * @param $data
-     * @param null $type
-     * @param null $action
      * @return RedirectResponse|Response|mixed
      */
     public function download($data, $type = null, $action = null, User $id = null)
     {
-
         if (Storage::missing("exports")) {
             Storage::makeDirectory("exports");
         }
         $data = json_decode($data, true);
         $result = $this->processType($type, $data, $action, $id);
-
-
         if ($result['success']) {
-            //$this->dispatchMessage("Ficher imprimable");
             return $result['pdf'];
         }
-
-        // $this->dispatchMessage("Ficher imprimable","create","error",$result['message']);
         return back()->with('error', $result['message']);
     }
-
     /**
-     * @param PrintFile $printFile
-     * @param null $type
-     * @param null $action
      * @return RedirectResponse|Response|mixed
      */
     public function downloadWithPrintData(PrintFile $printFile, $type = null, $action = null)
     {
-
-
         if (Storage::missing("exports")) {
             Storage::makeDirectory("exports");
         }
-        //$data = json_decode($data, true);
         $result = $this->processType($type, $printFile, $action);
-
-
         if ($result['success']) {
             session()->flash('status', 'Ficher Imprimer avec success.');
             return $result['pdf'];
         }
-
         session()->flash('status', "Erreur lors de la géneration du ficher");
         return back()->with('error', $result['message']);
     }
@@ -78,27 +58,21 @@ class PrintController extends Controller
      * @param $type
      * @param $data
      * @param $action
-     * @return array
      */
     public function processType($type, $data, $action, User $user = null): array
     {
-        //dump("test 1",$data,$type,$action);
-        // dd($type,$data,$action);
         switch ($type) {
             case 1:
-                return $this->pdfGenerator->downloadReceipt($data, 'payments', $action);
+                return $this->pdfGenerator->downloadReceipt($data);
             case 2:
-
                 if ($action == 3) {
                     return $this->pdfGenerator->generateInvoiceRegistrePdf('invoices-registre', $action);
                 } elseif ($action == 4) {
                     return $this->pdfGenerator->generateInvoiceDistribtionOrInvoiceRecouvrementPdf($data, 'invoices-distribution', $action, $user);
                 } elseif ($action == 41) {
                     return $this->pdfGenerator->generateInvoiceDistribtionOrInvoiceRecouvrementPdf($data, 'invoices-recouvrement', $action, $user);
-
                 } elseif ($action == 5) {
                     return $this->pdfGenerator->generateJournalInvoiceListPdf($data, 'invoices-journal-receveur', $action);
-
                 } elseif ($action == 42) {
                     return $this->pdfGenerator->generateInvoiceListPdf($data, 'invoices-recouvrement', $action);
                 } elseif ($action == 77) {
@@ -108,12 +82,8 @@ class PrintController extends Controller
                         return $this->pdfGenerator->generateBordereauListPdf('invoices-list', $action, $data);
                     } else {
                         return $this->pdfGenerator->generateBordereauListPdf('invoices-list', $action);
-
                     }
                 }
-            //case 3:dd($data,$action,'invoices-journal-receveur');
-            //case 4:return 'invoices-distribution';
-            //case 5:return 'invoices-recouvrement';
             case 11:
                 return $this->pdfGenerator->generataxpayerFormPdf($data, 'taxpayer-form');
             case 6:
@@ -122,8 +92,6 @@ class PrintController extends Controller
                 return $this->pdfGenerator->generateStateValueCollectorPdf($data, 'state-account-iv-receveur', $action);
             case 8:
                 return $this->pdfGenerator->generateStateValueCollectorPdf($data, 'state-versement-collecteur', $action);
-
-
             case 9:
                 return $this->pdfGenerator->generateStateValueCollectorPdf($data, 'state-versement-regisseur', $action);
             case 16:
@@ -132,14 +100,50 @@ class PrintController extends Controller
                 return $this->pdfGenerator->generateLedgersPdf('livre-journal-regie');
             case 15:
                 return $this->pdfGenerator->generateStateValueCollectorPdf($data, 'state-iv-regisseur', $action);
-
-
+            case 77:
+                return $this->pdfGenerator->generateInvoicePdf($data, 'invoices', $action,true);
             default:
                 return $this->pdfGenerator->generateInvoicePdf($data, 'invoices', $action);
-
+        }
+    }
+    public function downloadMultipleInvoicePdf(Request $request,int $action = null,): \Symfony\Component\HttpFoundation\BinaryFileResponse|RedirectResponse
+    {
+        $zip = new ZipArchive();
+        $zipFileName = storage_path('app/public/multiples_avis.zip');
+        $previousUrl = url()->previous();
+        $urlParts = parse_url($previousUrl);
+        $state = null;
+        parse_str($urlParts['query'] ?? '', $queryParams);
+        if (isset($queryParams['state']) && array_key_exists($queryParams['state'], Constants::INVOICE_STATE_PRINTABLE_MAP)) {
+            $state = Constants::INVOICE_STATE_PRINTABLE_MAP[$queryParams['state']];
+        }
+        if($state){
+            $uuid = Invoice::getPrintableUuid($state);
+        }else{
+        $uuid = Invoice::getPrintableUuid();
+        }
+        if (file_exists($zipFileName)) {
+            unlink($zipFileName);
+        }
+        if(count($uuid)==0){
+            return back()->with('error','no Data');
+        }else{
+            if ($zip->open($zipFileName, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+                foreach ($uuid as $invoiceUid){
+                    $result =$this->pdfGenerator->generateInvoicePdf([$invoiceUid],'invoices',$action);
+                    if($result['success']){
+                        $zip->addFromString($result['filename'], $result['pdf']);
+                    }else {
+                        \Log::warning("Impossible de générer le PDF pour l'UUID: {$invoiceUid}");
+                    }
+                }
+                $zip->close();
+            }else {
+                abort(500, "Impossible de créer l'archive ZIP.");
+            }
+            return response()->download($zipFileName)->deleteFileAfterSend(true);
         }
 
     }
-
 
 }

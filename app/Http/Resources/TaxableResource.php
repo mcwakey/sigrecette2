@@ -1,11 +1,8 @@
 <?php
-
 namespace App\Http\Resources;
-
 use App\Models\Taxable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-
 /**
  * @property Taxable $resource
  */
@@ -32,5 +29,4 @@ class TaxableResource extends JsonResource
             'taxlabel' => new TaxLabelResource($this->resource->tax_label)
         ];
     }
-
 }

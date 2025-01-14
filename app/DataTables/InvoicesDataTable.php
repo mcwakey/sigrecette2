@@ -1,17 +1,11 @@
 <?php
-
 namespace App\DataTables;
-
 use App\Enums\InvoicePayStatusEnums;
-use App\Enums\PrintNameEnums;
 use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
-use App\Helpers\InvoiceHelper;
 use App\Models\Invoice;
 use App\Models\Payment;
-use App\Models\Year;
-use Carbon\Carbon;
-use Yajra\DataTables\Html\Button;
+use App\Traits\HandlesTaxpayerFilters;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
@@ -19,12 +13,10 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
 use Yajra\DataTables\WithExportQueue;
-
 class InvoicesDataTable extends DataTable
 {
     use WithExportQueue;
-
-
+    use HandlesTaxpayerFilters;
     /**
      * Build the DataTable class.
      *
@@ -42,7 +34,6 @@ class InvoicesDataTable extends DataTable
             })
             ->editColumn('order_no', function (Invoice $invoice) {
                 return view('pages/invoices.columns._order_no', ['invoice' => $invoice]);
-                //return $invoice->order_no;
             })
             ->editColumn('nic', function (Invoice $invoice) {
                 return $invoice->nic;
@@ -57,7 +48,7 @@ class InvoicesDataTable extends DataTable
                 return ($invoice->taxpayer->latitude ?? '-') . ' : ' . ($invoice->taxpayer->longitude ?? '-');
             })
             ->editColumn('tax_labels.code', function (Invoice $invoice) {
-                return implode(',', array_keys(InvoiceHelper::sumAmountsByTaxCode($invoice)));
+                return implode(',', array_keys(Invoice::sumAmountsByTaxCode($invoice)));
             })
             ->editColumn('total', function (Invoice $invoice) {
                 if ($invoice->reduce_amount != '') {
@@ -67,7 +58,6 @@ class InvoicesDataTable extends DataTable
                 }
             })
             ->editColumn('paid', function (Invoice $invoice) {
-
                 return format_amount(Payment::getPaid($invoice->invoice_no));
             })
             ->editColumn('remains_to_be_paid', function (Invoice $invoice) {
@@ -75,16 +65,13 @@ class InvoicesDataTable extends DataTable
             })
             ->editColumn('validity', function (Invoice $invoice) {
                 return view('pages/invoices.columns._validity', ['invoice' => $invoice]);
-                //return ''; // Return empty string
             })
             ->editColumn('status', function (Invoice $invoice) {
                 return view('pages/invoices.columns._aproval', ['invoice' => $invoice]);
             })
             ->editColumn('delivery_date', function (Invoice $invoice) {
-                //return $invoice->delivery_date;
                 return view('pages/invoices.columns._delivery', ['invoice' => $invoice]);
             })
-            // ->editColumn('from_date', function (Invoice $invoice) {return $invoice->from_date;})
             ->editColumn('to_date', function (Invoice $invoice) {
                 return $invoice->to_date;
             })
@@ -99,29 +86,27 @@ class InvoicesDataTable extends DataTable
             })
             ->setRowId('uuid');
     }
-
-
     public function query(Invoice $model): QueryBuilder
     {
-
+        $this->id=$this->getTaxpayerId($this->id);
         $query = $model->join('invoice_items', 'invoice_items.invoice_id', '=', 'invoices.id')
             ->leftjoin('taxpayers', 'taxpayers.id', '=', 'invoices.taxpayer_id')
             ->join('taxpayer_taxables', 'taxpayer_taxables.id', '=', 'invoice_items.taxpayer_taxable_id')
             ->join('taxables', 'taxables.id', '=', 'taxpayer_taxables.taxable_id')
             ->join('tax_labels', 'tax_labels.id', '=', 'taxables.tax_label_id')
             ->leftjoin('zones', 'zones.id', '=', 'taxpayers.zone_id')
-            // ->where('taxpayers.zone_id', 'LIKE', '%' . ($this->zone ?? '') . '%')
-            // ->where('taxables.tax_label_id', 'LIKE', '%' . ($this->taxlabel ?? '') . '%')
-            // ->where('invoices.validity', 'EXPIRED')
             ->select('invoices.*')
             ->where('invoices.status', '!=', InvoiceStatusEnums::REJECTED_BY_OR)
-            ->whereBetween('invoices.created_at', [$this->startDate, $this->endDate])
             ->distinct()
             ->orderBy('invoices.created_at', 'desc')
             ->newQuery();
+        if(!$this->profile_page){
+            $query->whereBetween('invoices.created_at', [$this->startDate, $this->endDate]);
+        }
         if ($this->type != null) {
             $query->where('invoices.type', '=', $this->type);
         }
+        //else{$query->where('invoices.type', '=', Constants::TITRE);}
         if ($this->startInvoiceId !== null && $this->endInvoiceId !== null) {
             $query->whereBetween('invoices.id', [$this->startInvoiceId, $this->endInvoiceId]);
         }
@@ -131,8 +116,6 @@ class InvoicesDataTable extends DataTable
             } else {
                 $query->where('invoices.status', '=', $this->state);
             }
-
-
         }
         if ($this->delivery) {
             if ($this->delivery == Constants::INVOICE_DELIVERY_LIV_KEY) {
@@ -140,30 +123,22 @@ class InvoicesDataTable extends DataTable
                 if ($this->to_paid) {
                     $query->whereIn('invoices.status', [InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION])
                         ->where('invoices.pay_status', '!=', InvoicePayStatusEnums::PAID);
-
                 }
             } elseif ($this->delivery == Constants::INVOICE_DELIVERY_NON_LIV_KEY) {
                 $query->whereIn('invoices.status', [InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION]);
-
                 $query->whereNull('delivery_date');
-
             }
         }
-
-
         if ($this->id) {
             $query->where('invoices.taxpayer_id', '=', $this->id);
         }
         return $query;
     }
-
-
     /**
      * Optional method if you want to use the html builder.
      */
     public function html(): HtmlBuilder
     {
-
         return $this->builder()
             ->setTableId('invoices-table')
             ->columns($this->getColumns())
@@ -174,10 +149,8 @@ class InvoicesDataTable extends DataTable
             ->orderBy(3)
             ->pageLength(100) // Set the default number of rows per page to 3
             ->lengthMenu([[100, 300, 500, -1], [100, 300, 500, "All"]]) // Define options for the number of rows per page
-
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/taxpayer_taxables/columns/_draw-scripts.js')) . "}");
     }
-
     public function getColumns(): array
     {
         $columns = [
@@ -206,9 +179,7 @@ class InvoicesDataTable extends DataTable
                 ->printable(true)
                 ->width(60)
         ];
-
-
-        $columns = array_map(function ($column) {
+        return array_map(function ($column) {
             if ($this->type == Constants::INVOICE_TYPE_COMPTANT && in_array($column->name, ['zones.name', 'remains_to_be_paid', 'reason_for_reject', 'type'])) {
                 $column->visible(false);
             }
@@ -230,7 +201,6 @@ class InvoicesDataTable extends DataTable
                         $column->visible(false);
                     }
                 }
-
             }
             if ($this->to_paid && in_array($column->name, ['to_date', 'delivery_date', 'reason_for_reject', 'order_no', 'status'])) {
                 $column->visible(false);
@@ -246,16 +216,9 @@ class InvoicesDataTable extends DataTable
                     }
                 }
             }
-
-
             return $column;
         }, $columns);
-
-
-        return $columns;
     }
-
-
     /**
      * Get the filename for export.
      */
@@ -263,4 +226,5 @@ class InvoicesDataTable extends DataTable
     {
         return 'Invoices_' . date('YmdHis');
     }
+
 }

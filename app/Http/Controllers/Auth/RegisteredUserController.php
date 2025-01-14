@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
-
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
@@ -10,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
-
 class RegisteredUserController extends Controller
 {
     /**
@@ -21,16 +18,12 @@ class RegisteredUserController extends Controller
     public function create()
     {
         addJavascriptFile('assets/js/custom/authentication/sign-up/general.js');
-
         return view('pages/auth.register');
     }
-
     /**
      * Handle an incoming registration request.
      *
-     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
-     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
@@ -40,7 +33,6 @@ class RegisteredUserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
-
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -48,11 +40,8 @@ class RegisteredUserController extends Controller
             'last_login_at' => \Illuminate\Support\Carbon::now()->toDateTimeString(),
             'last_login_ip' => $request->getClientIp()
         ]);
-
         event(new Registered($user));
-
         Auth::login($user);
-
         return redirect(RouteServiceProvider::HOME);
     }
 }

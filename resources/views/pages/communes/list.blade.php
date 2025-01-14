@@ -77,6 +77,28 @@
                                         <td class="text-gray-500">URL site web:</td>
                                         <td class="text-gray-800">{{$commune->url}}</td>
                                     </tr>
+                                    <tr>
+                                        <td class="text-gray-500">Affichage du QR Code :</td>
+                                        <td class="text-gray-800">
+                                            @if($commune->qr_code_enabled)
+                                                Activé
+                                            @else
+                                                Désactivé
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-gray-500">Report des restes de l'année d'exercice  précédente :</td>
+                                        <td class="text-gray-800">
+                                            @if($commune->carry_over_enabled)
+                                                Activé
+                                            @else
+                                                Désactivé
+                                            @endif
+                                        </td>
+                                    </tr>
+
+
 
                                     <!--end::Row-->
                                     </tbody></table>

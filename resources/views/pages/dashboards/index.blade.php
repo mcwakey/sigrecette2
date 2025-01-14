@@ -41,7 +41,6 @@
                 @include('pages.dashboards.widget_root')
             </div>
 
-
             <div style="margin-bottom: 20px;">
                 @include('pages.dashboards.widget_activity_and_category')
             </div>
@@ -53,4 +52,8 @@
             </div>
 
         </div>
+    @include('pages.dashboards.widget_taxpayer_created')
+        @include('pages.dashboards.widget_invoice_created')
+        @include('pages.dashboards.widget_payment_created')
+
 </x-default-layout>

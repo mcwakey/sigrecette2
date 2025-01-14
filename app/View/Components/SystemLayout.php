@@ -1,10 +1,7 @@
 <?php
-
 namespace App\View\Components;
-
 use Illuminate\Support\Facades\App;
 use Illuminate\View\Component;
-
 class SystemLayout extends Component
 {
     /**
@@ -17,7 +14,6 @@ class SystemLayout extends Component
         // Init layout file
         app(config('settings.KT_THEME_BOOTSTRAP.system'))->init();
     }
-
     /**
      * Get the view / contents that represents the component.
      *

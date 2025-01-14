@@ -27,7 +27,7 @@
         </style>
 
         <h3 class="card-title align-items-start flex-column mb-6">
-            <span class="card-label fw-bold text-white">Graphique</span>
+            <span class="card-label fw-bold text-white">Graphique(Avis sur titre)</span>
         </h3>
 
         @if(isset($count_invoices['NOEXPIRED']))
@@ -37,8 +37,10 @@
                 </div>
                 <span class="opacity-75 pt-1 fw-semibold fs-6" style="color:#000000;margin-bottom:16px;">Avis émis</span>
                 <span
-                    class="fw-bold text-white me-2 lh-1 ls-n2" style="font-size: 32px;">{{format_amount($invoice_count) .\App\Helpers\Constants::CURRENCY}}</span>
-                <span class="opacity-75 pt-1 fw-bold fs-6" style="color:#000000">Montant à recouvrer</span>
+                    class="fw-bold text-white me-2 lh-1 ls-n2" style="font-size: 32px;">
+                    {{format_amount($invoice_estimation) .\App\Helpers\Constants::CURRENCY}}
+                </span>
+                <span class="opacity-75 pt-1 fw-bold fs-6" style="color:#000000">Estimation(Prends en compte tout les avis émis et valide)</span>
             </div>
         @endif
 

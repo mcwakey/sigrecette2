@@ -1,11 +1,8 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\DataTables\TaxablesDataTable;
 use App\Models\Taxable;
 use Illuminate\Http\Request;
-
 class TaxableController extends Controller
 {
     /**
@@ -13,10 +10,8 @@ class TaxableController extends Controller
      */
     public function index(TaxablesDataTable $dataTable)
     {
-        //return view('pages/taxables.list');
         return $dataTable->render('pages/taxables.list');
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -24,7 +19,6 @@ class TaxableController extends Controller
     {
         //
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -32,7 +26,6 @@ class TaxableController extends Controller
     {
         //
     }
-
     /**
      * Display the specified resource.
      */
@@ -40,14 +33,12 @@ class TaxableController extends Controller
     {
         return view('pages/taxables.show', ['taxable' => $taxable]);
     }
-
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Taxable $taxable)
     {
     }
-
     /**
      * Update the specified resource in storage.
      */
@@ -55,7 +46,6 @@ class TaxableController extends Controller
     {
         //
     }
-
     /**
      * Remove the specified resource from storage.
      */

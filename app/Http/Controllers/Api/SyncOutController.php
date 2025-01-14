@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers\Api;
-
 use App\Helpers\Constants;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SearchActivityResource;
@@ -31,7 +29,6 @@ use App\Models\TaxpayerTaxable;
 use App\Models\Town;
 use App\Models\Zone;
 use Illuminate\Http\Request;
-
 class SyncOutController extends Controller
 {
     public function search(Request $request)
@@ -41,75 +38,36 @@ class SyncOutController extends Controller
         if($categorieName==null){
             $categorieName='CATEGORY 1';
         }
-
-        // $queryTaxpayer = Taxpayer::query();
-        // $queryTaxpayerTaxable = TaxpayerTaxable::query();
-        // $queryInvoice = Invoice::query();
-
         if ($zoneName) {
-
             $zone = Zone::where('name', 'like', '%' . $zoneName . '%')->first();
             $queryZones =Zone::select('zones.*');
             if ($zone) {
-
                 $queryZones = Zone::select('zones.*');
-
                 $queryActivities = Activity::select('activities.*');
-
                 $queryCategories = Category::select('categories.*');
-
                 $queryEreas = Canton::select('cantons.*');
-
                 $queryTowns = Town::select('towns.*');
-
                 $queryGenders = Gender::select('genders.*');
-
                 $queryIdTypes = IdType::select('id_types.*');
-
-                //$queryTaxlabels = TaxLabel::where('category', 'LIKE', '%$categorieName%');
                 $queryTaxlabels = TaxLabel::where('category', 'LIKE', '%' . $categorieName . '%');
-
                 $queryTaxables = Taxable::join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
                     ->where('category', 'LIKE', '%' . $categorieName . '%')
                     ->select('taxables.*');
-
-                $queryTaxpayers = Taxpayer::where('zone_id', $zone->id)
-                    ->where('type', Constants::TITRE)
-                    ->where('deleted_at', null);
-
+                $queryTaxpayers = Taxpayer::where('zone_id',"=", $zone->id)
+                    ->where('type',"=",Constants::TITRE)
+                    ->where('deleted_at', "=",null);
                 $queryTaxpayerTaxables = TaxpayerTaxable::join('taxpayers', 'taxpayer_taxables.taxpayer_id', '=', 'taxpayers.id')
-                    ->where('taxpayers.zone_id', $zone->id)
+                    ->where('taxpayers.zone_id', "=",$zone->id)
                     ->select('taxpayer_taxables.*');
-
-                // $queryTaxpayerTaxable->whereHas('taxpayer', function ($query) use ($zone) {
-                //     $query->where('zone_id', $zone->id);
-                // });
-
                 $queryInvoices = Invoice::join('taxpayers', 'invoices.taxpayer_id', '=', 'taxpayers.id')
-                    ->where('taxpayers.zone_id', $zone->id)
-                    ->where('status', 'APPROVED')
-                    ->where('validity', 'VALID')
+                    ->where('taxpayers.zone_id',"=", $zone->id)
+                    ->where('status', "=",'APPROVED')
+                    ->where('validity', "=",'VALID')
                     ->select('invoices.*');
-
                 $queryPayments = Payment::join('taxpayers', 'payments.taxpayer_id', '=', 'taxpayers.id')
-                    ->where('taxpayers.zone_id', $zone->id)
-                    // ->whereNot('status', 'CANCELED')
+                    ->where('taxpayers.zone_id',"=", $zone->id)
                     ->select('payments.*');
-
-                // $queryInvoice->whereHas('taxpayer', function ($query) use ($zone) {
-                //     $query->where('zone_id', $zone->id);
-                // });
             }
-            // else {
-            //     return  [
-            //         'taxpayers'=> SearchTaxpayerResource::collection(collect([])),
-            //         'taxpayer_taxables' =>   SearchTaxpayerTaxableResource::collection(collect([])),
-            //         'invoices' => SearchInvoiceResource::collection(collect([])),
-
-            //         // 'taxables' =>   SearchTaxpayerTaxableResource::collection(collect([])),
-            //         // 'taxlabels' =>   SearchTaxpayerTaxableResource::collection(collect([])),
-            //     ];
-            // }
             return [
                 'zones' => SearchZoneResource::collection($queryZones->get()),
                 'activities' => SearchActivityResource::collection($queryActivities->get()),
@@ -118,14 +76,11 @@ class SyncOutController extends Controller
                 'towns' => SearchTownResource::collection($queryTowns->get()),
                 'genders' => SearchGenderResource::collection($queryGenders->get()),
                 'id_types' => SearchIdTypeResource::collection($queryIdTypes->get()),
-
                 'taxlabels' => SearchTaxlabelResource::collection($queryTaxlabels->get()),
                 'taxables' => SearchTaxableResource::collection($queryTaxables->get()),
-
                 'taxpayers' => SearchTaxpayerResource::collection($queryTaxpayers->get()),
                 'taxpayer_taxables' => SearchTaxpayerTaxableResource::collection($queryTaxpayerTaxables->get()),
                 'invoices' => SearchInvoiceResource::collection($queryInvoices->get()),
-
                 'payments' => SearchPaymentResource::collection($queryPayments->get()),
             ];
         }
@@ -133,7 +88,6 @@ class SyncOutController extends Controller
                     'taxpayers'=> SearchTaxpayerResource::collection(collect([])),
                      'taxpayer_taxables' =>   SearchTaxpayerTaxableResource::collection(collect([])),
                      'invoices' => SearchInvoiceResource::collection(collect([])),
-
                      'taxables' =>   SearchTaxpayerTaxableResource::collection(collect([])),
                   'taxlabels' =>   SearchTaxpayerTaxableResource::collection(collect([])),
             ];

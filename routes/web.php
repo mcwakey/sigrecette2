@@ -3,6 +3,7 @@
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\Password;
 use App\Http\Controllers\Geolocation;
+use App\Http\Controllers\UserActivityController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\EnsureIsAdmin;
 use App\Http\Controllers\EreasController;
@@ -66,11 +67,13 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('/user-management/users', UserManagementController::class);
         Route::resource('/user-management/roles', RoleManagementController::class);
         Route::resource('/user-management/permissions', PermissionManagementController::class);
+        Route::get('/user-activity', [UserActivityController::class, 'index'])->name('user-activity.index');
+
     });
 
     Route::resource('/taxpayers', TaxpayerController::class);
     Route::resource('/invoices', InvoiceController::class)->parameters([
-        'invoices' => 'invoice:notDelivery?,s_date?,e_date?,startInvoiceId?,endInvoiceId?,aucomptant?',
+        //'invoices' => 'invoice:notDelivery?,s_date?,e_date?,startInvoiceId?,endInvoiceId?,aucomptant?',
     ]);
 
     Route::resource('/recoveries', RecoveryController::class);
@@ -150,7 +153,9 @@ Route::middleware(['auth'])->group(function () {
     // Route::get('/import/taxpayer', [TaxpayerController::class, 'showImportPage'])->name('import-view');
 
     Route::get('/prints',   [PrintController::class, 'index'])->name("prints");
+    Route::get('/print-all-invoice',   [PrintController::class, 'downloadMultipleInvoicePdf'])->name("print-all-invoice");
     Route::get('/exports',   [ExportController::class, 'index'])->name("exports");
+    Route::get('/exports-invoice',   [ExportController::class, 'downloadExportInvoice'])->name("exports-invoice");
     Route::get('/exports/backup',   [ExportController::class, 'backup'])->name("export_backup");
     Route::get('/exports/backupdownload',   [ExportController::class, 'backupDownload'])->name("backupdownload");
     Route::get('/generate-pdf/{data}/{type?}/{action?}/{id?}', [PrintController::class, 'download'])->name("generatePdf");

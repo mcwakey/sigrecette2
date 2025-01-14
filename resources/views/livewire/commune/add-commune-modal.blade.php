@@ -222,6 +222,43 @@
                                     @enderror
                                 </div>
                             </div>
+                            <div class="row w-100 mb-4">
+                                <div class="col">
+                                    @if($qr_code_enabled)
+                                        <div class="form-check form-switch form-check-custom form-check-solid" style="border: none;">
+                                            <input class="form-check-input" type="checkbox" value="{{$qr_code_enabled}}" id="flexSwitchChecked" checked="checked"  wire:model.live.debounce.250ms="qr_code_enabled"/>
+                                            <label class="form-check-label" for="flexSwitchChecked">
+                                                {{__("Afficher le QR Code")}}
+                                            </label>
+                                        </div>
+                                    @else
+                                        <div class="form-check form-switch form-check-custom form-check-solid" style="border: none;">
+                                            <input class="form-check-input" type="checkbox"  value="{{$qr_code_enabled}}"  id="flexSwitchDefault"   wire:model.live.debounce.250ms="qr_code_enabled"/>
+                                            <label class="form-check-label" for="flexSwitchDefault">
+                                                {{__("Afficher le QR Code")}}
+                                            </label>
+                                        </div>
+                                    @endif
+
+                                </div>
+                                <div class="col">
+                                    @if($carry_forward_previous_year)
+                                        <div class="form-check form-switch form-check-custom form-check-solid" style="border: none;">
+                                            <input class="form-check-input" type="checkbox" value="{{$carry_forward_previous_year}}" id="flexSwitchChecked" checked="checked"  wire:model.live.debounce.250ms="carry_forward_previous_year"/>
+                                            <label class="form-check-label" for="flexSwitchChecked">
+                                                {{__("Reporter les restes de l'année d'exercice  précédente")}}
+                                            </label>
+                                        </div>
+                                    @else
+                                        <div class="form-check form-switch form-check-custom form-check-solid" style="border: none;">
+                                            <input class="form-check-input" type="checkbox"  value="{{$carry_forward_previous_year}}"  id="flexSwitchDefault"   wire:model.live.debounce.250ms="carry_forward_previous_year"/>
+                                            <label class="form-check-label" for="flexSwitchDefault">
+                                                {{__("Reporter les restes de l'année d'exercice précédente")}}
+                                            </label>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
 
                             <div class="col-md-12 mb-4">
                                 <label class="fw-semibold fs-6 mb-2">{{ __('URL site web') }}</label>
@@ -263,4 +300,4 @@
                 <!--end::Modal content-->
             </div>
             <!--end::Modal dialog-->
-        </div>
+</div>

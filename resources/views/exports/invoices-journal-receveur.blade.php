@@ -1,4 +1,6 @@
-@php use App\Helpers\InvoiceHelper; @endphp
+@php
+    use App\Models\Invoice;
+    @endphp
         <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -111,7 +113,7 @@
     @foreach($data as $index => $item )
 
         @php
-            $sumsByTaxCode = InvoiceHelper::sumAmountsByTaxCode($item);
+            $sumsByTaxCode = Invoice::sumAmountsByTaxCode($item);
         @endphp
 
         {{--TODO logique à refaire l'implémentation n'est pas correction doit gérer la creation des avis et les paiement associés --}}

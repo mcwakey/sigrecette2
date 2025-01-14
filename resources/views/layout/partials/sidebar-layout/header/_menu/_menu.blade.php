@@ -1,5 +1,8 @@
 @php
     use Carbon\Carbon;
+    use App\Models\Commune;
+
+    $commune= Commune::getFirstCommune();
     $year = \App\Models\Year::getActiveYear();
     $month = Carbon::createFromFormat('m', $year->current_month)->monthName;
 @endphp
@@ -247,13 +250,10 @@
     <!--begin::Menu-->
     <div class="menu menu-rounded menu-column menu-lg-row my-5 my-lg-0 align-items-stretch fw-semibold px-2 px-lg-0"
         id="kt_app_header_menu" data-kt-menu="true" style="position: relative">
-        <!--begin:Menu item-->
         <div id="stats-date-btn" data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
             data-kt-menu-placement="bottom-start"
             class="menu-item here show menu-here-bg menu-lg-down-accordion me-0 me-lg-2">
-            <!--begin:Menu link-->
             <span class="menu-link">
-                {{--  --}}
                 <span class="menu-title">
                     <span>
                         @if ($commune != null)
@@ -266,16 +266,27 @@
                     </span>
                     @endif
                     <span class="text-gray-500 text-hover-primary"></span>
-                    Année d'exercice:{{ ' ' . $year->name }}, Mois:{{ ' ' . $month }}
+                    Année d'exercice:{{ ' ' . $year->name }}, Mois:{{ ' ' . $month.' ' }}
                 </span>
-                {{--  --}}
                 <span class="menu-arrow d-lg-none"></span>
+                @if( session()->get('s_date',null)&& session()->get('e_date',null) )
+                    <span class="menu-title">
+                            |
+                    <span style="display:block;margin:0px 4px 0px 4px">
+                        Filtre date activé
+                    </span>
+
+                    <span class="text-gray-500 text-hover-primary"></span>
+                    ({{ session()->get('s_date') }}, {{ session()->get('e_date') }})
+                </span>
+                @endif
+
             </span>
             <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown p-0 w-100 w-lg-850px"></div>
 
 
         </div>
-
+        <form method="GET" action="{{ request()->url()   }}">
         <div class="shadow-sm bg-white" id="stats-date"
             style="position:fixed;max-width:620px;display:none;align-items:center;height:100px;padding:16px 20px;gap:16px;top:60px;border-radius:6px;">
 
@@ -288,7 +299,7 @@
                         <i class="ki-duotone ki-calendar fs-2"><span class="path1"></span><span
                                 class="path2"></span></i>
                     </span>
-                    <input id="date-picker-input-three" type="text" wire:model="period_from" name="period_from"
+                    <input id="date-picker-input-three" type="text" value="{{ request('s_date') }}" name="s_date"
                         class="form-control mb-3 mb-lg-0" placeholder="{{ __('Date') }}" />
                 </div>
 
@@ -340,7 +351,7 @@
                         <i class="ki-duotone ki-calendar fs-2"><span class="path1"></span><span
                                 class="path2"></span></i>
                     </span>
-                    <input id="date-picker-input-four" type="text" wire:model="period_to" name="period_to"
+                    <input id="date-picker-input-four" type="text" value="{{ request('e_date') }}" name="e_date"
                         class="form-control mb-3 mb-lg-0" placeholder="{{ __('Date') }}" />
                 </div>
 
@@ -389,13 +400,13 @@
                     <span class="indicator-label" wire:loading.remove>{{ __('Soumettre') }}</span>
                 </button>
 
-                <button href="/geolocation/taxpayers" type="submit" class="btn badge-light mt-8">
-                    <span class="indicator-label" wire:loading.remove>{{ __('Rénitialiser') }}</span>
-                </button>
+                <a href="{{ request()->fullUrlWithQuery(['reset_filters' => 1]) }}" class="btn badge-light mt-8">
+                    <span class="indicator-label" >{{ __('Rénitialiser') }}</span>
+                </a>
             </div>
 
         </div>
-
+        </form>
     </div>
 
 
@@ -408,7 +419,7 @@
             let showStatsDate = true;
             let statsDate = document.getElementById('stats-date');
 
-            
+
             statsDateBtn?.addEventListener('click', (event) => {
                 // event.stopPropagation();
                 if (!showStatsDate) {
@@ -419,7 +430,7 @@
                     showStatsDate = false;
                 }
             });
-            
+
             // statsDate.addEventListener('click', (event) => {
             //     event.stopPropagation();
             // });

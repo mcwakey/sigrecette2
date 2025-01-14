@@ -1,12 +1,9 @@
 <?php
-
 namespace App\Http\Controllers\Apps;
-
 use App\DataTables\UsersAssignedRoleDataTable;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
-
 class RoleManagementController extends Controller
 {
     /**
@@ -16,7 +13,6 @@ class RoleManagementController extends Controller
     {
         return view('pages/apps.user-management.roles.list');
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -24,7 +20,6 @@ class RoleManagementController extends Controller
     {
         //
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -32,18 +27,15 @@ class RoleManagementController extends Controller
     {
         //
     }
-
     /**
      * Display the specified resource.
      */
     public function show(Role $role, UsersAssignedRoleDataTable $dataTable)
     {
         $this->authorize('view', $role);
-
         return $dataTable->with('role', $role)
             ->render('pages/apps.user-management.roles.show', ['role' => $role]);
     }
-
     /**
      * Show the form for editing the specified resource.
      */
@@ -51,7 +43,6 @@ class RoleManagementController extends Controller
     {
         //
     }
-
     /**
      * Update the specified resource in storage.
      */
@@ -59,7 +50,6 @@ class RoleManagementController extends Controller
     {
         //
     }
-
     /**
      * Remove the specified resource from storage.
      */

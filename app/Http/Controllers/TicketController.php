@@ -1,11 +1,8 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\DataTables\TicketsDataTable;
 use App\Models\Taxable;
 use Illuminate\Http\Request;
-
 class TicketController extends Controller
 {
     /**
@@ -13,10 +10,8 @@ class TicketController extends Controller
      */
     public function index(TicketsDataTable $dataTable)
     {
-        //return view('pages/taxables.list');
         return $dataTable->render('pages/tickets.list');
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -24,7 +19,6 @@ class TicketController extends Controller
     {
         //
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -32,22 +26,18 @@ class TicketController extends Controller
     {
         //
     }
-
     /**
      * Display the specified resource.
      */
     public function show(Taxable $taxable)
     {
-        // return view('pages/taxables.show', compact('taxable'));
     }
-
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Taxable $taxable)
     {
     }
-
     /**
      * Update the specified resource in storage.
      */
@@ -55,7 +45,6 @@ class TicketController extends Controller
     {
         //
     }
-
     /**
      * Remove the specified resource from storage.
      */

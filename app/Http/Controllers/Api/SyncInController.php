@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers\Api;
-
 use App\Enums\TaxpayerStateEnums;
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
@@ -11,105 +9,39 @@ use App\Models\TaxpayerTaxable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-
 class SyncInController extends Controller
 {
     private string $new = 'new';
-
     public function syncIn(Request $request)
     {
         $data = $request->input('data', []);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         // Start the transaction
         DB::beginTransaction();
-
         try {
-
             foreach ($data as $taxpayer) {
                 foreach ($taxpayer as $taxpayerData) {
                     foreach ($taxpayerData as $value) {
-
                         $userId = $value['userId'] ?? null;
                         $taxpayerId = $value['_id'] ?? null;
                         $taxpayerTaxables = $value['taxpayerTaxables'] ?? [];
                         $taxpayerInvoices = $value['invoices'] ?? [];
                         $taxpayerPayments = $value['payments'] ?? [];
-                        //dd($userId);
                         unset($value['ereaId']);
                         $value['from_mobile_and_validate_state'] = TaxpayerStateEnums::PENDING;
                         if (empty($value['dataStatus']) || isset($value['dataStatus'])) {
                             if ($value['dataStatus'] == $this->new) {
-                                //$value['created_at'] = now();
                                 $value['createdBy'] = $userId;
-                                //dd($this->transformKeysToSnakeCase($value));
                                 $taxpayer = Taxpayer::create($this->transformKeysToSnakeCase($value));
                                 $taxpayerId = $taxpayer->id;
                             } else {
-                                //$value['updated_at'] = now();
                                 $value['updatedBy'] = $userId;
                                 Taxpayer::find($taxpayerId)?->update($this->transformKeysToSnakeCase($value));
                             }
                         }
-
                         // Process taxpayer taxables
                         foreach ($taxpayerTaxables as $taxpayerTaxable) {
                             if (empty($taxpayerTaxable['dataStatus']) || isset($taxpayerTaxable['dataStatus'])) {
-
                                 $taxpayerTaxable['taxpayer_id'] = $taxpayerId;
-
                                 if ($taxpayerTaxable['dataStatus'] == $this->new) {
                                     TaxpayerTaxable::create($this->transformKeysToSnakeCase($taxpayerTaxable));
                                 } else {
@@ -117,53 +49,39 @@ class SyncInController extends Controller
                                 }
                             }
                         }
-
                         // Process taxpayer invoices
                         foreach ($taxpayerInvoices as $taxpayerInvoice) {
                             if (empty($taxpayerInvoice['dataStatus']) || isset($taxpayerInvoice['dataStatus'])) {
                                 Invoice::find($taxpayerInvoice['_id'])?->update($this->transformKeysToSnakeCase($taxpayerInvoice));
                             }
                         }
-
                         // Process taxpayer payments
                         foreach ($taxpayerPayments as $taxpayerPayment) {
                             if (empty($taxpayerPayment['dataStatus']) || isset($taxpayerPayment['dataStatus'])) {
                                 $invoice = Invoice::find($taxpayerPayment['invoiceId']);
                                 $taxpayerPayment['code'] = $invoice->taxpayer_taxables->first()->taxable->code;
-                                //$taxpayerPayment['code'] = '705211';
-                                // Payment::updateOrCreate(['id' => $taxpayerPayment['_id']], $this->transformKeysToSnakeCase($taxpayerPayment));
                                 Payment::Create($this->transformKeysToSnakeCase($taxpayerPayment));
                             }
                         }
                     }
                 }
             }
-
             // Commit the transaction if all operations are successful
             DB::commit();
-
             return response()->json(true, 200);
         } catch (\Exception $e) {
             // Rollback the transaction if any operation fails
             DB::rollBack();
-
-            // Log the error (optional)
             \Illuminate\Support\Facades\Log::error('Error in syncIn: ' . $e->getMessage());
-
             return response()->json(['error' => 'Data sync failed' . $e], 500);
         }
     }
-
     private function transformKeysToSnakeCase(array $data)
     {
         $snakeCaseData = [];
         foreach ($data as $key => $value) {
             $snakeCaseKey = Str::snake($key);
-            if (is_array($value)) {
-                $snakeCaseData[$snakeCaseKey] = $this->transformKeysToSnakeCase($value);
-            } else {
-                $snakeCaseData[$snakeCaseKey] = $value;
-            }
+            $snakeCaseData[$snakeCaseKey] = is_array($value) ? $this->transformKeysToSnakeCase($value) : $value;
         }
         return $snakeCaseData;
     }

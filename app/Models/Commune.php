@@ -1,10 +1,7 @@
 <?php
-
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-
 class Commune extends Model
 {
     protected $fillable = [
@@ -22,19 +19,17 @@ class Commune extends Model
         'limit_json',
         'logo_path',
         'email',
-        'url'
+        'url',
+        'qr_code_enabled',
+        'carry_forward_previous_year',
     ];
-
     /**
      * Get the first commune.
-     *
-     * @return Commune|null
      */
     public static function getFirstCommune(): ?Commune
     {
         return Commune::orderBy('id')->first();
     }
-
     /**
      * Get the full URL of the image.
      *
@@ -42,12 +37,8 @@ class Commune extends Model
      */
     public function getImageUrlAttributeDirect()
     {
-
-
-        //dump();
         return $this->logo_path != null ? asset("storage/" . $this->logo_path) : null;
     }
-
     /**
      * Get the full URL of the image.
      *
@@ -55,11 +46,9 @@ class Commune extends Model
      */
     public function getImageUrlAttribute()
     {
-
         if ($this->logo_path) {
             return 'storage/' . $this->logo_path;
         }
         return $this->logo_path;
     }
-
 }

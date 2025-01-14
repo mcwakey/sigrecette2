@@ -1,11 +1,8 @@
 <?php
-
 namespace App\Http\Controllers\Apps;
-
 use App\DataTables\PermissionsDataTable;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
 class PermissionManagementController extends Controller
 {
     /**
@@ -15,7 +12,6 @@ class PermissionManagementController extends Controller
     {
         return $dataTable->render('pages/apps.user-management.permissions.list');
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -23,7 +19,6 @@ class PermissionManagementController extends Controller
     {
         //
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -31,7 +26,6 @@ class PermissionManagementController extends Controller
     {
         //
     }
-
     /**
      * Display the specified resource.
      */
@@ -39,7 +33,6 @@ class PermissionManagementController extends Controller
     {
         //
     }
-
     /**
      * Show the form for editing the specified resource.
      */
@@ -47,7 +40,6 @@ class PermissionManagementController extends Controller
     {
         //
     }
-
     /**
      * Update the specified resource in storage.
      */
@@ -55,7 +47,6 @@ class PermissionManagementController extends Controller
     {
         //
     }
-
     /**
      * Remove the specified resource from storage.
      */

@@ -1,21 +1,19 @@
 <?php
-
 namespace App\Models;
-
 use App\Enums\PaymentStatusEnums;
 use App\Enums\PaymentTypeEnums;
 use App\Helpers\Constants;
-use App\Helpers\PaymentHelper;
+use App\Traits\PaymentTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Database\Eloquent\Collection;
-
 class Payment extends Model
 {
     use HasFactory;
-
+    use PaymentTrait;
     protected $fillable = [
         'amount',
         'payment_type',
@@ -35,50 +33,26 @@ class Payment extends Model
         'notes'
     ];
 
-    /**
-     * @param $invoice_id
-     * @return float|int
-     */
-    public static function getPaid($invoice_id): float|int
-    {
-        return PaymentHelper::getPaid($invoice_id);
-
-    }
-
-    /**
-     * @param Invoice $invoice
-     * @return float|int
-     */
-    public static function getRestToPaid(Invoice $invoice): float|int
-    {
-        return PaymentHelper::getRestToPaid($invoice);
-    }
-
     public function invoice()
     {
         return $this->belongsTo(Invoice::class);
     }
-
     public function taxpayer()
     {
         return $this->belongsTo(Taxpayer::class);
     }
-
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
     public function r_user()
     {
         return $this->belongsTo(User::class);
     }
-
     public function stock_transfers()
     {
         return $this->hasMany(StockTransfer::class);
     }
-
     public static function boot()
     {
         parent::boot();
@@ -86,7 +60,6 @@ class Payment extends Model
             $payment->uuid = Uuid::uuid4()->toString();
         });
     }
-
     public static function getSumPaymentByCode($code, Invoice $invoice): int
     {
         $sum_payment = 0;
@@ -97,13 +70,11 @@ class Payment extends Model
         }
         return $sum_payment;
     }
-
     public static function getPrintData(): Collection
     {
         $activeYear = Year::getActiveYear();
         $startOfYear = Carbon::parse("{$activeYear->name}-01-01 00:00:00");
         $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
-
         return Payment::whereNot('status', PaymentStatusEnums::PENDING)
             ->whereNotIn('payments.reference', [Constants::ANNULATION, Constants::REDUCTION])// Filter collector_deposits by taxpayer_id
             ->orderBy('created_at', 'asc')
@@ -111,5 +82,8 @@ class Payment extends Model
             ->newQuery()
             ->get();
     }
-
+    public function tax_label()
+    {
+        return $this->belongsTo(TaxLabel::class, 'code', 'code');
+    }
 }

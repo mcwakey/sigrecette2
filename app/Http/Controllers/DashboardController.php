@@ -1,35 +1,27 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Models\Year;
 use App\Services\StatisticsService;
+use App\Traits\HandlesDateFilters;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-
 class DashboardController extends Controller
 {
-
+    use  HandlesDateFilters;
     protected $statisticsService;
 
     public function index(Request $request)
     {
-        $year = Year::getActiveYear()->name;
-        $validatedData = $request->validate([
-            's_date' => 'nullable|date_format:Y-m-d H:i:s',
-            'e_date' => 'nullable|date_format:Y-m-d H:i:s',
-        ]);
-
-        $startDate = $validatedData['s_date'] ?? Carbon::parse("{$year}-01-01 00:00:00");
-        $endDate = $validatedData['e_date'] ?? Carbon::parse("{$year}-12-31 23:59:59");
+        $this->handleDateFilters($request);
         addVendors(['amcharts', 'amcharts-maps', 'amcharts-stock']);
-        $this->statisticsService = new StatisticsService();
-
+        $this->statisticsService = new StatisticsService($this->s_date, $this->e_date);
+       // dd($this->s_date, $this->e_date);
+        //dd($this->statisticsService->getInvoiceByCreatedAt($startDate, $endDate)[0]);
         return view('pages/dashboards.index', [
             'stats' => $this->statisticsService->getStats(),
-            's_date' => $startDate,
-            'e_date' => $endDate
-
+            'taxpayer_by_created_at' => $this->statisticsService->getTaxpayerByCreatedAt(),
+            'invoice_by_created_at'=>$this->statisticsService->getInvoiceByCreatedAt(),
+            'payments_data'=>$this->statisticsService->getPaymentsEvolution(),
         ]);
     }
 }

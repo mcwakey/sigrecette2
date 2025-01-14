@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Livewire\User;
-
 use App\Helpers\Constants;
 use App\Models\User;
 use App\Models\Zone;
@@ -12,11 +10,9 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
-
 class AddUserModal extends Component
 {
     use WithFileUploads;
-
     public $user_id;
     public $name;
     public $email;
@@ -24,17 +20,13 @@ class AddUserModal extends Component
     public $zone_id;
     public $avatar;
     public $saved_avatar;
-
     public $edit_mode = false;
-
     protected $rules = [
         'name' => 'required|string',
         'email' => 'required|email|unique:users,email',
         'role' => 'required|string',
         'avatar' => 'nullable|sometimes|image|max:1024',
     ];
-
-
     protected $listeners = [
         'delete_user' => 'deleteUser',
         'update_user' => 'updateUser',
@@ -42,53 +34,39 @@ class AddUserModal extends Component
         'restore_row' => 'restoreUser',
         'close_user_modal' => 'closeUserModal',
     ];
-
     public function render()
     {
         $roles = Role::all();
         $zones = Zone::all();
-
         return view('livewire.user.add-user-modal', ['roles' => $roles, 'zones' => $zones]);
     }
-
     public function submit()
     {
         if ($this->edit_mode) {
             $this->rules['email'] = 'required|email|unique:users,email,' . $this->user_id;
         }
-
         $roleNeedZone = [__('agent_recouvrement'), __('collecteur'),];
-
         if (in_array(__($this->role), $roleNeedZone)) {
             $this->rules['zone_id'] = 'required|integer';
         } elseif ($this->zone_id && $this->role != 'regisseur') {
-            // $this->zone_id =  null;
         }
-
         // Validate the form input data
         $this->validate();
-
         DB::transaction(function () {
             // Prepare the data for creating a new user
             $data = ['name' => $this->name,];
-
             $data['profile_photo_path'] = $this->avatar ? $this->avatar->store('avatars', 'public') : null;
-
             if (!$this->edit_mode) {
                 $data['password'] = Hash::make($this->email);
             }
-
             $data['email'] = trim($this->email);
             $data['zone_id'] = $this->zone_id;
-
             if (!$this->edit_mode && !Gate::forUser(auth()->user())->allows('create-user', User::class)) {
                 $this->dispatch('error', Constants::NOT_PERMISSION_TO_PERFORM_ACTION);
                 return false;
             }
-
             // Update or Create a new user record in the database
             $user = User::find($this->user_id) ?? User::create($data);
-
             if ($this->edit_mode && Gate::forUser(auth()->user())->allows('update-user', $user)) {
                 foreach ($data as $k => $v) {
                     $user->$k = $v;
@@ -98,56 +76,43 @@ class AddUserModal extends Component
                 $this->dispatch('error', Constants::NOT_PERMISSION_TO_PERFORM_ACTION);
                 return false;
             }
-
             if ($this->edit_mode) {
                 // Assign selected role for user
                 $user->syncRoles($this->role);
-
                 // Emit a success event with a message
                 $this->dispatch('success', __('Utilisateur mis a jour avec succès.'));
             } else {
                 // Assign selected role for user
                 $user->assignRole($this->role);
-
                 // Emit a success event with a message
                 $this->dispatch('success', __('Utilisateur créer avec succès.'));
             }
         });
-
         // Reset the form fields after successful submission
         $this->reset();
     }
-
     public function deleteUser($id)
     {
-
         $user = User::find($id);
-
         if (!Gate::forUser(auth()->user())->allows('delete-user', $user)) {
             $this->dispatch('error', Constants::NOT_PERMISSION_TO_PERFORM_ACTION);
             return false;
         }
-
         // Prevent deletion of current user
         if ($id == Auth::id()) {
             $this->dispatch('error', 'La session courant ne peut etre supprimé.');
             return null;
         }
-
         // Delete the user record with the specified ID
-        $user = User::destroy($id);
-
+        User::destroy($id);
         // Emit a success event with a message
         $this->dispatch('success', 'Utilisateur supprimer avec succès.');
         return null;
     }
-
     public function updateUser($id)
     {
         $this->edit_mode = true;
-
         $user = User::find($id);
-
         $this->user_id = $user->id;
         $this->zone_id = $user->zone_id;
         $this->saved_avatar = $user->profile_photo_url;
@@ -155,30 +120,24 @@ class AddUserModal extends Component
         $this->email = $user->email;
         $this->role = $user->roles?->first()->name ?? '';
     }
-
     public function disabeldUser($id)
     {
         $user = User::find($id);
-
         if ($user && !$user->trashed()) {
             $user->delete();
             $this->dispatch('success', 'Utilisateur désactiver avec succès.');
             return true;
         }
         return null;
-
     }
-
     public function restoreUser($id)
     {
         $user = User::onlyTrashed()->find($id);
-
         if ($user) {
             $user->restore();
             $this->dispatch('success', 'Utilisateur restorer avec succès.');
         }
     }
-
     public function closeUserModal()
     {
         $this->edit_mode = false;
@@ -187,7 +146,6 @@ class AddUserModal extends Component
         $this->role = '';
         $this->zone_id = '';
     }
-
     public function hydrate()
     {
         $this->resetErrorBag();

@@ -579,6 +579,30 @@
                         <!--end:Menu link-->
                     </div>
                     @endfeature
+                    @feature('export_taxpayer_taxable_feature')
+                    <div class="menu-item">
+                        <a class="menu-link {{request()->routeIs('prints') ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('exports', ['export_type' =>  App\Helpers\Constants::EXPORT_TAXPAYERTAXABLE_KEY])) }}">
+								<span class="menu-bullet">
+									<span class="bullet bullet-dot"></span>
+								</span>
+                            <span class="menu-title">{{  __('Export taxable') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    @endfeature
+                    @feature('export_taxable_feature')
+                    <div class="menu-item">
+                        <a class="menu-link {{request()->routeIs('prints') ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('exports', ['export_type' =>  App\Helpers\Constants::EXPORT_TAXABLE_KEY])) }}">
+								<span class="menu-bullet">
+									<span class="bullet bullet-dot"></span>
+								</span>
+                            <span class="menu-title">{{  __('Export taxe') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    @endfeature
                 </div>
                 <!--end:Menu sub-->
             </div>
@@ -803,6 +827,17 @@
 									<span class="bullet bullet-dot"></span>
 								</span>
                             <span class="menu-title">{{ __('Liste des permissions') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('user-management.user-activity.index') ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('user-management.user-activity.index')) }}">
+								<span class="menu-bullet">
+									<span class="bullet bullet-dot"></span>
+								</span>
+                            <span class="menu-title">{{ __("Statistiques d'utilisation") }}</span>
                         </a>
                         <!--end:Menu link-->
                     </div>

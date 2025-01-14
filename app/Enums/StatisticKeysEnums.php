@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Enums;
-
 class StatisticKeysEnums
 {
     public const BY_GENDER = 'by_gender';
@@ -13,4 +11,5 @@ class StatisticKeysEnums
     public const BY_TAXABLE = 'by_taxable';
     const BY_STATE = "by_state";
     const BY_INVOICE = "by_invoice_count";
+    const BY_TAXLABEL = "by_taxlabel";
 }

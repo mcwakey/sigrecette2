@@ -1,7 +1,5 @@
 <?php
-
 namespace App\DataTables;
-
 use App\Models\Canton;
 use App\Models\Erea;
 use Yajra\DataTables\Html\Column;
@@ -10,10 +8,8 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
-
 class EreasDataTable extends DataTable
 {
-
     /**
      * Build the DataTable class.
      *
@@ -25,15 +21,10 @@ class EreasDataTable extends DataTable
             ->editColumn('name', function (Erea $erea) {
                 return $erea->name;
             })
-            // ->editColumn('status', function (Erea $erea) {
-            //     return $erea->status;
-            // })
             ->editColumn('town_id', function (Erea $erea) {
-                //return Canton::find($erea->town_id)->name ;
                 return $erea->town->name;
             })
             ->editColumn('canton_id', function (Erea $erea) {
-                //return Canton::find($erea->town->canton_id)->name ;
                 return $erea->town->canton->name;
             })
             ->editColumn('status', function (Erea $erea) {
@@ -47,7 +38,6 @@ class EreasDataTable extends DataTable
             })
             ->setRowId('id');
     }
-
     /**
      * Get the query source of dataTable.
      */
@@ -55,7 +45,6 @@ class EreasDataTable extends DataTable
     {
         return $model->newQuery();
     }
-
     /**
      * Optional method if you want to use the html builder.
      */
@@ -71,7 +60,6 @@ class EreasDataTable extends DataTable
             ->orderBy(3)
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/ereas/columns/_draw-scripts.js')) . "}");
     }
-
     /**
      * Get the dataTable columns definition.
      */
@@ -81,7 +69,6 @@ class EreasDataTable extends DataTable
             Column::make('name')->title(__('erea')),
             Column::make('town_id')->title(__('town')),
             Column::make('canton_id')->title(__('canton')),
-            //Column::make('gender')->title('Tax Name'),
             Column::make('status')->title(__('status'))->width(150),
             Column::make('created_at')->title(__('created at'))->addClass('text-nowrap')->width(150),
             Column::computed('action')
@@ -91,7 +78,6 @@ class EreasDataTable extends DataTable
                 ->width(60)
         ];
     }
-
     /**
      * Get the filename for export.
      */

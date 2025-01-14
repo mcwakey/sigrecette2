@@ -19,7 +19,7 @@
         <script>
             (function() {
                 let data = @json($chart['data']);
-                console.log("data", data);
+
                 am5.ready(function() {
                     var root = am5.Root.new("{{ $chart['container_id'] }}");
                     root.setThemes([

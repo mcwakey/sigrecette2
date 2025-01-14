@@ -94,21 +94,12 @@
                             <div class="col-md-3">
                             <div class="input-group mb-2">
                                 <select wire:model="start_month" name="start_month" class="form-select form-control-select" data-dropdown-parent="#kt_modal_auto_invoice">
-                                    <option value="01">Janvier</option>
-                                    <option value="02">Fevrier</option>
-                                    <option value="03">Mars</option>
-                                    <option value="04">Avril</option>
-                                    <option value="05">Mai</option>
-                                    <option value="06">Juin</option>
-                                    <option value="07">Juillet</option>
-                                    <option value="08">Aout</option>
-                                    <option value="09">Septembre</option>
-                                    <option value="10">Octobre</option>
-                                    <option value="11">Novembre</option>
-                                    <option value="12">Decembre</option>
+                                    @foreach ($months as $monthNumber => $monthName)
+                                        <option value="{{ $monthNumber }}" @if($start_month!=null && $monthNumber==$start_month) selected @endif>{{ $monthName }}</option>
+                                    @endforeach
                                 </select>
-                                <span class="input-group-text" id="basic-addon1">2024</span>
-                                        </div>
+                                <span class="input-group-text" id="basic-addon1">{{" ".$year->name}}</span>
+                            </div>
 
                             </div>
 

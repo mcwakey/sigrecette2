@@ -1,22 +1,15 @@
 <?php
-
 namespace App\Models;
-
 use App\Enums\TaxpayerStaticsEnums;
 use App\Helpers\Constants;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 class Taxpayer extends Model
 {
     use HasFactory;
     use SoftDeletes;
-
-
-
-
     /**
      * The attributes that are mass assignable.
      *
@@ -33,7 +26,6 @@ class Taxpayer extends Model
         'longitude',
         'latitude',
         'address',
-
         'file_no',
         'category_work',
         'work',
@@ -42,7 +34,6 @@ class Taxpayer extends Model
         'auth_reference',
         'nif',
         'social_work',
-
         'town_id',
         'erea_id',
         'zone_id',
@@ -57,8 +48,8 @@ class Taxpayer extends Model
         'deleted_at',
         'created_by',
         'updated_by',
+        'type'
     ];
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -68,7 +59,6 @@ class Taxpayer extends Model
         'password',
         'remember_token',
     ];
-
     /**
      * The attributes that should be cast.
      *
@@ -86,74 +76,58 @@ class Taxpayer extends Model
             static::creating(function ($model) use ($auth_id) {
                 $model->created_by = $auth_id;
             });
-
             static::updating(function ($model) use ($auth_id) {
                 $model->updated_by = $auth_id;
             });
         }
-
     }
-
     public function getProfilePhotoUrlAttribute()
     {
         if ($this->profile_photo_path) {
             return asset('storage/' . $this->profile_photo_path);
         }
-
         return $this->profile_photo_path;
     }
-
-
     public function addresses()
     {
         return $this->hasMany(Address::class);
     }
-
     public function town()
     {
         return $this->belongsTo(Town::class);
     }
-
     public function erea()
     {
         return $this->belongsTo(Erea::class);
     }
-
     public function zone()
     {
         return $this->belongsTo(Zone::class);
     }
-
     public function taxpayer_taxables()
     {
         return $this->hasMany(TaxpayerTaxable::class);
     }
-
     public function invoices()
     {
         return $this->hasMany(Invoice::class);
     }
-
     public function payments()
     {
         return $this->hasMany(Payment::class);
     }
-
     public function getDefaultAddressAttribute()
     {
         return $this->addresses?->first();
     }
-
     public function activity()
     {
         return $this->belongsTo(Activity::class);
     }
-
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
-
     public static function getInvoiceAndPayments($id): array
     {
         $result = [];
@@ -169,22 +143,13 @@ class Taxpayer extends Model
             }
             $result[] = $items;
         }
-        //dd($result[1]);
-        //$compareByDate = function ($a, $b) {$dateA = $a instanceof Invoice ? ($a->delivery_date ?? $a->created_at) : $a->created_at;$dateB = $b instanceof Invoice ? ($b->delivery_date ?? $b->created_at) : $b->created_at;return strcmp($dateA, $dateB);};usort($result[1], $compareByDate);
-
-
         return $result;
     }
-
     /**
      * Search for a given value in multiple columns.
-     *
-     * @param string $value
-     * @return QueryBuilder
      */
     public static function search(string $value): QueryBuilder
     {
-
         $columns = [
             'id',
             'tnif',
@@ -198,13 +163,13 @@ class Taxpayer extends Model
             'nif',
             'email'
         ];
-
         $query = self::query();
-
         foreach ($columns as $column) {
             $query->orWhere($column, 'like', "%{$value}%");
         }
-
         return $query;
     }
+  
+
+
 }

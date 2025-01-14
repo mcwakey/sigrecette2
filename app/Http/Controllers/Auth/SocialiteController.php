@@ -1,12 +1,9 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
-
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Laravel\Socialite\Facades\Socialite;
-
 class SocialiteController extends Controller
 {
     public function redirect($provider)
@@ -16,25 +13,18 @@ class SocialiteController extends Controller
             // already logged in
             // get user info from social site
             $user = Socialite::driver($provider)->stateless()->user();
-
             // check for existing user
-            $existingUser = User::where('email', $user->getEmail())->first();
-
+            $existingUser = User::where('email',"=", $user->getEmail())->first();
             if ($existingUser) {
                 auth()->login($existingUser, true);
-
                 return redirect()->to('/');
             }
-
             $newUser = $this->createUser($user);
             auth()->login($newUser, true);
         }
-
         // request login from social site
         return Socialite::driver($provider)->redirect();
     }
-
-
     function createUser($user)
     {
         $user = User::updateOrCreate([
@@ -44,11 +34,9 @@ class SocialiteController extends Controller
             'password' => '',
             'avatar' => $user->getAvatar(),
         ]);
-
         if ($user->markEmailAsVerified()) {
             event(new Verified($user));
         }
-
         return $user;
     }
 }

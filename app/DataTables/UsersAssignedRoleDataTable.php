@@ -1,7 +1,5 @@
 <?php
-
 namespace App\DataTables;
-
 use App\Models\User;
 use App\Models\UsersAssingedRole;
 use Illuminate\Contracts\Database\Query\Builder;
@@ -10,7 +8,6 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
-
 class UsersAssignedRoleDataTable extends DataTable
 {
     /**
@@ -33,7 +30,6 @@ class UsersAssignedRoleDataTable extends DataTable
             })
             ->setRowId('id');
     }
-
     /**
      * Get the query source of dataTable.
      */
@@ -43,7 +39,6 @@ class UsersAssignedRoleDataTable extends DataTable
             $query->where('role_id', $this->role->getKey());
         });
     }
-
     /**
      * Optional method if you want to use the html builder.
      */
@@ -59,7 +54,6 @@ class UsersAssignedRoleDataTable extends DataTable
             ->orderBy(1)
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/apps/user-management/users/columns/_draw-scripts.js')) . "}");
     }
-
     /**
      * Get the dataTable columns definition.
      */
@@ -77,7 +71,6 @@ class UsersAssignedRoleDataTable extends DataTable
                 ->width(60),
         ];
     }
-
     /**
      * Get the filename for export.
      */

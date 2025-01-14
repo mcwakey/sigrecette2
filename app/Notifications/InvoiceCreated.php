@@ -1,18 +1,14 @@
 <?php
-
 namespace App\Notifications;
-
 use App\Models\Invoice;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-
 class InvoiceCreated extends Notification
 {
     use Queueable;
-
     /**
      * Create a new notification instance.
      */
@@ -20,7 +16,6 @@ class InvoiceCreated extends Notification
     {
         //
     }
-
     /**
      * Get the notification's delivery channels.
      *
@@ -30,8 +25,6 @@ class InvoiceCreated extends Notification
     {
         return ['database'];
     }
-
-
     /**
      * Get the array representation of the notification.
      *

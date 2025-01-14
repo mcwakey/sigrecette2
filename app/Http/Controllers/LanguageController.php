@@ -1,10 +1,7 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Redirect;
-
 class LanguageController extends Controller
 {
     public function setLocale(string $locale)
@@ -13,7 +10,6 @@ class LanguageController extends Controller
             App::setLocale($locale);
             session()->put('locale', $locale);
         }
-
         return Redirect::back();
     }
 }

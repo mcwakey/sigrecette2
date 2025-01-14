@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Imports;
-
 use App\Models\Activity;
 use App\Models\Canton;
 use App\Models\Category;
@@ -19,22 +17,18 @@ use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithProgressBar;
-
 class TaxpayerImport implements ToModel, WithProgressBar, WithBatchInserts, WithChunkReading, WithHeadingRow, ShouldQueue
 {
     use Importable;
     use RemembersRowNumber;
     use RemembersChunkOffset;
-
     /**
-     * @param array $row
      *
      * @return \Illuminate\Database\Eloquent\Model|null
      * @throws \Exception
      */
     public function model(array $row)
     {
-
         $faker = fake();
         if (!isset($row['nom'])
             || !isset($row['adresse'])
@@ -44,11 +38,10 @@ class TaxpayerImport implements ToModel, WithProgressBar, WithBatchInserts, With
             return null;
         }
         $existingTaxpayer = Taxpayer::where(
-            'name', $row['nom'] . " " . isset($row['prenoms']) ?? $row['prenoms']
+            'name',"=", $row['nom'] . " " . isset($row['prenoms']) ?? $row['prenoms']
         )
-            ->where('address', $row["adresse"])
+            ->where('address',"=", $row["adresse"])
             ->first();
-
         if ($existingTaxpayer) {
             return null;
         }
@@ -58,7 +51,6 @@ class TaxpayerImport implements ToModel, WithProgressBar, WithBatchInserts, With
                 (isset($row['quartier']) ? $row['quartier'] : ''),
             'canton_id' => $canton->id
         ]);
-
         $zone = Zone::firstOrCreate(['name' => $row['zone']]);
         $category = isset($row['categ_activite']) ? Category::firstOrCreate(['name' => $row['categ_activite']]) : Category::firstOrCreate(['name' => 'Non défini']);
         $activity = Activity::firstOrCreate(['name' => $row["activite"], 'category_id' => $category->id]);
@@ -87,16 +79,12 @@ class TaxpayerImport implements ToModel, WithProgressBar, WithBatchInserts, With
         if (isset($row['state']) && $row['state'] != null) {
             $taxpayer->delete();
         }
-
         return $taxpayer;
     }
-
-
     public function chunkSize(): int
     {
         return 1000;
     }
-
     public function batchSize(): int
     {
         return 1000;

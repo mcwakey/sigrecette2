@@ -2,18 +2,16 @@
     <div class="modal-dialog modal-dialog-centered" style="max-width:calc(1000px - 20px)!important;">
         <div class="modal-content">
             <div class="modal-header" id="kt_modal_add_invoice_no_taxpayer_header">
-                <h2 class="fw-bold">{{ __('invoices') }}</h2>
+                <h2 class="fw-bold">{{ __('invoices') }} au comptant</h2>
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
                     {!! getIcon('cross', 'fs-1') !!}
                 </div>
             </div>
             <div class="modal-body px-5 my-5">
-                <!--begin::Form-->
                 <form id="kt_modal_add_invoice_no_taxpayer_form" class="form" action="#" wire:submit="submit"
                     enctype="multipart/form-data">
                     <input type="hidden" wire:model="invoice_id" name="invoice_id" />
                     <input type="hidden" wire:model="taxpayer_id" name="taxpayer_id" />
-                    <!--begin::Scroll-->
 
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_invoice_no_taxpayer_scroll"
                         data-kt-scroll="false" data-kt-scroll-activate="false" data-kt-scroll-max-height="auto"
@@ -279,10 +277,8 @@
                                     <tr class="border-bottom fs-7 fw-bolder text-gray-700 text-uppercase">
                                         <th class="min-w-300px w-450px">Item</th>
                                         <th class="min-w-150px w-150px">{{ $option_calculus }}</th>
-                                        <th class="min-w-150px w-150px">Price</th>
-                                        <!-- <th class="min-w-100px w-100px">period</th> -->
+                                        <th class="min-w-150px w-150px">Prix</th>
                                         <th class="min-w-100px text-end">Total</th>
-                                        <!-- <th class="min-w-50px w-50px text-end"></th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -301,10 +297,6 @@
                                             </div>
 
                                         </td>
-                                        <!-- <td class="pe-7">
-                                            <input type="number" class="form-control form-control-solid mb-2" name="quantity" placeholder="1" value="1" data-kt-element="quantity"/>
-                                            <input type="text" class="form-control form-control-solid" name="mesure" placeholder="m3" value="m3"/>
-                                        </td> -->
                                         <td class="ps-0">
 
                                             <div class="input-group mb-2">
@@ -323,33 +315,17 @@
                                                     id="basic-addon1">{{ $tariff_type }}</span>
                                             </div>
                                         </td>
-                                        <!-- <td>
-                                            <input wire:model="qty" name="qty" class="form-control form-control-solid mb-2" type="number" min="1" placeholder="1" value=""  data-kt-action="load_invoice_comptant"/>
-                                        </td> -->
                                         <td>
                                             <input wire:model="s_amount" name="s_amount" type="text"
                                                 class="form-control form-control-solid mb-2 text-end"
                                                 placeholder="0.00" readonly />
                                         </td>
 
-
-                                        <!-- <td class="pt-5">FCFA -->
-                                        <!-- <button type="button" class="btn btn-sm btn-icon btn-active-color-primary" data-kt-element="remove-item">
-                                                <span class="svg-icon svg-icon-3">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                        <path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="black" />
-                                                        <path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="black" />
-                                                        <path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="black" />
-                                                    </svg>
-                                                </span>
-                                            </button> -->
-                                        <!-- </td> -->
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr class="border-top border-top-dashed align-top fs-6 fw-bolder text-gray-700">
                                         <th class="text-primary">
-                                            <!-- <button class="btn btn-link py-1" data-kt-element="add-item">Add item</button> -->
                                         </th>
                                         <th colspan="2" class="border-bottom border-bottom-dashed ps-0">
                                             <div class="d-flex flex-column align-items-start">
@@ -397,7 +373,7 @@
                             </table>
                             <div class="mb-5">
                                 <label class="form-label fs-6 fw-bolder text-gray-700">Notes</label>
-                                <textarea wire:model="notes" name="notes" class="form-control" rows="2" placeholder="Thanks for your business"></textarea>
+                                <textarea wire:model="notes" name="notes" class="form-control" rows="2" placeholder=""></textarea>
                             </div>
                         </div>
 

@@ -1,9 +1,6 @@
 <?php
-
 namespace App\View\Components;
-
 use Illuminate\View\Component;
-
 class AuthLayout extends Component
 {
     /**
@@ -16,7 +13,6 @@ class AuthLayout extends Component
         // Init layout file
         app(config('settings.KT_THEME_BOOTSTRAP.auth'))->init();
     }
-
     /**
      * Get the view / contents that represents the component.
      *

@@ -1,11 +1,8 @@
 <?php
-
 namespace App\Policies;
-
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Illuminate\Auth\Access\Response;
-
 class RolePolicy
 {
     /**
@@ -15,19 +12,13 @@ class RolePolicy
     {
         return false;
     }
-
     /**
      * Determine whether the user can view the model.
      */
     public function view(User $user, Role $role): bool
     {
-        if (!$user->hasRole('administrateur_system') && $role->id == 1) {
-            return false;
-        }
-
-        return true;
+        return !(!$user->hasRole('administrateur_system') && $role->id == 1);
     }
-
     /**
      * Determine whether the user can create models.
      */
@@ -35,7 +26,6 @@ class RolePolicy
     {
         return $user->hasPermissionTo('peut créer un rôle');
     }
-
     /**
      * Determine whether the user can update the model.
      */
@@ -43,7 +33,6 @@ class RolePolicy
     {
         return $user->hasPermissionTo('peut modifier un rôle');
     }
-
     /**
      * Determine whether the user can delete the model.
      */
@@ -51,7 +40,6 @@ class RolePolicy
     {
         return $user->hasPermissionTo('peut supprimer un rôle');
     }
-
     /**
      * Determine whether the user can restore the model.
      */
@@ -59,7 +47,6 @@ class RolePolicy
     {
         return false;
     }
-
     /**
      * Determine whether the user can permanently delete the model.
      */

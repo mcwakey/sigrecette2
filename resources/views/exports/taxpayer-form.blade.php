@@ -1,6 +1,7 @@
 @php
-    use App\Helpers\InvoiceHelper;use Carbon\Carbon;
-    $year= \App\Models\Year::getActiveYear();
+    use App\Models\Invoice;
+     use Carbon\Carbon;
+     $year= \App\Models\Year::getActiveYear();
 @endphp
         <!DOCTYPE html>
 <html lang="en">
@@ -114,7 +115,7 @@
 
         @if($item instanceof \App\Models\Invoice )
             @if($item->delivery_date!=null && $item->status!= App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION)
-                @foreach(InvoiceHelper::sumAmountsByTaxCode($item) as $code => $tax)
+                @foreach(Invoice::sumAmountsByTaxCode($item) as $code => $tax)
                     <tr>
                         <td>{{$item->delivery_date}}</td>
                         <td>Distribution Avis {{$item->invoice_no}}, OR {{$item->order_no}}, {{$tax['name']}}</td>

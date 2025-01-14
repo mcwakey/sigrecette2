@@ -1,12 +1,8 @@
 <?php
-
 namespace App\Http\Resources;
-
-
 use App\Models\TaxpayerTaxable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-
 /**
  * @property TaxpayerTaxable $resource
  */
@@ -34,7 +30,6 @@ class SearchTaxpayerTaxableResource extends JsonResource
             'taxpayerId' => $this->resource->taxpayer_id,
             'width'=>$this->resource->width,
             'length'=>$this->resource->length,
-            // 'taxable'=> new TaxableResource($this->resource->taxable),
         ];
     }
 }

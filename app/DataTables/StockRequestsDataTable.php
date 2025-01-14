@@ -1,9 +1,6 @@
 <?php
-
 namespace App\DataTables;
-
 use Illuminate\Support\Facades\DB;
-
 use App\Models\StockRequest;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
@@ -11,7 +8,6 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
-
 class StockRequestsDataTable extends DataTable
 {
     /**
@@ -22,22 +18,7 @@ class StockRequestsDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            // ->filter(function ($query) {
-            //     if (request()->filled('search.value')) {
-            //         $query->where('tax_labels.name', 'like', '%' . request('search.value') . '%')
-            //         ->orWhere('taxables.name', 'like', '%' . request('search.value') . '%')
-            //         ->orWhere('tax_labels.code', 'like', '%' . request('search.value') . '%')
-            //         ->orWhere('bill_status', 'like', '%' . request('search.value') . '%');
-            //         // Add additional search conditions as needed for other columns
-            //     }
-            // })
             ->rawColumns(['status'])
-            // ->editColumn('id', function (StockRequest $stock_request) {
-            //     return $stock_request->id;
-            // })
-            // ->editColumn('req_no', function (StockRequest $stock_request) {
-            //     return view('pages.stock_requests.columns._bill', compact('stock_request'));
-            // })
             ->editColumn('stock_requests.created_at', function (StockRequest $stock_request) {
                 return $stock_request->created_at->format('d M Y');
             })
@@ -48,15 +29,8 @@ class StockRequestsDataTable extends DataTable
                 return $stock_request->req_desc;
             })
             ->editColumn('taxables.tariff', function (StockRequest $stock_request) {
-                $tariff = $stock_request->taxable->tariff > 0 ? number_format($stock_request->taxable->tariff) : "";
-                return $tariff;
+                return $stock_request->taxable->tariff > 0 ? number_format($stock_request->taxable->tariff) : "";
             })
-            // ->editColumn('stock_request', function (StockRequest $stock_request) {
-            //     return view('pages.stock_requests.columns._label', compact('stock_request'));
-            // })
-            // ->editColumn('tax_type', function (StockRequest $stock_request) {
-            //     return $stock_request->;
-            // })
             ->editColumn('stock_requests.start_no', function (StockRequest $stock_request) {
                 if ($stock_request->start_no > 0 || $stock_request->end_no > 0) {
                     $start_no = $stock_request->start_no;
@@ -65,33 +39,17 @@ class StockRequestsDataTable extends DataTable
                     $start_no = "";
                     $end_no = "";
                 }
-
                 return $start_no . " - " . $end_no;
-                // return view('pages.stock_requests.columns._seize', compact('stock_request'));
             })
             ->editColumn('pc_qty', function (StockRequest $stock_request) {
-                // if ($stock_request->req_type == "DEMANDE") {
-                //     $qty = $stock_request->qty ;
-                // } else {
-                //     $qty =  "";
-                // }
-
                 return $stock_request->pc_qty;
             })
             ->editColumn('pc_total', function (StockRequest $stock_request) {
-                // if ($stock_request->req_type == "DEMANDE") {
-                $pc_total = $stock_request->pc_qty * $stock_request->taxable?->tariff;;
-                // } else {
-                //     $total =  "";
-                // }
-                $pc_total = $pc_total > 0 ? number_format($pc_total, 2) : "";
-
-                return $pc_total;
+                $pc_total = $stock_request->pc_qty * $stock_request->taxable?->tariff;
+                return $pc_total > 0 ? number_format($pc_total, 2) : "";
             })
             ->editColumn('vv_qty', function (StockRequest $stock_request) {
-                $vv_qty = !$stock_request->pc_qty || !$stock_request->sd_qty ? "" : $stock_request->pc_qty - $stock_request->sd_qty;
-
-                return $vv_qty;
+                return !$stock_request->pc_qty || !$stock_request->sd_qty ? "" : $stock_request->pc_qty - $stock_request->sd_qty;
             })
             ->editColumn('vv_total', function (StockRequest $stock_request) {
                 if (!$stock_request->pc_qty || !$stock_request->sd_qty) {
@@ -99,12 +57,10 @@ class StockRequestsDataTable extends DataTable
                 } else {
                     $vv_total = ($stock_request->pc_qty - $stock_request->sd_qty) * $stock_request->taxable->tariff;
                 }
-
                 return $vv_total;
             })
             ->editColumn('sd_qty', function (StockRequest $stock_request) {
-                $sd_qty = !$stock_request->pc_qty || !$stock_request->sd_qty ? "" : $stock_request->sd_qty;
-                return $sd_qty;
+                return !$stock_request->pc_qty || !$stock_request->sd_qty ? "" : $stock_request->sd_qty;
             })
             ->editColumn('sd_total', function (StockRequest $stock_request) {
                 if (!$stock_request->pc_qty || !$stock_request->sd_qty) {
@@ -114,36 +70,22 @@ class StockRequestsDataTable extends DataTable
                 }
                 return $sd_total;
             })
-            // ->editColumn('bill_status', function (StockRequest $stock_request) {
-            //     return view('pages.stock_requests.columns._status', compact('stock_request'));
-            // })
             ->editColumn('users.name', function (StockRequest $stock_request) {
                 return $stock_request->user->name;
             })
             ->editColumn('stock_requests.type', function (StockRequest $stock_request) {
                 return view('pages.stock_requests.columns._status', ['stock_request' => $stock_request]);
-                //return $stock_request->type;
             })
             ->addColumn('action', function (StockRequest $stock_request) {
                 return view('pages.stock_requests.columns._actions', ['stock_request' => $stock_request]);
             })
             ->setRowId('id');
     }
-
     /**
      * Get the query source of dataTable.
      */
-    // public function query(): QueryBuilder // Remove $request parameter
     public function query(StockRequest $model): QueryBuilder
     {
-        // return $model->join('taxables', 'stock_requests.taxable_id', '=', 'taxables.id')
-        //             ->join('users', 'stock_requests.user_id', '=', 'users.id')
-        //             ->select('stock_requests.req_id',
-        //                     \DB::raw('MAX(CASE WHEN req_type = "DEMANDE" THEN qty END) AS pc_qty'),
-        //                     \DB::raw('MAX(CASE WHEN req_type = "COMPTABILITE" THEN qty END) AS vv_qty'))
-        //             ->groupBy('req_id')
-        //             ->orderBy('req_id', 'desc');
-
         return $model->join('taxables', 'stock_requests.taxable_id', '=', 'taxables.id')
             ->join('users', 'stock_requests.user_id', '=', 'users.id')
             ->select('stock_requests.req_id',
@@ -163,11 +105,7 @@ class StockRequestsDataTable extends DataTable
             ->groupBy('stock_requests.req_id')
             ->where('stock_requests.req_no', $this->reqNo)
             ->orderBy('req_id', 'desc');
-
-
-        // return StockRequest::where('taxpayer_id', $this->id); // Filter stock_requests by taxpayer_id
     }
-
     /**
      * Optional method if you want to use the html builder.
      */
@@ -181,25 +119,18 @@ class StockRequestsDataTable extends DataTable
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0, 'desc')
-            //->pageLength(3) // Set the default number of rows per page to 3
-            //->lengthMenu([[3, 10, 25, 50, -1], [3, 10, 25, 50, "All"]]) // Define options for the number of rows per page
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/stock_requests/columns/_draw-scripts.js')) . "}");
     }
-
     /**
      * Get the dataTable columns definition.
      */
     public function getColumns(): array
     {
         return [
-            // Column::make('req_id')->title(__('id'))->exportable(false)->printable(false)->visible(false),
             Column::make('stock_requests.created_at')->title(__('date'))->addClass('text-nowrap'),
-            // Column::make('req_desc')->title(__('req desc')),
             Column::make('taxables.name')->title(__('ticket')),
             Column::make('taxables.tariff')->title(__('tariff')),
             Column::make('stock_requests.start_no')->title(__('num')),
-            // //Column::make('tax_type')->title(__('tax_type')),
-            // //Column::make('seize')->title(__('amount')),
             Column::make('pc_qty')->title(__('pc qty')),
             Column::make('pc_total')->title(__('pc total'))->name('qty'),
             Column::make('vv_qty')->title(__('vv qty')),
@@ -213,16 +144,8 @@ class StockRequestsDataTable extends DataTable
                 ->exportable(false)
                 ->printable(false)
                 ->width(60)
-            // ->buttons(
-            //     Button::make('create'),
-            //     Button::make('export'),
-            //     Button::make('print'),
-            //     Button::make('reset'),
-            //     Button::make('reload')
-            // )
         ];
     }
-
     /**
      * Get the filename for export.
      */

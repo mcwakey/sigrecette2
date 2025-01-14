@@ -1,9 +1,6 @@
 <?php
-
 namespace App\Services;
-
 use Illuminate\Support\Facades\Http;
-
 /**
  * Class GetPublicService
  *
@@ -31,10 +28,8 @@ class GetPublicService
             'https://api.ipify.org?format=json',
             'https://ipinfo.io/json'
         ];
-
         $ips = [];
         $error = null;
-
         foreach ($services as $service) {
             try {
                 $response = Http::timeout(3)->get($service);
@@ -51,10 +46,8 @@ class GetPublicService
                 $error = self::handleError('General error: ' . $e->getMessage());
             }
         }
-
         return self::processIPs($ips, $error);
     }
-
     /**
      * Extract the IP address from the service response data.
      *
@@ -68,18 +61,14 @@ class GetPublicService
         if (isset($data['ip'])) {
             return $data['ip'];
         }
-
         if (isset($data['ip_addr'])) {
             return $data['ip_addr'];
         }
-
         if (isset($data['ipaddress'])) {
             return $data['ipaddress'];
         }
-
         return null;
     }
-
     /**
      * Process the collected IP addresses to ensure consistency.
      *
@@ -91,17 +80,11 @@ class GetPublicService
      */
     private static function processIPs(array $ips, string|null $errors): string
     {
-        if (count($ips) === 0) {
+        if ($ips === []) {
             return self::handleError('No IP addresses could be retrieved.' . $errors);
         }
-
-        if (count(array_unique($ips)) === 1) {
-            return $ips[0];
-        }
-
         return $ips[0];
     }
-
     /**
      * Handle errors and return appropriate messages.
      *
@@ -116,7 +99,6 @@ class GetPublicService
         if (app()->environment('production')) {
             return 'null';
         }
-
         return 'Erreur: ' . $message;
     }
 }

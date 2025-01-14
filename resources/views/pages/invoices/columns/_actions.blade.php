@@ -33,7 +33,7 @@
 
     @if(in_array(App\Enums\InvoiceActionsEnums::REDUCE,$actions))
         @if( $invoice->can( "submit_for_reduced") ||  $invoice->can("submit_for_canceled") && $invoice->validity == 'VALID')
-            @if($invoice->type ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY)
+            @if($invoice->type ==  App\Helpers\Constants::INVOICE_TYPE_TITRE)
                 @can('peut réduire un avis sur titre')
                     <div class="menu-item px-3">
                         <a href="#" class="menu-link px-3 text-start text-wrap" data-kt-user-id="{{ $invoice->id }}"
@@ -42,6 +42,14 @@
                         </a>
                     </div>
                 @endcan
+            @if($invoice->canSubmitToRelaunch())
+                @php
+                    $data = [$invoice->uuid];
+                @endphp
+                <div class="menu-item px-3">
+                    <a href="{{route('generatePdf', ['type'=>77,'data' => json_encode($data)]) }}" class="menu-link px-3" target="_blank">{{ __('print_relance') }}</a>
+                </div>
+            @endif
             @else
                 @can('peut réduire un avis au comptant')
                     <div class="menu-item px-3">

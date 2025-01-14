@@ -1,7 +1,5 @@
 <?php
-
 namespace App\DataTables;
-
 use App\Models\Category;
 use App\Models\Invoice;
 use Yajra\DataTables\Html\Column;
@@ -10,10 +8,8 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
-
 class CategoryDataTable extends DataTable
 {
-
     /**
      * Build the DataTable class.
      *
@@ -27,8 +23,6 @@ class CategoryDataTable extends DataTable
                 return $category->name;
             })
             ->editColumn('status', function (Category $category) {
-                // return $category->status;
-                // return sprintf('<div class="badge badge-light fw-bold">%s</div>', $category->status);
                 return view('pages/categories.columns._status', ['category' => $category]);
             })
             ->editColumn('created_at', function (Category $category) {
@@ -39,7 +33,6 @@ class CategoryDataTable extends DataTable
             })
             ->setRowId('id');
     }
-
     /**
      * Get the query source of dataTable.
      */
@@ -47,7 +40,6 @@ class CategoryDataTable extends DataTable
     {
         return $model->newQuery();
     }
-
     /**
      * Optional method if you want to use the html builder.
      */
@@ -63,7 +55,6 @@ class CategoryDataTable extends DataTable
             ->orderBy(2)
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/categories/columns/_draw-scripts.js')) . "}");
     }
-
     /**
      * Get the dataTable columns definition.
      */
@@ -71,7 +62,6 @@ class CategoryDataTable extends DataTable
     {
         return [
             Column::make('name')->title(__('activity_category')),
-            //Column::make('gender')->title('Tax Name'),
             Column::make('status')->title(__('status'))->width(150),
             Column::make('created_at')->title(__('created at'))->addClass('text-nowrap')->width(150),
             Column::computed('action')
@@ -81,7 +71,6 @@ class CategoryDataTable extends DataTable
                 ->width(60)
         ];
     }
-
     /**
      * Get the filename for export.
      */

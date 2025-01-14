@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers\Api;
-
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\StoreTaxpayerRequest;
 use App\Http\Resources\TaxpayerIndexResource;
@@ -13,7 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-
 class TaxpayerController extends Controller
 {
     /**
@@ -23,7 +20,6 @@ class TaxpayerController extends Controller
     {
         return TaxpayerIndexResource::collection(Taxpayer::paginate(10));
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -31,27 +27,21 @@ class TaxpayerController extends Controller
     {
         //
     }
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreTaxpayerRequest $request)
     {
         $validatedData = $request->validated();
-
         $email = $validatedData['email'];
         $password = Str::random(8);
         $validatedData['password'] = Hash::make($password);
-
         $taxpayer = Taxpayer::create($validatedData);
-
         if ($email) {
             Mail::to($email)->send(new TaxpayerCreationMail(['data' => $taxpayer]));
         }
-
         return new TaxpayerStoreResource($taxpayer);
     }
-
     /**
      * Display the specified resource.
      */
@@ -59,7 +49,6 @@ class TaxpayerController extends Controller
     {
         return new TaxpayerShowResource($taxpayer);
     }
-
     /**
      * Show the form for editing the specified resource.
      */
@@ -67,7 +56,6 @@ class TaxpayerController extends Controller
     {
         //
     }
-
     /**
      * Update the specified resource in storage.
      */
@@ -75,7 +63,6 @@ class TaxpayerController extends Controller
     {
         //
     }
-
     /**
      * Remove the specified resource from storage.
      */

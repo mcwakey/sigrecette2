@@ -25,10 +25,10 @@ var KTAccountSettingsSigninMethods = function () {
     }
 
     // Private functions
-    var initSettings = function () {  
+    var initSettings = function () {
         if (!signInMainEl) {
             return;
-        }        
+        }
 
         // toggle UI
         signInChangeEmail.querySelector('button').addEventListener('click', function () {
@@ -49,7 +49,7 @@ var KTAccountSettingsSigninMethods = function () {
     }
 
     var handleChangeEmail = function (e) {
-        var validation;        
+        var validation;
 
         if (!signInForm) {
             return;
@@ -90,7 +90,7 @@ var KTAccountSettingsSigninMethods = function () {
 
         signInForm.querySelector('#kt_signin_submit').addEventListener('click', function (e) {
             e.preventDefault();
-            console.log('click');
+           // console.log('click');
 
             validation.validate().then(function (status) {
                 if (status == 'Valid') {
@@ -178,7 +178,7 @@ var KTAccountSettingsSigninMethods = function () {
 
         passwordForm.querySelector('#kt_password_submit').addEventListener('click', function (e) {
             e.preventDefault();
-            console.log('click');
+           // console.log('click');
 
             validation.validate().then(function (status) {
                 if (status == 'Valid') {

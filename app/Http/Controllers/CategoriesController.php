@@ -1,11 +1,8 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\DataTables\CategoryDataTable;
 use App\Models\Category;
 use Illuminate\Http\Request;
-
 class CategoriesController extends Controller
 {
     /**
@@ -13,10 +10,8 @@ class CategoriesController extends Controller
      */
     public function index(CategoryDataTable $dataTable)
     {
-        //return view('pages/categories.list');
         return $dataTable->render('pages/categories.list');
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -24,7 +19,6 @@ class CategoriesController extends Controller
     {
         //
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -32,7 +26,6 @@ class CategoriesController extends Controller
     {
         //
     }
-
     /**
      * Display the specified resource.
      */
@@ -40,14 +33,12 @@ class CategoriesController extends Controller
     {
         return $categoriesDataTable->with('id', $category->id)->render('pages/categories.show', ['category' => $category]);
     }
-
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Category $category)
     {
     }
-
     /**
      * Update the specified resource in storage.
      */
@@ -55,7 +46,6 @@ class CategoriesController extends Controller
     {
         //
     }
-
     /**
      * Remove the specified resource from storage.
      */
@@ -64,4 +54,3 @@ class CategoriesController extends Controller
         //
     }
 }
-

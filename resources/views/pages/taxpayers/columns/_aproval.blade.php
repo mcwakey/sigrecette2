@@ -1,6 +1,6 @@
 @if($taxpayerinfo->from_mobile_and_validate_state == App\Enums\TaxpayerStateEnums::PENDING )
     <div class="badge badge-lg badge-light-primary d-inline">{{ __($taxpayerinfo->from_mobile_and_validate_state) }}
-            @can('peut prendre en charge un avis sur titre')
+            @can('peut valider un contribuable')
                 <button type="button"
                         class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto  pulse pulse-warning"
                         data-kt-user-id="{{ $taxpayerinfo->id }}"

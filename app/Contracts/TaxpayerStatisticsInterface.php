@@ -1,60 +1,14 @@
 <?php
-
 namespace App\Contracts;
-
 use App\Models\Year;
-
 interface TaxpayerStatisticsInterface
 {
-
-
-    /**
-     * @param Year $year
-     * @return array
-     */
-    public function countTaxpayers(Year $year): array;
-
-    /**
-     * @param Year $year
-     * @return array
-     */
-    public function countTaxpayersByCategory(Year $year): array;
-
-    /**
-     * @param Year $year
-     * @return array
-     */
-    public function countTaxpayersByActivity(Year $year): array;
-
-
-    /**
-     * @param Year $year
-     * @return array
-     */
-    public function countTaxpayersByCanton(Year $year): array;
-
-    /**
-     * @param Year $year
-     * @return array
-     */
-    public function countTaxpayersByTown(Year $year): array;
-
-    /**
-     * @return array
-     */
-    public function countTaxpayersByZone(Year $year): array;
-
-    /**
-     * @param Year $year
-     * @return array
-     */
-    public function countTaxpayersState(Year $year): array;
-
-
-    /**
-     * @param Year $year
-     * @return array
-     */
-    public function countTaxpayersByTaxables(Year $year): array;
-
+    public function countTaxpayers(): array;
+    public function countTaxpayersByCategory(): array;
+    public function countTaxpayersByActivity(): array;
+    public function countTaxpayersByCanton(): array;
+    public function countTaxpayersByTown(): array;
+    public function countTaxpayersByZone(): array;
+    public function countTaxpayersState(): array;
+    public function countTaxpayersByTaxables(): array;
 }

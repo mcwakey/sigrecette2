@@ -1,7 +1,5 @@
 <?php
-
 namespace App\DataTables;
-
 use App\Models\Year;
 use App\Models\Invoice;
 use Yajra\DataTables\Html\Column;
@@ -11,10 +9,8 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-
 class YearDataTable extends DataTable
 {
-
     /**
      * Build the DataTable class.
      *
@@ -34,8 +30,6 @@ class YearDataTable extends DataTable
                 return view('pages/years.columns._auto_switch', ['year' => $year]);
             })
             ->editColumn('status', function (Year $year) {
-                // return $year->status;
-                // return sprintf('<div class="badge badge-light fw-bold">%s</div>', $year->status);
                 return view('pages/years.columns._status', ['year' => $year]);
             })
             ->editColumn('created_at', function (Year $year) {
@@ -46,7 +40,6 @@ class YearDataTable extends DataTable
             })
             ->setRowId('id');
     }
-
     /**
      * Get the query source of dataTable.
      */
@@ -54,7 +47,6 @@ class YearDataTable extends DataTable
     {
         return $model->newQuery();
     }
-
     /**
      * Optional method if you want to use the html builder.
      */
@@ -70,7 +62,6 @@ class YearDataTable extends DataTable
             ->orderBy(1)
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/years/columns/_draw-scripts.js')) . "}");
     }
-
     /**
      * Get the dataTable columns definition.
      */
@@ -78,7 +69,6 @@ class YearDataTable extends DataTable
     {
         return [
             Column::make('name')->title(__('year')),
-            //Column::make('gender')->title('Tax Name'),
             Column::make('current_month')->title(__('current_month')),
             Column::make('auto_switch')->title(__('auto_switch')),
             Column::make('status')->title(__('status'))->width(150),
@@ -90,7 +80,6 @@ class YearDataTable extends DataTable
                 ->width(60)
         ];
     }
-
     /**
      * Get the filename for export.
      */

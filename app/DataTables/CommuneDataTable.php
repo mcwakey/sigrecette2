@@ -1,7 +1,5 @@
 <?php
-
 namespace App\DataTables;
-
 use App\Models\Commune;
 use App\Models\Taxpayer;
 use Yajra\DataTables\Html\Column;
@@ -9,7 +7,6 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-
 class CommuneDataTable extends DataTable
 {
     /**
@@ -55,7 +52,6 @@ class CommuneDataTable extends DataTable
             })
             ->setRowId('id');
     }
-
     /**
      * Get the query source of dataTable.
      */
@@ -63,7 +59,6 @@ class CommuneDataTable extends DataTable
     {
         return $model->newQuery();
     }
-
     /**
      * Optional method if you want to use the html builder.
      */
@@ -79,7 +74,6 @@ class CommuneDataTable extends DataTable
             ->orderBy(1)
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/communes/columns/_draw-scripts.js')) . "}");
     }
-
     /**
      * Get the dataTable columns definition.
      */
@@ -95,7 +89,6 @@ class CommuneDataTable extends DataTable
             Column::make('treasury_name')->title(__(__('treasury_name'))),
             Column::make('treasury_address')->title(__(__('treasury_address'))),
             Column::make('treasury_rib')->title(__(__('treasury_rib'))),
-
             Column::make('created_at')->title(__('created at'))->addClass('text-nowrap')->width(150),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
@@ -104,7 +97,6 @@ class CommuneDataTable extends DataTable
                 ->width(60)
         ];
     }
-
     /**
      * Get the filename for export.
      */

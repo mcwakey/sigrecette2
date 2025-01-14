@@ -1,11 +1,8 @@
 <?php
-
 namespace App\Http\Resources;
-
 use App\Models\IdType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-
 /**
  * @property IdType $resource
  */
@@ -21,8 +18,6 @@ class SearchIdTypeResource extends JsonResource
         return [
             'id' => $this->resource->id,
             'name' => $this->resource->name,
-            // 'code' => $this->resource->code,
-            // 'categoryId' => $this->resource->category_id
         ];
     }
 }

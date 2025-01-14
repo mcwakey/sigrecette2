@@ -1,5 +1,6 @@
 <div class="modal fade" id="kt_modal_add_stock_transfer-state" tabindex="-1" aria-hidden="true" wire:ignore.self>
     <!--begin::Modal dialog-->
+    @can('peut effectuer une alimentation des collecteurs')
     <div class="modal-dialog modal-dialog-centered mw-1000px">
         <!--begin::Modal content-->
         <div class="modal-content">
@@ -90,5 +91,6 @@
         </div>
         <!--end::Modal content-->
     </div>
+    @endcan
     <!--end::Modal dialog-->
 </div>

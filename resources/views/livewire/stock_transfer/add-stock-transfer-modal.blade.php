@@ -233,6 +233,8 @@
     {{-- End Styles Section  --}}
 
     <!--begin::Modal dialog-->
+    @can('peut effectuer une alimentation des collecteurs')
+
     <div class="modal-dialog modal-dialog-centered mw-1000px">
         <!--begin::Modal content-->
         <div class="modal-content">
@@ -598,6 +600,7 @@
         </div>
         <!--end::Modal content-->
     </div>
+    @endcan
     <!--end::Modal dialog-->
 </div>
 

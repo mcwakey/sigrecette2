@@ -1,23 +1,17 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\DataTables\YearDataTable;
 use App\Models\Year;
 use Illuminate\Http\Request;
-
 class YearsController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      */
     public function index(YearDataTable $dataTable)
     {
-        //return view('pages/years.list');
         return $dataTable->render('pages/years.list');
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -25,7 +19,6 @@ class YearsController extends Controller
     {
         //
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -33,7 +26,6 @@ class YearsController extends Controller
     {
         //
     }
-
     /**
      * Display the specified resource.
      */
@@ -41,14 +33,12 @@ class YearsController extends Controller
     {
         return $yearsDataTable->with('id', $year->id)->render('pages/years.show', ['year' => $year]);
     }
-
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Year $year)
     {
     }
-
     /**
      * Update the specified resource in storage.
      */
@@ -56,7 +46,6 @@ class YearsController extends Controller
     {
         //
     }
-
     /**
      * Remove the specified resource from storage.
      */
@@ -65,5 +54,3 @@ class YearsController extends Controller
         //
     }
 }
-
-

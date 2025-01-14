@@ -29,12 +29,36 @@
                     <!--begin::Title-->
                     <div class="card-title d-flex flex-column">
                         <!--begin::Amount-->
-                        <span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">{{$count_tapyers_with_gender["Total"] ?? ''}}</span>
-                        <!--end::Amount-->
-                        <!--begin::Subtitle-->
-                        <span class="text-gray-500 pt-1 fw-semibold fs-6">{{ __('Contribuables')}}</span>
-                        <!--end::Subtitle-->
+                        <div class="stats-container">
+                            <div class="stat-item">
+                                    <span class="fs-2hx fw-bold text-success me-2 lh-1 ls-n2">
+                                        {{$count_tapyers_with_gender["Total"] ?? '0'}}
+                                    </span>
+                                        <span class="fs-6 text-gray-700 fw-semibold">
+                                         {{ __('Contribuables') }} {{ __('Actifs') }}
+                                    </span>
+                            </div>
+                            <div class="stat-item">
+                                    <span class="fs-2hx fw-bold text-primary me-2 lh-1 ls-n2">
+                                        {{$count_tapyers_with_gender["from_mobile_and_validate"] ?? '0'}}
+                                    </span>
+                                    <span class="fs-6 text-gray-700 fw-semibold">
+                                       {{ __('Contribuables') }}  {{ __("Issus d'un recensement /Mise a jour puis validé") }}
+                                    </span>
+                            </div>
+
+                            <div class="stat-item">
+                                    <span class="fs-2hx fw-bold text-danger me-2 lh-1 ls-n2">
+                                        {{$count_tapyers_with_gender["deleted"] ?? '0'}}
+                                    </span>
+                                    <span class="fs-6 text-gray-700 fw-semibold">
+                                       {{ __('Contribuables') }}  {{ __('Désactivés') }}
+                                    </span>
+                            </div>
+                        </div>
+
                     </div>
+
                     <!--end::Title-->
                 </div>
                 <div >
@@ -74,13 +98,13 @@
                                             <!--end::Label-->
 
                                             <!--begin::Stats-->
-                                            <div class="ms-auto fw-bolder text-gray-700 text-end"> {{$count_tapyers_with_gender["Homme"] ?? ''}}</div>
+                                            <div class="ms-auto fw-bolder text-gray-700 text-end"> {{$count_tapyers_with_gender["Homme"] ?? '0'}}</div>
 
                                         </div>
                                         <div class="d-flex fs-6 fw-semibold align-items-center my-4">
                                             <div class="bullet bg-info me-3" style="border-radius: 3px;width: 12px;height: 12px"></div>
                                             <div class="fs-5 fw-bold text-gray-600 me-5">Entreprise</div>
-                                            <div class="ms-auto fw-bolder text-gray-700 text-end"> {{$count_tapyers_with_gender["Autre"] ?? ''}}</div>
+                                            <div class="ms-auto fw-bolder text-gray-700 text-end"> {{$count_tapyers_with_gender["Entreprise"] ?? '0'}}</div>
 
                                         </div>
 
