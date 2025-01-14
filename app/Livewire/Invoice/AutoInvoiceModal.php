@@ -69,6 +69,7 @@ class AutoInvoiceModal extends Component
                     ->where('invoices.type', '=', Constants::TITRE)
                     ->whereBetween('invoices.created_at', [$s_date, $e_date])
                     ->select('invoices.*')
+                    ->distinct()
                     ->get();
             }
             else{
