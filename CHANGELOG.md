@@ -2,31 +2,6 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [0.8.12](https://github.com/mcwakey/sigrecette2/compare/v0.9.1...v0.8.12) (2025-01-14)
-
-
-### Features
-
-* filter app by two perido ([3a89cb7](https://github.com/mcwakey/sigrecette2/commit/3a89cb7f75bdf23e782d8d4f506aeb8e800503ee))
-* get last backup ([03d0c62](https://github.com/mcwakey/sigrecette2/commit/03d0c6234379bdfcf6a30074e618499a93f6cdd4))
-
-
-### Bug Fixes
-
-* add payment modal validity (ARCHIVED,EXPIRED) ([b7cde6b](https://github.com/mcwakey/sigrecette2/commit/b7cde6ba75bea51f2ab4c388f072ee795ede8e91))
-* bug with livewire auth access gestion ([7f6449b](https://github.com/mcwakey/sigrecette2/commit/7f6449b297144921bae64d9d28e4fce7d522c10e))
-* can edit recoveries stat on export page ([e9674b8](https://github.com/mcwakey/sigrecette2/commit/e9674b86bf881f1966ff44b4ee7ffa2556f21d3e))
-* disable taxpayers ([72cd98c](https://github.com/mcwakey/sigrecette2/commit/72cd98cc5755864118add152bdef0aec4331b003))
-* make maatwebsite/excel dep disponbility as default ([544d6ac](https://github.com/mcwakey/sigrecette2/commit/544d6acbe4cf0c95ee58d5a816401176b57069b6))
-* null value on state ([10a36c5](https://github.com/mcwakey/sigrecette2/commit/10a36c51b06cdd18c9a4e1ab1f2f454a1e85a8c6))
-* Old invoices not displaying on taxpayer page after year transition ([26aa828](https://github.com/mcwakey/sigrecette2/commit/26aa8285a7d0eb83c37079ad7ad68bad1ae82d52))
-* partial fix (juste correction for future installation)use "APROVED" on procedures creation instead of  "APPROVED" ([94ac806](https://github.com/mcwakey/sigrecette2/commit/94ac80645cff4cf1b520a41908d9cb04b5e20330))
-* procedure logic ([76f9141](https://github.com/mcwakey/sigrecette2/commit/76f9141f55cabfe045c2d7e32512ad5d956122e8))
-* stat not return good colors on dasboard ([dab2673](https://github.com/mcwakey/sigrecette2/commit/dab26737c764ebad253d6173a5160e0a3dfd4067))
-* stats logic ([1430a1a](https://github.com/mcwakey/sigrecette2/commit/1430a1a1aa0acb25a059fcfc7339242656d7a900))
-* syntax error on deploy ci/cd ([cf19010](https://github.com/mcwakey/sigrecette2/commit/cf19010a192911336c0204a2510f2855699d59d5))
-* taxpayers paiement not display on taxpayers.show ([419bdc3](https://github.com/mcwakey/sigrecette2/commit/419bdc3c9a7f656eb0ba341931edec8826951031))
-
 ### [0.8.11](https://github.com/mcwakey/sigrecette2/compare/v0.8.10...v0.8.11) (2024-12-21)
 
 
