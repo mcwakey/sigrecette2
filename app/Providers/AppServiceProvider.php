@@ -44,7 +44,7 @@ class AppServiceProvider extends ServiceProvider
             Url::forceScheme('http');
         }
         if (env('APP_ENV') == 'production') {
-            $this->app['request']->server->set('HTTPS', 'on');
+           // $this->app['request']->server->set('HTTPS', 'on');
         }
         KTBootstrap::init();
     }
