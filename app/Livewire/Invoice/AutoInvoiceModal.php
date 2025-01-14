@@ -92,7 +92,22 @@ class AutoInvoiceModal extends Component
                 $created_invoice = Invoice::create($invoiceData);
                 $totalAmount = 0;
                 foreach ($invoice->invoiceitems as $invoiceitem) {
-                    $itemAmount = $invoiceitem->taxpayer_taxable->taxable->tariff * $this->qty * $invoiceitem->taxpayer_taxable->seize;
+                    $period = 1;
+                    $periodicity = $invoiceitem->taxpayer_taxable->taxable->periodicity;
+                    $qty = $periodicity == "Mois" ? 12 : 1;
+                    $created_invoice->qty=$qty;
+                    $temp_seize = $invoiceitem->taxpayer_taxable->seize;
+                    if ($invoiceitem->taxpayer_taxable->taxable->use_second_formula) {
+                        $temp_seize = 1;
+                    }
+                    if($invoiceitem->taxpayer_taxable->taxable->tariff_type == "FIXED"){
+                        $itemAmount = $invoiceitem->taxpayer_taxable->taxable->tariff * $qty * $temp_seize* $period;
+
+                    }else{
+                        $itemAmount = $invoiceitem->taxpayer_taxable->taxable->tariff * $qty * $temp_seize* $period / 100;
+
+                    }
+
                     $invoiceItemsData = [
                         'invoice_id' => $created_invoice->id,
                         'taxpayer_taxable_id' => $invoiceitem->taxpayer_taxable_id,
@@ -107,12 +122,13 @@ class AutoInvoiceModal extends Component
                     $taxpayerTaxable->bill_status = 'BILLED';
                     $taxpayerTaxable->save();
                     $totalAmount += $itemAmount;
+
                 }
                 $created_invoice->invoice_no = $created_invoice->id;
                 $created_invoice->nic = $created_invoice->taxpayer_id . $created_invoice->id;
                 $created_invoice->amount = $totalAmount;;
                 $created_invoice->save();
-                
+
                 $invoice->validity = 'ARCHIVED';
                 $invoice->save();
             }
