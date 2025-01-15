@@ -59,6 +59,8 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
                 return $this->countTaxpayersByTaxables();
             case InvoiceStaticsEnums::BY_INVOICE:
                 return $this->countInvoices();
+            case InvoiceStaticsEnums::BY_INVOICE_COMPTANT:
+                return $this->countInvoices(Constants::INVOICE_TYPE_COMPTANT);
             case TaxpayerStaticsEnums::BY_LABEL:
                 return $this->countTaxpayersByTaxLabel();
             default:
@@ -286,10 +288,14 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
         $count_titre = Payment::where('invoice_type', Constants::TITRE)
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->count();
+        $count_comptant = Payment::where('invoice_type', Constants::INVOICE_TYPE_COMPTANT)
+            ->whereBetween('created_at', [$this->startDate, $this->endDate])
+            ->count();
         return [
             'comptant_total' => $comptantTotal,
             'titre_total' => $titreTotal,
             'count_titre' => $count_titre,
+            'count_comptant'=>$count_comptant,
         ];
     }
     public function getTaxpayerByCreatedAt(): Collection

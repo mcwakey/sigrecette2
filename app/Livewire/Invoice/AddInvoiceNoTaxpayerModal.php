@@ -235,13 +235,9 @@ class AddInvoiceNoTaxpayerModal extends Component
         $this->zone = $invoice->taxpayer->zone->name ?? '';
         $this->taxpayer_taxables = $taxpayer_taxables = InvoiceItem::where('invoice_id',"=", $id)->get();
         foreach ($taxpayer_taxables as $index => $invoice_item) {
-            if ($invoice_item->taxpayer_taxable->taxable->periodicity == "Mois") {
-                $period = 1;
-            } elseif ($invoice_item->taxpayer_taxable->taxable->periodicity == "Ans") {
-                $period = 0.083333;
-            } else {
-                $period = 1;
-            }
+
+            //if ($invoice_item->taxpayer_taxable->taxable->periodicity == "Mois") {$period = 1;} elseif ($invoice_item->taxpayer_taxable->taxable->periodicity == "Ans") {$period = 0.083333;} else {$period = 1;}
+            $period = 1;
             $this->periodicity = $invoice_item->taxpayer_taxable->taxable->periodicity;
             $this->taxable_taxlabel = $invoice_item->taxpayer_taxable->taxable->tax_label->code . ' : ' . $invoice_item->taxpayer_taxable->taxable->name;
             $this->taxpayer_taxable_id[$index] = $invoice_item->taxpayer_taxable->id;
