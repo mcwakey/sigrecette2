@@ -58,6 +58,7 @@ class InvoiceExport implements FromCollection, WithHeadings, WithMapping
         return [
             $invoice->invoice_no,
             $invoice->order_no,
+            $invoice->taxpayer->id ,
             $invoice->taxpayer->name ?? '-',
             $invoice->taxpayer->zone->name ?? '-',
             implode(',', array_keys(Invoice::sumAmountsByTaxCode($invoice))),
