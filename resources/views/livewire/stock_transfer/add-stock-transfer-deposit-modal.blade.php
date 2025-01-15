@@ -76,11 +76,12 @@
                                 <!--begin::Input-->
 
                                 <select data-kt-action="load_drop" wire:model="stock_transfer_id" name="stock_transfer_id" class="form-select" data-dropdown-parent="#kt_modal_add_stock_transfer-deposit">
-                                    <option>{{ __('select an option') }}</option>
+                                    <option value="">{{ __('select an option') }}</option>
                                     @foreach($stock_transfers as $stock_transfer)
                                         <option value="{{  $stock_transfer->id}}">{{ $stock_transfer->taxable->name." (".$stock_transfer->taxable->tariff ." FCFA) [No: ". $stock_transfer->start_no."-". $stock_transfer->end_no."]" }}</option>
                                     @endforeach
                                 </select>
+
 
                                 @error('taxable_id')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -132,7 +133,7 @@
                                 <label class="fw-semibold fs-6 mb-2">{{ __('total') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" wire:model="total" name="total" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('total') }}" readonly />
+                                <input type="text" wire:model="total" name="total" class="form-control  mb-3 mb-lg-0" placeholder="{{ __('total') }}" @if(!$can_set_total) readonly @endif />
                                 <!--end::Input-->
                                 @error('qty')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -206,7 +207,7 @@
                                                         {{ $stock_transfer->qty }}
                                                     </td>
                                                     <td>
-                                                        {{ $stock_transfer->qty*$stock_transfer->taxable->tariff }}
+                                                        {{ $stock_transfer->payment?->amount}}
                                                     </td>
                                                     <td>
                                                         {{ $stock_transfer->start_no." - ".$stock_transfer->end_no }}

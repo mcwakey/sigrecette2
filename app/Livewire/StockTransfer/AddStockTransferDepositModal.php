@@ -50,6 +50,7 @@ class AddStockTransferDepositModal extends Component
     public $option_calculus;
     public $stock_transfers_v;
     public $select_transfer;
+    public $can_set_total = false;
     public function rules()
     {
         $this->select_transfer->start_no =$this->select_transfer->start_no === "" ? null : $this->select_transfer->start_no;
@@ -182,6 +183,12 @@ class AddStockTransferDepositModal extends Component
             ->where('to_user_id', $this->collector_id)
             ->orderBy('stock_transfers.id', 'DESC')
             ->get();
+
+        if($this->tariff=="0"){
+            $this->can_set_total=true;
+        }else{
+            $this->can_set_total=false;
+        }
         if ($this->collector_id < 1) {
             return;
         } else {
@@ -233,6 +240,7 @@ class AddStockTransferDepositModal extends Component
             $this->stock_transfers = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')->where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
         }
     }
+
     public function updatedEndNo($value)
     {
         $this->makeStartNoAndEndNoCalcul();
@@ -243,6 +251,7 @@ class AddStockTransferDepositModal extends Component
     }
     public function makeStartNoAndEndNoCalcul()
     {
+        //dump($this->stock_request_id);
         if ($this->stock_request_id != null && is_numeric($this->start_no) && is_numeric($this->end_no) && $this->start_no < $this->end_no) {
             $this->qty = intval($this->end_no) - intval($this->start_no) + 1;
             $this->updatedQty("");
@@ -258,7 +267,10 @@ class AddStockTransferDepositModal extends Component
         } elseif ($this->qty > $this->remaining_qty) {
             $this->qty = $this->remaining_qty;
         }
-        $this->total = $this->qty * $this->tariff;
+        if(!$this->can_set_total){
+            $this->total = $this->qty * $this->tariff;
+
+        }
     }
     public function submit()
     {
@@ -324,6 +336,7 @@ class AddStockTransferDepositModal extends Component
                         'stock_request_id' => $this->stock_request_id
                     ];
                     if ($this->deposit_mode) {
+                       // dd($this->total);
                         $paymentData = [
                             'amount' => $this->total,
                             'code' => $this->code,
