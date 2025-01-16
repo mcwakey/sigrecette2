@@ -9,6 +9,7 @@ use App\Models\Taxable;
 use App\Models\TaxLabel;
 use App\Models\TaxpayerTaxable;
 use App\Models\User;
+use App\Traits\DispatchesMessages;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +21,7 @@ use PhpParser\Node\Stmt\Return_;
 class AddStockTransferDepositModal extends Component
 {
     use WithFileUploads;
+    use DispatchesMessages;
     public $stock_transfer_id;
     public $user_id;
     public $collector_id;
@@ -275,6 +277,13 @@ class AddStockTransferDepositModal extends Component
     public function submit()
     {
         $this->validateData();
+        $user = auth()->user();
+        if (!$user->hasRole('regisseur')) {
+            $this->dispatchMessage('Valeur Inactive', 'update', 'error',"Action non authorize");
+            $this->reset();
+            abort(403, 'Accès interdit');
+            return;
+        }
         if ($this->getErrorBag()->isEmpty()) {
             DB::transaction(function () {
                 $stock_transfers = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();

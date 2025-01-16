@@ -2,6 +2,7 @@
 namespace App\DataTables;
 use App\Models\Taxable;
 use App\Models\Taxpayer;
+use App\Models\Year;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
@@ -48,6 +49,9 @@ class TaxablesDataTable extends DataTable
             })
             ->editColumn('periodicity', function (Taxable $taxable) {
                 return $taxable->periodicity;
+            })
+            ->editColumn('status', function (Taxable $taxable) {
+                return view('pages/taxables.columns._status', ['taxable' => $taxable]);
             })
             ->editColumn('created_at', function (Taxable $taxable) {
                 return $taxable->created_at->format('d M Y');
@@ -108,6 +112,7 @@ class TaxablesDataTable extends DataTable
             Column::make('unit')->title(__('unit')),
             Column::make('periodicity')->title(__('periodicity')),
             Column::make('penalty')->title(__('penalty')),
+            Column::make('status')->title(__('status'))->width(150),
             Column::make('created_at')->title(__('created at'))->addClass('text-nowrap'),
             Column::make('updated_at')->title(__('updated at'))->addClass('text-nowrap'),
             Column::computed('action')

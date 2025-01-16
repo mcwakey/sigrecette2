@@ -53,6 +53,7 @@ class StockRequestsSumDataTable extends DataTable
                 DB::raw('MIN(stock_requests.type) AS type'),
                 DB::raw('MAX(stock_requests.created_at) AS created_at')
             )
+            ->whereBetween('stock_requests.created_at', [$this->startDate, $this->endDate])
             ->groupBy('stock_requests.req_no')
             ->orderBy('req_id', 'desc');
     }

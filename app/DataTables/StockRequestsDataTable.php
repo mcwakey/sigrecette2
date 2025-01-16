@@ -103,6 +103,7 @@ class StockRequestsDataTable extends DataTable
                 DB::raw('MAX(stock_requests.created_at) AS created_at'),
                 DB::raw('MAX(stock_requests.taxable_id) AS taxable_id'))
             ->groupBy('stock_requests.req_id')
+            ->whereBetween('stock_requests.created_at', [$this->startDate, $this->endDate])
             ->where('stock_requests.req_no', $this->reqNo)
             ->orderBy('req_id', 'desc');
     }

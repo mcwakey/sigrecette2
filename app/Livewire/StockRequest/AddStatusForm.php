@@ -27,6 +27,13 @@ class AddStatusForm extends Component
     {
         // Validate the form input data
         $this->validate();
+        $user = auth()->user();
+        if (!$user->hasRole('regisseur')) {
+            $this->dispatchMessage('Valeur Inactive', 'update', 'error',"Action non authorize");
+            $this->reset();
+            abort(403, 'Accès interdit');
+            return;
+        }
         DB::transaction(function () {
             // Prepare data for request
             $data = [

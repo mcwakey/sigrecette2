@@ -400,7 +400,8 @@
                     <span class="indicator-label" wire:loading.remove>{{ __('Soumettre') }}</span>
                 </button>
 
-                <a href="{{ request()->fullUrlWithQuery(['reset_filters' => 1]) }}" class="btn badge-light mt-8">
+                <a href="{{ request()->url() . '?' . http_build_query(request()->except(['s_date', 'e_date']) + ['reset_filters' => 1]) }}
+" class="btn badge-light mt-8">
                     <span class="indicator-label" >{{ __('Rénitialiser') }}</span>
                 </a>
             </div>

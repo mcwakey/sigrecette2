@@ -33,7 +33,7 @@ class ExportController extends Controller
                           ExportInvoicesDataTable $exportInvoicesDataTable,
                           ExportRecoveriesDataTable $exportRecoveriesDataTable,
     ExportTaxpayerTaxablesDataTable $exportTaxpayerTaxablesDataTable,
-    ExportTaxablesDataTable $exportTaxablesDataTable,)
+    ExportTaxablesDataTable $exportTaxablesDataTable)
     {
         $this->handleDateFilters($request);
 
@@ -52,12 +52,14 @@ class ExportController extends Controller
             $towns = Town::all();
             $cantons = Canton::all();
             $activities = Activity::all();
+            $default_range = $this->getDefaultDateRange();
+            //dd($this->s_date==$default_range['s_date']?null: $this->s_date);
             return $exportTaxpayersDataTable->with(
                 [
                     'state' => $state,
                     'disable' => $disable,
-                    'startDate' => $this->s_date,
-                    'endDate' => $this->e_date,
+                    'startDate' => $this->s_date==$default_range['s_date']?null: $this->s_date,
+                    'endDate' => $this->e_date==$default_range['e_date']?null: $this->e_date,
                 ]
             )->render('pages/export.taxpayers.list', ['zones' => $zones, 'categories' => $categories, 'towns' => $towns, 'cantons' => $cantons, 'activities' => $activities]);
         } elseif ($export_type == ExportTypeEnums::INVOICE) {

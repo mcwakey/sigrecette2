@@ -2,14 +2,31 @@
 namespace App\Http\Controllers;
 use App\DataTables\StockRequestsDataTable;
 use App\DataTables\StockRequestsSumDataTable;
+use App\Traits\HandlesDateFilters;
+use Illuminate\Http\Request;
+
 class StockRequestController extends Controller
 {
-    public function index(StockRequestsSumDataTable $dataTable)
+    use  HandlesDateFilters;
+    public function index(Request $request,StockRequestsSumDataTable $dataTable)
     {
-        return $dataTable->render('pages/stock_requests.list');
+        $this->handleDateFilters($request);
+        return $dataTable->with(
+            [
+                'startDate' => $this->s_date,
+                'endDate' => $this->e_date,
+            ]
+        )->render('pages/stock_requests.list');
     }
-    public function show(string $reqNo, StockRequestsDataTable $dataTable)
+    public function show(Request $request,string $reqNo, StockRequestsDataTable $dataTable)
     {
-        return $dataTable->with('reqNo', $reqNo)->render('pages/stock_requests.show', ['reqNo' => $reqNo]);
+        $this->handleDateFilters($request);
+        return $dataTable->with(
+           [
+               'reqNo'=>$reqNo,
+               'startDate' => $this->s_date,
+               'endDate' => $this->e_date,
+           ]
+        )->render('pages/stock_requests.show', ['reqNo' => $reqNo]);
     }
 }
