@@ -93,6 +93,13 @@ class AddStockRequestModal extends Component
     public function submit()
     {
         $this->validate();
+        $user = auth()->user();
+        if (!$user->hasRole('regisseur')) {
+            $this->dispatchMessage('Valeur Inactive', 'update', 'error',"Action non authorize");
+            $this->reset();
+            abort(403, 'Accès interdit');
+            return;
+        }
         DB::transaction(function () {
             $data = [
                 'req_no' => $this->req_no,

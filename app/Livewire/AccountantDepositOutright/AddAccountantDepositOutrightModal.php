@@ -8,6 +8,7 @@ use App\Models\Taxable;
 use App\Models\TaxLabel;
 use App\Models\TaxpayerTaxable;
 use App\Models\User;
+use App\Traits\DispatchesMessages;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 class AddAccountantDepositOutrightModal extends Component
 {
     use WithFileUploads;
+    use DispatchesMessages;
     public $stock_transfer_id;
     public $user_id;
     public $collector_id;
@@ -131,6 +133,13 @@ class AddAccountantDepositOutrightModal extends Component
     {
         // Validate the form input data
         $this->validate();
+        $user = auth()->user();
+        if (!$user->hasRole('regisseur')) {
+            $this->dispatchMessage('Versement', 'update', 'error',"Action non authorize");
+            $this->reset();
+            abort(403, 'Accès interdit');
+            return;
+        }
         DB::transaction(function () {
             $paymentData = [
                 'deposit' => $this->paid,

@@ -32,6 +32,13 @@ class AddRefnoForm extends Component
     public function submit()
     {
         $this->validate();
+        $user = auth()->user();
+        if (!$user->hasRole('regisseur')) {
+            $this->dispatchMessage('Quitance de paiement', 'update', 'error',"Action non authorize");
+            $this->reset();
+            abort(403, 'Accès interdit');
+            return;
+        }
         DB::transaction(function () {
             $payments_olds = Payment::where('status', PaymentStatusEnums::DONE)->where('status', PaymentStatusEnums::CANCELED)->where('reference_deposit', null)->get();
             $payments_olds = Payment::where(function ($query) {
