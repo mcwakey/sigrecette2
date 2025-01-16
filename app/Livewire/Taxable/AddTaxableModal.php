@@ -23,6 +23,7 @@ class AddTaxableModal extends Component
     public $tax_label_id;
     public $use_second_formula = false;
     public $edit_mode = false;
+    public $status;
     protected function rules()
     {
         $rules = [
@@ -78,7 +79,8 @@ class AddTaxableModal extends Component
                 'penalty' => $this->penalty,
                 'penalty_type' => $this->penalty_type,
                 'tax_label_id' => $this->tax_label_id,
-                'use_second_formula' => $this->use_second_formula
+                'use_second_formula' => $this->use_second_formula,
+                  'status' => $this->status,
             ];
             $taxable = Taxable::find($this->taxable_id) ?? Taxable::create($data);
             if ($this->edit_mode) {
@@ -117,6 +119,7 @@ class AddTaxableModal extends Component
         $this->periodicity = $taxable->periodicity;
         $this->penalty = $taxable->penalty;
         $this->penalty_type = $taxable->penalty_type;
+        $this->status = $taxable->status;
     }
     public function rendering($view, $data)
     {

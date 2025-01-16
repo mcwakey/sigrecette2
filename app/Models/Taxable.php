@@ -16,7 +16,8 @@ class Taxable extends Model
         'penalty',
         'penalty_type',
         'tax_label_id',
-        'use_second_formula'
+        'use_second_formula',
+        'status',
     ];
     protected function casts(): array
     {

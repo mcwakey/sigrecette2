@@ -121,7 +121,8 @@ class AddInvoiceNoTaxpayerModal extends Component
     }
     public function updatedTaxlabelId($value)
     {
-        $this->taxables = Taxable::where('tax_label_id',"=", $value)->get(); // Load taxables based on tax label ID
+        $this->taxables = Taxable::where('tax_label_id',"=", $value)
+            ->where('status', '=', 'ACTIVE')->get(); // Load taxables based on tax label ID
         TaxLabel::find($value); // Load taxables based on tax label ID
         $this->taxable_id = null;
         $this->tariff = null;
