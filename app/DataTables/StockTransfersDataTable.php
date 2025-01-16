@@ -91,6 +91,7 @@ class StockTransfersDataTable extends DataTable
                 DB::raw('MAX(stock_transfers.to_user_id) AS to_user_id'),
                 DB::raw('MAX(stock_transfers.created_at) AS created_at'),
                 DB::raw('MAX(stock_transfers.taxable_id) AS taxable_id'))
+            ->whereBetween('stock_transfers.created_at', [$this->startDate, $this->endDate])
             ->where('stock_transfers.to_user_id', $this->id)
             ->where('stock_transfers.period_from', $this->dateFrom)
             ->groupBy('stock_transfers.trans_id')

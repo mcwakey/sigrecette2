@@ -185,6 +185,19 @@
                                 @endif
 
                             </div>
+                            <div class="col-md-3 ">
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('status') }}</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select wire:model="status" name="status" class="form-select " data-dropdown-parent="#kt_modal_add_year">
+                                    <option>{{ __('select an option') }}</option>
+                                    <option value="ACTIVE">{{ __('active') }}</option>
+                                    <option value="INACTIVE">{{ __('inactive') }}</option>
+                                </select>
+                                <!--end::Input-->
+                                @error('status')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
                         </div>
                         <div class="mb-0">
                             <label class="fw-semibold fs-6 mb-2">Penalité</label>

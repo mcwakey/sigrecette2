@@ -87,6 +87,7 @@ class CollectorsDataTable extends DataTable
                 DB::raw('MAX(stock_transfers.period_to) AS period_to'),
                 DB::raw('MAX(stock_transfers.created_at) AS created_at'),
                 DB::raw('MAX(stock_transfers.taxable_id) AS taxable_id'))
+            ->whereBetween('stock_transfers.created_at', [$this->startDate, $this->endDate])
             ->groupBy('stock_transfers.to_user_id', 'stock_transfers.period_to')
             ->orderBy('trans_id', 'desc')
             ;

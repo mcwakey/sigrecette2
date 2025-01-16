@@ -62,6 +62,7 @@ class CollectorDepositsDataTable extends DataTable
             ->join('users', 'stock_transfers.to_user_id', '=', 'users.id')
             ->leftjoin('payments', 'stock_transfers.payment_id', '=', 'payments.id')
             ->where('stock_transfers.trans_type', 'VENDU') // Filter collector_deposits by taxpayer_id
+            ->whereBetween('stock_transfers.created_at', [$this->startDate, $this->endDate])
             ->select('stock_transfers.*')//->orderBy('tax_labels.name')
         ;
         if ($this->id) {

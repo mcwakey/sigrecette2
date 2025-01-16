@@ -48,6 +48,7 @@ class AccountantDepositsOutrightDataTable extends DataTable
     public function query(Payment $model): QueryBuilder
     {
         return $model
+            ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->where('invoice_type', Constants::INVOICE_TYPE_COMPTANT) // Filter collector_deposits by taxpayer_id
             ->where('status', 'ACCOUNTED') // Filter collector_deposits by taxpayer_id
             ->newQuery();

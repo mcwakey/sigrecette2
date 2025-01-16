@@ -128,10 +128,15 @@ class ExportTaxpayersDataTable extends DataTable
             ->with('zone')
             ->join('zones', 'taxpayers.zone_id', '=', 'zones.id')
             ->select('taxpayers.*')
-            ->whereBetween('taxpayers.created_at', [$this->startDate, $this->endDate])
+          //  ->whereBetween('taxpayers.created_at', [$this->startDate, $this->endDate])
             ->newQuery();
-        $query
-            ->where('taxpayers.from_mobile_and_validate_state', '!=',TaxpayerStateEnums::REJECTED);
+        if($this->startDate && $this->endDate ){
+            $query = $query->whereBetween('taxpayers.created_at', [$this->startDate, $this->endDate]);
+        }
+        $query = $query->where(function ($q) {
+            $q->where('taxpayers.from_mobile_and_validate_state', '!=', TaxpayerStateEnums::REJECTED)
+                ->orWhereNull('taxpayers.from_mobile_and_validate_state');
+        });
         return $query;
     }
     public function html(): HtmlBuilder
@@ -144,6 +149,8 @@ class ExportTaxpayersDataTable extends DataTable
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0)
+            ->pageLength(50)
+            ->lengthMenu([[50,100, 300, 500, -1], [50,100, 300, 500, "All"]])
             ->drawCallbackWithLivewire();
     }
     /**
