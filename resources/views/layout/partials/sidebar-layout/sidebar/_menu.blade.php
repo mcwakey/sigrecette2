@@ -554,7 +554,18 @@
                         </a>
                     </div>
                     @endfeature
-
+                    @feature('export_taxpayer_taxable_feature')
+                    <div class="menu-item">
+                        <a class="menu-link {{request()->routeIs('prints') ? 'active' : '' }}"
+                           href="{{  App\Helpers\Constants::checkUrl(route('exports', ['export_type' =>  App\Helpers\Constants::EXPORT_TAXPAYERTAXABLE_KEY])) }}">
+								<span class="menu-bullet">
+									<span class="bullet bullet-dot"></span>
+								</span>
+                            <span class="menu-title">{{  __('Exportation taxations') }}</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    @endfeature
                     @feature('export_invoice_feature')
                     <div class="menu-item">
                         <a class="menu-link {{request()->routeIs('prints') ? 'active' : '' }}"
@@ -579,18 +590,6 @@
                         <!--end:Menu link-->
                     </div>
                     @endfeature
-                    @feature('export_taxpayer_taxable_feature')
-                    <div class="menu-item">
-                        <a class="menu-link {{request()->routeIs('prints') ? 'active' : '' }}"
-                           href="{{  App\Helpers\Constants::checkUrl(route('exports', ['export_type' =>  App\Helpers\Constants::EXPORT_TAXPAYERTAXABLE_KEY])) }}">
-								<span class="menu-bullet">
-									<span class="bullet bullet-dot"></span>
-								</span>
-                            <span class="menu-title">{{  __('Export taxable') }}</span>
-                        </a>
-                        <!--end:Menu link-->
-                    </div>
-                    @endfeature
                     @feature('export_taxable_feature')
                     <div class="menu-item">
                         <a class="menu-link {{request()->routeIs('prints') ? 'active' : '' }}"
@@ -598,7 +597,7 @@
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
-                            <span class="menu-title">{{  __('Export taxe') }}</span>
+                            <span class="menu-title">{{  __('Exportation des Matières Taxables') }}</span>
                         </a>
                         <!--end:Menu link-->
                     </div>
