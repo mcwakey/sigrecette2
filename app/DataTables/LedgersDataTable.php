@@ -26,7 +26,7 @@ class LedgersDataTable extends DataTable
         $newAmount = 0;
         return (new EloquentDataTable($query))
             ->rawColumns(['status'])
-            ->editColumn('payments.created_at', function (Payment $payment) {
+            ->editColumn('created_at', function (Payment $payment) {
                 return $payment->created_at->format('d M Y');
             })
             ->editColumn('description', function (Payment $payment) {
@@ -39,16 +39,12 @@ class LedgersDataTable extends DataTable
                 return $payment->amount;
             })
             ->editColumn('newAmount', function (Payment $payment) use (&$newAmount) {
-                // Add the amount of the current row to the accumulated amount
+                
                 $newAmount += $payment->amount - $payment->deposit;
-                // Return the accumulated amount
                 return $newAmount;
             })
-            ->editColumn('stock_transfers.code', function (Payment $payment) {
+            ->editColumn('code', function (Payment $payment) {
                 return $payment->stock_transfers->first()->code ?? $payment->code;
-            })
-            ->addColumn('action', function (Payment $payment) {
-                return view('pages.ledgers.columns._actions', ['payment' => $payment]);
             })
             ->setRowId('id');
     }
@@ -78,9 +74,10 @@ class LedgersDataTable extends DataTable
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0, 'desc')
-            ->pageLength(100) // Set the default number of rows per page to 3
-            ->lengthMenu([[100, 300, 500, -1], [100, 300, 500, "All"]]) // Define options for the number of rows per page
-            ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/ledgers/columns/_draw-scripts.js')) . "}");
+            ->pageLength(500)
+            ->lengthMenu([[500, -1], [500, "All"]]) // Define options for the number of rows per page
+            //->drawCallback("function() {" . file_get_contents(resource_path('views/pages/ledgers/columns/_draw-scripts.js')) . "}")
+            ;
     }
     /**
      * Get the dataTable columns definition.
