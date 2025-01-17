@@ -10,6 +10,7 @@ use App\Models\TaxLabel;
 use App\Models\TaxpayerTaxable;
 use App\Models\User;
 use App\Traits\DispatchesMessages;
+use App\Traits\HandlesDateFilters;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
@@ -22,6 +23,7 @@ class AddStockTransferDepositModal extends Component
 {
     use WithFileUploads;
     use DispatchesMessages;
+    use HandlesDateFilters;
     public $stock_transfer_id;
     public $user_id;
     public $collector_id;
@@ -144,17 +146,21 @@ class AddStockTransferDepositModal extends Component
             session()->flash('error', 'Erreur lors de la suppression du stock : ' . $e->getMessage());
         }
     }
+
     public function render()
     {
+        $default_date= $this->getDefaultDateRange();
         $this->user_id = Auth::id();
         $taxlabel_list = TaxLabel::where('category', 'LIKE', '%CATEGORY 3%')->get();
-        $stock_requests = StockRequest::where('req_type', 'DEMANDE')->where('type', 'ACTIVE')->get();
+        $stock_requests = StockRequest::where('req_type', 'DEMANDE')->where('type', '=','ACTIVE')->get();
         $collectors = User::select('users.id', 'users.name as user_name', 'roles.name as role_name')
             ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
             ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
             ->where('roles.name', 'collecteur')
             ->get();
-        $this->request_nos = StockTransfer::select('trans_no')->groupBy('trans_no')->where('to_user_id', $this->collector_id)->get();
+        $this->request_nos = StockTransfer::select('trans_no')
+            ->whereBetween('created_at', [$default_date['s_date'], $default_date['e_date']])
+            ->groupBy('trans_no')->where('to_user_id', '=',$this->collector_id)->get();
         return view('livewire.stock_transfer.add-stock-transfer-deposit-modal', ['collectors' => $collectors, 'stock_requests' => $stock_requests, 'taxlabel_list' => $taxlabel_list]);
     }
     public function updatedTransNo($value)

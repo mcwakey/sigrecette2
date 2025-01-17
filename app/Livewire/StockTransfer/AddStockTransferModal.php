@@ -7,6 +7,7 @@ use App\Models\StockTransfer;
 use App\Models\Taxable;
 use App\Models\TaxLabel;
 use App\Models\User;
+use App\Traits\HandlesDateFilters;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +17,7 @@ use Livewire\WithFileUploads;
 class AddStockTransferModal extends Component
 {
     use WithFileUploads;
+    use HandlesDateFilters;
     public $stock_transfer_id;
     public $user_id;
     public $collector_id;
@@ -47,6 +49,7 @@ class AddStockTransferModal extends Component
     public $remaining_qty = 0;
     public $option_calculus;
     public $select_stock;
+
     protected function rules()
     {
         return [
@@ -134,15 +137,24 @@ class AddStockTransferModal extends Component
         'update_transfer' => 'updateTransfer',
         'add_deposit' => 'addDeposit',
     ];
+    public function mount(){
+
+
+    }
     public function render()
     {
+        $default_date= $this->getDefaultDateRange();
+
         $this->user_id = Auth::id();
         $collectors = User::select('users.id', 'users.name as user_name', 'roles.name as role_name')
             ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
             ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
             ->where('roles.name', 'collecteur')
             ->get();
-        $request_nos = StockRequest::select('req_no')->groupBy('req_no')->get();
+
+        $request_nos = StockRequest::select('req_no')
+            ->whereBetween('created_at', [$default_date['s_date'], $default_date['e_date']])
+            ->groupBy('req_no')->get();
         $taxlabel_list = TaxLabel::where('category', 'CATEGORY 3')->get();
         return view('livewire.stock_transfer.add-stock-transfer-modal', ['collectors' => $collectors, 'taxlabel_list' => $taxlabel_list, 'request_nos' => $request_nos]);
     }
@@ -237,6 +249,13 @@ class AddStockTransferModal extends Component
     public function submit()
     {
         $this->validateData();
+        $user = auth()->user();
+        if (!$user->hasRole('regisseur')) {
+            $this->dispatchMessage('Valeur Inactive', 'update', 'error',"Action non authorize");
+            $this->reset();
+            abort(403, 'Accès interdit');
+            return;
+        }
         if ($this->getErrorBag()->isEmpty()) {
             DB::transaction(function () {
                 $stock_transfers = StockTransfer::where('type', 'ACTIVE')->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
