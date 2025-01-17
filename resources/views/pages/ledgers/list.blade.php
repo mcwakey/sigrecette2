@@ -73,7 +73,6 @@
 </div>
         <!--end::Card body-->
     </div>
-                <livewire:stock_transfer.add-stock-transfer-modal/>
 
     @push('scripts')
         {{ $dataTable->scripts() }}
