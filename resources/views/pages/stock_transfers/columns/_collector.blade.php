@@ -14,15 +14,23 @@ $url = "stock-transfers/{$stock_transfer->to_user_id}?p_s_date={$stock_transfer-
 
 @endphp
 <div class="d-flex flex-column">
+    
+    <a href="{{ $url }}"
+       class="{{ $stock_transfer->period_from != $stock_transfer->period_to && $stock_transfer->period_to >= now()->toDateString()
+                ? 'menu-link text-start text-wrap badge badge-warning'
+                : 'menu-link text-start text-wrap' }}">
+        {{ $stock_transfer->period_from . " - " . $stock_transfer->period_to }}
+    </a>
 
-        <a             href="{{$url}}"
-                       class="menu-link px-3 text-start text-wrap btn btn-icon btn-light pulse pulse-warning">
-        {{ $stock_transfer->period_from." - ".$stock_transfer->period_to}}
-            @if ($stock_transfer->period_from != $stock_transfer->period_to && $stock_transfer->period_to >= now()->toDateString())
-                <i class="ki-duotone ki-element-11 fs-1"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></i>
-                <span class="pulse-ring"></span>
-            @endif
 
+
+@if ($stock_transfer->period_from != $stock_transfer->period_to && $stock_transfer->period_to >= now()->toDateString())
+        <a href="#" class="btn btn-icon btn-light pulse pulse-warning">
+            <i class="ki-duotone ki-element-11 fs-1"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></i>
+            <span class="pulse-ring"></span>
         </a>
+        @endif
+
+
 </div>
 <!--begin::User details-->
