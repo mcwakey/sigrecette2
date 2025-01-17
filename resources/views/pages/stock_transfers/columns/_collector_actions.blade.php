@@ -13,7 +13,7 @@
 
     <div class="menu-item px-3">
         <a
-            href="stock-transfers/{{ $stock_transfer->to_user_id }}?s_date={{ $stock_transfer->period_from }}&e_date={{ $stock_transfer->period_to }}"
+            href="stock-transfers/{{ $stock_transfer->to_user_id }}?p_s_date={{ $stock_transfer->period_from }}&p_e_date={{ $stock_transfer->period_to }}"
            class="menu-link px-3 text-start text-wrap">
         {{ __('view') }}
         </a>

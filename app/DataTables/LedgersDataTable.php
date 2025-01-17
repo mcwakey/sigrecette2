@@ -39,7 +39,7 @@ class LedgersDataTable extends DataTable
                 return $payment->amount;
             })
             ->editColumn('newAmount', function (Payment $payment) use (&$newAmount) {
-                
+
                 $newAmount += $payment->amount - $payment->deposit;
                 return $newAmount;
             })

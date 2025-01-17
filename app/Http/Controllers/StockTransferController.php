@@ -30,12 +30,12 @@ class StockTransferController extends Controller
     {
         $this->handleDateFilters($request);
         $validatedData = $request->validate([
-            's_date' => 'date_format:Y-m-d',
-            'e_date' => 'date_format:Y-m-d',
+            'p_s_date' => 'date_format:Y-m-d',
+            'p_e_date' => 'date_format:Y-m-d',
         ]);
         $user = User::find($userId);
-        $dateFrom = $validatedData['s_date'] ?? null;
-        $dateTo = $validatedData['e_date'] ?? null;
+        $dateFrom = $validatedData['p_s_date'] ?? null;
+        $dateTo = $validatedData['p_e_date'] ?? null;
         return $dataTable->with([
             'id'=>$user->id,
             'startDate' => $this->s_date,
