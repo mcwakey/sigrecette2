@@ -73,6 +73,7 @@ class SyncOutController extends Controller
                     ->where('invoices.validity', "=", 'VALID')
                     ->select('invoice_items.*');
 
+                //CAN BE OPTIMIZED
                 $queryPayments = Payment::join('taxpayers', 'payments.taxpayer_id', '=', 'taxpayers.id')
                     ->where('taxpayers.zone_id',"=", $zone->id)
                     ->select('payments.*');

@@ -29,6 +29,7 @@ class Invoice extends Model implements FormatDateInterface
         'status',
         'uuid',
         'delivery_date',
+        'delivery_to',
         'type',
         'delivery',
         'edition_state',
