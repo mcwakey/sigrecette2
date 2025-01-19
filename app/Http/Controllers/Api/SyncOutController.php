@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Api;
 use App\Helpers\Constants;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\InvoiceItemResource;
 use App\Http\Resources\SearchActivityResource;
 use App\Http\Resources\SearchCategoryResource;
 use App\Http\Resources\SearchEreaResource;
@@ -21,6 +22,7 @@ use App\Models\Category;
 use App\Models\Gender;
 use App\Models\IdType;
 use App\Models\Invoice;
+use App\Models\InvoiceItem;
 use App\Models\Payment;
 use App\Models\Taxable;
 use App\Models\TaxLabel;
@@ -64,6 +66,14 @@ class SyncOutController extends Controller
                     ->where('status', "=",'APPROVED')
                     ->where('validity', "=",'VALID')
                     ->select('invoices.*');
+                $queryInvoiceItems = InvoiceItem::join('invoices', 'invoice_items.invoice_id', '=', 'invoices.id')
+                    ->join('taxpayers', 'invoices.taxpayer_id', '=', 'taxpayers.id')
+                    ->where('taxpayers.zone_id', "=", $zone->id)
+                    ->where('invoices.status', "=", 'APPROVED')
+                    ->where('invoices.validity', "=", 'VALID')
+                    ->select('invoice_items.*');
+
+                //CAN BE OPTIMIZED
                 $queryPayments = Payment::join('taxpayers', 'payments.taxpayer_id', '=', 'taxpayers.id')
                     ->where('taxpayers.zone_id',"=", $zone->id)
                     ->select('payments.*');
@@ -81,6 +91,7 @@ class SyncOutController extends Controller
                 'taxpayers' => SearchTaxpayerResource::collection($queryTaxpayers->get()),
                 'taxpayer_taxables' => SearchTaxpayerTaxableResource::collection($queryTaxpayerTaxables->get()),
                 'invoices' => SearchInvoiceResource::collection($queryInvoices->get()),
+                'invoice_items'=> InvoiceItemResource::collection($queryInvoiceItems->get()),
                 'payments' => SearchPaymentResource::collection($queryPayments->get()),
             ];
         }

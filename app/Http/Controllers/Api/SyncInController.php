@@ -59,7 +59,7 @@ class SyncInController extends Controller
                         foreach ($taxpayerPayments as $taxpayerPayment) {
                             if (empty($taxpayerPayment['dataStatus']) || isset($taxpayerPayment['dataStatus'])) {
                                 $invoice = Invoice::find($taxpayerPayment['invoiceId']);
-                                $taxpayerPayment['code'] = $invoice->taxpayer_taxables->first()->taxable->code;
+                                //$taxpayerPayment['code'] = $invoice->taxpayer_taxables->first()->taxable->code;
                                 Payment::Create($this->transformKeysToSnakeCase($taxpayerPayment));
                             }
                         }
