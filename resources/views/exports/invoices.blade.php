@@ -359,9 +359,13 @@
                 <td class="">
                     <p>Le Maire <span>{{ " ".$commune->mayor_name}}</span></p>
                 </td>
+                @if($commune->getImageUrlAttribute('sign')!=null)
                 <td class="">
-
+                    <div>
+                        <img src="{{$commune->getImageUrlAttribute('sign')}}" alt="Sign" style="width: 90px; height: auto;">
+                    </div>
                 </td>
+                @endif
                 <td class="">
                     <div>
                         @if($commune->qr_code_enabled)

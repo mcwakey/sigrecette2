@@ -157,6 +157,12 @@
                                             <img src="{{ $commune->getImageUrlAttributeDirect() }}" alt="Logo" style="width: 70px; height: 70px;">
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td class="text-gray-500">Signature de l'ordonnateur:</td>
+                                        <td class="text-gray-800">
+                                            <img src="{{ $commune->getImageUrlAttributeDirect('sign') }}" alt="sign" style="width: 70px; height: 70px;">
+                                        </td>
+                                    </tr>
                                     </tbody></table>
                                 <!--end::Details-->
                             </div>

@@ -18,6 +18,7 @@ class Commune extends Model
         'latitude',
         'limit_json',
         'logo_path',
+        'sign_path',
         'email',
         'url',
         'qr_code_enabled',
@@ -44,11 +45,19 @@ class Commune extends Model
      *
      * @return string
      */
-    public function getImageUrlAttribute()
+    public function getImageUrlAttribute(string $type='logo')
     {
-        if ($this->logo_path) {
-            return 'storage/' . $this->logo_path;
+        if($type == 'logo'){
+            if ($this->logo_path) {
+                return 'storage/' . $this->logo_path;
+            }
+            return $this->logo_path;
+        }else{
+            if ($this->sign_path) {
+                return 'storage/' . $this->sign_path;
+            }
+            return $this->sign_path;
         }
-        return $this->logo_path;
+
     }
 }

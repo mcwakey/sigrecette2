@@ -221,6 +221,13 @@
                                     <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
+                                <div class="col">
+                                    <label class="fw-semibold fs-6 mb-2">{{ __("Signature de l'ordonnateur") }}</label>
+                                    <input type="file" wire:model="sign" name="logo" class="fs-6 form-control form-control justify-content-center" />
+                                    @error('sign')
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
                             </div>
                             <div class="row w-100 mb-4">
                                 <div class="col">
