@@ -131,14 +131,13 @@ class AddPaymentModal extends Component
                 ];
                 if ($is_regisseur) {
                     $paymentData['status'] = PaymentStatusEnums::ACCOUNTED;
-                } else {
                 }
                 $payments = Invoice::getCode($this->invoice_no, $this->amount, $paymentData);
                 $payment = Payment::find($this->payment_id);
                 if ($payment == null) {
                     foreach ($payments as $payment) {
                         $tempPay = Payment::create($payment);
-                        if ($is_regisseur) {
+                        if (!$is_regisseur) {
                             $users = $role->users()->get();
                             Notification::send($users, new InvoicePaid($tempPay, Auth::user()));
                         }
