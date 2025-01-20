@@ -30,6 +30,8 @@ class AddCommuneModal extends Component
     public $email;
     public $logo;
     public $saved_logo;
+
+    public $sign;
     protected $rules = [
         "t_title" => 'required|string',
         'name' => 'required|string',
@@ -83,6 +85,9 @@ class AddCommuneModal extends Component
             ];
             if ($this->logo) {
                 $data['logo_path'] = $this->logo->store('logo', 'public');
+            }
+            if ($this->sign) {
+                $data['sign_path'] = $this->sign->store('sign', 'public');
             }
             if ($this->limit_json) {
                 $data['limit_json'] = json_encode($string_data['geometry']['coordinates'][0][0]);

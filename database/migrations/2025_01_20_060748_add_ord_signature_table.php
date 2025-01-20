@@ -12,21 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('communes', function (Blueprint $table) {
-            $table->string('logo_path', 2048)->after('name')->nullable();
-
-
+            $table->string('sign_path', 2048)->after('logo_path')->nullable();
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('communes', function (Blueprint $table) {
-            $table->dropColumn('logo_path');
+            $table->dropColumn('sign_path');
         });
     }
 };
