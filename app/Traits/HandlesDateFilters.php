@@ -16,29 +16,33 @@ trait HandlesDateFilters
         if ($request->has('reset_filters')) {
             session()->forget(['s_date', 'e_date']);
         }
+        try {
+            $request->merge([
+                's_date' => $request->s_date ? Carbon::parse($request->s_date)->format('Y-m-d') : null,
+                'e_date' => $request->e_date ? Carbon::parse($request->e_date)->format('Y-m-d') : null,
+            ]);
 
-        $request->merge([
-            's_date' => $request->s_date ? Carbon::parse($request->s_date)->format('Y-m-d') : null,
-            'e_date' => $request->e_date ? Carbon::parse($request->e_date)->format('Y-m-d') : null,
-        ]);
-
-        $validatedData = $request->validate([
-            's_date' => 'nullable|date_format:Y-m-d',
-            'e_date' => 'nullable|date_format:Y-m-d|after_or_equal:s_date',
-        ]);
+            $validatedData = $request->validate([
+                's_date' => 'nullable|date_format:Y-m-d',
+                'e_date' => 'nullable|date_format:Y-m-d|after_or_equal:s_date',
+            ]);
 
 
-        if($validatedData['s_date']&& $validatedData['e_date']){
-            $this->s_date = $validatedData['s_date'] ;
-            $this->e_date = $validatedData['e_date'] ;
-            session()->put('s_date', $this->s_date );
-            session()->put('e_date', $this->e_date);
-        }elseif (session()->get('s_date',null)&& session()->get('e_date',null)){
-            $this->s_date = session()->get('s_date');
-            $this->e_date = session()->get('e_date');
-        }else{
+            if($validatedData['s_date']&& $validatedData['e_date']){
+                $this->s_date = $validatedData['s_date'] ;
+                $this->e_date = $validatedData['e_date'] ;
+                session()->put('s_date', $this->s_date );
+                session()->put('e_date', $this->e_date);
+            }elseif (session()->get('s_date',null)&& session()->get('e_date',null)){
+                $this->s_date = session()->get('s_date');
+                $this->e_date = session()->get('e_date');
+            }else{
+                ['s_date' => $this->s_date, 'e_date' => $this->e_date] = $this->getDefaultDateRange();
+            }
+        }catch (\Exception $exception){
             ['s_date' => $this->s_date, 'e_date' => $this->e_date] = $this->getDefaultDateRange();
         }
+
 
 
         view()->share('s_date', is_string($this->s_date)?$this->s_date :$this->s_date->toDateString());
