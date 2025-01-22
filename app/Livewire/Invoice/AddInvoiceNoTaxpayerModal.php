@@ -294,9 +294,9 @@ class AddInvoiceNoTaxpayerModal extends Component
             $this->taxpayer_taxable = $this->name;
             $this->s_seize = $this->seize;
             if ($taxable->tariff_type == "FIXED") {
-                $this->s_amount = $this->s_seize * $this->s_tariff * $this->qty * $period;
+                $this->s_amount = doubleval($this->s_seize) * doubleval($this->s_tariff) * doubleval($this->qty) * $period;
             } else {
-                $this->s_amount = $this->s_seize * $this->s_tariff * $this->qty * $period / 100;
+                $this->s_amount = doubleval($this->s_seize) * doubleval($this->s_tariff) * doubleval($this->qty) * $period / 100;
             }
             $this->amount_ph = $this->s_amount . " FCFA";
             $this->amount = $this->s_amount;

@@ -124,7 +124,9 @@ class AddTaxpayerTaxableModal extends Component
     }
     public function submit()
     {
-        $this->authorize('peut créer une taxation');
+        if (!auth()->user()->hasPermissionTo('peut créer une taxation')) {
+            abort(403, 'Accès interdit');
+        }
         $this->validate();
         DB::transaction(function () {
             // Prepare the data for creating a new Taxable
@@ -160,8 +162,13 @@ class AddTaxpayerTaxableModal extends Component
     }
     public function deleteTaxpayerTaxable($id)
     {
-        TaxpayerTaxable::destroy($id);
-        $this->dispatchMessage('Taxation du contribuable', 'delete');
+        try {
+            TaxpayerTaxable::destroy($id);
+            $this->dispatchMessage('Taxation du contribuable', 'delete');
+        }catch (\Exception $exception){
+            $this->dispatchMessage('Taxation du contribuable', 'delete','error','erreur lors de la supression de la taxation du contribuable.');
+        }
+
     }
     public function updateTaxpayerTaxable($id)
     {

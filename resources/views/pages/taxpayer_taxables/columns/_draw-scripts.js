@@ -2,10 +2,10 @@
 KTMenu.init();
 
 // Add click event listener to delete buttons
-document.querySelectorAll('[data-kt-action="delete_row"]').forEach(function (element) {
+document.querySelectorAll('[data-kt-action="delete_row_taxpayer_taxable"]').forEach(function (element) {
     element.addEventListener('click', function () {
         Swal.fire({
-            text: 'Are you sure you want to remove?',
+            text: 'Vous etes sur de vouloir suprimer la taxation?',
             icon: 'warning',
             buttonsStyling: false,
             showCancelButton: true,

@@ -214,15 +214,22 @@ class AddPaymentModal extends Component
     public function deletePayment($id)
     {
         $payment = Payment::find($id);
-        $invoice = Invoice::where('invoice_no', $payment->invoice_id)
-            ->where('validity', 'VALID')
-            ->first();
-        Payment::destroy($id);
-        $paid = Payment::getPaid($invoice->invoice_no);
-        $paystatus = $paid == 0 ? PaymentStatusEnums::PENDING : "PART PAID";
-        $invoice->pay_status = $paystatus;
-        $invoice->save();
-        $this->dispatchMessage('Paiement', 'delete');
+        if($payment){
+            $invoice = Invoice::where('invoice_no', $payment?->invoice_id)
+                ->where('validity', 'VALID')
+                ->first();
+            Payment::destroy($id);
+            if($invoice){
+                $paid = Payment::getPaid($invoice?->invoice_no);
+                $paystatus = $paid == 0 ? PaymentStatusEnums::PENDING : "PART PAID";
+                $invoice->pay_status = $paystatus;
+                $invoice->save();
+                $this->dispatchMessage('Paiement', 'delete');
+            }
+        }
+
+
+
     }
     public function hydrate()
     {
