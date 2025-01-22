@@ -52,12 +52,10 @@ class InvoiceWorkflowSubscriber
                 if ($users && count($users) > 0) {
                     Notification::send($users, new  InvoiceRejected($invoice, Auth::user(), 'agent_delegation'));
                 }
-                foreach ($invoice->taxpayer_taxables as $taxpayerTaxable) {
-                    $taxpayerTaxable->billable = '0';
-                    $taxpayerTaxable->bill_status = "NOT BILLED";
-                    $taxpayerTaxable->invoice_id = null;
-                    $taxpayerTaxable->save();
-                }
+                $invoice->releaseTaxpayerTaxable();
+                break;
+            case  InvoiceStatusEnums::REJECTED:
+                $invoice->releaseTaxpayerTaxable();
                 break;
             case  InvoiceStatusEnums::PENDING:
                 $permissions = ['peut prendre en charge un avis sur titre', 'peut rejeter un avis sur titre (agent par délégation du receveur)'];
@@ -95,4 +93,5 @@ class InvoiceWorkflowSubscriber
         $event->getSubject();
         $event->getTransition()->getName();
     }
+
 }

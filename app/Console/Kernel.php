@@ -20,11 +20,14 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // Define a scheduled task to run the stored procedure daily at a specific time
-        $schedule->call(function () {DB::statement('CALL updateTaxpayerTaxables()');})->dailyAt('8:30'); // Adjust the time as needed
+        $schedule->call(function () {DB::statement('CALL updateTaxpayerTaxables()');})->dailyAt('8:30');
         $schedule->command('datatables:purge-export')->daily()->at('16:50');
-        $schedule->command('backup:clean')->daily()->at('8:30');
+        $schedule->command('backup:clean')->daily()->at('8:00');
+        $schedule->command('backup:clean')->daily()->at('9:00');
         $schedule->command('backup:run')->daily()->at('12:00');
+        $schedule->command('backup:run')->daily()->at('15:00');
         $schedule->command('backup:run')->daily()->at('17:00');
+        $schedule->call(function () {DB::statement('CALL updateTaxpayerTaxables()');})->dailyAt('17:00');
     }
 
     /**

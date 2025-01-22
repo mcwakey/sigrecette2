@@ -287,5 +287,15 @@ trait InvoiceTrait
         return $lastPayment->created_at->lt(now()->subMonths($month));
     }
 
+    public function releaseTaxpayerTaxable(): void
+    {
+        foreach ($this->taxpayer_taxables as $taxpayerTaxable) {
+            $taxpayerTaxable->billable = '0';
+            $taxpayerTaxable->bill_status = "NOT BILLED";
+            $taxpayerTaxable->invoice_id = null;
+            $taxpayerTaxable->save();
+        }
+
+    }
 
 }
