@@ -40,19 +40,19 @@ class SyncOutController extends Controller
         if($categorieName==null){
             $categorieName='CATEGORY 1';
         }
+        // ->where('status', "=","ACTIVE")
         if ($zoneName) {
             $zone = Zone::where('name', 'like', '%' . $zoneName . '%')->first();
             $queryZones =Zone::select('zones.*');
             if ($zone) {
-                $queryZones = Zone::where('status', "=","ACTIVE")->get();
-                $queryActivities = Activity::where('status', "=","ACTIVE")->get();
-                $queryCategories = Category::where('status', "=","ACTIVE")->get();
-                $queryEreas = Canton::where('status', "=","ACTIVE")->get();
-                $queryTowns = Town::where('status', "=","ACTIVE")->get();
+                $queryZones = Zone::select('zones.*');
+                $queryActivities = Activity::select('activities.*');
+                $queryCategories = Category::select('categories.*');
+                $queryEreas = Canton::select('cantons.*');
+                $queryTowns = Town::select('towns.*');
                 $queryGenders = Gender::select('genders.*');
                 $queryIdTypes = IdType::select('id_types.*');
-                $queryTaxlabels = TaxLabel::where('category', 'LIKE', '%' . $categorieName . '%')
-                    ->where('status', "=","ACTIVE");
+                $queryTaxlabels = TaxLabel::where('category', 'LIKE', '%' . $categorieName . '%');
                 $queryTaxables = Taxable::join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
                     ->where('category', 'LIKE', '%' . $categorieName . '%')
                     ->where('status', "=","ACTIVE")
