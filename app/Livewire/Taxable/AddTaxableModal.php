@@ -33,6 +33,7 @@ class AddTaxableModal extends Component
             'unit' => 'required|string',
             'unit_type' => 'required|string',
             'periodicity' => 'required|string',
+            'status' => 'required|string',
             'tax_label_id' => 'required|int',
         ];
         if ($this->edit_mode) {

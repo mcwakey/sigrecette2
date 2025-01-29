@@ -1,5 +1,4 @@
 <div class="card menu-column" style="height:100%;width:100%;" >
-    <!--begin::Heading-->
 
     <div style="opacity: 0;pointer-events:none;">
         <audio id="notif-sound2">
@@ -23,8 +22,6 @@
         </ul>
         <!--end::Tabs-->
     </div>
-    <!--end::Heading-->
-    <!--begin::Tab content-->
     <div class="tab-content">
         <!--begin::Tab panel-->
         <div class="tab-pane fade active show" id="kt_topbar_notifications_1" role="tabpanel">
@@ -110,7 +107,6 @@
         <div class="tab-pane fade show" id="kt_topbar_notifications_2" role="tabpanel">
             <div class="scroll-y mh-325px my-5 px-8">
 
-                <!--begin::Wrapper-->
                 @if (count(Auth::user()->readNotifications) > 0)
 
                     @foreach (Auth::user()->readNotifications as $notification)
@@ -317,24 +313,24 @@
                             })
                             .then(function(stream) {
                                 // L'utilisateur a autorisé l'accès au microphone
-                                console.log('Accès au microphone autorisé !');
+                               // console.log('Accès au microphone autorisé !');
                             })
                             .catch(function(error) {
                                 // L'utilisateur a refusé l'accès au microphone ou une erreur est survenue
-                                console.error('Accès au microphone refusé ou erreur : ', error);
+                                //console.error('Accès au microphone refusé ou erreur : ', error);
                             });
                     } else {
                         // L'utilisateur a déjà accordé les permissions pour le microphone
-                        console.log('L\'utilisateur a déjà accordé les permissions pour le microphone.');
+                        //console.log('L\'utilisateur a déjà accordé les permissions pour le microphone.');
                     }
                 })
                 .catch(function(error) {
                     // Une erreur est survenue lors de la vérification des périphériques
-                    console.error('Erreur lors de la vérification des périphériques : ', error);
+                  //  console.error('Erreur lors de la vérification des périphériques : ', error);
                 });
         } else {
             // Le navigateur ne prend pas en charge l'API MediaDevices
-            console.log("Votre navigateur ne prend pas en charge l'API MediaDevices.");
+           // console.log("Votre navigateur ne prend pas en charge l'API MediaDevices.");
         }
     </script>
 @endpush
