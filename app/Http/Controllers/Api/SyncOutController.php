@@ -43,13 +43,13 @@ class SyncOutController extends Controller
         // ->where('status', "=","ACTIVE")
         if ($zoneName) {
             $zone = Zone::where('name', 'like', '%' . $zoneName . '%')->first();
-            $queryZones =Zone::select('zones.*');
+            $queryZones =Zone::where('status', 'ACTIVE');
             if ($zone) {
-                $queryZones = Zone::select('zones.*');
-                $queryActivities = Activity::select('activities.*');
-                $queryCategories = Category::select('categories.*');
-                $queryEreas = Canton::select('cantons.*');
-                $queryTowns = Town::select('towns.*');
+                $queryZones = Zone::where('status', 'ACTIVE');
+                $queryActivities = Activity::where('status', 'ACTIVE');
+                $queryCategories = Category::where('status', 'ACTIVE');
+                $queryEreas = Canton::where('status', 'ACTIVE');
+                $queryTowns = Town::where('status', 'ACTIVE');
                 $queryGenders = Gender::select('genders.*');
                 $queryIdTypes = IdType::select('id_types.*');
                 $queryTaxlabels = TaxLabel::where('category', 'LIKE', '%' . $categorieName . '%');
@@ -102,7 +102,7 @@ class SyncOutController extends Controller
                      'taxpayer_taxables' =>   SearchTaxpayerTaxableResource::collection(collect([])),
                      'invoices' => SearchInvoiceResource::collection(collect([])),
                      'taxables' =>   SearchTaxpayerTaxableResource::collection(collect([])),
-                  'taxlabels' =>   SearchTaxpayerTaxableResource::collection(collect([])),
+                         'taxlabels' =>   SearchTaxpayerTaxableResource::collection(collect([])),
             ];
     }
 }
