@@ -64,7 +64,7 @@
 
 
 
-            <h3 class="mt-5">Total avis ar Libellés Fiscaux et Matières Taxables</h3>
+            <h3 class="mt-5">Total avis par Libellés Fiscaux et Matières Taxables</h3>
             <div class="row">
                 <div class="col-md-6">
                     <canvas id="labelsChart"></canvas>
