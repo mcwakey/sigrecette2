@@ -18,6 +18,7 @@ use App\Services\StatisticsService;
 use App\Traits\HandlesDateFilters;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
@@ -46,6 +47,36 @@ class TaxpayerController extends Controller
                 'disable' => $disable,
             ]
         )->render('pages/taxpayers.list', ['zones' => $zones, 'categories' => $categories, 'towns' => $towns, 'cantons' => $cantons, 'activities' => $activities]);
+    }
+    public function r_report(Request $request)
+    {
+        $this->handleDateFilters($request);
+        $taxpayersByZone = Taxpayer::select('zone_id', DB::raw('COUNT(*) as total'))
+            ->where('type','=',Constants::TITRE)
+            ->whereBetween('created_at', [$this->s_date,  $this->e_date])
+            ->groupBy('zone_id')
+            ->with('zone')
+            ->get();
+
+        $zoneLabels = $taxpayersByZone->pluck('zone.name');
+        $zoneTotals = $taxpayersByZone->pluck('total');
+        $genderCounts = Taxpayer::where('type','=',Constants::TITRE)
+            ->selectRaw('gender, count(*) as count')
+            ->whereBetween('created_at', [$this->s_date,  $this->e_date])
+            ->groupBy('gender')
+            ->pluck('count', 'gender')
+            ->toArray();
+
+        $genderLabels = array_keys($genderCounts);
+        $genderTotals = array_values($genderCounts);
+
+        $statisticsService = new StatisticsService($this->s_date, $this->e_date);
+        [$labels, $taxables,
+            $invoices_total,
+            $taxpayer_count,
+            $taxables_count,
+            $invoice_count,] = $statisticsService->c_capacity_data();
+        return view('pages/taxpayers/r_taxpayers.show', compact('labels', 'taxables','taxpayer_count','invoices_total','taxpayer_count','invoice_count','taxables_count','zoneLabels','zoneTotals','genderLabels','genderTotals'));
     }
     /**
      * Show the form for creating a new resource.

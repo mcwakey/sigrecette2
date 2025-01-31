@@ -86,6 +86,16 @@
                         </a>
 
                     </div>
+                        <div class="menu-item">
+                            <a class="menu-link {{ request()->routeIs('r_report-view')  ? 'active' : '' }}"
+                               href="{{ App\Helpers\Constants::checkUrl( route('r_report-view') ) }}">
+							<span class="menu-bullet">
+								<span class="bullet bullet-dot"></span>
+							</span>
+                                <span class="menu-title">Stats des contribuables</span>
+                            </a>
+
+                        </div>
                 </div>
             </div>
             <!--end:Menu item-->

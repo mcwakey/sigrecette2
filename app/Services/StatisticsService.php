@@ -476,6 +476,73 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
         //dd($data);
         return $data;
     }
+    public function c_capacity_data(){
+        $invoice_count=0;
+        $taxpayer_count=0;
+        $taxables_count=0;
+        $invoices_total=0;
+        $categorieName='CATEGORY 1';
+        $taxpayers= $this->getTaxpayerQuery()->get();
+
+        $labels = TaxLabel::where('status', 'ACTIVE')->where('category', 'LIKE', '%' . $categorieName . '%')
+            ->get(['id', 'name', 'code'])
+            ->mapWithKeys(function ($item) {
+                return [
+                    $item->id => [
+                        'name' => $item->name,
+                        'code' => $item->code,
+                        'total' => 0,
+                    ],
+                ];
+            })
+            ->toArray();
+        $taxables = Taxable::where('status', 'ACTIVE')
+            ->with(['tax_label'])
+            ->get(['id', 'name', 'tax_label_id'])
+            ->mapWithKeys(function ($item) {
+                return [
+                    $item->id => [
+                        'name' => $item->name,
+                        'code' => $item->tax_label?->code,
+                        'total' => 0,
+                    ]
+                ];
+            })
+            ->toArray();
+        $taxpayer_count=count($taxpayers);
+
+        foreach ($taxpayers as $taxpayer){
+            $invoices= $taxpayer->invoices;
+            $invoice_count+=count($invoices);
+            foreach ($invoices as $invoice){
+                if ($invoice->created_at->between($this->startDate, $this->endDate)){
+                    $taxables_count+=count($invoice->invoiceitems);
+                    $invoices_total+=$invoice->amount;
+                    foreach ($invoice->invoiceitems as $invoice_item){
+                        $taxpayerTaxable= $invoice_item->taxpayer_taxable;
+                        if (isset($taxables[$taxpayerTaxable->taxable->id])) {
+                            $taxables[$taxpayerTaxable->taxable->id]['total'] += $invoice_item->amount;
+                        }
+
+                        if (isset($labels[$taxpayerTaxable->taxable->tax_label->id])) {
+                            $labels[$taxpayerTaxable->taxable->tax_label->id]['total'] += $invoice_item->amount;
+                        }
+
+                    }
+                }
+            }
+        }
+        $labels = array_filter($labels, fn($item) => $item['total'] > 0);
+        $taxables = array_filter($taxables, fn($item) => $item['total'] > 0);
+        return [
+            $labels,
+            $taxables,
+            $invoices_total,
+            $taxpayer_count,
+            $taxables_count,
+            $invoice_count,
+        ];
+    }
     protected function getAllStatistics(): array
     {
         return [

@@ -80,7 +80,7 @@ class ExportTaxpayersDataTable extends DataTable
             ->editColumn('created_at', function (Taxpayer $taxpayer) {
                 return $taxpayer->created_at->format('d M Y');
             })
-            ->editColumn('created_by', function (Taxpayer $taxpayer) {
+            ->editColumn('user.name', function (Taxpayer $taxpayer) {
                 $createdByName = null;
                 $updatedByName = null;
                 $createdAt = null;
@@ -121,7 +121,7 @@ class ExportTaxpayersDataTable extends DataTable
     }
     public function query(Taxpayer $model): QueryBuilder
     {
-        $query = $model->with(['category', 'activity', 'town.canton', 'zone'])
+        $query = $model->with(['category', 'activity', 'town.canton', 'zone','user'])
             ->join('towns', 'taxpayers.town_id', '=', 'towns.id')
             ->with('town.canton')
             ->join('cantons', 'towns.canton_id', '=', 'cantons.id')
@@ -179,7 +179,7 @@ class ExportTaxpayersDataTable extends DataTable
             Column::make('town.canton.name')->title(__('canton')),
             Column::make('town.name')->title(__('Villages/Quartiers')),
             Column::make('zone.name')->title(__('zone'))->name("zone.name"),
-            Column::make('created_by')->title(__('user'))->addClass('d-flex align-items-center'),
+            Column::make('user.name')->title(__('user'))->addClass('d-flex align-items-center'),
             Column::make('type')->title(__('type'))->name("type"),
             Column::make('created_at')->title(__('created at')),
         ];

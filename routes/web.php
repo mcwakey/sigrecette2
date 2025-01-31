@@ -70,10 +70,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/user-activity', [UserActivityController::class, 'index'])->name('user-activity.index');
 
     });
+    Route::get('/taxpayers/r_report', [TaxpayerController::class, 'r_report'])->name('r_report-view');
 
     Route::resource('/taxpayers', TaxpayerController::class);
     Route::resource('/invoices', InvoiceController::class)->parameters([
-        //'invoices' => 'invoice:notDelivery?,s_date?,e_date?,startInvoiceId?,endInvoiceId?,aucomptant?',
     ]);
 
     Route::resource('/recoveries', RecoveryController::class);

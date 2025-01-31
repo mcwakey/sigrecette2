@@ -59,14 +59,14 @@
                                         </div>
                                     @else
                                         <div class="symbol-label fs-3 {{ app(\App\Actions\GetThemeType::class)->handle('bg-light-? text-?', $log->user->name) }}">
-                                            {{ substr($log->user->name, 0, 1) }}
+                                            {{ substr($log->user->name, 0, 1)}}
                                         </div>
                                     @endif
                                 </a>
                             </div>
                             <div class="d-flex flex-column">
                                 <a href="{{ route('user-management.users.show', $log->user) }}" class="text-gray-800 text-hover-primary mb-1">
-                                    {{ $log->user->name }}-{{ $log->user->id}}
+                                    {{ $log->user->name.' ('.$log->user->id.')'  }}
                                 </a>
                                 <span>{{ $log->user->email }}</span>
                             </div></td>

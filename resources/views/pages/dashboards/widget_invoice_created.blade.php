@@ -18,8 +18,6 @@
 </div>
 
 @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const ctx = document.getElementById('invoiceChart').getContext('2d');
@@ -31,7 +29,6 @@
             const dataUpdate = rawData.map(invoice => invoice.total_update);
             const topTaxpayers = rawData.map(invoice => invoice.name || 'N/A');
             const statusData = rawData.map(invoice => invoice.status);
-            console.log(rawData);
 
             const statusCounts = {
                 OWING: statusData.filter(s => s === 'OWING').length,
