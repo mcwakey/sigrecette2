@@ -368,7 +368,7 @@
                 @endif
                 <td class="">
                     <div>
-                        @if($commune->qr_code_enabled)
+                        @if($commune->qr_code_enabled && $qrcodeSvg)
                             <img src="{{ $qrcodeSvg }}" alt="QR Code" style="width: 90px; height: auto;">
                         @endif
                     </div>
