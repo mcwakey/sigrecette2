@@ -23,7 +23,7 @@ class AddActivityModal extends Component
     ];
     protected $listeners = [
         'delete_user' => 'deleteUser',
-        'update_user' => 'updateTown',
+        'update_activity' => 'updateActivity',
     ];
     public function render()
     {

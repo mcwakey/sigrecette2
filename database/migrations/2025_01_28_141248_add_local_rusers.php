@@ -86,7 +86,7 @@ return new class extends Migration
                 ],
                 [
                     'name' => 'KILIOUWE Gnimdéwa',
-                    'email' => 'keliouwe@gmail.com',
+                    'email' => 'kiliouwe@gmail.com',
                     'password' =>  $password!=null ? $password : Hash::make('$nidekal22'),
                     'created_at' => now(),
                     'updated_at' => now(),
@@ -162,8 +162,9 @@ return new class extends Migration
                     'updated_at' => now(),
                 ],
             ];
-
+            $numbers = [1, 2, 3, 4, 5];
             foreach ($users_table as $user) {
+                $user['zone_id']=$numbers[array_rand($numbers)];
                 $super_user = User::create($user);
                 $super_user->assignRole($role);
             }

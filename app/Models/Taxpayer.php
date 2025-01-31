@@ -50,6 +50,7 @@ class Taxpayer extends Model
         'updated_by',
         'type'
     ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -128,6 +129,10 @@ class Taxpayer extends Model
     {
         return $this->belongsTo(Category::class);
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
     public static function getInvoiceAndPayments($id): array
     {
         $result = [];
@@ -169,7 +174,7 @@ class Taxpayer extends Model
         }
         return $query;
     }
-  
+
 
 
 }

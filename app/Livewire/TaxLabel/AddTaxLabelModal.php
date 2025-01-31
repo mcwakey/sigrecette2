@@ -14,6 +14,7 @@ class AddTaxLabelModal extends Component
     public $edit_mode = false;
     public $categories = [];
     public $allCategories = ['CATEGORY 1', 'CATEGORY 2', 'CATEGORY 3','CATEGORY 4'];
+    public $status;
     protected function rules()
     {
         return [
@@ -21,6 +22,7 @@ class AddTaxLabelModal extends Component
             'code' => 'required',
             'categories' => 'required|array|min:1',
             'categories.*' => 'in:' . implode(',', $this->allCategories),
+            'status' => 'required|string',
         ];
     }
     protected $listeners = [
@@ -42,6 +44,7 @@ class AddTaxLabelModal extends Component
                 'name' => $this->name,
                 'category' => $categoryString,
                 'code' => $this->code,
+                'status' => $this->status,
             ];
             $tax_label = TaxLabel::find($this->tax_label_id) ?? TaxLabel::create($data);
             if ($this->edit_mode) {
@@ -77,6 +80,7 @@ class AddTaxLabelModal extends Component
         $this->category = $tax_label->category;
         $this->categories = explode(',', $tax_label->category);
         $this->code = $tax_label->code;
+        $this->status = $tax_label->status;
     }
     public function closeTaxLabelModal()
     {

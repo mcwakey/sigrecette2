@@ -29,7 +29,6 @@
             const dataUpdate = rawData.map(invoice => invoice.total_update);
             const topTaxpayers = rawData.map(invoice => invoice.name || 'N/A');
             const statusData = rawData.map(invoice => invoice.status);
-            console.log(rawData);
 
             const statusCounts = {
                 OWING: statusData.filter(s => s === 'OWING').length,

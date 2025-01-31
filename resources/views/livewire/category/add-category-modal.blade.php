@@ -6,7 +6,12 @@
             <!--begin::Modal header-->
             <div class="modal-header" id="kt_modal_add_category_header">
                 <!--begin::Modal title-->
-                <h2 class="fw-bold">{{ __('create_activity_category') }}</h2>
+                <h2 class="fw-bold">
+                    @if($edit_mode)
+                        {{ __('update_activity_category') }}
+                    @else
+                        {{ __('create_activity_category') }}
+                    @endif</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">

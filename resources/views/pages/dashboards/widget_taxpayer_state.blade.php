@@ -79,10 +79,7 @@
                     });
                     series.data.setAll(data);
 
-                    // Ajouter une légende externe
 
-
-                    //series.appear(100, 10);
                 });
             })
             ();
