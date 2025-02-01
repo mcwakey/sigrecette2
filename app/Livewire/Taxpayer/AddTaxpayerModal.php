@@ -98,7 +98,7 @@ class AddTaxpayerModal extends Component
         $genders = Gender::all();
         $id_types = IdType::all();
         $zones = Zone::where('status', "=","ACTIVE")->get();;
-        $categories = Category::all();
+        $categories = Category::where('status', "=","ACTIVE")->get();
         return view('livewire.taxpayer.add-taxpayer-modal', ['cantons' => $cantons, 'genders' => $genders, 'id_types' => $id_types, 'zones' => $zones, 'categories' => $categories]);
     }
     public function mount(){
@@ -166,7 +166,7 @@ class AddTaxpayerModal extends Component
     }
     public function updatedCategoryId($value)
     {
-        $this->activities = Activity::where('category_id', $value)->get();
+        $this->activities = Activity::where('category_id', $value)->where('status', "ACTIVE")->get();
     }
     #[On('delete_taxpayer')]
     public function deleteTaxpayer($id)
