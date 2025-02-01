@@ -220,11 +220,32 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: {
+                  plugins: {
+                    tooltip: {
+                        enabled: true
+                    },
                     legend: {
-                        position: 'bottom'
+                        display: true,
+                        position: 'top'
                     }
-                }
+                }, animation: {
+                    onComplete: function () {
+                        const ctx = this.ctx;
+                        ctx.font = 'bold 14px Arial';
+                        ctx.fillStyle = '#ffffff';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+
+                        this.data.datasets.forEach((dataset, i) => {
+                            const meta = this.getDatasetMeta(i);
+                            meta.data.forEach((arc, index) => {
+                                const center = arc.tooltipPosition();
+                                const value = dataset.data[index];
+                                ctx.fillText(value, center.x, center.y);
+                            });
+                        });
+                    }
+                 }
             }
         });
     }
@@ -248,10 +269,33 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
+                    tooltip: {
+                        enabled: true
+                    },
                     legend: {
-                        position: 'bottom'
+                        display: true,
+                        position: 'top'
                     }
-                }
+                },
+
+animation: {
+                    onComplete: function () {
+                        const ctx = this.ctx;
+                        ctx.font = 'bold 14px Arial';
+                        ctx.fillStyle = '#ffffff';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+
+                        this.data.datasets.forEach((dataset, i) => {
+                            const meta = this.getDatasetMeta(i);
+                            meta.data.forEach((arc, index) => {
+                                const center = arc.tooltipPosition();
+                                const value = dataset.data[index];
+                                ctx.fillText(value, center.x, center.y);
+                            });
+                        });
+                    }
+                 }
             }
         });
     }
