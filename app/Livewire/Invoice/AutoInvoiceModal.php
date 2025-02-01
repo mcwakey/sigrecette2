@@ -40,7 +40,7 @@ class AutoInvoiceModal extends Component
     public function render()
     {
         $zones = Zone::all();
-        $tax_labels = TaxLabel::where('category', 'LIKE', '%CATEGORY 1%')->get();
+        $tax_labels = TaxLabel::where('category', 'LIKE', '%CATEGORY 1%')->where('status', '=', 'ACTIVE')->get();
         $year = Year::getActiveYear();
         $months = Constants::getMonths();
         return view('livewire.invoice.auto-invoice-modal', ['zones' => $zones, 'tax_labels' => $tax_labels,'months' => $months, 'year' => $year]);

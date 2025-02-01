@@ -73,7 +73,7 @@ class AddTaxpayerTaxableModal extends Component
     }
     public function render()
     {
-        $taxlabels = TaxLabel::where('category', 'LIKE', '%CATEGORY 1%')->get();
+        $taxlabels = TaxLabel::where('category', 'LIKE', '%CATEGORY 1%')->where('status', '=', 'ACTIVE')->get();
         return view('livewire.taxpayer_taxable.add-taxpayer-taxable-modal', ['taxlabels' => $taxlabels]);
     }
     public function updatedTaxlabelId($value)

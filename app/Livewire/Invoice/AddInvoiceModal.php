@@ -98,8 +98,10 @@ class AddInvoiceModal extends Component
             if (!$this->edit_mode) {
                 $this->invoice_id = null;
             }
+            //When $this->periodicity == "Ans"  expire date not depend on nbr taxation
+            $multiple= $this->periodicity == "Ans" ? 12 : $this->qty ;
             $from_date = Carbon::createFromDate(date('Y'), $this->start_month, 1);
-            $to_date = $from_date->copy()->addMonths($this->qty - 1)->endOfMonth();
+            $to_date = $from_date->copy()->addMonths($multiple - 1)->endOfMonth();
             $end_of_year = Carbon::createFromDate(date('Y'), 12, 31);
             if ($to_date->greaterThan($end_of_year)) {
                 $to_date = $end_of_year;
@@ -248,6 +250,7 @@ class AddInvoiceModal extends Component
         $this->button_mode = true;
         $this->invoice_id = '';
         $this->qty = $this->periodicity == "Mois" ? 12 : 1;
+        //dump($this->qty);
         $this->taxpayer_taxables = $taxpayer_taxables = TaxpayerTaxable::where('taxpayer_id', $id)->where('billable', 1)->get();
         foreach ($taxpayer_taxables as $index => $taxable) {
             $this->taxpayer_taxable_id[$index] = $taxable->id;
