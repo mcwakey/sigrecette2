@@ -32,14 +32,23 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     public function __construct(private $startDate,private $endDate,protected string $NoneMessage = 'Non défini')
     {
     }
-    public function getTaxpayerQuery($dateFilter=true)
+    public function getTaxpayerQuery($dateFilter = true)
     {
-        if(!$dateFilter){
-            return Taxpayer::where('type','=',Constants::TITRE);
+        $query = Taxpayer::where('type', Constants::TITRE)
+            ->where(function ($q) {
+                $q->whereNotIn('taxpayers.from_mobile_and_validate_state', [
+                    TaxpayerStateEnums::REJECTED,
+                    TaxpayerStateEnums::PENDING
+                ])->orWhereNull('taxpayers.from_mobile_and_validate_state');
+            });
+
+        if ($dateFilter) {
+            $query->whereBetween('created_at', [$this->startDate, $this->endDate]);
         }
-        return Taxpayer::whereBetween('created_at', [$this->startDate, $this->endDate])
-            ->where('type','=',Constants::TITRE);
+
+        return $query;
     }
+
     public function getStats(string|null $type = null): array
     {
         switch ($type) {

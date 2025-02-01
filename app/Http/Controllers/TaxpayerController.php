@@ -4,6 +4,7 @@ use App\DataTables\InvoicesDataTable;
 use App\DataTables\RecoveriesDataTable;
 use App\DataTables\TaxpayersDataTable;
 use App\DataTables\TaxpayerTaxablesDataTable;
+use App\Enums\TaxpayerStateEnums;
 use App\Helpers\Constants;
 use App\Imports\TaxpayerImport;
 use App\Models\Activity;
@@ -53,6 +54,12 @@ class TaxpayerController extends Controller
         $this->handleDateFilters($request);
         $taxpayersByZone = Taxpayer::select('zone_id', DB::raw('COUNT(*) as total'))
             ->where('type','=',Constants::TITRE)
+            ->where(function ($q) {
+                $q->whereNotIn('taxpayers.from_mobile_and_validate_state', [
+                    TaxpayerStateEnums::REJECTED,
+                    TaxpayerStateEnums::PENDING
+                ])->orWhereNull('taxpayers.from_mobile_and_validate_state');
+            })
             ->whereBetween('created_at', [$this->s_date,  $this->e_date])
             ->groupBy('zone_id')
             ->with('zone')

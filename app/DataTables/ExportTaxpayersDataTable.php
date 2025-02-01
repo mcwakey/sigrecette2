@@ -134,8 +134,10 @@ class ExportTaxpayersDataTable extends DataTable
             $query = $query->whereBetween('taxpayers.created_at', [$this->startDate, $this->endDate]);
         }
         $query = $query->where(function ($q) {
-            $q->where('taxpayers.from_mobile_and_validate_state', '!=', TaxpayerStateEnums::REJECTED)
-                ->orWhereNull('taxpayers.from_mobile_and_validate_state');
+            $q->whereNotIn('taxpayers.from_mobile_and_validate_state', [
+                TaxpayerStateEnums::REJECTED,
+                TaxpayerStateEnums::PENDING
+            ])->orWhereNull('taxpayers.from_mobile_and_validate_state');
         });
         return $query;
     }
