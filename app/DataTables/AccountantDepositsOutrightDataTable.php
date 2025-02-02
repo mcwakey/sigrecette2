@@ -1,5 +1,6 @@
 <?php
 namespace App\DataTables;
+use App\Enums\PaymentStatusEnums;
 use App\Helpers\Constants;
 use App\Models\Payment;
 use Yajra\DataTables\Html\Column;
@@ -49,8 +50,8 @@ class AccountantDepositsOutrightDataTable extends DataTable
     {
         return $model
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
-            ->where('invoice_type', Constants::INVOICE_TYPE_COMPTANT) // Filter collector_deposits by taxpayer_id
-            ->where('status', 'ACCOUNTED') // Filter collector_deposits by taxpayer_id
+            ->where('invoice_type', Constants::INVOICE_TYPE_COMPTANT)
+          ->whereIn('payments.status', [PaymentStatusEnums::DONE, PaymentStatusEnums::ACCOUNTED])
             ->newQuery();
     }
     /**
