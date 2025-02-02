@@ -10,7 +10,9 @@ use App\Models\Taxable;
 use App\Models\TaxLabel;
 use App\Models\TaxpayerTaxable;
 use App\Models\User;
+use App\Models\Year;
 use App\Traits\DispatchesMessages;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -62,16 +64,10 @@ class AddAccountantDepositModal extends Component
     public function render()
     {
         $this->user_id = Auth::id();
-        $collectors = User::select('users.id', 'users.name as user_name', 'roles.name as role_name')
-            ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-            ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-            ->where('roles.name', 'collecteur')
-            ->get();
-        return view('livewire.accountant_deposit.add-accountant-deposit-modal', ['collectors' => $collectors]);
+        return view('livewire.accountant_deposit.add-accountant-deposit-modal');
     }
     public function submit()
     {
-        // Validate the form input data
         $this->validate();
         $user = auth()->user();
         if (!$user->hasRole('regisseur')) {
@@ -106,13 +102,22 @@ class AddAccountantDepositModal extends Component
     }
     public function addAccountantDeposit($type)
     {
+        $year=Year::getActiveYear()?->name;
+        $s_date = Carbon::parse("{$year}-01-01 00:00:00");
+        $e_date = Carbon::parse("{$year}-12-31 23:59:59");
         $this->collector_id = "";
         $this->taxlabel_id = "";
         $this->taxable_id = "";
         $this->trans_no = "";
-        $this->stock_transfers = StockTransfer::where('trans_no', $this->trans_no)->where('trans_type', 'RECU')->where('to_user_id', $this->collector_id)->get();
-        $total_amount = Payment::selectRaw('SUM(amount) AS amount')->where('status', "ACCOUNTED")->groupBy('status')->first();
-        $this->total_amount = $total_amount->amount ?? '';
+
+
+
+
+        $this->total_amount = Payment::selectRaw('SUM(amount) AS amount')
+            ->whereBetween('created_at', [$s_date, $e_date])
+            ->where('status', "ACCOUNTED")
+            ->first()
+            ->amount ?? 0;;
         $this->paid = $this->total_amount;
         $this->edit_mode = false;
         $this->deposit_mode = false;

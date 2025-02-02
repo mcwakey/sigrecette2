@@ -33,6 +33,13 @@ class AddRefnoForm extends Component
     public function submit()
     {
         $this->validate();
+        $user = auth()->user();
+        if (!$user->hasRole('regisseur')) {
+            $this->dispatchMessage('Paiement', 'update', 'error',"Action non authorize");
+            $this->reset();
+            abort(403, 'Accès interdit');
+            return;
+        }
         DB::transaction(function () {
             // Prepare data for Payment
             $data = [

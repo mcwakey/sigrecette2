@@ -30,6 +30,7 @@ class AddStatusForm extends Component
         if (!$user->hasRole('regisseur')) {
             $this->dispatchMessage('Paiement', 'update', 'error',"Action non authorize");
             $this->reset();
+            abort(403, 'Accès interdit');
             return;
         }
         DB::transaction(function () {

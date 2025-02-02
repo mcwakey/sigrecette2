@@ -1,127 +1,157 @@
 <x-default-layout>
 
-@section('title')
-    {{ __("Analyse des données") }}
-@endsection
+    @section('title')
+        {{ __("Analyse des données") }}
+    @endsection
     @section('breadcrumbs')
         {{ Breadcrumbs::render('taxpayers.index') }}
     @endsection
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
 
-        <div class="container">
+            #printable-area, #printable-area * {
+                visibility: visible;
+            }
 
-            <div class="container">
-                <div class="row g-3">
-                    <div class="col-md-3 col-sm-6">
-                        <div class="border border-gray-300 border-dashed rounded-lg shadow-sm bg-light p-4 text-center">
-                            <div class="d-flex justify-content-center align-items-center mb-2">
+            #printable-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+        }
+    </style>
+
+    <div class="container mt-3">
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-primary" onclick="window.print()">
+                🖨️ Imprimer la page
+            </button>
+        </div>
+    </div>
+    <div class="container " id="printable-area">
+
+        <div class="container mt-5 ">
+            <div class="row g-3">
+                <div class="col-md-3 col-sm-6">
+                    <div class="border border-gray-300 border-dashed rounded-lg shadow-sm bg-light p-4 text-center">
+                        <div class="d-flex justify-content-center align-items-center mb-2">
                     <span class="svg-icon fs-3 text-success me-2">
                         <i class="bi bi-cash-stack"></i>
                     </span>
-                                <div class="fs-2 fw-bold text-success" data-kt-countup="true" data-kt-countup-value="{{ $invoices_total }}">0</div>
+                            <div class="fs-2 fw-bold text-success" data-kt-countup="true"
+                                 data-kt-countup-value="{{ $invoices_total }}">0
                             </div>
-                            <div class="fw-semibold fs-6">Total Montant Avis</div>
                         </div>
+                        <div class="fw-semibold fs-6">Total Montant Avis</div>
                     </div>
+                </div>
 
-                    <div class="col-md-3 col-sm-6">
-                        <div class="border border-gray-300 border-dashed rounded-lg shadow-sm bg-light p-4 text-center">
-                            <div class="d-flex justify-content-center align-items-center mb-2">
+                <div class="col-md-3 col-sm-6">
+                    <div class="border border-gray-300 border-dashed rounded-lg shadow-sm bg-light p-4 text-center">
+                        <div class="d-flex justify-content-center align-items-center mb-2">
                     <span class="svg-icon fs-3 text-info me-2">
                         <i class="bi bi-people"></i>
                     </span>
-                                <div class="fs-2 fw-bold text-info" data-kt-countup="true" data-kt-countup-value="{{ $taxpayer_count }}">0</div>
+                            <div class="fs-2 fw-bold text-info" data-kt-countup="true"
+                                 data-kt-countup-value="{{ $taxpayer_count }}">0
                             </div>
-                            <div class="fw-semibold fs-6">Nombre de Contribuables</div>
                         </div>
+                        <div class="fw-semibold fs-6">Nombre de Contribuables</div>
                     </div>
+                </div>
 
-                    <div class="col-md-3 col-sm-6">
-                        <div class="border border-gray-300 border-dashed rounded-lg shadow-sm bg-light p-4 text-center">
-                            <div class="d-flex justify-content-center align-items-center mb-2">
+                <div class="col-md-3 col-sm-6">
+                    <div class="border border-gray-300 border-dashed rounded-lg shadow-sm bg-light p-4 text-center">
+                        <div class="d-flex justify-content-center align-items-center mb-2">
                     <span class="svg-icon fs-3 text-primary me-2">
                         <i class="bi bi-box-seam"></i>
                     </span>
-                                <div class="fs-2 fw-bold text-primary" data-kt-countup="true" data-kt-countup-value="{{ $taxables_count }}">0</div>
+                            <div class="fs-2 fw-bold text-primary" data-kt-countup="true"
+                                 data-kt-countup-value="{{ $taxables_count }}">0
                             </div>
-                            <div class="fw-semibold fs-6">Nombre de Matière</div>
                         </div>
+                        <div class="fw-semibold fs-6">Nombre de Matière</div>
                     </div>
+                </div>
 
-                    <div class="col-md-3 col-sm-6">
-                        <div class="border border-gray-300 border-dashed rounded-lg shadow-sm bg-light p-4 text-center">
-                            <div class="d-flex justify-content-center align-items-center mb-2">
+                <div class="col-md-3 col-sm-6">
+                    <div class="border border-gray-300 border-dashed rounded-lg shadow-sm bg-light p-4 text-center">
+                        <div class="d-flex justify-content-center align-items-center mb-2">
                     <span class="svg-icon fs-3 text-danger me-2">
                         <i class="bi bi-receipt"></i>
                     </span>
-                                <div class="fs-2 fw-bold text-danger" data-kt-countup="true" data-kt-countup-value="{{ $invoice_count }}">0</div>
+                            <div class="fs-2 fw-bold text-danger" data-kt-countup="true"
+                                 data-kt-countup-value="{{ $invoice_count }}">0
                             </div>
-                            <div class="fw-semibold fs-6">Nombre d'Avis</div>
                         </div>
+                        <div class="fw-semibold fs-6">Nombre d'Avis</div>
                     </div>
                 </div>
             </div>
-
-
-
-
-            <h3 class="mt-5">Total avis par Libellés Fiscaux et Matières Taxables</h3>
-            <div class="row">
-                <div class="col-md-6">
-                    <canvas id="labelsChart"></canvas>
-                </div>
-                <div class="col-md-6">
-                    <canvas id="taxablesChart"></canvas>
-                </div>
-            </div>
-            <h3 class="mt-5">Contribuables par zone fiscale et par genre</h3>
-            <div class="row">
-                <div class="col-md-6">
-            <canvas id="taxpayerPieChart"></canvas>
-                </div>
-                <div class="col-md-6">
-                <canvas id="genderPieChart"></canvas>
-                </div>
-            </div>
-
-            <h3 class="mt-5">Détails Montant avis par Libellés Fiscaux </h3>
-            <table class="table table-bordered">
-                <thead class="table-dark">
-                <tr>
-                    <th>Nom</th>
-                    <th>Code</th>
-                    <th>Total</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($labels as $id => $label)
-                    <tr>
-                        <td>{{ $label['code'] }}</td>
-                        <td>{{ $label['name'] }}</td>
-                        <td>{{ number_format($label['total'], 2, ',', ' ') }}</td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
-            <h3 class="mt-5">Détails Montant avis par Matières Taxables  </h3>
-            <table class="table table-bordered">
-                <thead class="table-dark">
-                <tr>
-                    <th>Nom</th>
-                    <th>Code</th>
-                    <th>Total</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($taxables as $id => $taxable)
-                    <tr>
-                        <td>{{ $taxable['code'] }}</td>
-                        <td>{{ $taxable['name'] }}</td>
-                        <td>{{ number_format($taxable['total'], 2, ',', ' ') }}</td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
         </div>
+        <h3 class="mt-5">Contribuables par zone fiscale et par genre</h3>
+        <div class="row">
+            <div class="col-md-6">
+                <canvas id="taxpayerPieChart"></canvas>
+            </div>
+            <div class="col-md-6">
+                <canvas id="genderPieChart"></canvas>
+            </div>
+        </div>
+        <h3 class="mt-5">Total avis par Libellés Fiscaux et Matières Taxables</h3>
+        <div class="row">
+            <div class="col-12">
+                <canvas id="labelsChart" class="w-100" style="height: 300px;"></canvas>
+            </div>
+            <div class="col-12 mt-3">
+                <canvas id="taxablesChart" class="w-100" style="height: 300px;"></canvas>
+            </div>
+        </div>
+
+
+        <h3 class="mt-5">Détails Montant avis par Libellés Fiscaux </h3>
+        <table class="table table-bordered">
+            <thead class="table-dark">
+            <tr>
+                <th>Nom</th>
+                <th>Code</th>
+                <th>Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($labels as $id => $label)
+                <tr>
+                    <td>{{ $label['code'] }}</td>
+                    <td>{{ $label['name'] }}</td>
+                    <td>{{ number_format($label['total'], 2, ',', ' ') }}</td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+        <h3 class="mt-5">Détails Montant avis par Matières Taxables </h3>
+        <table class="table table-bordered">
+            <thead class="table-dark">
+            <tr>
+                <th>Nom</th>
+                <th>Code</th>
+                <th>Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($taxables as $id => $taxable)
+                <tr>
+                    <td>{{ $taxable['code'] }}</td>
+                    <td>{{ $taxable['name'] }}</td>
+                    <td>{{ number_format($taxable['total'], 2, ',', ' ') }}</td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
     @push('scripts')
         <script src="assets/plugins/global/plugins.bundle.js"></script>
 
@@ -156,7 +186,6 @@
                 maintainAspectRatio: false,
                 scales: {
                     y: {
-                        type: 'logarithmic',
                         beginAtZero: false,
                         ticks: {
                             callback: function(value) {
@@ -189,7 +218,6 @@
                 maintainAspectRatio: false,
                 scales: {
                     y: {
-                        type: 'logarithmic',
                         beginAtZero: false,
                         ticks: {
                             callback: function(value) {
@@ -302,7 +330,6 @@ animation: {
 });
 
         </script>
-
 
     @endpush
 </x-default-layout>

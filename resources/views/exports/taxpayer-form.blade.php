@@ -73,7 +73,7 @@
         <th colspan="8" style="border: none; margin: 0; text-align: center;" class="caption">FICHE DU CONTRIBUABLE</th>
     </tr>
     <tr>
-        <td colspan="8" style="border: none; margin: 0; text-align: center;">NIC : {{$data[0]->nif}} </td>
+        <td colspan="8" style="border: none; margin: 0; text-align: center;">NIC : {{$data[0]->id}} </td>
     </tr>
     <tr>
         <td colspan="8" style="border: none; margin: 0; text-align: center;">Nom / Raison sociale
