@@ -153,7 +153,7 @@
         </table>
     </div>
     @push('scripts')
-            <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
+            <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}" defer></script>
 
         <script>
             document.addEventListener("DOMContentLoaded", function () {
