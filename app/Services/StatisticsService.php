@@ -201,7 +201,11 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     public function countTaxpayersByTaxables(): array
     {
         $taxables = Taxable::all()->pluck('name', 'id');
-        $counts = TaxpayerTaxable::whereBetween('created_at', [$this->startDate, $this->endDate])->selectRaw('taxable_id, count(*) as count')
+        $counts = TaxpayerTaxable::with([ 'taxpayer',])->whereBetween('created_at', [$this->startDate, $this->endDate])
+            ->whereHas('taxpayer', function ($query) {
+                $query->where('type', Constants::TITRE);
+            })
+            ->selectRaw('taxable_id, count(*) as count')
             ->groupBy('taxable_id')
             ->get()
             ->map(function ($item) use ($taxables) {
@@ -217,7 +221,10 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     public function countTaxpayersByTaxLabel(string $category='CATEGORY 1'): array
     {
         $taxLabels = TaxLabel::with('taxables')->where('category', 'LIKE', "%{$category}%")->get();
-        $counts = TaxpayerTaxable::whereBetween('taxpayer_taxables.created_at', [$this->startDate, $this->endDate])
+        $counts = TaxpayerTaxable::with([ 'taxpayer',])->whereBetween('taxpayer_taxables.created_at', [$this->startDate, $this->endDate])
+            ->whereHas('taxpayer', function ($query) {
+                $query->where('type', Constants::TITRE);
+            })
             ->selectRaw('taxables.tax_label_id, count(*) as count')
             ->join('taxables', 'taxpayer_taxables.taxable_id', '=', 'taxables.id')
             ->groupBy('taxables.tax_label_id')
