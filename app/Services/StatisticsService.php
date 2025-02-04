@@ -40,6 +40,12 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
                     TaxpayerStateEnums::REJECTED,
                     TaxpayerStateEnums::PENDING
                 ])->orWhereNull('taxpayers.from_mobile_and_validate_state');
+            });$query = Taxpayer::where('type', Constants::TITRE)
+            ->where(function ($q) {
+                $q->whereNotIn('taxpayers.from_mobile_and_validate_state', [
+                    TaxpayerStateEnums::REJECTED,
+                    TaxpayerStateEnums::PENDING
+                ])->orWhereNull('taxpayers.from_mobile_and_validate_state');
             });
 
         if ($dateFilter) {
@@ -492,73 +498,88 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
         //dd($data);
         return $data;
     }
-    public function c_capacity_data(){
-        $invoice_count=0;
-        $taxpayer_count=0;
-        $taxables_count=0;
-        $invoices_total=0;
-        $categorieName='CATEGORY 1';
-        $taxpayers= $this->getTaxpayerQuery()->get();
+    public function c_capacity_data()
+    {
+        $categorieName = 'CATEGORY 1';
+        $taxpayers = $this->getTaxpayersWithInvoices();
+        $labels = $this->getActiveLabels($categorieName);
+        $taxables = $this->getActiveTaxables();
 
-        $labels = TaxLabel::where('status', 'ACTIVE')->where('category', 'LIKE', '%' . $categorieName . '%')
+        $invoice_count = 0;
+        $taxpayer_count = count($taxpayers);
+        $taxables_count = 0;
+        $invoices_total = 0;
+
+        foreach ($taxpayers as $taxpayer) {
+            $this->processInvoices($taxpayer, $taxables, $labels, $invoice_count, $taxables_count, $invoices_total);
+        }
+
+        $labels = array_filter($labels, fn($item) => $item['total'] > 0);
+        $taxables = array_filter($taxables, fn($item) => $item['total'] > 0);
+
+        return [$labels, $taxables, $invoices_total, $taxpayer_count, $taxables_count, $invoice_count];
+    }
+
+
+    private function getTaxpayersWithInvoices()
+    {
+        return $this->getTaxpayerQuery()
+            ->with(['invoices.invoiceitems.taxpayer_taxable.taxable.tax_label'])
+            ->get();
+    }
+
+
+    private function getActiveLabels($categorieName)
+    {
+        return TaxLabel::where('status', 'ACTIVE')
+            ->where('category', 'LIKE', '%' . $categorieName . '%')
             ->get(['id', 'name', 'code'])
-            ->mapWithKeys(function ($item) {
-                return [
-                    $item->id => [
-                        'name' => $item->name,
-                        'code' => $item->code,
-                        'total' => 0,
-                    ],
-                ];
-            })
+            ->mapWithKeys(fn($item) => [
+                $item->id => ['name' => $item->name, 'code' => $item->code, 'total' => 0]
+            ])
             ->toArray();
-        $taxables = Taxable::where('status', 'ACTIVE')
+    }
+
+
+    private function getActiveTaxables()
+    {
+        return Taxable::where('status', 'ACTIVE')
             ->with(['tax_label'])
             ->get(['id', 'name', 'tax_label_id'])
-            ->mapWithKeys(function ($item) {
-                return [
-                    $item->id => [
-                        'name' => $item->name,
-                        'code' => $item->tax_label?->code,
-                        'total' => 0,
-                    ]
-                ];
-            })
+            ->mapWithKeys(fn($item) => [
+                $item->id => [
+                    'name' => $item->name,
+                    'code' => $item->tax_label?->code,
+                    'total' => 0
+                ]
+            ])
             ->toArray();
-        $taxpayer_count=count($taxpayers);
+    }
 
-        foreach ($taxpayers as $taxpayer){
-            $invoices= $taxpayer->invoices;
-            $invoice_count+=count($invoices);
-            foreach ($invoices as $invoice){
-                if ($invoice->created_at->between($this->startDate, $this->endDate)){
-                    $taxables_count+=count($invoice->invoiceitems);
-                    $invoices_total+=$invoice->amount;
-                    foreach ($invoice->invoiceitems as $invoice_item){
-                        $taxpayerTaxable= $invoice_item->taxpayer_taxable;
-                        if (isset($taxables[$taxpayerTaxable->taxable->id])) {
-                            $taxables[$taxpayerTaxable->taxable->id]['total'] += $invoice_item->amount;
-                        }
 
-                        if (isset($labels[$taxpayerTaxable->taxable->tax_label->id])) {
-                            $labels[$taxpayerTaxable->taxable->tax_label->id]['total'] += $invoice_item->amount;
-                        }
+    private function processInvoices($taxpayer, &$taxables, &$labels, &$invoice_count, &$taxables_count, &$invoices_total)
+    {
+        $invoices = $taxpayer->invoices;
+        $invoice_count += count($invoices);
 
+        foreach ($invoices as $invoice) {
+            if ($invoice->created_at->between($this->startDate, $this->endDate)) {
+                $taxables_count += count($invoice->invoiceitems);
+                $invoices_total += $invoice->amount;
+
+                foreach ($invoice->invoiceitems as $invoice_item) {
+                    $taxpayerTaxable = $invoice_item->taxpayer_taxable;
+                    if (isset($taxables[$taxpayerTaxable->taxable->id])) {
+                        $taxables[$taxpayerTaxable->taxable->id]['total'] += $invoice_item->amount;
+                    }
+                    if (isset($labels[$taxpayerTaxable->taxable->tax_label->id])) {
+                        $labels[$taxpayerTaxable->taxable->tax_label->id]['total'] += $invoice_item->amount;
                     }
                 }
             }
         }
-        $labels = array_filter($labels, fn($item) => $item['total'] > 0);
-        $taxables = array_filter($taxables, fn($item) => $item['total'] > 0);
-        return [
-            $labels,
-            $taxables,
-            $invoices_total,
-            $taxpayer_count,
-            $taxables_count,
-            $invoice_count,
-        ];
     }
+
     protected function getAllStatistics(): array
     {
         return [
