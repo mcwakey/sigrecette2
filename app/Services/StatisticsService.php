@@ -49,7 +49,8 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
             });
 
         if ($dateFilter) {
-            $query->whereBetween('created_at', [$this->startDate, $this->endDate]);
+            $query->whereBetween('created_at', [$this->startDate, $this->endDate])
+                ->orWhereBetween('updated_at', [$this->startDate, $this->endDate]);
         }
 
         return $query;
