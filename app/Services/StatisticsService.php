@@ -40,21 +40,18 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
                     TaxpayerStateEnums::REJECTED,
                     TaxpayerStateEnums::PENDING
                 ])->orWhereNull('taxpayers.from_mobile_and_validate_state');
-            });$query = Taxpayer::where('type', Constants::TITRE)
-            ->where(function ($q) {
-                $q->whereNotIn('taxpayers.from_mobile_and_validate_state', [
-                    TaxpayerStateEnums::REJECTED,
-                    TaxpayerStateEnums::PENDING
-                ])->orWhereNull('taxpayers.from_mobile_and_validate_state');
             });
 
         if ($dateFilter) {
-            $query->whereBetween('created_at', [$this->startDate, $this->endDate])
-                ->orWhereBetween('updated_at', [$this->startDate, $this->endDate]);
+            $query->where(function ($q) {
+                $q->whereBetween('created_at', [$this->startDate, $this->endDate])
+                    ->orWhereBetween('updated_at', [$this->startDate, $this->endDate]);
+            });
         }
 
         return $query;
     }
+
 
     public function getStats(string|null $type = null): array
     {
@@ -526,6 +523,7 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     {
         return $this->getTaxpayerQuery()
             ->with(['invoices.invoiceitems.taxpayer_taxable.taxable.tax_label'])
+           // ->distinct()
             ->get();
     }
 
