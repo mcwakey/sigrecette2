@@ -63,6 +63,7 @@ class TaxpayerController extends Controller
             ->whereBetween('created_at', [$this->s_date,  $this->e_date])
             ->groupBy('zone_id')
             ->with('zone')
+            ->newQuery()
             ->get();
 
         $zoneLabels = $taxpayersByZone->pluck('zone.name');
@@ -77,12 +78,14 @@ class TaxpayerController extends Controller
         $genderLabels = array_keys($genderCounts);
         $genderTotals = array_values($genderCounts);
 
+
         $statisticsService = new StatisticsService($this->s_date, $this->e_date);
         [$labels, $taxables,
             $invoices_total,
             $taxpayer_count,
             $taxables_count,
             $invoice_count,] = $statisticsService->c_capacity_data();
+
         return view('pages/taxpayers/r_taxpayers.show', compact('labels', 'taxables','taxpayer_count','invoices_total','taxpayer_count','invoice_count','taxables_count','zoneLabels','zoneTotals','genderLabels','genderTotals'));
     }
     /**

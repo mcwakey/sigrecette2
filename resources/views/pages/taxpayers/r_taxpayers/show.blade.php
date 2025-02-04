@@ -31,6 +31,23 @@
                 🖨️ Imprimer la page
             </button>
         </div>
+        <div class="bg-white p-4 rounded mt-5 shadow-sm border">
+            <div class="d-flex align-items-center mb-3">
+                <i class="fas fa-info-circle text-info fs-4 me-2"></i>
+                <h4 class="text-info mb-0">
+                    {{ __('Procédure') }}
+                </h4>
+            </div>
+            <p class="text-muted fs-6">
+                {{ __("Cette page vous permet de consulter les statistiques des avis créés sur une période donnée.
+                Pour afficher les données, appliquez les filtres de date et sélectionnez la période souhaitée.
+
+                Si vous avez récemment mis à jour votre base de données, comme après un recensement,
+                choisissez la période allant du début du recensement jusqu'à la date d'émission des avis sur titre
+                (ou la date du jour pour voir les données actuelles).") }}
+            </p>
+        </div>
+
     </div>
     <div class="container " id="printable-area">
 
@@ -154,7 +171,6 @@
     </div>
     @push('scripts')
             <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}" defer></script>
-
         <script>
             document.addEventListener("DOMContentLoaded", function () {
     function generateColors(length, opacity = 0.6) {
