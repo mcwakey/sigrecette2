@@ -43,7 +43,7 @@
                 Pour afficher les données, appliquez les filtres de date et sélectionnez la période souhaitée.
 
                 Si vous avez récemment mis à jour votre base de données, comme après un recensement,
-                choisissez la période allant du début du recensement jusqu'à la date d'émission des avis sur titre
+                choisissez la période allant du début du recensement jusqu'à la date de fin d'émission des avis sur titre
                 (ou la date du jour pour voir les données actuelles).") }}
             </p>
         </div>
