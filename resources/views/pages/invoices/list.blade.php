@@ -147,7 +147,7 @@ $filters = [
                 @else
                     @if(request()->routeIs('invoices.*') && !request()->has('delivery')&&!request()->has('state') && request()->input('type') ==  App\Helpers\Constants::INVOICE_TYPE_TITRE_KEY)
                         @can('peut générer automatiquement les avis sur titre')
-                            @if (now()->format('m') === '01' || $app->environment('local'))
+                            @if (now()->format('m') === '03' || $app->environment('local'))
                                 <div class="d-flex justify-content-end" data-kt-invoice-table-toolbar="base">
                                     <button type="button" class="btn btn-light-danger ms-auto me-5"
                                             data-bs-toggle="modal" data-bs-target="#kt_modal_auto_invoice">
