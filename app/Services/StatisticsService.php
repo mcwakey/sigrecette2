@@ -537,7 +537,7 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
         $invoice_count += count($invoices);
 
         foreach ($invoices as $invoice) {
-            if ($invoice->created_at->between($this->startDate, $this->endDate)) {
+            if ($invoice->created_at->between($this->startDate, $this->endDate)&&  $invoice->isValid() ) {
                 $taxables_count += count($invoice->invoiceitems);
                 $invoices_total += $invoice->amount;
 
