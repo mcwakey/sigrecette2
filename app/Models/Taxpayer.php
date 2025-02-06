@@ -1,5 +1,7 @@
 <?php
 namespace App\Models;
+use App\Enums\InvoicePayStatusEnums;
+use App\Enums\InvoiceStatusEnums;
 use App\Enums\TaxpayerStaticsEnums;
 use App\Helpers\Constants;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
@@ -150,6 +152,21 @@ class Taxpayer extends Model
         }
         return $result;
     }
+    public function getStatus(): bool
+    {
+        return Invoice::where('taxpayer_id','=',$this->id)
+            ->where('to_date', '>', now())
+            ->whereNotIn('status', [
+                InvoiceStatusEnums::REJECTED_BY_OR,
+                InvoiceStatusEnums::REJECTED,
+                InvoiceStatusEnums::CANCELED,
+                InvoiceStatusEnums::REDUCED
+            ])
+            ->where('pay_status', '!=', InvoicePayStatusEnums::PAID)
+            ->where('validity', 'VALID')
+            ->exists();
+    }
+
     /**
      * Search for a given value in multiple columns.
      */

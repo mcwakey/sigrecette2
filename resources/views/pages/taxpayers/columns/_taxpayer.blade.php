@@ -16,18 +16,25 @@
    }
 
 @endphp
-<div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
-    <a href="{{$taxpayer_url }}">
-        @if($taxpayerinfo->profile_photo_url)
-            <div class="symbol-label">
-                <img src="{{ $taxpayerinfo->profile_photo_url }}" class="w-100"/>
-            </div>
-        @else
-            <div class="symbol-label fs-3 {{ app(\App\Actions\GetThemeType::class)->handle('bg-light-? text-?', $taxpayerinfo->name) }}">
-                {{ substr($taxpayerinfo->name, 0, 1) }}
-            </div>
-        @endif
-    </a>
+<div class="d-flex align-items-center">
+    <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+        <a href="{{ $taxpayer_url }}">
+            @if ($taxpayerinfo->profile_photo_url)
+                <div class="symbol-label">
+                    <img src="{{ $taxpayerinfo->profile_photo_url }}" class="w-100" alt="Profil">
+                </div>
+            @else
+                <div class="symbol-label fs-3 {{ app(\App\Actions\GetThemeType::class)->handle('bg-light-? text-?', $taxpayerinfo->name) }}">
+                    {{ strtoupper(substr($taxpayerinfo->name, 0, 1)) }}
+                </div>
+            @endif
+        </a>
+    </div>
+
+    <!-- Badge de statut -->
+    <span class="badge {{ $taxpayerinfo->getStatus() ? 'badge-light-success' : 'badge-light-danger' }}">
+        {{ $taxpayerinfo->getStatus() ? 'Fac' : 'NF' }}
+    </span>
 </div>
 <!--end::Avatar-->
 <!--begin::User details-->

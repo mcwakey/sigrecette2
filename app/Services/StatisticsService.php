@@ -53,33 +53,7 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     }
 
 
-    public function getStats(string|null $type = null): array
-    {
-        switch ($type) {
-            case TaxpayerStaticsEnums::BY_GENDER:
-                return $this->countTaxpayers();
-            case TaxpayerStaticsEnums::BY_CATEGORY:
-                return $this->countTaxpayersByCategory();
-            case TaxpayerStaticsEnums::BY_ACTIVITY:
-                return $this->countTaxpayersByActivity();
-            case TaxpayerStaticsEnums::BY_CANTON:
-                return $this->countTaxpayersByCanton();
-            case TaxpayerStaticsEnums::BY_TOWN:
-                return $this->countTaxpayersByTown();
-            case TaxpayerStaticsEnums::BY_ZONE:
-                return $this->countTaxpayersByZone();
-            case TaxpayerStaticsEnums::BY_TAXABLE:
-                return $this->countTaxpayersByTaxables();
-            case InvoiceStaticsEnums::BY_INVOICE:
-                return $this->countInvoices();
-            case InvoiceStaticsEnums::BY_INVOICE_COMPTANT:
-                return $this->countInvoices(Constants::INVOICE_TYPE_COMPTANT);
-            case TaxpayerStaticsEnums::BY_LABEL:
-                return $this->countTaxpayersByTaxLabel();
-            default:
-                return $this->getAllStatistics();
-        }
-    }
+
     public function countTaxpayers(): array
     {
         $baseQuery = $this->getTaxpayerQuery(false);
@@ -249,7 +223,6 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     public function countInvoices(string $type=Constants::INVOICE_TYPE_TITRE): array
     {
         return Invoice::whereBetween('invoices.created_at', [$this->startDate, $this->endDate])
-
             ->selectRaw('status, count(*) as count')
             ->groupBy('status')
             ->pluck('count', 'status')
@@ -330,7 +303,9 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
                 created_by,
                 MAX(users.name) as user_name
             ')
+
             ->leftJoin('users', 'users.id', '=', 'taxpayers.created_by')
+            ->where('type', '=',Constants::TITRE)
             ->whereBetween('taxpayers.created_at', [$this->startDate, $this->endDate])
             ->whereNotNull('taxpayers.created_by')
             ->groupBy('date', 'created_by')
@@ -562,7 +537,7 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
         $invoice_count += count($invoices);
 
         foreach ($invoices as $invoice) {
-            if ($invoice->created_at->between($this->startDate, $this->endDate)) {
+            if ($invoice->created_at->between($this->startDate, $this->endDate)&&  $invoice->isValid() ) {
                 $taxables_count += count($invoice->invoiceitems);
                 $invoices_total += $invoice->amount;
 
@@ -591,5 +566,32 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
             StatisticKeysEnums::BY_STATE => $this->countTaxpayersState(),
             StatisticKeysEnums::BY_TAXLABEL => $this->countTaxpayersByTaxLabel(),
         ];
+    }
+    public function getStats(string|null $type = null): array
+    {
+        switch ($type) {
+            case TaxpayerStaticsEnums::BY_GENDER:
+                return $this->countTaxpayers();
+            case TaxpayerStaticsEnums::BY_CATEGORY:
+                return $this->countTaxpayersByCategory();
+            case TaxpayerStaticsEnums::BY_ACTIVITY:
+                return $this->countTaxpayersByActivity();
+            case TaxpayerStaticsEnums::BY_CANTON:
+                return $this->countTaxpayersByCanton();
+            case TaxpayerStaticsEnums::BY_TOWN:
+                return $this->countTaxpayersByTown();
+            case TaxpayerStaticsEnums::BY_ZONE:
+                return $this->countTaxpayersByZone();
+            case TaxpayerStaticsEnums::BY_TAXABLE:
+                return $this->countTaxpayersByTaxables();
+            case InvoiceStaticsEnums::BY_INVOICE:
+                return $this->countInvoices();
+            case InvoiceStaticsEnums::BY_INVOICE_COMPTANT:
+                return $this->countInvoices(Constants::INVOICE_TYPE_COMPTANT);
+            case TaxpayerStaticsEnums::BY_LABEL:
+                return $this->countTaxpayersByTaxLabel();
+            default:
+                return $this->getAllStatistics();
+        }
     }
 }
