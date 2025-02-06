@@ -27,6 +27,12 @@
                 {{ substr($taxpayerinfo->name, 0, 1) }}
             </div>
         @endif
+        @if($taxpayerinfo->getStatus())
+            <span class="badge badge-light-success">Fac</span>
+            @else
+                <span class="badge badge-light-danger">NF</span>
+            @endif
+
     </a>
 </div>
 <!--end::Avatar-->

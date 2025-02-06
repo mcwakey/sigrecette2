@@ -64,6 +64,16 @@ class Invoice extends Model implements FormatDateInterface
             return Payment::getRestToPaid($this);
         }
     }
+    public function isValid(): bool
+    {
+        return (
+            $this->status != InvoiceStatusEnums::REJECTED_BY_OR &&
+            $this->status != InvoiceStatusEnums::REJECTED &&
+            $this->status != InvoiceStatusEnums::CANCELED &&
+                $this->status != InvoiceStatusEnums::REDUCED &&
+                $this->pay_status != InvoicePayStatusEnums::PAID
+        &&$this->validity=='VALID');
+    }
     public function canGetPayment(): bool
     {
         return ($this->status != InvoiceStatusEnums::CANCELED &&

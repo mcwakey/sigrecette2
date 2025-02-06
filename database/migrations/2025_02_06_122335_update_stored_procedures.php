@@ -25,8 +25,7 @@ return new class extends Migration
                         taxpayer_taxables.bill_status = "NOT BILLED",
                         invoices.validity = "EXPIRED",
                     WHERE invoices.to_date <= today
-                    AND invoices.taxpayer_id IS NOT NULL
-                    AND invoices.type = "TITRE";
+                    AND invoices.taxpayer_id IS NOT NULL;
                 END
             ');
         }

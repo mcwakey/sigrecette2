@@ -150,6 +150,19 @@ class Taxpayer extends Model
         }
         return $result;
     }
+    public function getStatus(): bool
+    {
+        $status =false;
+        foreach ( $this->invoices as $invoice) {
+            if ($status==false&&$invoice->to_date>now()&&$invoice->isValid()) {
+                $status =true;
+
+                return $status;
+            }
+        }
+        return $status;
+
+    }
     /**
      * Search for a given value in multiple columns.
      */
