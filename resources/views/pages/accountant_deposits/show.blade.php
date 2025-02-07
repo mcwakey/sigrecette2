@@ -106,27 +106,11 @@
                 window.LaravelDataTables['collector_deposits-table'].search(this.value).draw();
             });
 
-            document.getElementById('mySearchZero').addEventListener('keyup', function() {
-                window.LaravelDataTables['collector_deposits-table'].column(1).search(this.value).draw();
-            });
+
             document.getElementById('mySearchThree').addEventListener('change', function() {
                 window.LaravelDataTables['collector_deposits-table'].column(7).search(this.value).draw();
             });
-            // document.getElementById('mySearchOne').addEventListener('change', function() {
-            //     window.LaravelDataTables['collector_deposits-table'].column(2).search(this.value).draw();
-            // });
 
-            document.getElementById('mySearchTwo').addEventListener('keyup', function() {
-                window.LaravelDataTables['collector_deposits-table'].column(2).search(this.value).draw();
-            });
-
-            document.getElementById('mySearchFour').addEventListener('keyup', function() {
-                window.LaravelDataTables['collector_deposits-table'].column(11).search(this.value).draw();
-            });
-
-            document.getElementById('mySearchFive').addEventListener('change', function() {
-                window.LaravelDataTables['collector_deposits-table'].column(12).search(this.value).draw();
-            });
 
             document.addEventListener('livewire:init', function () {
                 Livewire.on('success', function () {
