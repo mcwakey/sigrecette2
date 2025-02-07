@@ -49,7 +49,7 @@ class AccountantDepositsDataTable extends DataTable
         return $model
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->where('invoice_type', '!=', 'VERSEMENT')
-            ->where('payments.status', '=', PaymentStatusEnums::ACCOUNTED)
+            ->where('payments.status', '=', $this->ref == Constants::REFERENCE_DEPOSIT_NULL ?PaymentStatusEnums::ACCOUNTED :PaymentStatusEnums::DONE)
             ->where('reference_deposit', $this->ref == Constants::REFERENCE_DEPOSIT_NULL ? null : $this->ref)
             ->newQuery();
     }

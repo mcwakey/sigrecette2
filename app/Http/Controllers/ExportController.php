@@ -136,7 +136,7 @@ class ExportController extends Controller
             $latestBackup = $files->first(fn($file) =>
                 now()->diffInHours(
                     date('Y-m-d H:i:s', Storage::disk($diskName)->lastModified($file))
-                ) < 2
+                ) < 1
             );
 
             if (!$latestBackup) {
