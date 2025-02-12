@@ -71,7 +71,6 @@
                                 {!! getIcon('plus', 'fs-2', '', 'i') !!}
                                 {{ __('new deposit') }}
                             </button>
-                            <!--end::Add user-->
                         </div>
 
                     @endcan
