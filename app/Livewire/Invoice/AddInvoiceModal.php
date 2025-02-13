@@ -91,9 +91,8 @@ class AddInvoiceModal extends Component
     }
     public function submit()
     {
-        if (!auth()->user()->hasPermissionTo('peut émettre un avis sur titre')) {
-            abort(403, 'Accès interdit');
-        }
+
+       $this->checkPermissionOnSubmit();
         DB::transaction(function () {
             if (!$this->edit_mode) {
                 $this->invoice_id = null;
@@ -311,5 +310,27 @@ class AddInvoiceModal extends Component
     {
         $this->resetErrorBag();
         $this->resetValidation();
+    }
+    private function checkPermissionOnSubmit(): void
+    {
+
+        if($this->edit_mode) {
+            $invoice = Invoice::find($this->invoice_id);
+            if($invoice) {
+                if($invoice->type==Constants::TITRE){
+                    if (!auth()->user()->hasPermissionTo( 'peut réduire un avis sur titre')) {
+                        abort(403, 'Accès interdit');
+                    }
+                }else{
+                    if (!auth()->user()->hasPermissionTo('peut réduire un avis au comptant')) {
+                        abort(403, 'Accès interdit');
+                    }
+                }
+            }
+        }else{
+            if (!auth()->user()->hasPermissionTo('peut émettre un avis sur titre')) {
+                abort(403, 'Accès interdit');
+            }
+        }
     }
 }
