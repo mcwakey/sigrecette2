@@ -50,126 +50,128 @@ use App\Http\Controllers\Apps\PermissionManagementController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::middleware(['throttle:global'])->group(function () {
+    Route::get('/lang/{locale}', [LanguageController::class, 'setLocale'])->name('lang.setLocale');
+
+    Route::middleware(['auth'])->group(function () {
+
+        Route::get('/', [DashboardController::class, 'index']);
+
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        Route::middleware(EnsureIsAdmin::class)->post('/password/admin-reset', [Password::class, 'adminResetPassword'])
+            ->name('password.admin.reset');
+
+        Route::middleware(EnsureIsAdmin::class)->name('user-management.')->group(function () {
+            Route::resource('/user-management/users', UserManagementController::class);
+            Route::resource('/user-management/roles', RoleManagementController::class);
+            Route::resource('/user-management/permissions', PermissionManagementController::class);
+            Route::get('/user-activity', [UserActivityController::class, 'index'])->name('user-activity.index');
+
+        });
+        Route::get('/taxpayers/r_report', [TaxpayerController::class, 'r_report'])->name('r_report-view');
+
+        Route::resource('/taxpayers', TaxpayerController::class);
+        Route::resource('/invoices', InvoiceController::class)->parameters([
+        ]);
+
+        Route::resource('/recoveries', RecoveryController::class);
+
+        Route::name('geolocation.')->group(function () {
+            Route::get('/geolocation/taxpayers', [Geolocation::class, 'zones'])->name('taxpayers');
+            Route::get('/geolocation/users', [Geolocation::class, 'users'])->name('users');
+            Route::post('/geolocation/user', [Geolocation::class, 'setUserGeolocation'])->name('user');
+            Route::post('/geolocation/zone', [Geolocation::class, 'setZoneGeolocation'])->name('zone');
+        });
+
+        Route::name('invoicing.')->group(function () {
+            Route::resource('invoicing/taxpayers', TaxpayerController::class);
+            Route::resource('invoicing/invoices', InvoiceController::class);
+        });
+
+        Route::name('ticket.')->group(function () {
+            Route::resource('/ticket/stock-requests', StockRequestController::class);
+            Route::resource('/ticket/stock-transfers', StockTransferController::class);
+            Route::resource('/accounts/collector-deposits', CollectorDepositController::class);
+            // Route::resource('/accounts/collector-deposits/{id}', CollectorDepositController::class);
+            Route::resource('/accounts/accountant-deposits-title', AccountantDepositController::class);
+            Route::resource('/accounts/accountant-deposits-outright', AccountantDepositOutrightController::class);
+            Route::resource('/accounts/ledgers', LedgerController::class);
+        });
+
+        Route::name('accounts.')->group(function () {
+            // Route::resource('/accounts/stock-requests', StockRequestController::class);
+            // Route::resource('/accounts/stock-transfers', StockTransferController::class);
+            Route::resource('/accounts/collector-deposits', CollectorDepositController::class);
+            // Route::resource('/accounts/collector-deposits/{id}', CollectorDepositController::class);
+            Route::resource('/accounts/accountant-deposits-title', AccountantDepositController::class);
+            Route::resource('/accounts/accountant-deposits-outright', AccountantDepositOutrightController::class);
+            Route::resource('/accounts/ledgers', LedgerController::class);
+        });
+
+        Route::middleware(EnsureIsAdmin::class)->name('taxations.')->group(function () {
+            Route::resource('/taxations/taxables', TaxableController::class);
+            Route::resource('/taxations/taxlabels', TaxLabelController::class);
+            Route::resource('/taxations/tickets', TicketController::class);
+        });
+
+        Route::middleware(EnsureIsAdmin::class)->name('administratives.')->group(function () {
+            Route::resource('/administratives/cantons', CantonsController::class);
+            Route::resource('/administratives/towns', TownsController::class);
+            Route::resource('/administratives/ereas', EreasController::class);
+            Route::resource('/administratives/zones', ZonesController::class);
+        });
+
+        Route::middleware(EnsureIsAdmin::class)->name('economics.')->group(function () {
+            Route::resource('/economics/categories', CategoriesController::class);
+            Route::resource('/economics/activities', ActivitiesController::class);
+        });
+
+        Route::middleware(EnsureIsAdmin::class)->name('economics.')->group(function () {
+            Route::resource('/economics/categories', CategoriesController::class);
+            Route::resource('/economics/activities', ActivitiesController::class);
+        });
 
 
-Route::get('/lang/{locale}', [LanguageController::class, 'setLocale'])->name('lang.setLocale');
+        Route::middleware(EnsureIsAdmin::class)->name('settings.')->group(function () {
 
-Route::middleware(['auth'])->group(function () {
+            Route::resource('/years', YearsController::class);
+            Route::resource('/activities', ActivitiesController::class);
+            Route::resource('/communes', CommunesController::class);
+            Route::get('/import/taxpayers', [TaxpayerController::class, 'showImportPage'])->name('import-view');
 
-    Route::get('/', [DashboardController::class, 'index']);
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+            //Route::resource('/user-management/permissions', PermissionManagementController::class);
+            Route::resource('settings/communes', CommunesController::class);
+            Route::get('/import/taxpayers', [TaxpayerController::class, 'showImportPage'])->name('import-view');
+        });
 
-    Route::middleware(EnsureIsAdmin::class)->post('/password/admin-reset', [Password::class, 'adminResetPassword'])
-        ->name('password.admin.reset');
 
-    Route::middleware(EnsureIsAdmin::class)->name('user-management.')->group(function () {
-        Route::resource('/user-management/users', UserManagementController::class);
-        Route::resource('/user-management/roles', RoleManagementController::class);
-        Route::resource('/user-management/permissions', PermissionManagementController::class);
-        Route::get('/user-activity', [UserActivityController::class, 'index'])->name('user-activity.index');
+        // Route::get('/generate-pdf/{data}/{type?}/{action?}', [PrintController::class, 'download'])->name("generatePdf");
+        // Route::Post('/import/taxpayer', [TaxpayerController::class, 'import'])->name('import.process');
+        // Route::get('/import/taxpayer', [TaxpayerController::class, 'showImportPage'])->name('import-view');
+
+        Route::get('/prints',   [PrintController::class, 'index'])->name("prints");
+        Route::get('/print-all-invoice',   [PrintController::class, 'downloadMultipleInvoicePdf'])->name("print-all-invoice");
+        Route::get('/exports',   [ExportController::class, 'index'])->name("exports");
+        Route::get('/exports-invoice',   [ExportController::class, 'downloadExportInvoice'])->name("exports-invoice");
+        Route::get('/exports/backup',   [ExportController::class, 'backup'])->name("export_backup");
+        Route::get('/exports/backupdownload',   [ExportController::class, 'backupDownload'])->name("backupdownload");
+        Route::get('/generate-pdf/{data}/{type?}/{action?}/{id?}', [PrintController::class, 'download'])->name("generatePdf");
+        Route::get('/generatepdf/{printFile}/{type?}/{action?}', [PrintController::class, 'downloadWithPrintData'])->name("generateWithPrintData");
+        Route::middleware(EnsureIsAdmin::class)->post('/import/taxpayer', [TaxpayerController::class, 'import'])->name('import.process');
+        Route::middleware(EnsureIsAdmin::class)->get('/import/taxpayer', [TaxpayerController::class, 'showImportPage'])->name('import-view');
 
     });
-    Route::get('/taxpayers/r_report', [TaxpayerController::class, 'r_report'])->name('r_report-view');
 
-    Route::resource('/taxpayers', TaxpayerController::class);
-    Route::resource('/invoices', InvoiceController::class)->parameters([
-    ]);
-
-    Route::resource('/recoveries', RecoveryController::class);
-
-    Route::name('geolocation.')->group(function () {
-        Route::get('/geolocation/taxpayers', [Geolocation::class, 'zones'])->name('taxpayers');
-        Route::get('/geolocation/users', [Geolocation::class, 'users'])->name('users');
-        Route::post('/geolocation/user', [Geolocation::class, 'setUserGeolocation'])->name('user');
-        Route::post('/geolocation/zone', [Geolocation::class, 'setZoneGeolocation'])->name('zone');
+    Route::get('/error', function () {
+        abort(500);
     });
 
-    Route::name('invoicing.')->group(function () {
-        Route::resource('invoicing/taxpayers', TaxpayerController::class);
-        Route::resource('invoicing/invoices', InvoiceController::class);
-    });
-
-    Route::name('ticket.')->group(function () {
-        Route::resource('/ticket/stock-requests', StockRequestController::class);
-        Route::resource('/ticket/stock-transfers', StockTransferController::class);
-        Route::resource('/accounts/collector-deposits', CollectorDepositController::class);
-        // Route::resource('/accounts/collector-deposits/{id}', CollectorDepositController::class);
-        Route::resource('/accounts/accountant-deposits-title', AccountantDepositController::class);
-        Route::resource('/accounts/accountant-deposits-outright', AccountantDepositOutrightController::class);
-        Route::resource('/accounts/ledgers', LedgerController::class);
-    });
-
-    Route::name('accounts.')->group(function () {
-        // Route::resource('/accounts/stock-requests', StockRequestController::class);
-        // Route::resource('/accounts/stock-transfers', StockTransferController::class);
-        Route::resource('/accounts/collector-deposits', CollectorDepositController::class);
-        // Route::resource('/accounts/collector-deposits/{id}', CollectorDepositController::class);
-        Route::resource('/accounts/accountant-deposits-title', AccountantDepositController::class);
-        Route::resource('/accounts/accountant-deposits-outright', AccountantDepositOutrightController::class);
-        Route::resource('/accounts/ledgers', LedgerController::class);
-    });
-
-    Route::middleware(EnsureIsAdmin::class)->name('taxations.')->group(function () {
-        Route::resource('/taxations/taxables', TaxableController::class);
-        Route::resource('/taxations/taxlabels', TaxLabelController::class);
-        Route::resource('/taxations/tickets', TicketController::class);
-    });
-
-    Route::middleware(EnsureIsAdmin::class)->name('administratives.')->group(function () {
-        Route::resource('/administratives/cantons', CantonsController::class);
-        Route::resource('/administratives/towns', TownsController::class);
-        Route::resource('/administratives/ereas', EreasController::class);
-        Route::resource('/administratives/zones', ZonesController::class);
-    });
-
-    Route::middleware(EnsureIsAdmin::class)->name('economics.')->group(function () {
-        Route::resource('/economics/categories', CategoriesController::class);
-        Route::resource('/economics/activities', ActivitiesController::class);
-    });
-
-    Route::middleware(EnsureIsAdmin::class)->name('economics.')->group(function () {
-        Route::resource('/economics/categories', CategoriesController::class);
-        Route::resource('/economics/activities', ActivitiesController::class);
-    });
-
-
-    Route::middleware(EnsureIsAdmin::class)->name('settings.')->group(function () {
-
-        Route::resource('/years', YearsController::class);
-        Route::resource('/activities', ActivitiesController::class);
-        Route::resource('/communes', CommunesController::class);
-        Route::get('/import/taxpayers', [TaxpayerController::class, 'showImportPage'])->name('import-view');
-
-
-        //Route::resource('/user-management/permissions', PermissionManagementController::class);
-        Route::resource('settings/communes', CommunesController::class);
-        Route::get('/import/taxpayers', [TaxpayerController::class, 'showImportPage'])->name('import-view');
-    });
-
-
-    // Route::get('/generate-pdf/{data}/{type?}/{action?}', [PrintController::class, 'download'])->name("generatePdf");
-    // Route::Post('/import/taxpayer', [TaxpayerController::class, 'import'])->name('import.process');
-    // Route::get('/import/taxpayer', [TaxpayerController::class, 'showImportPage'])->name('import-view');
-
-    Route::get('/prints',   [PrintController::class, 'index'])->name("prints");
-    Route::get('/print-all-invoice',   [PrintController::class, 'downloadMultipleInvoicePdf'])->name("print-all-invoice");
-    Route::get('/exports',   [ExportController::class, 'index'])->name("exports");
-    Route::get('/exports-invoice',   [ExportController::class, 'downloadExportInvoice'])->name("exports-invoice");
-    Route::get('/exports/backup',   [ExportController::class, 'backup'])->name("export_backup");
-    Route::get('/exports/backupdownload',   [ExportController::class, 'backupDownload'])->name("backupdownload");
-    Route::get('/generate-pdf/{data}/{type?}/{action?}/{id?}', [PrintController::class, 'download'])->name("generatePdf");
-    Route::get('/generatepdf/{printFile}/{type?}/{action?}', [PrintController::class, 'downloadWithPrintData'])->name("generateWithPrintData");
-    Route::middleware(EnsureIsAdmin::class)->post('/import/taxpayer', [TaxpayerController::class, 'import'])->name('import.process');
-    Route::middleware(EnsureIsAdmin::class)->get('/import/taxpayer', [TaxpayerController::class, 'showImportPage'])->name('import-view');
-
+    Route::get('/auth/redirect/{provider}', [SocialiteController::class, 'redirect']);
 });
 
-Route::get('/error', function () {
-    abort(500);
-});
 
-Route::get('/auth/redirect/{provider}', [SocialiteController::class, 'redirect']);
 
 // Route::get('/generate-pdf/{data}/{type?}/{action?}', [PrintController::class, 'download'])->name("generatePdf");
 // Route::Post('/import/taxpayer', [TaxpayerController::class, 'import'])->name('import.process');
