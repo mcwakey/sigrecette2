@@ -481,7 +481,8 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
 
         if(count($taxpayers)<50){
             $taxpayers = Taxpayer::whereHas('invoices', function ($query) {
-                $query->whereBetween('created_at', [$this->startDate, $this->endDate]);
+                $query->whereBetween('created_at', [$this->startDate, $this->endDate])
+                ->where('type','=',Constants::TITRE);
             })->get();
         }
         $invoice_count = 0;
