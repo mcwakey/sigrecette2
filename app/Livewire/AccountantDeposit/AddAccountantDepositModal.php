@@ -74,7 +74,6 @@ class AddAccountantDepositModal extends Component
             $this->dispatchMessage('Compatilite', 'update', 'error',"Action non authorize");
             $this->reset();
             abort(403, 'Accès interdit');
-            return;
         }
         DB::transaction(function () {
             $paymentData = [
