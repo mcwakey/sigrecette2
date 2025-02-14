@@ -478,6 +478,12 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
         $labels = $this->getActiveLabels($categorieName);
         $taxables = $this->getActiveTaxables();
 
+
+        if(count($taxpayers)<50){
+            $taxpayers = Taxpayer::whereHas('invoices', function ($query) {
+                $query->whereBetween('created_at', [$this->startDate, $this->endDate]);
+            })->get();
+        }
         $invoice_count = 0;
         $taxpayer_count = count($taxpayers);
         $taxables_count = 0;

@@ -64,7 +64,7 @@ class AddTaxableModal extends Component
     }
     public function submit()
     {
-        if (!auth()->user()->hasPermissionTo('peut créer une taxation')) {
+        if (!auth()->user()->hasPermissionTo('peut modifier une matière taxable')) {
             abort(403, 'Accès interdit');
         }
         $this->validate();
