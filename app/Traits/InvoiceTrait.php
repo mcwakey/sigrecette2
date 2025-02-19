@@ -297,5 +297,72 @@ trait InvoiceTrait
         }
 
     }
+    public static function fixErrorInvoiceGeneration(): void{
+        DB::transaction(function () {
+            $s_date = Carbon::parse("2025-01-01 00:00:00");
+            $e_date = Carbon::parse("2025-3-31 23:59:59");
+            $end_of_year = Carbon::createFromDate(date('Y'), 12, 31);
+            $invoices = Invoice::whereBetween('invoices.created_at', [$s_date, $e_date])
+                ->where('invoices.type', '=', Constants::TITRE)
+                ->get();
+            foreach ($invoices as $invoice) {
+                $edited=false;
+                $totalAmount=0;
+                $amountIsEdited=false;
+                if($end_of_year!=$invoice->to_date){
+                    $invoice->to_date=$end_of_year;
+                    $edited=true;
+                    $invoice->status = InvoiceStatusEnums::DRAFT;
+                    $invoice->validity='VALID';
+                }
+                if($invoice->id==100222){
+
+                }
+                foreach ($invoice->invoiceitems as $invoiceitem) {
+                    $period = 1;
+                    $periodicity = $invoiceitem->taxpayer_taxable->taxable->periodicity;
+                    $qty = $periodicity == "Mois" ? 12 : 1;
+                    if($periodicity=="Mois"&& $invoiceitem->qty!=$qty ){
+                        $edited=true;
+
+                        $temp_seize = $invoiceitem->taxpayer_taxable->seize;
+                        if ($invoiceitem->taxpayer_taxable->taxable->use_second_formula) {
+                            $temp_seize = 1;
+                        }
+                        if($invoiceitem->taxpayer_taxable->taxable->tariff_type == "FIXED"){
+                            $itemAmount = $invoiceitem->taxpayer_taxable->taxable->tariff * $qty * $temp_seize* $period;
+
+                        }else{
+                            $itemAmount = $invoiceitem->taxpayer_taxable->taxable->tariff * $qty * $temp_seize* $period / 100;
+
+                        }
+                        $taxpayerTaxable= $invoiceitem->taxpayer_taxable;
+                        $taxpayerTaxable->invoice_id = $invoice->id;
+                        $taxpayerTaxable->bill_status = 'BILLED';
+                        $taxpayerTaxable->save();
+                        $totalAmount += $itemAmount;
+                        $invoiceitem->amount = $itemAmount;
+                        $invoiceitem->ii_tariff = $invoiceitem->taxpayer_taxable->taxable->tariff;
+                        $invoiceitem->qty = $qty;
+                        $invoiceitem->save();
+                        $amountIsEdited=true;
+                        $invoice->qty=$qty;
+                    }
+
+
+
+
+                }
+                if($edited){
+                    if($amountIsEdited){
+                        $invoice->amount = $totalAmount;
+                    }
+
+                    $invoice->save();
+                }
+            }
+        });
+
+    }
 
 }

@@ -157,8 +157,12 @@ Route::middleware(['throttle:global'])->group(function () {
         Route::get('/exports-invoice',   [ExportController::class, 'downloadExportInvoice'])->name("exports-invoice");
         Route::get('/exports/backup',   [ExportController::class, 'backup'])->name("export_backup");
         Route::get('/exports/backupdownload',   [ExportController::class, 'backupDownload'])->name("backupdownload");
-        Route::get('/generate-pdf/{data}/{type?}/{action?}/{id?}', [PrintController::class, 'download'])->name("generatePdf");
+        Route::get('/generate-pdf/{data?}/{type?}/{action?}/{id?}', [PrintController::class, 'download'])->name("generatePdf");
         Route::get('/generatepdf/{printFile}/{type?}/{action?}', [PrintController::class, 'downloadWithPrintData'])->name("generateWithPrintData");
+        Route::post('/store-session-params', function (Request $request) {
+            Session::put('edition_params', $request->all());
+            return response()->json(['message' => 'Paramètres enregistrés']);
+        })->name('store.session.params');
         Route::middleware(EnsureIsAdmin::class)->post('/import/taxpayer', [TaxpayerController::class, 'import'])->name('import.process');
         Route::middleware(EnsureIsAdmin::class)->get('/import/taxpayer', [TaxpayerController::class, 'showImportPage'])->name('import-view');
 

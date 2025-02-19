@@ -166,7 +166,7 @@
                                     </tbody></table>
                                 <!--end::Details-->
                             </div>
-                            <!--end::Row-->
+
                         </div>
                         <!--end::Row-->
                     </div>

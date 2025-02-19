@@ -25,16 +25,17 @@ class PrintController extends Controller
      * @param $data
      * @return RedirectResponse|Response|mixed
      */
-    public function download($data, $type = null, $action = null, User $id = null)
+    public function download( $data=null,$type = null, $action = null, User $id = null)
     {
         if (Storage::missing("exports")) {
             Storage::makeDirectory("exports");
         }
-        $data = json_decode($data, true);
+        $data = $data==null?session('edition_params', []): json_decode($data, true);;
         $result = $this->processType($type, $data, $action, $id);
         if ($result['success']) {
             return $result['pdf'];
         }
+        session()->forget('edition_params');
         return back()->with('error', $result['message']);
     }
     /**

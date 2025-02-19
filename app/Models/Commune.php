@@ -1,9 +1,12 @@
 <?php
 namespace App\Models;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+
 class Commune extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'name',
         'title',
@@ -36,9 +39,18 @@ class Commune extends Model
      *
      * @return string
      */
-    public function getImageUrlAttributeDirect()
+    public function getImageUrlAttributeDirect(string $type='logo')
     {
-        return $this->logo_path != null ? asset("storage/" . $this->logo_path) : null;
+        if($type == 'logo'){
+            if ($this->logo_path) {
+                return asset("storage/" . $this->logo_path);
+            }
+        }else{
+            if ($this->sign_path) {
+                return asset("storage/" . $this->sign_path);
+            }
+        }
+        return null;
     }
     /**
      * Get the full URL of the image.
@@ -60,4 +72,6 @@ class Commune extends Model
         }
 
     }
+
+
 }
