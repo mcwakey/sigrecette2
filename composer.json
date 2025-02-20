@@ -35,8 +35,8 @@
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^7.0",
-        "phpunit/phpunit": "^10.0",
+        "nunomaduro/collision": "^7.11",
+        "pestphp/pest": "^2.36",
         "rector/rector": "^1.2",
         "spatie/laravel-ignition": "^2.0"
     },

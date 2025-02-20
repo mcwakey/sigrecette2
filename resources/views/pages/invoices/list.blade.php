@@ -533,21 +533,28 @@ $filters = [
                         var url;
                         if (agent != null) {
                             url = "{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type', 'action' => ':selectedValue','id'=>':agent']) }}";
-                            url = url.replace(':jsonData', encodeURIComponent(jsonData));
+                            url = url.replace(':jsonData', encodeURIComponent(null));
                             url = url.replace(':r_type', encodeURIComponent(r_type));
                             url = url.replace(':selectedValue', encodeURIComponent(selectedValue));
                             url = url.replace(':agent', encodeURIComponent(agent));
                         }
                         else{
                             url = "{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type', 'action' => ':selectedValue']) }}";
-                            url = url.replace(':jsonData', encodeURIComponent(jsonData));
+                            url = url.replace(':jsonData', encodeURIComponent(null));
                             url = url.replace(':r_type', encodeURIComponent(r_type));
                             url = url.replace(':selectedValue', encodeURIComponent(selectedValue));
                         }
                         if(selectedValue==='00'){
                             url = "{{ route('print-all-invoice') }}";
                         }
-
+                        fetch("{{ route('store.session.params') }}", {
+                        method: "POST",
+                        headers: {
+                            "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                            "Content-Type": "application/json"
+                        },
+                        body: jsonData
+                         });
 
                         window.open(url,'_blank');
                     });

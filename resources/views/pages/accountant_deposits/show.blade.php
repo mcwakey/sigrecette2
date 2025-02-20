@@ -186,9 +186,16 @@
 
 
                     let jsonData = JSON.stringify(dataArray);
-                    let url =
-                        "{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type', 'action' => ':selectedValue']) }}";
-                    url = url.replace(':jsonData', encodeURIComponent(jsonData));
+                     fetch("{{ route('store.session.params') }}", {
+                        method: "POST",
+                        headers: {
+                            "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                            "Content-Type": "application/json"
+                        },
+                        body: jsonData
+                         });
+                     let url ="{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type', 'action' => ':selectedValue']) }}";
+                    url = url.replace(':jsonData', encodeURIComponent(null));
                     url = url.replace(':r_type', encodeURIComponent(r_type));
                     url = url.replace(':selectedValue', encodeURIComponent(selectedValue));
                     window.location.href = url;
