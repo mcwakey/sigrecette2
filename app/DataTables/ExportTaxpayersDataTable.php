@@ -128,10 +128,13 @@ class ExportTaxpayersDataTable extends DataTable
             ->with('zone')
             ->join('zones', 'taxpayers.zone_id', '=', 'zones.id')
             ->select('taxpayers.*')
-          //  ->whereBetween('taxpayers.created_at', [$this->startDate, $this->endDate])
+            ->where('taxpayers.type','=' ,Constants::TITRE)
             ->newQuery();
         if($this->startDate && $this->endDate ){
-            $query = $query->whereBetween('taxpayers.created_at', [$this->startDate, $this->endDate]);
+            $query->where(function ($q) {
+                $q->whereBetween('taxpayers.created_at', [$this->startDate, $this->endDate])
+                    ->orWhereBetween('taxpayers.updated_at', [$this->startDate, $this->endDate]);
+            });
         }
         $query = $query->where(function ($q) {
             $q->whereNotIn('taxpayers.from_mobile_and_validate_state', [

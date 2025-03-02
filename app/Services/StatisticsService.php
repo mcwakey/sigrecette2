@@ -34,7 +34,7 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     }
     public function getTaxpayerQuery($dateFilter = true)
     {
-        $query = Taxpayer::where('type', Constants::TITRE)
+        $query = Taxpayer::where('type', '=',Constants::TITRE)
             ->where(function ($q) {
                 $q->whereNotIn('taxpayers.from_mobile_and_validate_state', [
                     TaxpayerStateEnums::REJECTED,
@@ -485,13 +485,22 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
                 ->where('type','=',Constants::TITRE);
             })->get();
         }
-        $invoice_count = 0;
         $taxpayer_count = count($taxpayers);
-        $taxables_count = 0;
-        $invoices_total = 0;
+        $invoice_count = $taxpayers->sum(fn($taxpayer) =>
+        $taxpayer->invoices->filter(fn($invoice) =>
+            $invoice->created_at->between($this->startDate, $this->endDate) && $invoice->isValid()
+        )->count()
+        );
 
+        $taxables_count =$taxpayers->flatMap(
+            fn($taxpayer) => $taxpayer->invoices->filter(
+                fn($invoice) => $invoice->created_at->between($this->startDate, $this->endDate) && $invoice->isValid()
+                    )->flatMap(fn($invoice) => $invoice->invoiceitems)
+        )->unique('id')->count();
+
+        $invoices_total = 0;
         foreach ($taxpayers as $taxpayer) {
-            $this->processInvoices($taxpayer, $taxables, $labels, $invoice_count, $taxables_count, $invoices_total);
+            $this->processInvoices($taxpayer, $taxables, $labels,   $invoices_total);
         }
 
         $labels = array_filter($labels, fn($item) => $item['total'] > 0);
@@ -505,7 +514,7 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     {
         return $this->getTaxpayerQuery()
             ->with(['invoices.invoiceitems.taxpayer_taxable.taxable.tax_label'])
-           // ->distinct()
+           ->distinct()
             ->get();
     }
 
@@ -538,16 +547,12 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     }
 
 
-    private function processInvoices($taxpayer, &$taxables, &$labels, &$invoice_count, &$taxables_count, &$invoices_total)
+    private function processInvoices($taxpayer, &$taxables, &$labels, &$invoices_total)
     {
         $invoices = $taxpayer->invoices;
-        $invoice_count += count($invoices);
-
         foreach ($invoices as $invoice) {
             if ($invoice->created_at->between($this->startDate, $this->endDate)&&  $invoice->isValid() ) {
-                $taxables_count += count($invoice->invoiceitems);
                 $invoices_total += $invoice->amount;
-
                 foreach ($invoice->invoiceitems as $invoice_item) {
                     $taxpayerTaxable = $invoice_item->taxpayer_taxable;
                     if (isset($taxables[$taxpayerTaxable->taxable->id])) {
