@@ -111,6 +111,7 @@ class AddTaxpayerTaxableModal extends Component
     }
     public function updateCheckbox($id)
     {
+
         $taxpayer_taxables = TaxpayerTaxable::findOrFail($id);
         if ($taxpayer_taxables->billable == 0) {
             $taxpayer_taxables->update([
@@ -121,6 +122,7 @@ class AddTaxpayerTaxableModal extends Component
                 'billable' => '0'
             ]);
         }
+       $this->dispatchMessage('Taxation du contribuable', 'update');
     }
     public function submit()
     {

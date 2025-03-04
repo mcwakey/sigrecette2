@@ -261,12 +261,39 @@ trait InvoiceTrait
         return $query
             ->get();
     }
+    public static function getPrintFile(array $filterBy, string $type = null): ?PrintFile
+    {
+        $activeYear = Year::getActiveYear();
+        $startOfYear = Carbon::parse("{$activeYear->name}-01-01 00:00:00");
+        $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
+        $query = Invoice::whereIn('invoices.status', $filterBy)
+            ->where('invoices.type', '=', Constants::INVOICE_TYPE_TITRE)
+            ->whereBetween('invoices.created_at', [$startOfYear, $endOfYear]);
+        if ($type != null) {
+            if ($type === PrintNameEnums::BORDEREAU_REDUCTION) {
+                $query = $query->whereNot("invoices.reduce_amount", "=", '')
+                    ->whereHas('printFiles', function ($query) use ($type) {
+                        $query->where('name', $type);
+                    });
+            } elseif ($type === PrintNameEnums::BORDEREAU) {
+                $query = $query->where("invoices.reduce_amount", "=", '')
+                    -> whereHas('printFiles', function ($query) use ($type) {
+                        $query->where('name', $type);
+                    });
+            }
+        }
+
+        $invoice =$query->first();
+        return $invoice?->printFiles->first();
+    }
+
     public static function getPrintableUuid(string $status=InvoiceStatusEnums::ACCEPTED): array
     {
-       return Invoice::where('invoices.status', $status)
-           ->where('invoices.type', '=', Constants::TITRE)
-           ->pluck('uuid')
-           ->toArray();
+        return Invoice::where('status', $status)
+            ->where('type', Constants::TITRE)
+            ->select('uuid')
+            ->pluck('uuid')
+            ->toArray();
     }
     public function canSubmitToRelaunch(): bool{
         return $this->isInvoiceLastPaymentOlderThanThreeMonths($this->invoice_id);

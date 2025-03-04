@@ -2,6 +2,7 @@
 namespace App\Models;
 use App\Enums\InvoicePayStatusEnums;
 use App\Enums\InvoiceStatusEnums;
+use App\Enums\TaxpayerStateEnums;
 use App\Enums\TaxpayerStaticsEnums;
 use App\Helpers\Constants;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
@@ -193,5 +194,39 @@ class Taxpayer extends Model
     }
 
 
+    public static function merge($names=['BRASSERIE BB LOME', 'SOCIETE NOUVELLE DE BOISSON', 'MOOV AFRICA', 'YAS TOGO'])
+    {
+        foreach ($names as $name) {
+            $normalizedName = strtolower(str_replace(' ', '', $name));
 
+            $taxpayers = Taxpayer::whereRaw("LOWER(REPLACE(name, ' ', '')) LIKE ?", ["%{$normalizedName}(equipe%)%"])
+                ->orderBy('id')
+                ->get();
+            if ($taxpayers->count() < 2) {
+                continue;
+            }
+            $firstTaxpayer = $taxpayers->first();
+            foreach ($taxpayers->skip(1) as $taxpayer) {
+                TaxpayerTaxable::where('taxpayer_id', $taxpayer->id)
+                    ->update(['taxpayer_id' => $firstTaxpayer->id]);
+                $taxpayer->delete();
+            }
+        }
+
+    }
+    public static function getTaxpayers()
+    {
+        return Taxpayer::where('type', '=',Constants::TITRE)->where(function ($q) {$q->whereNotIn('taxpayers.from_mobile_and_validate_state', [TaxpayerStateEnums::REJECTED, TaxpayerStateEnums::PENDING])->orWhereNull('taxpayers.from_mobile_and_validate_state');})->get();
+
+    }
+    public static function taxpayersWithoutInvoice(){
+       return Taxpayer::getTaxpayers()->filter(fn($taxpayer) => !Invoice::where('taxpayer_id', $taxpayer->id)->where('to_date', '>', now())->whereNotIn('status', [InvoiceStatusEnums::REJECTED_BY_OR, InvoiceStatusEnums::REJECTED, InvoiceStatusEnums::CANCELED, InvoiceStatusEnums::REDUCED])
+            ->where('pay_status', '!=', InvoicePayStatusEnums::PAID)
+            ->where('validity', 'VALID')
+            ->exists()
+        );
+    }
+   public static function taxpayersWithMultipleInvoice(){
+       return Taxpayer::getTaxpayers()->filter(fn($taxpayer) => $taxpayer->invoices->filter(fn($invoice) => $invoice->created_at->between( $this->s_date,  $this->e_date) && $invoice->isValid())->count() > 1);
+   }
 }

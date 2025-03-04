@@ -2,10 +2,12 @@
 namespace App\Http\Controllers;
 use App\DataTables\InvoicesDataTable;
 use App\Enums\InvoiceStatusEnums;
+use App\Enums\TaxpayerStateEnums;
 use App\Helpers\Constants;
 use App\Models\Commune;
 use App\Models\Invoice;
 use App\Models\TaxLabel;
+use App\Models\Taxpayer;
 use App\Models\Year;
 use App\Models\Zone;
 use App\Services\QrcodeGeneratorService;
@@ -43,6 +45,8 @@ class InvoiceController extends Controller
         $role = Role::where('name',"=", 'agent_recouvrement')->first();
         $agent_recouvrements = $role->users()->get();
         $invoice_id = isset($validatedData['invoice_id']) ? $validatedData['invoice_id'] : null;
+
+
         if ($invoice_id) {
             $invoice = Invoice::find($invoice_id);
             if ($invoice) {

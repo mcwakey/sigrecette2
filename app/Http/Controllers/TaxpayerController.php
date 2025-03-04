@@ -4,12 +4,15 @@ use App\DataTables\InvoicesDataTable;
 use App\DataTables\RecoveriesDataTable;
 use App\DataTables\TaxpayersDataTable;
 use App\DataTables\TaxpayerTaxablesDataTable;
+use App\Enums\InvoicePayStatusEnums;
+use App\Enums\InvoiceStatusEnums;
 use App\Enums\TaxpayerStateEnums;
 use App\Helpers\Constants;
 use App\Imports\TaxpayerImport;
 use App\Models\Activity;
 use App\Models\Canton;
 use App\Models\Category;
+use App\Models\Invoice;
 use App\Models\Taxpayer;
 use App\Models\Town;
 use App\Models\UserLogs;
@@ -42,6 +45,7 @@ class TaxpayerController extends Controller
         $towns = Town::all();
         $cantons = Canton::all();
         $activities = Activity::all();
+       // Taxpayer::merge();
         return $dataTable->with(
             [
                 'state' => $state,
@@ -60,7 +64,10 @@ class TaxpayerController extends Controller
                     TaxpayerStateEnums::PENDING
                 ])->orWhereNull('taxpayers.from_mobile_and_validate_state');
             })
-            ->whereBetween('created_at', [$this->s_date,  $this->e_date])
+            ->where(function ($q) {
+                $q->whereBetween('created_at', [$this->s_date,  $this->e_date])
+                    ->orWhereBetween('updated_at', [$this->s_date, $this->e_date]);
+            })
             ->groupBy('zone_id')
             ->with('zone')
             ->newQuery()
@@ -70,6 +77,12 @@ class TaxpayerController extends Controller
         $zoneTotals = $taxpayersByZone->pluck('total');
         $genderCounts = Taxpayer::where('type','=',Constants::TITRE)
             ->selectRaw('gender, count(*) as count')
+            ->where(function ($q) {
+                $q->whereNotIn('taxpayers.from_mobile_and_validate_state', [
+                    TaxpayerStateEnums::REJECTED,
+                    TaxpayerStateEnums::PENDING
+                ])->orWhereNull('taxpayers.from_mobile_and_validate_state');
+            })
             ->whereBetween('created_at', [$this->s_date,  $this->e_date])
             ->groupBy('gender')
             ->pluck('count', 'gender')
@@ -85,7 +98,6 @@ class TaxpayerController extends Controller
             $taxpayer_count,
             $taxables_count,
             $invoice_count,] = $statisticsService->c_capacity_data();
-
         return view('pages/taxpayers/r_taxpayers.show', compact('labels', 'taxables','taxpayer_count','invoices_total','taxpayer_count','invoice_count','taxables_count','zoneLabels','zoneTotals','genderLabels','genderTotals'));
     }
     /**
