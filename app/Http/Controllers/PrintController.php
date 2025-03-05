@@ -30,7 +30,7 @@ class PrintController extends Controller
         if (Storage::missing("exports")) {
             Storage::makeDirectory("exports");
         }
-        $data = $data==null?session('edition_params', []): json_decode($data, true);;
+        $data = $data==null?session('edition_params', []): json_decode($data, true);
         $result = $this->processType($type, $data, $action, $id);
         if ($result['success']) {
             return $result['pdf'];
@@ -59,6 +59,8 @@ class PrintController extends Controller
      * @param $type
      * @param $data
      * @param $action
+     * @param User|null $user
+     * @return array
      */
     public function processType($type, $data, $action, User $user = null): array
     {

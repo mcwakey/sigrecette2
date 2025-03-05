@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Helpers\Constants;
 use App\Models\Invoice;
 use App\Models\Payment;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -22,7 +23,7 @@ class InvoiceExport implements FromCollection, WithHeadings, WithMapping
     }
     public function collection()
     {
-        $query = Invoice::with(['taxpayer', 'taxpayer.zone', 'invoiceitems.taxpayer_taxable.taxable.tax_label']);
+        $query = Invoice::with(['taxpayer', 'taxpayer.zone',]);
 
         if (!empty($this->invoiceIds)) {
             $query->whereIn('id', $this->invoiceIds);
@@ -30,6 +31,7 @@ class InvoiceExport implements FromCollection, WithHeadings, WithMapping
 
         return $query
             ->whereBetween('invoices.created_at', [$this->startDate, $this->endDate])
+            ->where('invoices.type','=' ,Constants::TITRE)
             ->orderBy('invoices.created_at', 'desc')->get();
     }
 

@@ -112,15 +112,14 @@ class ExportTaxpayerTaxablesDataTable extends DataTable
      */
     public function query(TaxpayerTaxable $model): QueryBuilder
     {
-        return $model->with(['taxable', 'taxpayer','invoice'])
+        return $model->with(['taxable', 'taxpayer','invoice','taxable.tax_label'])
             ->join('taxables', 'taxpayer_taxables.taxable_id', '=', 'taxables.id')
             ->leftJoin('taxpayers', 'taxpayers.id', '=', 'taxpayer_taxables.taxpayer_id')
-            ->leftJoin('invoices', 'taxpayer_taxables.invoice_id', '=', 'invoices.id')
-            ->with('taxable.tax_label')
+            ->where('taxpayers.type','=',Constants::TITRE)
             ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
             ->select('taxpayer_taxables.*')
             ->whereBetween('taxpayer_taxables.created_at', [$this->startDate, $this->endDate])
-            ->where('invoices.type','=',Constants::TITRE)
+
            // ->where(function ($query) {$query->whereNull('invoices.id')->orWhere('invoices.type', 'TITRE');})
             ->newQuery();
     }

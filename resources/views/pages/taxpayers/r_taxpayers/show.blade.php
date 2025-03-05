@@ -91,7 +91,7 @@
                                  data-kt-countup-value="{{ $taxables_count }}">0
                             </div>
                         </div>
-                        <div class="fw-semibold fs-6">Nombre de Matière</div>
+                        <div class="fw-semibold fs-6">Nombre de Matière(sur un avis)</div>
                     </div>
                 </div>
 

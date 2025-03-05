@@ -199,7 +199,6 @@ class PdfGeneratorService implements PdfGeneratorInterface
     }
     public function generataxpayerFormPdf($data, string $template): array
     {
-       // dd($data,$this->checkIfCommuneIsNotNull()&& count($data) > 0);
         if ($this->checkIfCommuneIsNotNull()&& count($data) > 0) {
 
             $data = Taxpayer::getInvoiceAndPayments($data[0]);
@@ -236,6 +235,8 @@ class PdfGeneratorService implements PdfGeneratorInterface
                     }
                 }
                 $printFile = PrintFile::createPrintFile($type, $data, $total);
+            }else{
+                $printFile= Invoice::getPrintFile([InvoiceStatusEnums::PENDING], $type);
             }
         }
         if ($printFile != null && $this->checkIfCommuneIsNotNull()) {
