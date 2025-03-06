@@ -76,76 +76,88 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     }
     public function countTaxpayersByCategory(): array
     {
-        $categories = Category::all()->pluck('name', 'id');
-        return $this->getTaxpayerQuery(false)->selectRaw('category_id, count(*) as count')
+        $categories = Category::pluck('name', 'id');
+
+        return $this->getTaxpayerQuery(false)
+            ->selectRaw('category_id, count(*) as count')
             ->groupBy('category_id')
             ->get()
-            ->map(function ($item) use ($categories) {
-                $categoryName = $categories[$item->category_id] ?? $this->NoneMessage;
-                return ['value' => $item->count, 'category' => $categoryName];
-            })
+            ->map(fn($item) => [
+                'value' => $item->count,
+                'category' => $categories[$item->category_id] ?? $this->NoneMessage
+            ])
             ->toArray();
     }
+
     public function countTaxpayersByActivity(): array
     {
-        $activities = Activity::all()->pluck('name', 'id');
-        return $this->getTaxpayerQuery(false)->selectRaw('activity_id, count(*) as count')
-            ->groupBy('category_id')
+        $activities = Activity::pluck('name', 'id');
+
+        return $this->getTaxpayerQuery(false)
+            ->selectRaw('activity_id, count(*) as count')
+            ->groupBy('activity_id')
             ->get()
-            ->map(function ($item) use ($activities) {
-                $activityName = $activities[$item->activity_id] ?? $this->NoneMessage;
-                return ['value' => $item->count, 'activity' => $activityName];
-            })
+            ->map(fn($item) => [
+                'value' => $item->count,
+                'activity' => $activities[$item->activity_id] ?? $this->NoneMessage
+            ])
             ->toArray();
     }
+
     public function countTaxpayersByCanton(): array
     {
         $cantons = Canton::all()->pluck('name', 'id');
-        $counts = $this->getTaxpayerQuery(false)->selectRaw('town_id, count(*) as count')
-            ->groupBy('town_id')
+        $counts = $this->getTaxpayerQuery(false)
+            ->selectRaw('towns.canton_id, count(*) as count')
+            ->join('towns', 'taxpayers.town_id', '=', 'towns.id')
+            ->groupBy('towns.canton_id')
             ->get()
             ->map(function ($item) use ($cantons) {
-                $categoryName = $item->town ? $cantons[$item->town->canton_id] ?? $this->NoneMessage : $this->NoneMessage;
-                return ['value' => $item->count, 'category' => $categoryName];
-            })
-            ->unique(function ($item) {
-                return $item['category'];
+                return ['value' => $item->count, 'category' => $cantons[$item->canton_id] ?? 'Inconnu'];
             })
             ->toArray();
         return array_values($counts);
     }
     public function countTaxpayersByTown(): array
     {
-        $cantons = Town::all()->pluck('name', 'id');
-        $counts = $this->getTaxpayerQuery(false)->selectRaw('town_id, count(*) as count')
-            ->groupBy('town_id')
+        $towns = Town::all()->pluck('name', 'id');
+
+        $counts = $this->getTaxpayerQuery(false)
+            ->selectRaw('towns.id as town_id, count(*) as count')
+            ->join('towns', 'taxpayers.town_id', '=', 'towns.id')
+            ->groupBy('towns.id')
             ->get()
-            ->map(function ($item) use ($cantons) {
-                $categoryName = $item->town ? $cantons[$item->town_id] ?? $this->NoneMessage : $this->NoneMessage;
-                return ['value' => $item->count, 'category' => $categoryName];
-            })
-            ->unique(function ($item) {
-                return $item['category'];
+            ->map(function ($item) use ($towns) {
+                return [
+                    'value' => $item->count,
+                    'category' => $towns[$item->town_id] ?? $this->NoneMessage
+                ];
             })
             ->toArray();
+
         return array_values($counts);
     }
+
     public function countTaxpayersByZone(): array
     {
-        $cantons = Zone::all()->pluck('name', 'id');
-        $counts = $this->getTaxpayerQuery(false)->selectRaw('zone_id, count(*) as count')
-            ->groupBy('town_id')
+        $zones = Zone::all()->pluck('name', 'id');
+
+        $counts = $this->getTaxpayerQuery(false)
+            ->selectRaw('zones.id as zone_id, count(*) as count')
+            ->join('zones', 'taxpayers.zone_id', '=', 'zones.id')
+            ->groupBy('zones.id')
             ->get()
-            ->map(function ($item) use ($cantons) {
-                $categoryName = $item->zone_id ? $cantons[$item->zone_id] ?? $this->NoneMessage : $this->NoneMessage;
-                return ['value' => $item->count, 'category' => $categoryName];
-            })
-            ->unique(function ($item) {
-                return $item['category'];
+            ->map(function ($item) use ($zones) {
+                return [
+                    'value' => $item->count,
+                    'category' => $zones[$item->zone_id] ?? $this->NoneMessage
+                ];
             })
             ->toArray();
+
         return array_values($counts);
     }
+
     public function countTaxpayersState(): array
     {
         $count_valid = 0;
@@ -178,24 +190,26 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     }
     public function countTaxpayersByTaxables(): array
     {
-        $taxables = Taxable::all()->pluck('name', 'id');
-        $counts = TaxpayerTaxable::with([ 'taxpayer',])->whereBetween('created_at', [$this->startDate, $this->endDate])
-            ->whereHas('taxpayer', function ($query) {
-                $query->where('type', Constants::TITRE);
-            })
-            ->selectRaw('taxable_id, count(*) as count')
-            ->groupBy('taxable_id')
+        $taxables = Taxable::pluck('name', 'id');
+
+        $counts = TaxpayerTaxable::query()
+            ->join('taxpayers', 'taxpayer_taxables.taxpayer_id', '=', 'taxpayers.id')
+            ->whereBetween('taxpayer_taxables.created_at', [$this->startDate, $this->endDate])
+            ->where('taxpayers.type', Constants::TITRE)
+            ->selectRaw('taxpayer_taxables.taxable_id, count(*) as count')
+            ->groupBy('taxpayer_taxables.taxable_id')
             ->get()
             ->map(function ($item) use ($taxables) {
-                $categoryName = $taxables[$item->taxable_id];
-                return ['value' => $item->count, 'category' => $categoryName];
-            })
-            ->unique(function ($item) {
-                return $item['category'];
+                return [
+                    'value' => $item->count,
+                    'category' => $taxables[$item->taxable_id] ?? $this->NoneMessage
+                ];
             })
             ->toArray();
+
         return array_values($counts);
     }
+
     public function countTaxpayersByTaxLabel(string $category='CATEGORY 1'): array
     {
         $taxLabels = TaxLabel::with('taxables')->where('category', 'LIKE', "%{$category}%")->get();
