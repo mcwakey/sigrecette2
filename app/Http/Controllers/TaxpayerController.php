@@ -51,7 +51,9 @@ class TaxpayerController extends Controller
                 'state' => $state,
                 'disable' => $disable,
             ]
-        )->render('pages/taxpayers.list', ['zones' => $zones, 'categories' => $categories, 'towns' => $towns, 'cantons' => $cantons, 'activities' => $activities]);
+        )->render('pages/taxpayers.list', ['zones' => $zones, 'categories' => $categories,
+            'towns' => $towns,
+            'cantons' => $cantons, 'activities' => $activities]);
     }
     public function r_report(Request $request)
     {
@@ -72,9 +74,6 @@ class TaxpayerController extends Controller
             ->with('zone')
             ->newQuery()
             ->get();
-
-        $zoneLabels = $taxpayersByZone->pluck('zone.name');
-        $zoneTotals = $taxpayersByZone->pluck('total');
         $genderCounts = Taxpayer::where('type','=',Constants::TITRE)
             ->selectRaw('gender, count(*) as count')
             ->where(function ($q) {
@@ -87,18 +86,39 @@ class TaxpayerController extends Controller
             ->groupBy('gender')
             ->pluck('count', 'gender')
             ->toArray();
+        if ($taxpayersByZone->isEmpty()) {
+            $taxpayersByZone = Taxpayer::select('zone_id', DB::raw('COUNT(*) as total'))
+                ->whereHas('invoices', function ($query) {
+                    $query->whereBetween('created_at', [$this->s_date, $this->e_date])
+                        ->where('type','=',Constants::TITRE);
+                })
+                ->groupBy('zone_id')
+                ->with('zone')
+                ->newQuery()
+                ->get();
+            $genderCounts = Taxpayer::selectRaw('gender, count(*) as count')
+                ->whereHas('invoices', function ($query) {
+                    $query->whereBetween('created_at', [$this->s_date, $this->e_date])
+                        ->where('type','=',Constants::TITRE);
+                })->groupBy('gender')
+                ->pluck('count', 'gender')
+                ->toArray();
+        }
 
+
+        $zoneLabels = $taxpayersByZone->pluck('zone.name');
+        $zoneTotals = $taxpayersByZone->pluck('total');
         $genderLabels = array_keys($genderCounts);
         $genderTotals = array_values($genderCounts);
-
-
         $statisticsService = new StatisticsService($this->s_date, $this->e_date);
         [$labels, $taxables,
             $invoices_total,
             $taxpayer_count,
             $taxables_count,
             $invoice_count,] = $statisticsService->c_capacity_data();
-        return view('pages/taxpayers/r_taxpayers.show', compact('labels', 'taxables','taxpayer_count','invoices_total','taxpayer_count','invoice_count','taxables_count','zoneLabels','zoneTotals','genderLabels','genderTotals'));
+        return view('pages/taxpayers/r_taxpayers.show', compact('labels', 'taxables',
+            'taxpayer_count','invoices_total','taxpayer_count','invoice_count','taxables_count',
+            'zoneLabels','zoneTotals','genderLabels','genderTotals'));
     }
     /**
      * Show the form for creating a new resource.

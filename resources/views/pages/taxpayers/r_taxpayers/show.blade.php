@@ -134,8 +134,9 @@
         <table class="table table-bordered">
             <thead class="table-dark">
             <tr>
-                <th>Nom</th>
+
                 <th>Code</th>
+                <th>Nom</th>
                 <th>Total</th>
             </tr>
             </thead>
@@ -153,8 +154,9 @@
         <table class="table table-bordered">
             <thead class="table-dark">
             <tr>
-                <th>Nom</th>
                 <th>Code</th>
+                <th>Nom</th>
+
                 <th>Total</th>
             </tr>
             </thead>
