@@ -57,22 +57,42 @@ class InvoiceExport implements FromCollection, WithHeadings, WithMapping
 
     public function map($invoice): array
     {
-        return [
-            $invoice->invoice_no,
-            $invoice->order_no,
-            $invoice->taxpayer->id ,
-            $invoice->taxpayer->name ?? '-',
-            $invoice->taxpayer->zone->name ?? '-',
-            implode(',', array_keys(Invoice::sumAmountsByTaxCode($invoice))),
-            $this->getAmount($invoice),
-            format_amount(Payment::getPaid($invoice->invoice_no)),
-            format_amount($invoice->get_remains_to_be_paid()),
-            $invoice->status,
-            $invoice->type,
-            $invoice->from_date,
-            $invoice->to_date,
-            $invoice->created_at->format('d/m/Y'),
-        ];
+        try {
+            return [
+                $invoice->invoice_no,
+                $invoice->order_no,
+                $invoice->taxpayer->id ,
+                $invoice->taxpayer->name ?? '-',
+                $invoice->taxpayer->zone->name ?? '-',
+                implode(',', array_keys(Invoice::sumAmountsByTaxCode($invoice))),
+                $this->getAmount($invoice),
+                format_amount(Payment::getPaid($invoice->invoice_no)),
+                format_amount($invoice->get_remains_to_be_paid()),
+                $invoice->status,
+                $invoice->type,
+                $invoice->from_date,
+                $invoice->to_date,
+                $invoice->created_at->format('d/m/Y'),
+            ];
+        }catch (\Exception $exception){
+            return [
+                '',
+                '',
+                '' ,
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+            ];
+        }
+
     }
     public function getAmount(Invoice $invoice){
         if ($invoice->reduce_amount != '') {

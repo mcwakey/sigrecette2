@@ -226,7 +226,7 @@ class Taxpayer extends Model
             ->exists()
         );
     }
-   public static function taxpayersWithMultipleInvoice(){
-       return Taxpayer::getTaxpayers()->filter(fn($taxpayer) => $taxpayer->invoices->filter(fn($invoice) => $invoice->created_at->between( $this->s_date,  $this->e_date) && $invoice->isValid())->count() > 1);
+   public static function taxpayersWithMultipleInvoice($start_date,$end_date){
+       return Taxpayer::getTaxpayers()->filter(fn($taxpayer) => $taxpayer->invoices->filter(fn($invoice) => $invoice->created_at->between( $start_date,  $end_date) && $invoice->isValid())->count() > 1);
    }
 }
