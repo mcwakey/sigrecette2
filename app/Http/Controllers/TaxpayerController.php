@@ -58,7 +58,6 @@ class TaxpayerController extends Controller
     public function r_report(Request $request)
     {
         $this->handleDateFilters($request);
-       // $result= Taxpayer::taxpayersWithMultipleInvoice($this->s_date, $this->e_date);dump('Mutiple',count($result));foreach ($result as $key => $value) {dump($value->id,$value->name);}dd(Taxpayer::taxpayersWithoutInvoice());
 
         $taxpayersByZone = Taxpayer::select('zone_id', DB::raw('COUNT(*) as total'))
             ->where('type','=',Constants::TITRE)
@@ -79,7 +78,7 @@ class TaxpayerController extends Controller
         $genderCounts = Taxpayer::where('type','=',Constants::TITRE)
             ->selectRaw('gender, count(*) as count')
             ->where(function ($q) {
-                $q->whereNotIn('taxpayers.from_mobile_and_validate_state', [ 
+                $q->whereNotIn('taxpayers.from_mobile_and_validate_state', [
                     TaxpayerStateEnums::REJECTED,
                     TaxpayerStateEnums::PENDING
                 ])->orWhereNull('taxpayers.from_mobile_and_validate_state');
