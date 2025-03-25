@@ -30,12 +30,13 @@ class PrintController extends Controller
         if (Storage::missing("exports")) {
             Storage::makeDirectory("exports");
         }
-        $data = $data==null?session('edition_params', []): json_decode($data, true);
+
+        $data = ($data === 'null' || $data === null)?session('edition_params', []): json_decode($data, true);
         $result = $this->processType($type, $data, $action, $id);
         if ($result['success']) {
             return $result['pdf'];
         }
-        session()->forget('edition_params');
+       session()->forget('edition_params');
         return back()->with('error', $result['message']);
     }
     /**
