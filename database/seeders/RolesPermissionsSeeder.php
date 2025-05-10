@@ -303,17 +303,18 @@ class RolesPermissionsSeeder extends Seeder
             Role::firstOrCreate(['name' => $role, 'user_id' => 0])->syncPermissions($permissions_list);
         }
 
-        if (!app()->environment('production')) {
-            User::find(1)->assignRole('administrateur_system');
-            User::find(2)->assignRole('administrateur');
-            User::find(3)->assignRole(['ordonateur', 'administrateur']);
-            User::find(4)->assignRole('agent_delegation');
-            User::find(5)->assignRole('agent_assiette');
-            User::find(6)->assignRole('regisseur');
-            User::find(7)->assignRole('agent_recouvrement');
-            User::find(8)->assignRole('collecteur');
-            User::find(9)->assignRole('agent_delegation_du_receveur');
-            User::find(10)->assignRole('agent_recette');
+        if(!app()->environment('production')) {
+            User::find(1)?->assignRole('administrateur_system');
+            User::find(2)?->assignRole('administrateur');
+            User::find(3)?->assignRole(['ordonateur', 'administrateur']);
+            User::find(4)?->assignRole('agent_delegation');
+            User::find(5)?->assignRole('agent_assiette');
+            User::find(6)?->assignRole('regisseur');
+            User::find(7)?->assignRole('agent_recouvrement');
+            User::find(8)?->assignRole('collecteur');
+            User::find(9)?->assignRole('agent_delegation_du_receveur');
+            User::find(10)?->assignRole('agent_recette');
         }
+
     }
 }

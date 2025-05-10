@@ -42,10 +42,15 @@ class DatabaseSeeder extends Seeder
                 $seedersArray,
                 TaxLabelsSeeder::class,
                 TaxablesSeeder::class,
+                GendersSeeder::class,
+                CantonsSeeder::class,
+                TownsSeeder::class,
+                EreasSeeder::class,
+                ZonesSeeder::class,
+                IdTypesSeeder::class,
+                TaxpayersSeeder::class,
                 UsersSeeder::class,
                 RolesPermissionsSeeder::class,
-                GendersSeeder::class,
-                IdTypesSeeder::class,
             );
         }
 
