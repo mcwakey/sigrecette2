@@ -1,6 +1,7 @@
 <?php
 
 namespace Tests\Fixtures\TestCases;
+
 use App\Models\User;
 use Database\Seeders\GendersSeeder;
 use Database\Seeders\IdTypesSeeder;

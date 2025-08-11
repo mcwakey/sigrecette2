@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\Invoice;
+
 use App\Enums\InvoiceStatusEnums;
 use App\Enums\PaymentStatusEnums;
 use App\Helpers\Constants;
@@ -23,10 +25,12 @@ use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+
 class AddInvoiceNoTaxpayerModal extends Component
 {
     //TODO Add backend validation on tarif
     use DispatchesMessages;
+
     public $invoice_id;
     public $name;
     public $tnif;
@@ -102,7 +106,6 @@ class AddInvoiceNoTaxpayerModal extends Component
     public $option_calculus;
     public function mount()
     {
-
     }
     public function render()
     {
@@ -121,7 +124,7 @@ class AddInvoiceNoTaxpayerModal extends Component
     }
     public function updatedTaxlabelId($value)
     {
-        $this->taxables = Taxable::where('tax_label_id',"=", $value)
+        $this->taxables = Taxable::where('tax_label_id', "=", $value)
             ->where('status', '=', 'ACTIVE')->get(); // Load taxables based on tax label ID
         TaxLabel::find($value); // Load taxables based on tax label ID
         $this->taxable_id = null;
@@ -234,9 +237,8 @@ class AddInvoiceNoTaxpayerModal extends Component
         $this->name = $invoice->taxpayer->name ?? '';
         $this->tnif = $invoice->taxpayer->id ?? '';
         $this->zone = $invoice->taxpayer->zone->name ?? '';
-        $this->taxpayer_taxables = $taxpayer_taxables = InvoiceItem::where('invoice_id',"=", $id)->get();
+        $this->taxpayer_taxables = $taxpayer_taxables = InvoiceItem::where('invoice_id', "=", $id)->get();
         foreach ($taxpayer_taxables as $index => $invoice_item) {
-
             //if ($invoice_item->taxpayer_taxable->taxable->periodicity == "Mois") {$period = 1;} elseif ($invoice_item->taxpayer_taxable->taxable->periodicity == "Ans") {$period = 0.083333;} else {$period = 1;}
             $period = 1;
             $this->periodicity = $invoice_item->taxpayer_taxable->taxable->periodicity;

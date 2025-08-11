@@ -22,15 +22,15 @@ return [
             InvoiceStatusEnums::REDUCED,
         ],
         'transitions' => [
-            "submit_for_accepted"=> [
+            "submit_for_accepted" => [
                 'from' => [InvoiceStatusEnums::DRAFT],
                 'to' => [InvoiceStatusEnums::ACCEPTED],
             ],
-            "submit_for_reject_by_ord"=> [
+            "submit_for_reject_by_ord" => [
                 'from' => [InvoiceStatusEnums::DRAFT],
                 'to' => [ InvoiceStatusEnums::REJECTED_BY_OR],
             ],
-            "submit_for_pending"=> [
+            "submit_for_pending" => [
                 'from' => [InvoiceStatusEnums::ACCEPTED],
                 'to' => InvoiceStatusEnums::PENDING,
                 'guard' => [InvoiceGuard::class, 'canSubmitForPending'],
@@ -50,11 +50,11 @@ return [
                 'to' => [ InvoiceStatusEnums::REJECTED],
 
             ],
-            "submit_for_reduced"=> [
+            "submit_for_reduced" => [
                 'from' => [InvoiceStatusEnums::APPROVED,InvoiceStatusEnums::APPROVED_CANCELLATION],
                 'to' => [ InvoiceStatusEnums::REDUCED],
             ],
-            "submit_for_canceled"=> [
+            "submit_for_canceled" => [
                 'from' => [InvoiceStatusEnums::APPROVED,InvoiceStatusEnums::APPROVED_CANCELLATION],
                 'to' => [InvoiceStatusEnums::CANCELED],
             ],

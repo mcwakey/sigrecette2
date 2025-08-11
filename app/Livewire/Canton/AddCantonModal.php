@@ -1,14 +1,18 @@
 <?php
+
 namespace App\Livewire\Canton;
+
 use App\Models\Canton;
 use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
+
 class AddCantonModal extends Component
 {
     use WithFileUploads;
     use DispatchesMessages;
+
     public $canton_id;
     public $name;
     public $status;

@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Services;
+
 use App\Contracts\InvoiceStatisticsInterface;
 use App\Contracts\TaxpayerStatisticsInterface;
 use App\Enums\InvoicePayStatusEnums;
@@ -28,13 +30,12 @@ use Illuminate\Database\Eloquent\Collection;
 
 class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatisticsInterface
 {
-
-    public function __construct(private $startDate,private $endDate,protected string $NoneMessage = 'Non défini')
+    public function __construct(private $startDate, private $endDate, protected string $NoneMessage = 'Non défini')
     {
     }
     public function getTaxpayerQuery($dateFilter = true)
     {
-        $query = Taxpayer::where('type', '=',Constants::TITRE)
+        $query = Taxpayer::where('type', '=', Constants::TITRE)
             ->where(function ($q) {
                 $q->whereNotIn('taxpayers.from_mobile_and_validate_state', [
                     TaxpayerStateEnums::REJECTED,
@@ -210,7 +211,7 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
         return array_values($counts);
     }
 
-    public function countTaxpayersByTaxLabel(string $category='CATEGORY 1'): array
+    public function countTaxpayersByTaxLabel(string $category = 'CATEGORY 1'): array
     {
         $taxLabels = TaxLabel::with('taxables')->where('category', 'LIKE', "%{$category}%")->get();
         $counts = TaxpayerTaxable::with([ 'taxpayer',])->whereBetween('taxpayer_taxables.created_at', [$this->startDate, $this->endDate])
@@ -234,43 +235,43 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
             ->toArray();
         return array_values($counts);
     }
-    public function countInvoices(string $type=Constants::INVOICE_TYPE_TITRE): array
+    public function countInvoices(string $type = Constants::INVOICE_TYPE_TITRE): array
     {
         return Invoice::whereBetween('invoices.created_at', [$this->startDate, $this->endDate])
             ->selectRaw('status, count(*) as count')
             ->groupBy('status')
             ->pluck('count', 'status')
             ->merge(['NOEXPIRED' => Invoice::whereBetween('created_at', [$this->startDate, $this->endDate])
-                ->where('invoices.type', '=',$type)
+                ->where('invoices.type', '=', $type)
                 ->where('status', '!=', 'EXPIRED')
                 ->count()])
             ->merge(['Pending' => Invoice::whereBetween('created_at', [$this->startDate, $this->endDate])
-                ->where('invoices.type', '=',$type)
+                ->where('invoices.type', '=', $type)
                 ->where('status', '!=', 'EXPIRED')
                 ->where('delivery', '=', 'NOT DELIVERED')
                 ->count()])
-            ->merge(['Total' => Invoice::whereBetween('created_at', [$this->startDate, $this->endDate])->where('invoices.type', '=',$type)
+            ->merge(['Total' => Invoice::whereBetween('created_at', [$this->startDate, $this->endDate])->where('invoices.type', '=', $type)
                 ->count()])
             ->toArray();
     }
-    public function getTotalRemainingToBeCollected(string $type=Constants::INVOICE_TYPE_TITRE): float|int
+    public function getTotalRemainingToBeCollected(string $type = Constants::INVOICE_TYPE_TITRE): float|int
     {
         $invoices = Invoice::whereIn('status', [InvoiceStatusEnums::ACCEPTED, InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION])
-            ->where('invoices.type', '=',$type)
+            ->where('invoices.type', '=', $type)
             ->whereBetween('invoices.created_at', [$this->startDate, $this->endDate])
             ->where('invoices.pay_status', '!=', InvoicePayStatusEnums::PAID)
             ->get();
         $totalRemaining = 0;
         foreach ($invoices as $invoice) {
             $paid = Payment::where('invoice_id', $invoice->invoice_no)
-                ->where('status', '=',PaymentStatusEnums::ACCOUNTED)
+                ->where('status', '=', PaymentStatusEnums::ACCOUNTED)
                 ->sum('amount');
             $restToPay = $invoice->amount - floatval($invoice->reduce_amount) - $paid;
             $totalRemaining += max($restToPay, 0);
         }
         return $totalRemaining;
     }
-    public function getTotalSoldToBeCollected(string $type=Constants::INVOICE_TYPE_TITRE): float|int
+    public function getTotalSoldToBeCollected(string $type = Constants::INVOICE_TYPE_TITRE): float|int
     {
         return Invoice::whereIn('status', [
             InvoiceStatusEnums::ACCEPTED,
@@ -284,7 +285,7 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     }
     public function getTotalCollected(): array
     {
-        $comptantTotal = Payment::where('invoice_type', '=',Constants::INVOICE_TYPE_COMPTANT)
+        $comptantTotal = Payment::where('invoice_type', '=', Constants::INVOICE_TYPE_COMPTANT)
             ->where('status', PaymentStatusEnums::ACCOUNTED)
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->sum('amount');
@@ -302,7 +303,7 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
             'comptant_total' => $comptantTotal,
             'titre_total' => $titreTotal,
             'count_titre' => $count_titre,
-            'count_comptant'=>$count_comptant,
+            'count_comptant' => $count_comptant,
         ];
     }
     public function getTaxpayerByCreatedAt(): Collection
@@ -319,16 +320,14 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
             ')
 
             ->leftJoin('users', 'users.id', '=', 'taxpayers.created_by')
-            ->where('type', '=',Constants::TITRE)
+            ->where('type', '=', Constants::TITRE)
             ->whereBetween('taxpayers.created_at', [$this->startDate, $this->endDate])
             ->whereNotNull('taxpayers.created_by')
             ->groupBy('date', 'created_by')
             ->orderBy('date', 'asc')
             ->get();
-
-
     }
-    public function getInvoiceByCreatedAt(string $type=Constants::INVOICE_TYPE_TITRE): Collection
+    public function getInvoiceByCreatedAt(string $type = Constants::INVOICE_TYPE_TITRE): Collection
     {
 
 
@@ -345,11 +344,8 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
             ->groupBy('date', 'created_by')
             ->orderBy('date', 'asc')
             ->get();
-
-
-
     }
-    public function getPaymentByCreatedAt(string $type=Constants::INVOICE_TYPE_COMPTANT): Collection
+    public function getPaymentByCreatedAt(string $type = Constants::INVOICE_TYPE_COMPTANT): Collection
     {
 
         return Payment::selectRaw('
@@ -364,10 +360,9 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
             ->groupBy('date')
             ->orderBy('date', 'asc')
             ->get();
-
     }
 
-    public function getPaymentsEvolution($taxpayerId=null, $invoiceId = null,string $type=Constants::INVOICE_TYPE_TITRE)
+    public function getPaymentsEvolution($taxpayerId = null, $invoiceId = null, string $type = Constants::INVOICE_TYPE_TITRE)
     {
        // dd($startDate,$endDate,$taxpayerId);
         $query = Payment::selectRaw('
@@ -385,7 +380,7 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
             ->where('payments.invoice_type', '=', $type)
         ;
 
-        if($taxpayerId){
+        if ($taxpayerId) {
             $query->where('taxpayers.id', '=', $taxpayerId);
         }
         if ($invoiceId) {
@@ -408,11 +403,13 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
             ->leftJoin('taxpayers', 'taxpayers.id', '=', 'payments.taxpayer_id')
             ->leftJoin('invoices', 'invoices.id', '=', 'payments.invoice_id')
             ->whereBetween('payments.created_at', [$this->startDate, $this->endDate])
-        ->whereIn('invoices.status',
-            [InvoiceStatusEnums::ACCEPTED, InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION]);
+        ->whereIn(
+            'invoices.status',
+            [InvoiceStatusEnums::ACCEPTED, InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION]
+        );
 
         if ($taxpayerId) {
-           $query->where('payments.taxpayer_id', $taxpayerId);
+            $query->where('payments.taxpayer_id', $taxpayerId);
         }
 
         if ($invoiceId) {
@@ -493,28 +490,26 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
         $taxables = $this->getActiveTaxables();
 
 
-        if(count($taxpayers)<50){
+        if (count($taxpayers) < 50) {
             $taxpayers = Taxpayer::whereHas('invoices', function ($query) {
                 $query->whereBetween('created_at', [$this->startDate, $this->endDate])
-                ->where('type','=',Constants::TITRE);
+                ->where('type', '=', Constants::TITRE);
             })->get();
         }
         $taxpayer_count = count($taxpayers);
         $invoice_count = $taxpayers->sum(fn($taxpayer) =>
         $taxpayer->invoices->filter(fn($invoice) =>
-            $invoice->created_at->between($this->startDate, $this->endDate) && $invoice->isValid()
-        )->count()
-        );
+            $invoice->created_at->between($this->startDate, $this->endDate) && $invoice->isValid())->count());
 
-        $taxables_count =$taxpayers->flatMap(
+        $taxables_count = $taxpayers->flatMap(
             fn($taxpayer) => $taxpayer->invoices->filter(
                 fn($invoice) => $invoice->created_at->between($this->startDate, $this->endDate) && $invoice->isValid()
-                    )->flatMap(fn($invoice) => $invoice->invoiceitems)
+            )->flatMap(fn($invoice) => $invoice->invoiceitems)
         )->unique('id')->count();
 
         $invoices_total = 0;
         foreach ($taxpayers as $taxpayer) {
-            $this->processInvoices($taxpayer, $taxables, $labels,   $invoices_total);
+            $this->processInvoices($taxpayer, $taxables, $labels, $invoices_total);
         }
 
         $labels = array_filter($labels, fn($item) => $item['total'] > 0);
@@ -565,7 +560,7 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     {
         $invoices = $taxpayer->invoices;
         foreach ($invoices as $invoice) {
-            if ($invoice->created_at->between($this->startDate, $this->endDate)&&  $invoice->isValid() ) {
+            if ($invoice->created_at->between($this->startDate, $this->endDate) &&  $invoice->isValid()) {
                 $invoices_total += $invoice->amount;
                 foreach ($invoice->invoiceitems as $invoice_item) {
                     $taxpayerTaxable = $invoice_item->taxpayer_taxable;

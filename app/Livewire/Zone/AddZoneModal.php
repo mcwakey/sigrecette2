@@ -1,12 +1,16 @@
 <?php
+
 namespace App\Livewire\Zone;
+
 use App\Models\Zone;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
+
 class AddZoneModal extends Component
 {
     use WithFileUploads;
+
     public $zone_id;
     public $name;
     public $status;

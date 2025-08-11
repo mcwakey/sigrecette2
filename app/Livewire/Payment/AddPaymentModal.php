@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\Payment;
+
 use App\Models\Invoice;
 use App\Models\Payment;
 use Livewire\Attributes\On;
@@ -21,6 +23,7 @@ use Illuminate\Http\Request;
 class AddPaymentModal extends Component
 {
     use DispatchesMessages;
+
     public $payment_id;
     public $invoice_id;
     public $taxpayer_id;
@@ -71,8 +74,8 @@ class AddPaymentModal extends Component
         'update_payment_amount' => 'updatePaymentAmount',
         'update_local_amount' => 'updateLocalAmount',
     ];
-    public function mount(){
-
+    public function mount()
+    {
     }
     public function render()
     {
@@ -92,10 +95,10 @@ class AddPaymentModal extends Component
     public function submit()
     {
         if (!auth()->user()->hasPermissionTo('peut ajouter un paiement')) {
-        abort(403, 'Accès interdit');
+            abort(403, 'Accès interdit');
         }
         $is_regisseur = false;
-        $role = Role::where('name', "=",'regisseur')->first();
+        $role = Role::where('name', "=", 'regisseur')->first();
         if ($role) {
             /**@var App\Models\User $user */
             $user = auth()->user();
@@ -171,13 +174,13 @@ class AddPaymentModal extends Component
             ->where('validity', 'VALID')
             ->first();
         $previousRoute = Route::getRoutes()->match(Request::create(url()->previous()));
-        if ($invoice == null&& $previousRoute->getName()=="taxpayers.show") {
+        if ($invoice == null && $previousRoute->getName() == "taxpayers.show") {
             $invoice = Invoice::where('invoice_no', $id)
                 ->OrWhere('validity', 'ARCHIVED')
                 ->where('validity', 'EXPIRED')
                 ->first();
         }
-        if(!$invoice){
+        if (!$invoice) {
             $this->dispatchMessage('Paiment', 'update', 'error', "Erreur lors de la mise à jour du paiement,avis non retrouvé.");
             return;
         }
@@ -214,12 +217,12 @@ class AddPaymentModal extends Component
     public function deletePayment($id)
     {
         $payment = Payment::find($id);
-        if($payment){
+        if ($payment) {
             $invoice = Invoice::where('invoice_no', $payment?->invoice_id)
                 ->where('validity', 'VALID')
                 ->first();
             Payment::destroy($id);
-            if($invoice){
+            if ($invoice) {
                 $paid = Payment::getPaid($invoice?->invoice_no);
                 $paystatus = $paid == 0 ? PaymentStatusEnums::PENDING : "PART PAID";
                 $invoice->pay_status = $paystatus;
@@ -227,9 +230,6 @@ class AddPaymentModal extends Component
                 $this->dispatchMessage('Paiement', 'delete');
             }
         }
-
-
-
     }
     public function hydrate()
     {

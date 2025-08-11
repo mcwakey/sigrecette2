@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\Invoice;
+
 use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
 use App\Models\User;
@@ -27,9 +29,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Spatie\Permission\Models\Role;
+
 class AddInvoiceModal extends Component
 {
     use DispatchesMessages;
+
     public $invoice_id;
     public $name;
     public $tnif;
@@ -92,13 +96,13 @@ class AddInvoiceModal extends Component
     public function submit()
     {
 
-       $this->checkPermissionOnSubmit();
+        $this->checkPermissionOnSubmit();
         DB::transaction(function () {
             if (!$this->edit_mode) {
                 $this->invoice_id = null;
             }
             //When $this->periodicity == "Ans"  expire date not depend on nbr taxation
-            $multiple= $this->periodicity == "Ans" ? 12 : $this->qty ;
+            $multiple = $this->periodicity == "Ans" ? 12 : $this->qty ;
             $from_date = Carbon::createFromDate(date('Y'), $this->start_month, 1);
             $to_date = $from_date->copy()->addMonths($multiple - 1)->endOfMonth();
             $end_of_year = Carbon::createFromDate(date('Y'), 12, 31);
@@ -314,20 +318,20 @@ class AddInvoiceModal extends Component
     private function checkPermissionOnSubmit(): void
     {
 
-        if($this->edit_mode) {
+        if ($this->edit_mode) {
             $invoice = Invoice::find($this->invoice_id);
-            if($invoice) {
-                if($invoice->type==Constants::TITRE){
-                    if (!auth()->user()->hasPermissionTo( 'peut réduire un avis sur titre')) {
+            if ($invoice) {
+                if ($invoice->type == Constants::TITRE) {
+                    if (!auth()->user()->hasPermissionTo('peut réduire un avis sur titre')) {
                         abort(403, 'Accès interdit');
                     }
-                }else{
+                } else {
                     if (!auth()->user()->hasPermissionTo('peut réduire un avis au comptant')) {
                         abort(403, 'Accès interdit');
                     }
                 }
             }
-        }else{
+        } else {
             if (!auth()->user()->hasPermissionTo('peut émettre un avis sur titre')) {
                 abort(403, 'Accès interdit');
             }

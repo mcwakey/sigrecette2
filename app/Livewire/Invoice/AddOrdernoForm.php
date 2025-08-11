@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\Invoice;
+
 use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
 use App\Models\Invoice;
@@ -10,9 +12,11 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\InvoiceAccepted;
 use Illuminate\Support\Facades\Notification;
+
 class AddOrdernoForm extends Component
 {
     use DispatchesMessages;
+
     public $invoice_id;
     public $orderno;
     public $edit_mode = false;
@@ -31,17 +35,16 @@ class AddOrdernoForm extends Component
     }
     public function mount()
     {
-
     }
     public function validateData()
     {
         $this->validate();
         $invoice = Invoice::find($this->invoice_id);
-        if($invoice && $invoice->reduce_amount == ''){
+        if ($invoice && $invoice->reduce_amount == '') {
             if ($invoice) {
-                if($invoice->type ==Constants::INVOICE_TYPE_TITRE && $invoice->edition_state != "PRINT"){
-                    $this->error_message="Veuillez au préalable imprimer l'avis.";
-                   $this->addError('orderno', $this->error_message);
+                if ($invoice->type == Constants::INVOICE_TYPE_TITRE && $invoice->edition_state != "PRINT") {
+                    $this->error_message = "Veuillez au préalable imprimer l'avis.";
+                    $this->addError('orderno', $this->error_message);
                 }
             }
         }

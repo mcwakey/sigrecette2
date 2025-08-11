@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\DataTables\ActivityDataTable;
 use App\Models\Activity;
 use Illuminate\Http\Request;
+
 class ActivitiesController extends Controller
 {
     /**

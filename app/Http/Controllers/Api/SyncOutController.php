@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers\Api;
+
 use App\Helpers\Constants;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\InvoiceItemResource;
@@ -31,19 +33,20 @@ use App\Models\TaxpayerTaxable;
 use App\Models\Town;
 use App\Models\Zone;
 use Illuminate\Http\Request;
+
 class SyncOutController extends Controller
 {
     public function search(Request $request)
     {
         $zoneName = $request->input('zone', null);
         $categorieName = $request->input('category', null);
-        if($categorieName==null){
-            $categorieName='CATEGORY 1';
+        if ($categorieName == null) {
+            $categorieName = 'CATEGORY 1';
         }
         // ->where('status', "=","ACTIVE")
         if ($zoneName) {
             $zone = Zone::where('name', 'like', '%' . $zoneName . '%')->first();
-            $queryZones =Zone::where('status', 'ACTIVE');
+            $queryZones = Zone::where('status', 'ACTIVE');
             if ($zone) {
                 $queryZones = Zone::where('status', 'ACTIVE');
                 $queryActivities = Activity::where('status', 'ACTIVE');
@@ -55,18 +58,18 @@ class SyncOutController extends Controller
                 $queryTaxlabels = TaxLabel::where('category', 'LIKE', '%' . $categorieName . '%');
                 $queryTaxables = Taxable::join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
                     ->where('category', 'LIKE', '%' . $categorieName . '%')
-                    ->where('taxables.status', "=","ACTIVE")
+                    ->where('taxables.status', "=", "ACTIVE")
                     ->select('taxables.*');
-                $queryTaxpayers = Taxpayer::where('zone_id',"=", $zone->id)
-                    ->where('type',"=",Constants::TITRE)
-                    ->where('deleted_at', "=",null);
+                $queryTaxpayers = Taxpayer::where('zone_id', "=", $zone->id)
+                    ->where('type', "=", Constants::TITRE)
+                    ->where('deleted_at', "=", null);
                 $queryTaxpayerTaxables = TaxpayerTaxable::join('taxpayers', 'taxpayer_taxables.taxpayer_id', '=', 'taxpayers.id')
-                    ->where('taxpayers.zone_id', "=",$zone->id)
+                    ->where('taxpayers.zone_id', "=", $zone->id)
                     ->select('taxpayer_taxables.*');
                 $queryInvoices = Invoice::join('taxpayers', 'invoices.taxpayer_id', '=', 'taxpayers.id')
-                    ->where('taxpayers.zone_id',"=", $zone->id)
-                    ->where('status', "=",'APPROVED')
-                    ->where('validity', "=",'VALID')
+                    ->where('taxpayers.zone_id', "=", $zone->id)
+                    ->where('status', "=", 'APPROVED')
+                    ->where('validity', "=", 'VALID')
                     ->select('invoices.*');
                 $queryInvoiceItems = InvoiceItem::join('invoices', 'invoice_items.invoice_id', '=', 'invoices.id')
                     ->join('taxpayers', 'invoices.taxpayer_id', '=', 'taxpayers.id')
@@ -77,7 +80,7 @@ class SyncOutController extends Controller
 
                 //CAN BE OPTIMIZED
                 $queryPayments = Payment::join('taxpayers', 'payments.taxpayer_id', '=', 'taxpayers.id')
-                    ->where('taxpayers.zone_id',"=", $zone->id)
+                    ->where('taxpayers.zone_id', "=", $zone->id)
                     ->select('payments.*');
             }
             return [
@@ -93,12 +96,12 @@ class SyncOutController extends Controller
                 'taxpayers' => SearchTaxpayerResource::collection($queryTaxpayers->get()),
                 'taxpayer_taxables' => SearchTaxpayerTaxableResource::collection($queryTaxpayerTaxables->get()),
                 'invoices' => SearchInvoiceResource::collection($queryInvoices->get()),
-                'invoice_items'=> InvoiceItemResource::collection($queryInvoiceItems->get()),
+                'invoice_items' => InvoiceItemResource::collection($queryInvoiceItems->get()),
                 'payments' => SearchPaymentResource::collection($queryPayments->get()),
             ];
         }
         return  [
-                    'taxpayers'=> SearchTaxpayerResource::collection(collect([])),
+                    'taxpayers' => SearchTaxpayerResource::collection(collect([])),
                      'taxpayer_taxables' =>   SearchTaxpayerTaxableResource::collection(collect([])),
                      'invoices' => SearchInvoiceResource::collection(collect([])),
                      'taxables' =>   SearchTaxpayerTaxableResource::collection(collect([])),

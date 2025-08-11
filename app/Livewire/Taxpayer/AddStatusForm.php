@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\Taxpayer;
+
 use App\Enums\InvoiceStatusEnums;
 use App\Enums\TaxpayerStateEnums;
 use App\Helpers\Constants;
@@ -18,9 +20,11 @@ use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+
 class AddStatusForm extends Component
 {
     use DispatchesMessages;
+
     public $taxpayer_id;
     public $status;
     public $edit_mode = false;
@@ -29,7 +33,8 @@ class AddStatusForm extends Component
         return [
             'status' => ['required', 'string', Rule::in(
                 TaxpayerStateEnums::APPROVED,
-                TaxpayerStateEnums::REJECTED)],
+                TaxpayerStateEnums::REJECTED
+            )],
         ];
     }
     private $error_message;

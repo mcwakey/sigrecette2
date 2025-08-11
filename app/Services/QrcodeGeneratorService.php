@@ -14,8 +14,6 @@ use Exception;
 
 class QrcodeGeneratorService
 {
-
-
     /**
      * @throws QRCodeDataException
      * @throws QRCodeOutputException
@@ -24,14 +22,16 @@ class QrcodeGeneratorService
     public function generate(?string $data, ?string $backgroundImagePath = null): mixed
     {
         try {
-            if ($data === null) {return null;}
+            if ($data === null) {
+                return null;
+            }
 
 
 
             if ($backgroundImagePath !== null && file_exists($backgroundImagePath)) {
                 //$backgroundImage = imagecreatefromstring(file_get_contents($backgroundImagePath));
 
-                $options = new QROptions;
+                $options = new QROptions();
 
                 $options->version             = 5;
                 $options->outputBase64        = false;
@@ -53,9 +53,9 @@ class QrcodeGeneratorService
 
                 $qrOutputInterface = new QRImageWithLogo($options, $qrcode->getQRMatrix());
                 //dd($qrOutputInterface->dump(null,$backgroundImagePath));
-                return $qrOutputInterface->dump(null,$backgroundImagePath);
-            }else{
-                $options = new QROptions;
+                return $qrOutputInterface->dump(null, $backgroundImagePath);
+            } else {
+                $options = new QROptions();
 
                 $options->outputInterface     = QRGdImageWEBP::class;
                 $options->quality             = 90;
@@ -81,13 +81,9 @@ class QrcodeGeneratorService
                     QRMatrix::M_DATA           => [233, 233, 233],
                 ];
                 return  (new QRCode($options))->render(data: $data);
-
             }
-        }catch (Exception $exception){
+        } catch (Exception $exception) {
             return null;
         }
-
-
-
     }
 }

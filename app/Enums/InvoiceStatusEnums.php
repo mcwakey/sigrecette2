@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Enums;
+
 class InvoiceStatusEnums
 {
     public const DRAFT = 'DRAFT';//after draft invoice can be go to Pending or REJECTED_BY_OR

@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\DataTables\InvoicesDataTable;
 use App\DataTables\RecoveriesDataTable;
 use App\DataTables\TaxpayersDataTable;
@@ -26,9 +28,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
+
 class TaxpayerController extends Controller
 {
-    use  HandlesDateFilters;
+    use HandlesDateFilters;
+
     /**
      * Display a listing of the resource.
      */
@@ -60,7 +64,7 @@ class TaxpayerController extends Controller
         $this->handleDateFilters($request);
 
         $taxpayersByZone = Taxpayer::select('zone_id', DB::raw('COUNT(*) as total'))
-            ->where('type','=',Constants::TITRE)
+            ->where('type', '=', Constants::TITRE)
             ->where(function ($q) {
                 $q->whereNotIn('taxpayers.from_mobile_and_validate_state', [
                     TaxpayerStateEnums::REJECTED,
@@ -75,7 +79,7 @@ class TaxpayerController extends Controller
             ->with('zone')
             ->newQuery()
             ->get();
-        $genderCounts = Taxpayer::where('type','=',Constants::TITRE)
+        $genderCounts = Taxpayer::where('type', '=', Constants::TITRE)
             ->selectRaw('gender, count(*) as count')
             ->where(function ($q) {
                 $q->whereNotIn('taxpayers.from_mobile_and_validate_state', [
@@ -91,7 +95,7 @@ class TaxpayerController extends Controller
             $taxpayersByZone = Taxpayer::select('zone_id', DB::raw('COUNT(*) as total'))
                 ->whereHas('invoices', function ($query) {
                     $query->whereBetween('created_at', [$this->s_date, $this->e_date])
-                        ->where('type','=',Constants::TITRE);
+                        ->where('type', '=', Constants::TITRE);
                 })
                 ->groupBy('zone_id')
                 ->with('zone')
@@ -100,7 +104,7 @@ class TaxpayerController extends Controller
             $genderCounts = Taxpayer::selectRaw('gender, count(*) as count')
                 ->whereHas('invoices', function ($query) {
                     $query->whereBetween('created_at', [$this->s_date, $this->e_date])
-                        ->where('type','=',Constants::TITRE);
+                        ->where('type', '=', Constants::TITRE);
                 })->groupBy('gender')
                 ->pluck('count', 'gender')
                 ->toArray();
@@ -117,9 +121,19 @@ class TaxpayerController extends Controller
             $taxpayer_count,
             $taxables_count,
             $invoice_count,] = $statisticsService->c_capacity_data();
-        return view('pages/taxpayers/r_taxpayers.show', compact('labels', 'taxables',
-            'taxpayer_count','invoices_total','taxpayer_count','invoice_count','taxables_count',
-            'zoneLabels','zoneTotals','genderLabels','genderTotals'));
+        return view('pages/taxpayers/r_taxpayers.show', compact(
+            'labels',
+            'taxables',
+            'taxpayer_count',
+            'invoices_total',
+            'taxpayer_count',
+            'invoice_count',
+            'taxables_count',
+            'zoneLabels',
+            'zoneTotals',
+            'genderLabels',
+            'genderTotals'
+        ));
     }
     /**
      * Show the form for creating a new resource.
@@ -134,17 +148,20 @@ class TaxpayerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Taxpayer $taxpayer, InvoicesDataTable $invoicesDataTable,Request $request,
-                         RecoveriesDataTable $recoveriesDataTable, TaxpayerTaxablesDataTable $taxablesDataTable)
-    {
-        if($taxpayer->type ==Constants::INVOICE_TYPE_COMPTANT){
+    public function show(
+        Taxpayer $taxpayer,
+        InvoicesDataTable $invoicesDataTable,
+        Request $request,
+        RecoveriesDataTable $recoveriesDataTable,
+        TaxpayerTaxablesDataTable $taxablesDataTable
+    ) {
+        if ($taxpayer->type == Constants::INVOICE_TYPE_COMPTANT) {
             return redirect()->back();
-
         }
         $this->handleDateFilters($request);
         $statisticsService = new StatisticsService($this->s_date, $this->e_date);
         addVendors(['amcharts', 'amcharts-maps', 'amcharts-stock']);
-        $taxpayerActionLog = UserLogs::where('taxpayer_id',"=", $taxpayer->id)
+        $taxpayerActionLog = UserLogs::where('taxpayer_id', "=", $taxpayer->id)
             ->orderBy('id', 'desc')
             ->limit(10)
             ->get();
@@ -158,7 +175,7 @@ class TaxpayerController extends Controller
                 'payments' => $superData['payments'],
                 'totalMonthlyPayments' => $superData['totalMonthlyPayments'],
                 'totalOwing' => $superData['totalOwing'],
-                'paidPercentage' =>$superData['paidPercentage'],
+                'paidPercentage' => $superData['paidPercentage'],
             ]);
     }
     /**
@@ -192,14 +209,16 @@ class TaxpayerController extends Controller
     public function import(Request $request)
     {
         if ($request->file('file')) {
-            Excel::queueImport(new TaxpayerImport,
-                $request->file('file')->store('files'));
+            Excel::queueImport(
+                new TaxpayerImport(),
+                $request->file('file')->store('files')
+            );
             return redirect()->back();
         }
         $filename = "data.xlsx";
         if (!Storage::missing("imports")) {
             $filePath = Storage::path('imports') . DIRECTORY_SEPARATOR . $filename;
-            Excel::queueImport(new TaxpayerImport, $filePath);
+            Excel::queueImport(new TaxpayerImport(), $filePath);
         }
         return redirect()->back();
     }

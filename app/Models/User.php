@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Models;
+
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
@@ -8,12 +10,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
     use HasRoles;
     use Notifiable;
     use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -74,7 +80,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
     public static function getRegisseurName(): string
     {
-        $role = Role::where('name', "=",'regisseur')->first();
+        $role = Role::where('name', "=", 'regisseur')->first();
         if ($role) {
             $user = $role->users()->first();
             return $user->name;

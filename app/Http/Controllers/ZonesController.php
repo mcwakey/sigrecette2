@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\DataTables\ZonesDataTable;
 use App\Models\Zone;
 use Illuminate\Http\Request;
+
 class ZonesController extends Controller
 {
     /**

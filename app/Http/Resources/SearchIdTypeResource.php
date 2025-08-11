@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Http\Resources;
+
 use App\Models\IdType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+
 /**
  * @property IdType $resource
  */

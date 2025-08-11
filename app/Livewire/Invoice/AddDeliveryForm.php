@@ -1,13 +1,17 @@
 <?php
+
 namespace App\Livewire\Invoice;
+
 use App\Helpers\Constants;
 use App\Models\Invoice;
 use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+
 class AddDeliveryForm extends Component
 {
     use DispatchesMessages;
+
     public $invoice_id;
     public $delivery_date;
     public $delivery_to;
@@ -25,7 +29,6 @@ class AddDeliveryForm extends Component
     ];
     public function mount()
     {
-
     }
     public function render()
     {

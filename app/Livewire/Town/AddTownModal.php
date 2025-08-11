@@ -1,15 +1,19 @@
 <?php
+
 namespace App\Livewire\Town;
+
 use App\Models\Canton;
 use App\Models\Town;
 use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
+
 class AddTownModal extends Component
 {
     use WithFileUploads;
     use DispatchesMessages;
+
     public $canton_id;
     public $town_id;
     public $name;

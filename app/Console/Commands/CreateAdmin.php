@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Console\Commands;
+
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
+
 class CreateAdmin extends Command
 {
     /**
@@ -29,7 +32,7 @@ class CreateAdmin extends Command
             $this->error('Veuillez fournir une adresse e-mail, un mot de passe et un nom complet valides.');
             return;
         }
-        if (User::where('email',"=", $email)->exists()) {
+        if (User::where('email', "=", $email)->exists()) {
             $this->error('Un utilisateur avec cette adresse e-mail existe déjà.');
             return;
         }

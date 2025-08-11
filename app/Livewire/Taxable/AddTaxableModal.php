@@ -1,15 +1,19 @@
 <?php
+
 namespace App\Livewire\Taxable;
+
 use App\Models\Taxable;
 use App\Models\TaxLabel;
 use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
+
 class AddTaxableModal extends Component
 {
     use WithFileUploads;
     use DispatchesMessages;
+
     public $taxable_id;
     public $name;
     public $tariff;

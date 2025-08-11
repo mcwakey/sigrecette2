@@ -1,5 +1,7 @@
 <?php
+
 namespace App\DataTables;
+
 use App\Models\Taxable;
 use App\Models\Taxpayer;
 use Yajra\DataTables\Html\Column;
@@ -8,6 +10,7 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Log;
+
 class TicketsDataTable extends DataTable
 {
     public $query = false;

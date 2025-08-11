@@ -36,8 +36,7 @@ class DatabaseSeeder extends Seeder
                 GendersSeeder::class,
                 IdTypesSeeder::class,
             );
-
-        }else{
+        } else {
             array_push(
                 $seedersArray,
                 TaxLabelsSeeder::class,

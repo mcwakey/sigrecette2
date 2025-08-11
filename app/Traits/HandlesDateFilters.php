@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Traits;
 
 use App\Models\Year;
@@ -28,25 +29,25 @@ trait HandlesDateFilters
             ]);
 
 
-            if($validatedData['s_date']&& $validatedData['e_date']){
+            if ($validatedData['s_date'] && $validatedData['e_date']) {
                 $this->s_date = $validatedData['s_date'] ;
                 $this->e_date = $validatedData['e_date'] ;
-                session()->put('s_date', $this->s_date );
+                session()->put('s_date', $this->s_date);
                 session()->put('e_date', $this->e_date);
-            }elseif (session()->get('s_date',null)&& session()->get('e_date',null)){
+            } elseif (session()->get('s_date', null) && session()->get('e_date', null)) {
                 $this->s_date = session()->get('s_date');
                 $this->e_date = session()->get('e_date');
-            }else{
+            } else {
                 ['s_date' => $this->s_date, 'e_date' => $this->e_date] = $this->getDefaultDateRange();
             }
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             ['s_date' => $this->s_date, 'e_date' => $this->e_date] = $this->getDefaultDateRange();
         }
 
 
 
-        view()->share('s_date', is_string($this->s_date)?$this->s_date :$this->s_date->toDateString());
-        view()->share('e_date',  is_string($this->e_date)?$this->e_date:$this->e_date->toDateString());
+        view()->share('s_date', is_string($this->s_date) ? $this->s_date : $this->s_date->toDateString());
+        view()->share('e_date', is_string($this->e_date) ? $this->e_date : $this->e_date->toDateString());
     }
     protected function getDefaultDateRange()
     {
@@ -56,5 +57,4 @@ trait HandlesDateFilters
             'e_date' => Carbon::parse("{$year}-12-31 23:59:59"),
         ];
     }
-
 }

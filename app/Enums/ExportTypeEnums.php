@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Enums;
+
 class ExportTypeEnums
 {
     public const INVOICE = "INVOICE";

@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\StockTransfer;
+
 use App\Enums\PaymentStatusEnums;
 use App\Helpers\Constants;
 use App\Models\Payment;
@@ -19,11 +21,13 @@ use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Return_;
+
 class AddStockTransferDepositModal extends Component
 {
     use WithFileUploads;
     use DispatchesMessages;
     use HandlesDateFilters;
+
     public $stock_transfer_id;
     public $user_id;
     public $collector_id;
@@ -57,7 +61,7 @@ class AddStockTransferDepositModal extends Component
     public $can_set_total = false;
     public function rules()
     {
-        $this->select_transfer->start_no =$this->select_transfer->start_no === "" ? null : $this->select_transfer->start_no;
+        $this->select_transfer->start_no = $this->select_transfer->start_no === "" ? null : $this->select_transfer->start_no;
         $this->select_transfer->end_no = $this->select_transfer->end_no === "" ? null : $this->select_transfer->end_no;
         $rules = [
             'collector_id' => 'required',
@@ -72,7 +76,7 @@ class AddStockTransferDepositModal extends Component
                 $rules['end_no'] = 'nullable|numeric|min:' .
                     (is_null($this->select_transfer->start_no) ? 0 : $this->select_transfer->start_no + 1) .
                     (is_null($this->select_transfer->end_no) ? '' : '|max:' . $this->select_transfer->end_no);
-                $rules['qty'] = 'required|numeric|min:1|max:'.$this->remaining_qty ;
+                $rules['qty'] = 'required|numeric|min:1|max:' . $this->remaining_qty ;
                 $rules['taxable_id'] = 'required|numeric';
             } else {
             }
@@ -149,10 +153,10 @@ class AddStockTransferDepositModal extends Component
 
     public function render()
     {
-        $default_date= $this->getDefaultDateRange();
+        $default_date = $this->getDefaultDateRange();
         $this->user_id = Auth::id();
         $taxlabel_list = TaxLabel::where('category', 'LIKE', '%CATEGORY 3%')->get();
-        $stock_requests = StockRequest::where('req_type', 'DEMANDE')->where('type', '=','ACTIVE')->get();
+        $stock_requests = StockRequest::where('req_type', 'DEMANDE')->where('type', '=', 'ACTIVE')->get();
         $collectors = User::select('users.id', 'users.name as user_name', 'roles.name as role_name')
             ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
             ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
@@ -160,7 +164,7 @@ class AddStockTransferDepositModal extends Component
             ->get();
         $this->request_nos = StockTransfer::select('trans_no')
             ->whereBetween('created_at', [$default_date['s_date'], $default_date['e_date']])
-            ->groupBy('trans_no')->where('to_user_id', '=',$this->collector_id)->get();
+            ->groupBy('trans_no')->where('to_user_id', '=', $this->collector_id)->get();
         return view('livewire.stock_transfer.add-stock-transfer-deposit-modal', ['collectors' => $collectors, 'stock_requests' => $stock_requests, 'taxlabel_list' => $taxlabel_list]);
     }
     public function updatedTransNo($value)
@@ -192,10 +196,10 @@ class AddStockTransferDepositModal extends Component
             ->orderBy('stock_transfers.id', 'DESC')
             ->get();
 
-        if($this->tariff=="0"){
-            $this->can_set_total=true;
-        }else{
-            $this->can_set_total=false;
+        if ($this->tariff == "0") {
+            $this->can_set_total = true;
+        } else {
+            $this->can_set_total = false;
         }
         if ($this->collector_id < 1) {
             return;
@@ -275,9 +279,8 @@ class AddStockTransferDepositModal extends Component
         } elseif ($this->qty > $this->remaining_qty) {
             $this->qty = $this->remaining_qty;
         }
-        if(!$this->can_set_total){
+        if (!$this->can_set_total) {
             $this->total = $this->qty * $this->tariff;
-
         }
     }
     public function submit()
@@ -285,7 +288,7 @@ class AddStockTransferDepositModal extends Component
         $this->validateData();
         $user = auth()->user();
         if (!$user->hasRole('regisseur')) {
-            $this->dispatchMessage('Valeur Inactive', 'update', 'error',"Action non authorize");
+            $this->dispatchMessage('Valeur Inactive', 'update', 'error', "Action non authorize");
             $this->reset();
             abort(403, 'Accès interdit');
             return;

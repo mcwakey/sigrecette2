@@ -1,5 +1,7 @@
 <?php
+
 namespace App\DataTables;
+
 use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
 use App\Models\Invoice;
@@ -16,6 +18,7 @@ use Yajra\DataTables\WithExportQueue;
 class ExportTaxpayerTaxablesDataTable extends DataTable
 {
     use WithExportQueue;
+
     /**
      * Build the DataTable class.
      *
@@ -38,13 +41,13 @@ class ExportTaxpayerTaxablesDataTable extends DataTable
                 return $taxpayerTaxable->taxpayer?->name;
             })
             ->editColumn('width', function (TaxpayerTaxable $taxpayer_taxable) {
-                if ($taxpayer_taxable->taxable->unit_type=='Superficie'){
+                if ($taxpayer_taxable->taxable->unit_type == 'Superficie') {
                     return $taxpayer_taxable->width;
                 }
                 return "";
             })
             ->editColumn('length', function (TaxpayerTaxable $taxpayer_taxable) {
-                if ($taxpayer_taxable->taxable->unit_type=='Superficie'){
+                if ($taxpayer_taxable->taxable->unit_type == 'Superficie') {
                     return $taxpayer_taxable->length;
                 }
                 return "";
@@ -78,13 +81,12 @@ class ExportTaxpayerTaxablesDataTable extends DataTable
                 } else {
                     $period = 1;
                 }
-                $amount=0;
-                if( is_numeric($taxpayer_taxable->seize)){
+                $amount = 0;
+                if (is_numeric($taxpayer_taxable->seize)) {
                     if ($taxpayer_taxable->taxable->tariff_type == "FIXED") {
                         $amount = floatval($taxpayer_taxable->taxable->tariff) * ($taxpayer_taxable->taxable->use_second_formula == true ? 1 : floatval($taxpayer_taxable->seize) * $period);
-
                     } else {
-                        $amount=  floatval($taxpayer_taxable->taxable->tariff) * ($taxpayer_taxable->taxable->use_second_formula == true ? 1 : floatval($taxpayer_taxable->seize) * $period/100);
+                        $amount =  floatval($taxpayer_taxable->taxable->tariff) * ($taxpayer_taxable->taxable->use_second_formula == true ? 1 : floatval($taxpayer_taxable->seize) * $period / 100);
                         // $amount=2;
                     }
                  //  dd(floatval($taxpayer_taxable->taxable->tariff), $taxpayer_taxable->taxable->use_second_formula,floatval($taxpayer_taxable->seize), $period, $amount);
@@ -115,7 +117,7 @@ class ExportTaxpayerTaxablesDataTable extends DataTable
         return $model->with(['taxable', 'taxpayer','invoice','taxable.tax_label'])
             ->join('taxables', 'taxpayer_taxables.taxable_id', '=', 'taxables.id')
             ->leftJoin('taxpayers', 'taxpayers.id', '=', 'taxpayer_taxables.taxpayer_id')
-            ->where('taxpayers.type','=',Constants::TITRE)
+            ->where('taxpayers.type', '=', Constants::TITRE)
             ->join('tax_labels', 'taxables.tax_label_id', '=', 'tax_labels.id')
             ->select('taxpayer_taxables.*')
             ->whereBetween('taxpayer_taxables.created_at', [$this->startDate, $this->endDate])
@@ -170,7 +172,4 @@ class ExportTaxpayerTaxablesDataTable extends DataTable
     {
         return 'Export-TaxpayerTaxables_' . date('YmdHis');
     }
-
-
-
 }

@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\DataTables\EreasDataTable;
 use App\Models\Erea;
 use Illuminate\Http\Request;
+
 class EreasController extends Controller
 {
     /**

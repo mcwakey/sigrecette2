@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('taxpayers', function (Blueprint $table) {
             $table->string('from_mobile_and_validate_state')->nullable();
-
         });
     }
 
@@ -24,7 +23,6 @@ return new class extends Migration
     {
         Schema::table('taxpayers', function (Blueprint $table) {
             $table->dropColumn('from_mobile_and_validate_state');
-
         });
     }
 };

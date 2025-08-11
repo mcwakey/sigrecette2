@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\User;
+
 use App\Helpers\Constants;
 use App\Models\User;
 use App\Models\Zone;
@@ -10,9 +12,11 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
+
 class AddUserModal extends Component
 {
     use WithFileUploads;
+
     public $user_id;
     public $name;
     public $email;

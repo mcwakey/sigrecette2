@@ -1,12 +1,16 @@
 <?php
+
 namespace App\Livewire\TaxLabel;
+
 use App\Models\TaxLabel;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
+
 class AddTaxLabelModal extends Component
 {
     use WithFileUploads;
+
     public $tax_label_id;
     public $name;
     public $category;

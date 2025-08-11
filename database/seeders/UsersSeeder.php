@@ -105,7 +105,6 @@ class UsersSeeder extends Seeder
                 'latitude' => json_encode([1.204888, 1.209127, 1.207924]),
                 'zone_id' => Zone::inRandomOrder()->first()->id,
             ]);
-
         }
     }
 }

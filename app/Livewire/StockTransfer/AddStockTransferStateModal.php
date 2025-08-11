@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\StockTransfer;
+
 use App\Helpers\Constants;
 use App\Models\Payment;
 use App\Models\StockRequest;
@@ -13,9 +15,11 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Stmt\Return_;
+
 class AddStockTransferStateModal extends Component
 {
     use WithFileUploads;
+
     public $stock_transfer_id;
     public $user_id;
     public $collector_id;

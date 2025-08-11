@@ -1,13 +1,17 @@
 <?php
+
 namespace App\Livewire\StockRequest;
+
 use App\Models\StockRequest;
 use App\Traits\DispatchesMessages;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+
 class AddStatusForm extends Component
 {
     use DispatchesMessages;
+
     public $request_id;
     public $status;
     public $edit_mode = false;
@@ -29,7 +33,7 @@ class AddStatusForm extends Component
         $this->validate();
         $user = auth()->user();
         if (!$user->hasRole('regisseur')) {
-            $this->dispatchMessage('Valeur Inactive', 'update', 'error',"Action non authorize");
+            $this->dispatchMessage('Valeur Inactive', 'update', 'error', "Action non authorize");
             $this->reset();
             abort(403, 'Accès interdit');
             return;

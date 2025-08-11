@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\DataTables\TownsDataTable;
 use App\Models\Town;
 use Illuminate\Http\Request;
+
 class TownsController extends Controller
 {
     /**

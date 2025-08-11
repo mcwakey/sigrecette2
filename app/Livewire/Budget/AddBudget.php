@@ -17,7 +17,7 @@ class AddBudget extends Component
     public $budgets = [];
     public $availableTaxLabels;
     public $edit_mode = false;
-    public $current_budget=[];
+    public $current_budget = [];
     protected $rules = [
         'budgets.*.tax_label_id' => 'required|distinct|exists:tax_labels,id',
         'budgets.*.expected_amount' => 'required|numeric|min:0',
@@ -25,14 +25,14 @@ class AddBudget extends Component
     public function mount()
     {
         $year = Year::getActiveYear();
-        $last_budgets=$year->getBudgetsByTaxLabel();
+        $last_budgets = $year->getBudgetsByTaxLabel();
         $this->yearId = $year->id;
         $this->availableTaxLabels = TaxLabel::all();
         $this->budgets = $last_budgets->map(function ($budget) {
             return [
                 'tax_label_id' => $budget->tax_label_id,
                 'expected_amount' => $budget->expected_amount,
-                'id'=>$budget->id,
+                'id' => $budget->id,
             ];
         })->toArray();
 
@@ -43,19 +43,18 @@ class AddBudget extends Component
     }
     public function cleanCurrentBudget()
     {
-        $this->current_budget = ['tax_label_id' => '', 'expected_amount' => 0, 'id'=>null];
+        $this->current_budget = ['tax_label_id' => '', 'expected_amount' => 0, 'id' => null];
     }
     public function addBudgetRow()
     {
 
         $this->budgets[] = $this->current_budget;
         $this->cleanCurrentBudget();
-
     }
 
     public function removeBudgetRow($index)
     {
-        if($this->budgets[$index]['id']!=null){
+        if ($this->budgets[$index]['id'] != null) {
             $this->deleteSavedBudget($this->budgets[$index]['id']);
         }
         unset($this->budgets[$index]);
@@ -72,10 +71,9 @@ class AddBudget extends Component
         }
         DB::transaction(function () {
             foreach ($this->budgets as $budget) {
-                if($budget['tax_label_id']){
-                    Budget::updateOrCreateBudget($this->yearId, $budget['tax_label_id'],$budget['expected_amount']);
+                if ($budget['tax_label_id']) {
+                    Budget::updateOrCreateBudget($this->yearId, $budget['tax_label_id'], $budget['expected_amount']);
                 }
-
             }
             if ($this->edit_mode) {
                 $this->dispatchMessage('Budget', 'update');
@@ -83,7 +81,6 @@ class AddBudget extends Component
                 $this->dispatchMessage('Budget');
             }
         });
-
     }
     public function render()
     {

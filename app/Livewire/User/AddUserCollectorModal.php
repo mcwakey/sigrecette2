@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\User;
+
 use App\Helpers\Constants;
 use App\Models\User;
 use App\Models\Zone;
@@ -11,9 +13,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+
 class AddUserCollectorModal extends Component
 {
     use WithFileUploads;
+
     public $user_id;
     public $name;
     public $role;
@@ -36,7 +40,7 @@ class AddUserCollectorModal extends Component
     }
     public function submit()
     {
-        $role = Role::where('name', "=",'collecteur')->first();
+        $role = Role::where('name', "=", 'collecteur')->first();
         if ($role) {
             $this->role = $role->name;
         }

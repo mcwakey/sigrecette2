@@ -1,15 +1,19 @@
 <?php
+
 namespace App\Livewire\Commune;
+
 use App\Models\Commune;
 use App\Traits\DispatchesMessages;
 use http\Url;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
+
 class AddCommuneModal extends Component
 {
     use WithFileUploads;
     use DispatchesMessages;
+
     public $commune_id;
     public $mayor_name;
     public $phone_number;
@@ -25,8 +29,8 @@ class AddCommuneModal extends Component
     public $limit_json;
     public $edit_mode = false;
     public $url;
-    public $qr_code_enabled=false;
-    public $carry_forward_previous_year=false;
+    public $qr_code_enabled = false;
+    public $carry_forward_previous_year = false;
     public $email;
     public $logo;
     public $saved_logo;
@@ -134,8 +138,8 @@ class AddCommuneModal extends Component
         $this->longitude = $commune->longitude;
         $this->url = $commune->url;
         $this->email = $commune->email;
-        $this->qr_code_enabled= $commune->qr_code_enabled;
-        $this->carry_forward_previous_year= $commune->carry_forward_previous_year;
+        $this->qr_code_enabled = $commune->qr_code_enabled;
+        $this->carry_forward_previous_year = $commune->carry_forward_previous_year;
     }
     public function hydrate()
     {

@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\StockRequest;
+
 use App\Models\StockRequest;
 use App\Models\StockTransfer;
 use App\Models\Taxable;
@@ -13,10 +15,12 @@ use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
+
 class AddStockRequestModal extends Component
 {
     use WithFileUploads;
     use DispatchesMessages;
+
     public $stock_request_id;
     public $user_id;
     public $tariff;
@@ -52,7 +56,7 @@ class AddStockRequestModal extends Component
                         dump($this->start_no, $this->end_no);
                         $fail('Les valeurs saisies dans n° de debut ou n° de fin sont incorrectes.');
                     }
-                }catch (Exception $e) {
+                } catch (Exception $e) {
                     $fail('Les valeurs saisies dans n° de debut ou n° de fin sont incorrectes.');
                 }
             }],
@@ -95,7 +99,7 @@ class AddStockRequestModal extends Component
         $this->validate();
         $user = auth()->user();
         if (!$user->hasRole('regisseur')) {
-            $this->dispatchMessage('Valeur Inactive', 'update', 'error',"Action non authorize");
+            $this->dispatchMessage('Valeur Inactive', 'update', 'error', "Action non authorize");
             $this->reset();
             abort(403, 'Accès interdit');
             return;

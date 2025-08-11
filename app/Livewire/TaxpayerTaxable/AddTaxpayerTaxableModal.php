@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\TaxpayerTaxable;
+
 use App\Models\Canton;
 use App\Models\Erea;
 use App\Models\Gender;
@@ -17,10 +19,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use mysql_xdevapi\CollectionRemove;
+
 class AddTaxpayerTaxableModal extends Component
 {
     use WithFileUploads;
     use DispatchesMessages;
+
     public $taxpayer_taxable_id;
     public $description;
     public $seize;
@@ -122,7 +126,7 @@ class AddTaxpayerTaxableModal extends Component
                 'billable' => '0'
             ]);
         }
-       $this->dispatchMessage('Taxation du contribuable', 'update');
+        $this->dispatchMessage('Taxation du contribuable', 'update');
     }
     public function submit()
     {
@@ -167,10 +171,9 @@ class AddTaxpayerTaxableModal extends Component
         try {
             TaxpayerTaxable::destroy($id);
             $this->dispatchMessage('Taxation du contribuable', 'delete');
-        }catch (\Exception $exception){
-            $this->dispatchMessage('Taxation du contribuable', 'delete','error','erreur lors de la supression de la taxation du contribuable.');
+        } catch (\Exception $exception) {
+            $this->dispatchMessage('Taxation du contribuable', 'delete', 'error', 'erreur lors de la supression de la taxation du contribuable.');
         }
-
     }
     public function updateTaxpayerTaxable($id)
     {

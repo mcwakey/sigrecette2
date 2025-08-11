@@ -1,6 +1,9 @@
 <?php
+
 namespace App\Jobs;
+
 use App\Models\UserLogs;
+
 class LogUserActivity
 {
     protected $data;

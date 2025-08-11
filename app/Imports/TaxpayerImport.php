@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Imports;
+
 use App\Models\Activity;
 use App\Models\Canton;
 use App\Models\Category;
@@ -17,11 +19,13 @@ use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithProgressBar;
+
 class TaxpayerImport implements ToModel, WithProgressBar, WithBatchInserts, WithChunkReading, WithHeadingRow, ShouldQueue
 {
     use Importable;
     use RemembersRowNumber;
     use RemembersChunkOffset;
+
     /**
      *
      * @return \Illuminate\Database\Eloquent\Model|null
@@ -30,7 +34,8 @@ class TaxpayerImport implements ToModel, WithProgressBar, WithBatchInserts, With
     public function model(array $row)
     {
         $faker = fake();
-        if (!isset($row['nom'])
+        if (
+            !isset($row['nom'])
             || !isset($row['adresse'])
             || !isset($row['zone'])
             || !isset($row['activite'])
@@ -38,9 +43,11 @@ class TaxpayerImport implements ToModel, WithProgressBar, WithBatchInserts, With
             return null;
         }
         $existingTaxpayer = Taxpayer::where(
-            'name',"=", $row['nom'] . " " . isset($row['prenoms']) ?? $row['prenoms']
+            'name',
+            "=",
+            $row['nom'] . " " . isset($row['prenoms']) ?? $row['prenoms']
         )
-            ->where('address',"=", $row["adresse"])
+            ->where('address', "=", $row["adresse"])
             ->first();
         if ($existingTaxpayer) {
             return null;

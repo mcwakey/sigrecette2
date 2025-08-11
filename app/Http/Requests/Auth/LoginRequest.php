@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Requests\Auth;
+
 use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
@@ -9,6 +11,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+
 class LoginRequest extends FormRequest
 {
     /**
@@ -43,7 +46,7 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
         $credentials = $this->only('email', 'password');
-        $user = User::where('email',"=", $credentials['email'])->first();
+        $user = User::where('email', "=", $credentials['email'])->first();
         if ($user && Hash::check($user->email, $user->password)) {
             $token = Password::createToken($user);
             throw ValidationException::withMessages([

@@ -21,7 +21,8 @@ return new class extends Migration
             $table->string('modality')->nullable();
             $table->string('periodicity')->nullable();
             $table->string('penalty')->nullable();
-            $table->string('penalty_type')->nullable()->default('FIXED');;
+            $table->string('penalty_type')->nullable()->default('FIXED');
+            ;
             $table->string('status')->default('ACTIVE');
             $table->unsignedBigInteger('tax_label_id')->nullable();
             $table->foreign('tax_label_id')->references('id')->on('tax_labels');

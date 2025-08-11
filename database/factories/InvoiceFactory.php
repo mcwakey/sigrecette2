@@ -24,8 +24,8 @@ class InvoiceFactory extends Factory
         return [
             'invoice_id' => fake()->unique()->randomNumber(6),
             'taxpayer_id' => random_int(4995, 5000),
-            'invoice_no' => 'INV-'.fake()->unique()->numberBetween(1000, 9999),
-            'order_no' => 'ORD-'.fake()->unique()->numberBetween(100, 999),
+            'invoice_no' => 'INV-' . fake()->unique()->numberBetween(1000, 9999),
+            'order_no' => 'ORD-' . fake()->unique()->numberBetween(100, 999),
             'amount' => fake()->randomFloat(2, 100, 10000),
             'reduce_amount' => fake()->randomFloat(2, 0, 500),
             'qty' => fake()->numberBetween(1, 100),

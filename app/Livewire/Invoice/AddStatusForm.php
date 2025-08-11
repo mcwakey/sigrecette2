@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\Invoice;
+
 use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
 use App\Models\Invoice;
@@ -16,9 +18,11 @@ use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+
 class AddStatusForm extends Component
 {
     use DispatchesMessages;
+
     public $invoice_id;
     public $status;
     public $type;
@@ -35,7 +39,8 @@ class AddStatusForm extends Component
                 InvoiceStatusEnums::APPROVED,
                 InvoiceStatusEnums::APPROVED_CANCELLATION,
                 InvoiceStatusEnums::CANCELED,
-                InvoiceStatusEnums::REDUCED)],
+                InvoiceStatusEnums::REDUCED
+            )],
         ];
     }
     private $error_message;
@@ -101,14 +106,14 @@ class AddStatusForm extends Component
                     case InvoiceStatusEnums::REJECTED_BY_OR:
                         $invoice->submitToState("submit_for_reject_by_ord");
                         break;
-                    case  InvoiceStatusEnums::PENDING:
+                    case InvoiceStatusEnums::PENDING:
                         $invoice->submitToState("submit_for_pending");
                         break;
                     case InvoiceStatusEnums::REJECTED:
                         $invoice->submitToState("submit_for_rejected");
                         break;
-                    case   InvoiceStatusEnums::APPROVED:
-                    case     InvoiceStatusEnums::APPROVED_CANCELLATION:
+                    case InvoiceStatusEnums::APPROVED:
+                    case InvoiceStatusEnums::APPROVED_CANCELLATION:
                         if ($invoice->type == Constants::INVOICE_TYPE_COMPTANT) {
                             $invoice->setDeliveryToNow($this->status);
                             $invoice->save();
@@ -121,7 +126,7 @@ class AddStatusForm extends Component
                     case InvoiceStatusEnums::CANCELED:
                     case InvoiceStatusEnums::REDUCED:
                         break;
-                    default :
+                    default:
                 }
                 $this->dispatchMessage('Avis', 'update');
             });

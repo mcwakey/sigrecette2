@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\Invoice;
+
 ;
 use App\DataTables\TaxpayersDataTable;
 use App\Models\Taxpayer;
@@ -14,6 +16,7 @@ class AddInvoiceGeneralModal extends Component
 {
     use DispatchesMessages;
     use WithPagination;
+
     public $taxpayer_id;
     public $taxpayer_taxables;
     protected $rules = [
@@ -34,10 +37,12 @@ class AddInvoiceGeneralModal extends Component
     }
     public function render()
     {
-        return view('livewire.invoice.add-invoice-general-modal',
+        return view(
+            'livewire.invoice.add-invoice-general-modal',
             [
                 'taxpayer' => Taxpayer::find($this->taxpayer_id)
-            ]);
+            ]
+        );
     }
     public function loadTaxpayerData()
     {
@@ -55,7 +60,7 @@ class AddInvoiceGeneralModal extends Component
                 break;
             }
         }
-        TaxpayerTaxable::where('id', "=",$taxpayerTaxableId)->update(['billable' => $value]);
+        TaxpayerTaxable::where('id', "=", $taxpayerTaxableId)->update(['billable' => $value]);
     }
     public function hhpaginationView()
     {

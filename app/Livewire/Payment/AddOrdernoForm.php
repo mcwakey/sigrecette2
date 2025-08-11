@@ -1,12 +1,16 @@
 <?php
+
 namespace App\Livewire\Invoice;
+
 use App\Models\Invoice;
 use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+
 class AddOrdernoForm extends Component
 {
     use DispatchesMessages;
+
     public $invoice_id;
     public $orderno;
     public $edit_mode = false;
@@ -27,7 +31,7 @@ class AddOrdernoForm extends Component
         $this->validate();
         $user = auth()->user();
         if (!$user->hasRole('regisseur')) {
-            $this->dispatchMessage('Paiement', 'update', 'error',"Action non authorize");
+            $this->dispatchMessage('Paiement', 'update', 'error', "Action non authorize");
             $this->reset();
             abort(403, 'Accès interdit');
             return;

@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\Activity;
+
 use App\Models\Activity;
 use App\Models\Canton;
 use App\Models\Category;
@@ -7,10 +9,12 @@ use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
+
 class AddActivityModal extends Component
 {
     use WithFileUploads;
     use DispatchesMessages;
+
     public $category_id;
     public $activity_id;
     public $name;

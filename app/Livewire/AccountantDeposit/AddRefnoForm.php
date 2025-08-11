@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\AccountantDeposit;
+
 use App\Enums\InvoiceStatusEnums;
 use App\Enums\PaymentStatusEnums;
 use App\Helpers\Constants;
@@ -12,9 +14,11 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\InvoiceAccepted;
 use Illuminate\Support\Facades\Notification;
+
 class AddRefnoForm extends Component
 {
     use DispatchesMessages;
+
     public $refno;
     public $edit_mode = false;
     protected $rules = [
@@ -34,7 +38,7 @@ class AddRefnoForm extends Component
         $this->validate();
         $user = auth()->user();
         if (!$user->hasRole('regisseur')) {
-            $this->dispatchMessage('Quitance de paiement', 'update', 'error',"Action non authorize");
+            $this->dispatchMessage('Quitance de paiement', 'update', 'error', "Action non authorize");
             $this->reset();
             abort(403, 'Accès interdit');
             return;

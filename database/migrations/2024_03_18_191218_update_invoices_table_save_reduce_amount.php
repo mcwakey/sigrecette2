@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('invoices', function (Blueprint $table) {
             $table->string('reduce_amount')->after('amount')->nullable()->default('');
         });
-}
+    }
 
     /**
      * Reverse the migrations.
@@ -23,7 +23,6 @@ return new class extends Migration
     {
         Schema::table('invoices', function (Blueprint $table) {
             $table->dropColumn('reduce_amount');
-
         });
     }
 };

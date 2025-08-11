@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\Erea;
+
 use App\Models\Canton;
 use App\Models\Erea;
 use App\Models\Town;
@@ -7,10 +9,12 @@ use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
+
 class AddEreaModal extends Component
 {
     use WithFileUploads;
     use DispatchesMessages;
+
     public $canton_id;
     public $town_id;
     public $erea_id;
@@ -30,7 +34,7 @@ class AddEreaModal extends Component
     ];
     public function updatedCantonId($value)
     {
-        $this->towns = Town::where('canton_id',"=", $value)->get(); // Load taxables based on tax label ID
+        $this->towns = Town::where('canton_id', "=", $value)->get(); // Load taxables based on tax label ID
     }
     public function render()
     {

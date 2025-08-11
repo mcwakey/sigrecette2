@@ -1,5 +1,7 @@
 <?php
+
 namespace App\DataTables;
+
 use App\Models\Taxable;
 use App\Models\Taxpayer;
 use Yajra\DataTables\Html\Column;
@@ -13,6 +15,7 @@ use Yajra\DataTables\WithExportQueue;
 class ExportTaxablesDataTable extends DataTable
 {
     use WithExportQueue;
+
     public $query = false;
 
     /**

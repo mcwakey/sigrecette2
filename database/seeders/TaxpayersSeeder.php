@@ -10,6 +10,7 @@ use App\Models\Zone;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
 use function Pest\Laravel\from;
 
 class TaxpayersSeeder extends Seeder
@@ -19,7 +20,7 @@ class TaxpayersSeeder extends Seeder
      */
     public function run(): void
     {
-        $taxpayers =null;
+        $taxpayers = null;
         $coordinates = [
             [0.7966636,6.7985916],
             [0.7965752,6.7984923],
@@ -37,7 +38,7 @@ class TaxpayersSeeder extends Seeder
         ];
 
         foreach ($coordinates as $value) {
-           $taxpayers[]=Taxpayer::create([
+            $taxpayers[] = Taxpayer::create([
             'tnif' => fake()->randomNumber(3, 1, 10) . Str::random(5) . fake()->randomNumber(3, 0, 9),
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
@@ -56,7 +57,7 @@ class TaxpayersSeeder extends Seeder
             'zone_id' => Zone::inRandomOrder()->first()->id,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
-           ]);
+            ]);
         }
 
         $taxpayers = Taxpayer::factory()
@@ -71,11 +72,5 @@ class TaxpayersSeeder extends Seeder
                     'taxpayer_id' => $taxpayer->id,
                 ]);
         });
-
-
-
-
-
-
     }
 }

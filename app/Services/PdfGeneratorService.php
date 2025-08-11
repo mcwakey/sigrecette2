@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Services;
+
 use App\Contracts\PdfGeneratorInterface;
 use App\Enums\InvoiceStatusEnums;
 use App\Enums\PrintNameEnums;
@@ -20,16 +22,17 @@ use ZipArchive;
 
 class PdfGeneratorService implements PdfGeneratorInterface
 {
-    public function __construct(private  Commune|null $commune = null,
-                                private  QrcodeGeneratorService $qrcodeGeneratorService)
-    {
+    public function __construct(
+        private Commune|null $commune = null,
+        private QrcodeGeneratorService $qrcodeGeneratorService
+    ) {
         $this->commune = Commune::first();
     }
 
     /**
      * @param int|null $action
      */
-    public function generateInvoicePdf(array $data, string $templateName, int $action = null,$is_relance=false): array
+    public function generateInvoicePdf(array $data, string $templateName, int $action = null, $is_relance = false): array
     {
 
         $data = Invoice::retrieveByUUIDs($data);
@@ -53,11 +56,13 @@ class PdfGeneratorService implements PdfGeneratorInterface
                 $pdf = PDF::loadView(
                     "exports." . $templateName,
                     ['data' => $default_invoice, 'action' => $action, "commune" => $this->commune,
-                    'qrcodeSvg' =>$this->qrcodeGeneratorService->generate(
+                    'qrcodeSvg' => $this->qrcodeGeneratorService->generate(
                         route('invoices.show', [$default_invoice]),
                         $this->commune->getImageUrlAttribute()
                     ),
-                    'is_relance'=>$is_relance,])
+                    'is_relance' => $is_relance,
+                    ]
+                )
                     ->stream($filename);
                 $invoice = $default_invoice;
             } else {
@@ -66,10 +71,11 @@ class PdfGeneratorService implements PdfGeneratorInterface
                     ['data' => $default_invoice, 'action' => $action,
                         'invoice' => $invoice,
                         "commune" => $this->commune,
-                     'qrcodeSvg' =>$this->qrcodeGeneratorService->generate($invoice->invoice_no)
+                     'qrcodeSvg' => $this->qrcodeGeneratorService->generate($invoice->invoice_no)
                         ,
-                        'is_relance'=>$is_relance,
-                    ])
+                        'is_relance' => $is_relance,
+                    ]
+                )
                     ->stream($filename);
             }
             if (isset($invoice) && $invoice->edition_state == null) {
@@ -96,7 +102,9 @@ class PdfGeneratorService implements PdfGeneratorInterface
                 PDF::loadView(
                     "exports." . $template,
                     ['data' => $data, 'titles' => $this->generateTitleWithAction($action),
-                        "commune" => $this->commune, "action" => $action])
+                    "commune" => $this->commune,
+                    "action" => $action]
+                )
                     ->setPaper('a4', 'landscape')
                     ->stream($filename);
             return ['success' => true, 'pdf' => $pdf];
@@ -199,8 +207,7 @@ class PdfGeneratorService implements PdfGeneratorInterface
     }
     public function generataxpayerFormPdf($data, string $template): array
     {
-        if ($this->checkIfCommuneIsNotNull()&& count($data) > 0) {
-
+        if ($this->checkIfCommuneIsNotNull() && count($data) > 0) {
             $data = Taxpayer::getInvoiceAndPayments($data[0]);
             $filename = "Fiche-contribuable" . Str::random(8) . ".pdf";
             $pdf = PDF::loadView("exports." . $template, ['data' => $data, "commune" => $this->commune])->setPaper('a4')->stream($filename);
@@ -235,8 +242,8 @@ class PdfGeneratorService implements PdfGeneratorInterface
                     }
                 }
                 $printFile = PrintFile::createPrintFile($type, $data, $total);
-            }else{
-                $printFile= Invoice::getPrintFile([InvoiceStatusEnums::PENDING], $type);
+            } else {
+                $printFile = Invoice::getPrintFile([InvoiceStatusEnums::PENDING], $type);
             }
         }
         if ($printFile != null && $this->checkIfCommuneIsNotNull()) {
@@ -247,7 +254,10 @@ class PdfGeneratorService implements PdfGeneratorInterface
                 $pdf = PDF::loadView(
                     "exports." . $templateName,
                     ['data' => $data, 'titles' => $this->generateTitleWithAction($action),
-                        "commune" => $this->commune, "action" => $action, 'print' => $printFile])
+                    "commune" => $this->commune,
+                    "action" => $action,
+                    'print' => $printFile]
+                )
                     ->setPaper('a4', 'landscape')
                     ->stream($filename);
                 foreach ($data as $invoice) {
@@ -271,7 +281,8 @@ class PdfGeneratorService implements PdfGeneratorInterface
             [InvoiceStatusEnums::CANCELED,
                 InvoiceStatusEnums::REDUCED,
                 InvoiceStatusEnums::APPROVED,
-                InvoiceStatusEnums::APPROVED_CANCELLATION]);
+            InvoiceStatusEnums::APPROVED_CANCELLATION]
+        );
         if ($this->checkIfCommuneIsNotNull() && count($data) > 0) {
             $filename = "Journal_des_avis_des_sommes_à_payer_confiés_par_le_receveur" . "-" . date('Ymd_His') . ".pdf";
             $pdf = PDF::loadView("exports." . $template, ['data' => $data, 'titles' => $this->generateTitleWithAction($action), "commune" => $this->commune, "action" => $action])->setPaper('a4', 'landscape')->stream($filename);
@@ -288,7 +299,8 @@ class PdfGeneratorService implements PdfGeneratorInterface
             [InvoiceStatusEnums::CANCELED,
                 InvoiceStatusEnums::REDUCED,
                 InvoiceStatusEnums::APPROVED,
-                InvoiceStatusEnums::APPROVED_CANCELLATION]);
+            InvoiceStatusEnums::APPROVED_CANCELLATION]
+        );
         if ($this->checkIfCommuneIsNotNull() && count($data) > 0) {
             $filename = "Registre-journal-des-avis-distribués" . Str::random(8) . ".pdf";
             $pdf = PDF::loadView("exports." . $template, ['data' => $data, 'titles' => $this->generateTitleWithAction($action), "commune" => $this->commune, "action" => $action])->setPaper('a4', 'landscape')->stream($filename);
@@ -357,7 +369,7 @@ class PdfGeneratorService implements PdfGeneratorInterface
     }
     public function generateStateAcountIvCollectorPdf($data, string $template): array
     {
-        if(count($data) > 2) {
+        if (count($data) > 2) {
             $user = User::find($data[0]);
             $period = $data[1];
             $data = StockTransfer::buildAndGetStockTransferWithQuery($period);

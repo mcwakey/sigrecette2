@@ -1,14 +1,18 @@
 <?php
+
 namespace App\Livewire\Category;
+
 use App\Models\Category;
 use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
+
 class AddCategoryModal extends Component
 {
     use WithFileUploads;
     use DispatchesMessages;
+
     public $category_id;
     public $name;
     public $status;

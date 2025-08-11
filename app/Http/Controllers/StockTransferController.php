@@ -1,20 +1,24 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\DataTables\CollectorsDataTable;
 use App\DataTables\StockTransfersDataTable;
 use App\Models\User;
 use App\Traits\HandlesDateFilters;
 use Illuminate\Http\Request;
+
 class StockTransferController extends Controller
 {
-    use  HandlesDateFilters;
-    public function index(Request $request,CollectorsDataTable $dataTable)
+    use HandlesDateFilters;
+
+    public function index(Request $request, CollectorsDataTable $dataTable)
     {
         $this->handleDateFilters($request);
         $collectors = User::select('users.id', 'users.name as user_name', 'roles.name as role_name')
             ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
             ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-            ->where('roles.name', "=",'collecteur')
+            ->where('roles.name', "=", 'collecteur')
             ->get();
         return $dataTable->with(
             [
@@ -26,7 +30,7 @@ class StockTransferController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request,string $userId, StockTransfersDataTable $dataTable)
+    public function show(Request $request, string $userId, StockTransfersDataTable $dataTable)
     {
         $this->handleDateFilters($request);
         $validatedData = $request->validate([
@@ -37,7 +41,7 @@ class StockTransferController extends Controller
         $dateFrom = $validatedData['p_s_date'] ?? null;
         $dateTo = $validatedData['p_e_date'] ?? null;
         return $dataTable->with([
-            'id'=>$user->id,
+            'id' => $user->id,
             'startDate' => $this->s_date,
             'endDate' => $this->e_date,
         ])->with('dateFrom', $dateFrom)->render('pages/stock_transfers.show', ['user' => $user, 'dateFrom' => $dateFrom, 'dateTo' => $dateTo]);

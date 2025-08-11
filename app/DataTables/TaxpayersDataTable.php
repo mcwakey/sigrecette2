@@ -1,5 +1,7 @@
 <?php
+
 namespace App\DataTables;
+
 use App\Enums\TaxpayerStateEnums;
 use App\Helpers\Constants;
 use App\Models\Taxpayer;
@@ -11,9 +13,11 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\WithExportQueue;
+
 class TaxpayersDataTable extends DataTable
 {
     use WithExportQueue;
+
     /**
      * Build the DataTable class.
      *
@@ -51,7 +55,7 @@ class TaxpayersDataTable extends DataTable
                 return view('pages/taxpayers.columns._aproval', ['taxpayerinfo' => $taxpayerinfo]);
             })
             ->editColumn('created_at', function (Taxpayer $taxpayer) {
-                return "Créé le: ".$taxpayer->created_at->format('d M Y');
+                return "Créé le: " . $taxpayer->created_at->format('d M Y');
             })
             ->editColumn('created_by', function (Taxpayer $taxpayer) {
                 $createdByName = null;
@@ -164,7 +168,7 @@ class TaxpayersDataTable extends DataTable
             if (request()->has('rc') && in_array($column->name, ['action', 'status'])) {
                 $column->visible(false);
             }
-            if (!request()->has('state') &&  in_array($column->name,['created_by','status','town.canton.name'])) {
+            if (!request()->has('state') &&  in_array($column->name, ['created_by','status','town.canton.name'])) {
                 $column->visible(false);
             }
             return $column;

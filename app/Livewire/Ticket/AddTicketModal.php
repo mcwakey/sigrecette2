@@ -1,15 +1,19 @@
 <?php
+
 namespace App\Livewire\Ticket;
+
 use App\Models\Taxable;
 use App\Models\TaxLabel;
 use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
+
 class AddTicketModal extends Component
 {
     use WithFileUploads;
     use DispatchesMessages;
+
     public $taxable_id;
     public $name;
     public $tariff;

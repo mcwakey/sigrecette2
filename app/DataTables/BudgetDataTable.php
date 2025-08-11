@@ -1,5 +1,7 @@
 <?php
+
 namespace App\DataTables;
+
 use App\Enums\InvoicePayStatusEnums;
 use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
@@ -14,10 +16,12 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
 use Yajra\DataTables\WithExportQueue;
+
 class BudgetDataTable extends DataTable
 {
     use WithExportQueue;
     use HandlesTaxpayerFilters;
+
     /**
      * Build the DataTable class.
      *
@@ -83,5 +87,4 @@ class BudgetDataTable extends DataTable
     {
         return 'Budgets_' . date('YmdHis');
     }
-
 }

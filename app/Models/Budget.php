@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Budget extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'year_id',
         'tax_label_id',
@@ -33,5 +34,4 @@ class Budget extends Model
             ]
         );
     }
-
 }

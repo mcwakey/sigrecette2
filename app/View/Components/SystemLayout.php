@@ -1,7 +1,10 @@
 <?php
+
 namespace App\View\Components;
+
 use Illuminate\Support\Facades\App;
 use Illuminate\View\Component;
+
 class SystemLayout extends Component
 {
     /**

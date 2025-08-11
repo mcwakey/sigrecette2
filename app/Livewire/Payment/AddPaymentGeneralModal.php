@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\Payment;
+
 use App\Models\Invoice;
 use App\Models\Payment;
 use Livewire\Component;
@@ -15,10 +17,12 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\Rule;
+
 class AddPaymentGeneralModal extends Component
 {
     use DispatchesMessages;
     use WithPagination;
+
     public $invoice_id;
     public $invoice;
     public $search = '';

@@ -1,9 +1,12 @@
 <?php
+
 namespace App\Http\Middleware;
+
 use App\Jobs\LogUserActivity;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Queue;
+
 class LogsUserActivity
 {
     public function handle(Request $request, Closure $next)

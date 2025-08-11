@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\Taxpayer;
+
 use App\Models\Town;
 use App\Models\Zone;
 use App\Models\Canton;
@@ -18,10 +20,12 @@ use App\Traits\DispatchesMessages;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Propaganistas\LaravelPhone\Rules\Phone;
+
 class AddTaxpayerModal extends Component
 {
     use WithFileUploads;
     use DispatchesMessages;
+
     public $taxpayer_id;
     public $tnif;
     public $name;
@@ -60,7 +64,7 @@ class AddTaxpayerModal extends Component
             'mobilephone' => [
                 'required',
                 'string',
-                (new Phone)->country(['TG', 'GH', 'BJ']),
+                (new Phone())->country(['TG', 'GH', 'BJ']),
             ],
             'longitude' => 'nullable|sometimes|string',
             'latitude' => 'nullable|sometimes|string',
@@ -94,15 +98,16 @@ class AddTaxpayerModal extends Component
     public function render()
     {
 
-        $cantons = Canton::where('status', "=","ACTIVE")->get();
+        $cantons = Canton::where('status', "=", "ACTIVE")->get();
         $genders = Gender::all();
         $id_types = IdType::all();
-        $zones = Zone::where('status', "=","ACTIVE")->get();;
-        $categories = Category::where('status', "=","ACTIVE")->get();
+        $zones = Zone::where('status', "=", "ACTIVE")->get();
+        ;
+        $categories = Category::where('status', "=", "ACTIVE")->get();
         return view('livewire.taxpayer.add-taxpayer-modal', ['cantons' => $cantons, 'genders' => $genders, 'id_types' => $id_types, 'zones' => $zones, 'categories' => $categories]);
     }
-    public function mount(){
-
+    public function mount()
+    {
     }
     public function submit(Request $request)
     {

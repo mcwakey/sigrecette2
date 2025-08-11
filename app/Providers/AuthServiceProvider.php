@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Providers;
+
 use App\Models\User;
 use App\Policies\CollectorPolicy;
 use App\Policies\RolePolicy;
@@ -7,6 +9,7 @@ use App\Policies\UserPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Spatie\Permission\Models\Role;
+
 class AuthServiceProvider extends ServiceProvider
 {
     /**
@@ -37,6 +40,5 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('update-collector', [CollectorPolicy::class, 'update']);
         Gate::define('create-collector', [CollectorPolicy::class, 'create']);
         Gate::define('delete-collector', [CollectorPolicy::class, 'delete']);
-
     }
 }

@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\StockTransfer;
+
 use App\Helpers\Constants;
 use App\Models\Payment;
 use App\Models\StockRequest;
@@ -14,10 +16,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+
 class AddStockTransferModal extends Component
 {
     use WithFileUploads;
     use HandlesDateFilters;
+
     public $stock_transfer_id;
     public $user_id;
     public $collector_id;
@@ -68,7 +72,7 @@ class AddStockTransferModal extends Component
                 'required',
                 'numeric',
                 'min:1',
-                'max:'.$this->remaining_qty,
+                'max:' . $this->remaining_qty,
                 function ($attribute, $value, $fail) {
                     try {
                         $startNo = $this->start_no ?? null;
@@ -137,13 +141,12 @@ class AddStockTransferModal extends Component
         'update_transfer' => 'updateTransfer',
         'add_deposit' => 'addDeposit',
     ];
-    public function mount(){
-
-
+    public function mount()
+    {
     }
     public function render()
     {
-        $default_date= $this->getDefaultDateRange();
+        $default_date = $this->getDefaultDateRange();
 
         $this->user_id = Auth::id();
         $collectors = User::select('users.id', 'users.name as user_name', 'roles.name as role_name')
@@ -251,7 +254,7 @@ class AddStockTransferModal extends Component
         $this->validateData();
         $user = auth()->user();
         if (!$user->hasRole('regisseur')) {
-            $this->dispatchMessage('Valeur Inactive', 'update', 'error',"Action non authorize");
+            $this->dispatchMessage('Valeur Inactive', 'update', 'error', "Action non authorize");
             $this->reset();
             abort(403, 'Accès interdit');
             return;

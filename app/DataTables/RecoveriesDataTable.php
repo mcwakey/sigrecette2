@@ -1,5 +1,7 @@
 <?php
+
 namespace App\DataTables;
+
 use App\Enums\PaymentStatusEnums;
 use App\Helpers\Constants;
 use App\Models\Invoice;
@@ -16,10 +18,12 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
 use Yajra\DataTables\WithExportQueue;
+
 class RecoveriesDataTable extends DataTable
 {
     use WithExportQueue;
     use HandlesTaxpayerFilters;
+
     /**
      * Build the DataTable class.
      *
@@ -63,7 +67,7 @@ class RecoveriesDataTable extends DataTable
     public function query(Payment $model): QueryBuilder
     {
 
-        $this->id=$this->getTaxpayerId($this->id);
+        $this->id = $this->getTaxpayerId($this->id);
 
         $query = $model
             ->join('invoices', 'invoices.id', '=', 'payments.invoice_id')
@@ -79,7 +83,7 @@ class RecoveriesDataTable extends DataTable
             ->orderBy('payments.created_at', 'desc')
             ->distinct();
        // $this->id=11463;
-        if(!$this->profile_page){
+        if (!$this->profile_page) {
             $query->whereBetween('payments.created_at', [$this->startDate, $this->endDate]);
         }
         if ($this->id) {

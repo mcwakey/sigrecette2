@@ -303,7 +303,7 @@ class RolesPermissionsSeeder extends Seeder
             Role::firstOrCreate(['name' => $role, 'user_id' => 0])->syncPermissions($permissions_list);
         }
 
-        if(!app()->environment('production')) {
+        if (!app()->environment('production')) {
             User::find(1)?->assignRole('administrateur_system');
             User::find(2)?->assignRole('administrateur');
             User::find(3)?->assignRole(['ordonateur', 'administrateur']);
@@ -315,6 +315,5 @@ class RolesPermissionsSeeder extends Seeder
             User::find(9)?->assignRole('agent_delegation_du_receveur');
             User::find(10)?->assignRole('agent_recette');
         }
-
     }
 }

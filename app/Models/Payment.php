@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Models;
+
 use App\Enums\PaymentStatusEnums;
 use App\Enums\PaymentTypeEnums;
 use App\Helpers\Constants;
@@ -10,10 +12,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Database\Eloquent\Collection;
+
 class Payment extends Model
 {
     use HasFactory;
     use PaymentTrait;
+
     protected $fillable = [
         'amount',
         'payment_type',

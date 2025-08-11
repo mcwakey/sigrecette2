@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Enums;
+
 class TaxpayerStateEnums
 {
     public const PENDING = 'PENDING';

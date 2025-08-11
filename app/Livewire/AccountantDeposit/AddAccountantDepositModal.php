@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\AccountantDeposit;
+
 use App\Enums\InvoiceStatusEnums;
 use App\Enums\PaymentStatusEnums;
 use App\Helpers\Constants;
@@ -17,10 +19,12 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
+
 class AddAccountantDepositModal extends Component
 {
     use WithFileUploads;
     use DispatchesMessages;
+
     public $stock_transfer_id;
     public $user_id;
     public $collector_id;
@@ -71,7 +75,7 @@ class AddAccountantDepositModal extends Component
         $this->validate();
         $user = auth()->user();
         if (!$user->hasRole('regisseur')) {
-            $this->dispatchMessage('Compatilite', 'update', 'error',"Action non authorize");
+            $this->dispatchMessage('Compatilite', 'update', 'error', "Action non authorize");
             $this->reset();
             abort(403, 'Accès interdit');
         }
@@ -94,14 +98,13 @@ class AddAccountantDepositModal extends Component
                 $payments_old->save();
             }
             $this->dispatch('success', __('Etat de comptabilité mis a jour avec succès'));
-        }
-        );
+        });
         $this->end_no = "";
         $this->qty = "";
     }
     public function addAccountantDeposit($type)
     {
-        $year=Year::getActiveYear()?->name;
+        $year = Year::getActiveYear()?->name;
         $s_date = Carbon::parse("{$year}-01-01 00:00:00");
         $e_date = Carbon::parse("{$year}-12-31 23:59:59");
         $this->collector_id = "";
@@ -116,7 +119,8 @@ class AddAccountantDepositModal extends Component
             ->whereBetween('created_at', [$s_date, $e_date])
             ->where('status', "ACCOUNTED")
             ->first()
-            ->amount ?? 0;;
+            ->amount ?? 0;
+        ;
         $this->paid = $this->total_amount;
         $this->edit_mode = false;
         $this->deposit_mode = false;
