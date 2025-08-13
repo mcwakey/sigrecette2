@@ -137,9 +137,13 @@ Route::middleware(['throttle:global'])->group(function () {
             Route::get('/import/taxpayers', [TaxpayerController::class, 'showImportPage'])->name('import-view');
         });
 
-
-
-
+        Route::get('/download/{filename}', function ($filename) {
+            $filePath = storage_path("app/exports/{$filename}");
+            if (!file_exists($filePath)) {
+                abort(404);
+            }
+            return response()->download($filePath)->deleteFileAfterSend(true);
+        })->name('download.file');
         Route::get('/prints', [PrintController::class, 'index'])->name("prints");
         Route::get('/print-all-invoice', [PrintController::class, 'downloadMultipleInvoicePdf'])->name("print-all-invoice");
         Route::get('/exports', [ExportController::class, 'index'])->name("exports");

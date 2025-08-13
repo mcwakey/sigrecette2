@@ -41,45 +41,50 @@
                                         <span class="symbol-label bg-light-primary">{!! getIcon('abstract-28', 'fs-2 text-primary') !!}</span>
                                     </div>
 
-                                    @php
-                                        $taxpayer = \App\Models\Taxpayer::find($notification->data['taxpayer_id']);
-                                    @endphp
 
+                                    @if ($notification->data['type'] !== 'file_is_ready')
+                                        @if ($notification->data['type'] === 'invoice_paid')
+                                            <div class="mb-0 me-2">
 
-                                    @if ($notification->data['type'] === 'invoice_paid')
-                                        <div class="mb-0 me-2">
+                                                <a data-notif="true"
+                                                   href="/invoices?invoice_id={{ $notification->data['invoice_id']  ?? null }}&?&invoice_tab=true&notif_id={{ $notification->id }}"
+                                                   class="fs-6 text-gray-800 text-hover-primary fw-bold">
+                                                    Paiement : {{ $notification->data['invoice_id'] }} - ajouté
 
-                                            <a data-notif="true"
-                                                href="/invoices?invoice_id={{ $notification->data['invoice_id']  ?? null }}&?&invoice_tab=true&notif_id={{ $notification->id }}"
-                                                class="fs-6 text-gray-800 text-hover-primary fw-bold">
-                                                Paiement : {{ $notification->data['invoice_id'] }} - ajouté
+                                                </a>
+                                                <div class="text-gray-500 fs-7">
+                                                    {{ 'Montant :' .format_amount($notification->data['amount']) . ' FCFA - ' . $notification->created_at->diffForHumans() }}
+                                                </div>
 
-                                            </a>
-                                            <div class="text-gray-500 fs-7">
-                                                {{ 'Montant :' .format_amount($notification->data['amount']) . ' FCFA - ' . $notification->created_at->diffForHumans() }}
                                             </div>
-
-                                        </div>
+                                        @else
+                                            <div class="mb-0 me-2">
+                                                <a data-notif="true"
+                                                   href="/invoices?invoice_id={{ $notification->data['invoice_id']  ?? null }}?&invoice_tab=true&notif_id={{ $notification->id }}"
+                                                   class="fs-6 text-gray-800 text-hover-primary fw-bold">
+                                                    @if ($notification->data['type'] === 'invoice_created')
+                                                        Avis : {{ $notification->data['invoice_id'] }} - créer
+                                                    @elseif($notification->data['type'] === 'invoice_accepted')
+                                                        Avis : {{ $notification->data['invoice_id'] }} - accepter
+                                                    @elseif($notification->data['type'] === 'invoice_approved')
+                                                        Avis : {{ $notification->data['invoice_id'] }} - pris en charge
+                                                    @else
+                                                        Avis : {{ $notification->data['invoice_id'] }} - rejeter
+                                                    @endif
+                                                </a>
+                                                <div class="text-gray-500 fs-7">
+                                                    {{ 'Montant :' .format_amount($notification->data['amount']) . ' FCFA - ' . $notification->created_at->diffForHumans() }}
+                                                </div>
+                                            </div>
+                                        @endif
                                     @else
-                                        <div class="mb-0 me-2">
-                                            <a data-notif="true"
-                                               href="/invoices?invoice_id={{ $notification->data['invoice_id']  ?? null }}?&invoice_tab=true&notif_id={{ $notification->id }}"
-                                               class="fs-6 text-gray-800 text-hover-primary fw-bold">
-                                                @if ($notification->data['type'] === 'invoice_created')
-                                                    Avis : {{ $notification->data['invoice_id'] }} - créer
-                                                @elseif($notification->data['type'] === 'invoice_accepted')
-                                                    Avis : {{ $notification->data['invoice_id'] }} - accepter
-                                                @elseif($notification->data['type'] === 'invoice_approved')
-                                                    Avis : {{ $notification->data['invoice_id'] }} - pris en charge
-                                                @else
-                                                    Avis : {{ $notification->data['invoice_id'] }} - rejeter
-                                                @endif
-                                            </a>
-                                            <div class="text-gray-500 fs-7">
-                                                {{ 'Montant :' .format_amount($notification->data['amount']) . ' FCFA - ' . $notification->created_at->diffForHumans() }}
-                                            </div>
-                                        </div>
+                                        <a href="{{ route('download.file', ['filename' => $notification->data['file_name']]) }}"
+                                           class="fs-6 text-gray-800 text-hover-primary fw-bold" target="_blank">
+                                            Télécharger le fichier
+                                        </a>
                                     @endif
+
+
 
                                 </div>
                                 <!--end::Title-->
@@ -201,16 +206,20 @@
 
         function getTitleByNotifType2(type, id) {
 
-            if (type === 'invoice_paid') {
-                return `Paiement : ${id} - ajouter`
-            } else if (type === 'invoice_created') {
-                return `Avis : ${id} - créer`
-            } else if (type === 'invoice_accepted') {
-                return `Avis : ${id} - accepter`
-            } else if (type === 'invoice_approved') {
-                return `Avis : ${id} - pris en charge`
-            } else {
-                return `Avis : ${id} - rejeter`
+            if (type !== 'file_ready') {
+                if (type === 'invoice_paid') {
+                    return `Paiement : ${id} - ajouter`
+                } else if (type === 'invoice_created') {
+                    return `Avis : ${id} - créer`
+                } else if (type === 'invoice_accepted') {
+                    return `Avis : ${id} - accepter`
+                } else if (type === 'invoice_approved') {
+                    return `Avis : ${id} - pris en charge`
+                } else {
+                    return `Avis : ${id} - rejeter`
+                }
+            }else {
+                return `Ficher Disponible`
             }
         }
 

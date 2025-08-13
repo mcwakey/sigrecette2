@@ -8,4 +8,5 @@ class PrintNameEnums
     public const BORDEREAU = 'Bordereau Journal des avis des sommes à payer';
     public const FICHE_DE_DISTRIBUTION_DES_AVIS = "Fiche de distribution des avis";
     public const FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES = "Fiche de recouvrement des avis distribués";
+    public const MULTIPLE_INVOICE = "multiple-invoices";
 }

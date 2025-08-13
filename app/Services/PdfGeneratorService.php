@@ -15,13 +15,10 @@ use App\Models\StockTransfer;
 use App\Models\Taxpayer;
 use App\Models\User;
 use App\Models\Year;
-use App\Notifications\FileReadyNotification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
-use ZipArchive;
 
 class PdfGeneratorService implements PdfGeneratorInterface
 {
@@ -264,7 +261,7 @@ class PdfGeneratorService implements PdfGeneratorInterface
                     'print' => $printFile]
                 )
                     ->setPaper('a4', 'landscape')
-                    ->stream($filename);
+                    ->save(storage_path("app/exports/{$filename}"));
 
                 foreach ($data as $invoice) {
                     if ($invoice->edition_state == "PRINT") {
@@ -273,7 +270,7 @@ class PdfGeneratorService implements PdfGeneratorInterface
                         $invoice->save();
                     }
                 }
-                return ['success' => true, 'pdf' => $pdf];
+                return ['success' => true, 'pdf' => $pdf,'file_name' => $filename];
             }
         }
         return ['success' => false, 'message' => 'Invalid data structure.'];

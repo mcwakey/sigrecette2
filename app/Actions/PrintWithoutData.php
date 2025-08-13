@@ -26,10 +26,7 @@ class PrintWithoutData
             session()->forget('edition_params');
             return back()->with('error', $result['message']);
         }catch (\Throwable $e) {
-            $code = method_exists($e, 'getStatusCode') ? $e->getStatusCode() : Response::HTTP_INTERNAL_SERVER_ERROR;
-            if (!in_array($code, [Response::HTTP_FORBIDDEN, Response::HTTP_NOT_FOUND])) {
-                $code = Response::HTTP_INTERNAL_SERVER_ERROR;
-            }
+            $code =$exceptionService->getStatusCode($e);
             return view("errors.{$code}", [
                 "code" => $code,
                 "message" => $exceptionService->getMessage($e)

@@ -6,9 +6,8 @@ use App\Contracts\ExceptionServiceInterface;
 use App\Contracts\PdfGeneratorInterface;
 use App\Helpers\Constants;
 use App\Models\Invoice;
-use App\Services\PdfGeneratorService;
+use Spatie\Async\Pool;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpFoundation\Response;
 use ZipArchive;
 class DownloadMultipleInvoiceAction
 {
@@ -27,11 +26,7 @@ class DownloadMultipleInvoiceAction
             if (isset($queryParams['state']) && array_key_exists($queryParams['state'], Constants::INVOICE_STATE_PRINTABLE_MAP)) {
                 $state = Constants::INVOICE_STATE_PRINTABLE_MAP[$queryParams['state']];
             }
-            if ($state) {
-                $uuid = Invoice::getPrintableUuid($state);
-            } else {
-                $uuid = Invoice::getPrintableUuid();
-            }
+            $uuid = Invoice::getPrintableUuid($state ?? null);
             if (file_exists($zipFileName)) {
                 unlink($zipFileName);
             }
@@ -39,6 +34,7 @@ class DownloadMultipleInvoiceAction
                 return back()->with('error', 'no Data');
             } else {
                 if ($zip->open($zipFileName, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+                    $pool = Pool::create();
                     foreach ($uuid as $invoiceUid) {
                         $result =$pdfGenerator->generateInvoicePdf([$invoiceUid], 'invoices', $action);
                         if ($result['success']) {
@@ -47,6 +43,7 @@ class DownloadMultipleInvoiceAction
                             Log::warning("Impossible de générer le PDF pour l'UUID: {$invoiceUid}");
                         }
                     }
+                    $pool->wait();
                     $zip->close();
                 } else {
                     abort(500, "Impossible de créer l'archive ZIP.");
@@ -54,8 +51,9 @@ class DownloadMultipleInvoiceAction
                 return response()->download($zipFileName)->deleteFileAfterSend(true);
             }
         }catch (\Throwable $e) {
-            return view("errors.error", [
-                "code" => Response::HTTP_BAD_REQUEST,
+            $code =$exceptionService->getStatusCode($e);
+            return view("errors.{$code}", [
+                "code" => $code,
                 "message" => $exceptionService->getMessage($e)
             ]);
         }

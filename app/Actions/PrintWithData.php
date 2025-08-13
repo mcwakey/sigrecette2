@@ -28,8 +28,9 @@ class PrintWithData
             session()->flash('status', "Erreur lors de la géneration du ficher");
             return back()->with('error', $result['message']);
         }catch (\Throwable $e) {
-            return view("errors.error", [
-                "code" => Response::HTTP_BAD_REQUEST,
+            $code =$exceptionService->getStatusCode($e);
+            return view("errors.{$code}", [
+                "code" => $code,
                 "message" => $exceptionService->getMessage($e)
             ]);
         }

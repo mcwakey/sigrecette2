@@ -11,7 +11,7 @@ class FileReadyNotification extends Notification
     /**
      * @param array $filePath
      */
-    public function __construct(private string $filePath,private int $user_id)
+    public function __construct(private string $fileName,private int $user_id)
     {
     }
     /**
@@ -33,7 +33,7 @@ class FileReadyNotification extends Notification
         return [
             'type' => 'file_is_ready',
             'user_id' => $this->user_id,
-            'file_path' => $this->filePath,
+            'file_name' => $this->fileName,
             'is_read' => false,
         ];
     }

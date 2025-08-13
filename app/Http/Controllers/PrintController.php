@@ -12,6 +12,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 
 class PrintController extends Controller
@@ -38,8 +39,9 @@ class PrintController extends Controller
     }
 
 
-    public function downloadMultipleInvoicePdf(DownloadMultipleInvoiceAction $actionExecute,Request $request, int $action = null):
-    \Symfony\Component\HttpFoundation\BinaryFileResponse|RedirectResponse
+    public function downloadMultipleInvoicePdf(DownloadMultipleInvoiceAction $actionExecute,Request $request,
+                                               int $action = null):
+    \Symfony\Component\HttpFoundation\BinaryFileResponse|RedirectResponse|View
     {
 
         return $actionExecute->execute($action);
