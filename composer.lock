@@ -740,7 +740,6 @@
             },
             "dist": {
                 "type": "zip",
-                "reference": "5817d0659c5b50c9b950feb9af7b9668e2c436bc",
                 "url": "https://api.github.com/repos/doctrine/inflector/zipball/6d6c96277ea252fc1304627204c3d5e6e15faa3b",
                 "reference": "6d6c96277ea252fc1304627204c3d5e6e15faa3b",
                 "shasum": ""
