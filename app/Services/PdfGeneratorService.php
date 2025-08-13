@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Contracts\PdfGeneratorInterface;
+use App\Contracts\QrcodeGeneratorServiceInterface;
 use App\Enums\InvoiceStatusEnums;
 use App\Enums\PrintNameEnums;
 use App\Helpers\Constants;
@@ -14,8 +15,10 @@ use App\Models\StockTransfer;
 use App\Models\Taxpayer;
 use App\Models\User;
 use App\Models\Year;
+use App\Notifications\FileReadyNotification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
 use ZipArchive;
@@ -24,9 +27,12 @@ class PdfGeneratorService implements PdfGeneratorInterface
 {
     public function __construct(
         private Commune|null $commune = null,
-        private QrcodeGeneratorService $qrcodeGeneratorService
+        private QrcodeGeneratorServiceInterface $qrcodeGeneratorService
     ) {
-        $this->commune = Commune::first();
+        if ($this->commune == null) {
+            $this->commune = Commune::first();
+        }
+
     }
 
     /**
@@ -248,7 +254,6 @@ class PdfGeneratorService implements PdfGeneratorInterface
         }
         if ($printFile != null && $this->checkIfCommuneIsNotNull()) {
             $data = $printFile->invoices()->get();
-            //
             if (count($data) > 0) {
                 $filename = $type . "-" . date('Ymd_His') . ".pdf";
                 $pdf = PDF::loadView(
@@ -260,6 +265,7 @@ class PdfGeneratorService implements PdfGeneratorInterface
                 )
                     ->setPaper('a4', 'landscape')
                     ->stream($filename);
+
                 foreach ($data as $invoice) {
                     if ($invoice->edition_state == "PRINT") {
                         $invoice->edition_state = "bPRINT";
@@ -367,7 +373,7 @@ class PdfGeneratorService implements PdfGeneratorInterface
         }
         return ['success' => false, 'message' => 'Invalid data structure.'];
     }
-    public function generateStateAcountIvCollectorPdf($data, string $template): array
+    public function generateStateAccountIvCollectorPdf($data, string $template): array
     {
         if (count($data) > 2) {
             $user = User::find($data[0]);

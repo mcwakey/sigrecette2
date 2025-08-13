@@ -138,5 +138,7 @@ Route::middleware(['throttle:api'])->group(function () {
 //        Route::delete('/permissions/{id}', function ($id) {
 //            return app(SamplePermissionApi::class)->delete($id);
 //        });
+
+
     });
 });

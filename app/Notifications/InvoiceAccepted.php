@@ -16,7 +16,9 @@ class InvoiceAccepted extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct(private Invoice $invoice, private User $user, private string $type = "agent_delegation_du_receveur")
+    public function __construct(private Invoice $invoice,
+                                private User $user,
+                                private string $type = "agent_delegation_du_receveur")
     {
         //
     }

@@ -2,27 +2,31 @@
 
 namespace App\Jobs;
 
-use App\Models\UserLogs;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class LogUserActivity implements ShouldQueue
+class LongPrintTaskJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
 
-    protected $data;
-    public function __construct(array $data)
+    /**
+     * Create a new job instance.
+     */
+    public function __construct( protected \Closure $callback)
     {
-        $this->data = $data;
     }
-    public function handle()
+
+    /**
+     * Execute the job.
+     */
+    public function handle(): void
     {
-        UserLogs::create($this->data);
+        call_user_func($this->callback);
     }
 }

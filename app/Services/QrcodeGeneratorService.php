@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Contracts\QrcodeGeneratorServiceInterface;
 use App\Helpers\QRImageWithLogo;
 use chillerlan\QRCode\Common\EccLevel;
 use chillerlan\QRCode\Data\QRCodeDataException;
@@ -12,7 +13,7 @@ use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
 use Exception;
 
-class QrcodeGeneratorService
+class QrcodeGeneratorService implements QrcodeGeneratorServiceInterface
 {
     /**
      * @throws QRCodeDataException

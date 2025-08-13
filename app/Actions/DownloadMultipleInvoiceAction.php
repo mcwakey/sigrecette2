@@ -1,0 +1,64 @@
+<?php
+
+namespace App\Actions;
+
+use App\Contracts\ExceptionServiceInterface;
+use App\Contracts\PdfGeneratorInterface;
+use App\Helpers\Constants;
+use App\Models\Invoice;
+use App\Services\PdfGeneratorService;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Response;
+use ZipArchive;
+class DownloadMultipleInvoiceAction
+{
+    public function execute($action)
+    {
+        $exceptionService = resolve(ExceptionServiceInterface::class);
+
+        try {
+            $pdfGenerator = app(PdfGeneratorInterface::class);
+            $zip = new ZipArchive();
+            $zipFileName = storage_path('app/public/multiples_avis.zip');
+            $previousUrl = url()->previous();
+            $urlParts = parse_url($previousUrl);
+            $state = null;
+            parse_str($urlParts['query'] ?? '', $queryParams);
+            if (isset($queryParams['state']) && array_key_exists($queryParams['state'], Constants::INVOICE_STATE_PRINTABLE_MAP)) {
+                $state = Constants::INVOICE_STATE_PRINTABLE_MAP[$queryParams['state']];
+            }
+            if ($state) {
+                $uuid = Invoice::getPrintableUuid($state);
+            } else {
+                $uuid = Invoice::getPrintableUuid();
+            }
+            if (file_exists($zipFileName)) {
+                unlink($zipFileName);
+            }
+            if (count($uuid) == 0) {
+                return back()->with('error', 'no Data');
+            } else {
+                if ($zip->open($zipFileName, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+                    foreach ($uuid as $invoiceUid) {
+                        $result =$pdfGenerator->generateInvoicePdf([$invoiceUid], 'invoices', $action);
+                        if ($result['success']) {
+                            $zip->addFromString($result['filename'], $result['pdf']);
+                        } else {
+                            Log::warning("Impossible de générer le PDF pour l'UUID: {$invoiceUid}");
+                        }
+                    }
+                    $zip->close();
+                } else {
+                    abort(500, "Impossible de créer l'archive ZIP.");
+                }
+                return response()->download($zipFileName)->deleteFileAfterSend(true);
+            }
+        }catch (\Throwable $e) {
+            return view("errors.error", [
+                "code" => Response::HTTP_BAD_REQUEST,
+                "message" => $exceptionService->getMessage($e)
+            ]);
+        }
+
+    }
+}

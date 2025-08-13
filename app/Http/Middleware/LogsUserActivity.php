@@ -29,11 +29,11 @@ class LogsUserActivity
             if ($request->routeIs('taxpayers.show')) {
                 try {
                     $data['taxpayer_id'] = $request->route('taxpayer')->id;
-                    Queue::push(new LogUserActivity($data));
+                    LogUserActivity::dispatch($data);
                 } catch (\Exception $e) {
                 }
             } elseif (!$request->routeIs('taxpayers.*') && method_exists($response, 'status') && $response->status() != 404) {
-                Queue::push(new LogUserActivity($data));
+                LogUserActivity::dispatch($data);
             }
         }
         return $response;
