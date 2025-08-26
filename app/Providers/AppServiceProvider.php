@@ -17,6 +17,7 @@ use Illuminate\Database\Schema\Builder;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Carbon\Carbon;
@@ -29,6 +30,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->singleton(QrcodeGeneratorServiceInterface::class, fn()=> new QrcodeGeneratorService());
+        $this->app->singleton(PrintServiceInterface::class, fn()=> new PrintService());
+        $this->app->bind(PdfGeneratorInterface::class, fn()=> new PdfGeneratorService(
+            Commune::getFirstCommune(),
+            $this->app->make(QrcodeGeneratorServiceInterface::class)
+        ));
+        $this->app->bind(
+            ExceptionServiceInterface::class,
+            fn(Application $app) =>  $app->make(ExceptionService::class)
+        );
     }
     /**
      * Bootstrap any application services.
@@ -38,16 +49,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Builder::defaultStringLength(191);
-        $this->app->singleton(QrcodeGeneratorServiceInterface::class, fn()=> new QrcodeGeneratorService());
-        $this->app->singleton(PrintServiceInterface::class, fn()=> new PrintService());
-        $this->app->singleton(PdfGeneratorInterface::class, fn()=> new PdfGeneratorService(
-            Commune::getFirstCommune(),
-            $this->app->make(QrcodeGeneratorServiceInterface::class)
-        ));
-        $this->app->bind(
-            ExceptionServiceInterface::class,
-            fn(Application $app) =>  $app->make(ExceptionService::class)
-        );
+
         Blade::directive('numberToWords', function ($number) {
             return "";
         });
@@ -59,33 +61,26 @@ class AppServiceProvider extends ServiceProvider
         });
         View::composer('*', function ($view) {
             $commune = cache()->rememberForever('first_commune', function () {
-                $c = Commune::getFirstCommune();
-                return $c ?: null;
+                return Commune::getFirstCommune() ?: null;
+            });
+            $year = cache()->rememberForever('active_year', function () {
+                return Year::getActiveYear() ?: null;
             });
             if (!$commune) {
-                $commune = Commune::getFirstCommune();
-                if ($commune) {
-                    cache()->forever('first_commune', $commune);
-                }
+                $commune = Cache::rememberForever('first_commune', fn() => Commune::getFirstCommune());
             }
-
-            $year = cache()->rememberForever('active_year', function () {
-                $y = Year::getActiveYear();
-                return $y ?: null;
-            });
-
             if (!$year) {
-                $year = Year::getActiveYear();
-                if ($year) {
-                    cache()->forever('active_year', $year);
-                }
+                Cache::rememberForever('active_year', fn() => Year::getActiveYear());
             }
-
-            $public_ip= '';
             $month = $year
                 ? Carbon::createFromFormat('m', $year->current_month)->monthName
                 : null;
-            $view->with(compact('public_ip','commune', 'year', 'month'));
+            $view->with([
+                'public_ip' => '',
+                'commune'   => $commune,
+                'year'      => $year,
+                'month'     => $month,
+            ]);
         });
 
         KTBootstrap::init();

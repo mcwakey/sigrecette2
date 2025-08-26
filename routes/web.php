@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\FileDownloadController;
 use App\Http\Controllers\Password;
 use App\Http\Controllers\Geolocation;
 use App\Http\Controllers\UserActivityController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\EnsureIsAdmin;
 use App\Http\Controllers\EreasController;
@@ -137,13 +139,7 @@ Route::middleware(['throttle:global'])->group(function () {
             Route::get('/import/taxpayers', [TaxpayerController::class, 'showImportPage'])->name('import-view');
         });
 
-        Route::get('/download/{filename}', function ($filename) {
-            $filePath = storage_path("app/exports/{$filename}");
-            if (!file_exists($filePath)) {
-                abort(404);
-            }
-            return response()->download($filePath)->deleteFileAfterSend(true);
-        })->name('download.file');
+        Route::get('/download/{filename}/{id?}', [FileDownloadController::class,'download'])->name('download.file');
         Route::get('/prints', [PrintController::class, 'index'])->name("prints");
         Route::get('/print-all-invoice', [PrintController::class, 'downloadMultipleInvoicePdf'])->name("print-all-invoice");
         Route::get('/exports', [ExportController::class, 'index'])->name("exports");
