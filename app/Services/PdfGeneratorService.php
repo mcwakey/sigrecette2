@@ -87,7 +87,7 @@ class PdfGeneratorService implements PdfGeneratorInterface
             }
             return ['success' => true, 'pdf' => $pdf,"filename" => $filename];
         }
-        return ['success' => false, 'message' => 'Invalid data structure.'];
+        return ['success' => false, 'message' => 'Invalid data structure or commune is not set.'];
     }
     /**
      * @param int|null $action
