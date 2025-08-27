@@ -3,55 +3,30 @@
 namespace App\Actions;
 
 use App\Contracts\ExceptionServiceInterface;
-use App\Contracts\PdfGeneratorInterface;
+use App\Dtos\InvoiceBatchDTO;
 use App\Helpers\Constants;
+use App\Jobs\DownloadInvoiceZipJob;
 use App\Models\Invoice;
-use Spatie\Async\Pool;
-use Illuminate\Support\Facades\Log;
-use ZipArchive;
 class DownloadMultipleInvoiceAction
 {
     public function execute($action)
     {
         $exceptionService = resolve(ExceptionServiceInterface::class);
-
         try {
-            $pdfGenerator = app(PdfGeneratorInterface::class);
-            $zip = new ZipArchive();
-            $zipFileName = storage_path('app/public/multiples_avis.zip');
-            $previousUrl = url()->previous();
-            $urlParts = parse_url($previousUrl);
+            $urlParts = parse_url(url()->previous());
             $state = null;
             parse_str($urlParts['query'] ?? '', $queryParams);
             if (isset($queryParams['state']) && array_key_exists($queryParams['state'], Constants::INVOICE_STATE_PRINTABLE_MAP)) {
                 $state = Constants::INVOICE_STATE_PRINTABLE_MAP[$queryParams['state']];
             }
             $uuids = Invoice::getPrintableUuid($state ?? null);
-            if (file_exists($zipFileName)) {
-                unlink($zipFileName);
-            }
             if (count($uuids) == 0) {
                 return back()->with('error', 'no Data');
             } else {
-                if ($zip->open($zipFileName, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
-                    $pool = Pool::create();
-                    foreach ($uuids as $invoiceUid) {
-                        $result =$pdfGenerator->generateInvoicePdf([$invoiceUid], 'invoices', $action);
-                        if ($result['success']) {
-                            $zip->addFromString($result['filename'], $result['pdf']);
-                        } else {
-                            Log::warning("Impossible de générer le PDF pour l'UUID: {$invoiceUid}");
-                        }
-                    }
-                    $pool->wait();
-                    $zip->close();
-                    return response()->download($zipFileName)->deleteFileAfterSend(true);
-                } else {
-                    abort(500, "Impossible de créer l'archive ZIP.");
-                }
+              DownloadInvoiceZipJob::dispatch(new InvoiceBatchDTO($uuids, $action),auth()->user());
             }
+            return back();
         }catch (\Throwable $e) {
-
             $code =$exceptionService->getStatusCode($e);
             return view("errors.{$code}", [
                 "code" => $code,

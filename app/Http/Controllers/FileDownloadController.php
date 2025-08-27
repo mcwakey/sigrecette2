@@ -9,12 +9,12 @@ class FileDownloadController extends Controller
 {
    public function download($filename,$id){
        $filePath = storage_path("app/exports/{$filename}");
-       if (!file_exists($filePath)) {
-           abort(404);
-       }
        if(!empty($id)){
            $user = Auth::user();
            $user->notifications->where('id', "=", $id)->markAsRead();
+       }
+       if (!file_exists($filePath)) {
+           abort(404);
        }
        return response()->download($filePath)->deleteFileAfterSend(true);
    }
