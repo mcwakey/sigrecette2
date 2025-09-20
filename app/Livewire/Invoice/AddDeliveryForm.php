@@ -53,32 +53,42 @@ class AddDeliveryForm extends Component
             abort(403, 'Accès interdit');
         }
         $this->validateData();
-        if ($this->getErrorBag()->isEmpty()) {
-            DB::transaction(function () {
-                // Prepare data for Invoice
-                $data = [
-                    'delivery' => "DELIVERED",
-                    'delivery_date' => $this->delivery_date,
-                    "delivery_to" => $this->delivery_to
-                ];
-                $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
-                $this->invoice_id = $invoice->id;
-                foreach ($data as $k => $v) {
-                    $invoice->$k = $v;
-                }
-                $invoice->save();
-                $this->dispatchMessage('Avis', 'update');
-            });
-            $this->reset();
-        } else {
-            $this->dispatchMessage('Avis', 'update', 'error', $this->error_message);
+        try {
+            if ($this->getErrorBag()->isEmpty()) {
+                DB::transaction(function () {
+                    // Prepare data for Invoice
+                    $data = [
+                        'delivery' => "DELIVERED",
+                        'delivery_date' => $this->delivery_date,
+                        "delivery_to" => $this->delivery_to
+                    ];
+                    $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
+                    $this->invoice_id = $invoice->id;
+                    foreach ($data as $k => $v) {
+                        $invoice->$k = $v;
+                    }
+                    $invoice->save();
+                    $this->dispatchMessage('Avis', 'update');
+                });
+                $this->reset();
+            } else {
+                $this->dispatchMessage('Avis', 'update', 'error', $this->error_message);
+            }
+        }catch (\Throwable $th) {
+            $this->dispatchMessage('Avis', 'update', 'error', "Action non enregistrer");
         }
+
     }
     public function updateStatus($id)
     {
-        $invoice = Invoice::find($id);
-        $this->invoice_id = $invoice->id;
-        $this->status = $invoice->status;
+        try {
+            $invoice = Invoice::find($id);
+            $this->invoice_id = $invoice->id;
+            $this->status = $invoice->status;
+        }catch (\Exception $e) {
+
+        }
+
     }
     public function hydrate()
     {

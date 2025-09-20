@@ -115,55 +115,58 @@ class AddTaxpayerModal extends Component
             abort(403, 'Accès interdit');
         }
         $this->validate();
-        DB::transaction(function () {
-            // Prepare the data for creating a new Taxpayer
-            $data = [
-                'name' => $this->name,
-                'gender' => $this->gender,
-                'id_type' => $this->id_type,
-                'id_number' => $this->id_number,
-                'mobilephone' => $this->mobilephone,
-                'telephone' => $this->telephone,
-                'longitude' => $this->longitude ?? Commune::getFirstCommune()->longitude,
-                'latitude' => $this->latitude ?? Commune::getFirstCommune()->latitude,
-                'address' => $this->address,
-                'file_no' => $this->file_no,
-                'category_id' => $this->category_id,
-                'activity_id' => $this->activity_id,
-                'other_work' => $this->other_work,
-                'authorisation' => $this->authorisation,
-                'auth_reference' => $this->auth_reference,
-                'nif' => $this->nif,
-                'social_work' => $this->social_work,
-                'town_id' => $this->town_id,
-                'zone_id' => $this->zone_id,
-            ];
-            $data['profile_photo_path'] = $this->avatar ? $this->avatar->store('avatars', 'public') : null;
-            if (!$this->edit_mode) {
-                $data['password'] = Hash::make($this->email);
-            }
-            // Update or Create a new Taxpayer record in the database
-            $data['email'] = $this->email;
-            $taxpayer = Taxpayer::find($this->taxpayer_id) ?? Taxpayer::create($data);
-            if ($this->edit_mode) {
-                foreach ($data as $k => $v) {
-                    $taxpayer->$k = $v;
+        try {
+            DB::transaction(function () {
+                // Prepare the data for creating a new Taxpayer
+                $data = [
+                    'name' => $this->name,
+                    'gender' => $this->gender,
+                    'id_type' => $this->id_type,
+                    'id_number' => $this->id_number,
+                    'mobilephone' => $this->mobilephone,
+                    'telephone' => $this->telephone,
+                    'longitude' => $this->longitude ?? Commune::getFirstCommune()->longitude,
+                    'latitude' => $this->latitude ?? Commune::getFirstCommune()->latitude,
+                    'address' => $this->address,
+                    'file_no' => $this->file_no,
+                    'category_id' => $this->category_id,
+                    'activity_id' => $this->activity_id,
+                    'other_work' => $this->other_work,
+                    'authorisation' => $this->authorisation,
+                    'auth_reference' => $this->auth_reference,
+                    'nif' => $this->nif,
+                    'social_work' => $this->social_work,
+                    'town_id' => $this->town_id,
+                    'zone_id' => $this->zone_id,
+                ];
+                $data['profile_photo_path'] = $this->avatar ? $this->avatar->store('avatars', 'public') : null;
+                if (!$this->edit_mode) {
+                    $data['password'] = Hash::make($this->email);
                 }
-                $taxpayer->save();
-            }
-            if ($this->edit_mode) {
-                $this->dispatchMessage('Contribuable', 'update');
-            } else {
-                $this->dispatchMessage('Contribuable');
-            }
-            $taxpayerActionData = [];
-            $taxpayerActionData['status'] = $this->edit_mode ? 204 : 201;
-            $taxpayerActionData['taxpayerId'] = $taxpayer->id;
-            $taxpayerActionData['statusText'] = $taxpayerActionData['status'] == 204 ? 'UPDATED' : 'CREATED';
-            event(new TaxpayerAction(request(), $taxpayerActionData));
-        });
-        // Reset the form fields after successful submission
-        $this->reset();
+                // Update or Create a new Taxpayer record in the database
+                $data['email'] = $this->email;
+                $taxpayer = Taxpayer::find($this->taxpayer_id) ?? Taxpayer::create($data);
+                if ($this->edit_mode) {
+                    foreach ($data as $k => $v) {
+                        $taxpayer->$k = $v;
+                    }
+                    $taxpayer->save();
+                }
+                if ($this->edit_mode) {
+                    $this->dispatchMessage('Contribuable', 'update');
+                } else {
+                    $this->dispatchMessage('Contribuable');
+                }
+                $taxpayerActionData = [];
+                $taxpayerActionData['status'] = $this->edit_mode ? 204 : 201;
+                $taxpayerActionData['taxpayerId'] = $taxpayer->id;
+                $taxpayerActionData['statusText'] = $taxpayerActionData['status'] == 204 ? 'UPDATED' : 'CREATED';
+                event(new TaxpayerAction(request(), $taxpayerActionData));
+            });
+            // Reset the form fields after successful submission
+            $this->reset();
+        }catch (\Exception $e) {}
+
     }
     public function updatedCanton($value)
     {
@@ -194,33 +197,36 @@ class AddTaxpayerModal extends Component
     #[On('update_taxpayer')]
     public function updateTaxPayer($id)
     {
-        $this->edit_mode = true;
-        $taxpayer = Taxpayer::find($id);
-        $this->taxpayer_id = $taxpayer->id;
-        $this->saved_avatar = $taxpayer->profile_photo_url;
-        $this->name = $taxpayer->name;
-        $this->email = $taxpayer->email;
-        $this->gender = $taxpayer->gender;
-        $this->id_type = $taxpayer->id_type;
-        $this->id_number = $taxpayer->id_number;
-        $this->mobilephone = $taxpayer->mobilephone;
-        $this->telephone = $taxpayer->telephone;
-        $this->longitude = $taxpayer->longitude;
-        $this->latitude = $taxpayer->latitude;
-        $this->address = $taxpayer->address;
-        $this->file_no = $taxpayer->file_no;
-        $this->category_id = $taxpayer->category_id;
-        $this->updatedCategoryId($taxpayer->category_id);
-        $this->activity_id = $taxpayer->activity_id;
-        $this->other_work = $taxpayer->other_work;
-        $this->authorisation = $taxpayer->authorisation;
-        $this->auth_reference = $taxpayer->auth_reference;
-        $this->nif = $taxpayer->nif;
-        $this->social_work = $taxpayer->social_work;
-        $this->canton = $taxpayer->town->canton->id;
-        $this->updatedCanton($taxpayer->town->canton->id);
-        $this->town_id = $taxpayer->town_id;
-        $this->zone_id = $taxpayer->zone_id;
+        try {
+            $this->edit_mode = true;
+            $taxpayer = Taxpayer::find($id);
+            $this->taxpayer_id = $taxpayer->id;
+            $this->saved_avatar = $taxpayer->profile_photo_url;
+            $this->name = $taxpayer->name;
+            $this->email = $taxpayer->email;
+            $this->gender = $taxpayer->gender;
+            $this->id_type = $taxpayer->id_type;
+            $this->id_number = $taxpayer->id_number;
+            $this->mobilephone = $taxpayer->mobilephone;
+            $this->telephone = $taxpayer->telephone;
+            $this->longitude = $taxpayer->longitude;
+            $this->latitude = $taxpayer->latitude;
+            $this->address = $taxpayer->address;
+            $this->file_no = $taxpayer->file_no;
+            $this->category_id = $taxpayer->category_id;
+            $this->updatedCategoryId($taxpayer->category_id);
+            $this->activity_id = $taxpayer->activity_id;
+            $this->other_work = $taxpayer->other_work;
+            $this->authorisation = $taxpayer->authorisation;
+            $this->auth_reference = $taxpayer->auth_reference;
+            $this->nif = $taxpayer->nif;
+            $this->social_work = $taxpayer->social_work;
+            $this->canton = $taxpayer->town->canton->id;
+            $this->updatedCanton($taxpayer->town->canton->id);
+            $this->town_id = $taxpayer->town_id;
+            $this->zone_id = $taxpayer->zone_id;
+        }catch (\Exception $e) {}
+
     }
     public function closeTaxPayerModal()
     {

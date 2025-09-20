@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\Cache;
 class Commune extends Model
 {
     use HasFactory;
@@ -30,6 +30,17 @@ class Commune extends Model
         'qr_code_enabled',
         'carry_forward_previous_year',
     ];
+    protected static function booted()
+    {
+        static::saved(function ($commune) {
+            Cache::forget('first_commune');
+        });
+
+        static::deleted(function ($commune) {
+            Cache::forget('first_commune');
+        });
+    }
+
     /**
      * Get the first commune.
      */

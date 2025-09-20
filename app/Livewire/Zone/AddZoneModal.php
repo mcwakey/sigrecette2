@@ -32,42 +32,49 @@ class AddZoneModal extends Component
     {
         // Validate the form input data
         $this->validate();
-        DB::transaction(function () {
-            // Prepare the data for creating a new Taxable
-            $data = [
-                'name' => $this->name,
-                'status' => $this->status,
-            ];
-            $zone = Zone::find($this->zone_id) ?? Zone::create($data);
-            if ($this->edit_mode) {
-                foreach ($data as $k => $v) {
-                    $zone->$k = $v;
+        try {
+            DB::transaction(function () {
+                // Prepare the data for creating a new Taxable
+                $data = [
+                    'name' => $this->name,
+                    'status' => $this->status,
+                ];
+                $zone = Zone::find($this->zone_id) ?? Zone::create($data);
+                if ($this->edit_mode) {
+                    foreach ($data as $k => $v) {
+                        $zone->$k = $v;
+                    }
+                    $zone->save();
                 }
-                $zone->save();
-            }
-            if ($this->edit_mode) {
-                $this->dispatch('success', __('Zone updated'));
-            } else {
-                $this->dispatch('success', __('New Zone created'));
-            }
-        });
-        // Reset the form fields after successful submission
-        $this->reset();
+                if ($this->edit_mode) {
+                    $this->dispatch('success', __('Zone updated'));
+                } else {
+                    $this->dispatch('success', __('New Zone created'));
+                }
+            });
+            // Reset the form fields after successful submission
+            $this->reset();
+        }catch (\Exception $e) {}
     }
     public function deleteUser($id)
     {
-        // Delete the user record with the specified ID
-        Zone::destroy($id);
-        // Emit a success event with a message
-        $this->dispatch('success', 'Taxpayer successfully deleted');
+        try {
+            Zone::destroy($id);
+            // Emit a success event with a message
+            $this->dispatch('success', 'Taxpayer successfully deleted');
+        }catch (\Exception $e) {}
+
     }
     public function updateZone($id)
     {
-        $this->edit_mode = true;
-        $zone = Zone::find($id);
-        $this->zone_id = $zone->id;
-        $this->name = $zone->name;
-        $this->status = $zone->status;
+        try {
+            $this->edit_mode = true;
+            $zone = Zone::find($id);
+            $this->zone_id = $zone->id;
+            $this->name = $zone->name;
+            $this->status = $zone->status;
+        }catch (\Exception $e) {}
+
     }
     public function hydrate()
     {

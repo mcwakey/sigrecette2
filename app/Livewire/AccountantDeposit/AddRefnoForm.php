@@ -43,18 +43,22 @@ class AddRefnoForm extends Component
             abort(403, 'Accès interdit');
             return;
         }
-        DB::transaction(function () {
-            $payments_olds = Payment::where('status', PaymentStatusEnums::DONE)->where('status', PaymentStatusEnums::CANCELED)->where('reference_deposit', null)->get();
-            $payments_olds = Payment::where(function ($query) {
-                $query->where('status', PaymentStatusEnums::DONE)->orWhere('status', PaymentStatusEnums::CANCELED);
-            })->where('reference_deposit', null)->get();
-            foreach ($payments_olds as $payments_old) {
-                $payments_old->reference_deposit = $this->refno;
-                $payments_old->save();
-            }
-        });
-        $this->reset();
-        $this->dispatchMessage('Numéro de quitance', 'update');
+        try {
+            DB::transaction(function () {
+                $payments_olds = Payment::where('status', PaymentStatusEnums::DONE)->where('status', PaymentStatusEnums::CANCELED)->where('reference_deposit', null)->get();
+                $payments_olds = Payment::where(function ($query) {
+                    $query->where('status', PaymentStatusEnums::DONE)->orWhere('status', PaymentStatusEnums::CANCELED);
+                })->where('reference_deposit', null)->get();
+                foreach ($payments_olds as $payments_old) {
+                    $payments_old->reference_deposit = $this->refno;
+                    $payments_old->save();
+                }
+            });
+            $this->reset();
+            $this->dispatchMessage('Numéro de quitance', 'update');
+        }catch (\Exception $e) {
+            $this->dispatchMessage('Quitance de paiement', 'update', 'error', "Action non enregistrer");
+        }
     }
     public function hydrate()
     {

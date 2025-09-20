@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Date;
 use Carbon\Carbon;
 use Throwable;
+use Illuminate\Support\Facades\Cache;
 
 class Year extends Model
 {
@@ -135,5 +136,15 @@ class Year extends Model
     public function getBudgetsByTaxLabel()
     {
         return $this->budgets()->with('tax_label')->get();
+    }
+    protected static function booted()
+    {
+        static::saved(function ($year) {
+            Cache::forget('active_year');
+        });
+
+        static::deleted(function ($year) {
+            Cache::forget('active_year');
+        });
     }
 }

@@ -38,19 +38,22 @@ class AddStatusForm extends Component
             abort(403, 'Accès interdit');
             return;
         }
-        DB::transaction(function () {
-            // Prepare data for request
-            $data = [
-                'type' => $this->status,
-            ];
-            // Create or update request record
-            $requests = StockRequest::where("req_id", $this->request_id)->get(); //?? request::create($request_id);
-            foreach ($requests as $request) {
-                $request->update($data);
-            }
-            $this->dispatchMessage('Paiement', 'update');
-        });
-        $this->reset();
+        try {
+            DB::transaction(function () {
+                // Prepare data for request
+                $data = [
+                    'type' => $this->status,
+                ];
+                // Create or update request record
+                $requests = StockRequest::where("req_id", $this->request_id)->get(); //?? request::create($request_id);
+                foreach ($requests as $request) {
+                    $request->update($data);
+                }
+                $this->dispatchMessage('Paiement', 'update');
+            });
+            $this->reset();
+        }catch (\Throwable $th) {}
+
     }
     public function updateRequestStatus($id)
     {

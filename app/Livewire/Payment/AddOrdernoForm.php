@@ -36,21 +36,24 @@ class AddOrdernoForm extends Component
             abort(403, 'Accès interdit');
             return;
         }
-        DB::transaction(function () {
-            // Prepare data for Invoice
-            $data = [
-                'order_no' => $this->orderno,
-            ];
-            $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
-            $this->invoice_id = $invoice->id;
-            foreach ($data as $k => $v) {
-                $invoice->$k = $v;
-            }
-            $invoice->save();
-            $this->dispatch('success', __('Invoice updated'));
-        });
-        // Reset form fields after successful submission
-        $this->reset();
+        try {
+            DB::transaction(function () {
+                // Prepare data for Invoice
+                $data = [
+                    'order_no' => $this->orderno,
+                ];
+                $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
+                $this->invoice_id = $invoice->id;
+                foreach ($data as $k => $v) {
+                    $invoice->$k = $v;
+                }
+                $invoice->save();
+                $this->dispatch('success', __('Invoice updated'));
+            });
+            // Reset form fields after successful submission
+            $this->reset();
+        }catch (\Exception $e) {}
+
     }
     public function updateInvoice($id)
     {

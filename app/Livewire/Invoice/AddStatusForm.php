@@ -69,71 +69,74 @@ class AddStatusForm extends Component
     public function submit()
     {
         $this->validateData();
-        if ($this->getErrorBag()->isEmpty()) {
-            DB::transaction(function () {
-                $invoice = Invoice::find($this->invoice_id);
-                $this->invoice_id = $invoice->id;
-                if ($invoice->type == Constants::INVOICE_TYPE_TITRE && $this->status == InvoiceStatusEnums::REJECTED) {
-                    $invoice->reason_for_reject = $this->reason_for_reject;
-                }
-                if ($this->status == InvoiceStatusEnums::APPROVED && $invoice->reduce_amount != '') {
-                    //Todo make cascade reduction
-                    $description_str = $invoice->reduce_amount == $invoice->amount ? Constants::ANNULATION : Constants::REDUCTION;
-                    $paymentData = [
-                        'invoice_id' => $invoice->invoice_no,
-                        'taxpayer_id' => $invoice->taxpayer_id,
-                        'amount' => $invoice->reduce_amount,
-                        'description' => $description_str,
-                        'user_id' => Auth::id(),
-                        'reference' => $description_str,
-                        'invoice_type' => $description_str,
-                        'status' => $description_str,
-                        'payment_type' => $description_str,
-                        'code' => null
-                    ];
-                    $payments = Invoice::getCode($invoice->invoice_no, $invoice->reduce_amount, $paymentData);
-                    foreach ($payments as $payment) {
-                        Payment::create($payment);
+        try {
+            if ($this->getErrorBag()->isEmpty()) {
+                DB::transaction(function () {
+                    $invoice = Invoice::find($this->invoice_id);
+                    $this->invoice_id = $invoice->id;
+                    if ($invoice->type == Constants::INVOICE_TYPE_TITRE && $this->status == InvoiceStatusEnums::REJECTED) {
+                        $invoice->reason_for_reject = $this->reason_for_reject;
                     }
-                    $invoice->pay_status = $invoice->reduce_amount == $invoice->amount ? "PAID" : "PART PAID";
-                    $this->status = InvoiceStatusEnums::APPROVED_CANCELLATION;
-                }
-                $invoice->save();
-                switch ($this->status) {
-                    case InvoiceStatusEnums::ACCEPTED:
-                        $invoice->submitToState("submit_for_accepted");
-                        break;
-                    case InvoiceStatusEnums::REJECTED_BY_OR:
-                        $invoice->submitToState("submit_for_reject_by_ord");
-                        break;
-                    case InvoiceStatusEnums::PENDING:
-                        $invoice->submitToState("submit_for_pending");
-                        break;
-                    case InvoiceStatusEnums::REJECTED:
-                        $invoice->submitToState("submit_for_rejected");
-                        break;
-                    case InvoiceStatusEnums::APPROVED:
-                    case InvoiceStatusEnums::APPROVED_CANCELLATION:
-                        if ($invoice->type == Constants::INVOICE_TYPE_COMPTANT) {
-                            $invoice->setDeliveryToNow($this->status);
-                            $invoice->save();
-                        } elseif ($this->status == InvoiceStatusEnums::APPROVED) {
-                            $invoice->submitToState("submit_for_approved");
-                        } else {
-                            $invoice->submitToState("submit_for_approved_cancellation");
+                    if ($this->status == InvoiceStatusEnums::APPROVED && $invoice->reduce_amount != '') {
+                        //Todo make cascade reduction
+                        $description_str = $invoice->reduce_amount == $invoice->amount ? Constants::ANNULATION : Constants::REDUCTION;
+                        $paymentData = [
+                            'invoice_id' => $invoice->invoice_no,
+                            'taxpayer_id' => $invoice->taxpayer_id,
+                            'amount' => $invoice->reduce_amount,
+                            'description' => $description_str,
+                            'user_id' => Auth::id(),
+                            'reference' => $description_str,
+                            'invoice_type' => $description_str,
+                            'status' => $description_str,
+                            'payment_type' => $description_str,
+                            'code' => null
+                        ];
+                        $payments = Invoice::getCode($invoice->invoice_no, $invoice->reduce_amount, $paymentData);
+                        foreach ($payments as $payment) {
+                            Payment::create($payment);
                         }
-                        break;
-                    case InvoiceStatusEnums::CANCELED:
-                    case InvoiceStatusEnums::REDUCED:
-                        break;
-                    default:
-                }
-                $this->dispatchMessage('Avis', 'update');
-            });
-            $this->reset();
-        } else {
-            $this->dispatchMessage('Avis', 'update', 'error', $this->error_message);
-        }
+                        $invoice->pay_status = $invoice->reduce_amount == $invoice->amount ? "PAID" : "PART PAID";
+                        $this->status = InvoiceStatusEnums::APPROVED_CANCELLATION;
+                    }
+                    $invoice->save();
+                    switch ($this->status) {
+                        case InvoiceStatusEnums::ACCEPTED:
+                            $invoice->submitToState("submit_for_accepted");
+                            break;
+                        case InvoiceStatusEnums::REJECTED_BY_OR:
+                            $invoice->submitToState("submit_for_reject_by_ord");
+                            break;
+                        case InvoiceStatusEnums::PENDING:
+                            $invoice->submitToState("submit_for_pending");
+                            break;
+                        case InvoiceStatusEnums::REJECTED:
+                            $invoice->submitToState("submit_for_rejected");
+                            break;
+                        case InvoiceStatusEnums::APPROVED:
+                        case InvoiceStatusEnums::APPROVED_CANCELLATION:
+                            if ($invoice->type == Constants::INVOICE_TYPE_COMPTANT) {
+                                $invoice->setDeliveryToNow($this->status);
+                                $invoice->save();
+                            } elseif ($this->status == InvoiceStatusEnums::APPROVED) {
+                                $invoice->submitToState("submit_for_approved");
+                            } else {
+                                $invoice->submitToState("submit_for_approved_cancellation");
+                            }
+                            break;
+                        case InvoiceStatusEnums::CANCELED:
+                        case InvoiceStatusEnums::REDUCED:
+                            break;
+                        default:
+                    }
+                    $this->dispatchMessage('Avis', 'update');
+                });
+                $this->reset();
+            } else {
+                $this->dispatchMessage('Avis', 'update', 'error', $this->error_message);
+            }
+        }catch (\Throwable $th) {}
+
     }
     public function updateStatus($id)
     {

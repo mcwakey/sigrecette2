@@ -45,46 +45,54 @@ class AddTicketModal extends Component
     {
         // Validate the form input data
         $this->validate();
-        DB::transaction(function () {
-            // Prepare the data for creating a new Taxable
-            $data = [
-                'name' => $this->name,
-                'tariff' => $this->tariff,
-                'unit' => $this->unit,
-            ];
-            $taxable = Taxable::find($this->taxable_id) ?? Taxable::create($data);
-            if ($this->edit_mode) {
-                foreach ($data as $k => $v) {
-                    $taxable->$k = $v;
+        try {
+            DB::transaction(function () {
+                // Prepare the data for creating a new Taxable
+                $data = [
+                    'name' => $this->name,
+                    'tariff' => $this->tariff,
+                    'unit' => $this->unit,
+                ];
+                $taxable = Taxable::find($this->taxable_id) ?? Taxable::create($data);
+                if ($this->edit_mode) {
+                    foreach ($data as $k => $v) {
+                        $taxable->$k = $v;
+                    }
+                    $taxable->save();
                 }
-                $taxable->save();
-            }
-            if ($this->edit_mode) {
-                // Emit a success event with a message
-                $this->dispatch('success', __('Valeur inactive mis a jour'));
-            } else {
-                // Emit a success event with a message
-                $this->dispatch('success', __('Valeur inactive créer'));
-            }
-        });
-        // Reset the form fields after successful submission
-        $this->reset();
+                if ($this->edit_mode) {
+                    // Emit a success event with a message
+                    $this->dispatch('success', __('Valeur inactive mis a jour'));
+                } else {
+                    // Emit a success event with a message
+                    $this->dispatch('success', __('Valeur inactive créer'));
+                }
+            });
+            // Reset the form fields after successful submission
+            $this->reset();
+        }catch (\Exception $e) {}
+
     }
     public function deleteUser($id)
     {
-        // Delete the user record with the specified ID
-        Taxable::destroy($id);
-        // Emit a success event with a message
-        $this->dispatch('success', 'Valeur inactive supprimer.');
+        try {
+            Taxable::destroy($id);
+            // Emit a success event with a message
+            $this->dispatch('success', 'Valeur inactive supprimer.');
+        }catch (\Exception $e) {}
+
     }
     public function updateUser($id)
     {
-        $this->edit_mode = true;
-        $taxable = Taxable::find($id);
-        $this->taxable_id = $taxable->id;
-        $this->name = $taxable->name;
-        $this->tariff = $taxable->tariff;
-        $this->unit = $taxable->unit;
+        try {
+            $this->edit_mode = true;
+            $taxable = Taxable::find($id);
+            $this->taxable_id = $taxable->id;
+            $this->name = $taxable->name;
+            $this->tariff = $taxable->tariff;
+            $this->unit = $taxable->unit;
+        }catch (\Exception $e) {}
+
     }
     public function closeTicketModal()
     {

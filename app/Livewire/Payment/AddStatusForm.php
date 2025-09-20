@@ -37,21 +37,24 @@ class AddStatusForm extends Component
             abort(403, 'Accès interdit');
             return;
         }
-        DB::transaction(function () {
-            // Prepare data for Payment
-            $data = [
-                'status' => $this->status,
-                'r_user_id' => Auth::id()
-            ];
-            $payment = Payment::find($this->payment_id); //?? Payment::create($payment_id);
-            $this->payment_id = $payment->id;
-            foreach ($data as $k => $v) {
-                $payment->$k = $v;
-            }
-            $payment->save();
-            $this->dispatchMessage('Paiement', 'update');
-        });
-        $this->reset();
+        try {
+            DB::transaction(function () {
+                // Prepare data for Payment
+                $data = [
+                    'status' => $this->status,
+                    'r_user_id' => Auth::id()
+                ];
+                $payment = Payment::find($this->payment_id); //?? Payment::create($payment_id);
+                $this->payment_id = $payment->id;
+                foreach ($data as $k => $v) {
+                    $payment->$k = $v;
+                }
+                $payment->save();
+                $this->dispatchMessage('Paiement', 'update');
+            });
+            $this->reset();
+        }catch (\Throwable $th) {}
+
     }
     public function updateStatus($id)
     {

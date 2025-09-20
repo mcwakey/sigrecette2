@@ -55,19 +55,22 @@ class AddOrdernoForm extends Component
             abort(403, 'Accès interdit');
         }
         $this->validateData();
-        if ($this->getErrorBag()->isEmpty()) {
-            DB::transaction(function () {
-                $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
-                $this->invoice_id = $invoice->id;
-                $invoice->order_no = $this->orderno;
-                $invoice->submitToState("submit_for_pending");
-                $invoice->save();
-                $this->dispatchMessage('Avis', 'update');
-            });
-            $this->reset();
-        } else {
-            $this->dispatchMessage('Avis', 'update', 'error', $this->error_message);
-        }
+        try {
+            if ($this->getErrorBag()->isEmpty()) {
+                DB::transaction(function () {
+                    $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
+                    $this->invoice_id = $invoice->id;
+                    $invoice->order_no = $this->orderno;
+                    $invoice->submitToState("submit_for_pending");
+                    $invoice->save();
+                    $this->dispatchMessage('Avis', 'update');
+                });
+                $this->reset();
+            } else {
+                $this->dispatchMessage('Avis', 'update', 'error', $this->error_message);
+            }
+        }catch (\Throwable $th) {}
+
     }
     public function updateInvoice($id)
     {

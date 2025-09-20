@@ -112,91 +112,97 @@ class AddPaymentModal extends Component
                 'reference' => 'required',
             ]);
         }
-
-        DB::transaction(function () use ($role, $is_regisseur) {
-            $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
-            if (($this->paid + $this->amount) <= $invoice->amount) {
-                if ($this->code != null && $this->amount >= $this->paidAndCodeArray[$this->code]['amount']) {
-                    $this->amount = $this->paidAndCodeArray[$this->code]['amount'];
-                }
-                $paymentData = [
-                    'invoice_id' => $this->invoice_no,
-                    'taxpayer_id' => ($this->taxpayer_id === "") ? null : $this->taxpayer_id,
-                    'amount' => $invoice->type == Constants::INVOICE_TYPE_COMPTANT ? $invoice->amount : $this->amount,
-                    'payment_type' => $this->payment_type,
-                    'reference' => $this->reference,
-                    'code' => $this->code,
-                    'description' => $invoice->type == Constants::INVOICE_TYPE_COMPTANT ? "Avis " . $this->invoice_no : "Avis " . $this->invoice_no . ", OR " . $this->order_no,
-                    'remaining_amount' => $this->bill - ($this->amount + $this->paid),
-                    'user_id' => Auth::id(),
-                    'invoice_type' => $invoice->type,
-                    'notes' => $this->notes
-                ];
-                if ($is_regisseur) {
-                    $paymentData['status'] = PaymentStatusEnums::ACCOUNTED;
-                }
-                $payments = Invoice::getCode($this->invoice_no, $this->amount, $paymentData);
-                $payment = Payment::find($this->payment_id);
-                if ($payment == null) {
-                    foreach ($payments as $payment) {
-                        $tempPay = Payment::create($payment);
-                        if (!$is_regisseur) {
-                            $users = $role->users()->get();
-                            Notification::send($users, new InvoicePaid($tempPay, Auth::user()));
+        try {
+            DB::transaction(function () use ($role, $is_regisseur) {
+                $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
+                if (($this->paid + $this->amount) <= $invoice->amount) {
+                    if ($this->code != null && $this->amount >= $this->paidAndCodeArray[$this->code]['amount']) {
+                        $this->amount = $this->paidAndCodeArray[$this->code]['amount'];
+                    }
+                    $paymentData = [
+                        'invoice_id' => $this->invoice_no,
+                        'taxpayer_id' => ($this->taxpayer_id === "") ? null : $this->taxpayer_id,
+                        'amount' => $invoice->type == Constants::INVOICE_TYPE_COMPTANT ? $invoice->amount : $this->amount,
+                        'payment_type' => $this->payment_type,
+                        'reference' => $this->reference,
+                        'code' => $this->code,
+                        'description' => $invoice->type == Constants::INVOICE_TYPE_COMPTANT ? "Avis " . $this->invoice_no : "Avis " . $this->invoice_no . ", OR " . $this->order_no,
+                        'remaining_amount' => $this->bill - ($this->amount + $this->paid),
+                        'user_id' => Auth::id(),
+                        'invoice_type' => $invoice->type,
+                        'notes' => $this->notes
+                    ];
+                    if ($is_regisseur) {
+                        $paymentData['status'] = PaymentStatusEnums::ACCOUNTED;
+                    }
+                    $payments = Invoice::getCode($this->invoice_no, $this->amount, $paymentData);
+                    $payment = Payment::find($this->payment_id);
+                    if ($payment == null) {
+                        foreach ($payments as $payment) {
+                            $tempPay = Payment::create($payment);
+                            if (!$is_regisseur) {
+                                $users = $role->users()->get();
+                                Notification::send($users, new InvoicePaid($tempPay, Auth::user()));
+                            }
                         }
                     }
-                }
-                $paystatus = $this->amount + $this->paid >= $this->bill ? "PAID" : "PART PAID";
-                $data = [
-                    'pay_status' => $paystatus,
-                ];
-                $this->invoice_id = $invoice->id;
-                foreach ($data as $k => $v) {
-                    $invoice->$k = $v;
-                }
-                $invoice->save();
-                if ($this->edit_mode) {
-                    $this->dispatchMessage('Paiement', 'update');
+                    $paystatus = $this->amount + $this->paid >= $this->bill ? "PAID" : "PART PAID";
+                    $data = [
+                        'pay_status' => $paystatus,
+                    ];
+                    $this->invoice_id = $invoice->id;
+                    foreach ($data as $k => $v) {
+                        $invoice->$k = $v;
+                    }
+                    $invoice->save();
+                    if ($this->edit_mode) {
+                        $this->dispatchMessage('Paiement', 'update');
+                    } else {
+                        $this->dispatchMessage('Paiement');
+                    }
                 } else {
-                    $this->dispatchMessage('Paiement');
+                    $this->dispatchMessage('Paiment', 'update', 'error', "Erreur lors de la mise à jour du paiement,Vous avez saisi des données de paiement incorrectes.");
                 }
-            } else {
-                $this->dispatchMessage('Paiment', 'update', 'error', "Erreur lors de la mise à jour du paiement,Vous avez saisi des données de paiement incorrectes.");
-            }
-        });
-        $this->reset();
+            });
+            $this->reset();
+        }catch (\Throwable $th) {
+
+        }
+
     }
     public function updatePayment($id)
     {
-
-        $this->edit_mode = true;
-        $invoice = Invoice::where('invoice_no', $id)
-            ->where('validity', 'VALID')
-            ->first();
-        $previousRoute = Route::getRoutes()->match(Request::create(url()->previous()));
-        if ($invoice == null && $previousRoute->getName() == "taxpayers.show") {
+        try {
+            $this->edit_mode = true;
             $invoice = Invoice::where('invoice_no', $id)
-                ->OrWhere('validity', 'ARCHIVED')
-                ->where('validity', 'EXPIRED')
+                ->where('validity', 'VALID')
                 ->first();
-        }
-        if (!$invoice) {
-            $this->dispatchMessage('Paiment', 'update', 'error', "Erreur lors de la mise à jour du paiement,avis non retrouvé.");
-            return;
-        }
-        $this->invoice_id = $invoice->id;
-        $this->taxpayer_id = $invoice->taxpayer->id ?? "";
-        $this->name = $invoice->taxpayer->name ?? "";
-        $this->tnif = $invoice->taxpayer->id ?? "";
-        $this->zone = $invoice->taxpayer->zone->name ?? "";
-        $this->invoice_no = $invoice->invoice_no;
-        $this->order_no = $invoice->order_no;
-        $this->nic = $invoice->nic;
-        $this->qty = $invoice->qty;
-        $this->bill = $invoice->amount;
-        $this->paid = Payment::getPaid($invoice->invoice_no);
-        $this->periodicity = ' / ' . $invoice->taxpayer->taxpayer_taxables->first()->taxable->periodicity;
-        $this->balance = $this->bill - $this->paid;
+            $previousRoute = Route::getRoutes()->match(Request::create(url()->previous()));
+            if ($invoice == null && $previousRoute->getName() == "taxpayers.show") {
+                $invoice = Invoice::where('invoice_no', $id)
+                    ->OrWhere('validity', 'ARCHIVED')
+                    ->where('validity', 'EXPIRED')
+                    ->first();
+            }
+            if (!$invoice) {
+                $this->dispatchMessage('Paiment', 'update', 'error', "Erreur lors de la mise à jour du paiement,avis non retrouvé.");
+                return;
+            }
+            $this->invoice_id = $invoice->id;
+            $this->taxpayer_id = $invoice->taxpayer->id ?? "";
+            $this->name = $invoice->taxpayer->name ?? "";
+            $this->tnif = $invoice->taxpayer->id ?? "";
+            $this->zone = $invoice->taxpayer->zone->name ?? "";
+            $this->invoice_no = $invoice->invoice_no;
+            $this->order_no = $invoice->order_no;
+            $this->nic = $invoice->nic;
+            $this->qty = $invoice->qty;
+            $this->bill = $invoice->amount;
+            $this->paid = Payment::getPaid($invoice->invoice_no);
+            $this->periodicity = ' / ' . $invoice->taxpayer->taxpayer_taxables->first()->taxable->periodicity;
+            $this->balance = $this->bill - $this->paid;
+        }catch (\Throwable $th) {}
+
     }
     public function updatePaymentAmount($code)
     {

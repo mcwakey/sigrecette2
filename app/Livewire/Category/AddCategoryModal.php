@@ -31,44 +31,56 @@ class AddCategoryModal extends Component
     }
     public function submit()
     {
-        // Validate the form input data
         $this->validate();
-        DB::transaction(function () {
-            // Prepare the data for creating a new Taxable
-            $data = [
-                'name' => $this->name,
-                'status' => $this->status,
-            ];
-            $category = Category::find($this->category_id) ?? Category::create($data);
-            if ($this->edit_mode) {
-                foreach ($data as $k => $v) {
-                    $category->$k = $v;
+        try {
+            DB::transaction(function () {
+                // Prepare the data for creating a new Taxable
+                $data = [
+                    'name' => $this->name,
+                    'status' => $this->status,
+                ];
+                $category = Category::find($this->category_id) ?? Category::create($data);
+                if ($this->edit_mode) {
+                    foreach ($data as $k => $v) {
+                        $category->$k = $v;
+                    }
+                    $category->save();
                 }
-                $category->save();
-            }
-            if ($this->edit_mode) {
-                $this->dispatchMessage('Catégorie', 'update');
-            } else {
-                $this->dispatchMessage('Catégorie');
-            }
-        });
-        // Reset the form fields after successful submission
-        $this->reset();
+                if ($this->edit_mode) {
+                    $this->dispatchMessage('Catégorie', 'update');
+                } else {
+                    $this->dispatchMessage('Catégorie');
+                }
+            });
+            // Reset the form fields after successful submission
+            $this->reset();
+        }catch (\Throwable $th) {
+        }
+
     }
     public function deleteUser($id)
     {
-        // Delete the user record with the specified ID
-        Category::destroy($id);
-        // Emit a success event with a message
-        $this->dispatchMessage('Catégorie', 'delete');
+        try {
+            Category::destroy($id);
+            // Emit a success event with a message
+            $this->dispatchMessage('Catégorie', 'delete');
+        }catch (\Exception $e) {
+
+        }
+
     }
     public function updateCategory($id)
     {
-        $this->edit_mode = true;
-        $category = Category::find($id);
-        $this->category_id = $category->id;
-        $this->name = $category->name;
-        $this->status = $category->status;
+        try {
+            $this->edit_mode = true;
+            $category = Category::find($id);
+            $this->category_id = $category->id;
+            $this->name = $category->name;
+            $this->status = $category->status;
+        }catch (\Exception $e) {
+
+        }
+
     }
     public function hydrate()
     {

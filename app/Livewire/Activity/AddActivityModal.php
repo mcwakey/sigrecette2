@@ -36,45 +36,58 @@ class AddActivityModal extends Component
     }
     public function submit()
     {
-        // Validate the form input data
-        $this->validate();
-        DB::transaction(function () {
-            // Prepare the data for creating a new Taxable
-            $data = [
-                'category_id' => $this->category_id,
-                'name' => $this->name,
-                'status' => $this->status,
-            ];
-            $activity = Activity::find($this->activity_id) ?? Activity::create($data);
-            if ($this->edit_mode) {
-                foreach ($data as $k => $v) {
-                    $activity->$k = $v;
+        try {
+            $this->validate();
+            DB::transaction(function () {
+                // Prepare the data for creating a new Taxable
+                $data = [
+                    'category_id' => $this->category_id,
+                    'name' => $this->name,
+                    'status' => $this->status,
+                ];
+                $activity = Activity::find($this->activity_id) ?? Activity::create($data);
+                if ($this->edit_mode) {
+                    foreach ($data as $k => $v) {
+                        $activity->$k = $v;
+                    }
+                    $activity->save();
                 }
-                $activity->save();
-            }
-            if ($this->edit_mode) {
-                $this->dispatchMessage('Activité', 'update');
-            } else {
-                $this->dispatchMessage('Activité');
-            }
-        });
-        // Reset the form fields after successful submission
-        $this->reset();
+                if ($this->edit_mode) {
+                    $this->dispatchMessage('Activité', 'update');
+                } else {
+                    $this->dispatchMessage('Activité');
+                }
+            });
+            // Reset the form fields after successful submission
+            $this->reset();
+        }catch (\Exception $e) {
+
+        }
+
     }
     public function deleteUser($id)
     {
-        // Delete the user record with the specified ID
-        Activity::destroy($id);
-        $this->dispatchMessage('Activité', 'delete');
+        try {
+            Activity::destroy($id);
+            $this->dispatchMessage('Activité', 'delete');
+        }catch (\Exception $e) {
+
+        }
+
     }
     public function updateActivity($id)
     {
-        $this->edit_mode = true;
-        $activity = Activity::find($id);
-        $this->category_id = $activity->category_id;
-        $this->activity_id = $activity->id;
-        $this->name = $activity->name;
-        $this->status = $activity->status;
+        try {
+            $this->edit_mode = true;
+            $activity = Activity::find($id);
+            $this->category_id = $activity->category_id;
+            $this->activity_id = $activity->id;
+            $this->name = $activity->name;
+            $this->status = $activity->status;
+        }catch (\Exception $e) {
+
+        }
+
     }
     public function hydrate()
     {

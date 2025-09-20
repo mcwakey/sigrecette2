@@ -44,20 +44,25 @@ class AddRefnoForm extends Component
             abort(403, 'Accès interdit');
             return;
         }
-        DB::transaction(function () {
-            // Prepare data for Payment
-            $data = [
-                'reference' => $this->refno,
-            ];
-            $payment = Payment::find($this->payment_id); //?? Payment::create($payment_id);
-            $this->payment_id = $payment->id;
-            foreach ($data as $k => $v) {
-                $payment->$k = $v;
-            }
-            $payment->save();
-        });
-        $this->reset();
-        $this->dispatchMessage('Numéro de quitance', 'update');
+        try {
+            DB::transaction(function () {
+                // Prepare data for Payment
+                $data = [
+                    'reference' => $this->refno,
+                ];
+                $payment = Payment::find($this->payment_id); //?? Payment::create($payment_id);
+                $this->payment_id = $payment->id;
+                foreach ($data as $k => $v) {
+                    $payment->$k = $v;
+                }
+                $payment->save();
+            });
+            $this->reset();
+            $this->dispatchMessage('Numéro de quitance', 'update');
+        }catch (\Throwable $th) {
+
+        }
+
     }
     public function updateInvoice($id)
     {
