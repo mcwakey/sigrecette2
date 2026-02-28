@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\payment;
+
 use App\Enums\InvoiceStatusEnums;
 use App\Enums\PaymentStatusEnums;
 use App\Helpers\Constants;
@@ -12,9 +14,11 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\InvoiceAccepted;
 use Illuminate\Support\Facades\Notification;
+
 class AddRefnoForm extends Component
 {
     use DispatchesMessages;
+
     public $payment_id;
     public $refno;
     public $edit_mode = false;
@@ -35,25 +39,30 @@ class AddRefnoForm extends Component
         $this->validate();
         $user = auth()->user();
         if (!$user->hasRole('regisseur')) {
-            $this->dispatchMessage('Paiement', 'update', 'error',"Action non authorize");
+            $this->dispatchMessage('Paiement', 'update', 'error', "Action non authorize");
             $this->reset();
             abort(403, 'Accès interdit');
             return;
         }
-        DB::transaction(function () {
-            // Prepare data for Payment
-            $data = [
-                'reference' => $this->refno,
-            ];
-            $payment = Payment::find($this->payment_id); //?? Payment::create($payment_id);
-            $this->payment_id = $payment->id;
-            foreach ($data as $k => $v) {
-                $payment->$k = $v;
-            }
-            $payment->save();
-        });
-        $this->reset();
-        $this->dispatchMessage('Numéro de quitance', 'update');
+        try {
+            DB::transaction(function () {
+                // Prepare data for Payment
+                $data = [
+                    'reference' => $this->refno,
+                ];
+                $payment = Payment::find($this->payment_id); //?? Payment::create($payment_id);
+                $this->payment_id = $payment->id;
+                foreach ($data as $k => $v) {
+                    $payment->$k = $v;
+                }
+                $payment->save();
+            });
+            $this->reset();
+            $this->dispatchMessage('Numéro de quitance', 'update');
+        }catch (\Throwable $th) {
+
+        }
+
     }
     public function updateInvoice($id)
     {

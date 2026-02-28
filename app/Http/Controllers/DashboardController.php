@@ -1,13 +1,17 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\Models\Year;
 use App\Services\StatisticsService;
 use App\Traits\HandlesDateFilters;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+
 class DashboardController extends Controller
 {
-    use  HandlesDateFilters;
+    use HandlesDateFilters;
+
     protected $statisticsService;
 
     public function index(Request $request)
@@ -20,8 +24,8 @@ class DashboardController extends Controller
         return view('pages/dashboards.index', [
             'stats' => $this->statisticsService->getStats(),
             'taxpayer_by_created_at' => $this->statisticsService->getTaxpayerByCreatedAt(),
-            'invoice_by_created_at'=>$this->statisticsService->getInvoiceByCreatedAt(),
-            'payments_data'=>$this->statisticsService->getPaymentsEvolution(),
+            'invoice_by_created_at' => $this->statisticsService->getInvoiceByCreatedAt(),
+            'payments_data' => $this->statisticsService->getPaymentsEvolution(),
         ]);
     }
 }

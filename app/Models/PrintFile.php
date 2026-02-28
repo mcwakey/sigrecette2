@@ -1,9 +1,12 @@
 <?php
+
 namespace App\Models;
+
 use App\Enums\PrintNameEnums;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+
 class PrintFile extends Model
 {
     protected $fillable = [
@@ -21,7 +24,7 @@ class PrintFile extends Model
         $activeYear = Year::getActiveYear();
         $startOfYear = Carbon::parse("{$activeYear->name}-01-01 00:00:00");
         $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
-        return PrintFile::where('name',"=", $type)
+        return PrintFile::where('name', "=", $type)
             ->whereBetween('created_at', [$startOfYear, $endOfYear])
             ->orderBy('created_at', 'desc')
             ->first();

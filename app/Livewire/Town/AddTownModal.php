@@ -1,15 +1,19 @@
 <?php
+
 namespace App\Livewire\Town;
+
 use App\Models\Canton;
 use App\Models\Town;
 use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
+
 class AddTownModal extends Component
 {
     use WithFileUploads;
     use DispatchesMessages;
+
     public $canton_id;
     public $town_id;
     public $name;
@@ -33,46 +37,54 @@ class AddTownModal extends Component
     {
         // Validate the form input data
         $this->validate();
-        DB::transaction(function () {
-            // Prepare the data for creating a new Taxable
-            $data = [
-                'canton_id' => $this->canton_id,
-                'name' => $this->name,
-                'status' => $this->status,
-            ];
-            $town = Town::find($this->town_id) ?? Town::create($data);
-            if ($this->edit_mode) {
-                foreach ($data as $k => $v) {
-                    $town->$k = $v;
+        try {
+            DB::transaction(function () {
+                // Prepare the data for creating a new Taxable
+                $data = [
+                    'canton_id' => $this->canton_id,
+                    'name' => $this->name,
+                    'status' => $this->status,
+                ];
+                $town = Town::find($this->town_id) ?? Town::create($data);
+                if ($this->edit_mode) {
+                    foreach ($data as $k => $v) {
+                        $town->$k = $v;
+                    }
+                    $town->save();
                 }
-                $town->save();
-            }
-            if ($this->edit_mode) {
-                // Emit a success event with a message
-                $this->dispatchMessage('Ville/Quartier', 'update');
-            } else {
-                // Emit a success event with a message
-                $this->dispatchMessage('Ville/Quartier');
-            }
-        });
-        // Reset the form fields after successful submission
-        $this->reset();
+                if ($this->edit_mode) {
+                    // Emit a success event with a message
+                    $this->dispatchMessage('Ville/Quartier', 'update');
+                } else {
+                    // Emit a success event with a message
+                    $this->dispatchMessage('Ville/Quartier');
+                }
+            });
+            // Reset the form fields after successful submission
+            $this->reset();
+        }catch (\Exception $e) {}
+
     }
     public function deleteUser($id)
     {
-        // Delete the user record with the specified ID
-        Town::destroy($id);
-        // Emit a success event with a message
-        $this->dispatch('success', 'Taxpayer successfully deleted');
+        try {
+            Town::destroy($id);
+            // Emit a success event with a message
+            $this->dispatch('success', 'Taxpayer successfully deleted');
+        }catch (\Exception $e) {}
+
     }
     public function updateTown($id)
     {
-        $this->edit_mode = true;
-        $town = Town::find($id);
-        $this->canton_id = $town->canton_id;
-        $this->town_id = $town->id;
-        $this->name = $town->name;
-        $this->status = $town->status;
+        try {
+            $this->edit_mode = true;
+            $town = Town::find($id);
+            $this->canton_id = $town->canton_id;
+            $this->town_id = $town->id;
+            $this->name = $town->name;
+            $this->status = $town->status;
+        }catch (\Exception $e) {}
+
     }
     public function hydrate()
     {

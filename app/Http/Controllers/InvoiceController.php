@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\DataTables\InvoicesDataTable;
 use App\Enums\InvoiceStatusEnums;
 use App\Enums\TaxpayerStateEnums;
@@ -16,9 +18,11 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
+
 class InvoiceController extends Controller
 {
-    use  HandlesDateFilters;
+    use HandlesDateFilters;
+
     /**
      * Display a listing of the resource.
      */
@@ -42,7 +46,7 @@ class InvoiceController extends Controller
         $endInvoiceId = $validatedData['endInvoiceId'] ?? null;
         $zones = Zone::all();
         $tax_labels = TaxLabel::all();
-        $role = Role::where('name',"=", 'agent_recouvrement')->first();
+        $role = Role::where('name', "=", 'agent_recouvrement')->first();
         $agent_recouvrements = $role->users()->get();
         $invoice_id = isset($validatedData['invoice_id']) ? $validatedData['invoice_id'] : null;
 
@@ -94,7 +98,7 @@ class InvoiceController extends Controller
         return view('exports/invoices', [
             'data' => $invoice,
             'action' => 1, "commune" => Commune::first(),
-            'qrcodeSvg' =>$qrcodeGeneratorService->generate(route('invoices.show', [ $invoice]))
+            'qrcodeSvg' => $qrcodeGeneratorService->generate(route('invoices.show', [ $invoice]))
         ]);
     }
     /**

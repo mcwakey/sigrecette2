@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Http\Middleware;
+
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+
 class EnsureIsAdmin
 {
     /**
@@ -12,7 +15,8 @@ class EnsureIsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!$request->user()->hasAnyRole(['administrateur_system', 'administrateur',])
+        if (
+            !$request->user()->hasAnyRole(['administrateur_system', 'administrateur',])
             && (!$request->has('type') || !$request->user()->hasAnyRole(['regisseur',]))
         ) {
             return redirect()->route('dashboard');

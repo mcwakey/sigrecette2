@@ -55,7 +55,7 @@ class TownsSeeder extends Seeder
         }
 
         //Hossoukopé, Logogomé, Elavagno-Atsanvé, Elavagno-Klévé, Awoudja-Kopé, Dansakopé
-        $cantonNameTwo=[
+        $cantonNameTwo = [
             'Hossoukopé',
             'Logogomé',
             'Elavagno-Atsanvé',

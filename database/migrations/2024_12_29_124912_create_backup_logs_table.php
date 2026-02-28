@@ -9,18 +9,18 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-     public function up(): void
-     {
-         Schema::create('backup_logs', function (Blueprint $table) {
-             $table->id();
-             $table->string('file_name');
-             $table->string('disk_name');
-             $table->timestamp('downloaded_at');
-             $table->foreignId('user_id')->nullable();
-             $table->string('full_path');
-             $table->timestamps();
-         });
-     }
+    public function up(): void
+    {
+        Schema::create('backup_logs', function (Blueprint $table) {
+            $table->id();
+            $table->string('file_name');
+            $table->string('disk_name');
+            $table->timestamp('downloaded_at');
+            $table->foreignId('user_id')->nullable();
+            $table->string('full_path');
+            $table->timestamps();
+        });
+    }
 
     public function down(): void
     {

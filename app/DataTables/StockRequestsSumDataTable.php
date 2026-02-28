@@ -1,5 +1,7 @@
 <?php
+
 namespace App\DataTables;
+
 use Illuminate\Support\Facades\DB;
 use App\Models\StockRequest;
 use Yajra\DataTables\Html\Column;
@@ -8,6 +10,7 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
+
 class StockRequestsSumDataTable extends DataTable
 {
     /**
@@ -43,7 +46,8 @@ class StockRequestsSumDataTable extends DataTable
     {
         return $model->join('taxables', 'stock_requests.taxable_id', '=', 'taxables.id')
             ->join('users', 'stock_requests.user_id', '=', 'users.id')
-            ->select('stock_requests.req_no',
+            ->select(
+                'stock_requests.req_no',
                 DB::raw('SUM(CASE WHEN req_type = "DEMANDE" THEN qty*tariff END) AS pc_qty'),
                 DB::raw('SUM(CASE WHEN req_type = "VENDU" THEN qty*tariff END) AS vd_qty'),
                 DB::raw('SUM(CASE WHEN req_type = "RENDU" THEN qty*tariff END) AS rd_qty'),

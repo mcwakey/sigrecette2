@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Livewire\Taxpayer;
+
 use App\Models\Taxpayer;
 use Livewire\Attributes\On;
 use Livewire\Component;
+
 class TaxpayerPayments extends Component
 {
     public $taxpayer_id;

@@ -36,16 +36,20 @@ class DatabaseSeeder extends Seeder
                 GendersSeeder::class,
                 IdTypesSeeder::class,
             );
-
-        }else{
+        } else {
             array_push(
                 $seedersArray,
                 TaxLabelsSeeder::class,
                 TaxablesSeeder::class,
+                GendersSeeder::class,
+                CantonsSeeder::class,
+                TownsSeeder::class,
+                EreasSeeder::class,
+                ZonesSeeder::class,
+                IdTypesSeeder::class,
+                TaxpayersSeeder::class,
                 UsersSeeder::class,
                 RolesPermissionsSeeder::class,
-                GendersSeeder::class,
-                IdTypesSeeder::class,
             );
         }
 

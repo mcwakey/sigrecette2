@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\Taxpayer;
+
 use App\Enums\InvoiceStatusEnums;
 use App\Enums\TaxpayerStateEnums;
 use App\Helpers\Constants;
@@ -18,9 +20,11 @@ use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+
 class AddStatusForm extends Component
 {
     use DispatchesMessages;
+
     public $taxpayer_id;
     public $status;
     public $edit_mode = false;
@@ -29,7 +33,8 @@ class AddStatusForm extends Component
         return [
             'status' => ['required', 'string', Rule::in(
                 TaxpayerStateEnums::APPROVED,
-                TaxpayerStateEnums::REJECTED)],
+                TaxpayerStateEnums::REJECTED
+            )],
         ];
     }
     private $error_message;
@@ -53,17 +58,20 @@ class AddStatusForm extends Component
             abort(403, 'Accès interdit');
         }
         $this->validate();
-        if ($this->getErrorBag()->isEmpty()) {
-            DB::transaction(function () {
-                $taxpayer = Taxpayer::find($this->taxpayer_id);
-                $taxpayer->from_mobile_and_validate_state = $this->status;
-                $taxpayer->save();
-                $this->dispatchMessage('Taxpayer', 'update');
-            });
-            $this->reset();
-        } else {
-            $this->dispatchMessage('Taxpayer', 'update', 'error', "erreur");
-        }
+        try {
+            if ($this->getErrorBag()->isEmpty()) {
+                DB::transaction(function () {
+                    $taxpayer = Taxpayer::find($this->taxpayer_id);
+                    $taxpayer->from_mobile_and_validate_state = $this->status;
+                    $taxpayer->save();
+                    $this->dispatchMessage('Taxpayer', 'update');
+                });
+                $this->reset();
+            } else {
+                $this->dispatchMessage('Taxpayer', 'update', 'error', "erreur");
+            }
+        }catch (\Throwable $th) {}
+
     }
     public function updateStatus($id)
     {

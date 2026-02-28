@@ -1,5 +1,7 @@
 <?php
+
 namespace App\DataTables;
+
 use App\Enums\TaxpayerStateEnums;
 use App\Helpers\Constants;
 use App\Models\Taxpayer;
@@ -11,9 +13,11 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\WithExportQueue;
+
 class ExportTaxpayersDataTable extends DataTable
 {
     use WithExportQueue;
+
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
@@ -128,9 +132,9 @@ class ExportTaxpayersDataTable extends DataTable
             ->with('zone')
             ->join('zones', 'taxpayers.zone_id', '=', 'zones.id')
             ->select('taxpayers.*')
-            ->where('taxpayers.type','=' ,Constants::TITRE)
+            ->where('taxpayers.type', '=', Constants::TITRE)
             ->newQuery();
-        if($this->startDate && $this->endDate ){
+        if ($this->startDate && $this->endDate) {
             $query->where(function ($q) {
                 $q->whereBetween('taxpayers.created_at', [$this->startDate, $this->endDate])
                     ->orWhereBetween('taxpayers.updated_at', [$this->startDate, $this->endDate]);

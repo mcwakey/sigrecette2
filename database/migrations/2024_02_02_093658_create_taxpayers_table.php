@@ -15,8 +15,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('taxpayers', function (Blueprint $table) {
-            $table->id()->from(10001);;
-		    $table->string('tnif')->unique()->nullable();
+            $table->id()->from(10001);
+            ;
+            $table->string('tnif')->unique()->nullable();
             $table->string('name');
             $table->string('gender');
             $table->string('id_type');
@@ -55,7 +56,6 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
-
     }
 
     /**

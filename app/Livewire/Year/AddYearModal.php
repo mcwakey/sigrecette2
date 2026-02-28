@@ -1,12 +1,16 @@
 <?php
+
 namespace App\Livewire\Year;
+
 use App\Models\Year;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
+
 class AddYearModal extends Component
 {
     use WithFileUploads;
+
     public $year_id;
     public $name;
     public $status;

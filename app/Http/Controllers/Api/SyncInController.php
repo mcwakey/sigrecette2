@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers\Api;
+
 use App\Enums\TaxpayerStateEnums;
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
@@ -9,6 +11,7 @@ use App\Models\TaxpayerTaxable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+
 class SyncInController extends Controller
 {
     private string $new = 'new';

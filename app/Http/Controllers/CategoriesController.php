@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\DataTables\CategoryDataTable;
 use App\Models\Category;
 use Illuminate\Http\Request;
+
 class CategoriesController extends Controller
 {
     /**

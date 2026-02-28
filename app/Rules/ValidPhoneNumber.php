@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Rules;
+
 use Exception;
 use Illuminate\Contracts\Validation\Rule;
 use Propaganistas\LaravelPhone\Rules\Phone;
+
 class ValidPhoneNumber implements Rule
 {
     /**

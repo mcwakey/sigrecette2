@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\StockRequest;
+
 use App\Models\StockRequest;
 use App\Models\StockTransfer;
 use App\Models\Taxable;
@@ -13,10 +15,12 @@ use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
+
 class AddStockRequestModal extends Component
 {
     use WithFileUploads;
     use DispatchesMessages;
+
     public $stock_request_id;
     public $user_id;
     public $tariff;
@@ -52,7 +56,7 @@ class AddStockRequestModal extends Component
                         dump($this->start_no, $this->end_no);
                         $fail('Les valeurs saisies dans n° de debut ou n° de fin sont incorrectes.');
                     }
-                }catch (Exception $e) {
+                } catch (Exception $e) {
                     $fail('Les valeurs saisies dans n° de debut ou n° de fin sont incorrectes.');
                 }
             }],
@@ -95,41 +99,44 @@ class AddStockRequestModal extends Component
         $this->validate();
         $user = auth()->user();
         if (!$user->hasRole('regisseur')) {
-            $this->dispatchMessage('Valeur Inactive', 'update', 'error',"Action non authorize");
+            $this->dispatchMessage('Valeur Inactive', 'update', 'error', "Action non authorize");
             $this->reset();
             abort(403, 'Accès interdit');
             return;
         }
-        DB::transaction(function () {
-            $data = [
-                'req_no' => $this->req_no,
-                'req_desc' => 'Demande d’approvisionnement N°' . $this->req_no,
-                'qty' => $this->qty,
-                'start_no' => $this->start_no,
-                'last_no' => $this->start_no,
-                'end_no' => $this->end_no,
-                'taxable_id' => $this->taxable_id,
-                'req_type' => 'DEMANDE',
-                'user_id' => Auth::id(),
-            ];
-            $stock_request = StockRequest::create($data);
-            $stock_request->req_id = $stock_request->id;
-            if ($this->edit_mode) {
-                // Save the invoice ID into the invoice_no column
-                $stock_request->req_id = $this->stock_request_id;
-            }
-            $stock_request->save();
-            $this->stock_requests = StockRequest::where('req_no', $this->req_no)->where('req_type', 'DEMANDE')->get();
-            $this->qty = null;
-            $this->start_no = null;
-            $this->end_no = null;
-            if ($this->edit_mode) {
-                // Emit a success event with a message
-                $this->dispatchMessage(__('Stock valeur inactive'), 'update');
-            } else {
-                $this->dispatchMessage('Stock valeur inactive');
-            }
-        });
+        try {
+            DB::transaction(function () {
+                $data = [
+                    'req_no' => $this->req_no,
+                    'req_desc' => 'Demande d’approvisionnement N°' . $this->req_no,
+                    'qty' => $this->qty,
+                    'start_no' => $this->start_no,
+                    'last_no' => $this->start_no,
+                    'end_no' => $this->end_no,
+                    'taxable_id' => $this->taxable_id,
+                    'req_type' => 'DEMANDE',
+                    'user_id' => Auth::id(),
+                ];
+                $stock_request = StockRequest::create($data);
+                $stock_request->req_id = $stock_request->id;
+                if ($this->edit_mode) {
+                    // Save the invoice ID into the invoice_no column
+                    $stock_request->req_id = $this->stock_request_id;
+                }
+                $stock_request->save();
+                $this->stock_requests = StockRequest::where('req_no', $this->req_no)->where('req_type', 'DEMANDE')->get();
+                $this->qty = null;
+                $this->start_no = null;
+                $this->end_no = null;
+                if ($this->edit_mode) {
+                    // Emit a success event with a message
+                    $this->dispatchMessage(__('Stock valeur inactive'), 'update');
+                } else {
+                    $this->dispatchMessage('Stock valeur inactive');
+                }
+            });
+        }catch (\Throwable $th) {}
+
     }
     /**
      * @param $id
@@ -163,16 +170,19 @@ class AddStockRequestModal extends Component
     }
     public function updateRequest($id)
     {
-        $this->edit_mode = true;
-        $stock_request = StockRequest::find($id);
-        $this->stock_request_id = $id;
-        $this->req_no = $stock_request->req_no;
-        $this->taxlabel_name = $stock_request->taxable->unit;
-        $this->taxable_idd = $stock_request->taxable_id;
-        $this->taxable_name = $stock_request->taxable->name;
-        $this->start_no = $stock_request->last_no;
-        $this->end_no = $stock_request->end_no;
-        $this->qty = $stock_request->end_no - $stock_request->last_no + 1;
+        try {
+            $this->edit_mode = true;
+            $stock_request = StockRequest::find($id);
+            $this->stock_request_id = $id;
+            $this->req_no = $stock_request->req_no;
+            $this->taxlabel_name = $stock_request->taxable->unit;
+            $this->taxable_idd = $stock_request->taxable_id;
+            $this->taxable_name = $stock_request->taxable->name;
+            $this->start_no = $stock_request->last_no;
+            $this->end_no = $stock_request->end_no;
+            $this->qty = $stock_request->end_no - $stock_request->last_no + 1;
+        }catch (\Throwable $th) {}
+
     }
     public function hydrate()
     {

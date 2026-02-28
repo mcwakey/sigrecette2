@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Traits;
+
 use App\Enums\InvoicePayStatusEnums;
 use App\Enums\InvoiceStatusEnums;
 use App\Enums\PaymentStatusEnums;
@@ -16,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 
 trait InvoiceTrait
 {
-    public static  function getReceiverName($id)
+    public static function getReceiverName($id)
     {
         $invoice = Invoice::find($id);
         if ($invoice && $invoice->delivery_date !== null) {
@@ -30,7 +32,7 @@ trait InvoiceTrait
      * @return array Returns a collection of invoices if all UUIDs are found,
      *                               `false` if any UUID is not found, or an empty array if `$uuids` is empty.
      */
-    public static  function retrieveByUUIDs(array $uuids, string|null $type = null): array
+    public static function retrieveByUUIDs(array $uuids, string|null $type = null): array
     {
         $invoices = [];
         if ($uuids === []) {
@@ -64,7 +66,7 @@ trait InvoiceTrait
      * @return array Returns a collection of invoices if all UUIDs are found,
      *                               `false` if any UUID is not found, or an empty array if `$uuids` is empty.
      */
-    public static  function filterByType(array $invoices, string $type): array
+    public static function filterByType(array $invoices, string $type): array
     {
         $invoices_return = [];
         foreach ($invoices as $invoice) {
@@ -85,7 +87,7 @@ trait InvoiceTrait
      * @param Invoice $invoice The invoice object.
      * @return array An associative array where keys are tax codes and values are the total amounts.
      */
-    public static  function sumAmountsByTaxCode(Invoice $invoice): array
+    public static function sumAmountsByTaxCode(Invoice $invoice): array
     {
         $sumsByTaxCode = [];
         foreach ($invoice->invoiceitems as $item) {
@@ -283,11 +285,11 @@ trait InvoiceTrait
             }
         }
 
-        $invoice =$query->first();
+        $invoice = $query->first();
         return $invoice?->printFiles->first();
     }
 
-    public static function getPrintableUuid(string $status=InvoiceStatusEnums::ACCEPTED): array
+    public static function getPrintableUuid(string $status = InvoiceStatusEnums::ACCEPTED): array
     {
         return Invoice::where('status', $status)
             ->where('type', Constants::TITRE)
@@ -295,10 +297,11 @@ trait InvoiceTrait
             ->pluck('uuid')
             ->toArray();
     }
-    public function canSubmitToRelaunch(): bool{
+    public function canSubmitToRelaunch(): bool
+    {
         return $this->isInvoiceLastPaymentOlderThanThreeMonths($this->invoice_id);
     }
-    public  function isInvoiceLastPaymentOlderThanThreeMonths($invoice_id,int $month=3): bool
+    public function isInvoiceLastPaymentOlderThanThreeMonths($invoice_id, int $month = 3): bool
     {
         $invoice = Invoice::find($invoice_id);
 
@@ -322,9 +325,9 @@ trait InvoiceTrait
             $taxpayerTaxable->invoice_id = null;
             $taxpayerTaxable->save();
         }
-
     }
-    public static function fixErrorInvoiceGeneration(): void{
+    public static function fixErrorInvoiceGeneration(): void
+    {
         DB::transaction(function () {
             $s_date = Carbon::parse("2025-01-01 00:00:00");
             $e_date = Carbon::parse("2025-3-31 23:59:59");
@@ -333,37 +336,34 @@ trait InvoiceTrait
                 ->where('invoices.type', '=', Constants::TITRE)
                 ->get();
             foreach ($invoices as $invoice) {
-                $edited=false;
-                $totalAmount=0;
-                $amountIsEdited=false;
-                if($end_of_year!=$invoice->to_date){
-                    $invoice->to_date=$end_of_year;
-                    $edited=true;
+                $edited = false;
+                $totalAmount = 0;
+                $amountIsEdited = false;
+                if ($end_of_year != $invoice->to_date) {
+                    $invoice->to_date = $end_of_year;
+                    $edited = true;
                     $invoice->status = InvoiceStatusEnums::DRAFT;
-                    $invoice->validity='VALID';
+                    $invoice->validity = 'VALID';
                 }
-                if($invoice->id==100222){
-
+                if ($invoice->id == 100222) {
                 }
                 foreach ($invoice->invoiceitems as $invoiceitem) {
                     $period = 1;
                     $periodicity = $invoiceitem->taxpayer_taxable->taxable->periodicity;
                     $qty = $periodicity == "Mois" ? 12 : 1;
-                    if($periodicity=="Mois"&& $invoiceitem->qty!=$qty ){
-                        $edited=true;
+                    if ($periodicity == "Mois" && $invoiceitem->qty != $qty) {
+                        $edited = true;
 
                         $temp_seize = $invoiceitem->taxpayer_taxable->seize;
                         if ($invoiceitem->taxpayer_taxable->taxable->use_second_formula) {
                             $temp_seize = 1;
                         }
-                        if($invoiceitem->taxpayer_taxable->taxable->tariff_type == "FIXED"){
-                            $itemAmount = $invoiceitem->taxpayer_taxable->taxable->tariff * $qty * $temp_seize* $period;
-
-                        }else{
-                            $itemAmount = $invoiceitem->taxpayer_taxable->taxable->tariff * $qty * $temp_seize* $period / 100;
-
+                        if ($invoiceitem->taxpayer_taxable->taxable->tariff_type == "FIXED") {
+                            $itemAmount = $invoiceitem->taxpayer_taxable->taxable->tariff * $qty * $temp_seize * $period;
+                        } else {
+                            $itemAmount = $invoiceitem->taxpayer_taxable->taxable->tariff * $qty * $temp_seize * $period / 100;
                         }
-                        $taxpayerTaxable= $invoiceitem->taxpayer_taxable;
+                        $taxpayerTaxable = $invoiceitem->taxpayer_taxable;
                         $taxpayerTaxable->invoice_id = $invoice->id;
                         $taxpayerTaxable->bill_status = 'BILLED';
                         $taxpayerTaxable->save();
@@ -372,16 +372,12 @@ trait InvoiceTrait
                         $invoiceitem->ii_tariff = $invoiceitem->taxpayer_taxable->taxable->tariff;
                         $invoiceitem->qty = $qty;
                         $invoiceitem->save();
-                        $amountIsEdited=true;
-                        $invoice->qty=$qty;
+                        $amountIsEdited = true;
+                        $invoice->qty = $qty;
                     }
-
-
-
-
                 }
-                if($edited){
-                    if($amountIsEdited){
+                if ($edited) {
+                    if ($amountIsEdited) {
                         $invoice->amount = $totalAmount;
                     }
 
@@ -389,7 +385,5 @@ trait InvoiceTrait
                 }
             }
         });
-
     }
-
 }

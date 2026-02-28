@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Models;
+
 use App\Contracts\FormatDateInterface;
 use App\Enums\InvoicePayStatusEnums;
 use App\Enums\InvoiceStatusEnums;
@@ -10,11 +12,13 @@ use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
 use Spatie\Permission\Models\Role;
 use ZeroDaHero\LaravelWorkflow\Traits\WorkflowTrait;
+
 class Invoice extends Model implements FormatDateInterface
 {
     use HasFactory;
     use WorkflowTrait;
     use InvoiceTrait;
+
     protected $fillable = [
         'invoice_id',
         'taxpayer_id',
@@ -72,7 +76,7 @@ class Invoice extends Model implements FormatDateInterface
             $this->status != InvoiceStatusEnums::CANCELED &&
                 $this->status != InvoiceStatusEnums::REDUCED &&
                 $this->pay_status != InvoicePayStatusEnums::PAID
-        &&$this->validity=='VALID');
+        && $this->validity == 'VALID');
     }
     public function canGetPayment(): bool
     {
@@ -142,7 +146,7 @@ class Invoice extends Model implements FormatDateInterface
     }
     public function processOnInvoicesByUser(string $roleName): Invoice
     {
-        $role = Role::where('name', "=",$roleName)->first();
+        $role = Role::where('name', "=", $roleName)->first();
         if ($role) {
             $user = auth()->user();
             if ($user->hasRole($roleName)) {
@@ -151,9 +155,9 @@ class Invoice extends Model implements FormatDateInterface
         }
         return $this;
     }
-    public static function saveNotes(int $previousInvoiceId=null, string $remainingAmount=null, $freeText=null)
+    public static function saveNotes(int $previousInvoiceId = null, string $remainingAmount = null, $freeText = null)
     {
-       return json_encode([
+        return json_encode([
             'previous_invoice_id' => $previousInvoiceId,
             'remaining_amount' => $remainingAmount,
             'free_text' => $freeText,
@@ -176,7 +180,7 @@ class Invoice extends Model implements FormatDateInterface
 
         return false;
     }
-    public  function migrateNotes()
+    public function migrateNotes()
     {
 
         if (!$this->hasValidNotesStructure()) {
@@ -192,9 +196,9 @@ class Invoice extends Model implements FormatDateInterface
 
     public function getNotes()
     {
-        if($this->hasValidNotesStructure()) {
+        if ($this->hasValidNotesStructure()) {
             return json_decode($this->notes, true) ;
-        }else{
+        } else {
             return $this->notes;
         }
     }

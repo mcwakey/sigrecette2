@@ -24,7 +24,7 @@ class TaxableFactory extends Factory
             'periodicity' => fake()->randomElement(['Mois', 'Forfait']),
             'penalty' =>  fake()->randomElement(['10', '15', null]),
             'penalty_type' => fake()->randomElement(['%', null]),
-            'tax_label_id' => random_int(1, 10), 
+            'tax_label_id' => random_int(1, 10),
         ];
     }
 }

@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('invoices', function (Blueprint $table) {
             $table->string('edition_state')->nullable();
-
         });
     }
 

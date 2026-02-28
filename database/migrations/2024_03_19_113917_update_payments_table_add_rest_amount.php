@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('payments', function (Blueprint $table) {
             $table->string('remaining_amount')->after('amount')->nullable()->default('');
-
         });
     }
 
@@ -25,6 +24,5 @@ return new class extends Migration
         Schema::table('payments', function (Blueprint $table) {
             $table->dropColumn('remaining_amount');
         });
-
     }
 };

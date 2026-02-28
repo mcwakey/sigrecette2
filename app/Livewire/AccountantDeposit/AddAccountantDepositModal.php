@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\AccountantDeposit;
+
 use App\Enums\InvoiceStatusEnums;
 use App\Enums\PaymentStatusEnums;
 use App\Helpers\Constants;
@@ -17,10 +19,12 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
+
 class AddAccountantDepositModal extends Component
 {
     use WithFileUploads;
     use DispatchesMessages;
+
     public $stock_transfer_id;
     public $user_id;
     public $collector_id;
@@ -71,55 +75,63 @@ class AddAccountantDepositModal extends Component
         $this->validate();
         $user = auth()->user();
         if (!$user->hasRole('regisseur')) {
-            $this->dispatchMessage('Compatilite', 'update', 'error',"Action non authorize");
+            $this->dispatchMessage('Compatilite', 'update', 'error', "Action non authorize");
             $this->reset();
             abort(403, 'Accès interdit');
         }
-        DB::transaction(function () {
-            $paymentData = [
-                'deposit' => $this->paid,
-                'status' => 'DONE',
-                'payment_type' => $this->payment_type,
-                'description' => "Versement",
-                'user_id' => Auth::id(),
-                'r_user_id' => null,
-                'reference' => $this->reference,
-                'invoice_type' => 'VERSEMENT',
-            ];
-            Payment::create($paymentData);
-            $payments_olds = Payment::whereIn('invoice_type', [Constants::INVOICE_TYPE_COMPTANT, Constants::INVOICE_TYPE_TITRE])->where('status', PaymentStatusEnums::ACCOUNTED)->get();
-            foreach ($payments_olds as $payments_old) {
-                $payments_old->reference_deposit = $this->reference;
-                $payments_old->status = 'DONE';
-                $payments_old->save();
-            }
-            $this->dispatch('success', __('Etat de comptabilité mis a jour avec succès'));
+        try {
+            DB::transaction(function () {
+                $paymentData = [
+                    'deposit' => $this->paid,
+                    'status' => 'DONE',
+                    'payment_type' => $this->payment_type,
+                    'description' => "Versement",
+                    'user_id' => Auth::id(),
+                    'r_user_id' => null,
+                    'reference' => $this->reference,
+                    'invoice_type' => 'VERSEMENT',
+                ];
+                Payment::create($paymentData);
+                $payments_olds = Payment::whereIn('invoice_type', [Constants::INVOICE_TYPE_COMPTANT, Constants::INVOICE_TYPE_TITRE])->where('status', PaymentStatusEnums::ACCOUNTED)->get();
+                foreach ($payments_olds as $payments_old) {
+                    $payments_old->reference_deposit = $this->reference;
+                    $payments_old->status = 'DONE';
+                    $payments_old->save();
+                }
+                $this->dispatch('success', __('Etat de comptabilité mis a jour avec succès'));
+            });
+            $this->end_no = "";
+            $this->qty = "";
+        }catch (\Exception $e) {
+            $this->dispatchMessage('Compatilite', 'update', 'error', "Action non enregistrer");
         }
-        );
-        $this->end_no = "";
-        $this->qty = "";
+
+
     }
     public function addAccountantDeposit($type)
     {
-        $year=Year::getActiveYear()?->name;
-        $s_date = Carbon::parse("{$year}-01-01 00:00:00");
-        $e_date = Carbon::parse("{$year}-12-31 23:59:59");
-        $this->collector_id = "";
-        $this->taxlabel_id = "";
-        $this->taxable_id = "";
-        $this->trans_no = "";
+        try {
+            $year = Year::getActiveYear()?->name;
+            $s_date = Carbon::parse("{$year}-01-01 00:00:00");
+            $e_date = Carbon::parse("{$year}-12-31 23:59:59");
+            $this->collector_id = "";
+            $this->taxlabel_id = "";
+            $this->taxable_id = "";
+            $this->trans_no = "";
 
+            $this->total_amount = Payment::selectRaw('SUM(amount) AS amount')
+                ->whereBetween('created_at', [$s_date, $e_date])
+                ->where('status', "ACCOUNTED")
+                ->first()
+                ->amount ?? 0;
+            ;
+            $this->paid = $this->total_amount;
+            $this->edit_mode = false;
+            $this->deposit_mode = false;
+        }catch (\Exception $e) {
+            $this->dispatchMessage('Compatilite', 'update', 'error', "Action non enregistrer");
+        }
 
-
-
-        $this->total_amount = Payment::selectRaw('SUM(amount) AS amount')
-            ->whereBetween('created_at', [$s_date, $e_date])
-            ->where('status', "ACCOUNTED")
-            ->first()
-            ->amount ?? 0;;
-        $this->paid = $this->total_amount;
-        $this->edit_mode = false;
-        $this->deposit_mode = false;
     }
     public function hydrate()
     {

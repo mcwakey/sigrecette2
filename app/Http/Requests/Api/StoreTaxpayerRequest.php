@@ -1,6 +1,9 @@
 <?php
+
 namespace App\Http\Requests\Api;
+
 use Illuminate\Foundation\Http\FormRequest;
+
 class StoreTaxpayerRequest extends FormRequest
 {
     /**
@@ -28,13 +31,13 @@ class StoreTaxpayerRequest extends FormRequest
                 'string',
                 'min:8',
                 'max:8',
-                new \App\Rules\ValidPhoneNumber,
+                new \App\Rules\ValidPhoneNumber(),
             ],
             'telephone' => [
                 'string',
                 'min:8',
                 'max:8',
-                new \App\Rules\ValidPhoneNumber,
+                new \App\Rules\ValidPhoneNumber(),
             ],
             'longitude' => 'nullable',
             'latitude' => 'nullable',

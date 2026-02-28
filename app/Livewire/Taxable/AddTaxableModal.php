@@ -1,15 +1,19 @@
 <?php
+
 namespace App\Livewire\Taxable;
+
 use App\Models\Taxable;
 use App\Models\TaxLabel;
 use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
+
 class AddTaxableModal extends Component
 {
     use WithFileUploads;
     use DispatchesMessages;
+
     public $taxable_id;
     public $name;
     public $tariff;
@@ -68,59 +72,68 @@ class AddTaxableModal extends Component
             abort(403, 'Accès interdit');
         }
         $this->validate();
-        DB::transaction(function () {
-            $data = [
-                'name' => $this->name,
-                'tariff' => $this->tariff,
-                'tariff_type' => $this->tariff_type,
-                'unit' => $this->unit,
-                'unit_type' => $this->unit_type,
-                'modality' => $this->modality,
-                'periodicity' => $this->periodicity,
-                'penalty' => $this->penalty,
-                'penalty_type' => $this->penalty_type,
-                'tax_label_id' => $this->tax_label_id,
-                'use_second_formula' => $this->use_second_formula,
-                  'status' => $this->status,
-            ];
-            $taxable = Taxable::find($this->taxable_id) ?? Taxable::create($data);
-            if ($this->edit_mode) {
-                foreach ($data as $k => $v) {
-                    $taxable->$k = $v;
+        try {
+            DB::transaction(function () {
+                $data = [
+                    'name' => $this->name,
+                    'tariff' => $this->tariff,
+                    'tariff_type' => $this->tariff_type,
+                    'unit' => $this->unit,
+                    'unit_type' => $this->unit_type,
+                    'modality' => $this->modality,
+                    'periodicity' => $this->periodicity,
+                    'penalty' => $this->penalty,
+                    'penalty_type' => $this->penalty_type,
+                    'tax_label_id' => $this->tax_label_id,
+                    'use_second_formula' => $this->use_second_formula,
+                    'status' => $this->status,
+                ];
+                $taxable = Taxable::find($this->taxable_id) ?? Taxable::create($data);
+                if ($this->edit_mode) {
+                    foreach ($data as $k => $v) {
+                        $taxable->$k = $v;
+                    }
+                    $taxable->save();
                 }
-                $taxable->save();
-            }
-            if ($this->edit_mode) {
-                $this->dispatchMessage('Matière Taxable', 'update');
-            } else {
-                $this->dispatchMessage('Matière Taxable');
-            }
-        });
-        // Reset the form fields after successful submission
-        $this->reset();
+                if ($this->edit_mode) {
+                    $this->dispatchMessage('Matière Taxable', 'update');
+                } else {
+                    $this->dispatchMessage('Matière Taxable');
+                }
+            });
+            $this->reset();
+        }catch (\Throwable $th) {}
+
+
     }
     public function deleteUser($id)
     {
-        Taxable::destroy($id);
-        $this->dispatchMessage('Matière Taxable', 'delete');
+        try {
+            Taxable::destroy($id);
+            $this->dispatchMessage('Matière Taxable', 'delete');
+        }catch (\Exception $e) {}
+
     }
     public function updateUser($id)
     {
-        $this->edit_mode = true;
-        $taxable = Taxable::find($id);
-        $this->taxable_id = $taxable->id;
-        $this->use_second_formula = $taxable->use_second_formula;
-        $this->tax_label_id = $taxable->tax_label_id;
-        $this->name = $taxable->name;
-        $this->tariff = $taxable->tariff;
-        $this->tariff_type = $taxable->tariff_type;
-        $this->unit = $taxable->unit;
-        $this->unit_type = $taxable->unit_type;
-        $this->modality = $taxable->modality;
-        $this->periodicity = $taxable->periodicity;
-        $this->penalty = $taxable->penalty;
-        $this->penalty_type = $taxable->penalty_type;
-        $this->status = $taxable->status;
+        try {
+            $this->edit_mode = true;
+            $taxable = Taxable::find($id);
+            $this->taxable_id = $taxable->id;
+            $this->use_second_formula = $taxable->use_second_formula;
+            $this->tax_label_id = $taxable->tax_label_id;
+            $this->name = $taxable->name;
+            $this->tariff = $taxable->tariff;
+            $this->tariff_type = $taxable->tariff_type;
+            $this->unit = $taxable->unit;
+            $this->unit_type = $taxable->unit_type;
+            $this->modality = $taxable->modality;
+            $this->periodicity = $taxable->periodicity;
+            $this->penalty = $taxable->penalty;
+            $this->penalty_type = $taxable->penalty_type;
+            $this->status = $taxable->status;
+        }catch (\Exception $e) {}
+
     }
     public function rendering($view, $data)
     {

@@ -139,7 +139,7 @@ Breadcrumbs::for('activities.index', function (BreadcrumbTrail $trail) {
     $trail->push(__('activities'), route('economics.activities.index'));
 });
 
-Breadcrumbs::for('communes.show', function (BreadcrumbTrail $trail,Commune $commune) {
+Breadcrumbs::for('communes.show', function (BreadcrumbTrail $trail, Commune $commune) {
     $trail->parent('communes.index');
     $trail->push(ucwords($commune->id), route(' communes.show', $commune));
 });

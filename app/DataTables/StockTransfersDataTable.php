@@ -1,5 +1,7 @@
 <?php
+
 namespace App\DataTables;
+
 use App\Models\StockTransfer;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
@@ -8,6 +10,7 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
 class StockTransfersDataTable extends DataTable
 {
     /**
@@ -77,7 +80,8 @@ class StockTransfersDataTable extends DataTable
     {
         return $model->join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')
             ->join('users', 'stock_transfers.to_user_id', '=', 'users.id')
-            ->select('stock_transfers.trans_id',
+            ->select(
+                'stock_transfers.trans_id',
                 DB::raw('SUM(CASE WHEN trans_type = "RECU" THEN qty END) AS rc_qty'),
                 DB::raw('SUM(CASE WHEN trans_type = "VENDU" THEN qty END) AS vv_qty'),
                 DB::raw('MAX(CASE WHEN trans_type = "RENDU" THEN qty END) AS rd_qty'),
@@ -90,7 +94,8 @@ class StockTransfersDataTable extends DataTable
                 DB::raw('MIN(stock_transfers.type) AS type'),
                 DB::raw('MAX(stock_transfers.to_user_id) AS to_user_id'),
                 DB::raw('MAX(stock_transfers.created_at) AS created_at'),
-                DB::raw('MAX(stock_transfers.taxable_id) AS taxable_id'))
+                DB::raw('MAX(stock_transfers.taxable_id) AS taxable_id')
+            )
             ->whereBetween('stock_transfers.created_at', [$this->startDate, $this->endDate])
             ->where('stock_transfers.to_user_id', $this->id)
             ->where('stock_transfers.period_from', $this->dateFrom)

@@ -1,9 +1,12 @@
 <?php
+
 namespace App\Http\Middleware;
+
 use App\Jobs\LogUserActivity;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Queue;
+
 class LogsUserActivity
 {
     public function handle(Request $request, Closure $next)
@@ -26,11 +29,11 @@ class LogsUserActivity
             if ($request->routeIs('taxpayers.show')) {
                 try {
                     $data['taxpayer_id'] = $request->route('taxpayer')->id;
-                    Queue::push(new LogUserActivity($data));
+                    LogUserActivity::dispatch($data);
                 } catch (\Exception $e) {
                 }
             } elseif (!$request->routeIs('taxpayers.*') && method_exists($response, 'status') && $response->status() != 404) {
-                Queue::push(new LogUserActivity($data));
+                LogUserActivity::dispatch($data);
             }
         }
         return $response;

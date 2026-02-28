@@ -51,11 +51,6 @@
                                         <span class="symbol-label bg-light-primary">{!! getIcon('abstract-28', 'fs-2 text-primary') !!}</span>
                                     </div>
 
-                                    @php
-                                        $taxpayer = \App\Models\Taxpayer::find($notification->data['taxpayer_id']);
-                                    @endphp
-
-
                                     @if ($notification->data['type'] === 'invoice_paid')
                                         <div class="mb-0 me-2">
 
@@ -72,22 +67,29 @@
                                         </div>
                                     @else
                                         <div class="mb-0 me-2">
-                                            <a data-notif="true"
-                                               href="/invoices?invoice_id={{ $notification->data['invoice_id']  ?? null }}&?&invoice_tab=true&notif_id={{ $notification->id }}"
-                                                class="fs-6 text-gray-800 text-hover-primary fw-bold">
-                                                @if ($notification->data['type'] === 'invoice_created')
-                                                    Avis : {{ $notification->data['invoice_id'] }} - créer
-                                                @elseif($notification->data['type'] === 'invoice_accepted')
-                                                    Avis : {{ $notification->data['invoice_id'] }} - accepter
-                                                @elseif($notification->data['type'] === 'invoice_approved')
-                                                    Avis : {{ $notification->data['invoice_id'] }} - pris en charge
-                                                @else
-                                                    Avis : {{ $notification->data['invoice_id'] }} - rejeter
-                                                @endif
-                                            </a>
-                                            <div class="text-gray-500 fs-7">
-                                                {{ 'Montant :' . $notification->data['amount'] . ' FCFA - ' . $notification->created_at->diffForHumans() }}
-                                            </div>
+                                            @if ($notification->data['type'] !== 'file_is_ready')
+                                                <a data-notif="true"
+                                                   href="/invoices?invoice_id={{ $notification->data['invoice_id']  ?? null }}&?&invoice_tab=true&notif_id={{ $notification->id }}"
+                                                   class="fs-6 text-gray-800 text-hover-primary fw-bold">
+                                                    @if ($notification->data['type'] === 'invoice_created')
+                                                        Avis : {{ $notification->data['invoice_id'] }} - créer
+                                                    @elseif($notification->data['type'] === 'invoice_accepted')
+                                                        Avis : {{ $notification->data['invoice_id'] }} - accepter
+                                                    @elseif($notification->data['type'] === 'invoice_approved')
+                                                        Avis : {{ $notification->data['invoice_id'] }} - pris en charge
+                                                    @else
+                                                        Avis : {{ $notification->data['invoice_id'] }} - rejeter
+                                                    @endif
+                                                </a>
+                                                <div class="text-gray-500 fs-7">
+                                                    {{ 'Montant :' . $notification->data['amount'] . ' FCFA - ' . $notification->created_at->diffForHumans() }}
+                                                </div>
+                                            @else
+                                                <a href="{{ route('download.file', ['filename' => $notification->data['file_name'],'id'=>$notification->id]) }}"                                                   class="fs-6 text-gray-800 text-hover-primary fw-bold" target="_blank">
+                                                    Télécharger le fichier
+                                                </a>
+                                            @endif
+
                                         </div>
                                     @endif
 
@@ -133,43 +135,46 @@
                                     <span class="symbol-label bg-light-primary">{!! getIcon('abstract-28', 'fs-2 text-primary') !!}</span>
                                 </div>
 
-                                @php
-                                    $taxpayer = \App\Models\Taxpayer::find($notification->data['taxpayer_id']);
-                                @endphp
+
 
                                 <div>
-
-                                    @if ($notification->data['type'] === 'invoice_paid')
-                                        <div class="mb-0 me-2">
-                                            <a data-notif="true"
-                                               href="/invoices?invoice_id={{ $notification->data['invoice_id']  ?? null }}&?&invoice_tab=true&notif_id={{ $notification->id }}"
-                                                class="fs-6 text-gray-800 text-hover-primary fw-bold">
-                                                Paiement : {{ $notification->data['invoice_id'] }} - ajouté
-                                            </a>
-                                            <div class="text-gray-500 fs-7">
-                                                {{ 'montant :' . $notification->data['amount'] . ' FCFA - ' . $notification->created_at->diffForHumans() }}
+                                    @if ($notification->data['type'] !== 'file_is_ready')
+                                        @php
+                                            $taxpayer = \App\Models\Taxpayer::find($notification->data['taxpayer_id']);
+                                        @endphp
+                                        @if ($notification->data['type'] === 'invoice_paid')
+                                            <div class="mb-0 me-2">
+                                                <a data-notif="true"
+                                                   href="/invoices?invoice_id={{ $notification->data['invoice_id']  ?? null }}&?&invoice_tab=true&notif_id={{ $notification->id }}"
+                                                   class="fs-6 text-gray-800 text-hover-primary fw-bold">
+                                                    Paiement : {{ $notification->data['invoice_id'] }} - ajouté
+                                                </a>
+                                                <div class="text-gray-500 fs-7">
+                                                    {{ 'montant :' . $notification->data['amount'] . ' FCFA - ' . $notification->created_at->diffForHumans() }}
+                                                </div>
                                             </div>
-                                        </div>
-                                    @else
-                                        <div class="mb-0 me-2">
-                                            <a data-notif="true"
-                                               href="/invoices?invoice_id={{ $notification->data['invoice_id']  ?? null }}&?&invoice_tab=true&notif_id={{ $notification->id }}"
-                                                class="fs-6 text-gray-800 text-hover-primary">
-                                                @if ($notification->data['type'] === 'invoice_created')
-                                                    Avis : {{ $notification->data['invoice_id'] }} - créer
-                                                @elseif($notification->data['type'] === 'invoice_accepted')
-                                                    Avis : {{ $notification->data['invoice_id'] }} - accepter
-                                                @elseif($notification->data['type'] === 'invoice_approved')
-                                                    Avis : {{ $notification->data['invoice_id'] }} - pris en charge
-                                                @else
-                                                    Avis : {{ $notification->data['invoice_id'] }} - rejeter
-                                                @endif
-                                            </a>
-                                            <div class="text-gray-500 fs-7">
-                                                {{ 'Montant :' . $notification->data['amount'] . ' FCFA - ' . $notification->created_at->diffForHumans() }}
+                                        @else
+                                            <div class="mb-0 me-2">
+                                                <a data-notif="true"
+                                                   href="/invoices?invoice_id={{ $notification->data['invoice_id']  ?? null }}&?&invoice_tab=true&notif_id={{ $notification->id }}"
+                                                   class="fs-6 text-gray-800 text-hover-primary">
+                                                    @if ($notification->data['type'] === 'invoice_created')
+                                                        Avis : {{ $notification->data['invoice_id'] }} - créer
+                                                    @elseif($notification->data['type'] === 'invoice_accepted')
+                                                        Avis : {{ $notification->data['invoice_id'] }} - accepter
+                                                    @elseif($notification->data['type'] === 'invoice_approved')
+                                                        Avis : {{ $notification->data['invoice_id'] }} - pris en charge
+                                                    @else
+                                                        Avis : {{ $notification->data['invoice_id'] }} - rejeter
+                                                    @endif
+                                                </a>
+                                                <div class="text-gray-500 fs-7">
+                                                    {{ 'Montant :' . $notification->data['amount'] . ' FCFA - ' . $notification->created_at->diffForHumans() }}
+                                                </div>
                                             </div>
-                                        </div>
+                                        @endif
                                     @endif
+
 
                                 </div>
 
@@ -204,225 +209,6 @@
         <!--end::Tab panel-->
 
 
-
-        <!--begin::Tab panel-->
-        <div class="tab-pane fade" id="kt_topbar_notifications_3" role="tabpanel">
-            <!--begin::Items-->
-            <div class="scroll-y mh-325px my-5 px-8">
-                <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
-                    <!--begin::Section-->
-                    <div class="d-flex align-items-center me-2">
-                        <!--begin::Code-->
-                        <span class="w-70px badge badge-light-success me-4">200 OK</span>
-                        <!--end::Code-->
-                        <!--begin::Title-->
-                        <a href="#" class="text-gray-800 text-hover-primary fw-semibold">New order</a>
-                        <!--end::Title-->
-                    </div>
-                    <!--end::Section-->
-                    <!--begin::Label-->
-                    <span class="badge badge-light fs-8">Just now</span>
-                    <!--end::Label-->
-                </div>
-                <!--end::Item-->
-                <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
-                    <!--begin::Section-->
-                    <div class="d-flex align-items-center me-2">
-                        <!--begin::Code-->
-                        <span class="w-70px badge badge-light-danger me-4">500 ERR</span>
-                        <!--end::Code-->
-                        <!--begin::Title-->
-                        <a href="#" class="text-gray-800 text-hover-primary fw-semibold">New customer</a>
-                        <!--end::Title-->
-                    </div>
-                    <!--end::Section-->
-                    <!--begin::Label-->
-                    <span class="badge badge-light fs-8">2 hrs</span>
-                    <!--end::Label-->
-                </div>
-                <!--end::Item-->
-                <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
-                    <!--begin::Section-->
-                    <div class="d-flex align-items-center me-2">
-                        <!--begin::Code-->
-                        <span class="w-70px badge badge-light-success me-4">200 OK</span>
-                        <!--end::Code-->
-                        <!--begin::Title-->
-                        <a href="#" class="text-gray-800 text-hover-primary fw-semibold">Payment process</a>
-                        <!--end::Title-->
-                    </div>
-                    <!--end::Section-->
-                    <!--begin::Label-->
-                    <span class="badge badge-light fs-8">5 hrs</span>
-                    <!--end::Label-->
-                </div>
-                <!--end::Item-->
-                <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
-                    <!--begin::Section-->
-                    <div class="d-flex align-items-center me-2">
-                        <!--begin::Code-->
-                        <span class="w-70px badge badge-light-warning me-4">300 WRN</span>
-                        <!--end::Code-->
-                        <!--begin::Title-->
-                        <a href="#" class="text-gray-800 text-hover-primary fw-semibold">Search query</a>
-                        <!--end::Title-->
-                    </div>
-                    <!--end::Section-->
-                    <!--begin::Label-->
-                    <span class="badge badge-light fs-8">2 days</span>
-                    <!--end::Label-->
-                </div>
-                <!--end::Item-->
-                <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
-                    <!--begin::Section-->
-                    <div class="d-flex align-items-center me-2">
-                        <!--begin::Code-->
-                        <span class="w-70px badge badge-light-success me-4">200 OK</span>
-                        <!--end::Code-->
-                        <!--begin::Title-->
-                        <a href="#" class="text-gray-800 text-hover-primary fw-semibold">API connection</a>
-                        <!--end::Title-->
-                    </div>
-                    <!--end::Section-->
-                    <!--begin::Label-->
-                    <span class="badge badge-light fs-8">1 week</span>
-                    <!--end::Label-->
-                </div>
-                <!--end::Item-->
-                <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
-                    <!--begin::Section-->
-                    <div class="d-flex align-items-center me-2">
-                        <!--begin::Code-->
-                        <span class="w-70px badge badge-light-success me-4">200 OK</span>
-                        <!--end::Code-->
-                        <!--begin::Title-->
-                        <a href="#" class="text-gray-800 text-hover-primary fw-semibold">Database restore</a>
-                        <!--end::Title-->
-                    </div>
-                    <!--end::Section-->
-                    <!--begin::Label-->
-                    <span class="badge badge-light fs-8">Mar 5</span>
-                    <!--end::Label-->
-                </div>
-                <!--end::Item-->
-                <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
-                    <!--begin::Section-->
-                    <div class="d-flex align-items-center me-2">
-                        <!--begin::Code-->
-                        <span class="w-70px badge badge-light-warning me-4">300 WRN</span>
-                        <!--end::Code-->
-                        <!--begin::Title-->
-                        <a href="#" class="text-gray-800 text-hover-primary fw-semibold">System update</a>
-                        <!--end::Title-->
-                    </div>
-                    <!--end::Section-->
-                    <!--begin::Label-->
-                    <span class="badge badge-light fs-8">May 15</span>
-                    <!--end::Label-->
-                </div>
-                <!--end::Item-->
-                <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
-                    <!--begin::Section-->
-                    <div class="d-flex align-items-center me-2">
-                        <!--begin::Code-->
-                        <span class="w-70px badge badge-light-warning me-4">300 WRN</span>
-                        <!--end::Code-->
-                        <!--begin::Title-->
-                        <a href="#" class="text-gray-800 text-hover-primary fw-semibold">Server OS update</a>
-                        <!--end::Title-->
-                    </div>
-                    <!--end::Section-->
-                    <!--begin::Label-->
-                    <span class="badge badge-light fs-8">Apr 3</span>
-                    <!--end::Label-->
-                </div>
-                <!--end::Item-->
-                <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
-                    <!--begin::Section-->
-                    <div class="d-flex align-items-center me-2">
-                        <!--begin::Code-->
-                        <span class="w-70px badge badge-light-warning me-4">300 WRN</span>
-                        <!--end::Code-->
-                        <!--begin::Title-->
-                        <a href="#" class="text-gray-800 text-hover-primary fw-semibold">API rollback</a>
-                        <!--end::Title-->
-                    </div>
-                    <!--end::Section-->
-                    <!--begin::Label-->
-                    <span class="badge badge-light fs-8">Jun 30</span>
-                    <!--end::Label-->
-                </div>
-                <!--end::Item-->
-                <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
-                    <!--begin::Section-->
-                    <div class="d-flex align-items-center me-2">
-                        <!--begin::Code-->
-                        <span class="w-70px badge badge-light-danger me-4">500 ERR</span>
-                        <!--end::Code-->
-                        <!--begin::Title-->
-                        <a href="#" class="text-gray-800 text-hover-primary fw-semibold">Refund process</a>
-                        <!--end::Title-->
-                    </div>
-                    <!--end::Section-->
-                    <!--begin::Label-->
-                    <span class="badge badge-light fs-8">Jul 10</span>
-                    <!--end::Label-->
-                </div>
-                <!--end::Item-->
-                <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
-                    <!--begin::Section-->
-                    <div class="d-flex align-items-center me-2">
-                        <!--begin::Code-->
-                        <span class="w-70px badge badge-light-danger me-4">500 ERR</span>
-                        <!--end::Code-->
-                        <!--begin::Title-->
-                        <a href="#" class="text-gray-800 text-hover-primary fw-semibold">Withdrawal process</a>
-                        <!--end::Title-->
-                    </div>
-                    <!--end::Section-->
-                    <!--begin::Label-->
-                    <span class="badge badge-light fs-8">Sep 10</span>
-                    <!--end::Label-->
-                </div>
-                <!--end::Item-->
-                <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
-                    <!--begin::Section-->
-                    <div class="d-flex align-items-center me-2">
-                        <!--begin::Code-->
-                        <span class="w-70px badge badge-light-danger me-4">500 ERR</span>
-                        <!--end::Code-->
-                        <!--begin::Title-->
-                        <a href="#" class="text-gray-800 text-hover-primary fw-semibold">Mail tasks</a>
-                        <!--end::Title-->
-                    </div>
-                    <!--end::Section-->
-                    <!--begin::Label-->
-                    <span class="badge badge-light fs-8">Dec 10</span>
-                    <!--end::Label-->
-                </div>
-                <!--end::Item-->
-            </div>
-            <!--end::Items-->
-            <!--begin::View more-->
-            <div class="py-3 text-center border-top">
-                <a href="#" class="btn btn-color-gray-600 btn-active-color-primary">View All
-                    {!! getIcon('arrow-right', 'fs-5') !!}</a>
-            </div>
-            <!--end::View more-->
-        </div>
-        <!--end::Tab panel-->
     </div>
     <!--end::Tab content-->
 </div>
@@ -446,22 +232,26 @@
 
         function getTitleByNotifType(type, id) {
 
-            if (type === 'invoice_paid') {
-                return `Paiement : ${id} - ajouter`
-            } else if (type === 'invoice_created') {
-                return `Avis : ${id} - créer`
-            } else if (type === 'invoice_accepted') {
-                return `Avis : ${id} - accepter`
-            } else if (type === 'invoice_approved') {
-                return `Avis : ${id} - pris en charge`
-            } else {
-                return `Avis : ${id} - rejeter`
+            if (type !== 'file_ready') {
+                if (type === 'invoice_paid') {
+                    return `Paiement : ${id} - ajouter`
+                } else if (type === 'invoice_created') {
+                    return `Avis : ${id} - créer`
+                } else if (type === 'invoice_accepted') {
+                    return `Avis : ${id} - accepter`
+                } else if (type === 'invoice_approved') {
+                    return `Avis : ${id} - pris en charge`
+                } else {
+                    return `Avis : ${id} - rejeter`
+                }
+            }else {
+                return `Ficher Disponible`
             }
+
         }
 
         function createNotifTemplate(data, size) {
             let html = ``;
-
             data.forEach(element => {
                 html += `
 				<div class="d-flex flex-stack py-4">

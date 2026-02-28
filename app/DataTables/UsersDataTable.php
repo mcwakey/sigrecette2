@@ -1,5 +1,7 @@
 <?php
+
 namespace App\DataTables;
+
 use App\Helpers\Constants;
 use App\Models\User;
 use Illuminate\Support\Facades\App;
@@ -9,6 +11,7 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+
 class UsersDataTable extends DataTable
 {
     /**

@@ -1,6 +1,9 @@
 <?php
+
 namespace App\Contracts;
+
 use App\Models\Year;
+
 interface TaxpayerStatisticsInterface
 {
     public function countTaxpayers(): array;

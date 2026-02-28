@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Livewire\Permission;
+
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
+
 class RoleList extends Component
 {
     public array|Collection $roles;

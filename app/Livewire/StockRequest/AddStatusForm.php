@@ -1,13 +1,17 @@
 <?php
+
 namespace App\Livewire\StockRequest;
+
 use App\Models\StockRequest;
 use App\Traits\DispatchesMessages;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+
 class AddStatusForm extends Component
 {
     use DispatchesMessages;
+
     public $request_id;
     public $status;
     public $edit_mode = false;
@@ -29,24 +33,27 @@ class AddStatusForm extends Component
         $this->validate();
         $user = auth()->user();
         if (!$user->hasRole('regisseur')) {
-            $this->dispatchMessage('Valeur Inactive', 'update', 'error',"Action non authorize");
+            $this->dispatchMessage('Valeur Inactive', 'update', 'error', "Action non authorize");
             $this->reset();
             abort(403, 'Accès interdit');
             return;
         }
-        DB::transaction(function () {
-            // Prepare data for request
-            $data = [
-                'type' => $this->status,
-            ];
-            // Create or update request record
-            $requests = StockRequest::where("req_id", $this->request_id)->get(); //?? request::create($request_id);
-            foreach ($requests as $request) {
-                $request->update($data);
-            }
-            $this->dispatchMessage('Paiement', 'update');
-        });
-        $this->reset();
+        try {
+            DB::transaction(function () {
+                // Prepare data for request
+                $data = [
+                    'type' => $this->status,
+                ];
+                // Create or update request record
+                $requests = StockRequest::where("req_id", $this->request_id)->get(); //?? request::create($request_id);
+                foreach ($requests as $request) {
+                    $request->update($data);
+                }
+                $this->dispatchMessage('Paiement', 'update');
+            });
+            $this->reset();
+        }catch (\Throwable $th) {}
+
     }
     public function updateRequestStatus($id)
     {

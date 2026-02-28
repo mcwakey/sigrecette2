@@ -1,5 +1,7 @@
 <?php
+
 namespace App\DataTables;
+
 use App\Models\Year;
 use App\Models\Invoice;
 use Yajra\DataTables\Html\Column;
@@ -9,6 +11,7 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+
 class YearDataTable extends DataTable
 {
     /**

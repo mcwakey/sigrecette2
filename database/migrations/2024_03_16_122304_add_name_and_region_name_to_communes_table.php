@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::table('communes', function (Blueprint $table) {
             $table->string('title')->after('id');
-            $table->string('name')->after('title')->nullable()->default('');;
-            $table->string('region_name')->after('name')->nullable()->default('');;
+            $table->string('name')->after('title')->nullable()->default('');
+            ;
+            $table->string('region_name')->after('name')->nullable()->default('');
+            ;
         });
     }
 

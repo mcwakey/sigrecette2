@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Helpers;
+
 use App\Enums\ExportTypeEnums;
 use App\Enums\InvoiceActionsEnums;
 use App\Enums\InvoiceStatusEnums;
@@ -39,8 +41,8 @@ class Constants
     const EXPORT_TAXPAYER_KEY = "contribuables";
     const EXPORT_INVOICE_KEY = "avis";
     const EXPORT_PAYMENT_KEY = "recouvrement";
-    const EXPORT_TAXPAYERTAXABLE_KEY="taxation";
-    const EXPORT_TAXABLE_KEY="taxe";
+    const EXPORT_TAXPAYERTAXABLE_KEY = "taxation";
+    const EXPORT_TAXABLE_KEY = "taxe";
     const EXPORT_VALIDATION_MAP = [
         self::EXPORT_TAXPAYER_KEY => ExportTypeEnums::TAXPAYER,
         self::EXPORT_INVOICE_KEY => ExportTypeEnums::INVOICE,
@@ -87,14 +89,14 @@ class Constants
         $actions = [InvoiceActionsEnums::VIEW];
         $previousUrl = url()->previous();
         $previousRoute = Route::getRoutes()->match(Request::create($previousUrl));
-       if ($previousRoute->getName() === "taxpayers.show"){
+        if ($previousRoute->getName() === "taxpayers.show") {
             $actions = [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::PRINT,
                 InvoiceActionsEnums::PAYMENT,
                 InvoiceActionsEnums::RELAUNCH
             ];
-        }elseif (request()->routeIs('invoices.*')) {
-        $actions = self::getInvoiceActions();
-       }
+        } elseif (request()->routeIs('invoices.*')) {
+            $actions = self::getInvoiceActions();
+        }
        // dd($actions,$previousRoute->getName() === "taxpayers.show");
         return $actions;
     }

@@ -1,9 +1,12 @@
 <?php
+
 namespace App\Http\Controllers\Auth;
+
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Laravel\Socialite\Facades\Socialite;
+
 class SocialiteController extends Controller
 {
     public function redirect($provider)
@@ -14,7 +17,7 @@ class SocialiteController extends Controller
             // get user info from social site
             $user = Socialite::driver($provider)->stateless()->user();
             // check for existing user
-            $existingUser = User::where('email',"=", $user->getEmail())->first();
+            $existingUser = User::where('email', "=", $user->getEmail())->first();
             if ($existingUser) {
                 auth()->login($existingUser, true);
                 return redirect()->to('/');

@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\DataTables\InvoicesDataTable;
 use App\DataTables\RecoveriesDataTable;
 use App\Helpers\Constants;
@@ -11,9 +13,11 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
+
 class RecoveryController extends Controller
 {
-    use  HandlesDateFilters;
+    use HandlesDateFilters;
+
     public function index(Request $request, RecoveriesDataTable $dataTable, InvoicesDataTable $invoicesDataTable)
     {
         $this->handleDateFilters($request);
@@ -36,8 +40,7 @@ class RecoveryController extends Controller
                 ]
             )->render('pages/recoveries.list', ['zones' => $zones, 'tax_labels' => $tax_labels]);
         } else {
-
-            $role = Role::where('name',"=", 'agent_recouvrement')->first();
+            $role = Role::where('name', "=", 'agent_recouvrement')->first();
             $agent_recouvrements = $role->users()->get();
             return $invoicesDataTable->with(
                 [

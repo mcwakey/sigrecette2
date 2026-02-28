@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\DataTables\CantonsDataTable;
 use App\Models\Canton;
 use Illuminate\Http\Request;
+
 class CantonsController extends Controller
 {
     /**

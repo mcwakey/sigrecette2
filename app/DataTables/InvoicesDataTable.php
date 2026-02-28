@@ -1,5 +1,7 @@
 <?php
+
 namespace App\DataTables;
+
 use App\Enums\InvoicePayStatusEnums;
 use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
@@ -13,10 +15,12 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
 use Yajra\DataTables\WithExportQueue;
+
 class InvoicesDataTable extends DataTable
 {
     use WithExportQueue;
     use HandlesTaxpayerFilters;
+
     /**
      * Build the DataTable class.
      *
@@ -88,7 +92,7 @@ class InvoicesDataTable extends DataTable
     }
     public function query(Invoice $model): QueryBuilder
     {
-        $this->id=$this->getTaxpayerId($this->id);
+        $this->id = $this->getTaxpayerId($this->id);
         $query = $model->join('invoice_items', 'invoice_items.invoice_id', '=', 'invoices.id')
             ->leftjoin('taxpayers', 'taxpayers.id', '=', 'invoices.taxpayer_id')
             ->join('taxpayer_taxables', 'taxpayer_taxables.id', '=', 'invoice_items.taxpayer_taxable_id')
@@ -100,7 +104,7 @@ class InvoicesDataTable extends DataTable
             ->distinct()
             ->orderBy('invoices.created_at', 'desc')
             ->newQuery();
-        if(!$this->profile_page){
+        if (!$this->profile_page) {
             $query->whereBetween('invoices.created_at', [$this->startDate, $this->endDate]);
         }
         if ($this->type != null) {
@@ -226,5 +230,4 @@ class InvoicesDataTable extends DataTable
     {
         return 'Invoices_' . date('YmdHis');
     }
-
 }

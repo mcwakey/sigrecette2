@@ -1,5 +1,7 @@
 <?php
+
 namespace App\DataTables;
+
 use App\Models\Invoice;
 use App\Models\Payment;
 use Yajra\DataTables\Html\Column;
@@ -9,9 +11,11 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
 use Yajra\DataTables\WithExportQueue;
+
 class ExportInvoicesDataTable extends DataTable
 {
     use WithExportQueue;
+
     public function dataTable(QueryBuilder $query, Request $request): EloquentDataTable
     {
         return (new EloquentDataTable($query))

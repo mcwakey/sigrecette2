@@ -11,10 +11,11 @@
 |
 */
 
-uses(
-    Tests\TestCase::class,
-    // Illuminate\Foundation\Testing\RefreshDatabase::class,
-)->in('Feature');
+use Tests\Fixtures\TestCases\AuthTestCase;
+
+uses(AuthTestCase::class)
+    ->group('auth')
+    ->in('Feature/Auth');
 
 /*
 |--------------------------------------------------------------------------
@@ -27,9 +28,7 @@ uses(
 |
 */
 
-expect()->extend('toBeOne', function () {
-    return $this->toBe(1);
-});
+expect()->extend('toBeOne', fn() => $this->toBe(1));
 
 /*
 |--------------------------------------------------------------------------

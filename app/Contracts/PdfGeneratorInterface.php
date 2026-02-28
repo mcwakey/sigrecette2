@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Contracts;
+
 interface PdfGeneratorInterface
 {
     /**

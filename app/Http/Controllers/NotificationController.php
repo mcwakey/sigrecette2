@@ -1,10 +1,13 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\Models\Taxpayer;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 class NotificationController extends Controller
 {
     public function notifications()
@@ -30,7 +33,7 @@ class NotificationController extends Controller
         $notifId = $request->input('notif_id');
         $user = Auth::user();
         if ($notifId) {
-            $user->notifications->where('id', "=",$notifId)->markAsRead();
+            $user->notifications->where('id', "=", $notifId)->markAsRead();
         }
         $userId = $user->id;
         $user = User::find($userId);

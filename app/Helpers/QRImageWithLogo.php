@@ -7,8 +7,8 @@ use chillerlan\QRCode\Output\QRGdImagePNG;
 use ErrorException;
 use GdImage;
 
-class QRImageWithLogo extends QRGdImagePNG{
-
+class QRImageWithLogo extends QRGdImagePNG
+{
     function convertToPng(string $logoPath): ?string
     {
         $imageInfo = getimagesize($logoPath);
@@ -40,7 +40,7 @@ class QRImageWithLogo extends QRGdImagePNG{
             return null;
         }
 
-       return $im;
+        return $im;
     }
 
     function convertToPngN(string $logoPath): ?GdImage
@@ -99,11 +99,12 @@ class QRImageWithLogo extends QRGdImagePNG{
     /**
      * @throws QRCodeOutputException|ErrorException
      */
-    public function dump(string|null $file = null, string|null $logo = null):string{
+    public function dump(string|null $file = null, string|null $logo = null): string
+    {
         $logo ??= '';
 
         $this->options->returnResource = true;
-        if(!is_file($logo) || !is_readable($logo)){
+        if (!is_file($logo) || !is_readable($logo)) {
             throw new QRCodeOutputException('invalid logo');
         }
 
@@ -112,7 +113,7 @@ class QRImageWithLogo extends QRGdImagePNG{
         $im = $this->convertToPngN($logo);
 
 
-        if($im === false){
+        if ($im === false) {
             throw new QRCodeOutputException('imagecreatefrompng() error');
         }
 
@@ -132,5 +133,4 @@ class QRImageWithLogo extends QRGdImagePNG{
 
         return $this->toBase64DataURI($imageData);
     }
-
 }

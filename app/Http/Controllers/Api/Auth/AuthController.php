@@ -1,9 +1,12 @@
 <?php
+
 namespace App\Http\Controllers\Api\Auth;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\AuthRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 class AuthController extends Controller
 {
     public function auth(AuthRequest $request)

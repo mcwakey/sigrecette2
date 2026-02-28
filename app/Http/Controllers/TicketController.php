@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\DataTables\TicketsDataTable;
 use App\Models\Taxable;
 use Illuminate\Http\Request;
+
 class TicketController extends Controller
 {
     /**

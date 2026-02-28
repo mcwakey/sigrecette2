@@ -1,5 +1,7 @@
 <?php
+
 namespace App\DataTables;
+
 use App\Models\User;
 use App\Models\UsersAssingedRole;
 use Illuminate\Contracts\Database\Query\Builder;
@@ -8,6 +10,7 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
+
 class UsersAssignedRoleDataTable extends DataTable
 {
     /**

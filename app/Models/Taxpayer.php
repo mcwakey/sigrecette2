@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Models;
+
 use App\Enums\InvoicePayStatusEnums;
 use App\Enums\InvoiceStatusEnums;
 use App\Enums\TaxpayerStateEnums;
@@ -9,10 +11,12 @@ use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Taxpayer extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -76,7 +80,7 @@ class Taxpayer extends Model
     {
         parent::boot();
         $auth_id = auth()->id();
-        if($auth_id){
+        if ($auth_id) {
             static::creating(function ($model) use ($auth_id) {
                 $model->created_by = $auth_id;
             });
@@ -155,7 +159,7 @@ class Taxpayer extends Model
     }
     public function getStatus(): bool
     {
-        return Invoice::where('taxpayer_id','=',$this->id)
+        return Invoice::where('taxpayer_id', '=', $this->id)
             ->where('to_date', '>', now())
             ->whereNotIn('status', [
                 InvoiceStatusEnums::REJECTED_BY_OR,
@@ -194,7 +198,7 @@ class Taxpayer extends Model
     }
 
 
-    public static function merge($names=['BRASSERIE BB LOME', 'SOCIETE NOUVELLE DE BOISSON', 'MOOV AFRICA', 'YAS TOGO'])
+    public static function merge($names = ['BRASSERIE BB LOME', 'SOCIETE NOUVELLE DE BOISSON', 'MOOV AFRICA', 'YAS TOGO'])
     {
         foreach ($names as $name) {
             $normalizedName = strtolower(str_replace(' ', '', $name));
@@ -212,21 +216,22 @@ class Taxpayer extends Model
                 $taxpayer->delete();
             }
         }
-
     }
     public static function getTaxpayers()
     {
-        return Taxpayer::where('type', '=',Constants::TITRE)->where(function ($q) {$q->whereNotIn('taxpayers.from_mobile_and_validate_state', [TaxpayerStateEnums::REJECTED, TaxpayerStateEnums::PENDING])->orWhereNull('taxpayers.from_mobile_and_validate_state');})->get();
-
+        return Taxpayer::where('type', '=', Constants::TITRE)->where(function ($q) {
+            $q->whereNotIn('taxpayers.from_mobile_and_validate_state', [TaxpayerStateEnums::REJECTED, TaxpayerStateEnums::PENDING])->orWhereNull('taxpayers.from_mobile_and_validate_state');
+        })->get();
     }
-    public static function taxpayersWithoutInvoice(){
-       return Taxpayer::getTaxpayers()->filter(fn($taxpayer) => !Invoice::where('taxpayer_id', $taxpayer->id)->where('to_date', '>', now())->whereNotIn('status', [InvoiceStatusEnums::REJECTED_BY_OR, InvoiceStatusEnums::REJECTED, InvoiceStatusEnums::CANCELED, InvoiceStatusEnums::REDUCED])
+    public static function taxpayersWithoutInvoice()
+    {
+        return Taxpayer::getTaxpayers()->filter(fn($taxpayer) => !Invoice::where('taxpayer_id', $taxpayer->id)->where('to_date', '>', now())->whereNotIn('status', [InvoiceStatusEnums::REJECTED_BY_OR, InvoiceStatusEnums::REJECTED, InvoiceStatusEnums::CANCELED, InvoiceStatusEnums::REDUCED])
             ->where('pay_status', '!=', InvoicePayStatusEnums::PAID)
             ->where('validity', 'VALID')
-            ->exists()
-        );
+            ->exists());
     }
-   public static function taxpayersWithMultipleInvoice($start_date,$end_date){
-       return Taxpayer::getTaxpayers()->filter(fn($taxpayer) => $taxpayer->invoices->filter(fn($invoice) => $invoice->created_at->between( $start_date,  $end_date) && $invoice->isValid())->count() > 1);
-   }
+    public static function taxpayersWithMultipleInvoice($start_date, $end_date)
+    {
+        return Taxpayer::getTaxpayers()->filter(fn($taxpayer) => $taxpayer->invoices->filter(fn($invoice) => $invoice->created_at->between($start_date, $end_date) && $invoice->isValid())->count() > 1);
+    }
 }

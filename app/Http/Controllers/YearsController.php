@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\DataTables\YearDataTable;
 use App\Models\Year;
 use Illuminate\Http\Request;
+
 class YearsController extends Controller
 {
     /**
