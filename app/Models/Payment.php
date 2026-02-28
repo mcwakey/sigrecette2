@@ -57,7 +57,9 @@ class Payment extends Model
     {
         parent::boot();
         static::creating(function ($payment) {
-            $payment->uuid = Uuid::uuid4()->toString();
+            if (empty($payment->uuid)) {
+                $payment->uuid = Uuid::uuid4()->toString();
+            }
         });
     }
     public static function getSumPaymentByCode($code, Invoice $invoice): int

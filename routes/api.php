@@ -12,6 +12,8 @@ use App\Http\Controllers\Api\SearchTaxpayerController;
 use App\Http\Controllers\Api\SearchTaxpayerTaxableController;
 use App\Http\Controllers\Api\SyncInController;
 use App\Http\Controllers\Api\SyncOutController;
+use App\Http\Controllers\Api\SyncV1InvoicesController;
+use App\Http\Controllers\Api\SyncV1PaymentsController;
 use App\Http\Controllers\Api\TaxpayerController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Http\Request;
@@ -41,8 +43,14 @@ Route::middleware(['throttle:api'])->group(function () {
     Route::Post('/v1/search/taxpayerstaxables', [SearchTaxpayerTaxableController::class, 'search']);
     Route::Post('/v1/search/invoices', [SearchInvoiceController::class, 'search']);
 
-    Route::middleware('auth:sanctum')->post('/v1/synchronisation/out', [SyncOutController::class, 'search']);
-    Route::middleware('auth:sanctum')->post('/v1/synchronisation/in', [SyncInController::class, 'syncIn']);
+    Route::middleware(['auth:sanctum', 'sync.ip'])->post('/v1/synchronisation/out', [SyncOutController::class, 'search']);
+    Route::middleware(['auth:sanctum', 'sync.ip'])->post('/v1/synchronisation/in', [SyncInController::class, 'syncIn']);
+
+    Route::middleware(['auth:sanctum', 'sync.ip'])->prefix('v1/sync')->group(function () {
+        Route::get('/invoices', [SyncV1InvoicesController::class, 'index']);
+        Route::get('/payments', [SyncV1PaymentsController::class, 'index']);
+        Route::post('/payments', [SyncV1PaymentsController::class, 'store']);
+    });
 
     Route::post('/v1/user/notifications', [NotificationController::class, 'notifications']);
     Route::post('/v1/user/notification/update', [NotificationController::class, 'updateNotification']);
@@ -139,4 +147,3 @@ Route::middleware(['throttle:api'])->group(function () {
         });
     });
 });
-

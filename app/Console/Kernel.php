@@ -5,6 +5,8 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\DB;
+use App\Jobs\SyncExportInvoicesJob;
+use App\Jobs\SyncImportPaymentsJob;
 
 // Import the DB facade
 
@@ -31,6 +33,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('backup:run')->daily()->at('20:00');
         $schedule->call(function () {DB::statement('CALL updateTaxpayerTaxables()');})->dailyAt('17:00');
         $schedule->call(function () {DB::statement('CALL updateTaxpayerTaxables()');})->dailyAt('20:00');
+
+        $schedule->job(new SyncExportInvoicesJob())->cron(config('sync.export_cron'));
+        $schedule->job(new SyncImportPaymentsJob())->cron(config('sync.import_cron'));
     }
 
     /**
