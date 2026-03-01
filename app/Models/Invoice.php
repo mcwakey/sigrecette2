@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
 use Spatie\Permission\Models\Role;
 use ZeroDaHero\LaravelWorkflow\Traits\WorkflowTrait;
+use App\Models\InvoiceCodeBalance;
+use Carbon\Carbon;
 
 class Invoice extends Model implements FormatDateInterface
 {
@@ -201,5 +203,35 @@ class Invoice extends Model implements FormatDateInterface
         } else {
             return $this->notes;
         }
+    }
+
+    public function getInvoiceYear(): int
+    {
+        if (!empty($this->from_date)) {
+            return Carbon::parse($this->from_date)->year;
+        }
+        return $this->created_at?->year ?? (int) date('Y');
+    }
+
+    public function getPreviousBalancesByCode(): array
+    {
+        $year = $this->getInvoiceYear();
+        $rows = InvoiceCodeBalance::query()
+            ->where('taxpayer_id', $this->taxpayer_id)
+            ->where('year', '<', $year)
+            ->where('remaining_amount', '>', 0)
+            ->get();
+
+        $balances = [];
+        foreach ($rows as $row) {
+            $balances[$row->code] = ($balances[$row->code] ?? 0) + $row->remaining_amount;
+        }
+        return $balances;
+    }
+
+    public function getPreviousBalanceTotal(): float
+    {
+        $balances = $this->getPreviousBalancesByCode();
+        return array_sum($balances) ?: 0.0;
     }
 }

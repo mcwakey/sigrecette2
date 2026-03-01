@@ -8,7 +8,11 @@ use App\Contracts\PrintServiceInterface;
 use App\Contracts\QrcodeGeneratorServiceInterface;
 use App\Core\KTBootstrap;
 use App\Models\Commune;
+use App\Models\InvoiceItem;
+use App\Models\Payment;
 use App\Models\Year;
+use App\Observers\InvoiceItemObserver;
+use App\Observers\PaymentObserver;
 use App\Services\ExceptionService;
 use App\Services\PdfGeneratorService;
 use App\Services\PrintService;
@@ -49,6 +53,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Builder::defaultStringLength(191);
+
+        InvoiceItem::observe(InvoiceItemObserver::class);
+        Payment::observe(PaymentObserver::class);
 
         Blade::directive('numberToWords', function ($number) {
             return "";

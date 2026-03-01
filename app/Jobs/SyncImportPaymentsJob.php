@@ -41,7 +41,15 @@ class SyncImportPaymentsJob implements ShouldQueue
             ->orderByDesc('finished_at')
             ->first();
 
-        $cursor = $lastSuccess?->finished_at?->toISOString();
+        $cursor = null;
+        if ($lastSuccess) {
+            $meta = $lastSuccess->meta ?? [];
+            if (is_array($meta) && !empty($meta['last_synced_at'])) {
+                $cursor = $meta['last_synced_at'];
+            } else {
+                $cursor = $lastSuccess->finished_at?->toISOString();
+            }
+        }
 
         $run = SyncRun::create([
             'direction' => 'import',
@@ -58,6 +66,7 @@ class SyncImportPaymentsJob implements ShouldQueue
         $failed = 0;
         $errorSample = [];
         $lastSyncedAt = null;
+        $maxUpdatedAt = null;
 
         try {
             do {
@@ -95,6 +104,15 @@ class SyncImportPaymentsJob implements ShouldQueue
                     if (!empty($result['errors'])) {
                         $errorSample = array_slice(array_merge($errorSample, $result['errors']), 0, 50);
                     }
+                    foreach ($payments as $payment) {
+                        if (empty($payment['updated_at'])) {
+                            continue;
+                        }
+                        $candidate = \Carbon\Carbon::parse($payment['updated_at']);
+                        if (!$maxUpdatedAt || $candidate->gt($maxUpdatedAt)) {
+                            $maxUpdatedAt = $candidate;
+                        }
+                    }
                     Log::channel($logChannel)->info('sync import payments batch', [
                         'page' => $page,
                         'processed' => count($payments),
@@ -106,8 +124,8 @@ class SyncImportPaymentsJob implements ShouldQueue
 
                 $page++;
 
-                if (!empty($meta['updated_since'])) {
-                    $lastSyncedAt = $meta['updated_since'];
+                if ($maxUpdatedAt) {
+                    $lastSyncedAt = $maxUpdatedAt->toISOString();
                 }
 
                 $hasMore = isset($meta['page'], $meta['last_page']) && $meta['page'] < $meta['last_page'];
