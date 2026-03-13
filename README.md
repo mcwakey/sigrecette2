@@ -179,6 +179,12 @@ Exécutez les migrations et les seed de base de données pour charger la configu
 php artisan migrate --seed
 ```
 
+Lancez un worker pour traiter les jobs en arrière-plan (logs d'activité, etc.) :
+
+```bash
+php artisan queue:work --queue=default --tries=3
+```
+
 
 
 Créez un lien symbolique pour le dossier `storage` :
