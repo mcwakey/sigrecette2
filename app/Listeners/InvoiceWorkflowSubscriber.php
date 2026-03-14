@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Listeners;
+
 use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
 use App\Models\User;
@@ -13,6 +15,7 @@ use Spatie\Permission\Models\Role;
 use Symfony\Component\Workflow\Event\GuardEvent;
 use Symfony\Component\Workflow\Event\Event;
 use Illuminate\Contracts\Events\Dispatcher;
+
 class InvoiceWorkflowSubscriber
 {
     public function subscribe(Dispatcher $events)
@@ -41,7 +44,8 @@ class InvoiceWorkflowSubscriber
         switch ($place) {
             case InvoiceStatusEnums::ACCEPTED:
                 $permissions = ['peut émettre un avis sur titre', 'peut accepter un avis sur titre', 'peut ajouter le numéro d\'ordre de recette d\'un avis'];
-                $users = Constants::getUserWithPermission($permissions);;
+                $users = Constants::getUserWithPermission($permissions);
+                ;
                 if ($users && count($users) > 0) {
                     Notification::send($users, new InvoiceAccepted($invoice, Auth::user(), 'agent_delegation'));
                 }
@@ -54,18 +58,18 @@ class InvoiceWorkflowSubscriber
                 }
                 $invoice->releaseTaxpayerTaxable();
                 break;
-            case  InvoiceStatusEnums::REJECTED:
+            case InvoiceStatusEnums::REJECTED:
                 $invoice->releaseTaxpayerTaxable();
                 break;
-            case  InvoiceStatusEnums::PENDING:
+            case InvoiceStatusEnums::PENDING:
                 $permissions = ['peut prendre en charge un avis sur titre', 'peut rejeter un avis sur titre (agent par délégation du receveur)'];
                 $users = Constants::getUserWithPermission($permissions);
                 if ($users && count($users) > 0) {
                     Notification::send($users, new InvoiceAccepted($invoice, Auth::user(), "agent_recette"));
                 }
                 break;
-            case   InvoiceStatusEnums::APPROVED:
-            case     InvoiceStatusEnums::APPROVED_CANCELLATION:
+            case InvoiceStatusEnums::APPROVED:
+            case InvoiceStatusEnums::APPROVED_CANCELLATION:
                 $permissions = ['peut prendre en charge un avis sur titre', 'peut rejeter un avis sur titre (agent par délégation du receveur)', 'peut comptabiliser un paiement'];
                 $users = Constants::getUserWithPermission($permissions);
                 if ($users && count($users) > 0) {
@@ -75,7 +79,7 @@ class InvoiceWorkflowSubscriber
             case InvoiceStatusEnums::CANCELED:
             case InvoiceStatusEnums::REDUCED:
                 break;
-            default :
+            default:
         }
     }
     public function onLeave(Event $event)
@@ -93,5 +97,4 @@ class InvoiceWorkflowSubscriber
         $event->getSubject();
         $event->getTransition()->getName();
     }
-
 }

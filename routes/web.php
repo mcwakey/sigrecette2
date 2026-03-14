@@ -1,20 +1,19 @@
 <?php
 
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\FileDownloadController;
 use App\Http\Controllers\Password;
 use App\Http\Controllers\Geolocation;
 use App\Http\Controllers\UserActivityController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\EnsureIsAdmin;
 use App\Http\Controllers\EreasController;
 use App\Http\Controllers\PrintController;
-
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\RecoveryController;
 use App\Http\Controllers\TaxableController;
 use App\Http\Controllers\LanguageController;
-
-
 use App\Http\Controllers\YearsController;
 use App\Http\Controllers\ZonesController;
 use App\Http\Controllers\LedgerController;
@@ -27,10 +26,8 @@ use App\Http\Controllers\ActivitiesController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\StockRequestController;
 use App\Http\Controllers\StockTransferController;
-
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TownsController;
-
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\CollectorDepositController;
 use App\Http\Controllers\AccountantDepositController;
@@ -39,7 +36,7 @@ use App\Http\Controllers\Apps\UserManagementController;
 use App\Http\Controllers\AccountantDepositOutrightController;
 use App\Http\Controllers\Apps\PermissionManagementController;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,7 +65,6 @@ Route::middleware(['throttle:global'])->group(function () {
             Route::resource('/user-management/roles', RoleManagementController::class);
             Route::resource('/user-management/permissions', PermissionManagementController::class);
             Route::get('/user-activity', [UserActivityController::class, 'index'])->name('user-activity.index');
-
         });
         Route::get('/taxpayers/r_report', [TaxpayerController::class, 'r_report'])->name('r_report-view');
 
@@ -101,10 +97,7 @@ Route::middleware(['throttle:global'])->group(function () {
         });
 
         Route::name('accounts.')->group(function () {
-            // Route::resource('/accounts/stock-requests', StockRequestController::class);
-            // Route::resource('/accounts/stock-transfers', StockTransferController::class);
             Route::resource('/accounts/collector-deposits', CollectorDepositController::class);
-            // Route::resource('/accounts/collector-deposits/{id}', CollectorDepositController::class);
             Route::resource('/accounts/accountant-deposits-title', AccountantDepositController::class);
             Route::resource('/accounts/accountant-deposits-outright', AccountantDepositOutrightController::class);
             Route::resource('/accounts/ledgers', LedgerController::class);
@@ -142,22 +135,17 @@ Route::middleware(['throttle:global'])->group(function () {
             Route::get('/import/taxpayers', [TaxpayerController::class, 'showImportPage'])->name('import-view');
 
 
-            //Route::resource('/user-management/permissions', PermissionManagementController::class);
             Route::resource('settings/communes', CommunesController::class);
             Route::get('/import/taxpayers', [TaxpayerController::class, 'showImportPage'])->name('import-view');
         });
 
-
-        // Route::get('/generate-pdf/{data}/{type?}/{action?}', [PrintController::class, 'download'])->name("generatePdf");
-        // Route::Post('/import/taxpayer', [TaxpayerController::class, 'import'])->name('import.process');
-        // Route::get('/import/taxpayer', [TaxpayerController::class, 'showImportPage'])->name('import-view');
-
-        Route::get('/prints',   [PrintController::class, 'index'])->name("prints");
-        Route::get('/print-all-invoice',   [PrintController::class, 'downloadMultipleInvoicePdf'])->name("print-all-invoice");
-        Route::get('/exports',   [ExportController::class, 'index'])->name("exports");
-        Route::get('/exports-invoice',   [ExportController::class, 'downloadExportInvoice'])->name("exports-invoice");
-        Route::get('/exports/backup',   [ExportController::class, 'backup'])->name("export_backup");
-        Route::get('/exports/backupdownload',   [ExportController::class, 'backupDownload'])->name("backupdownload");
+        Route::get('/download/{filename}/{id?}', [FileDownloadController::class,'download'])->name('download.file');
+        Route::get('/prints', [PrintController::class, 'index'])->name("prints");
+        Route::get('/print-all-invoice', [PrintController::class, 'downloadMultipleInvoicePdf'])->name("print-all-invoice");
+        Route::get('/exports', [ExportController::class, 'index'])->name("exports");
+        Route::get('/exports-invoice', [ExportController::class, 'downloadExportInvoice'])->name("exports-invoice");
+        Route::get('/exports/backup', [ExportController::class, 'backup'])->name("export_backup");
+        Route::get('/exports/backupdownload', [ExportController::class, 'backupDownload'])->name("backupdownload");
         Route::get('/generate-pdf/{data?}/{type?}/{action?}/{id?}', [PrintController::class, 'download'])->name("generatePdf");
         Route::get('/generatepdf/{printFile}/{type?}/{action?}', [PrintController::class, 'downloadWithPrintData'])->name("generateWithPrintData");
         Route::post('/store-session-params', function (Request $request) {
@@ -166,7 +154,6 @@ Route::middleware(['throttle:global'])->group(function () {
         })->name('store.session.params');
         Route::middleware(EnsureIsAdmin::class)->post('/import/taxpayer', [TaxpayerController::class, 'import'])->name('import.process');
         Route::middleware(EnsureIsAdmin::class)->get('/import/taxpayer', [TaxpayerController::class, 'showImportPage'])->name('import-view');
-
     });
 
     Route::get('/error', function () {
@@ -178,8 +165,6 @@ Route::middleware(['throttle:global'])->group(function () {
 
 
 
-// Route::get('/generate-pdf/{data}/{type?}/{action?}', [PrintController::class, 'download'])->name("generatePdf");
-// Route::Post('/import/taxpayer', [TaxpayerController::class, 'import'])->name('import.process');
-// Route::get('/import/taxpayer', [TaxpayerController::class, 'showImportPage'])->name('import-view');
+
 
 require __DIR__ . '/auth.php';

@@ -1,14 +1,18 @@
 <?php
+
 namespace App\Notifications;
+
 use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+
 class InvoicePaid extends Notification
 {
     use Queueable;
+
     /**
      * Create a new notification instance.
      */

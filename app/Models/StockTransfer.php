@@ -1,11 +1,15 @@
 <?php
+
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+
 class StockTransfer extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'trans_no',
         'trans_id',
@@ -44,7 +48,8 @@ class StockTransfer extends Model
     {
         $builder = StockTransfer::join('taxables', 'stock_transfers.taxable_id', '=', 'taxables.id')
             ->join('users', 'stock_transfers.to_user_id', '=', 'users.id')
-            ->select('stock_transfers.trans_id',
+            ->select(
+                'stock_transfers.trans_id',
                 DB::raw('CASE WHEN trans_type = "RECU" THEN qty END AS rc_qty'),
                 DB::raw('CASE WHEN trans_type = "VENDU" THEN qty END AS vv_qty'),
                 DB::raw('CASE WHEN trans_type = "RENDU" THEN qty END AS rd_qty'),
@@ -57,8 +62,9 @@ class StockTransfer extends Model
                 DB::raw('stock_transfers.type AS type'),
                 DB::raw('stock_transfers.to_user_id AS to_user_id'),
                 DB::raw('stock_transfers.created_at AS created_at'),
-                DB::raw('stock_transfers.taxable_id AS taxable_id'))
-            ->where('stock_transfers.to_user_id', "=",$id)
+                DB::raw('stock_transfers.taxable_id AS taxable_id')
+            )
+            ->where('stock_transfers.to_user_id', "=", $id)
             ->orderBy('trans_id', 'desc');
         return $builder->get();
     }

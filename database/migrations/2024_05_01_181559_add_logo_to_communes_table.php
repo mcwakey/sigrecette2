@@ -13,8 +13,6 @@ return new class extends Migration
     {
         Schema::table('communes', function (Blueprint $table) {
             $table->string('logo_path', 2048)->after('name')->nullable();
-
-
         });
     }
 

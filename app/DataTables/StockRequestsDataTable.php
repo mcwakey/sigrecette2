@@ -1,5 +1,7 @@
 <?php
+
 namespace App\DataTables;
+
 use Illuminate\Support\Facades\DB;
 use App\Models\StockRequest;
 use Yajra\DataTables\Html\Column;
@@ -8,6 +10,7 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
+
 class StockRequestsDataTable extends DataTable
 {
     /**
@@ -88,7 +91,8 @@ class StockRequestsDataTable extends DataTable
     {
         return $model->join('taxables', 'stock_requests.taxable_id', '=', 'taxables.id')
             ->join('users', 'stock_requests.user_id', '=', 'users.id')
-            ->select('stock_requests.req_id',
+            ->select(
+                'stock_requests.req_id',
                 DB::raw('MAX(CASE WHEN req_type = "DEMANDE" THEN qty END) AS pc_qty'),
                 DB::raw('MAX(CASE WHEN req_type = "COMPTABILISE" THEN qty END) AS sd_qty'),
                 DB::raw('MAX(stock_requests.id) AS id'),
@@ -101,7 +105,8 @@ class StockRequestsDataTable extends DataTable
                 DB::raw('MIN(stock_requests.type) AS type'),
                 DB::raw('MAX(stock_requests.user_id) AS user_id'),
                 DB::raw('MAX(stock_requests.created_at) AS created_at'),
-                DB::raw('MAX(stock_requests.taxable_id) AS taxable_id'))
+                DB::raw('MAX(stock_requests.taxable_id) AS taxable_id')
+            )
             ->groupBy('stock_requests.req_id')
             ->whereBetween('stock_requests.created_at', [$this->startDate, $this->endDate])
             ->where('stock_requests.req_no', $this->reqNo)

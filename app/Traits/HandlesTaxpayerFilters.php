@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Traits;
 
 use App\Models\Year;
@@ -8,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 trait HandlesTaxpayerFilters
 {
-   protected bool $profile_page=false;
+    protected bool $profile_page = false;
 
     public function getTaxpayerId($id)
     {
@@ -16,10 +17,9 @@ trait HandlesTaxpayerFilters
             $previousUrl = url()->previous();
             $previousRoute = Route::getRoutes()->match(Request::create($previousUrl));
             if ($previousRoute->getName() === "taxpayers.show") {
-                $this->profile_page=true;
+                $this->profile_page = true;
                 $segments = explode('/', parse_url($previousUrl, PHP_URL_PATH));
                 return   end($segments) ? intval(end($segments)) : null;
-
             }
         }
         return $id;

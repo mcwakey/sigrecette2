@@ -1,12 +1,16 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\DataTables\CollectorDepositsDataTable;
 use App\Models\Payment;
 use App\Traits\HandlesDateFilters;
 use Illuminate\Http\Request;
+
 class CollectorDepositController extends Controller
 {
-    use  HandlesDateFilters;
+    use HandlesDateFilters;
+
     public function index(Request $request, CollectorDepositsDataTable $dataTable)
     {
         $this->handleDateFilters($request);
@@ -16,7 +20,7 @@ class CollectorDepositController extends Controller
         $user_id = isset($validatedData['id']) ? $validatedData['id'] : null;
         return $dataTable->with(
             [
-                'id'=> $user_id,
+                'id' => $user_id,
                 'startDate' => $this->s_date,
                 'endDate' => $this->e_date,
             ]
@@ -27,7 +31,7 @@ class CollectorDepositController extends Controller
         $this->handleDateFilters($request);
         return $dataTable->with(
             [
-                'id'=> $payment->id,
+                'id' => $payment->id,
                 'startDate' => $this->s_date,
                 'endDate' => $this->e_date,
             ]

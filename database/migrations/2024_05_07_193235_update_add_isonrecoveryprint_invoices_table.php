@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::table('invoices', function (Blueprint $table) {
             $table->boolean('onrecoveryprint')->after('reduce_amount')->nullable()->default(false);
             $table->boolean('ondistributionprint')->nullable()->default(false);
-
         });
     }
 
@@ -26,7 +25,6 @@ return new class extends Migration
             Schema::table('invoices', function (Blueprint $table) {
                 $table->dropColumn('onrecoveryprint');
                 $table->dropColumn('ondistributionprint');
-
             });
     }
 };

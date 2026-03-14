@@ -1,5 +1,7 @@
 <?php
+
 namespace App\DataTables;
+
 use Illuminate\Support\Facades\DB;
 use App\Enums\PaymentStatusEnums;
 use App\Models\Payment;
@@ -9,6 +11,7 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
+
 class AccountantDepositsSumDataTable extends DataTable
 {
     /**
@@ -40,7 +43,8 @@ class AccountantDepositsSumDataTable extends DataTable
     public function query(Payment $model): QueryBuilder
     {
         return $model
-            ->select('id',
+            ->select(
+                'id',
                 DB::raw('SUM(amount) AS amount'),
                 DB::raw('MAX(reference_deposit) AS reference_deposit'),
                 DB::raw('MAX(status) AS status'),

@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\TaxpayerTaxable;
+
 use App\Models\Canton;
 use App\Models\Erea;
 use App\Models\Gender;
@@ -17,10 +19,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use mysql_xdevapi\CollectionRemove;
+
 class AddTaxpayerTaxableModal extends Component
 {
     use WithFileUploads;
     use DispatchesMessages;
+
     public $taxpayer_taxable_id;
     public $description;
     public $seize;
@@ -111,18 +115,21 @@ class AddTaxpayerTaxableModal extends Component
     }
     public function updateCheckbox($id)
     {
+        try {
+            $taxpayer_taxables = TaxpayerTaxable::findOrFail($id);
+            if ($taxpayer_taxables->billable == 0) {
+                $taxpayer_taxables->update([
+                    'billable' => '1'
+                ]);
+            } else {
+                $taxpayer_taxables->update([
+                    'billable' => '0'
+                ]);
+            }
+            $this->dispatchMessage('Taxation du contribuable', 'update');
+        }catch (\Throwable $th) {}
 
-        $taxpayer_taxables = TaxpayerTaxable::findOrFail($id);
-        if ($taxpayer_taxables->billable == 0) {
-            $taxpayer_taxables->update([
-                'billable' => '1'
-            ]);
-        } else {
-            $taxpayer_taxables->update([
-                'billable' => '0'
-            ]);
-        }
-       $this->dispatchMessage('Taxation du contribuable', 'update');
+
     }
     public function submit()
     {
@@ -130,67 +137,72 @@ class AddTaxpayerTaxableModal extends Component
             abort(403, 'Accès interdit');
         }
         $this->validate();
-        DB::transaction(function () {
-            // Prepare the data for creating a new Taxable
-            $data = [
-                'name' => $this->description,
-                'length' => $this->length,
-                'width' => $this->width,
-                'seize' => $this->seize,
-                'location' => $this->location,
-                'taxpayer_id' => $this->taxpayer_id,
-                'taxable_id' => $this->taxable_id,
-                'authorisation' => $this->authorisation,
-                'auth_reference' => $this->auth_reference,
-                'longitude' => $this->longitude,
-                'latitude' => $this->latitude,
-            ];
-            $taxpayer_taxable = TaxpayerTaxable::find($this->taxpayer_taxable_id) ?? TaxpayerTaxable::create($data);
-            if ($this->edit_mode) {
-                foreach ($data as $k => $v) {
-                    $taxpayer_taxable->$k = $v;
+        try {
+            DB::transaction(function () {
+                // Prepare the data for creating a new Taxable
+                $data = [
+                    'name' => $this->description,
+                    'length' => $this->length,
+                    'width' => $this->width,
+                    'seize' => $this->seize,
+                    'location' => $this->location,
+                    'taxpayer_id' => $this->taxpayer_id,
+                    'taxable_id' => $this->taxable_id,
+                    'authorisation' => $this->authorisation,
+                    'auth_reference' => $this->auth_reference,
+                    'longitude' => $this->longitude,
+                    'latitude' => $this->latitude,
+                ];
+                $taxpayer_taxable = TaxpayerTaxable::find($this->taxpayer_taxable_id) ?? TaxpayerTaxable::create($data);
+                if ($this->edit_mode) {
+                    foreach ($data as $k => $v) {
+                        $taxpayer_taxable->$k = $v;
+                    }
+                    $taxpayer_taxable->save();
                 }
-                $taxpayer_taxable->save();
-            }
-            if ($this->edit_mode) {
-                $this->dispatchMessage('Taxation du contribuable', 'update');
-            } else {
-                $this->dispatchMessage('Taxation du contribuable');
-            }
-            $this->dispatch('updatesTaxpayerTaxables', ['id' => $this->taxpayer_id]);
-        });
-        // Reset the form fields after successful submission
-        $this->reset();
+                if ($this->edit_mode) {
+                    $this->dispatchMessage('Taxation du contribuable', 'update');
+                } else {
+                    $this->dispatchMessage('Taxation du contribuable');
+                }
+                $this->dispatch('updatesTaxpayerTaxables', ['id' => $this->taxpayer_id]);
+            });
+            // Reset the form fields after successful submission
+            $this->reset();
+        }catch (\Throwable $th) {}
+
     }
     public function deleteTaxpayerTaxable($id)
     {
         try {
             TaxpayerTaxable::destroy($id);
             $this->dispatchMessage('Taxation du contribuable', 'delete');
-        }catch (\Exception $exception){
-            $this->dispatchMessage('Taxation du contribuable', 'delete','error','erreur lors de la supression de la taxation du contribuable.');
+        } catch (\Exception $exception) {
+            $this->dispatchMessage('Taxation du contribuable', 'delete', 'error', 'erreur lors de la supression de la taxation du contribuable.');
         }
-
     }
     public function updateTaxpayerTaxable($id)
     {
-        $this->edit_mode = true;
-        $taxpayer_taxable = TaxpayerTaxable::find($id);
-        $this->taxpayer_taxable_id = $taxpayer_taxable->id;
-        $this->description = $taxpayer_taxable->name;
-        $this->length = $taxpayer_taxable->length;
-        $this->width = $taxpayer_taxable->width;
-        $this->seize = $taxpayer_taxable->seize;
-        $this->location = $taxpayer_taxable->location;
-        $this->longitude = $taxpayer_taxable->longitude;
-        $this->latitude = $taxpayer_taxable->latitude;
-        $this->taxpayer_id = $taxpayer_taxable->taxpayer_id;
-        $this->taxlabel_id = $taxpayer_taxable->taxable->tax_label_id;
-        $this->taxables = Taxable::where('tax_label_id', $taxpayer_taxable->taxable->tax_label_id)->get();
-        $this->taxable_id = $taxpayer_taxable->taxable_id;
-        $this->authorisation = $taxpayer_taxable->authorisation;
-        $this->auth_reference = $taxpayer_taxable->auth_reference;
-        $this->option_calculus = $taxpayer_taxable->taxable->unit_type;
+        try {
+            $this->edit_mode = true;
+            $taxpayer_taxable = TaxpayerTaxable::find($id);
+            $this->taxpayer_taxable_id = $taxpayer_taxable->id;
+            $this->description = $taxpayer_taxable->name;
+            $this->length = $taxpayer_taxable->length;
+            $this->width = $taxpayer_taxable->width;
+            $this->seize = $taxpayer_taxable->seize;
+            $this->location = $taxpayer_taxable->location;
+            $this->longitude = $taxpayer_taxable->longitude;
+            $this->latitude = $taxpayer_taxable->latitude;
+            $this->taxpayer_id = $taxpayer_taxable->taxpayer_id;
+            $this->taxlabel_id = $taxpayer_taxable->taxable->tax_label_id;
+            $this->taxables = Taxable::where('tax_label_id', $taxpayer_taxable->taxable->tax_label_id)->get();
+            $this->taxable_id = $taxpayer_taxable->taxable_id;
+            $this->authorisation = $taxpayer_taxable->authorisation;
+            $this->auth_reference = $taxpayer_taxable->auth_reference;
+            $this->option_calculus = $taxpayer_taxable->taxable->unit_type;
+        }catch (\Throwable $th) {}
+
     }
     public function addTaxpayerTaxable($id)
     {

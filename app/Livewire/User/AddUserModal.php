@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\User;
+
 use App\Helpers\Constants;
 use App\Models\User;
 use App\Models\Zone;
@@ -10,9 +12,11 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
+
 class AddUserModal extends Component
 {
     use WithFileUploads;
+
     public $user_id;
     public $name;
     public $email;
@@ -52,44 +56,47 @@ class AddUserModal extends Component
         }
         // Validate the form input data
         $this->validate();
-        DB::transaction(function () {
-            // Prepare the data for creating a new user
-            $data = ['name' => $this->name,];
-            $data['profile_photo_path'] = $this->avatar ? $this->avatar->store('avatars', 'public') : null;
-            if (!$this->edit_mode) {
-                $data['password'] = Hash::make($this->email);
-            }
-            $data['email'] = trim($this->email);
-            $data['zone_id'] = $this->zone_id;
-            if (!$this->edit_mode && !Gate::forUser(auth()->user())->allows('create-user', User::class)) {
-                $this->dispatch('error', Constants::NOT_PERMISSION_TO_PERFORM_ACTION);
-                return false;
-            }
-            // Update or Create a new user record in the database
-            $user = User::find($this->user_id) ?? User::create($data);
-            if ($this->edit_mode && Gate::forUser(auth()->user())->allows('update-user', $user)) {
-                foreach ($data as $k => $v) {
-                    $user->$k = $v;
+        try {
+            DB::transaction(function () {
+                // Prepare the data for creating a new user
+                $data = ['name' => $this->name,];
+                $data['profile_photo_path'] = $this->avatar ? $this->avatar->store('avatars', 'public') : null;
+                if (!$this->edit_mode) {
+                    $data['password'] = Hash::make($this->email);
                 }
-                $user->save();
-            } elseif ($this->edit_mode) {
-                $this->dispatch('error', Constants::NOT_PERMISSION_TO_PERFORM_ACTION);
-                return false;
-            }
-            if ($this->edit_mode) {
-                // Assign selected role for user
-                $user->syncRoles($this->role);
-                // Emit a success event with a message
-                $this->dispatch('success', __('Utilisateur mis a jour avec succès.'));
-            } else {
-                // Assign selected role for user
-                $user->assignRole($this->role);
-                // Emit a success event with a message
-                $this->dispatch('success', __('Utilisateur créer avec succès.'));
-            }
-        });
-        // Reset the form fields after successful submission
-        $this->reset();
+                $data['email'] = trim($this->email);
+                $data['zone_id'] = $this->zone_id;
+                if (!$this->edit_mode && !Gate::forUser(auth()->user())->allows('create-user', User::class)) {
+                    $this->dispatch('error', Constants::NOT_PERMISSION_TO_PERFORM_ACTION);
+                    return false;
+                }
+                // Update or Create a new user record in the database
+                $user = User::find($this->user_id) ?? User::create($data);
+                if ($this->edit_mode && Gate::forUser(auth()->user())->allows('update-user', $user)) {
+                    foreach ($data as $k => $v) {
+                        $user->$k = $v;
+                    }
+                    $user->save();
+                } elseif ($this->edit_mode) {
+                    $this->dispatch('error', Constants::NOT_PERMISSION_TO_PERFORM_ACTION);
+                    return false;
+                }
+                if ($this->edit_mode) {
+                    // Assign selected role for user
+                    $user->syncRoles($this->role);
+                    // Emit a success event with a message
+                    $this->dispatch('success', __('Utilisateur mis a jour avec succès.'));
+                } else {
+                    // Assign selected role for user
+                    $user->assignRole($this->role);
+                    // Emit a success event with a message
+                    $this->dispatch('success', __('Utilisateur créer avec succès.'));
+                }
+            });
+            // Reset the form fields after successful submission
+            $this->reset();
+        }catch (\Exception $e) {}
+
     }
     public function deleteUser($id)
     {
@@ -111,14 +118,17 @@ class AddUserModal extends Component
     }
     public function updateUser($id)
     {
-        $this->edit_mode = true;
-        $user = User::find($id);
-        $this->user_id = $user->id;
-        $this->zone_id = $user->zone_id;
-        $this->saved_avatar = $user->profile_photo_url;
-        $this->name = $user->name;
-        $this->email = $user->email;
-        $this->role = $user->roles?->first()->name ?? '';
+        try {
+            $this->edit_mode = true;
+            $user = User::find($id);
+            $this->user_id = $user->id;
+            $this->zone_id = $user->zone_id;
+            $this->saved_avatar = $user->profile_photo_url;
+            $this->name = $user->name;
+            $this->email = $user->email;
+            $this->role = $user->roles?->first()->name ?? '';
+        }catch (\Exception $e) {}
+
     }
     public function disabeldUser($id)
     {

@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Enums;
+
 class PaymentTypeEnums
 {
     public const CASH = 'CASH';

@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Http\Resources;
+
 use App\Models\Taxpayer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+
 /**
  * @property Taxpayer $resource
  */
@@ -38,8 +41,8 @@ class SearchTaxpayerResource extends JsonResource
             'ereaId' => $this->resource->erea_id,
             'zoneId' => $this->resource->zone_id,
             'deletedAt' => $this->resource->deleted_at,
-            'createdBy'=> $this->resource->created_by,
-            'updatedBy'=>$this->resource->updated_by
+            'createdBy' => $this->resource->created_by,
+            'updatedBy' => $this->resource->updated_by
         ];
     }
 }

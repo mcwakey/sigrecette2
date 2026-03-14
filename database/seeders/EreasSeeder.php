@@ -14,7 +14,7 @@ class EreasSeeder extends Seeder
     public function run(): void
     {
         //Atsanvé, Houmbi, Kpatefi, Klévé, Apelebuimé, Adidodokpo, Nyivémé
-        $townNameOne=[
+        $townNameOne = [
             'Atsanvé',
             'Houmbi',
             'Kpatefi',

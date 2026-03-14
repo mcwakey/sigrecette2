@@ -1,11 +1,14 @@
 <?php
+
 namespace App\Livewire\Permission;
+
 use App\Helpers\Constants;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+
 class RoleModal extends Component
 {
     public $name;
@@ -26,12 +29,12 @@ class RoleModal extends Component
     {
         if (empty($role_name)) {
             // Create new
-            $this->role = new Role;
+            $this->role = new Role();
             $this->name = '';
             return;
         }
         // Get the role by name.
-        $role = Role::where('name',"=", $role_name)->first();
+        $role = Role::where('name', "=", $role_name)->first();
         if (is_null($role)) {
             $this->dispatch('error', 'Le role séléctioner [' . $role_name . '] est introuvable');
             return;

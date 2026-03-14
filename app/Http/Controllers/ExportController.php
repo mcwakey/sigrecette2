@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\DataTables\ExportInvoicesDataTable;
 use App\DataTables\ExportRecoveriesDataTable;
 use App\DataTables\ExportTaxablesDataTable;
@@ -27,14 +29,16 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ExportController extends Controller
 {
-    use  HandlesDateFilters;
-    public function index(Request $request,
-                          ExportTaxpayersDataTable $exportTaxpayersDataTable,
-                          ExportInvoicesDataTable $exportInvoicesDataTable,
-                          ExportRecoveriesDataTable $exportRecoveriesDataTable,
-    ExportTaxpayerTaxablesDataTable $exportTaxpayerTaxablesDataTable,
-    ExportTaxablesDataTable $exportTaxablesDataTable)
-    {
+    use HandlesDateFilters;
+
+    public function index(
+        Request $request,
+        ExportTaxpayersDataTable $exportTaxpayersDataTable,
+        ExportInvoicesDataTable $exportInvoicesDataTable,
+        ExportRecoveriesDataTable $exportRecoveriesDataTable,
+        ExportTaxpayerTaxablesDataTable $exportTaxpayerTaxablesDataTable,
+        ExportTaxablesDataTable $exportTaxablesDataTable
+    ) {
         $this->handleDateFilters($request);
 
         $validatedData = $request->validate([
@@ -58,8 +62,8 @@ class ExportController extends Controller
                 [
                     'state' => $state,
                     'disable' => $disable,
-                    'startDate' => $this->s_date==$default_range['s_date']?null: $this->s_date,
-                    'endDate' => $this->e_date==$default_range['e_date']?null: $this->e_date,
+                    'startDate' => $this->s_date == $default_range['s_date'] ? null : $this->s_date,
+                    'endDate' => $this->e_date == $default_range['e_date'] ? null : $this->e_date,
                 ]
             )->render('pages/export.taxpayers.list', ['zones' => $zones, 'categories' => $categories, 'towns' => $towns, 'cantons' => $cantons, 'activities' => $activities]);
         } elseif ($export_type == ExportTypeEnums::INVOICE) {
@@ -70,23 +74,21 @@ class ExportController extends Controller
                     'endDate' => $this->e_date,
                 ]
             )->render('pages/export.invoices.list', ['zones' => $zones, 'tax_labels' => $tax_labels]);
-        } elseif ($export_type == ExportTypeEnums::TAXPAYER_TAXABLE){
+        } elseif ($export_type == ExportTypeEnums::TAXPAYER_TAXABLE) {
             return $exportTaxpayerTaxablesDataTable->with(
                 [
                     'startDate' => $this->s_date,
                     'endDate' => $this->e_date,
                 ]
             )->render('pages/export.taxpayer_taxables.list', []);
-        }
-        elseif ($export_type == ExportTypeEnums::TAXABLE){
+        } elseif ($export_type == ExportTypeEnums::TAXABLE) {
             return $exportTaxablesDataTable->with(
                 [
                     'startDate' => $this->s_date,
                     'endDate' => $this->e_date,
                 ]
             )->render('pages/export.taxables.list', []);
-        }
-        else {
+        } else {
             return $exportRecoveriesDataTable->with(
                 [
                     'startDate' => $this->s_date,
@@ -101,12 +103,11 @@ class ExportController extends Controller
         $invoiceIds = $request->input('ids', null);
         $this->handleDateFilters($request);
 
-        return Excel::download(new InvoiceExport($this->s_date,$this->e_date,$invoiceIds), 'avis.xlsx');
-
+        return Excel::download(new InvoiceExport($this->s_date, $this->e_date, $invoiceIds), 'avis.xlsx');
     }
     public function backup()
     {
-        return view('pages/export/backup.show',[
+        return view('pages/export/backup.show', [
             'backup' => $this->getLastBackup()
         ]);
     }
@@ -125,7 +126,7 @@ class ExportController extends Controller
                 'error' => 'Cette action est uniquement disponible sur un environnement Linux.'
             ], 403);
         }
-        if($last_date==null){
+        if ($last_date == null) {
             $diskName = config('backup.backup.destination.disks')[0];
             $rootPath = config('filesystems.disks.' . $diskName . '.root');
 
@@ -136,8 +137,7 @@ class ExportController extends Controller
             $latestBackup = $files->first(fn($file) =>
                 now()->diffInHours(
                     date('Y-m-d H:i:s', Storage::disk($diskName)->lastModified($file))
-                ) < 1
-            );
+                ) < 1);
 
             if (!$latestBackup) {
                 Artisan::call('backup:run');
@@ -154,19 +154,18 @@ class ExportController extends Controller
                     'disk_name' => $diskName,
                 ], 404);
             }
-            $file_name= basename($latestBackup);
+            $file_name = basename($latestBackup);
             $fullPath = realpath($rootPath . DIRECTORY_SEPARATOR . $latestBackup);
-        }else{
-            $last=$this->getLastBackup();
-            $file_name=$last['name'];
-            $diskName=$last['disk_name'];
-            if($last_date==$last['created_at']){
-                $fullPath=$last['url'];
+        } else {
+            $last = $this->getLastBackup();
+            $file_name = $last['name'];
+            $diskName = $last['disk_name'];
+            if ($last_date == $last['created_at']) {
+                $fullPath = $last['url'];
             }
-
         }
         if ($fullPath) {
-            $this->saveBackupLog($file_name,$diskName,$fullPath);
+            $this->saveBackupLog($file_name, $diskName, $fullPath);
             return response()->download($fullPath);
         } else {
             return response()->json(['error' => 'Fichier introuvable'], 404);
@@ -197,7 +196,7 @@ class ExportController extends Controller
             'created_at' => $formattedDate,
         ];
     }
-    function saveBackupLog($name,$diskName,$fullPath):BackupLog
+    function saveBackupLog($name, $diskName, $fullPath): BackupLog
     {
         $userBackupsCount = BackupLog::where('user_id', auth()->id())->count();
 
@@ -217,5 +216,4 @@ class ExportController extends Controller
             'full_path' => $fullPath,
         ]);
     }
-
 }

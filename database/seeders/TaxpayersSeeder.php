@@ -2,10 +2,16 @@
 
 namespace Database\Seeders;
 
+use App\Models\Invoice;
+use App\Models\InvoiceItem;
 use App\Models\Taxpayer;
+use App\Models\TaxpayerTaxable;
+use App\Models\Zone;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use function Pest\Laravel\from;
 
 class TaxpayersSeeder extends Seeder
 {
@@ -14,6 +20,7 @@ class TaxpayersSeeder extends Seeder
      */
     public function run(): void
     {
+        $taxpayers = null;
         $coordinates = [
             [0.7966636,6.7985916],
             [0.7965752,6.7984923],
@@ -31,7 +38,7 @@ class TaxpayersSeeder extends Seeder
         ];
 
         foreach ($coordinates as $value) {
-           Taxpayer::create([
+            $taxpayers[] = Taxpayer::create([
             'tnif' => fake()->randomNumber(3, 1, 10) . Str::random(5) . fake()->randomNumber(3, 0, 9),
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
@@ -41,17 +48,29 @@ class TaxpayersSeeder extends Seeder
             'id_number' => random_int(1000000, 6000000),
             'mobilephone' => fake()->phoneNumber(),
             'telephone' => fake()->phoneNumber(),
-            'longitude' => $value[0], 
+            'longitude' => $value[0],
             'latitude' => $value[1],
             'address' => fake()->streetAddress(),
             //'canton' => fake()->city(),
             'town_id' => random_int(1, 6),
             'erea_id' => random_int(1, 2),
-            'zone_id' => random_int(1, 3),
+            'zone_id' => Zone::inRandomOrder()->first()->id,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
-           ]);
+            ]);
         }
 
+        $taxpayers = Taxpayer::factory()
+            ->count(10)
+            ->create();
+
+
+        $taxpayers->each(function ($taxpayer) {
+            TaxpayerTaxable::factory()
+                ->count(5)
+                ->create([
+                    'taxpayer_id' => $taxpayer->id,
+                ]);
+        });
     }
 }

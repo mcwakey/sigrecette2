@@ -31,10 +31,10 @@ return new class extends Migration
             // $table->foreign('taxpayer_taxable_id')->references('id')->on('taxpayer_taxables');
             $table->timestamps();
         });
-        
+
         //DB::statement("ALTER TABLE books AUTO_INCREMENT = 100000;");
     }
-    
+
 
     /**
      * Reverse the migrations.

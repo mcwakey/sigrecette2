@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Enums;
+
 class InvoicePayStatusEnums
 {
     public const OWING = 'OWING';

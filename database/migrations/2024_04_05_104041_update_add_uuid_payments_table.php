@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::table('payments', function (Blueprint $table) {
             $table->string('uuid')->unique();
         });
-
     }
 
     /**

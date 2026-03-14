@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class BackupLog extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'file_name',
         'disk_name',

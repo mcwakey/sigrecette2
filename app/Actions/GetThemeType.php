@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Actions;
+
 class GetThemeType
 {
     public array $types = ['primary', 'success', 'info', 'danger', 'warning'];

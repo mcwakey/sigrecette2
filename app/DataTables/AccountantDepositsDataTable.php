@@ -1,5 +1,7 @@
 <?php
+
 namespace App\DataTables;
+
 use App\Enums\PaymentStatusEnums;
 use App\Helpers\Constants;
 use App\Models\Payment;
@@ -9,6 +11,7 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
+
 class AccountantDepositsDataTable extends DataTable
 {
     /**
@@ -49,7 +52,7 @@ class AccountantDepositsDataTable extends DataTable
         return $model
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->where('invoice_type', '!=', 'VERSEMENT')
-            ->where('payments.status', '=', $this->ref == Constants::REFERENCE_DEPOSIT_NULL ?PaymentStatusEnums::ACCOUNTED :PaymentStatusEnums::DONE)
+            ->where('payments.status', '=', $this->ref == Constants::REFERENCE_DEPOSIT_NULL ? PaymentStatusEnums::ACCOUNTED : PaymentStatusEnums::DONE)
             ->where('reference_deposit', $this->ref == Constants::REFERENCE_DEPOSIT_NULL ? null : $this->ref)
             ->newQuery();
     }

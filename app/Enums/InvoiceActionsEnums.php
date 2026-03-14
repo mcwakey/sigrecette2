@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Enums;
+
 class InvoiceActionsEnums
 {
     public const VIEW = 'VIEW';

@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Models;
+
 use App\Contracts\FormatDateInterface;
 use App\Enums\InvoicePayStatusEnums;
 use App\Enums\InvoiceStatusEnums;
@@ -10,11 +12,15 @@ use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
 use Spatie\Permission\Models\Role;
 use ZeroDaHero\LaravelWorkflow\Traits\WorkflowTrait;
+use App\Models\InvoiceCodeBalance;
+use Carbon\Carbon;
+
 class Invoice extends Model implements FormatDateInterface
 {
     use HasFactory;
     use WorkflowTrait;
     use InvoiceTrait;
+
     protected $fillable = [
         'invoice_id',
         'taxpayer_id',
@@ -72,7 +78,7 @@ class Invoice extends Model implements FormatDateInterface
             $this->status != InvoiceStatusEnums::CANCELED &&
                 $this->status != InvoiceStatusEnums::REDUCED &&
                 $this->pay_status != InvoicePayStatusEnums::PAID
-        &&$this->validity=='VALID');
+        && $this->validity == 'VALID');
     }
     public function canGetPayment(): bool
     {
@@ -142,7 +148,7 @@ class Invoice extends Model implements FormatDateInterface
     }
     public function processOnInvoicesByUser(string $roleName): Invoice
     {
-        $role = Role::where('name', "=",$roleName)->first();
+        $role = Role::where('name', "=", $roleName)->first();
         if ($role) {
             $user = auth()->user();
             if ($user->hasRole($roleName)) {
@@ -151,9 +157,9 @@ class Invoice extends Model implements FormatDateInterface
         }
         return $this;
     }
-    public static function saveNotes(int $previousInvoiceId=null, string $remainingAmount=null, $freeText=null)
+    public static function saveNotes(int $previousInvoiceId = null, string $remainingAmount = null, $freeText = null)
     {
-       return json_encode([
+        return json_encode([
             'previous_invoice_id' => $previousInvoiceId,
             'remaining_amount' => $remainingAmount,
             'free_text' => $freeText,
@@ -176,7 +182,7 @@ class Invoice extends Model implements FormatDateInterface
 
         return false;
     }
-    public  function migrateNotes()
+    public function migrateNotes()
     {
 
         if (!$this->hasValidNotesStructure()) {
@@ -192,10 +198,40 @@ class Invoice extends Model implements FormatDateInterface
 
     public function getNotes()
     {
-        if($this->hasValidNotesStructure()) {
+        if ($this->hasValidNotesStructure()) {
             return json_decode($this->notes, true) ;
-        }else{
+        } else {
             return $this->notes;
         }
+    }
+
+    public function getInvoiceYear(): int
+    {
+        if (!empty($this->from_date)) {
+            return Carbon::parse($this->from_date)->year;
+        }
+        return $this->created_at?->year ?? (int) date('Y');
+    }
+
+    public function getPreviousBalancesByCode(): array
+    {
+        $year = $this->getInvoiceYear();
+        $rows = InvoiceCodeBalance::query()
+            ->where('taxpayer_id', $this->taxpayer_id)
+            ->where('year', '<', $year)
+            ->where('remaining_amount', '>', 0)
+            ->get();
+
+        $balances = [];
+        foreach ($rows as $row) {
+            $balances[$row->code] = ($balances[$row->code] ?? 0) + $row->remaining_amount;
+        }
+        return $balances;
+    }
+
+    public function getPreviousBalanceTotal(): float
+    {
+        $balances = $this->getPreviousBalancesByCode();
+        return array_sum($balances) ?: 0.0;
     }
 }

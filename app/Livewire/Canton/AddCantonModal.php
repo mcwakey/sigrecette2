@@ -1,14 +1,18 @@
 <?php
+
 namespace App\Livewire\Canton;
+
 use App\Models\Canton;
 use App\Traits\DispatchesMessages;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
+
 class AddCantonModal extends Component
 {
     use WithFileUploads;
     use DispatchesMessages;
+
     public $canton_id;
     public $name;
     public $status;
@@ -29,41 +33,55 @@ class AddCantonModal extends Component
     {
         // Validate the form input data
         $this->validate();
-        DB::transaction(function () {
-            // Prepare the data for creating a new Taxable
-            $data = [
-                'name' => $this->name,
-                'status' => $this->status,
-            ];
-            $canton = Canton::find($this->canton_id) ?? Canton::create($data);
-            if ($this->edit_mode) {
-                foreach ($data as $k => $v) {
-                    $canton->$k = $v;
+        try {
+            DB::transaction(function () {
+                // Prepare the data for creating a new Taxable
+                $data = [
+                    'name' => $this->name,
+                    'status' => $this->status,
+                ];
+                $canton = Canton::find($this->canton_id) ?? Canton::create($data);
+                if ($this->edit_mode) {
+                    foreach ($data as $k => $v) {
+                        $canton->$k = $v;
+                    }
+                    $canton->save();
                 }
-                $canton->save();
-            }
-            if ($this->edit_mode) {
-                $this->dispatchMessage('Canton', 'update');
-            } else {
-                $this->dispatchMessage('Canton');
-            }
-        });
-        // Reset the form fields after successful submission
-        $this->reset();
+                if ($this->edit_mode) {
+                    $this->dispatchMessage('Canton', 'update');
+                } else {
+                    $this->dispatchMessage('Canton');
+                }
+            });
+            // Reset the form fields after successful submission
+            $this->reset();
+        }catch (\Exception $e) {
+
+        }
+
     }
     public function deleteUser($id)
     {
-        // Delete the user record with the specified ID
-        Canton::destroy($id);
-        $this->dispatchMessage('Canton', 'delete');
+        try {
+            Canton::destroy($id);
+            $this->dispatchMessage('Canton', 'delete');
+        }catch (\Exception $e) {
+            $this->dispatchMessage('Canton', 'delete', 'error', 'erreur lors de la supression du canton.');
+        }
+
     }
     public function updateCanton($id)
     {
-        $this->edit_mode = true;
-        $canton = Canton::find($id);
-        $this->canton_id = $canton->id;
-        $this->name = $canton->name;
-        $this->status = $canton->status;
+        try {
+            $this->edit_mode = true;
+            $canton = Canton::find($id);
+            $this->canton_id = $canton->id;
+            $this->name = $canton->name;
+            $this->status = $canton->status;
+        }catch (\Exception $e) {
+
+        }
+
     }
     public function hydrate()
     {

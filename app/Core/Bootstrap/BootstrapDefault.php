@@ -83,5 +83,4 @@ class BootstrapDefault
 
         addHtmlClass('body', 'app-default');
     }
-
 }

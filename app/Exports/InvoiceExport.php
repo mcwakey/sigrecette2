@@ -15,7 +15,7 @@ class InvoiceExport implements FromCollection, WithHeadings, WithMapping
     protected $startDate;
     protected $endDate;
 
-    public function __construct($startDate,$endDate,?array $invoiceIds = null)
+    public function __construct($startDate, $endDate, ?array $invoiceIds = null)
     {
         $this->startDate = $startDate;
         $this->endDate = $endDate;
@@ -31,7 +31,7 @@ class InvoiceExport implements FromCollection, WithHeadings, WithMapping
 
         return $query
             ->whereBetween('invoices.created_at', [$this->startDate, $this->endDate])
-            ->where('invoices.type','=' ,Constants::TITRE)
+            ->where('invoices.type', '=', Constants::TITRE)
             ->orderBy('invoices.created_at', 'desc')->get();
     }
 
@@ -74,7 +74,7 @@ class InvoiceExport implements FromCollection, WithHeadings, WithMapping
                 $invoice->to_date,
                 $invoice->created_at->format('d/m/Y'),
             ];
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return [
                 '',
                 '',
@@ -92,9 +92,9 @@ class InvoiceExport implements FromCollection, WithHeadings, WithMapping
                 '',
             ];
         }
-
     }
-    public function getAmount(Invoice $invoice){
+    public function getAmount(Invoice $invoice)
+    {
         if ($invoice->reduce_amount != '') {
             return '-' . format_amount($invoice->reduce_amount);
         } else {

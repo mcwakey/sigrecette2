@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Events;
+
 use App\Models\UserLogs;
 use Illuminate\Http\Request;
 use Illuminate\Broadcasting\Channel;
@@ -9,9 +11,13 @@ use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+
 class TaxpayerAction
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
+
     public $data;
     public $request;
     /**

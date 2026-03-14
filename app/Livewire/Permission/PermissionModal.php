@@ -1,7 +1,10 @@
 <?php
+
 namespace App\Livewire\Permission;
+
 use Livewire\Component;
 use Spatie\Permission\Models\Permission;
+
 class PermissionModal extends Component
 {
     public $name;
@@ -22,7 +25,7 @@ class PermissionModal extends Component
     {
         if (empty($permission_name)) {
             // Create new
-            $this->permission = new Permission;
+            $this->permission = new Permission();
             $this->name = '';
             return;
         }

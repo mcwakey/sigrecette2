@@ -1,11 +1,3 @@
-@php
-    use Carbon\Carbon;
-    use App\Models\Commune;
-
-    $commune= Commune::getFirstCommune();
-    $year = \App\Models\Year::getActiveYear();
-    $month = Carbon::createFromFormat('m', $year->current_month)->monthName;
-@endphp
 <!--begin::Menu wrapper-->
 <div class="app-header-menu app-header-mobile-drawer align-items-stretch" data-kt-drawer="true"
     data-kt-drawer-name="app-header-menu" data-kt-drawer-activate="{default: true, lg: false}"

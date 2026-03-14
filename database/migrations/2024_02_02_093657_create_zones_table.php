@@ -19,10 +19,9 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::table('users',function(Blueprint $table){
+        Schema::table('users', function (Blueprint $table) {
             $table->foreignIdFor(Zone::class)->nullable()->constrained()->nullOnDelete();
         });
-
     }
 
     /**

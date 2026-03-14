@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Zone;
 use Faker\Generator;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -22,13 +23,15 @@ class UsersSeeder extends Seeder
                 'email' => 'AdministrateurSystem@demo.com',
                 'password' => Hash::make('demo'),
                 'email_verified_at' => now(),
+                'zone_id' => Zone::inRandomOrder()->first()->id,
             ]);
 
             User::create([
                 'name'  => 'Administrateur',
-                'email' => 'Administrateur@demo.com',
+                'email' => 'administrateur@demo.com',
                 'password' => Hash::make('demo'),
                 'email_verified_at' => now(),
+                'zone_id' => Zone::inRandomOrder()->first()->id,
             ]);
 
             User::create([
@@ -36,6 +39,7 @@ class UsersSeeder extends Seeder
                 'email' => 'Ordonateur@demo.com',
                 'password' => Hash::make('demo'),
                 'email_verified_at' => now(),
+                'zone_id' => Zone::inRandomOrder()->first()->id,
             ]);
 
             User::create([
@@ -43,6 +47,7 @@ class UsersSeeder extends Seeder
                 'email' => 'AgentParDelegation@demo.com',
                 'password' => Hash::make('demo'),
                 'email_verified_at' => now(),
+                'zone_id' => Zone::inRandomOrder()->first()->id,
             ]);
 
             User::create([
@@ -50,6 +55,7 @@ class UsersSeeder extends Seeder
                 'email' => 'AgentAssiette@demo.com',
                 'password' => Hash::make('demo'),
                 'email_verified_at' => now(),
+                'zone_id' => Zone::inRandomOrder()->first()->id,
             ]);
 
             User::create([
@@ -57,6 +63,7 @@ class UsersSeeder extends Seeder
                 'email' => 'Regisseur@demo.com',
                 'password' => Hash::make('demo'),
                 'email_verified_at' => now(),
+                'zone_id' => Zone::inRandomOrder()->first()->id,
             ]);
 
             User::create([
@@ -64,6 +71,7 @@ class UsersSeeder extends Seeder
                 'email' => 'AgentDeRecouvrement@demo.com',
                 'password' => Hash::make('demo'),
                 'email_verified_at' => now(),
+                'zone_id' => Zone::inRandomOrder()->first()->id,
                 'longitude' => json_encode([6.145761, 6.148153, 6.142344]),
                 'latitude' => json_encode([1.204888, 1.209127, 1.207924]),
             ]);
@@ -73,6 +81,7 @@ class UsersSeeder extends Seeder
                 'email' => 'Collecteur@demo.com',
                 'password' => Hash::make('demo'),
                 'email_verified_at' => now(),
+                'zone_id' => Zone::inRandomOrder()->first()->id,
                 'longitude' => json_encode([6.145761, 6.148153, 6.142344]),
                 'latitude' => json_encode([1.204888, 1.209127, 1.207924]),
             ]);
@@ -82,6 +91,7 @@ class UsersSeeder extends Seeder
                 'email' => 'AgentDelegationReceveur@demo.com',
                 'password' => Hash::make('demo'),
                 'email_verified_at' => now(),
+                'zone_id' => Zone::inRandomOrder()->first()->id,
                 'longitude' => json_encode([6.145761, 6.148153, 6.142344]),
                 'latitude' => json_encode([1.204888, 1.209127, 1.207924]),
             ]);
@@ -93,6 +103,7 @@ class UsersSeeder extends Seeder
                 'email_verified_at' => now(),
                 'longitude' => json_encode([6.145761, 6.148153, 6.142344]),
                 'latitude' => json_encode([1.204888, 1.209127, 1.207924]),
+                'zone_id' => Zone::inRandomOrder()->first()->id,
             ]);
         }
     }

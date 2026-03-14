@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\AccountantDeposit;
+
 use App\Enums\InvoiceStatusEnums;
 use App\Enums\PaymentStatusEnums;
 use App\Helpers\Constants;
@@ -12,9 +14,11 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\InvoiceAccepted;
 use Illuminate\Support\Facades\Notification;
+
 class AddRefnoForm extends Component
 {
     use DispatchesMessages;
+
     public $refno;
     public $edit_mode = false;
     protected $rules = [
@@ -34,23 +38,27 @@ class AddRefnoForm extends Component
         $this->validate();
         $user = auth()->user();
         if (!$user->hasRole('regisseur')) {
-            $this->dispatchMessage('Quitance de paiement', 'update', 'error',"Action non authorize");
+            $this->dispatchMessage('Quitance de paiement', 'update', 'error', "Action non authorize");
             $this->reset();
             abort(403, 'Accès interdit');
             return;
         }
-        DB::transaction(function () {
-            $payments_olds = Payment::where('status', PaymentStatusEnums::DONE)->where('status', PaymentStatusEnums::CANCELED)->where('reference_deposit', null)->get();
-            $payments_olds = Payment::where(function ($query) {
-                $query->where('status', PaymentStatusEnums::DONE)->orWhere('status', PaymentStatusEnums::CANCELED);
-            })->where('reference_deposit', null)->get();
-            foreach ($payments_olds as $payments_old) {
-                $payments_old->reference_deposit = $this->refno;
-                $payments_old->save();
-            }
-        });
-        $this->reset();
-        $this->dispatchMessage('Numéro de quitance', 'update');
+        try {
+            DB::transaction(function () {
+                $payments_olds = Payment::where('status', PaymentStatusEnums::DONE)->where('status', PaymentStatusEnums::CANCELED)->where('reference_deposit', null)->get();
+                $payments_olds = Payment::where(function ($query) {
+                    $query->where('status', PaymentStatusEnums::DONE)->orWhere('status', PaymentStatusEnums::CANCELED);
+                })->where('reference_deposit', null)->get();
+                foreach ($payments_olds as $payments_old) {
+                    $payments_old->reference_deposit = $this->refno;
+                    $payments_old->save();
+                }
+            });
+            $this->reset();
+            $this->dispatchMessage('Numéro de quitance', 'update');
+        }catch (\Exception $e) {
+            $this->dispatchMessage('Quitance de paiement', 'update', 'error', "Action non enregistrer");
+        }
     }
     public function hydrate()
     {

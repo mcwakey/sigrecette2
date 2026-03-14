@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Livewire\User;
+
 use App\Helpers\Constants;
 use App\Models\User;
 use App\Models\Zone;
@@ -11,9 +13,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+
 class AddUserCollectorModal extends Component
 {
     use WithFileUploads;
+
     public $user_id;
     public $name;
     public $role;
@@ -36,7 +40,7 @@ class AddUserCollectorModal extends Component
     }
     public function submit()
     {
-        $role = Role::where('name', "=",'collecteur')->first();
+        $role = Role::where('name', "=", 'collecteur')->first();
         if ($role) {
             $this->role = $role->name;
         }
@@ -47,41 +51,44 @@ class AddUserCollectorModal extends Component
             $this->zone_id = null;
         }
         $this->validate();
-        DB::transaction(function () {
-            $data = [
-                'name' => $this->name,
-            ];
-            $data['zone_id'] = $this->zone_id;
-            //edit to add collector
-            if (!$this->edit_mode && !Gate::forUser(auth()->user())->allows('create-collector', User::class)) {
-                $this->dispatch('error', Constants::NOT_PERMISSION_TO_PERFORM_ACTION);
-                return false;
-            }
-            //edit to add collector
-            $user = User::find($this->user_id) ?? User::create($data);
-            if ($this->edit_mode && Gate::forUser(auth()->user())->allows('update-collector', $user)) {
-                foreach ($data as $k => $v) {
-                    $user->$k = $v;
+        try {
+            DB::transaction(function () {
+                $data = [
+                    'name' => $this->name,
+                ];
+                $data['zone_id'] = $this->zone_id;
+                //edit to add collector
+                if (!$this->edit_mode && !Gate::forUser(auth()->user())->allows('create-collector', User::class)) {
+                    $this->dispatch('error', Constants::NOT_PERMISSION_TO_PERFORM_ACTION);
+                    return false;
                 }
-                $user->save();
-            } elseif ($this->edit_mode) {
-                $this->dispatch('error', Constants::NOT_PERMISSION_TO_PERFORM_ACTION);
-                return false;
-            }
-            if ($this->edit_mode) {
-                // Assign selected role for user
-                $user->syncRoles($this->role);
-                // Emit a success event with a message
-                $this->dispatch('success', __('Collecteur mis a jour avec succès'));
-            } else {
-                // Assign selected role for user
-                $user->assignRole($this->role);
-                // Emit a success event with a message
-                $this->dispatch('success', __('Collecteur créer avec succès'));
-            }
-        });
-        // Reset the form fields after successful submission
-        $this->reset();
+                //edit to add collector
+                $user = User::find($this->user_id) ?? User::create($data);
+                if ($this->edit_mode && Gate::forUser(auth()->user())->allows('update-collector', $user)) {
+                    foreach ($data as $k => $v) {
+                        $user->$k = $v;
+                    }
+                    $user->save();
+                } elseif ($this->edit_mode) {
+                    $this->dispatch('error', Constants::NOT_PERMISSION_TO_PERFORM_ACTION);
+                    return false;
+                }
+                if ($this->edit_mode) {
+                    // Assign selected role for user
+                    $user->syncRoles($this->role);
+                    // Emit a success event with a message
+                    $this->dispatch('success', __('Collecteur mis a jour avec succès'));
+                } else {
+                    // Assign selected role for user
+                    $user->assignRole($this->role);
+                    // Emit a success event with a message
+                    $this->dispatch('success', __('Collecteur créer avec succès'));
+                }
+            });
+            // Reset the form fields after successful submission
+            $this->reset();
+        }catch (\Exception $e) {}
+
     }
     public function deleteUser($id)
     {
@@ -103,12 +110,15 @@ class AddUserCollectorModal extends Component
     }
     public function updateUser($id)
     {
-        $this->edit_mode = true;
-        $user = User::find($id);
-        $this->user_id = $user->id;
-        $this->zone_id = $user->zone_id;
-        $this->name = $user->name;
-        $this->role = $user->roles?->first()->name ?? '';
+        try {
+            $this->edit_mode = true;
+            $user = User::find($id);
+            $this->user_id = $user->id;
+            $this->zone_id = $user->zone_id;
+            $this->name = $user->name;
+            $this->role = $user->roles?->first()->name ?? '';
+        }catch (\Exception $e) {}
+
     }
     public function disabeldUser($id)
     {

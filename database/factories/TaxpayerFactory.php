@@ -27,7 +27,7 @@ class TaxpayerFactory extends Factory
             'id_number' => random_int(1000000, 6000000),
             'mobilephone' => fake()->phoneNumber(),
             'telephone' => fake()->phoneNumber(),
-            'longitude' => fake()->randomFloat(10, -180, 180), 
+            'longitude' => fake()->randomFloat(10, -180, 180),
             'latitude' => fake()->randomFloat(10, -180, 180),
             'address' => fake()->streetAddress(),
             //'canton' => fake()->city(),

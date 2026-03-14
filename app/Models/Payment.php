@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Models;
+
 use App\Enums\PaymentStatusEnums;
 use App\Enums\PaymentTypeEnums;
 use App\Helpers\Constants;
@@ -10,10 +12,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Database\Eloquent\Collection;
+
 class Payment extends Model
 {
     use HasFactory;
     use PaymentTrait;
+
     protected $fillable = [
         'amount',
         'payment_type',
@@ -57,7 +61,9 @@ class Payment extends Model
     {
         parent::boot();
         static::creating(function ($payment) {
-            $payment->uuid = Uuid::uuid4()->toString();
+            if (empty($payment->uuid)) {
+                $payment->uuid = Uuid::uuid4()->toString();
+            }
         });
     }
     public static function getSumPaymentByCode($code, Invoice $invoice): int

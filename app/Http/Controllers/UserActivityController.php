@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Cache;
 
 class UserActivityController extends Controller
 {
-    use  HandlesDateFilters;
+    use HandlesDateFilters;
+
     public function index(Request $request)
     {
 
@@ -23,9 +24,11 @@ class UserActivityController extends Controller
         $user_id = $validatedData['user_id'] ?? null;
         $logs_tab = UserLogs::with('user')
             ->when(
-                $user_id, function ($query) use ( $user_id) {
-                $query->OrWhere('user_id', $user_id);
-            })
+                $user_id,
+                function ($query) use ($user_id) {
+                    $query->OrWhere('user_id', $user_id);
+                }
+            )
             ->whereBetween('created_at', [ $this->s_date,$this->e_date])
             ->orderBy('created_at', 'desc')
             ->paginate(15);
@@ -34,7 +37,7 @@ class UserActivityController extends Controller
         $e_date = $this->e_date;
 
        // dd($user_id);
-        $logs = Cache::remember('user_activity_' . $s_date . '_' . $e_date, 60, function () use ( $user_id, $s_date, $e_date) {
+        $logs = Cache::remember('user_activity_' . $s_date . '_' . $e_date, 60, function () use ($user_id, $s_date, $e_date) {
             return UserLogs::selectRaw('
              DATE(user_logs.created_at) as date,
             COUNT(*) as total_requests,
@@ -43,8 +46,8 @@ class UserActivityController extends Controller
         ')
                 ->leftJoin('users', 'users.id', '=', 'user_logs.user_id')
                 ->whereBetween('user_logs.created_at', [$s_date, $e_date])
-                ->when( $user_id, function ($query) use ( $user_id) {
-                    $query->where('user_logs.user_id',"=", $user_id);
+                ->when($user_id, function ($query) use ($user_id) {
+                    $query->where('user_logs.user_id', "=", $user_id);
                 })
                 ->groupBy('date', 'user_id')
                 ->orderBy('date', 'asc')
@@ -53,6 +56,6 @@ class UserActivityController extends Controller
         //dd($logs[0]);
         $groupedLogs = $logs->groupBy('user_id');
 
-        return view('pages/logs.index', compact('groupedLogs', 'logs','logs_tab'));
+        return view('pages/logs.index', compact('groupedLogs', 'logs', 'logs_tab'));
     }
 }

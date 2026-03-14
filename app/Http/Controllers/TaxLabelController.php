@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\DataTables\TaxLabelsDataTable;
 use App\Models\TaxLabel;
 use Illuminate\Http\Request;
+
 class TaxLabelController extends Controller
 {
     /**
