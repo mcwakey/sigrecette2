@@ -26,6 +26,9 @@ class SyncPaymentResource extends JsonResource
             'status' => $this->resource->status,
             'deposit' => $this->resource->deposit,
             'notes' => $this->resource->notes,
+            'provider' => $this->resource->provider,
+            'phone_number' => $this->resource->phone_number,
+            'external_id' => $this->resource->external_id,
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
         ];

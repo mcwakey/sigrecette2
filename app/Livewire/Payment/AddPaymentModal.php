@@ -3,14 +3,18 @@
 namespace App\Livewire\Payment;
 
 use App\Models\Invoice;
+use App\Models\MobilePaymentTransaction;
 use App\Models\Payment;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\Taxpayer;
 use App\Helpers\Constants;
 use App\Enums\PaymentStatusEnums;
+use App\Enums\PaymentTypeEnums;
 use App\Models\User;
 use App\Notifications\InvoicePaid;
+use App\Services\MobilePayment\MobilePaymentService;
+use App\Jobs\VerifyMobilePaymentJob;
 use App\Traits\DispatchesMessages;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
@@ -50,6 +54,13 @@ class AddPaymentModal extends Component
     public $edit_amount = true;
     public $notes;
 
+    // Mobile payment properties
+    public $phone_number;
+    public $provider;
+    public $mobile_transaction_id;
+    public $mobile_payment_status;
+    public $mobile_payment_message;
+
 
     protected function rules()
     {
@@ -66,6 +77,10 @@ class AddPaymentModal extends Component
         ];
         if ($this->code != null) {
             $rules['code'] = Rule::in($this->validCodes);
+        }
+        if ($this->payment_type === PaymentTypeEnums::DIGI) {
+            $rules['phone_number'] = ['required', 'string', 'regex:/^(\+229|00229)?[0-9]{8}$/'];
+            $rules['provider'] = ['required', Rule::in(Constants::MOBILE_PROVIDERS)];
         }
         return $rules;
     }
@@ -112,6 +127,13 @@ class AddPaymentModal extends Component
                 'reference' => 'required',
             ]);
         }
+
+        // Branch for mobile (DIGI) payments
+        if ($this->payment_type === PaymentTypeEnums::DIGI) {
+            $this->submitMobilePayment();
+            return;
+        }
+
         try {
             DB::transaction(function () use ($role, $is_regisseur) {
                 $invoice = Invoice::find($this->invoice_id); //?? Invoice::create($invoice_id);
@@ -170,6 +192,107 @@ class AddPaymentModal extends Component
         }
 
     }
+    public function submitMobilePayment()
+    {
+        try {
+            $invoice = Invoice::find($this->invoice_id);
+            if (!$invoice) {
+                $this->dispatchMessage('Paiment', 'update', 'error', "Avis non retrouvé.");
+                return;
+            }
+
+            if (($this->paid + $this->amount) > $invoice->amount) {
+                $this->dispatchMessage('Paiment', 'update', 'error', "Vous avez saisi des données de paiement incorrectes.");
+                return;
+            }
+
+            $effectiveAmount = $invoice->type == Constants::INVOICE_TYPE_COMPTANT ? $invoice->amount : $this->amount;
+
+            if ($this->code != null && isset($this->paidAndCodeArray[$this->code]) && $effectiveAmount >= $this->paidAndCodeArray[$this->code]['amount']) {
+                $effectiveAmount = $this->paidAndCodeArray[$this->code]['amount'];
+            }
+
+            /** @var MobilePaymentService $service */
+            $service = app(MobilePaymentService::class);
+
+            $transaction = $service->initiate([
+                'invoice_id' => $invoice->id,
+                'taxpayer_id' => ($this->taxpayer_id === "") ? null : $this->taxpayer_id,
+                'amount' => $effectiveAmount,
+                'phone_number' => $this->phone_number,
+                'provider' => $this->provider,
+                'meta' => [
+                    'code' => $this->code,
+                    'invoice_no' => $this->invoice_no,
+                    'order_no' => $this->order_no,
+                    'invoice_type' => $invoice->type,
+                    'notes' => $this->notes,
+                ],
+            ]);
+
+            $this->mobile_transaction_id = $transaction->id;
+
+            if ($transaction->status === 'failed') {
+                $this->mobile_payment_status = 'failed';
+                $this->mobile_payment_message = 'L\'initiation du paiement a échoué. Veuillez réessayer.';
+                return;
+            }
+
+            $this->mobile_payment_status = 'verifying';
+            $this->mobile_payment_message = 'Paiement initié. Veuillez confirmer sur votre téléphone...';
+
+            VerifyMobilePaymentJob::dispatch($transaction);
+
+        } catch (\Throwable $th) {
+            $this->mobile_payment_status = 'failed';
+            $this->mobile_payment_message = 'Erreur lors de l\'initiation du paiement mobile.';
+        }
+    }
+
+    public function checkMobilePaymentStatus()
+    {
+        if (!$this->mobile_transaction_id) {
+            return;
+        }
+
+        $transaction = MobilePaymentTransaction::find($this->mobile_transaction_id);
+
+        if (!$transaction) {
+            $this->mobile_payment_status = 'failed';
+            $this->mobile_payment_message = 'Transaction introuvable.';
+            return;
+        }
+
+        if ($transaction->isSuccess()) {
+            $this->mobile_payment_status = 'success';
+            $this->mobile_payment_message = 'Paiement confirmé avec succès!';
+            $this->dispatch('refreshPayments');
+            return;
+        }
+
+        if ($transaction->isFailed()) {
+            $this->mobile_payment_status = 'failed';
+            $this->mobile_payment_message = 'Le paiement a échoué. Veuillez réessayer.';
+            return;
+        }
+
+        if ($transaction->isExpired()) {
+            $this->mobile_payment_status = 'expired';
+            $this->mobile_payment_message = 'Le délai de paiement a expiré. Veuillez réessayer.';
+            return;
+        }
+
+        $this->mobile_payment_status = 'verifying';
+        $this->mobile_payment_message = 'Vérification en cours... (tentative ' . $transaction->verification_attempts . ')';
+    }
+
+    public function resetMobilePayment()
+    {
+        $this->mobile_transaction_id = null;
+        $this->mobile_payment_status = null;
+        $this->mobile_payment_message = null;
+    }
+
     public function updatePayment($id)
     {
         try {

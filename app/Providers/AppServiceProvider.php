@@ -14,9 +14,12 @@ use App\Models\Year;
 use App\Observers\InvoiceItemObserver;
 use App\Observers\PaymentObserver;
 use App\Services\ExceptionService;
+use App\Services\MobilePayment\MobilePaymentProviderFactory;
+use App\Services\MobilePayment\MobilePaymentService;
 use App\Services\PdfGeneratorService;
 use App\Services\PrintService;
 use App\Services\QrcodeGeneratorService;
+use App\Services\SmsService;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\App;
@@ -44,6 +47,12 @@ class AppServiceProvider extends ServiceProvider
             ExceptionServiceInterface::class,
             fn(Application $app) =>  $app->make(ExceptionService::class)
         );
+
+        $this->app->singleton(MobilePaymentProviderFactory::class);
+        $this->app->singleton(MobilePaymentService::class, fn(Application $app) => new MobilePaymentService(
+            $app->make(MobilePaymentProviderFactory::class),
+        ));
+        $this->app->singleton(SmsService::class);
     }
     /**
      * Bootstrap any application services.

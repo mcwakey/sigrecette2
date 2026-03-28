@@ -59,6 +59,12 @@ class RecoveriesDataTable extends DataTable
             ->editColumn('notes', function (Payment $payment) {
                 return $payment->notes;
             })
+            ->editColumn('provider', function (Payment $payment) {
+                return $payment->provider ? strtoupper($payment->provider) : '';
+            })
+            ->editColumn('phone_number', function (Payment $payment) {
+                return $payment->phone_number ?? '';
+            })
             ->addColumn('action', function (Payment $payment) {
                 return view('pages/recoveries.columns._actions', ['payment' => $payment]);
             })
@@ -129,6 +135,8 @@ class RecoveriesDataTable extends DataTable
             Column::make('users.name')->title(__('user'))->addClass('d-flex align-items-center'),
             Column::make('taxpayer_id')->visible(false),
             Column::make('notes'),
+            Column::make('provider')->title(__('provider'))->visible(false),
+            Column::make('phone_number')->title(__('phone'))->visible(false),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
                 ->exportable(false)

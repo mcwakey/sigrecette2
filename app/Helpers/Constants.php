@@ -23,6 +23,15 @@ class Constants
     public const  ANNULATION = "Annulation";
     public const INVOICE_TYPE_TITRE = "TITRE";
     public const INVOICE_TYPE_COMPTANT = "COMPTANT";
+
+    const PROVIDER_QOSIC = 'qosic';
+    const PROVIDER_FEDAPAY = 'fedapay';
+    const PROVIDER_PAYGATE = 'paygate';
+    const MOBILE_PROVIDERS = [
+        self::PROVIDER_QOSIC,
+        self::PROVIDER_FEDAPAY,
+        self::PROVIDER_PAYGATE,
+    ];
     const CANCELED = "CANCELED";
     const REDUCED = "REDUCED";
     const NOT_PERMISSION_TO_PERFORM_ACTION = "Vous n'avez pas la permission pour effectuer cette action.";

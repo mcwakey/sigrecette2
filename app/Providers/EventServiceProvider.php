@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\MobilePaymentVerified;
+use App\Listeners\HandleMobilePaymentVerified;
 use App\Listeners\InvoiceWorkflowSubscriber;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -18,6 +20,9 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+        MobilePaymentVerified::class => [
+            HandleMobilePaymentVerified::class,
         ],
     ];
     /**

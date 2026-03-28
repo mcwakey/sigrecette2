@@ -7,6 +7,7 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\DB;
 use App\Jobs\SyncExportInvoicesJob;
 use App\Jobs\SyncImportPaymentsJob;
+use App\Jobs\ExpireStaleMobilePaymentsJob;
 
 // Import the DB facade
 
@@ -39,6 +40,10 @@ class Kernel extends ConsoleKernel
 
         $schedule->job(new SyncExportInvoicesJob())->cron(config('sync.export_cron'));
         $schedule->job(new SyncImportPaymentsJob())->cron(config('sync.import_cron'));
+
+        if (config('features.mobile_payment_feature')) {
+            $schedule->job(new ExpireStaleMobilePaymentsJob())->everyFiveMinutes();
+        }
 
         $schedule->call(function () {
             DB::statement('CALL updateTaxpayerTaxables()');

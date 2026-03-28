@@ -205,6 +205,54 @@
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>
+
+                        {{-- Mobile payment fields (visible when DIGI is selected) --}}
+                        @if($payment_type === App\Enums\PaymentTypeEnums::DIGI)
+                        <div class="row mb-5">
+                            <div class="col-md-6">
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('Fournisseur') }}</label>
+                                <select wire:model="provider" name="provider" class="form-select" data-dropdown-parent="#kt_modal_add_payment">
+                                    <option value="">Selectionner un fournisseur</option>
+                                    <option value="{{ App\Helpers\Constants::PROVIDER_QOSIC }}">QOSIC (MTN/Moov)</option>
+                                    <option value="{{ App\Helpers\Constants::PROVIDER_FEDAPAY }}">FedaPay</option>
+                                    <option value="{{ App\Helpers\Constants::PROVIDER_PAYGATE }}">PayGate</option>
+                                </select>
+                                @error('provider')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('Numéro de téléphone') }}</label>
+                                <input wire:model="phone_number" name="phone_number" class="form-control mb-2" type="tel" placeholder="+22990000000" />
+                                @error('phone_number')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
+                        @endif
+
+                        {{-- Mobile payment status feedback --}}
+                        @if($mobile_payment_status)
+                        <div class="row mb-5" @if($mobile_payment_status === 'verifying') wire:poll.3s="checkMobilePaymentStatus" @endif>
+                            @if($mobile_payment_status === 'verifying')
+                            <div class="notice d-flex bg-light-info rounded border-info border border-dashed p-4">
+                                <div class="d-flex align-items-center">
+                                    <span class="spinner-border spinner-border-sm text-info me-3"></span>
+                                    <span class="text-info fw-semibold">{{ $mobile_payment_message }}</span>
+                                </div>
+                            </div>
+                            @elseif($mobile_payment_status === 'success')
+                            <div class="notice d-flex bg-light-success rounded border-success border border-dashed p-4">
+                                <span class="text-success fw-semibold">{!! getIcon('check-circle', 'fs-3 text-success me-2') !!} {{ $mobile_payment_message }}</span>
+                            </div>
+                            @elseif($mobile_payment_status === 'failed' || $mobile_payment_status === 'expired')
+                            <div class="notice d-flex bg-light-danger rounded border-danger border border-dashed p-4">
+                                <div class="d-flex flex-column">
+                                    <span class="text-danger fw-semibold">{{ $mobile_payment_message }}</span>
+                                    <button type="button" wire:click="resetMobilePayment" class="btn btn-sm btn-light-danger mt-2 w-auto">Réessayer</button>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                        @endif
                         <div class="mb-0">
                             <label class="form-label fs-6 fw-bolder text-gray-700">Notes</label>
                             <textarea  wire:model="notes" name="description"  class="form-control" rows="2" placeholder=""></textarea>
@@ -217,6 +265,7 @@
                     <!--begin::Actions-->
                     <div class="text-center pt-15">
                         <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal" aria-label="Close" wire:loading.attr="disabled">{{ __('cancel') }}</button>
+                        @if(!$mobile_payment_status || $mobile_payment_status === 'failed' || $mobile_payment_status === 'expired')
                         <button type="submit" class="btn btn-success" data-kt-payments-modal-action="submit">
                             <span class="indicator-label" wire:loading.remove>{{ __('submit') }}</span>
                             <span class="indicator-progress" wire:loading wire:target="submit">
@@ -224,6 +273,7 @@
                                 <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                             </span>
                         </button>
+                        @endif
                     </div>
                     <!--end::Actions-->
                 </form>

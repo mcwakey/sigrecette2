@@ -34,7 +34,18 @@ class Payment extends Model
         'code',
         'deposit',
         'invoice_type',
-        'notes'
+        'notes',
+        'provider',
+        'phone_number',
+        'external_id',
+        'verification_attempts',
+        'last_checked_at',
+        'expires_at',
+    ];
+
+    protected $casts = [
+        'last_checked_at' => 'datetime',
+        'expires_at' => 'datetime',
     ];
 
     public function invoice()
@@ -91,5 +102,10 @@ class Payment extends Model
     public function tax_label()
     {
         return $this->belongsTo(TaxLabel::class, 'code', 'code');
+    }
+
+    public function mobilePaymentTransaction()
+    {
+        return $this->hasOne(MobilePaymentTransaction::class);
     }
 }
