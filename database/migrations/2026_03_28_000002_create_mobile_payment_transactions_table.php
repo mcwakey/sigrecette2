@@ -22,8 +22,8 @@ return new class extends Migration
             $table->timestamp('last_checked_at')->nullable();
             $table->timestamp('verified_at')->nullable();
             $table->timestamp('expires_at')->nullable();
-            $table->json('provider_response')->nullable();
-            $table->json('meta')->nullable();
+            $table->longText('provider_response')->nullable();
+            $table->longText('meta')->nullable();
             $table->foreignId('user_id')->nullable()->constrained();
             $table->timestamps();
 

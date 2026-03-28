@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('provider')->nullable();
             $table->string('status')->default('pending');
             $table->string('external_id')->nullable();
-            $table->json('meta')->nullable();
+            $table->longText('meta')->nullable();
             $table->morphs('loggable');
             $table->timestamps();
         });

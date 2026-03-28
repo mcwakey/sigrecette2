@@ -194,7 +194,7 @@ php artisan storage:link
 ```
 Puis veillez creer un adminstrateur system avec cette commande
 ```bash
-php artisan app:create-system-admin username youremail@forfonfig.com password
+php artisan app:create-system-admin username admin@sigrecette.com password
 ```
 Puis veillez vous loger puis charger le fichers des contribuables si disponible et
 verifier si tout fonction puis créer le compte de

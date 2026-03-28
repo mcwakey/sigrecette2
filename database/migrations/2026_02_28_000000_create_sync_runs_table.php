@@ -19,8 +19,8 @@ return new class extends Migration
             $table->unsignedInteger('succeeded')->default(0);
             $table->unsignedInteger('failed')->default(0);
             $table->string('cursor')->nullable();
-            $table->json('error_sample')->nullable();
-            $table->json('meta')->nullable();
+            $table->longText('error_sample')->nullable();
+            $table->longText('meta')->nullable();
             $table->timestamps();
             $table->index(['direction', 'entity', 'status']);
         });
