@@ -235,7 +235,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('Numéro de téléphone') }}</label>
-                                <input wire:model="phone_number" name="phone_number" class="form-control mb-2" type="tel" placeholder="+22990000000" />
+                                <input wire:model="phone_number" name="phone_number" class="form-control mb-2" type="tel" placeholder="900000" />
                                 @error('phone_number')
                                 <span class="text-danger">{{ $message }}</span> @enderror
                             </div>

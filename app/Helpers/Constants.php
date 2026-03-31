@@ -33,7 +33,7 @@ class Constants
         self::PROVIDER_PAYGATE,
     ];
 
-    const NETWORK_TMONEY = 'MONEY';
+    const NETWORK_TMONEY = 'TMONEY';
     const NETWORK_FLOOZ = 'FLOOZ';
     const MOBILE_NETWORKS = [
         self::NETWORK_TMONEY,
