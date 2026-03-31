@@ -15,7 +15,7 @@ class QosicProvider implements MobilePaymentProviderInterface
         try {
             $response = Http::withBasicAuth($config['username'], $config['password'])
                 ->timeout($config['timeout'])
-                ->post($config['base_url'] . '/QosicBridge/user/requestpayment', [
+                ->post($config['base_url'] . '/QosicBridge/tm/v1/requestpayment', [
                     'msisdn' => $data['phone_number'],
                     'amount' => $data['amount'],
                     'firstname' => 'SIG',
@@ -53,7 +53,7 @@ class QosicProvider implements MobilePaymentProviderInterface
         try {
             $response = Http::withBasicAuth($config['username'], $config['password'])
                 ->timeout($config['timeout'])
-                ->post($config['base_url'] . '/QosicBridge/user/gettransactionstatus', [
+                ->post($config['base_url'] . '/QosicBridge/tm/v1/gettransactionstatus', [
                     'transref' => $reference,
                 ]);
 

@@ -18,7 +18,7 @@ class InitiateMobilePaymentRequest extends FormRequest
         return [
             'invoice_id' => ['required', 'exists:invoices,id'],
             'amount' => ['required', 'numeric', 'min:1'],
-            'phone_number' => ['required', 'string', 'regex:/^(\+229|00229)?[0-9]{8}$/'],
+            'phone_number' => ['required', 'string', 'regex:/^(\+228|00228)?[0-9]{8}$/'],
             'provider' => ['required', Rule::in(Constants::MOBILE_PROVIDERS)],
             'code' => ['nullable', 'string'],
         ];
