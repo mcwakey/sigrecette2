@@ -250,7 +250,13 @@
                             <div class="notice d-flex bg-light-danger rounded border-danger border border-dashed p-4">
                                 <div class="d-flex flex-column">
                                     <span class="text-danger fw-semibold">{{ $mobile_payment_message }}</span>
-                                    <button type="button" wire:click="resetMobilePayment" class="btn btn-sm btn-light-danger mt-2 w-auto">Réessayer</button>
+                                    <div class="d-flex gap-2 mt-2">
+                                        <button type="button" wire:click="retryVerification" class="btn btn-sm btn-light-warning w-auto">
+                                            <span wire:loading.remove wire:target="retryVerification">{!! getIcon('arrows-circle', 'fs-4 me-1') !!} Relancer la vérification</span>
+                                            <span wire:loading wire:target="retryVerification">Vérification... <span class="spinner-border spinner-border-sm"></span></span>
+                                        </button>
+                                        <button type="button" wire:click="resetMobilePayment" class="btn btn-sm btn-light-danger w-auto">Nouveau paiement</button>
+                                    </div>
                                 </div>
                             </div>
                             @endif

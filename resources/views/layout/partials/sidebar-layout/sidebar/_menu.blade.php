@@ -333,6 +333,17 @@
                             </a>
                             <!--end:Menu link-->
                         </div>
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->routeIs('mobile-payments.*') ? 'active' : '' }}"
+                               href="{{ App\Helpers\Constants::checkUrl( route('mobile-payments.index')) }}">
+								<span class="menu-bullet">
+									<span class="bullet bullet-dot"></span>
+								</span>
+                                <span class="menu-title">Paiements mobiles</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
                     </div>
                     <!--end:Menu sub-->
                 </div>

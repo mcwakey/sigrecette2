@@ -12,6 +12,7 @@ use App\Http\Controllers\EreasController;
 use App\Http\Controllers\PrintController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\RecoveryController;
+use App\Http\Controllers\MobilePaymentController;
 use App\Http\Controllers\TaxableController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\YearsController;
@@ -73,6 +74,8 @@ Route::middleware(['throttle:global'])->group(function () {
         ]);
 
         Route::resource('/recoveries', RecoveryController::class);
+
+        Route::get('/mobile-payments', [MobilePaymentController::class, 'index'])->name('mobile-payments.index');
 
         Route::name('geolocation.')->group(function () {
             Route::get('/geolocation/taxpayers', [Geolocation::class, 'zones'])->name('taxpayers');

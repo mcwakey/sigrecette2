@@ -320,6 +320,50 @@ class AddPaymentModal extends Component
         $this->mobile_payment_message = null;
     }
 
+    public function retryVerification()
+    {
+        if (!$this->mobile_transaction_id) {
+            $this->mobile_payment_status = 'failed';
+            $this->mobile_payment_message = 'Aucune transaction à vérifier.';
+            return;
+        }
+
+        $transaction = MobilePaymentTransaction::find($this->mobile_transaction_id);
+        if (!$transaction) {
+            $this->mobile_payment_status = 'failed';
+            $this->mobile_payment_message = 'Transaction introuvable.';
+            return;
+        }
+
+        Log::channel('daily')->info('Mobile payment: manual retry verification', [
+            'transaction_id' => $transaction->id,
+            'reference' => $transaction->reference,
+            'current_status' => $transaction->status,
+        ]);
+
+        /** @var MobilePaymentService $service */
+        $service = app(MobilePaymentService::class);
+        $result = $service->verifyWithProvider($transaction);
+
+        Log::channel('daily')->info('Mobile payment: retry verification result', [
+            'transaction_id' => $transaction->id,
+            'result' => $result,
+        ]);
+
+        if ($result === 'success') {
+            $this->mobile_payment_status = 'success';
+            $this->mobile_payment_message = 'Paiement confirmé avec succès!';
+            $this->dispatch('refreshPayments');
+        } elseif ($result === 'failed') {
+            $this->mobile_payment_status = 'failed';
+            $this->mobile_payment_message = 'Le paiement a échoué après vérification.';
+        } else {
+            $this->mobile_payment_status = 'verifying';
+            $this->mobile_payment_message = 'Vérification relancée. En attente de confirmation...';
+            VerifyMobilePaymentJob::dispatch($transaction->fresh());
+        }
+    }
+
     public function updatePayment($id)
     {
         try {

@@ -159,3 +159,7 @@ Breadcrumbs::for('recoveries.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
     $trail->push(__('recoveries'), route('recoveries.index'));
 });
+Breadcrumbs::for('mobile-payments.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Paiements mobiles', route('mobile-payments.index'));
+});
