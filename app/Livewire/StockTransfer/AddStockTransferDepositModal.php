@@ -375,7 +375,7 @@ class AddStockTransferDepositModal extends Component
                                 'code' => $this->code,
                                 'invoice_type' => Constants::INVOICE_TYPE_COMPTANT,
                                 'payment_type' => 'CASH',
-                                'status' => PaymentStatusEnums::ACCOUNTED,
+                                'status' => PaymentStatusEnums::ACCOUNTED->value,
                                 'description' => "Etat de versement collecteur " . User::find($this->collector_id)?->name,
                                 'user_id' => $this->user_id,
                                 'r_user_id' => $this->collector_id,

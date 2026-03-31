@@ -1,5 +1,5 @@
 @php
-   $count_tapyers_with_gender = $stats_reactive[ \App\Enums\StatisticKeysEnums::BY_GENDER];
+   $count_tapyers_with_gender = $stats_reactive[ \App\Enums\StatisticKeysEnums::BY_GENDER->value];
 @endphp
 <div class="card card-flush h-xl-100">
     <!--begin::Header-->

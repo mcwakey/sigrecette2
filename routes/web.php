@@ -71,7 +71,7 @@ Route::middleware(['throttle:global'])->group(function () {
 
         Route::resource('/taxpayers', TaxpayerController::class);
         Route::resource('/invoices', InvoiceController::class)->parameters([
-        ]);
+        ])->except(['create', 'store', 'edit', 'update', 'destroy']);
 
         Route::resource('/recoveries', RecoveryController::class);
 
@@ -86,7 +86,8 @@ Route::middleware(['throttle:global'])->group(function () {
 
         Route::name('invoicing.')->group(function () {
             Route::resource('invoicing/taxpayers', TaxpayerController::class);
-            Route::resource('invoicing/invoices', InvoiceController::class);
+            Route::resource('invoicing/invoices', InvoiceController::class)
+                ->except(['create', 'store', 'edit', 'update', 'destroy']);
         });
 
         Route::name('ticket.')->group(function () {

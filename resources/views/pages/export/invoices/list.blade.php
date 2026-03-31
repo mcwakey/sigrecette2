@@ -133,19 +133,19 @@
                             <label class="fs-6 form-label fw-bold text-dark">{{ __('aproval') }}</label>
                             <select class="form-select" id="mySearchTen">
                                 <option value=""></option>
-                                <option value="{{App\Enums\InvoiceStatusEnums::APPROVED}}">{{ __('APROVED') }}</option>
+                                <option value="{{App\Enums\InvoiceStatusEnums::APPROVED->value}}">{{ __('APROVED') }}</option>
                                 <option
-                                    value="{{ App\Enums\InvoiceStatusEnums::REJECTED }}">{{ __('REJECTED') }}</option>
+                                    value="{{ App\Enums\InvoiceStatusEnums::REJECTED->value }}">{{ __('REJECTED') }}</option>
                                 <option
-                                    value="{{  App\Enums\InvoiceStatusEnums::CANCELED }}">{{ __('CANCELED') }}</option>
+                                    value="{{  App\Enums\InvoiceStatusEnums::CANCELED->value }}">{{ __('CANCELED') }}</option>
                                 <option
-                                    value="{{  App\Enums\InvoiceStatusEnums::REDUCED }}">{{ __('REDUCED') }}</option>
+                                    value="{{  App\Enums\InvoiceStatusEnums::REDUCED->value }}">{{ __('REDUCED') }}</option>
                                 <option
-                                    value="{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}">{{ __("AVIS D'ANNULATION/REDUCTION") }}</option>
-                                <option value="{{ App\Enums\InvoiceStatusEnums::PENDING}}">{{ __('PENDING') }}</option>
+                                    value="{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION->value}}">{{ __("AVIS D'ANNULATION/REDUCTION") }}</option>
+                                <option value="{{ App\Enums\InvoiceStatusEnums::PENDING->value}}">{{ __('PENDING') }}</option>
                                 <option
-                                    value="{{ App\Enums\InvoiceStatusEnums::ACCEPTED}}">{{ __('ACCEPTED') }}</option>
-                                <option value="{{ App\Enums\InvoiceStatusEnums::DRAFT}}">{{ __('DRAFT') }}</option>
+                                    value="{{ App\Enums\InvoiceStatusEnums::ACCEPTED->value}}">{{ __('ACCEPTED') }}</option>
+                                <option value="{{ App\Enums\InvoiceStatusEnums::DRAFT->value}}">{{ __('DRAFT') }}</option>
                             </select>
                         </div>
 

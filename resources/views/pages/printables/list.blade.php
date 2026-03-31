@@ -24,10 +24,10 @@
                     <div class="d-flex align-items-center ms-5">
                         <select class="form-select" id="mySearchThree">
                             <option value="">{{ __("Type de fichers d'impression") }}</option>
-                            <option value="{{App\Enums\PrintNameEnums::BORDEREAU}}">{{App\Enums\PrintNameEnums::BORDEREAU}}</option>
-                            <option value="{{App\Enums\PrintNameEnums::BORDEREAU_REDUCTION}}">{{App\Enums\PrintNameEnums::BORDEREAU_REDUCTION}}</option>
-                            <option value="{{App\Enums\PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS}}">{{App\Enums\PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS}}</option>
-                            <option value="{{App\Enums\PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES}}">{{App\Enums\PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES}}</option>
+                            <option value="{{App\Enums\PrintNameEnums::BORDEREAU->value}}">{{App\Enums\PrintNameEnums::BORDEREAU->value}}</option>
+                            <option value="{{App\Enums\PrintNameEnums::BORDEREAU_REDUCTION->value}}">{{App\Enums\PrintNameEnums::BORDEREAU_REDUCTION->value}}</option>
+                            <option value="{{App\Enums\PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS->value}}">{{App\Enums\PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS->value}}</option>
+                            <option value="{{App\Enums\PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES->value}}">{{App\Enums\PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES->value}}</option>
 
 
                         </select>

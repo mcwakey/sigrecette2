@@ -2,9 +2,9 @@
 
 namespace App\Enums;
 
-class PaymentTypeEnums
+enum PaymentTypeEnums: string
 {
-    public const CASH = 'CASH';
-    public const  CHEQUE = 'CHEQUE';
-    public const  DIGI = "DIGI";
+    case CASH = 'CASH';
+    case CHEQUE = 'CHEQUE';
+    case DIGI = 'DIGI';
 }

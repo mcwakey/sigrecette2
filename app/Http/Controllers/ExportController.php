@@ -48,7 +48,7 @@ class ExportController extends Controller
         ]);
         $export_type = isset($validatedData['export_type']) ? Constants::EXPORT_VALIDATION_MAP[$validatedData['export_type']] : null;
         $tax_labels = TaxLabel::all();
-        if ($export_type == ExportTypeEnums::TAXPAYER) {
+        if ($export_type == ExportTypeEnums::TAXPAYER->value) {
             $disable = $validatedData['disable'] ?? null;
             $state = $validatedData['state'] ?? null;
             $zones = Zone::all();
@@ -66,7 +66,7 @@ class ExportController extends Controller
                     'endDate' => $this->e_date == $default_range['e_date'] ? null : $this->e_date,
                 ]
             )->render('pages/export.taxpayers.list', ['zones' => $zones, 'categories' => $categories, 'towns' => $towns, 'cantons' => $cantons, 'activities' => $activities]);
-        } elseif ($export_type == ExportTypeEnums::INVOICE) {
+        } elseif ($export_type == ExportTypeEnums::INVOICE->value) {
             $zones = Zone::all();
             return $exportInvoicesDataTable->with(
                 [
@@ -74,14 +74,14 @@ class ExportController extends Controller
                     'endDate' => $this->e_date,
                 ]
             )->render('pages/export.invoices.list', ['zones' => $zones, 'tax_labels' => $tax_labels]);
-        } elseif ($export_type == ExportTypeEnums::TAXPAYER_TAXABLE) {
+        } elseif ($export_type == ExportTypeEnums::TAXPAYER_TAXABLE->value) {
             return $exportTaxpayerTaxablesDataTable->with(
                 [
                     'startDate' => $this->s_date,
                     'endDate' => $this->e_date,
                 ]
             )->render('pages/export.taxpayer_taxables.list', []);
-        } elseif ($export_type == ExportTypeEnums::TAXABLE) {
+        } elseif ($export_type == ExportTypeEnums::TAXABLE->value) {
             return $exportTaxablesDataTable->with(
                 [
                     'startDate' => $this->s_date,

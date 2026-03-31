@@ -2,11 +2,11 @@
 
 namespace App\Enums;
 
-class ExportTypeEnums
+enum ExportTypeEnums: string
 {
-    public const INVOICE = "INVOICE";
-    public const PAYMENT = "PAYMENT";
-    public const TAXPAYER = "TAXPAYER";
-    const TAXPAYER_TAXABLE = 'TaxPayerTaxable';
-    const TAXABLE = "Taxable";
+    case INVOICE = 'INVOICE';
+    case PAYMENT = 'PAYMENT';
+    case TAXPAYER = 'TAXPAYER';
+    case TAXPAYER_TAXABLE = 'TaxPayerTaxable';
+    case TAXABLE = 'Taxable';
 }

@@ -5,12 +5,12 @@
         <!--begin::Label-->
 
         <label class="required fw-semibold fs-6 mb-2">{{ __('status') }}</label>
-        @if ($status == App\Enums\TaxpayerStateEnums::PENDING)
+        @if ($status == App\Enums\TaxpayerStateEnums::PENDING->value)
             <select class="form-select form-select-solid" wire:model="status" name="status"
                     data-placeholder="Select option" data-allow-clear="true">
                 <option>{{ __('select an option') }}</option>
-                <option value="{{App\Enums\TaxpayerStateEnums::APPROVED}}">{{ __('valider') }}</option>
-                <option value="{{App\Enums\TaxpayerStateEnums::REJECTED}}">{{ __('rejeter') }}</option>
+                <option value="{{App\Enums\TaxpayerStateEnums::APPROVED->value}}">{{ __('valider') }}</option>
+                <option value="{{App\Enums\TaxpayerStateEnums::REJECTED->value}}">{{ __('rejeter') }}</option>
             </select>
         @endif
         @error('status')

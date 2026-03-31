@@ -55,7 +55,7 @@ class PrintService implements PrintServiceInterface
 
     private function generateBordereauListPdf($action, $data,$pdfGenerator): array
     {
-        LongPrintTaskJob::dispatch(PrintNameEnums::BORDEREAU,$data, $action,auth()->user());
+        LongPrintTaskJob::dispatch(PrintNameEnums::BORDEREAU->value,$data, $action,auth()->user());
 //        if ($data instanceof PrintFile) {
 //            $result= $pdfGenerator->generateBordereauListPdf('invoices-list', $action, $data);
 //        } else {

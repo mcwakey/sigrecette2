@@ -28,6 +28,7 @@ class InvoiceController extends Controller
      */
     public function index(Request $request, InvoicesDataTable $dataTable)
     {
+        $this->authorize('viewAny', Invoice::class);
         $this->handleDateFilters($request);
         $validatedData = $request->validate([
             'delivery' => ['nullable', 'string', Rule::in(Constants::INVOICE_DELIVERY_STATE_VALIDATION_MAP)],
@@ -44,21 +45,21 @@ class InvoiceController extends Controller
         $delivery = isset($validatedData['delivery']) ? $validatedData['delivery'] : null;
         $startInvoiceId = $validatedData['startInvoiceId'] ?? null;
         $endInvoiceId = $validatedData['endInvoiceId'] ?? null;
-        $zones = Zone::all();
-        $tax_labels = TaxLabel::all();
-        $role = Role::where('name', "=", 'agent_recouvrement')->first();
-        $agent_recouvrements = $role->users()->get();
+        $zones = cache()->remember('zones.all', 3600, fn() => Zone::all());
+        $tax_labels = cache()->remember('tax_labels.all', 3600, fn() => TaxLabel::all());
+        $role = cache()->remember('role.agent_recouvrement', 3600, fn() => Role::where('name', '=', 'agent_recouvrement')->first());
+        $agent_recouvrements = $role?->users()->get() ?? collect();
         $invoice_id = isset($validatedData['invoice_id']) ? $validatedData['invoice_id'] : null;
 
 
         if ($invoice_id) {
             $invoice = Invoice::find($invoice_id);
             if ($invoice) {
-                if ($invoice->status == InvoiceStatusEnums::PENDING) {
+                if ($invoice->status == InvoiceStatusEnums::PENDING->value) {
                     return redirect()->route('invoices.index', ['state' => Constants::INVOICE_STATE_DRAFT_KEY, 'type' => Constants::INVOICE_TYPE_TITRE_KEY]);
-                } elseif ($invoice->status == InvoiceStatusEnums::ACCEPTED) {
+                } elseif ($invoice->status == InvoiceStatusEnums::ACCEPTED->value) {
                     return redirect()->route('invoices.index', ['state' => Constants::INVOICE_STATE_ACCEPTED_KEY, 'type' => Constants::INVOICE_TYPE_TITRE_KEY]);
-                } elseif ($invoice->status == InvoiceStatusEnums::PENDING) {
+                } elseif ($invoice->status == InvoiceStatusEnums::PENDING->value) {
                     return redirect()->route('invoices.index', ['state' => Constants::INVOICE_STATE_PENDING_KEY, 'type' => Constants::INVOICE_TYPE_TITRE_KEY]);
                 }
             }
@@ -95,6 +96,7 @@ class InvoiceController extends Controller
      */
     public function show(Invoice $invoice, QrcodeGeneratorService $qrcodeGeneratorService)
     {
+        $this->authorize('view', $invoice);
         return view('exports/invoices', [
             'data' => $invoice,
             'action' => 1, "commune" => Commune::first(),

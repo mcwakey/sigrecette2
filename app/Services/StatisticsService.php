@@ -38,8 +38,8 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
         $query = Taxpayer::where('type', '=', Constants::TITRE)
             ->where(function ($q) {
                 $q->whereNotIn('taxpayers.from_mobile_and_validate_state', [
-                    TaxpayerStateEnums::REJECTED,
-                    TaxpayerStateEnums::PENDING
+                    TaxpayerStateEnums::REJECTED->value,
+                    TaxpayerStateEnums::PENDING->value
                 ])->orWhereNull('taxpayers.from_mobile_and_validate_state');
             });
 
@@ -59,7 +59,7 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     {
         $baseQuery = $this->getTaxpayerQuery(false);
         $mobileCount = (clone $baseQuery)
-            ->where('taxpayers.from_mobile_and_validate_state', '=', TaxpayerStateEnums::APPROVED)
+            ->where('taxpayers.from_mobile_and_validate_state', '=', TaxpayerStateEnums::APPROVED->value)
             ->count();
         $deletedCount = (clone $baseQuery)
             ->onlyTrashed()
@@ -169,7 +169,7 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
             if ($taxpayer->invoices->isNotEmpty()) {
                 $is_valid = true;
                 foreach ($taxpayer->invoices as $invoice) {
-                    if ($invoice->pay_status == 'OWING' || $invoice->pay_status == 'PART PAID') {
+                    if ($invoice->pay_status == InvoicePayStatusEnums::OWING->value || $invoice->pay_status == InvoicePayStatusEnums::PART_PAID->value) {
                         $is_valid = false;
                         break;
                     }
@@ -256,15 +256,15 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     }
     public function getTotalRemainingToBeCollected(string $type = Constants::INVOICE_TYPE_TITRE): float|int
     {
-        $invoices = Invoice::whereIn('status', [InvoiceStatusEnums::ACCEPTED, InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION])
+        $invoices = Invoice::whereIn('status', [InvoiceStatusEnums::ACCEPTED->value, InvoiceStatusEnums::APPROVED->value, InvoiceStatusEnums::APPROVED_CANCELLATION->value])
             ->where('invoices.type', '=', $type)
             ->whereBetween('invoices.created_at', [$this->startDate, $this->endDate])
-            ->where('invoices.pay_status', '!=', InvoicePayStatusEnums::PAID)
+            ->where('invoices.pay_status', '!=', InvoicePayStatusEnums::PAID->value)
             ->get();
         $totalRemaining = 0;
         foreach ($invoices as $invoice) {
             $paid = Payment::where('invoice_id', $invoice->invoice_no)
-                ->where('status', '=', PaymentStatusEnums::ACCOUNTED)
+                ->where('status', '=', PaymentStatusEnums::ACCOUNTED->value)
                 ->sum('amount');
             $restToPay = $invoice->amount - floatval($invoice->reduce_amount) - $paid;
             $totalRemaining += max($restToPay, 0);
@@ -274,10 +274,10 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     public function getTotalSoldToBeCollected(string $type = Constants::INVOICE_TYPE_TITRE): float|int
     {
         return Invoice::whereIn('status', [
-            InvoiceStatusEnums::ACCEPTED,
-            InvoiceStatusEnums::PENDING,
-            InvoiceStatusEnums::APPROVED,
-            InvoiceStatusEnums::APPROVED_CANCELLATION,
+            InvoiceStatusEnums::ACCEPTED->value,
+            InvoiceStatusEnums::PENDING->value,
+            InvoiceStatusEnums::APPROVED->value,
+            InvoiceStatusEnums::APPROVED_CANCELLATION->value,
            ])
             ->where('invoices.type', $type)
             ->whereBetween('invoices.created_at', [$this->startDate, $this->endDate])
@@ -286,12 +286,12 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     public function getTotalCollected(): array
     {
         $comptantTotal = Payment::where('invoice_type', '=', Constants::INVOICE_TYPE_COMPTANT)
-            ->where('status', PaymentStatusEnums::ACCOUNTED)
+            ->where('status', PaymentStatusEnums::ACCOUNTED->value)
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->sum('amount');
         $titreTotal = Payment::where('invoice_type', Constants::TITRE)
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
-            ->where('status', PaymentStatusEnums::ACCOUNTED)
+            ->where('status', PaymentStatusEnums::ACCOUNTED->value)
             ->sum('amount');
         $count_titre = Payment::where('invoice_type', Constants::TITRE)
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
@@ -405,7 +405,7 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
             ->whereBetween('payments.created_at', [$this->startDate, $this->endDate])
         ->whereIn(
             'invoices.status',
-            [InvoiceStatusEnums::ACCEPTED, InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION]
+            [InvoiceStatusEnums::ACCEPTED->value, InvoiceStatusEnums::APPROVED->value, InvoiceStatusEnums::APPROVED_CANCELLATION->value]
         );
 
         if ($taxpayerId) {
@@ -424,13 +424,13 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
             ->when($taxpayerId, fn($q) => $q->where('taxpayer_id', $taxpayerId))
             ->sum('amount');
 
-        $totalOwing = Invoice::where('pay_status', InvoicePayStatusEnums::OWING)
+        $totalOwing = Invoice::where('pay_status', InvoicePayStatusEnums::OWING->value)
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
-            ->whereIn('invoices.status', [InvoiceStatusEnums::ACCEPTED, InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION])
+            ->whereIn('invoices.status', [InvoiceStatusEnums::ACCEPTED->value, InvoiceStatusEnums::APPROVED->value, InvoiceStatusEnums::APPROVED_CANCELLATION->value])
             ->when($taxpayerId, fn($q) => $q->where('taxpayer_id', $taxpayerId))
             ->sum('amount');
 
-        $totalPaidCount = Invoice::where('pay_status', InvoicePayStatusEnums::PAID)
+        $totalPaidCount = Invoice::where('pay_status', InvoicePayStatusEnums::PAID->value)
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
           ->when($taxpayerId, fn($q) => $q->where('taxpayer_id', $taxpayerId))
             ->count();
@@ -578,38 +578,38 @@ class StatisticsService implements TaxpayerStatisticsInterface, InvoiceStatistic
     protected function getAllStatistics(): array
     {
         return [
-            StatisticKeysEnums::BY_CATEGORY => $this->countTaxpayersByCategory(),
-            StatisticKeysEnums::BY_ACTIVITY => $this->countTaxpayersByActivity(),
-            StatisticKeysEnums::BY_CANTON => $this->countTaxpayersByCanton(),
-            StatisticKeysEnums::BY_TOWN => $this->countTaxpayersByTown(),
-            StatisticKeysEnums::BY_ZONE => $this->countTaxpayersByZone(),
-            StatisticKeysEnums::BY_TAXABLE => $this->countTaxpayersByTaxables(),
-            StatisticKeysEnums::BY_STATE => $this->countTaxpayersState(),
-            StatisticKeysEnums::BY_TAXLABEL => $this->countTaxpayersByTaxLabel(),
+            StatisticKeysEnums::BY_CATEGORY->value => $this->countTaxpayersByCategory(),
+            StatisticKeysEnums::BY_ACTIVITY->value => $this->countTaxpayersByActivity(),
+            StatisticKeysEnums::BY_CANTON->value => $this->countTaxpayersByCanton(),
+            StatisticKeysEnums::BY_TOWN->value => $this->countTaxpayersByTown(),
+            StatisticKeysEnums::BY_ZONE->value => $this->countTaxpayersByZone(),
+            StatisticKeysEnums::BY_TAXABLE->value => $this->countTaxpayersByTaxables(),
+            StatisticKeysEnums::BY_STATE->value => $this->countTaxpayersState(),
+            StatisticKeysEnums::BY_TAXLABEL->value => $this->countTaxpayersByTaxLabel(),
         ];
     }
     public function getStats(string|null $type = null): array
     {
         switch ($type) {
-            case TaxpayerStaticsEnums::BY_GENDER:
+            case TaxpayerStaticsEnums::BY_GENDER->value:
                 return $this->countTaxpayers();
-            case TaxpayerStaticsEnums::BY_CATEGORY:
+            case TaxpayerStaticsEnums::BY_CATEGORY->value:
                 return $this->countTaxpayersByCategory();
-            case TaxpayerStaticsEnums::BY_ACTIVITY:
+            case TaxpayerStaticsEnums::BY_ACTIVITY->value:
                 return $this->countTaxpayersByActivity();
-            case TaxpayerStaticsEnums::BY_CANTON:
+            case TaxpayerStaticsEnums::BY_CANTON->value:
                 return $this->countTaxpayersByCanton();
-            case TaxpayerStaticsEnums::BY_TOWN:
+            case TaxpayerStaticsEnums::BY_TOWN->value:
                 return $this->countTaxpayersByTown();
-            case TaxpayerStaticsEnums::BY_ZONE:
+            case TaxpayerStaticsEnums::BY_ZONE->value:
                 return $this->countTaxpayersByZone();
-            case TaxpayerStaticsEnums::BY_TAXABLE:
+            case TaxpayerStaticsEnums::BY_TAXABLE->value:
                 return $this->countTaxpayersByTaxables();
-            case InvoiceStaticsEnums::BY_INVOICE:
+            case InvoiceStaticsEnums::BY_INVOICE->value:
                 return $this->countInvoices();
-            case InvoiceStaticsEnums::BY_INVOICE_COMPTANT:
+            case InvoiceStaticsEnums::BY_INVOICE_COMPTANT->value:
                 return $this->countInvoices(Constants::INVOICE_TYPE_COMPTANT);
-            case TaxpayerStaticsEnums::BY_LABEL:
+            case TaxpayerStaticsEnums::BY_LABEL->value:
                 return $this->countTaxpayersByTaxLabel();
             default:
                 return $this->getAllStatistics();

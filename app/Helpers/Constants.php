@@ -62,26 +62,26 @@ class Constants
     const EXPORT_TAXPAYERTAXABLE_KEY = "taxation";
     const EXPORT_TAXABLE_KEY = "taxe";
     const EXPORT_VALIDATION_MAP = [
-        self::EXPORT_TAXPAYER_KEY => ExportTypeEnums::TAXPAYER,
-        self::EXPORT_INVOICE_KEY => ExportTypeEnums::INVOICE,
-        self::EXPORT_PAYMENT_KEY => ExportTypeEnums::PAYMENT,
-        self::EXPORT_TAXPAYERTAXABLE_KEY => ExportTypeEnums::TAXPAYER_TAXABLE,
-        self::EXPORT_TAXABLE_KEY => ExportTypeEnums::TAXABLE,
+        self::EXPORT_TAXPAYER_KEY => ExportTypeEnums::TAXPAYER->value,
+        self::EXPORT_INVOICE_KEY => ExportTypeEnums::INVOICE->value,
+        self::EXPORT_PAYMENT_KEY => ExportTypeEnums::PAYMENT->value,
+        self::EXPORT_TAXPAYERTAXABLE_KEY => ExportTypeEnums::TAXPAYER_TAXABLE->value,
+        self::EXPORT_TAXABLE_KEY => ExportTypeEnums::TAXABLE->value,
     ];
     const INVOICE_STATE_VALIDATION_MAP = [
-        self::INVOICE_STATE_DRAFT_KEY => InvoiceStatusEnums::DRAFT,
-        self::INVOICE_STATE_ACCEPTED_KEY => InvoiceStatusEnums::ACCEPTED,
-        self::INVOICE_STATE_PENDING_KEY => InvoiceStatusEnums::PENDING,
-        self::INVOICE_STATE_REJECT_KEY => InvoiceStatusEnums::REJECTED,
-        self::INVOICE_STATE_APPROVE_KEY => InvoiceStatusEnums::APPROVED,
+        self::INVOICE_STATE_DRAFT_KEY => InvoiceStatusEnums::DRAFT->value,
+        self::INVOICE_STATE_ACCEPTED_KEY => InvoiceStatusEnums::ACCEPTED->value,
+        self::INVOICE_STATE_PENDING_KEY => InvoiceStatusEnums::PENDING->value,
+        self::INVOICE_STATE_REJECT_KEY => InvoiceStatusEnums::REJECTED->value,
+        self::INVOICE_STATE_APPROVE_KEY => InvoiceStatusEnums::APPROVED->value,
     ];
     const INVOICE_STATE_PRINTABLE_MAP = [
-        self::INVOICE_STATE_ACCEPTED_KEY => InvoiceStatusEnums::ACCEPTED,
-        self::INVOICE_STATE_PENDING_KEY => InvoiceStatusEnums::PENDING,
+        self::INVOICE_STATE_ACCEPTED_KEY => InvoiceStatusEnums::ACCEPTED->value,
+        self::INVOICE_STATE_PENDING_KEY => InvoiceStatusEnums::PENDING->value,
     ];
     const PAYMENT_STATE_VALIDATION_MAP = [
-        self::PAYMENT_STATE_PENDING_KEY => InvoiceStatusEnums::PENDING,
-        self::PAYMENT_STATE_CANCEL_KEY => PaymentStatusEnums::CANCELED,
+        self::PAYMENT_STATE_PENDING_KEY => InvoiceStatusEnums::PENDING->value,
+        self::PAYMENT_STATE_CANCEL_KEY => PaymentStatusEnums::CANCELED->value,
     ];
     const INVOICE_DELIVERY_STATE_VALIDATION_MAP = [
         self::INVOICE_DELIVERY_NON_LIV_KEY,
@@ -104,13 +104,13 @@ class Constants
     }
     public static function getInvoiceActionsBasedOnRouteNameAndStatut(string $state = null): array
     {
-        $actions = [InvoiceActionsEnums::VIEW];
+        $actions = [InvoiceActionsEnums::VIEW->value];
         $previousUrl = url()->previous();
         $previousRoute = Route::getRoutes()->match(Request::create($previousUrl));
         if ($previousRoute->getName() === "taxpayers.show") {
-            $actions = [InvoiceActionsEnums::VIEW,InvoiceActionsEnums::PRINT,
-                InvoiceActionsEnums::PAYMENT,
-                InvoiceActionsEnums::RELAUNCH
+            $actions = [InvoiceActionsEnums::VIEW->value,InvoiceActionsEnums::PRINT->value,
+                InvoiceActionsEnums::PAYMENT->value,
+                InvoiceActionsEnums::RELAUNCH->value
             ];
         } elseif (request()->routeIs('invoices.*')) {
             $actions = self::getInvoiceActions();
@@ -122,32 +122,32 @@ class Constants
     {
         if (request()->has('state')) {
             if (request()->input('state') == self::INVOICE_STATE_DRAFT_KEY) {
-                return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::EDITSTATUT];
+                return [InvoiceActionsEnums::VIEW->value, InvoiceActionsEnums::EDITSTATUT->value];
             } elseif (request()->input('state') == self::INVOICE_STATE_ACCEPTED_KEY) {
-                return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::PRINT, InvoiceActionsEnums::ADDORNO];
+                return [InvoiceActionsEnums::VIEW->value, InvoiceActionsEnums::PRINT->value, InvoiceActionsEnums::ADDORNO->value];
             } elseif (request()->input('state') == self::INVOICE_STATE_PENDING_KEY) {
-                return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::EDITSTATUT, InvoiceActionsEnums::PRINT];
+                return [InvoiceActionsEnums::VIEW->value, InvoiceActionsEnums::EDITSTATUT->value, InvoiceActionsEnums::PRINT->value];
             } elseif (request()->input('state') == self::INVOICE_STATE_APPROVE_KEY) {
-                return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::REDUCE];
+                return [InvoiceActionsEnums::VIEW->value, InvoiceActionsEnums::REDUCE->value];
             }
         } elseif (request()->has('delivery')) {
             if (request()->input('delivery') == Constants::INVOICE_DELIVERY_NON_LIV_KEY) {
-                return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::ADDDELIVERY];
+                return [InvoiceActionsEnums::VIEW->value, InvoiceActionsEnums::ADDDELIVERY->value];
             } elseif (request()->input('delivery') == Constants::INVOICE_DELIVERY_LIV_KEY && request()->input('to_paid') == "1") {
-                return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::PAYMENT];
+                return [InvoiceActionsEnums::VIEW->value, InvoiceActionsEnums::PAYMENT->value];
             } elseif (request()->input('delivery') == Constants::INVOICE_DELIVERY_LIV_KEY) {
-                return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::REDUCE, InvoiceActionsEnums::RELAUNCH];
+                return [InvoiceActionsEnums::VIEW->value, InvoiceActionsEnums::REDUCE->value, InvoiceActionsEnums::RELAUNCH->value];
             }
         } else {
             if (request()->input('type') == Constants::INVOICE_TYPE_TITRE_KEY) {
-                return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::ZEROEDITION, InvoiceActionsEnums::PRINT];
+                return [InvoiceActionsEnums::VIEW->value, InvoiceActionsEnums::ZEROEDITION->value, InvoiceActionsEnums::PRINT->value];
             }
             if (request()->input('type') == Constants::INVOICE_TYPE_COMPTANT_KEY) {
-                return [InvoiceActionsEnums::VIEW, InvoiceActionsEnums::REDUCE,
-                    InvoiceActionsEnums::PRINT, InvoiceActionsEnums::ADDORNO, InvoiceActionsEnums::EDITSTATUT];
+                return [InvoiceActionsEnums::VIEW->value, InvoiceActionsEnums::REDUCE->value,
+                    InvoiceActionsEnums::PRINT->value, InvoiceActionsEnums::ADDORNO->value, InvoiceActionsEnums::EDITSTATUT->value];
             }
         }
-        return [InvoiceActionsEnums::VIEW];
+        return [InvoiceActionsEnums::VIEW->value];
     }
     /**
      * check if user is already on a url

@@ -185,7 +185,7 @@ class AddInvoiceNoTaxpayerModal extends Component
                     'qty' => $this->qty,
                     'from_date' => date('Y-') . $this->start_month . "-01",
                     'to_date' => date('Y-') . $this->start_month + $this->qty . "-01",
-                    'status' => InvoiceStatusEnums::PENDING,
+                    'status' => InvoiceStatusEnums::PENDING->value,
                     'pay_status' => 'OWING',
                     'type' => Constants::INVOICE_TYPE_COMPTANT,
                     'notes' => $this->notes

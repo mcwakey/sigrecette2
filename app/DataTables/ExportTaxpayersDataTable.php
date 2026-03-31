@@ -142,8 +142,8 @@ class ExportTaxpayersDataTable extends DataTable
         }
         $query = $query->where(function ($q) {
             $q->whereNotIn('taxpayers.from_mobile_and_validate_state', [
-                TaxpayerStateEnums::REJECTED,
-                TaxpayerStateEnums::PENDING
+                TaxpayerStateEnums::REJECTED->value,
+                TaxpayerStateEnums::PENDING->value
             ])->orWhereNull('taxpayers.from_mobile_and_validate_state');
         });
         return $query;

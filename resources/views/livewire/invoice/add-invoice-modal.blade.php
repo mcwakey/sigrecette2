@@ -268,9 +268,9 @@
                                     <select wire:model="cancel_reduct" name="cancel_reduct" class="form-select form-control-select" data-dropdown-parent="#kt_modal_add_invoice">
                                         <option></option>
                                         @if ($reduce_amount > 0)
-                                        <option value="{{App\Enums\InvoiceStatusEnums::REDUCED }}">Reduction</option>
+                                        <option value="{{App\Enums\InvoiceStatusEnums::REDUCED->value }}">Reduction</option>
                                         @endif
-                                        <option value="{{App\Enums\InvoiceStatusEnums::CANCELED}}">Annulation</option>
+                                        <option value="{{App\Enums\InvoiceStatusEnums::CANCELED->value}}">Annulation</option>
                                     </select>
                                     @error('cancel_reduct')
                                     <span class="text-danger">{{ $message }}</span> @enderror

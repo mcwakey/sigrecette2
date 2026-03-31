@@ -2,9 +2,9 @@
 
 namespace App\Enums;
 
-class TaxpayerStateEnums
+enum TaxpayerStateEnums: string
 {
-    public const PENDING = 'PENDING';
-    public const REJECTED = 'REJECTED';
-    public const APPROVED = 'APPROVED';
+    case PENDING = 'PENDING';
+    case REJECTED = 'REJECTED';
+    case APPROVED = 'APPROVED';
 }

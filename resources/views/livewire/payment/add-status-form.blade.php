@@ -12,13 +12,13 @@
         <!--begin::Input-->
         <input type="hidden" wire:model="payment_id" name="payment_id" class="form-control form-control-solid mb-3 mb-lg-0"
                placeholder="{{ __('payment_id') }}" />
-            @if ($status == App\Enums\PaymentStatusEnums::PENDING)
+            @if ($status == App\Enums\PaymentStatusEnums::PENDING->value)
                 <select class="form-select form-select-solid" wire:model="status" name="status"
                         data-placeholder="Select option" data-allow-clear="true">
                     <option></option>
                     @can('peut comptabiliser un paiement')
-                        <option value="{{App\Enums\PaymentStatusEnums::ACCOUNTED}}">{{ __('ACCOUNTED') }}</option>
-                        <option value="{{App\Enums\PaymentStatusEnums::CANCELED}}">{{ __('CANCELED') }}</option>
+                        <option value="{{App\Enums\PaymentStatusEnums::ACCOUNTED->value}}">{{ __('ACCOUNTED') }}</option>
+                        <option value="{{App\Enums\PaymentStatusEnums::CANCELED->value}}">{{ __('CANCELED') }}</option>
                     @endcan
                 </select>
             @endif

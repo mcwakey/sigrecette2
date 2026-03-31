@@ -31,7 +31,7 @@ trait PaymentTrait
      */
     public static function getPaid($invoice_id): float|int
     {
-        $payments = self::getPaymentsByStatus($invoice_id, [PaymentStatusEnums::PENDING, PaymentStatusEnums::ACCOUNTED, PaymentStatusEnums::DONE]);
+        $payments = self::getPaymentsByStatus($invoice_id, [PaymentStatusEnums::PENDING->value, PaymentStatusEnums::ACCOUNTED->value, PaymentStatusEnums::DONE->value]);
         $s_amount = [];
         foreach ($payments as $index => $payment) {
             if ($payment->description != Constants::ANNULATION && $payment->description != Constants::REDUCTION) {
@@ -45,7 +45,7 @@ trait PaymentTrait
      */
     public static function getPaidNotAccounted($invoice_id): float|int
     {
-        $payments = self::getPaymentsByStatus($invoice_id, [PaymentStatusEnums::PENDING]);
+        $payments = self::getPaymentsByStatus($invoice_id, [PaymentStatusEnums::PENDING->value]);
         $s_amount = [];
         foreach ($payments as $index => $payment) {
             if ($payment->description != Constants::ANNULATION && $payment->description != Constants::REDUCTION) {
@@ -56,7 +56,7 @@ trait PaymentTrait
     }
     public static function getRestToPaid(Invoice $invoice): float|int
     {
-        $paid = self::getPaymentsByStatus($invoice->invoice_no, [PaymentStatusEnums::PENDING, PaymentStatusEnums::ACCOUNTED, PaymentStatusEnums::DONE])
+        $paid = self::getPaymentsByStatus($invoice->invoice_no, [PaymentStatusEnums::PENDING->value, PaymentStatusEnums::ACCOUNTED->value, PaymentStatusEnums::DONE->value])
             ->sum('amount');
         $restToPay = $invoice->amount - $paid;
         return max($restToPay, 0);

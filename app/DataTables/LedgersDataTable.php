@@ -59,7 +59,7 @@ class LedgersDataTable extends DataTable
     {
 
         return $model
-            ->whereNot('status', PaymentStatusEnums::PENDING) // Filter collector_deposits by taxpayer_id
+            ->whereNot('status', PaymentStatusEnums::PENDING->value) // Filter collector_deposits by taxpayer_id
             ->whereBetween('payments.created_at', [$this->startDate, $this->endDate])
             ->orderBy('created_at', 'asc')
             ->newQuery();

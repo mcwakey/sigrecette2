@@ -2,13 +2,13 @@
     $charts = [
         [
             'container_id' => 'kt_amcharts_30',
-            'data' => $stats[ \App\Enums\StatisticKeysEnums::BY_TAXABLE],
+            'data' => $stats[ \App\Enums\StatisticKeysEnums::BY_TAXABLE->value],
         ],
     ];
     $charts_i = [
         [
             'container_id' => 'kt_amcharts_label',
-            'data' => $stats[ \App\Enums\StatisticKeysEnums::BY_TAXLABEL],
+            'data' => $stats[ \App\Enums\StatisticKeysEnums::BY_TAXLABEL->value],
         ],
     ];
 @endphp

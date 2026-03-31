@@ -66,9 +66,9 @@ class PaymentImportService
 
                 $paid = Payment::where('invoice_id', $invoice->id)
                     ->whereIn('status', [
-                        PaymentStatusEnums::PENDING,
-                        PaymentStatusEnums::ACCOUNTED,
-                        PaymentStatusEnums::DONE,
+                        PaymentStatusEnums::PENDING->value,
+                        PaymentStatusEnums::ACCOUNTED->value,
+                        PaymentStatusEnums::DONE->value,
                     ])
                     ->where(function ($query) {
                         $query->whereNull('description')
@@ -77,11 +77,11 @@ class PaymentImportService
                     ->sum('amount');
 
                 if ($paid <= 0) {
-                    $invoice->pay_status = InvoicePayStatusEnums::OWING;
+                    $invoice->pay_status = InvoicePayStatusEnums::OWING->value;
                 } elseif ($paid >= $invoice->amount) {
-                    $invoice->pay_status = InvoicePayStatusEnums::PAID;
+                    $invoice->pay_status = InvoicePayStatusEnums::PAID->value;
                 } else {
-                    $invoice->pay_status = InvoicePayStatusEnums::PART_PAID;
+                    $invoice->pay_status = InvoicePayStatusEnums::PART_PAID->value;
                 }
 
                 $invoice->save();

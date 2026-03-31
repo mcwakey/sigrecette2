@@ -2,18 +2,17 @@
 
 namespace App\Enums;
 
-class StatisticKeysEnums
+enum StatisticKeysEnums: string
 {
-    public const BY_GENDER = 'by_gender';
-    public const BY_CATEGORY = 'by_category';
-    public const BY_ACTIVITY = 'by_activity';
-    public const BY_CANTON = 'by_canton';
-    public const BY_TOWN = 'by_town';
-    public const BY_ZONE = 'by_zone';
-    public const BY_TAXABLE = 'by_taxable';
-    const BY_STATE = "by_state";
-    const BY_INVOICE = "by_invoice_count";
-    const BY_INVOICE_COMPTANT = "by_invoice_count_comptant";
-
-    const BY_TAXLABEL = "by_taxlabel";
+    case BY_GENDER = 'by_gender';
+    case BY_CATEGORY = 'by_category';
+    case BY_ACTIVITY = 'by_activity';
+    case BY_CANTON = 'by_canton';
+    case BY_TOWN = 'by_town';
+    case BY_ZONE = 'by_zone';
+    case BY_TAXABLE = 'by_taxable';
+    case BY_STATE = 'by_state';
+    case BY_INVOICE = 'by_invoice_count';
+    case BY_INVOICE_COMPTANT = 'by_invoice_count_comptant';
+    case BY_TAXLABEL = 'by_taxlabel';
 }

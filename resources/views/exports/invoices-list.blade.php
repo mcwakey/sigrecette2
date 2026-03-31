@@ -130,10 +130,10 @@
 
                 $year = date("Y", strtotime( $item[ __('from_date')])) ;
                 switch ($item->status) {
-                    case App\Enums\InvoiceStatusEnums::APPROVED:
-                    case App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION:
-                         case App\Enums\InvoiceStatusEnums::REDUCED:
-                        case App\Enums\InvoiceStatusEnums::CANCELED:
+                    case App\Enums\InvoiceStatusEnums::APPROVED->value:
+                    case App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION->value:
+                         case App\Enums\InvoiceStatusEnums::REDUCED->value:
+                        case App\Enums\InvoiceStatusEnums::CANCELED->value:
                         $item->status = "PC";
                         break;
                     case "REJECTED":

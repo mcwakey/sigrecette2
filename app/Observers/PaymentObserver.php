@@ -33,13 +33,12 @@ class PaymentObserver
 
     private function resolveInvoice(Payment $payment): ?Invoice
     {
-        if (!empty($payment->invoice_id)) {
-            $invoice = Invoice::find($payment->invoice_id);
-            if ($invoice) {
-                return $invoice;
-            }
-            return Invoice::where('invoice_no', $payment->invoice_id)->first();
+        if (empty($payment->invoice_id)) {
+            return null;
         }
-        return null;
+
+        return Invoice::where('id', $payment->invoice_id)
+            ->orWhere('invoice_no', $payment->invoice_id)
+            ->first();
     }
 }

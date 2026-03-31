@@ -3,8 +3,14 @@
 namespace App\Providers;
 
 use App\Models\User;
+use App\Models\Invoice;
+use App\Models\Payment;
+use App\Models\Taxpayer;
 use App\Policies\CollectorPolicy;
+use App\Policies\InvoicePolicy;
+use App\Policies\PaymentPolicy;
 use App\Policies\RolePolicy;
+use App\Policies\TaxpayerPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -19,8 +25,10 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         User::class => UserPolicy::class,
-        User::class => CollectorPolicy::class,
         Role::class => RolePolicy::class,
+        Invoice::class => InvoicePolicy::class,
+        Payment::class => PaymentPolicy::class,
+        Taxpayer::class => TaxpayerPolicy::class,
     ];
     /**
      * Register any authentication / authorization services.

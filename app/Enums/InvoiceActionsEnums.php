@@ -2,15 +2,15 @@
 
 namespace App\Enums;
 
-class InvoiceActionsEnums
+enum InvoiceActionsEnums: string
 {
-    public const VIEW = 'VIEW';
-    public const PRINT = 'PRINT';
-    public const REDUCE = 'REDUCE';
-    public const PAYMENT = 'ADD_PAYMENT';
-    public const RELAUNCH = 'RELAUNCH';
-    public const ZEROEDITION = "zero_edit";
-    public const ADDORNO = "add_or_no";
-    public const ADDDELIVERY = "add_delivery";
-    public const EDITSTATUT = "edit_statut";
+    case VIEW = 'VIEW';
+    case PRINT = 'PRINT';
+    case REDUCE = 'REDUCE';
+    case PAYMENT = 'ADD_PAYMENT';
+    case RELAUNCH = 'RELAUNCH';
+    case ZEROEDITION = 'zero_edit';
+    case ADDORNO = 'add_or_no';
+    case ADDDELIVERY = 'add_delivery';
+    case EDITSTATUT = 'edit_statut';
 }

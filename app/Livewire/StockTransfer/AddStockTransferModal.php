@@ -2,6 +2,7 @@
 
 namespace App\Livewire\StockTransfer;
 
+use App\Enums\PaymentStatusEnums;
 use App\Helpers\Constants;
 use App\Models\Payment;
 use App\Models\StockRequest;
@@ -331,7 +332,7 @@ class AddStockTransferModal extends Component
                                 'code' => $this->code,
                                 'invoice_type' => Constants::INVOICE_TYPE_COMPTANT,
                                 'payment_type' => 'CASH',
-                                'status' => "ACCOUNTED",
+                                'status' => PaymentStatusEnums::ACCOUNTED->value,
                                 'description' => "Etat de versement collecteur N°" . $this->collector_id,
                                 'user_id' => $this->user_id,
                                 'r_user_id' => $this->collector_id,

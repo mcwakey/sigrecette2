@@ -93,12 +93,12 @@
                             </td>
                             <td>
                                 @if (
-                                    $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED ||
-                                        $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION)
-                                    @if ($invoice->pay_status == App\Enums\InvoicePayStatusEnums::OWING)
+                                    $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED->value ||
+                                        $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION->value)
+                                    @if ($invoice->pay_status == App\Enums\InvoicePayStatusEnums::OWING->value)
                                         <span
                                             class="badge badge-light-info">{{ __($invoice->pay_status) }}</span>
-                                    @elseif($invoice->pay_status == App\Enums\InvoicePayStatusEnums::PART_PAID)
+                                    @elseif($invoice->pay_status == App\Enums\InvoicePayStatusEnums::PART_PAID->value)
                                         <span
                                             class="badge badge-light-warning">{{ __($invoice->pay_status) }}</span>
                                     @else
@@ -106,9 +106,9 @@
                                             class="badge badge-light-success">{{ __($invoice->pay_status) }}</span>
                                     @endif
                                 @elseif(
-                                    $invoice->status == App\Enums\InvoiceStatusEnums::CANCELED ||
-                                        $invoice->status == App\Enums\InvoiceStatusEnums::REDUCED ||
-                                        $invoice->status == App\Enums\InvoiceStatusEnums::REJECTED)
+                                    $invoice->status == App\Enums\InvoiceStatusEnums::CANCELED->value ||
+                                        $invoice->status == App\Enums\InvoiceStatusEnums::REDUCED->value ||
+                                        $invoice->status == App\Enums\InvoiceStatusEnums::REJECTED->value)
                                     <span
                                         class="badge badge-light-warning">{{ '----' }}</span>
                                 @else
@@ -168,7 +168,7 @@
                                         @else
                                             {{ __('NOT DELIVERED') }}
                                         @endcan
-                                    @elseif($invoice->delivery == App\Enums\InvoiceDeliveryEnums::DELIVERED)
+                                    @elseif($invoice->delivery == App\Enums\InvoiceDeliveryEnums::DELIVERED->value)
                                         {{ date('Y-m-d', strtotime($invoice->delivery_date)) }}
                                     @endif
                                 @else
@@ -199,11 +199,11 @@
                                         </button>
                                     @endcan
                                 @elseif(
-                                    $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED ||
-                                        $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION)
+                                    $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED->value ||
+                                        $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION->value)
                                     <span
-                                        class="badge badge-light-success">{{ __(App\Enums\InvoiceStatusEnums::APPROVED) }}</span>
-                                @elseif($invoice->status == App\Enums\InvoiceStatusEnums::REJECTED)
+                                        class="badge badge-light-success">{{ __(App\Enums\InvoiceStatusEnums::APPROVED->value) }}</span>
+                                @elseif($invoice->status == App\Enums\InvoiceStatusEnums::REJECTED->value)
                                     <span
                                         class="badge badge-light-danger">{{ __('REJECTED') }}</span>
                                 @elseif($invoice->can( "submit_for_accepted"))

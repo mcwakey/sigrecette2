@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\TownsDataTable;
+use App\Http\Requests\StoreTownRequest;
+use App\Http\Requests\UpdateTownRequest;
 use App\Models\Town;
 use Illuminate\Http\Request;
 
@@ -25,7 +27,7 @@ class TownsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTownRequest $request)
     {
         //
     }
@@ -45,7 +47,7 @@ class TownsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Town $town)
+    public function update(UpdateTownRequest $request, Town $town)
     {
         //
     }

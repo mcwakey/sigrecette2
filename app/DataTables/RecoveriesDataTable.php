@@ -98,7 +98,7 @@ class RecoveriesDataTable extends DataTable
         if ($this->state != null) {
             $query->where('payments.status', '=', $this->state);
         } else {
-            $query->whereIn('payments.status', [PaymentStatusEnums::DONE, PaymentStatusEnums::ACCOUNTED]);
+            $query->whereIn('payments.status', [PaymentStatusEnums::DONE->value, PaymentStatusEnums::ACCOUNTED->value]);
         }
        // dd($query->get());
         return $query;
@@ -144,7 +144,7 @@ class RecoveriesDataTable extends DataTable
                 ->width(60)
         ];
         return array_map(function ($column) {
-            if ($this->state != PaymentStatusEnums::CANCELED && $column->name == 'action') {
+            if ($this->state != PaymentStatusEnums::CANCELED->value && $column->name == 'action') {
                 $column->visible(false);
             }
             if ($this->state == null && $column->name == 'notes') {

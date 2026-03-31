@@ -36,7 +36,7 @@ class LongPrintTaskJob implements ShouldQueue
     {
         $result['success']=false;
         switch ($this->printType) {
-            case PrintNameEnums::BORDEREAU:
+            case PrintNameEnums::BORDEREAU->value:
                 $pdfGenerator = app(PdfGeneratorInterface::class);
                 if ($this->data instanceof PrintFile) {
                     $result= $pdfGenerator->generateBordereauListPdf('invoices-list', $this->action, $this->data);
@@ -44,7 +44,7 @@ class LongPrintTaskJob implements ShouldQueue
                     $result= $pdfGenerator->generateBordereauListPdf('invoices-list', $this->action);
                 }
                 break;
-            case PrintNameEnums::MULTIPLE_INVOICE:
+            case PrintNameEnums::MULTIPLE_INVOICE->value:
                 $printService = app(PrintServiceInterface::class);
                 $zipFileName=$printService->downloadMultipleInvoice($this->action);
                 if ($zipFileName){

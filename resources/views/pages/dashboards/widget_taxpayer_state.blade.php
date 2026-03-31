@@ -2,7 +2,7 @@
     $charts = [
         [
             'container_id' => 'kt_amcharts_37',
-            'data' => $stats[ \App\Enums\StatisticKeysEnums::BY_STATE],
+            'data' => $stats[ \App\Enums\StatisticKeysEnums::BY_STATE->value],
         ],
     ];
 @endphp

@@ -1,5 +1,5 @@
 
-    @if ($payment->status ==App\Enums\PaymentStatusEnums::PENDING )
+    @if ($payment->status ==App\Enums\PaymentStatusEnums::PENDING->value )
         <span
             class="badge badge-light-primary">{{ __($payment->status) }}</span>
         @can('peut accepter un paiement')
@@ -21,14 +21,14 @@
                 </button>
 @endif
         @endcan
-    @elseif($payment->status == App\Enums\PaymentStatusEnums::ACCOUNTED)
+    @elseif($payment->status == App\Enums\PaymentStatusEnums::ACCOUNTED->value)
         <span
-            class="badge badge-light-success">{{ __(App\Enums\PaymentStatusEnums::ACCOUNTED) }}</span>
-    @elseif($payment->status == App\Enums\PaymentStatusEnums::DONE)
+            class="badge badge-light-success">{{ __(App\Enums\PaymentStatusEnums::ACCOUNTED->value) }}</span>
+    @elseif($payment->status == App\Enums\PaymentStatusEnums::DONE->value)
         <span
-            class="badge badge-light-warning">{{ __(App\Enums\PaymentStatusEnums::DONE)}}</span>
+            class="badge badge-light-warning">{{ __(App\Enums\PaymentStatusEnums::DONE->value)}}</span>
         @else
-        <div class="badge badge-lg badge-light-danger d-inline">{{ __(App\Enums\PaymentStatusEnums::CANCELED) }}</div>
+        <div class="badge badge-lg badge-light-danger d-inline">{{ __(App\Enums\PaymentStatusEnums::CANCELED->value) }}</div>
     @endif
 
 

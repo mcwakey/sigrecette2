@@ -14,7 +14,7 @@ return [
     | After changing this item, run: `php artisan livewire:discover`.
     |
     */
-    'debug' => true,
+    'debug' => env('LIVEWIRE_DEBUG', false),
 
     'class_namespace' => 'App\\Livewire',
 

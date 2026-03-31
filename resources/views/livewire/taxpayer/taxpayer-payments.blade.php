@@ -49,7 +49,7 @@
 
 
                         <td>
-                            @if ($payment->status == App\Enums\PaymentStatusEnums::PENDING)
+                            @if ($payment->status == App\Enums\PaymentStatusEnums::PENDING->value)
                                 <span
                                     class="badge badge-light-primary">{{ __($payment->status) }}</span>
                                 @can('peut accepter un paiement')
@@ -82,9 +82,9 @@
                                         <!--end::Form-->
                                     </div>
                                 @endcan
-                            @elseif($payment->status == App\Enums\PaymentStatusEnums::ACCOUNTED)
+                            @elseif($payment->status == App\Enums\PaymentStatusEnums::ACCOUNTED->value)
                                 <span
-                                    class="badge badge-light-success">{{ __(App\Enums\PaymentStatusEnums::ACCOUNTED) }}</span>
+                                    class="badge badge-light-success">{{ __(App\Enums\PaymentStatusEnums::ACCOUNTED->value) }}</span>
                             @else
                                 @if (
                                     $payment->payment_type == App\Helpers\Constants::ANNULATION ||

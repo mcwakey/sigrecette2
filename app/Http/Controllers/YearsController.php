@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\YearDataTable;
+use App\Http\Requests\StoreYearRequest;
+use App\Http\Requests\UpdateYearRequest;
 use App\Models\Year;
 use Illuminate\Http\Request;
 
@@ -25,7 +27,7 @@ class YearsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreYearRequest $request)
     {
         //
     }
@@ -45,7 +47,7 @@ class YearsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Year $year)
+    public function update(UpdateYearRequest $request, Year $year)
     {
         //
     }

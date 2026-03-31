@@ -3,15 +3,15 @@
 
                [
                    'container_id' => 'kt_amcharts_c',
-                   'data' => $stats[ \App\Enums\StatisticKeysEnums::BY_CANTON],
+                   'data' => $stats[ \App\Enums\StatisticKeysEnums::BY_CANTON->value],
                ],
                 [
                    'container_id' => 'kt_amcharts_t',
-                    'data' =>$stats[ \App\Enums\StatisticKeysEnums::BY_TOWN],
+                    'data' =>$stats[ \App\Enums\StatisticKeysEnums::BY_TOWN->value],
               ],
                 [
                     'container_id' => 'kt_amcharts_z',
-                    'data' =>$stats[ \App\Enums\StatisticKeysEnums::BY_ZONE],
+                    'data' =>$stats[ \App\Enums\StatisticKeysEnums::BY_ZONE->value],
                 ],
 
            ];

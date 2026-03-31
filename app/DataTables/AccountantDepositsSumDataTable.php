@@ -51,7 +51,7 @@ class AccountantDepositsSumDataTable extends DataTable
                 DB::raw('MAX(payments.updated_at) AS created_at')
             )
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
-            ->whereIn('payments.status', [PaymentStatusEnums::DONE, PaymentStatusEnums::ACCOUNTED])
+            ->whereIn('payments.status', [PaymentStatusEnums::DONE->value, PaymentStatusEnums::ACCOUNTED->value])
             ->groupBy('reference_deposit', 'reference_deposit')
             ->orderBy('reference_deposit', 'asc');
     }

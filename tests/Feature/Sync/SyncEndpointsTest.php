@@ -101,12 +101,12 @@ test('sync payments import creates payment and updates invoice pay_status', func
                 'invoice_uuid' => $invoice->uuid,
                 'taxpayer_id' => $taxpayer->id,
                 'amount' => 60,
-                'payment_type' => PaymentTypeEnums::DIGI,
+                'payment_type' => PaymentTypeEnums::DIGI->value,
                 'invoice_type' => 'TITRE',
                 'reference' => 'REF-1',
                 'description' => 'Paiement test',
                 'remaining_amount' => 40,
-                'status' => PaymentStatusEnums::DONE,
+                'status' => PaymentStatusEnums::DONE->value,
                 'deposit' => null,
                 'notes' => 'test',
             ],
@@ -122,7 +122,7 @@ test('sync payments import creates payment and updates invoice pay_status', func
     expect($payment)->not()->toBeNull();
 
     $invoice->refresh();
-    expect($invoice->pay_status)->toBe(InvoicePayStatusEnums::PART_PAID);
+    expect($invoice->pay_status)->toBe(InvoicePayStatusEnums::PART_PAID->value);
 });
 
 test('payment import service updates existing payment by uuid', function () {
@@ -144,8 +144,8 @@ test('payment import service updates existing payment by uuid', function () {
         'invoice_id' => $invoice->id,
         'taxpayer_id' => $taxpayer->id,
         'amount' => 20,
-        'payment_type' => PaymentTypeEnums::CASH,
-        'status' => PaymentStatusEnums::PENDING,
+        'payment_type' => PaymentTypeEnums::CASH->value,
+        'status' => PaymentStatusEnums::PENDING->value,
     ]);
 
     $service = new PaymentImportService();
@@ -155,12 +155,12 @@ test('payment import service updates existing payment by uuid', function () {
             'invoice_uuid' => $invoice->uuid,
             'taxpayer_id' => $taxpayer->id,
             'amount' => 100,
-            'payment_type' => PaymentTypeEnums::CASH,
+            'payment_type' => PaymentTypeEnums::CASH->value,
             'invoice_type' => 'TITRE',
             'reference' => null,
             'description' => null,
             'remaining_amount' => 0,
-            'status' => PaymentStatusEnums::DONE,
+            'status' => PaymentStatusEnums::DONE->value,
             'deposit' => null,
             'notes' => null,
         ],
@@ -172,5 +172,5 @@ test('payment import service updates existing payment by uuid', function () {
     expect($payment->amount)->toBe(100.0);
 
     $invoice->refresh();
-    expect($invoice->pay_status)->toBe(InvoicePayStatusEnums::PAID);
+    expect($invoice->pay_status)->toBe(InvoicePayStatusEnums::PAID->value);
 });

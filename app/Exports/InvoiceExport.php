@@ -5,11 +5,12 @@ namespace App\Exports;
 use App\Helpers\Constants;
 use App\Models\Invoice;
 use App\Models\Payment;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class InvoiceExport implements FromCollection, WithHeadings, WithMapping
+class InvoiceExport implements FromQuery, WithHeadings, WithMapping, WithChunkReading
 {
     protected $invoiceIds;
     protected $startDate;
@@ -21,9 +22,9 @@ class InvoiceExport implements FromCollection, WithHeadings, WithMapping
         $this->endDate = $endDate;
         $this->invoiceIds = $invoiceIds;
     }
-    public function collection()
+    public function query()
     {
-        $query = Invoice::with(['taxpayer', 'taxpayer.zone',]);
+        $query = Invoice::with(['taxpayer', 'taxpayer.zone']);
 
         if (!empty($this->invoiceIds)) {
             $query->whereIn('id', $this->invoiceIds);
@@ -32,7 +33,12 @@ class InvoiceExport implements FromCollection, WithHeadings, WithMapping
         return $query
             ->whereBetween('invoices.created_at', [$this->startDate, $this->endDate])
             ->where('invoices.type', '=', Constants::TITRE)
-            ->orderBy('invoices.created_at', 'desc')->get();
+            ->orderBy('invoices.created_at', 'desc');
+    }
+
+    public function chunkSize(): int
+    {
+        return 1000;
     }
 
     public function headings(): array

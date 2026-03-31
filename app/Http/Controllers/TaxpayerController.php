@@ -38,17 +38,18 @@ class TaxpayerController extends Controller
      */
     public function index(Request $request, TaxpayersDataTable $dataTable)
     {
+        $this->authorize('viewAny', Taxpayer::class);
         $validatedData = $request->validate([
             'disable' => ['nullable', 'integer', Rule::in(1)],
             'state' => ['nullable', 'string', Rule::in('at')],
         ]);
         $disable = $validatedData['disable'] ?? null;
         $state = $validatedData['state'] ?? null;
-        $zones = Zone::all();
-        $categories = Category::all();
-        $towns = Town::all();
-        $cantons = Canton::all();
-        $activities = Activity::all();
+        $zones = cache()->remember('zones.all', 3600, fn() => Zone::all());
+        $categories = cache()->remember('categories.all', 3600, fn() => Category::all());
+        $towns = cache()->remember('towns.all', 3600, fn() => Town::all());
+        $cantons = cache()->remember('cantons.all', 3600, fn() => Canton::all());
+        $activities = cache()->remember('activities.all', 3600, fn() => Activity::all());
        // Taxpayer::merge();
         return $dataTable->with(
             [
@@ -67,8 +68,8 @@ class TaxpayerController extends Controller
             ->where('type', '=', Constants::TITRE)
             ->where(function ($q) {
                 $q->whereNotIn('taxpayers.from_mobile_and_validate_state', [
-                    TaxpayerStateEnums::REJECTED,
-                    TaxpayerStateEnums::PENDING
+                    TaxpayerStateEnums::REJECTED->value,
+                    TaxpayerStateEnums::PENDING->value
                 ])->orWhereNull('taxpayers.from_mobile_and_validate_state');
             })
             ->where(function ($q) {
@@ -83,8 +84,8 @@ class TaxpayerController extends Controller
             ->selectRaw('gender, count(*) as count')
             ->where(function ($q) {
                 $q->whereNotIn('taxpayers.from_mobile_and_validate_state', [
-                    TaxpayerStateEnums::REJECTED,
-                    TaxpayerStateEnums::PENDING
+                    TaxpayerStateEnums::REJECTED->value,
+                    TaxpayerStateEnums::PENDING->value
                 ])->orWhereNull('taxpayers.from_mobile_and_validate_state');
             })
             ->whereBetween('created_at', [$this->s_date,  $this->e_date])
@@ -155,6 +156,7 @@ class TaxpayerController extends Controller
         RecoveriesDataTable $recoveriesDataTable,
         TaxpayerTaxablesDataTable $taxablesDataTable
     ) {
+        $this->authorize('view', $taxpayer);
         if ($taxpayer->type == Constants::INVOICE_TYPE_COMPTANT) {
             return redirect()->back();
         }

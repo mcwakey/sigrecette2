@@ -45,7 +45,7 @@ class PrintFile extends Model
     {
         $data = $file->invoices()->get();
         $total = 0;
-        if ($file->name == PrintNameEnums::BORDEREAU_REDUCTION) {
+        if ($file->name == PrintNameEnums::BORDEREAU_REDUCTION->value) {
             foreach ($data as $invoice) {
                 $total += $invoice->reduce_amount;
             }

@@ -2,9 +2,9 @@
 
 namespace App\Enums;
 
-class InvoicePayStatusEnums
+enum InvoicePayStatusEnums: string
 {
-    public const OWING = 'OWING';
-    public const PART_PAID = 'PART PAID';
-    public const PAID = 'PAID';
+    case OWING = 'OWING';
+    case PART_PAID = 'PART PAID';
+    case PAID = 'PAID';
 }

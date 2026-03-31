@@ -70,9 +70,9 @@ trait InvoiceTrait
     {
         $invoices_return = [];
         foreach ($invoices as $invoice) {
-            if ($type === PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS && $invoice->ondistributionprint == false) {
+            if ($type === PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS->value && $invoice->ondistributionprint == false) {
                 $invoices_return[] = $invoice;
-            } elseif ($type === PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES && $invoice->onrecoveryprint == false) {
+            } elseif ($type === PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES->value && $invoice->onrecoveryprint == false) {
                 $invoices_return[] = $invoice;
             }
         }
@@ -128,20 +128,20 @@ trait InvoiceTrait
         $startDate = Carbon::parse("{$year}-01-01 00:00:00");
         $endDate = Carbon::parse("{$year}-12-31 23:59:59");
         // Amount remaining to be collected
-        $totalAmountRemaining = self::whereIn('status', [InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION])
+        $totalAmountRemaining = self::whereIn('status', [InvoiceStatusEnums::APPROVED->value, InvoiceStatusEnums::APPROVED_CANCELLATION->value])
             ->whereBetween('invoices.created_at', [$startDate, $endDate])
-            ->where('invoices.pay_status', '!=', InvoicePayStatusEnums::PAID)
+            ->where('invoices.pay_status', '!=', InvoicePayStatusEnums::PAID->value)
             ->sum('amount');
-        $totalReduceAmountRemaining = self::whereIn('status', [InvoiceStatusEnums::APPROVED_CANCELLATION])
+        $totalReduceAmountRemaining = self::whereIn('status', [InvoiceStatusEnums::APPROVED_CANCELLATION->value])
             ->whereBetween('invoices.created_at', [$startDate, $endDate])
-            ->where('invoices.pay_status', '!=', InvoicePayStatusEnums::PAID)
+            ->where('invoices.pay_status', '!=', InvoicePayStatusEnums::PAID->value)
             ->whereNotNull('reduce_amount')
             ->sum('reduce_amount');
         $remainingAmount = $totalAmountRemaining - $totalReduceAmountRemaining;
         // Amount collected
-        $totalAmountCollected = self::whereIn('status', [InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION])
+        $totalAmountCollected = self::whereIn('status', [InvoiceStatusEnums::APPROVED->value, InvoiceStatusEnums::APPROVED_CANCELLATION->value])
             ->whereBetween('invoices.created_at', [$startDate, $endDate])
-            ->where('invoices.pay_status', '=', InvoicePayStatusEnums::PAID)
+            ->where('invoices.pay_status', '=', InvoicePayStatusEnums::PAID->value)
             ->sum('amount');
         $collectedAmount = $totalAmountCollected;
         return [
@@ -188,7 +188,7 @@ trait InvoiceTrait
     }
     public static function returnPaidAndSumByCode(Invoice $invoice): array
     {
-        $last_payments = Payment::where('invoice_id', $invoice->invoice_no)->where('status', PaymentStatusEnums::ACCOUNTED)->get();
+        $last_payments = Payment::where('invoice_id', $invoice->invoice_no)->where('status', PaymentStatusEnums::ACCOUNTED->value)->get();
         $sumsByTaxCode = Invoice::sumAmountsByTaxCode($invoice);
         $paidAmounts = [];
         foreach ($sumsByTaxCode as $code => &$totalAmount) {
@@ -224,8 +224,8 @@ trait InvoiceTrait
             'id',
             'invoice_no'
         ];
-        $query = Invoice::query()->whereIn('invoices.status', [InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION])
-            ->where('invoices.pay_status', '!=', InvoicePayStatusEnums::PAID);
+        $query = Invoice::query()->whereIn('invoices.status', [InvoiceStatusEnums::APPROVED->value, InvoiceStatusEnums::APPROVED_CANCELLATION->value])
+            ->where('invoices.pay_status', '!=', InvoicePayStatusEnums::PAID->value);
         foreach ($columns as $column) {
             $query->orWhere($column, 'like', "%{$value}%");
         }
@@ -240,21 +240,21 @@ trait InvoiceTrait
             ->where('invoices.type', '=', Constants::INVOICE_TYPE_TITRE)
             ->whereBetween('invoices.created_at', [$startOfYear, $endOfYear]);
         if ($type != null) {
-            if ($type === PrintNameEnums::BORDEREAU_REDUCTION) {
+            if ($type === PrintNameEnums::BORDEREAU_REDUCTION->value) {
                 $query = $query->whereNot("invoices.reduce_amount", "=", '')
                     ->WhereDoesntHave('printFiles', function ($query) use ($type) {
                         $query->where('name', $type);
                     });
-            } elseif ($type === PrintNameEnums::BORDEREAU) {
+            } elseif ($type === PrintNameEnums::BORDEREAU->value) {
                 $query = $query->where("invoices.reduce_amount", "=", '')
                     ->WhereDoesntHave('printFiles', function ($query) use ($type) {
                         $query->where('name', $type);
                     });
-            } elseif ($type === PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS) {
+            } elseif ($type === PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS->value) {
                 $query = $query->whereNot("invoices.ondistributionprint", "=", false)->WhereDoesntHave('printFiles', function ($query) use ($type) {
                     $query->where('name', $type);
                 });
-            } elseif ($type === PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES) {
+            } elseif ($type === PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES->value) {
                 $query = $query->whereNot("invoices.onrecoveryprint", "=", false)->WhereDoesntHave('printFiles', function ($query) use ($type) {
                     $query->where('name', $type);
                 });
@@ -272,12 +272,12 @@ trait InvoiceTrait
             ->where('invoices.type', '=', Constants::INVOICE_TYPE_TITRE)
             ->whereBetween('invoices.created_at', [$startOfYear, $endOfYear]);
         if ($type != null) {
-            if ($type === PrintNameEnums::BORDEREAU_REDUCTION) {
+            if ($type === PrintNameEnums::BORDEREAU_REDUCTION->value) {
                 $query = $query->whereNot("invoices.reduce_amount", "=", '')
                     ->whereHas('printFiles', function ($query) use ($type) {
                         $query->where('name', $type);
                     });
-            } elseif ($type === PrintNameEnums::BORDEREAU) {
+            } elseif ($type === PrintNameEnums::BORDEREAU->value) {
                 $query = $query->where("invoices.reduce_amount", "=", '')
                     -> whereHas('printFiles', function ($query) use ($type) {
                         $query->where('name', $type);
@@ -289,7 +289,7 @@ trait InvoiceTrait
         return $invoice?->printFiles->first();
     }
 
-    public static function getPrintableUuid(string $status = InvoiceStatusEnums::ACCEPTED): array
+    public static function getPrintableUuid(string $status = InvoiceStatusEnums::ACCEPTED->value): array
     {
         return Invoice::where('status', $status)
             ->where('type', Constants::TITRE)
@@ -305,7 +305,7 @@ trait InvoiceTrait
     {
         $invoice = Invoice::find($invoice_id);
 
-        if (!$invoice || $invoice->pay_status === InvoicePayStatusEnums::PAID) {
+        if (!$invoice || $invoice->pay_status === InvoicePayStatusEnums::PAID->value) {
             return false;
         }
         $lastPayment = Payment::where('invoice_id', $invoice_id)
@@ -342,7 +342,7 @@ trait InvoiceTrait
                 if ($end_of_year != $invoice->to_date) {
                     $invoice->to_date = $end_of_year;
                     $edited = true;
-                    $invoice->status = InvoiceStatusEnums::DRAFT;
+                    $invoice->status = InvoiceStatusEnums::DRAFT->value;
                     $invoice->validity = 'VALID';
                 }
                 if ($invoice->id == 100222) {

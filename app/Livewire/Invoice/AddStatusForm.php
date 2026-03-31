@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Invoice;
 
+use App\Enums\InvoicePayStatusEnums;
 use App\Enums\InvoiceStatusEnums;
 use App\Helpers\Constants;
 use App\Models\Invoice;
@@ -32,14 +33,14 @@ class AddStatusForm extends Component
     {
         return [
             'status' => ['required', 'string', Rule::in(
-                InvoiceStatusEnums::ACCEPTED,
-                InvoiceStatusEnums::REJECTED_BY_OR,
-                InvoiceStatusEnums::PENDING,
-                InvoiceStatusEnums::REJECTED,
-                InvoiceStatusEnums::APPROVED,
-                InvoiceStatusEnums::APPROVED_CANCELLATION,
-                InvoiceStatusEnums::CANCELED,
-                InvoiceStatusEnums::REDUCED
+                InvoiceStatusEnums::ACCEPTED->value,
+                InvoiceStatusEnums::REJECTED_BY_OR->value,
+                InvoiceStatusEnums::PENDING->value,
+                InvoiceStatusEnums::REJECTED->value,
+                InvoiceStatusEnums::APPROVED->value,
+                InvoiceStatusEnums::APPROVED_CANCELLATION->value,
+                InvoiceStatusEnums::CANCELED->value,
+                InvoiceStatusEnums::REDUCED->value
             )],
         ];
     }
@@ -55,7 +56,7 @@ class AddStatusForm extends Component
     {
         $this->validate();
         $invoice = Invoice::find($this->invoice_id);
-        if ($invoice && $invoice->reduce_amount == '' && ($this->status == InvoiceStatusEnums::APPROVED || $this->status == InvoiceStatusEnums::APPROVED_CANCELLATION || $this->status == InvoiceStatusEnums::REJECTED) && ($invoice->type == Constants::INVOICE_TYPE_TITRE && $invoice->edition_state != "bPRINT")) {
+        if ($invoice && $invoice->reduce_amount == '' && ($this->status == InvoiceStatusEnums::APPROVED->value || $this->status == InvoiceStatusEnums::APPROVED_CANCELLATION->value || $this->status == InvoiceStatusEnums::REJECTED->value) && ($invoice->type == Constants::INVOICE_TYPE_TITRE && $invoice->edition_state != "bPRINT")) {
             if (!$invoice->edition_state) {
                 $this->error_message = "Veuillez au préalable imprimer l'avis.";
             } elseif ($invoice->edition_state == "PRINT") {
@@ -74,10 +75,10 @@ class AddStatusForm extends Component
                 DB::transaction(function () {
                     $invoice = Invoice::find($this->invoice_id);
                     $this->invoice_id = $invoice->id;
-                    if ($invoice->type == Constants::INVOICE_TYPE_TITRE && $this->status == InvoiceStatusEnums::REJECTED) {
+                    if ($invoice->type == Constants::INVOICE_TYPE_TITRE && $this->status == InvoiceStatusEnums::REJECTED->value) {
                         $invoice->reason_for_reject = $this->reason_for_reject;
                     }
-                    if ($this->status == InvoiceStatusEnums::APPROVED && $invoice->reduce_amount != '') {
+                    if ($this->status == InvoiceStatusEnums::APPROVED->value && $invoice->reduce_amount != '') {
                         //Todo make cascade reduction
                         $description_str = $invoice->reduce_amount == $invoice->amount ? Constants::ANNULATION : Constants::REDUCTION;
                         $paymentData = [
@@ -96,36 +97,36 @@ class AddStatusForm extends Component
                         foreach ($payments as $payment) {
                             Payment::create($payment);
                         }
-                        $invoice->pay_status = $invoice->reduce_amount == $invoice->amount ? "PAID" : "PART PAID";
-                        $this->status = InvoiceStatusEnums::APPROVED_CANCELLATION;
+                        $invoice->pay_status = $invoice->reduce_amount == $invoice->amount ? InvoicePayStatusEnums::PAID->value : InvoicePayStatusEnums::PART_PAID->value;
+                        $this->status = InvoiceStatusEnums::APPROVED_CANCELLATION->value;
                     }
                     $invoice->save();
                     switch ($this->status) {
-                        case InvoiceStatusEnums::ACCEPTED:
+                        case InvoiceStatusEnums::ACCEPTED->value:
                             $invoice->submitToState("submit_for_accepted");
                             break;
-                        case InvoiceStatusEnums::REJECTED_BY_OR:
+                        case InvoiceStatusEnums::REJECTED_BY_OR->value:
                             $invoice->submitToState("submit_for_reject_by_ord");
                             break;
-                        case InvoiceStatusEnums::PENDING:
+                        case InvoiceStatusEnums::PENDING->value:
                             $invoice->submitToState("submit_for_pending");
                             break;
-                        case InvoiceStatusEnums::REJECTED:
+                        case InvoiceStatusEnums::REJECTED->value:
                             $invoice->submitToState("submit_for_rejected");
                             break;
-                        case InvoiceStatusEnums::APPROVED:
-                        case InvoiceStatusEnums::APPROVED_CANCELLATION:
+                        case InvoiceStatusEnums::APPROVED->value:
+                        case InvoiceStatusEnums::APPROVED_CANCELLATION->value:
                             if ($invoice->type == Constants::INVOICE_TYPE_COMPTANT) {
                                 $invoice->setDeliveryToNow($this->status);
                                 $invoice->save();
-                            } elseif ($this->status == InvoiceStatusEnums::APPROVED) {
+                            } elseif ($this->status == InvoiceStatusEnums::APPROVED->value) {
                                 $invoice->submitToState("submit_for_approved");
                             } else {
                                 $invoice->submitToState("submit_for_approved_cancellation");
                             }
                             break;
-                        case InvoiceStatusEnums::CANCELED:
-                        case InvoiceStatusEnums::REDUCED:
+                        case InvoiceStatusEnums::CANCELED->value:
+                        case InvoiceStatusEnums::REDUCED->value:
                             break;
                         default:
                     }

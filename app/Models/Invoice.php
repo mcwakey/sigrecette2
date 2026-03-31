@@ -41,9 +41,39 @@ class Invoice extends Model implements FormatDateInterface
         'edition_state',
         'notes'
     ];
+
     protected $attributes = [
-        'status' => InvoiceStatusEnums::DRAFT,
+        'status' => 'DRAFT',
     ];
+
+    public function scopeOfStatus($query, string $status)
+    {
+        return $query->where('status', $status);
+    }
+
+    public function scopeApproved($query)
+    {
+        return $query->whereIn('status', [
+            InvoiceStatusEnums::APPROVED->value,
+            InvoiceStatusEnums::APPROVED_CANCELLATION->value,
+        ]);
+    }
+
+    public function scopeUnpaid($query)
+    {
+        return $query->where('pay_status', '!=', InvoicePayStatusEnums::PAID->value);
+    }
+
+    public function scopeForTaxpayer($query, int $taxpayerId)
+    {
+        return $query->where('taxpayer_id', $taxpayerId);
+    }
+
+    public function scopeInDateRange($query, $startDate, $endDate)
+    {
+        return $query->whereBetween('invoices.created_at', [$startDate, $endDate]);
+    }
+
     public function can(string $state)
     {
         $workflow = $this->workflow_get();
@@ -61,9 +91,9 @@ class Invoice extends Model implements FormatDateInterface
     }
     public function get_remains_to_be_paid()
     {
-        if ($this->status == InvoiceStatusEnums::REDUCED || $this->status == InvoiceStatusEnums::CANCELED || $this->status == InvoiceStatusEnums::REJECTED) {
+        if ($this->status == InvoiceStatusEnums::REDUCED->value || $this->status == InvoiceStatusEnums::CANCELED->value || $this->status == InvoiceStatusEnums::REJECTED->value) {
             return "-";
-        } elseif ($this->status == InvoiceStatusEnums::APPROVED_CANCELLATION) {
+        } elseif ($this->status == InvoiceStatusEnums::APPROVED_CANCELLATION->value) {
             $invoice = Invoice::where('invoice_no', $this->invoice_no)->first();
             return Payment::getRestToPaid($invoice);
         } else {
@@ -73,18 +103,18 @@ class Invoice extends Model implements FormatDateInterface
     public function isValid(): bool
     {
         return (
-            $this->status != InvoiceStatusEnums::REJECTED_BY_OR &&
-            $this->status != InvoiceStatusEnums::REJECTED &&
-            $this->status != InvoiceStatusEnums::CANCELED &&
-                $this->status != InvoiceStatusEnums::REDUCED &&
-                $this->pay_status != InvoicePayStatusEnums::PAID
+            $this->status != InvoiceStatusEnums::REJECTED_BY_OR->value &&
+            $this->status != InvoiceStatusEnums::REJECTED->value &&
+            $this->status != InvoiceStatusEnums::CANCELED->value &&
+                $this->status != InvoiceStatusEnums::REDUCED->value &&
+                $this->pay_status != InvoicePayStatusEnums::PAID->value
         && $this->validity == 'VALID');
     }
     public function canGetPayment(): bool
     {
-        return ($this->status != InvoiceStatusEnums::CANCELED &&
-                $this->status != InvoiceStatusEnums::REDUCED &&
-                $this->pay_status != InvoicePayStatusEnums::PAID)
+        return ($this->status != InvoiceStatusEnums::CANCELED->value &&
+                $this->status != InvoiceStatusEnums::REDUCED->value &&
+                $this->pay_status != InvoicePayStatusEnums::PAID->value)
             && ($this->delivery_date != null || $this->type == Constants::INVOICE_TYPE_COMPTANT);
     }
     public function is_editions_is_generate_for_approve_state(): bool
@@ -152,7 +182,7 @@ class Invoice extends Model implements FormatDateInterface
         if ($role) {
             $user = auth()->user();
             if ($user->hasRole($roleName)) {
-                $this->setDeliveryToNow(InvoiceStatusEnums::APPROVED);
+                $this->setDeliveryToNow(InvoiceStatusEnums::APPROVED->value);
             }
         }
         return $this;

@@ -60,9 +60,9 @@ class InvoiceCodeBalanceService
         $query = Payment::query()
             ->where('code', $code)
             ->whereIn('status', [
-                PaymentStatusEnums::PENDING,
-                PaymentStatusEnums::ACCOUNTED,
-                PaymentStatusEnums::DONE,
+                PaymentStatusEnums::PENDING->value,
+                PaymentStatusEnums::ACCOUNTED->value,
+                PaymentStatusEnums::DONE->value,
             ])
             ->where(function ($q) use ($invoice) {
                 $q->where('invoice_id', $invoice->id)

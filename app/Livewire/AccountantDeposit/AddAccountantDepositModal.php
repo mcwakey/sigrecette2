@@ -92,7 +92,7 @@ class AddAccountantDepositModal extends Component
                     'invoice_type' => 'VERSEMENT',
                 ];
                 Payment::create($paymentData);
-                $payments_olds = Payment::whereIn('invoice_type', [Constants::INVOICE_TYPE_COMPTANT, Constants::INVOICE_TYPE_TITRE])->where('status', PaymentStatusEnums::ACCOUNTED)->get();
+                $payments_olds = Payment::whereIn('invoice_type', [Constants::INVOICE_TYPE_COMPTANT, Constants::INVOICE_TYPE_TITRE])->where('status', PaymentStatusEnums::ACCOUNTED->value)->get();
                 foreach ($payments_olds as $payments_old) {
                     $payments_old->reference_deposit = $this->reference;
                     $payments_old->status = 'DONE';
@@ -121,7 +121,7 @@ class AddAccountantDepositModal extends Component
 
             $this->total_amount = Payment::selectRaw('SUM(amount) AS amount')
                 ->whereBetween('created_at', [$s_date, $e_date])
-                ->where('status', "ACCOUNTED")
+                ->where('status', PaymentStatusEnums::ACCOUNTED->value)
                 ->first()
                 ->amount ?? 0;
             ;

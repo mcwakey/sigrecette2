@@ -89,6 +89,32 @@ class Taxpayer extends Model
             });
         }
     }
+
+    public function scopeOfType($query, string $type)
+    {
+        return $query->where('type', $type);
+    }
+
+    public function scopeInZone($query, int $zoneId)
+    {
+        return $query->where('zone_id', $zoneId);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where(function ($q) {
+            $q->whereNotIn('from_mobile_and_validate_state', [
+                TaxpayerStateEnums::REJECTED->value,
+                TaxpayerStateEnums::PENDING->value,
+            ])->orWhereNull('from_mobile_and_validate_state');
+        });
+    }
+
+    public function scopeInCategory($query, int $categoryId)
+    {
+        return $query->where('category_id', $categoryId);
+    }
+
     public function getProfilePhotoUrlAttribute()
     {
         if ($this->profile_photo_path) {
@@ -162,12 +188,12 @@ class Taxpayer extends Model
         return Invoice::where('taxpayer_id', '=', $this->id)
             ->where('to_date', '>', now())
             ->whereNotIn('status', [
-                InvoiceStatusEnums::REJECTED_BY_OR,
-                InvoiceStatusEnums::REJECTED,
-                InvoiceStatusEnums::CANCELED,
-                InvoiceStatusEnums::REDUCED
+                InvoiceStatusEnums::REJECTED_BY_OR->value,
+                InvoiceStatusEnums::REJECTED->value,
+                InvoiceStatusEnums::CANCELED->value,
+                InvoiceStatusEnums::REDUCED->value
             ])
-            ->where('pay_status', '!=', InvoicePayStatusEnums::PAID)
+            ->where('pay_status', '!=', InvoicePayStatusEnums::PAID->value)
             ->where('validity', 'VALID')
             ->exists();
     }
@@ -220,13 +246,13 @@ class Taxpayer extends Model
     public static function getTaxpayers()
     {
         return Taxpayer::where('type', '=', Constants::TITRE)->where(function ($q) {
-            $q->whereNotIn('taxpayers.from_mobile_and_validate_state', [TaxpayerStateEnums::REJECTED, TaxpayerStateEnums::PENDING])->orWhereNull('taxpayers.from_mobile_and_validate_state');
+            $q->whereNotIn('taxpayers.from_mobile_and_validate_state', [TaxpayerStateEnums::REJECTED->value, TaxpayerStateEnums::PENDING->value])->orWhereNull('taxpayers.from_mobile_and_validate_state');
         })->get();
     }
     public static function taxpayersWithoutInvoice()
     {
-        return Taxpayer::getTaxpayers()->filter(fn($taxpayer) => !Invoice::where('taxpayer_id', $taxpayer->id)->where('to_date', '>', now())->whereNotIn('status', [InvoiceStatusEnums::REJECTED_BY_OR, InvoiceStatusEnums::REJECTED, InvoiceStatusEnums::CANCELED, InvoiceStatusEnums::REDUCED])
-            ->where('pay_status', '!=', InvoicePayStatusEnums::PAID)
+        return Taxpayer::getTaxpayers()->filter(fn($taxpayer) => !Invoice::where('taxpayer_id', $taxpayer->id)->where('to_date', '>', now())->whereNotIn('status', [InvoiceStatusEnums::REJECTED_BY_OR->value, InvoiceStatusEnums::REJECTED->value, InvoiceStatusEnums::CANCELED->value, InvoiceStatusEnums::REDUCED->value])
+            ->where('pay_status', '!=', InvoicePayStatusEnums::PAID->value)
             ->where('validity', 'VALID')
             ->exists());
     }

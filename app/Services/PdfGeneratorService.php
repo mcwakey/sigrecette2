@@ -229,16 +229,16 @@ class PdfGeneratorService implements PdfGeneratorInterface
     {
         $type = null;
         if ($action == 1) {
-            $type = PrintNameEnums::BORDEREAU;
+            $type = PrintNameEnums::BORDEREAU->value;
         } elseif ($action == 2) {
-            $type = PrintNameEnums::BORDEREAU_REDUCTION;
+            $type = PrintNameEnums::BORDEREAU_REDUCTION->value;
         }
         if ($type != null && $printFile == null) {
-            $data = Invoice::getPrintData([InvoiceStatusEnums::PENDING], $type);
+            $data = Invoice::getPrintData([InvoiceStatusEnums::PENDING->value], $type);
             if (count($data) > 0) {
                 $total = 0;
                 foreach ($data as $datum) {
-                    if ($type === PrintNameEnums::BORDEREAU) {
+                    if ($type === PrintNameEnums::BORDEREAU->value) {
                         $total += $datum->amount;
                     } else {
                         $total += $datum->reduce_amount;
@@ -246,7 +246,7 @@ class PdfGeneratorService implements PdfGeneratorInterface
                 }
                 $printFile = PrintFile::createPrintFile($type, $data, $total);
             } else {
-                $printFile = Invoice::getPrintFile([InvoiceStatusEnums::PENDING], $type);
+                $printFile = Invoice::getPrintFile([InvoiceStatusEnums::PENDING->value], $type);
             }
         }
         if ($printFile != null && $this->checkIfCommuneIsNotNull()) {
@@ -266,7 +266,7 @@ class PdfGeneratorService implements PdfGeneratorInterface
                 foreach ($data as $invoice) {
                     if ($invoice->edition_state == "PRINT") {
                         $invoice->edition_state = "bPRINT";
-                        $invoice->status = InvoiceStatusEnums::PENDING;
+                        $invoice->status = InvoiceStatusEnums::PENDING->value;
                         $invoice->save();
                     }
                 }
@@ -281,10 +281,10 @@ class PdfGeneratorService implements PdfGeneratorInterface
     public function generateJournalInvoiceListPdf(array $data, string $template, int $action = null): array
     {
         $data = Invoice::getPrintData(
-            [InvoiceStatusEnums::CANCELED,
-                InvoiceStatusEnums::REDUCED,
-                InvoiceStatusEnums::APPROVED,
-            InvoiceStatusEnums::APPROVED_CANCELLATION]
+            [InvoiceStatusEnums::CANCELED->value,
+                InvoiceStatusEnums::REDUCED->value,
+                InvoiceStatusEnums::APPROVED->value,
+            InvoiceStatusEnums::APPROVED_CANCELLATION->value]
         );
         if ($this->checkIfCommuneIsNotNull() && count($data) > 0) {
             $filename = "Journal_des_avis_des_sommes_à_payer_confiés_par_le_receveur" . "-" . date('Ymd_His') . ".pdf";
@@ -299,10 +299,10 @@ class PdfGeneratorService implements PdfGeneratorInterface
     public function generateInvoiceRegistrePdf(string $template, int $action = null): array
     {
         $data = Invoice::getPrintData(
-            [InvoiceStatusEnums::CANCELED,
-                InvoiceStatusEnums::REDUCED,
-                InvoiceStatusEnums::APPROVED,
-            InvoiceStatusEnums::APPROVED_CANCELLATION]
+            [InvoiceStatusEnums::CANCELED->value,
+                InvoiceStatusEnums::REDUCED->value,
+                InvoiceStatusEnums::APPROVED->value,
+            InvoiceStatusEnums::APPROVED_CANCELLATION->value]
         );
         if ($this->checkIfCommuneIsNotNull() && count($data) > 0) {
             $filename = "Registre-journal-des-avis-distribués" . Str::random(8) . ".pdf";
@@ -315,9 +315,9 @@ class PdfGeneratorService implements PdfGeneratorInterface
     {
         $type = null;
         if ($action == 4) {
-            $type = PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS;
+            $type = PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS->value;
         } elseif ($action == 41) {
-            $type = PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES;
+            $type = PrintNameEnums::FICHE_DE_RECOUVREMENT_DES_AVIS_DISTRIBUES->value;
         }
         if ($data instanceof PrintFile) {
             $printFile = $data;
@@ -326,7 +326,7 @@ class PdfGeneratorService implements PdfGeneratorInterface
             $data = Invoice::filterByType(Invoice::retrieveByUUIDs($data), $type);
             if ($data !== []) {
                 $printFile = PrintFile::createPrintFile($type, $data, 0, $user);
-                if ($type === PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS) {
+                if ($type === PrintNameEnums::FICHE_DE_DISTRIBUTION_DES_AVIS->value) {
                     DB::transaction(function () use ($data) {
                         foreach ($data as $item) {
                             $item->ondistributionprint = true;
@@ -362,7 +362,7 @@ class PdfGeneratorService implements PdfGeneratorInterface
         $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
         $data = Invoice::whereBetween('created_at', [$startOfYear, $endOfYear])
             ->where('type', '=', Constants::INVOICE_TYPE_COMPTANT)
-            ->where('status', '=', InvoiceStatusEnums::APPROVED)->get();
+            ->where('status', '=', InvoiceStatusEnums::APPROVED->value)->get();
         if ($this->checkIfCommuneIsNotNull() && count($data) > 0) {
             $filename = "Registre-journal_des_déclarations_préalables_des_usagers" . Str::random(8) . ".pdf";
             $pdf = PDF::loadView("exports." . $template, ['data' => $data, 'titles' => $this->generateTitleWithAction($action), "commune" => $this->commune, "action" => $action])->setPaper('a4', 'landscape')->stream($filename);

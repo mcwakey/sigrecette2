@@ -1,4 +1,4 @@
-@if($taxpayerinfo->from_mobile_and_validate_state == App\Enums\TaxpayerStateEnums::PENDING )
+@if($taxpayerinfo->from_mobile_and_validate_state == App\Enums\TaxpayerStateEnums::PENDING->value )
     <div class="badge badge-lg badge-light-primary d-inline">{{ __($taxpayerinfo->from_mobile_and_validate_state) }}
             @can('peut valider un contribuable')
                 <button type="button"
@@ -32,10 +32,10 @@
                 </div>
             @endcan
     </div>
-@elseif($taxpayerinfo->from_mobile_and_validate_state ==  App\Enums\TaxpayerStateEnums::APPROVED)
+@elseif($taxpayerinfo->from_mobile_and_validate_state ==  App\Enums\TaxpayerStateEnums::APPROVED->value)
 <div class="badge badge-lg badge-light-success d-inline">
 {{ __('APROVED') }}</div>
-@elseif($taxpayerinfo->from_mobile_and_validate_state ==  App\Enums\TaxpayerStateEnums::REJECTED)
+@elseif($taxpayerinfo->from_mobile_and_validate_state ==  App\Enums\TaxpayerStateEnums::REJECTED->value)
 <div class="badge badge-lg badge-light-danger d-inline">{{ __('REJECTED') }}</div>
 @endif
 

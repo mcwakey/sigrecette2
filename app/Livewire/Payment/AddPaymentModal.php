@@ -9,6 +9,7 @@ use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\Taxpayer;
 use App\Helpers\Constants;
+use App\Enums\InvoicePayStatusEnums;
 use App\Enums\PaymentStatusEnums;
 use App\Enums\PaymentTypeEnums;
 use App\Models\User;
@@ -80,7 +81,7 @@ class AddPaymentModal extends Component
         if ($this->code != null) {
             $rules['code'] = Rule::in($this->validCodes);
         }
-        if ($this->payment_type === PaymentTypeEnums::DIGI) {
+        if ($this->payment_type === PaymentTypeEnums::DIGI->value) {
             $rules['phone_number'] = ['required', 'string'];
             $rules['network'] = ['required', Rule::in(Constants::MOBILE_NETWORKS)];
         }
@@ -132,7 +133,7 @@ class AddPaymentModal extends Component
         }
 
         // Branch for mobile (DIGI) payments
-        if ($this->payment_type === PaymentTypeEnums::DIGI) {
+        if ($this->payment_type === PaymentTypeEnums::DIGI->value) {
             $this->submitMobilePayment();
             return;
         }
@@ -158,7 +159,7 @@ class AddPaymentModal extends Component
                         'notes' => $this->notes
                     ];
                     if ($is_regisseur) {
-                        $paymentData['status'] = PaymentStatusEnums::ACCOUNTED;
+                        $paymentData['status'] = PaymentStatusEnums::ACCOUNTED->value;
                     }
                     $payments = Invoice::getCode($this->invoice_no, $this->amount, $paymentData);
                     $payment = Payment::find($this->payment_id);
@@ -171,7 +172,7 @@ class AddPaymentModal extends Component
                             }
                         }
                     }
-                    $paystatus = $this->amount + $this->paid >= $this->bill ? "PAID" : "PART PAID";
+                    $paystatus = $this->amount + $this->paid >= $this->bill ? InvoicePayStatusEnums::PAID->value : InvoicePayStatusEnums::PART_PAID->value;
                     $data = [
                         'pay_status' => $paystatus,
                     ];
@@ -424,7 +425,7 @@ class AddPaymentModal extends Component
             Payment::destroy($id);
             if ($invoice) {
                 $paid = Payment::getPaid($invoice?->invoice_no);
-                $paystatus = $paid == 0 ? PaymentStatusEnums::PENDING : "PART PAID";
+                $paystatus = $paid == 0 ? PaymentStatusEnums::PENDING->value : InvoicePayStatusEnums::PART_PAID->value;
                 $invoice->pay_status = $paystatus;
                 $invoice->save();
                 $this->dispatchMessage('Paiement', 'delete');

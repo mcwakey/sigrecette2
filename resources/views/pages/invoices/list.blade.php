@@ -253,19 +253,19 @@ $filters = [
                                 <select class="form-select" id="mySearchTen">
                                     <option value=""></option>
                                     @if($aucomptant)
-                                        <option value="{{ App\Enums\InvoiceStatusEnums::PENDING}}">{{ __('PENDING') }}</option>
-                                        <option value="{{App\Enums\InvoiceStatusEnums::APPROVED}}">{{ __('APROVED') }}</option>
-                                        <option value="{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}">{{ __("AVIS D'ANNULATION/REDUCTION") }}</option>
+                                        <option value="{{ App\Enums\InvoiceStatusEnums::PENDING->value}}">{{ __('PENDING') }}</option>
+                                        <option value="{{App\Enums\InvoiceStatusEnums::APPROVED->value}}">{{ __('APROVED') }}</option>
+                                        <option value="{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION->value}}">{{ __("AVIS D'ANNULATION/REDUCTION") }}</option>
 
                                     @else
-                                        <option value="{{App\Enums\InvoiceStatusEnums::APPROVED}}">{{ __('APROVED') }}</option>
-                                        <option value="{{ App\Enums\InvoiceStatusEnums::REJECTED }}">{{ __('REJECTED') }}</option>
-                                        <option value="{{  App\Enums\InvoiceStatusEnums::CANCELED }}">{{ __('CANCELED') }}</option>
-                                        <option value="{{  App\Enums\InvoiceStatusEnums::REDUCED }}">{{ __('REDUCED') }}</option>
-                                        <option value="{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}">{{ __("AVIS D'ANNULATION/REDUCTION") }}</option>
-                                        <option value="{{ App\Enums\InvoiceStatusEnums::PENDING}}">{{ __('PENDING') }}</option>
-                                        <option value="{{ App\Enums\InvoiceStatusEnums::ACCEPTED}}">{{ __('ACCEPTED') }}</option>
-                                        <option value="{{ App\Enums\InvoiceStatusEnums::DRAFT}}">{{ __('DRAFT') }}</option>
+                                        <option value="{{App\Enums\InvoiceStatusEnums::APPROVED->value}}">{{ __('APROVED') }}</option>
+                                        <option value="{{ App\Enums\InvoiceStatusEnums::REJECTED->value }}">{{ __('REJECTED') }}</option>
+                                        <option value="{{  App\Enums\InvoiceStatusEnums::CANCELED->value }}">{{ __('CANCELED') }}</option>
+                                        <option value="{{  App\Enums\InvoiceStatusEnums::REDUCED->value }}">{{ __('REDUCED') }}</option>
+                                        <option value="{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION->value}}">{{ __("AVIS D'ANNULATION/REDUCTION") }}</option>
+                                        <option value="{{ App\Enums\InvoiceStatusEnums::PENDING->value}}">{{ __('PENDING') }}</option>
+                                        <option value="{{ App\Enums\InvoiceStatusEnums::ACCEPTED->value}}">{{ __('ACCEPTED') }}</option>
+                                        <option value="{{ App\Enums\InvoiceStatusEnums::DRAFT->value}}">{{ __('DRAFT') }}</option>
                                     @endif
                                 </select>
                             </div>
@@ -563,22 +563,22 @@ $filters = [
             function onSelectedValueChanged(selectedValue) {
                 removePrintMenuItems();
                 const array = ['liv',
-                    '{{App\Enums\InvoiceStatusEnums::APPROVED}}',
-                    '{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}',
-                    '{{  App\Enums\InvoiceStatusEnums::CANCELED }}',
-                    '{{ App\Enums\InvoiceStatusEnums::PENDING}}',
-                    "{{ App\Enums\InvoiceStatusEnums::REJECTED }}",
-                    '{{ App\Enums\InvoiceStatusEnums::REDUCED}}',
-                    '{{ App\Enums\InvoiceStatusEnums::ACCEPTED}}',
+                    '{{App\Enums\InvoiceStatusEnums::APPROVED->value}}',
+                    '{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION->value}}',
+                    '{{  App\Enums\InvoiceStatusEnums::CANCELED->value }}',
+                    '{{ App\Enums\InvoiceStatusEnums::PENDING->value}}',
+                    "{{ App\Enums\InvoiceStatusEnums::REJECTED->value }}",
+                    '{{ App\Enums\InvoiceStatusEnums::REDUCED->value}}',
+                    '{{ App\Enums\InvoiceStatusEnums::ACCEPTED->value}}',
                 ];
                 if (array.includes(selectedValue)) {
                     printButton.classList.add('btn-active-light-primary');
                     printButton.classList.remove( "d-none");
                     const approve_array = [
-                        '{{App\Enums\InvoiceStatusEnums::APPROVED}}',
-                        '{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION}}',
-                        '{{  App\Enums\InvoiceStatusEnums::CANCELED }}',
-                        '{{ App\Enums\InvoiceStatusEnums::REDUCED}}'
+                        '{{App\Enums\InvoiceStatusEnums::APPROVED->value}}',
+                        '{{ App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION->value}}',
+                        '{{  App\Enums\InvoiceStatusEnums::CANCELED->value }}',
+                        '{{ App\Enums\InvoiceStatusEnums::REDUCED->value}}'
                     ];
                     if (
                         approve_array.includes(selectedValue)
@@ -594,15 +594,15 @@ $filters = [
 
 
                         }
-                    } else if(selectedValue === '{{ App\Enums\InvoiceStatusEnums::ACCEPTED}}'){
+                    } else if(selectedValue === '{{ App\Enums\InvoiceStatusEnums::ACCEPTED->value}}'){
                         addPrintMenuItem('{{ __('Imprimer tous les avis') }}', '00');
                     }
-                    else if(  selectedValue ==="{{ App\Enums\InvoiceStatusEnums::PENDING}}" && !aucomptant){
+                    else if(  selectedValue ==="{{ App\Enums\InvoiceStatusEnums::PENDING->value}}" && !aucomptant){
                         addPrintMenuItem('{{ __('Imprimer tous les avis') }}', '00');
                         addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
                         addPrintMenuItem('{{ __('Bordereau journal des avis de réduction ou d’annulation') }}', '2');
                         agentDiv.classList.add( "d-none")
-                    }else if(  selectedValue ==="{{ App\Enums\InvoiceStatusEnums::PENDING}}" ||  selectedValue ==="{{ App\Enums\InvoiceStatusEnums::APPROVED}}" && aucomptant){
+                    }else if(  selectedValue ==="{{ App\Enums\InvoiceStatusEnums::PENDING->value}}" ||  selectedValue ==="{{ App\Enums\InvoiceStatusEnums::APPROVED->value}}" && aucomptant){
                         addPrintMenuItem('{{ __('Registre-journal des déclarations préalables des usagers') }}', '77');
                         agentDiv.classList.add( "d-none")
                     }else if(selectedValue ==='liv'){
@@ -634,14 +634,14 @@ $filters = [
             onSelectedValueChanged(filters.state);
            // console.log(filters)
             if(!filters.state && filters.delivery=='nonliv' && filters.type== "TITRE"){
-                onSelectedValueChanged("{{ App\Enums\InvoiceStatusEnums::APPROVED}}");
+                onSelectedValueChanged("{{ App\Enums\InvoiceStatusEnums::APPROVED->value}}");
             }
             else if(!filters.state && !filters.delivery && aucomptant){
-                onSelectedValueChanged("{{ App\Enums\InvoiceStatusEnums::APPROVED}}");
+                onSelectedValueChanged("{{ App\Enums\InvoiceStatusEnums::APPROVED->value}}");
             }else if(!filters.state && filters.delivery=='liv' && filters.type== "TITRE"){
                 onSelectedValueChanged('liv');
             }else if(filters.state==="ACCEPTED" && filters.type== "TITRE"){
-                onSelectedValueChanged("{{ App\Enums\InvoiceStatusEnums::ACCEPTED}}");
+                onSelectedValueChanged("{{ App\Enums\InvoiceStatusEnums::ACCEPTED->value}}");
             }
 
         </script>

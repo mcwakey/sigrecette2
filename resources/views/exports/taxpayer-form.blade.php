@@ -114,7 +114,7 @@
     @foreach($data[1] as  $item)
 
         @if($item instanceof \App\Models\Invoice )
-            @if($item->delivery_date!=null && $item->status!= App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION)
+            @if($item->delivery_date!=null && $item->status!= App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION->value)
                 @foreach(Invoice::sumAmountsByTaxCode($item) as $code => $tax)
                     <tr>
                         <td>{{$item->delivery_date}}</td>

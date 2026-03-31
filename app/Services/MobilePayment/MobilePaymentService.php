@@ -2,6 +2,7 @@
 
 namespace App\Services\MobilePayment;
 
+use App\Enums\InvoicePayStatusEnums;
 use App\Enums\PaymentStatusEnums;
 use App\Events\MobilePaymentVerified;
 use App\Models\Invoice;
@@ -145,7 +146,7 @@ class MobilePaymentService
                 'remaining_amount' => 0,
                 'user_id' => $transaction->user_id,
                 'invoice_type' => $invoice->type,
-                'status' => PaymentStatusEnums::ACCOUNTED,
+                'status' => PaymentStatusEnums::ACCOUNTED->value,
                 'provider' => $transaction->provider,
                 'phone_number' => $transaction->phone_number,
                 'external_id' => $transaction->external_id,
@@ -162,7 +163,7 @@ class MobilePaymentService
             }
 
             $newPaid = Payment::getPaid($invoice->invoice_no);
-            $payStatus = $newPaid >= $invoice->amount ? 'PAID' : 'PART PAID';
+            $payStatus = $newPaid >= $invoice->amount ? InvoicePayStatusEnums::PAID->value : InvoicePayStatusEnums::PART_PAID->value;
             $invoice->update(['pay_status' => $payStatus]);
 
             event(new MobilePaymentVerified($transaction));

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\ZonesDataTable;
+use App\Http\Requests\StoreZoneRequest;
+use App\Http\Requests\UpdateZoneRequest;
 use App\Models\Zone;
 use Illuminate\Http\Request;
 
@@ -25,7 +27,7 @@ class ZonesController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreZoneRequest $request)
     {
         //
     }
@@ -45,10 +47,7 @@ class ZonesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Zone $zone)
-    {
-        //
-    }
+    public function update(UpdateZoneRequest $request, Zone $zone)\n    {\n        //\n    }
     /**
      * Remove the specified resource from storage.
      */

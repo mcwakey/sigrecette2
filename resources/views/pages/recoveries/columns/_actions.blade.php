@@ -7,7 +7,7 @@
         <!--begin::Menu item-->
 
 
-        @if($payment->status==App\Enums\PaymentStatusEnums::CANCELED)
+        @if($payment->status==App\Enums\PaymentStatusEnums::CANCELED->value)
         <div class="menu-item px-3">
             <a href="#" class="menu-link px-3" data-kt-user-id="{{ $payment->id }}" data-kt-action="delete_row">
                 {{ __('delete') }}

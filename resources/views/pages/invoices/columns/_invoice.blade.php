@@ -15,7 +15,7 @@
             </a>
 
         </div>
-        @if($invoice->status==App\Enums\InvoiceStatusEnums::PENDING)
+        @if($invoice->status==App\Enums\InvoiceStatusEnums::PENDING->value)
             @php
             $printFile = $invoice?->printFiles->first();
              @endphp

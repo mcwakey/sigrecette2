@@ -191,9 +191,9 @@
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('payment type') }}</label>
                                 <select wire:model.live="payment_type" name="payment_type" class="form-select" data-dropdown-parent="#kt_modal_add_payment">
                                     <option value="">Selectionner une option</option>
-                                    <option value="{{App\Enums\PaymentTypeEnums::CASH}}">ESPECE</option>
-                                    <option value="{{App\Enums\PaymentTypeEnums::CHEQUE}}">CHEQUE</option>
-                                    <option value="{{App\Enums\PaymentTypeEnums::DIGI}}">DIGITAL</option>
+                                    <option value="{{App\Enums\PaymentTypeEnums::CASH->value}}">ESPECE</option>
+                                    <option value="{{App\Enums\PaymentTypeEnums::CHEQUE->value}}">CHEQUE</option>
+                                    <option value="{{App\Enums\PaymentTypeEnums::DIGI->value}}">DIGITAL</option>
                                 </select>
                                 @error('payment_type')
                                 <span class="text-danger">{{ $message }}</span> @enderror
@@ -207,7 +207,7 @@
                         </div>
 
                         {{-- Mobile payment fields (visible when DIGI is selected) --}}
-                        @if($payment_type === App\Enums\PaymentTypeEnums::DIGI)
+                        @if($payment_type === App\Enums\PaymentTypeEnums::DIGI->value)
                         <div class="row mb-5">
                             <div class="col-md-3">
                                 <label class="fw-semibold fs-6 mb-2">{{ __('Fournisseur') }}</label>

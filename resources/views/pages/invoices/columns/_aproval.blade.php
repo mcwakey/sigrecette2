@@ -1,12 +1,12 @@
 @php
     $actions = App\Helpers\Constants::getInvoiceActionsBasedOnRouteNameAndStatut();
 @endphp
-@if($invoice->status ==  App\Enums\InvoiceStatusEnums::PENDING )
+@if($invoice->status ==  App\Enums\InvoiceStatusEnums::PENDING->value )
 
 @if($invoice->can("submit_for_approved"))
 
     <div class="badge badge-lg badge-light-primary d-inline">{{ __($invoice->status) }}
-        @if(in_array(App\Enums\InvoiceActionsEnums::EDITSTATUT,$actions))
+        @if(in_array(App\Enums\InvoiceActionsEnums::EDITSTATUT->value,$actions))
                 <button type="button"
                         class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto  pulse pulse-warning"
                         data-kt-user-id="{{ $invoice->id }}"
@@ -41,14 +41,14 @@
     </div>
 @endif
 
-@elseif( $invoice->status ==  App\Enums\InvoiceStatusEnums::APPROVED || $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION)
+@elseif( $invoice->status ==  App\Enums\InvoiceStatusEnums::APPROVED->value || $invoice->status == App\Enums\InvoiceStatusEnums::APPROVED_CANCELLATION->value)
 <div class="badge badge-lg badge-light-success d-inline">
 {{ __('APROVED') }}</div>
-@elseif($invoice->status==  App\Enums\InvoiceStatusEnums::REJECTED)
+@elseif($invoice->status==  App\Enums\InvoiceStatusEnums::REJECTED->value)
 <div class="badge badge-lg badge-light-danger d-inline">{{ __('REJECTED') }}</div>
 @elseif($invoice->can( "submit_for_accepted"))
 <div class="badge badge-lg badge-light-secondary d-inline">{{ __('DRAFT')}}
-    @if(in_array(App\Enums\InvoiceActionsEnums::EDITSTATUT,$actions))
+    @if(in_array(App\Enums\InvoiceActionsEnums::EDITSTATUT->value,$actions))
             <button type="button"
                     class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto pulse pulse-warning"
                     data-kt-user-id="{{ $invoice->id }}"

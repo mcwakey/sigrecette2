@@ -32,8 +32,8 @@ class AddStatusForm extends Component
     {
         return [
             'status' => ['required', 'string', Rule::in(
-                TaxpayerStateEnums::APPROVED,
-                TaxpayerStateEnums::REJECTED
+                TaxpayerStateEnums::APPROVED->value,
+                TaxpayerStateEnums::REJECTED->value
             )],
         ];
     }

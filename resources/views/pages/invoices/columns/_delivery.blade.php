@@ -8,7 +8,7 @@
 @endif
 
 @if ($invoice->can("submit_for_reduced"))
-    @if (in_array(App\Enums\InvoiceActionsEnums::ADDDELIVERY,$actions))
+    @if (in_array(App\Enums\InvoiceActionsEnums::ADDDELIVERY->value,$actions))
         @can('peut ajouter la date de livraison d\'un avis')
             <button type="button"
                 class="btn btn-icon btn-active-light-primary w-30px h-30px ms-auto  pulse pulse-warning"

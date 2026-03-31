@@ -2,13 +2,13 @@
 
 namespace App\Enums;
 
-class PaymentStatusEnums
+enum PaymentStatusEnums: string
 {
-    public const PENDING = 'PENDING';
-    public const  ACCOUNTED = 'ACCOUNTED';
-    public const  CANCELED = 'CANCELED';
-    public const  DONE = 'DONE';
-    public const VERIFYING = 'VERIFYING';
-    public const FAILED = 'FAILED';
-    public const EXPIRED = 'EXPIRED';
+    case PENDING = 'PENDING';
+    case ACCOUNTED = 'ACCOUNTED';
+    case CANCELED = 'CANCELED';
+    case DONE = 'DONE';
+    case VERIFYING = 'VERIFYING';
+    case FAILED = 'FAILED';
+    case EXPIRED = 'EXPIRED';
 }

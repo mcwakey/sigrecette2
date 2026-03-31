@@ -2,8 +2,8 @@
 
 namespace App\Enums;
 
-class InvoiceDeliveryEnums
+enum InvoiceDeliveryEnums: string
 {
-    public const NOT_DELIVERED = 'NOT DELIVERED';
-    public const DELIVERED = 'DELIVERED';
+    case NOT_DELIVERED = 'NOT DELIVERED';
+    case DELIVERED = 'DELIVERED';
 }

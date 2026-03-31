@@ -1,6 +1,6 @@
 @php
-    $count_invoices_t = $stats_reactive[ \App\Enums\StatisticKeysEnums::BY_INVOICE];
-        $count_invoices_c = $stats_reactive[ \App\Enums\StatisticKeysEnums::BY_INVOICE_COMPTANT];
+    $count_invoices_t = $stats_reactive[ \App\Enums\StatisticKeysEnums::BY_INVOICE->value];
+        $count_invoices_c = $stats_reactive[ \App\Enums\StatisticKeysEnums::BY_INVOICE_COMPTANT->value];
 
 @endphp
 

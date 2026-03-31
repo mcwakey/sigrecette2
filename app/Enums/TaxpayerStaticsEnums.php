@@ -2,14 +2,14 @@
 
 namespace App\Enums;
 
-class TaxpayerStaticsEnums
+enum TaxpayerStaticsEnums: string
 {
-    public const BY_GENDER = 'gender';
-    public const BY_CATEGORY = 'category';
-    public const BY_ACTIVITY = 'activity';
-    public const BY_CANTON = 'canton';
-    public const BY_TOWN = 'town';
-    public const BY_ZONE = 'zone';
-    public const BY_TAXABLE = 'taxable';
-    const BY_LABEL = 'label';
+    case BY_GENDER = 'gender';
+    case BY_CATEGORY = 'category';
+    case BY_ACTIVITY = 'activity';
+    case BY_CANTON = 'canton';
+    case BY_TOWN = 'town';
+    case BY_ZONE = 'zone';
+    case BY_TAXABLE = 'taxable';
+    case BY_LABEL = 'label';
 }

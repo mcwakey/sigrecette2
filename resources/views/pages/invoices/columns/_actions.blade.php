@@ -10,7 +10,7 @@
     @php
     $actions = App\Helpers\Constants::getInvoiceActionsBasedOnRouteNameAndStatut();
     @endphp
-@if(in_array(App\Enums\InvoiceActionsEnums::VIEW,$actions))
+@if(in_array(App\Enums\InvoiceActionsEnums::VIEW->value,$actions))
         <div class="menu-item px-3">
             <a href="#" class="menu-link px-3" data-kt-user-id="{{ $invoice->id }}" data-bs-toggle="modal"
                data-bs-target="#kt_modal_add_invoice" data-kt-action="view_invoice">
@@ -18,7 +18,7 @@
             </a>
         </div>
     @endif
-    @if(in_array(App\Enums\InvoiceActionsEnums::PRINT,$actions))
+    @if(in_array(App\Enums\InvoiceActionsEnums::PRINT->value,$actions))
         @if($invoice->canPrint())
             @php
                 $data = [$invoice->uuid];
@@ -31,7 +31,7 @@
     @endif
 
 
-    @if(in_array(App\Enums\InvoiceActionsEnums::REDUCE,$actions))
+    @if(in_array(App\Enums\InvoiceActionsEnums::REDUCE->value,$actions))
         @if( $invoice->can( "submit_for_reduced") ||  $invoice->can("submit_for_canceled") && $invoice->validity == 'VALID')
             @if($invoice->type ==  App\Helpers\Constants::INVOICE_TYPE_TITRE)
                 @can('peut réduire un avis sur titre')
@@ -63,7 +63,7 @@
         @endif
 
     @endif
-    @if( in_array(App\Enums\InvoiceActionsEnums::PAYMENT,$actions))
+    @if( in_array(App\Enums\InvoiceActionsEnums::PAYMENT->value,$actions))
         @if( $invoice->can( "submit_for_reduced") ||  $invoice->can("submit_for_canceled"))
             @if( $invoice->canGetPayment())
                 @can('peut ajouter un paiement')

@@ -93,7 +93,7 @@ class Payment extends Model
         $activeYear = Year::getActiveYear();
         $startOfYear = Carbon::parse("{$activeYear->name}-01-01 00:00:00");
         $endOfYear = Carbon::parse("{$activeYear->name}-12-31 23:59:59");
-        return Payment::whereNot('status', PaymentStatusEnums::PENDING)
+        return Payment::whereNot('status', PaymentStatusEnums::PENDING->value)
             ->whereNotIn('payments.reference', [Constants::ANNULATION, Constants::REDUCTION])// Filter collector_deposits by taxpayer_id
             ->orderBy('created_at', 'asc')
             ->whereBetween('payments.created_at', [$startOfYear, $endOfYear])

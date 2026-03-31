@@ -123,7 +123,7 @@ class AddInvoiceModal extends Component
                     $invoiceData['amount'] = $this->amount_e;
                     $invoiceData['reduce_amount'] = $this->reduce_amount;
                     //FIX CANCEL INVOICE BUG
-                    if ($this->cancel_reduct == InvoiceStatusEnums::CANCELED) {
+                    if ($this->cancel_reduct == InvoiceStatusEnums::CANCELED->value) {
                         $invoiceData['reduce_amount'] = $this->amount_e;
                         $invoice = Invoice::find($this->invoice_id);
                         foreach ($invoice->taxpayer_taxables()->get() as $item) {
@@ -171,7 +171,7 @@ class AddInvoiceModal extends Component
                     $invoice_old->validity = "CANCELED";
                     $invoice->type = $invoice_old->type;
                     if ($invoice_old->type == Constants::INVOICE_TYPE_COMPTANT) {
-                        $invoice->status = InvoiceStatusEnums::PENDING;
+                        $invoice->status = InvoiceStatusEnums::PENDING->value;
                         $invoice->processOnInvoicesByUser('regisseur');
                     }
                     $invoice_old->save();

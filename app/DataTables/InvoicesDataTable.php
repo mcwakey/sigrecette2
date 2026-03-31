@@ -93,14 +93,15 @@ class InvoicesDataTable extends DataTable
     public function query(Invoice $model): QueryBuilder
     {
         $this->id = $this->getTaxpayerId($this->id);
-        $query = $model->join('invoice_items', 'invoice_items.invoice_id', '=', 'invoices.id')
+        $query = $model->with(['taxpayer', 'taxpayer.zone'])
+            ->join('invoice_items', 'invoice_items.invoice_id', '=', 'invoices.id')
             ->leftjoin('taxpayers', 'taxpayers.id', '=', 'invoices.taxpayer_id')
             ->join('taxpayer_taxables', 'taxpayer_taxables.id', '=', 'invoice_items.taxpayer_taxable_id')
             ->join('taxables', 'taxables.id', '=', 'taxpayer_taxables.taxable_id')
             ->join('tax_labels', 'tax_labels.id', '=', 'taxables.tax_label_id')
             ->leftjoin('zones', 'zones.id', '=', 'taxpayers.zone_id')
             ->select('invoices.*')
-            ->where('invoices.status', '!=', InvoiceStatusEnums::REJECTED_BY_OR)
+            ->where('invoices.status', '!=', InvoiceStatusEnums::REJECTED_BY_OR->value)
             ->distinct()
             ->orderBy('invoices.created_at', 'desc')
             ->newQuery();
@@ -115,8 +116,8 @@ class InvoicesDataTable extends DataTable
             $query->whereBetween('invoices.id', [$this->startInvoiceId, $this->endInvoiceId]);
         }
         if ($this->state != null) {
-            if ($this->state == InvoiceStatusEnums::APPROVED) {
-                $query->whereIn('invoices.status', [InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION]);
+            if ($this->state == InvoiceStatusEnums::APPROVED->value) {
+                $query->whereIn('invoices.status', [InvoiceStatusEnums::APPROVED->value, InvoiceStatusEnums::APPROVED_CANCELLATION->value]);
             } else {
                 $query->where('invoices.status', '=', $this->state);
             }
@@ -125,11 +126,11 @@ class InvoicesDataTable extends DataTable
             if ($this->delivery == Constants::INVOICE_DELIVERY_LIV_KEY) {
                 $query->whereNotNull('delivery_date');
                 if ($this->to_paid) {
-                    $query->whereIn('invoices.status', [InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION])
-                        ->where('invoices.pay_status', '!=', InvoicePayStatusEnums::PAID);
+                    $query->whereIn('invoices.status', [InvoiceStatusEnums::APPROVED->value, InvoiceStatusEnums::APPROVED_CANCELLATION->value])
+                        ->where('invoices.pay_status', '!=', InvoicePayStatusEnums::PAID->value);
                 }
             } elseif ($this->delivery == Constants::INVOICE_DELIVERY_NON_LIV_KEY) {
-                $query->whereIn('invoices.status', [InvoiceStatusEnums::APPROVED, InvoiceStatusEnums::APPROVED_CANCELLATION]);
+                $query->whereIn('invoices.status', [InvoiceStatusEnums::APPROVED->value, InvoiceStatusEnums::APPROVED_CANCELLATION->value]);
                 $query->whereNull('delivery_date');
             }
         }
@@ -188,19 +189,19 @@ class InvoicesDataTable extends DataTable
                 $column->visible(false);
             }
             if ($this->state != null) {
-                if ($this->state == InvoiceStatusEnums::DRAFT) {
+                if ($this->state == InvoiceStatusEnums::DRAFT->value) {
                     if (in_array($column->name, ['order_no', 'paid', 'remains_to_be_paid', 'delivery_date', 'to_date', 'validity', 'reason_for_reject', 'type'])) {
                         $column->visible(false);
                     }
-                } elseif ($this->state == InvoiceStatusEnums::ACCEPTED) {
+                } elseif ($this->state == InvoiceStatusEnums::ACCEPTED->value) {
                     if (in_array($column->name, ['paid', 'remains_to_be_paid', 'delivery_date', 'validity', 'to_date', 'reason_for_reject', 'type'])) {
                         $column->visible(false);
                     }
-                } elseif ($this->state == InvoiceStatusEnums::PENDING) {
+                } elseif ($this->state == InvoiceStatusEnums::PENDING->value) {
                     if (in_array($column->name, ['paid', 'remains_to_be_paid', 'to_date', 'validity', 'delivery_date', 'reason_for_reject', 'type'])) {
                         $column->visible(false);
                     }
-                } elseif ($this->state == InvoiceStatusEnums::REJECTED) {
+                } elseif ($this->state == InvoiceStatusEnums::REJECTED->value) {
                     if (in_array($column->name, ['paid', 'remains_to_be_paid', 'to_date', 'validity', 'delivery_date'])) {
                         $column->visible(false);
                     }

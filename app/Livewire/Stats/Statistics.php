@@ -44,9 +44,9 @@ class Statistics extends Component
             'invoice_estimation_c' => $this->statisticsService->getTotalSoldToBeCollected(Constants::INVOICE_TYPE_COMPTANT),
             'invoice_count_collected' => $this->statisticsService->getTotalCollected(),
             'stats_reactive' => [
-                StatisticKeysEnums::BY_INVOICE_COMPTANT => $this->statisticsService->getStats(InvoiceStaticsEnums::BY_INVOICE_COMPTANT),
-                StatisticKeysEnums::BY_INVOICE => $this->statisticsService->getStats(InvoiceStaticsEnums::BY_INVOICE),
-                StatisticKeysEnums::BY_GENDER => $this->statisticsService->getStats(TaxpayerStaticsEnums::BY_GENDER)
+                StatisticKeysEnums::BY_INVOICE_COMPTANT->value => $this->statisticsService->getStats(InvoiceStaticsEnums::BY_INVOICE_COMPTANT->value),
+                StatisticKeysEnums::BY_INVOICE->value => $this->statisticsService->getStats(InvoiceStaticsEnums::BY_INVOICE->value),
+                StatisticKeysEnums::BY_GENDER->value => $this->statisticsService->getStats(TaxpayerStaticsEnums::BY_GENDER->value)
             ]]);
     }
 }

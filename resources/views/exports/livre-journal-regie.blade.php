@@ -116,11 +116,11 @@
             <td>{{$payment->description}}</td>
             <td>{{$payment->stock_transfers->first()->code ?? $payment->code}}</td>
             <td>{{ $payment->reference}}</td>
-            @if( $payment->payment_type == App\Enums\PaymentTypeEnums::CASH)
+            @if( $payment->payment_type == App\Enums\PaymentTypeEnums::CASH->value)
                 <td>{{ $payment->amount}}</td>
                 <td></td>
                 <td></td>
-            @elseif($payment->payment_type == App\Enums\PaymentTypeEnums::DIGI)
+            @elseif($payment->payment_type == App\Enums\PaymentTypeEnums::DIGI->value)
                 <td></td>
                 <td>{{ $payment->amount}}</td>
                 <td></td>

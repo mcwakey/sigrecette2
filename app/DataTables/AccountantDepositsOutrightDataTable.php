@@ -54,7 +54,7 @@ class AccountantDepositsOutrightDataTable extends DataTable
         return $model
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->where('invoice_type', Constants::INVOICE_TYPE_COMPTANT)
-          ->whereIn('payments.status', [PaymentStatusEnums::DONE, PaymentStatusEnums::ACCOUNTED])
+          ->whereIn('payments.status', [PaymentStatusEnums::DONE->value, PaymentStatusEnums::ACCOUNTED->value])
             ->newQuery();
     }
     /**
