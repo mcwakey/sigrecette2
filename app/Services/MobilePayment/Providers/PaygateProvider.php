@@ -29,7 +29,7 @@ class PaygateProvider implements MobilePaymentProviderInterface
             $body = $response->json();
 
             return [
-                'success' => $response->successful() && ($body['status'] ?? '0') === 'success',
+                'success' => $response->successful() && ($body['status'] ?? '') === 'success',
                 'external_id' => $body['tx_reference'] ?? null,
                 'message' => $body['message'] ?? null,
                 'raw' => $body ?? [],
