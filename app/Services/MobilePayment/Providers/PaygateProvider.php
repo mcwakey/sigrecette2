@@ -14,15 +14,16 @@ class PaygateProvider implements MobilePaymentProviderInterface
 
         try {
             $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $config['api_key'],
+                // 'Authorization' => 'Bearer ' . $config['api_key'],
             ])
                 ->timeout($config['timeout'])
-                ->post($config['base_url'] . '/api/v1/payment/request', [
+                ->post($config['base_url'] . '/api/v1/pay', [
+                    'auth_token' => $config['api_key'],
                     'identifier' => $data['reference'],
                     'phone_number' => $data['phone_number'],
                     'amount' => (int) $data['amount'],
                     'description' => $data['description'],
-                    'network' => 'mtn',
+                    'network' => 'TMONEY',
                 ]);
 
             $body = $response->json();
@@ -54,10 +55,10 @@ class PaygateProvider implements MobilePaymentProviderInterface
 
         try {
             $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $config['api_key'],
+                // 'Authorization' => 'Bearer ' . $config['api_key'],
             ])
                 ->timeout($config['timeout'])
-                ->get($config['base_url'] . '/api/v1/payment/status/' . $reference);
+                ->get($config['base_url'] . '/api/v1/status' . $reference);
 
             $body = $response->json();
             $txStatus = $body['payment_status'] ?? $body['status'] ?? '';
