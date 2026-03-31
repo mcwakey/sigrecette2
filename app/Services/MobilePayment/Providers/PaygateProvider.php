@@ -23,7 +23,8 @@ class PaygateProvider implements MobilePaymentProviderInterface
                     'phone_number' => $data['phone_number'],
                     'amount' => (int) $data['amount'],
                     'description' => $data['description'],
-                    'network' => $data['network']
+                    'network' => 'TMONEY',
+                    // 'network' => $data['network'],
                 ]);
 
             $body = $response->json();
