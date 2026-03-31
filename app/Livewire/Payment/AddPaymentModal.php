@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AddPaymentModal extends Component
 {
@@ -81,7 +82,6 @@ class AddPaymentModal extends Component
         }
         if ($this->payment_type === PaymentTypeEnums::DIGI) {
             $rules['phone_number'] = ['required', 'string'];
-            $rules['provider'] = ['required', Rule::in(Constants::MOBILE_PROVIDERS)];
             $rules['network'] = ['required', Rule::in(Constants::MOBILE_NETWORKS)];
         }
         return $rules;
@@ -93,6 +93,7 @@ class AddPaymentModal extends Component
     ];
     public function mount()
     {
+        $this->provider = config('mobile-payment.default_provider');
     }
     public function render()
     {
@@ -214,6 +215,14 @@ class AddPaymentModal extends Component
                 $effectiveAmount = $this->paidAndCodeArray[$this->code]['amount'];
             }
 
+            Log::channel('daily')->info('Mobile payment: submitting', [
+                'invoice_id' => $invoice->id,
+                'amount' => $effectiveAmount,
+                'phone_number' => $this->phone_number,
+                'provider' => $this->provider,
+                'network' => $this->network,
+            ]);
+
             /** @var MobilePaymentService $service */
             $service = app(MobilePaymentService::class);
 
@@ -233,11 +242,22 @@ class AddPaymentModal extends Component
                 ],
             ]);
 
+            Log::channel('daily')->info('Mobile payment: transaction created', [
+                'transaction_id' => $transaction->id,
+                'reference' => $transaction->reference,
+                'status' => $transaction->status,
+                'external_id' => $transaction->external_id,
+            ]);
+
             $this->mobile_transaction_id = $transaction->id;
 
             if ($transaction->status === 'failed') {
                 $this->mobile_payment_status = 'failed';
                 $this->mobile_payment_message = 'L\'initiation du paiement a échoué. Veuillez réessayer.';
+                Log::channel('daily')->warning('Mobile payment: initiation failed', [
+                    'transaction_id' => $transaction->id,
+                    'provider_response' => $transaction->provider_response,
+                ]);
                 return;
             }
 
@@ -247,6 +267,10 @@ class AddPaymentModal extends Component
             VerifyMobilePaymentJob::dispatch($transaction);
 
         } catch (\Throwable $th) {
+            Log::channel('daily')->error('Mobile payment: exception', [
+                'message' => $th->getMessage(),
+                'trace' => $th->getTraceAsString(),
+            ]);
             $this->mobile_payment_status = 'failed';
             $this->mobile_payment_message = 'Erreur lors de l\'initiation du paiement mobile.';
         }

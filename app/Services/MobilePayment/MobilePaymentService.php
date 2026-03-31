@@ -43,12 +43,27 @@ class MobilePaymentService
         $invoice = Invoice::find($data['invoice_id']);
         $description = "Avis " . ($invoice->invoice_no ?? '');
 
+        Log::channel('daily')->info('MobilePaymentService: calling provider initiate', [
+            'provider' => $data['provider'],
+            'reference' => $reference,
+            'amount' => $data['amount'],
+            'phone_number' => $data['phone_number'],
+            'network' => $data['network'] ?? null,
+        ]);
+
         $result = $provider->initiate([
             'reference' => $reference,
             'amount' => $data['amount'],
             'phone_number' => $data['phone_number'],
             'description' => $description,
             'network' => $data['network'] ?? null,
+        ]);
+
+        Log::channel('daily')->info('MobilePaymentService: provider response', [
+            'reference' => $reference,
+            'success' => $result['success'],
+            'external_id' => $result['external_id'] ?? null,
+            'message' => $result['message'] ?? null,
         ]);
 
         $transaction->update([
