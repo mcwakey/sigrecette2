@@ -32,6 +32,15 @@ class Constants
         self::PROVIDER_FEDAPAY,
         self::PROVIDER_PAYGATE,
     ];
+
+    const NETWORK_TMONEY = 'MONEY';
+    const NETWORK_FLOOZ = 'FLOOZ';
+    const MOBILE_NETWORKS = [
+        self::NETWORK_TMONEY,
+        self::NETWORK_FLOOZ,
+    ];
+
+
     const CANCELED = "CANCELED";
     const REDUCED = "REDUCED";
     const NOT_PERMISSION_TO_PERFORM_ACTION = "Vous n'avez pas la permission pour effectuer cette action.";

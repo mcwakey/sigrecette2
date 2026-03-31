@@ -209,13 +209,26 @@
                         {{-- Mobile payment fields (visible when DIGI is selected) --}}
                         @if($payment_type === App\Enums\PaymentTypeEnums::DIGI)
                         <div class="row mb-5">
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('Fournisseur') }}</label>
                                 <select wire:model="provider" name="provider" class="form-select" data-dropdown-parent="#kt_modal_add_payment">
                                     <option value="">Selectionner un fournisseur</option>
                                     <option value="{{ App\Helpers\Constants::PROVIDER_QOSIC }}">QOSIC (MTN/Moov)</option>
-                                    <option value="{{ App\Helpers\Constants::PROVIDER_FEDAPAY }}">FedaPay</option>
+                                    {{-- <option value="{{ App\Helpers\Constants::PROVIDER_FEDAPAY }}">FedaPay</option> --}}
                                     <option value="{{ App\Helpers\Constants::PROVIDER_PAYGATE }}">PayGate</option>
+                                </select>
+                                @error('provider')
+                                <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-3">
+                                <label class="required fw-semibold fs-6 mb-2">{{ __('Reseau') }}</label>
+                                <select wire:model="network" name="network" class="form-select" data-dropdown-parent="#kt_modal_add_payment">
+                                    <option value="">Selectionner un reseau</option>
+                                    <option value="{{ App\Helpers\Constants::NETWORK_TMONEY }}">TMONEY</option>
+                                    <option value="{{ App\Helpers\Constants::NETWORK_FLOOZ }}">FLOOZ</option>
+                                </select>
+                                @error('network')
+                                <span class="text-danger">{{ $message }}</span> @enderror
                                 </select>
                                 @error('provider')
                                 <span class="text-danger">{{ $message }}</span> @enderror

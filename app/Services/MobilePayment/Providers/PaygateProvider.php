@@ -23,7 +23,7 @@ class PaygateProvider implements MobilePaymentProviderInterface
                     'phone_number' => $data['phone_number'],
                     'amount' => (int) $data['amount'],
                     'description' => $data['description'],
-                    'network' => 'TMONEY',
+                    'network' => $data['network']
                 ]);
 
             $body = $response->json();
@@ -58,7 +58,10 @@ class PaygateProvider implements MobilePaymentProviderInterface
                 // 'Authorization' => 'Bearer ' . $config['api_key'],
             ])
                 ->timeout($config['timeout'])
-                ->get($config['base_url'] . '/api/v1/status' . $reference);
+                ->post($config['base_url'] . '/api/v1/status', [
+                    'auth_token' => $config['api_key'],
+                    'tx_reference' => $reference,
+                ]);
 
             $body = $response->json();
             $txStatus = $body['payment_status'] ?? $body['status'] ?? '';
