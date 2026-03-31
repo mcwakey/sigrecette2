@@ -36,6 +36,7 @@ class Payment extends Model
         'invoice_type',
         'notes',
         'provider',
+        'network',
         'phone_number',
         'external_id',
         'verification_attempts',
