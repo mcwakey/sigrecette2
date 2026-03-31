@@ -224,8 +224,10 @@
                                 <label class="required fw-semibold fs-6 mb-2">{{ __('Reseau') }}</label>
                                 <select wire:model="network" name="network" class="form-select" data-dropdown-parent="#kt_modal_add_payment">
                                     <option value="">Selectionner un reseau</option>
-                                    <option value="{{ App\Helpers\Constants::NETWORK_TMONEY }}">TMONEY</option>
-                                    <option value="{{ App\Helpers\Constants::NETWORK_FLOOZ }}">FLOOZ</option>
+                                    {{-- <option value="{{ App\Helpers\Constants::NETWORK_TMONEY }}">TMONEY</option> --}}
+                                    {{-- <option value="{{ App\Helpers\Constants::NETWORK_FLOOZ }}">FLOOZ</option> --}}
+                                    <option value="TMONEY">TMONEY</option>
+                                    <option value="FLOOZ">FLOOZ</option>
                                 </select>
                                 @error('network')
                                 <span class="text-danger">{{ $message }}</span> @enderror
