@@ -48,6 +48,7 @@ class MobilePaymentService
             'amount' => $data['amount'],
             'phone_number' => $data['phone_number'],
             'description' => $description,
+            'network' => $data['network'] ?? null,
         ]);
 
         $transaction->update([

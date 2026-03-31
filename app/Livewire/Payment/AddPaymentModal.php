@@ -57,6 +57,7 @@ class AddPaymentModal extends Component
     // Mobile payment properties
     public $phone_number;
     public $provider;
+    public $network;
     public $mobile_transaction_id;
     public $mobile_payment_status;
     public $mobile_payment_message;
@@ -81,6 +82,7 @@ class AddPaymentModal extends Component
         if ($this->payment_type === PaymentTypeEnums::DIGI) {
             $rules['phone_number'] = ['required', 'string'];
             $rules['provider'] = ['required', Rule::in(Constants::MOBILE_PROVIDERS)];
+            $rules['network'] = ['required', Rule::in(Constants::MOBILE_NETWORKS)];
         }
         return $rules;
     }
@@ -221,6 +223,7 @@ class AddPaymentModal extends Component
                 'amount' => $effectiveAmount,
                 'phone_number' => $this->phone_number,
                 'provider' => $this->provider,
+                'network' => $this->network,
                 'meta' => [
                     'code' => $this->code,
                     'invoice_no' => $this->invoice_no,
