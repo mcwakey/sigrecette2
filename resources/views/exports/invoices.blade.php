@@ -109,23 +109,18 @@
         }
 
         .count_page {
-            display: flex;
-            justify-content: end;
-            align-items: end;
-
-
+            text-align: right;
         }
         .watermark {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-30deg);
-            font-size: 120px;
-            color: rgba(255, 0, 0, 0.1);
+            top: 30%;
+            left: 5%;
+            font-size: 100px;
+            color: #ffcccc;
             font-weight: bold;
             z-index: -1;
             white-space: nowrap;
-            pointer-events: none;
+            opacity: 0.3;
         }
 
     </style>

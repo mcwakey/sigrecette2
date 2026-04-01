@@ -46,8 +46,10 @@ Route::middleware(['throttle:api'])->group(function () {
         Route::post('/payments', [SyncV1PaymentsController::class, 'store']);
     });
 
-    Route::post('/v1/user/notifications', [NotificationController::class, 'notifications']);
-    Route::post('/v1/user/notification/update', [NotificationController::class, 'updateNotification']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/v1/user/notifications', [NotificationController::class, 'notifications']);
+        Route::post('/v1/user/notification/update', [NotificationController::class, 'updateNotification']);
+    });
 
     Route::middleware('auth:sanctum')->prefix('/v1')->group(function () {
         Route::post('/auth/logout', [AuthController::class, 'logout']);

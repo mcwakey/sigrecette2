@@ -283,29 +283,34 @@
         }
 
         async function makeNotifRequest2() {
-            let request = new Request('/api/v1/user/notifications', {
-                method: "POST",
-            });
-
-            fetch(request)
-                .then((response) => {
-                    if (response.status === 200) {
-                        return response.json();
-                    } else {
-                        throw new Error("Something went wrong on API server!");
-                    }
-                })
-                .then((response) => {
-                    render2(response);
-                })
-                .catch((error) => {
-                    console.error(error);
+            try {
+                const response = await fetch('/api/v1/user/notifications', {
+                    method: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+                        'Accept': 'application/json',
+                    },
+                    credentials: 'same-origin',
                 });
+
+                if (response.status === 401 || response.status === 419) {
+                    return;
+                }
+
+                if (!response.ok) {
+                    return;
+                }
+
+                const data = await response.json();
+                render2(data);
+            } catch (error) {
+                // Network error, skip silently
+            }
         }
 
         setInterval(async () => {
             await makeNotifRequest2()
-        }, 8000);
+        }, 10000);
 
 
         // Vérifie si le navigateur prend en charge l'API MediaDevices

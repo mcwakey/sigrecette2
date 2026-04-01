@@ -22,6 +22,10 @@ class DownloadInvoiceZipJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
+    public $timeout = 300;
+
+    public $tries = 3;
+
 
     /**
      * Create a new job instance.

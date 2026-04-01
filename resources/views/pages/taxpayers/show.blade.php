@@ -485,18 +485,20 @@
                                        id="kt_table_users_logs">
                                     <tbody>
                                     @foreach ($taxpayerActionLog as $action)
+                                        @php $responseData = json_decode($action->response); @endphp
                                         <tr>
                                             <td class="min-w-70px">
                                                 <div
-                                                    class="badge {{ (int) json_decode($action->response)->status <= 300 ? 'badge-light-success' : 'badge-light-danger' }}">
-                                                    {{ json_decode($action->response)->status }}
-                                                    {{ json_decode($action->response)->status_text }}
-                                                    {{ ' : ' . $action->user->name }}
+                                                    class="badge {{ (int) ($responseData->status ?? 500) <= 300 ? 'badge-light-success' : 'badge-light-danger' }}">
+                                                    {{ $responseData->status ?? '' }}
+                                                    {{ $responseData->status_text ?? '' }}
+                                                    {{ ' : ' . ($action->user->name ?? '') }}
                                                 </div>
                                             </td>
                                             <td>
-                                                {{ json_decode($action->request)->method }}
-                                                {{ json_decode($action->request)->path_info }}
+                                                @php $requestData = json_decode($action->request); @endphp
+                                                {{ $requestData->method ?? '' }}
+                                                {{ $requestData->path_info ?? '' }}
                                                 {{ $action->taxpayer ? ' : ' . $action->taxpayer->name : '' }}
                                             </td>
                                             <td class="pe-0 text-end min-w-200px">

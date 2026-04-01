@@ -23,6 +23,10 @@ class PrintWithoutData
             if ($result['success']) {
                 return $result['pdf'];
             }
+            if (!empty($result['async'])) {
+                session()->forget('edition_params');
+                return back()->with('success', $result['message']);
+            }
             session()->forget('edition_params');
             return back()->with('error', $result['message']);
         }catch (\Throwable $e) {

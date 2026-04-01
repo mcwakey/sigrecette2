@@ -307,29 +307,34 @@
         }
 
         async function makeNotifRequest() {
-            let request = new Request('/api/v1/user/notifications', {
-                method: "POST",
-            });
-
-            fetch(request)
-                .then((response) => {
-                    if (response.status === 200) {
-                        return response.json();
-                    } else {
-                        throw new Error("Something went wrong on API server!");
-                    }
-                })
-                .then((response) => {
-                    render(response);
-                })
-                .catch((error) => {
-                    console.error(error);
+            try {
+                const response = await fetch('/api/v1/user/notifications', {
+                    method: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+                        'Accept': 'application/json',
+                    },
+                    credentials: 'same-origin',
                 });
+
+                if (response.status === 401 || response.status === 419) {
+                    return; // Session expired, skip silently
+                }
+
+                if (!response.ok) {
+                    return; // Non-critical, skip silently
+                }
+
+                const data = await response.json();
+                render(data);
+            } catch (error) {
+                // Network error, skip silently
+            }
         }
 
         setInterval(async () => {
             await makeNotifRequest()
-        }, 5000);
+        }, 10000);
 
 
         if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {

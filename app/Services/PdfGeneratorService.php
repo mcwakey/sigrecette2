@@ -115,12 +115,13 @@ class PdfGeneratorService implements PdfGeneratorInterface
         return ['success' => false, 'message' => 'Invalid data structure.'];
     }
 
-    public function downloadReceipt($data)
+    public function downloadReceipt($data): array
     {
         $data = json_decode($data, true);
         $filename = "receipt-" . $data[2] . '-' . Str::random(8) . ".pdf";
-        return PDF::loadView('exports.payments', ['data' => $data])
+        $pdf = PDF::loadView('exports.payments', ['data' => $data])
             ->stream($filename);
+        return ['success' => true, 'pdf' => $pdf, 'filename' => $filename];
     }
     public function generateTitleWithAction($action = null): array
     {

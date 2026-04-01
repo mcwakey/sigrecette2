@@ -56,13 +56,7 @@ class PrintService implements PrintServiceInterface
     private function generateBordereauListPdf($action, $data,$pdfGenerator): array
     {
         LongPrintTaskJob::dispatch(PrintNameEnums::BORDEREAU->value,$data, $action,auth()->user());
-//        if ($data instanceof PrintFile) {
-//            $result= $pdfGenerator->generateBordereauListPdf('invoices-list', $action, $data);
-//        } else {
-//            $result= $pdfGenerator->generateBordereauListPdf('invoices-list', $action);
-//        }
-//        return $result;
-        return ['success' => false, 'message' => 'Invalid data structure.'];
+        return ['success' => false, 'message' => 'Le bordereau est en cours de génération. Vous recevrez une notification lorsque le fichier sera prêt.', 'async' => true];
     }
     public function downloadMultipleInvoice($action){
         $pdfGenerator = app(PdfGeneratorInterface::class);
@@ -91,7 +85,7 @@ class PrintService implements PrintServiceInterface
                 foreach ($uuid as $invoiceUid) {
                     $result =$pdfGenerator->generateInvoicePdf([$invoiceUid], 'invoices', $action);
                     if ($result['success']) {
-                        $zip->addFromString($result['filename'], $result['pdf']);
+                        $zip->addFromString($result['filename'], $result['pdf']->getContent());
                     } else {
                         Log::warning("Impossible de générer le PDF pour l'UUID: {$invoiceUid}");
                     }
