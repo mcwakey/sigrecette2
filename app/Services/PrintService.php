@@ -82,13 +82,17 @@ class PrintService implements PrintServiceInterface
             return back()->with('error', 'no Data');
         } else {
             if ($zip->open($zipFileName, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
-                foreach ($uuid as $invoiceUid) {
-                    $result =$pdfGenerator->generateInvoicePdf([$invoiceUid], 'invoices', $action);
-                    if ($result['success']) {
-                        $zip->addFromString($result['filename'], $result['pdf']->getContent());
-                    } else {
-                        Log::warning("Impossible de générer le PDF pour l'UUID: {$invoiceUid}");
+                foreach (array_chunk($uuid, 50) as $chunk) {
+                    foreach ($chunk as $invoiceUid) {
+                        $result = $pdfGenerator->generateInvoicePdf([$invoiceUid], 'invoices', $action);
+                        if ($result['success']) {
+                            $zip->addFromString($result['filename'], $result['pdf']->getContent());
+                        } else {
+                            Log::warning("Impossible de générer le PDF pour l'UUID: {$invoiceUid}");
+                        }
+                        unset($result);
                     }
+                    gc_collect_cycles();
                 }
                 $zip->close();
             } else {

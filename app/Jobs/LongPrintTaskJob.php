@@ -38,6 +38,7 @@ class LongPrintTaskJob implements ShouldQueue
      */
     public function handle(): void
     {
+        ini_set('memory_limit', '512M');
         $result['success']=false;
         switch ($this->printType) {
             case PrintNameEnums::BORDEREAU->value:

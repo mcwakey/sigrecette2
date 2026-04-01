@@ -40,6 +40,7 @@ trait InvoiceTrait
 
         $eagerLoad = [
             'invoiceitems.taxpayer_taxable.taxable.tax_label',
+            'taxpayer_taxables.taxable.tax_label',
             'taxpayer.town.canton',
             'taxpayer.zone',
             'taxpayer.category',

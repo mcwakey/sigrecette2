@@ -10,10 +10,10 @@
 
 | Category | Total Issues | Fixed | Remaining |
 |---|---|---|---|
-| PDF System (2.1–2.11) | 11 | 9 | 2 |
+| PDF System (2.1–2.11) | 11 | 11 | 0 |
 | Additional Bugs (5.1–5.3) | 3 | 3 | 0 |
 | Bonus Fix | 1 | 1 | 0 |
-| **Total** | **15** | **13** | **2** |
+| **Total** | **15** | **15** | **0** |
 
 ---
 
@@ -73,13 +73,13 @@ return ['success' => false, 'message' => 'Le bordereau est en cours de générat
 
 ---
 
-### 2.5 — ZIP Generation Memory / Timeout ✅ PARTIALLY FIXED
+### 2.5 — ZIP Generation Memory / Timeout ✅ FIXED
 
 **What was done:**
 - `$zip->addFromString($result['filename'], $result['pdf']->getContent())` — fixed Response object being written as string bytes
 - Queue jobs now have `$timeout = 300` and `$tries = 3`
-
-**Remaining concern:** The per-invoice PDF loop in `downloadMultipleInvoice()` is still sequential. For large batches (200+ invoices), memory pressure remains. A chunked or batched approach would be needed for full resolution — see Section 3.
+- `LongPrintTaskJob::handle()` now sets `ini_set('memory_limit', '512M')` at start
+- `downloadMultipleInvoice()` now processes UUIDs in `array_chunk($uuid, 50)` chunks with `unset($result)` + `gc_collect_cycles()` after each chunk
 
 ---
 
@@ -129,11 +129,11 @@ $zip->addFromString($result['filename'], $result['pdf']->getContent());
 
 ---
 
-### 2.9 — QR Code SVG Overhead ⚠️ OPEN
+### 2.9 — QR Code SVG Rendering Overhead ✅ FIXED
 
-**Estimated impact:** Medium — increases PDF generation time and file size.
+**File:** `app/Services/QrcodeGeneratorService.php`
 
-**No fix applied yet.** See Section 3.2 for proposed solution.
+**What was done:** Wrapped both generation paths (with-logo and no-logo) inside `Cache::remember()` with a 6-hour TTL. Cache key is `'qrcode_' . md5($data . ($backgroundImagePath ?? ''))` — unique per data + logo combination. First render pays full cost; subsequent renders for the same invoice return instantly from cache.
 
 ---
 
@@ -151,21 +151,9 @@ Added to the `catch (\Throwable $e)` block in both actions. Failures now appear 
 
 ### 2.11 — N+1 Queries in `retrieveByUUIDs()` ✅ FIXED
 
-**File:** `app/Traits/InvoiceTrait.php`
+**Files:** `app/Traits/InvoiceTrait.php`, `app/Services/PdfGeneratorService.php`
 
-**What was done:** Replaced per-UUID loop with a single bulk query + eager loading:
-```php
-return Invoice::with([
-    'invoiceitems.taxpayer_taxable.taxable.tax_label',
-    'taxpayer.town.canton',
-    'taxpayer.zone',
-    'taxpayer.category',
-    'taxpayer.activity',
-    'payments',
-])->whereIn('uuid', $uuids)->get()->all();
-```
-
-**Remaining micro-issue:** `generateInvoicePdf()` calls `usort()` accessing `$a->taxpayer_taxable` (the `getDefaulttaxpayer_taxableAttribute` accessor), which calls `taxpayer_taxables()->first()` — not covered by the eager load above. This triggers 2 extra queries per invoice during sorting. Fix proposed in Section 3.3.
+**What was done:** Replaced per-UUID loop with a single bulk query + eager loading. Also added `taxpayer_taxables.taxable.tax_label` to the eager load array, and updated `usort` comparator in `generateInvoicePdf()` to use the pre-loaded collection (`$a->taxpayer_taxables->first()?->...`) instead of the lazy accessor (`$a->taxpayer_taxable`).
 
 ---
 
@@ -228,7 +216,11 @@ SQLSTATE[42000]: Expression #1 of SELECT list is not in GROUP BY clause
 
 ## 2. Remaining Open Issues
 
-### 2.9 — QR Code SVG Rendering Overhead
+_All issues resolved. No remaining open issues._
+
+---
+
+### (archived) 2.9 — QR Code SVG Rendering Overhead
 
 **Current behaviour:** `QrcodeGeneratorService::generate()` produces SVG/WEBP, embedded as base64 data URI in the invoice PDF. DomPDF must decode and render each one inline. For complex SVG paths this adds 200–500ms per invoice.
 

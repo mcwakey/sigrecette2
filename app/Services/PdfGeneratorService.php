@@ -40,8 +40,8 @@ class PdfGeneratorService implements PdfGeneratorInterface
 
         $data = Invoice::retrieveByUUIDs($data);
         usort($data, function ($a, $b) {
-            $codeA = $a->taxpayer_taxable->taxable->tax_label->code;
-            $codeB = $b->taxpayer_taxable->taxable->tax_label->code;
+            $codeA = $a->taxpayer_taxables->first()?->taxable->tax_label->code ?? '';
+            $codeB = $b->taxpayer_taxables->first()?->taxable->tax_label->code ?? '';
             return strcmp($codeA, $codeB);
         });
         if ($data && count($data) == 1 && $this->checkIfCommuneIsNotNull()) {
