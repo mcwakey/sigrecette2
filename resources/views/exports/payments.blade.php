@@ -1,149 +1,207 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Invoice</title>
+    <title>Quittance de paiement</title>
     <style>
         @page {
             size: A5 landscape;
-            margin: 0;
+            margin: 10mm;
         }
 
-        body{
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 5px;
-            background-color: #ffffff;
-            margin-bottom: 20px;
-
-        }
-        h4 {
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 11px;
             margin: 0;
+            padding: 0;
+            color: #333;
         }
-        .w-full {
+
+        h4 { margin: 0; }
+
+        .header-table {
             width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
         }
-        .w-half {
-            width: 50%;
+
+        .header-table td {
+            vertical-align: top;
+            padding: 2px;
         }
-        .margin-top {
-            margin-top: 1.25rem;
+
+        .header-center { text-align: center; }
+        .header-right { text-align: right; }
+
+        .title {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 8px 0;
+            text-decoration: underline;
         }
-        .footer {
-            font-size: 0.875rem;
-            padding: 1rem;
-            background-color: rgb(241 245 249);
-        }
-        table {
+
+        .info-table {
             width: 100%;
-            border-spacing: 0;
+            border-collapse: collapse;
+            margin-bottom: 8px;
         }
-        table.products {
-            font-size: 0.875rem;
+
+        .info-table td {
+            padding: 2px 4px;
+            vertical-align: top;
         }
-        table.products tr {
-            background-color: rgb(96 165 250);
+
+        .info-label {
+            font-weight: bold;
+            width: 140px;
         }
-        table.products th {
+
+        .payments-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 8px;
+        }
+
+        .payments-table th {
+            background-color: #2c3e50;
             color: #ffffff;
-            padding: 0.5rem;
+            padding: 4px 6px;
+            text-align: left;
+            font-size: 10px;
+            border: 1px solid #2c3e50;
         }
-        table tr.items {
-            background-color: rgb(241 245 249);
+
+        .payments-table td {
+            padding: 4px 6px;
+            border: 1px solid #ddd;
+            font-size: 10px;
         }
-        table tr.items td {
-            padding: 0.5rem;
+
+        .payments-table tr:nth-child(even) {
+            background-color: #f2f2f2;
         }
-        .total {
-            text-align: right;
-            margin-top: 1rem;
-            font-size: 0.875rem;
+
+        .text-right { text-align: right; }
+
+        .total-row td {
+            font-weight: bold;
+            background-color: #eee;
+        }
+
+        .footer-note {
+            font-size: 9px;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+
+        .signature-table {
+            width: 100%;
+            margin-top: 15px;
+            border-collapse: collapse;
+        }
+
+        .signature-table td {
+            width: 50%;
+            text-align: center;
+            padding-top: 25px;
+            vertical-align: bottom;
         }
     </style>
 </head>
 <body>
-<table class="w-full">
-    <tr>
-        <td class="w-half">
-            <img src="../images/image3.jpg" alt="laravel daily" width="50" />
-        </td>
-        <td class="w-half">
-            <div>
-                <div>
-                    <h6>
-                        Invoice ID: 834847473
-                    </h6>
-                    <h6>
-                        N° d'avis: 834847473
-                    </h6>
-                </div>
+    @php
+        $firstPayment = $payments->first();
+        $invoice = $firstPayment->invoice;
+        $taxpayer = $firstPayment->taxpayer;
+        $totalPaid = $payments->sum('amount');
+    @endphp
 
-            </div>
-
-        </td>
-    </tr>
-</table>
-
-<div class="margin-top">
-    <table class="w-full">
+    {{-- Header --}}
+    <table class="header-table">
         <tr>
-            <td class="w-half">
-                <div><h4>To:</h4></div>
-                <div>John Doe</div>
-                <div>123 Acme Str.</div>
+            <td style="width: 60px;">
+                @if($commune->getImageUrlAttribute() != null)
+                    <img src="{{ $commune->getImageUrlAttribute() }}" alt="Logo" style="width: 50px; height: 50px;">
+                @endif
             </td>
-            <td class="w-half">
-                <div><h4>From:</h4></div>
-                <div>Laravel Daily</div>
-                <div>London</div>
+            <td class="header-center">
+                <strong>COMMUNE DE {{ strtoupper($commune->name ?? '') }}</strong><br>
+                {{ $commune->address ?? '' }}
+            </td>
+            <td class="header-right" style="width: 160px;">
+                <strong>Date :</strong> {{ now()->format('d/m/Y') }}<br>
+                <strong>N° Quittance :</strong> {{ $firstPayment->reference ?? $firstPayment->id }}
             </td>
         </tr>
     </table>
-</div>
 
-<div class="margin-top">
-    <table class="products">
+    <div class="title">QUITTANCE DE PAIEMENT</div>
+
+    {{-- Taxpayer & Invoice Info --}}
+    <table class="info-table">
         <tr>
-            <th>Reference N°</th>
-            <th>Amount paid</th>
-            <th>Payment Type</th>
-            <th>Payment restant</th>
-            <th>Total pament</th>
+            <td class="info-label">Contribuable :</td>
+            <td>{{ $taxpayer->name ?? '-' }}</td>
+            <td class="info-label">N° Avis :</td>
+            <td>{{ $invoice->invoice_no ?? '-' }}</td>
         </tr>
-        <tr class="items">
+        <tr>
+            <td class="info-label">Adresse :</td>
+            <td>{{ $taxpayer->address ?? '-' }}</td>
+            <td class="info-label">Type :</td>
+            <td>{{ $invoice->type ?? '-' }}</td>
+        </tr>
+    </table>
 
-            @foreach($data as $item)
-                <td>
-                    {{ $item['name'] }}
-                </td>
-                <td>
-                    {{ $item['quantity'] }}
-                </td>
-                <td>
-                    {{ $item['description'] }}
-                </td>
-                <td>
-                    {{ $item['description'] }}
-                </td>
-                <td>
-                    {{ $item['price'] }}
-                </td>
+    {{-- Payment Details Table --}}
+    <table class="payments-table">
+        <thead>
+            <tr>
+                <th>Reference</th>
+                <th>Libelle taxe</th>
+                <th>Type paiement</th>
+                <th class="text-right">Montant paye</th>
+                <th class="text-right">Reste a payer</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($payments as $payment)
+                <tr>
+                    <td>{{ $payment->reference ?? '-' }}</td>
+                    <td>{{ $payment->tax_label->name ?? $payment->code ?? '-' }}</td>
+                    <td>{{ $payment->payment_type ?? '-' }}</td>
+                    <td class="text-right">{{ number_format($payment->amount, 0, ',', ' ') }}</td>
+                    <td class="text-right">{{ number_format($payment->remaining_amount ?? 0, 0, ',', ' ') }}</td>
+                    <td>{{ $payment->created_at?->format('d/m/Y') ?? '-' }}</td>
+                </tr>
             @endforeach
+            <tr class="total-row">
+                <td colspan="3" class="text-right">Total paye :</td>
+                <td class="text-right">{{ number_format($totalPaid, 0, ',', ' ') }} FCFA</td>
+                <td colspan="2"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p class="footer-note">
+        N.B. Le paiement peut etre effectue en numeraire, par cheque au nom du Receveur de la Commune
+        de {{ $commune->name ?? '' }}, ou par virement au compte tresor.
+        La quittance est delivree a la reception des especes, du cheque ou de l'ordre de virement par le Regisseur de recettes.
+    </p>
+
+    <table class="signature-table">
+        <tr>
+            <td>
+                Le Contribuable<br><br><br>
+                _________________________
+            </td>
+            <td>
+                Le Receveur<br><br><br>
+                _________________________
+            </td>
         </tr>
     </table>
-</div>
-
-<div class="total">
-    Total: $129.00 USD
-</div>
-<p>N.B. Le paiement peut être effectué en numéraire, par chèque au nom du Receveur de la Commune de <span class="write"> ………………………………</span>. ou
-    par virement au compte trésor RIB<span class="write"> ………………………………</span>. La quittance est délivrée à la réception des espèces, du
-    chèque ou de l’ordre de virement par le Régisseur de recettes.</p>
-<div class="footer margin-top">
-    <div>Thank you</div>
-    <div>&copy; Laravel Daily</div>
-</div>
 </body>
 </html>

@@ -5,6 +5,7 @@ namespace App\Actions;
 use App\Contracts\ExceptionServiceInterface;
 use App\Contracts\PrintServiceInterface;
 use App\Models\PrintFile;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -28,6 +29,7 @@ class PrintWithData
             session()->flash('status', "Erreur lors de la géneration du ficher");
             return back()->with('error', $result['message']);
         }catch (\Throwable $e) {
+            Log::error('PDF generation (with data) failed', ['type' => $type, 'action' => $action, 'error' => $e->getMessage()]);
             $code =$exceptionService->getStatusCode($e);
             return view("errors.{$code}", [
                 "code" => $code,

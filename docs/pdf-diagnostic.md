@@ -228,9 +228,13 @@ Each relationship is lazy-loaded. For single invoices this is acceptable but for
 1. ~~Fix CSS in `invoices.blade.php`~~ ✅ Replaced `display: flex`, `transform`, `rgba()` with DomPDF-compatible equivalents
 2. ~~Fix `downloadReceipt()` return type~~ ✅ Now returns `['success' => true, 'pdf' => ..., 'filename' => ...]` array
 3. ~~Fix `generateBordereauListPdf` async message~~ ✅ Returns success flash message instead of error
-4. Wrap side-effect status updates in DB transactions (deferred — low priority)
+4. ~~Wrap side-effect status updates in DB transactions~~ ✅ Applied to `generateBordereauListPdf` and `generateInvoicePdf`
 5. ~~Fix bulk ZIP generation~~ ✅ Uses `->getContent()` to extract raw bytes from Response
 6. ~~Add `$timeout = 300` and `$tries = 3` to queue jobs~~ ✅ Applied to LongPrintTaskJob and DownloadInvoiceZipJob
+7. ~~Fix `payments.blade.php` placeholder template~~ ✅ Rewritten with real Payment data, commune header, proper receipt layout
+8. ~~Fix `downloadReceipt()` double json_decode~~ ✅ Now loads Payment models by UUID with eager loading
+9. ~~Add error logging to Print actions~~ ✅ `Log::error()` in both `PrintWithoutData` and `PrintWithData`
+10. ~~Fix N+1 queries in `retrieveByUUIDs()`~~ ✅ Replaced per-UUID loop with `whereIn` + eager loading of relationships
 
 ### Medium-term (package migration): **Recommended if server allows**
 

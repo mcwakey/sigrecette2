@@ -5,6 +5,7 @@ namespace App\Actions;
 use App\Contracts\ExceptionServiceInterface;
 use App\Contracts\PrintServiceInterface;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,6 +31,7 @@ class PrintWithoutData
             session()->forget('edition_params');
             return back()->with('error', $result['message']);
         }catch (\Throwable $e) {
+            Log::error('PDF generation failed', ['type' => $type, 'action' => $action, 'error' => $e->getMessage()]);
             $code =$exceptionService->getStatusCode($e);
             return view("errors.{$code}", [
                 "code" => $code,

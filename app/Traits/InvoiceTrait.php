@@ -34,31 +34,32 @@ trait InvoiceTrait
      */
     public static function retrieveByUUIDs(array $uuids, string|null $type = null): array
     {
-        $invoices = [];
         if ($uuids === []) {
             return [];
         }
-        foreach ($uuids as $uuid) {
-            $invoice = null;
-            if ($type === 'payment') {
-                $payment = Payment::where('uuid', $uuid)->first();
-                if ($payment instanceof Payment) {
-                    $invoiceId = $payment->invoice_id;
-                    if (!isset($invoices[$invoiceId])) {
-                        $invoice = Invoice::find($invoiceId);
-                        if ($invoice instanceof Invoice) {
-                            $invoices[$invoiceId] = $invoice;
-                        }
-                    }
-                }
-            } else {
-                $invoice = Invoice::where('uuid', $uuid)->first();
-            }
-            if ($invoice instanceof Invoice) {
-                $invoices[$invoice->id] = $invoice;
-            }
+
+        $eagerLoad = [
+            'invoiceitems.taxpayer_taxable.taxable.tax_label',
+            'taxpayer.town.canton',
+            'taxpayer.zone',
+            'taxpayer.category',
+            'taxpayer.activity',
+            'payments',
+        ];
+
+        if ($type === 'payment') {
+            $payments = Payment::whereIn('uuid', $uuids)->get();
+            $invoiceIds = $payments->pluck('invoice_id')->unique()->filter()->all();
+            return Invoice::with($eagerLoad)
+                ->whereIn('id', $invoiceIds)
+                ->get()
+                ->all();
         }
-        return array_values($invoices); // Réorganise les valeurs pour obtenir un tableau indexé à partir de 0
+
+        return Invoice::with($eagerLoad)
+            ->whereIn('uuid', $uuids)
+            ->get()
+            ->all();
     }
     /**
      * Retrieve invoices based on provided UUIDs.

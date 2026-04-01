@@ -82,8 +82,10 @@ class PdfGeneratorService implements PdfGeneratorInterface
                     ->stream($filename);
             }
             if (isset($invoice) && $invoice->edition_state == null) {
-                $invoice->edition_state = "PRINT";
-                $invoice->save();
+                DB::transaction(function () use ($invoice) {
+                    $invoice->edition_state = "PRINT";
+                    $invoice->save();
+                });
             }
             return ['success' => true, 'pdf' => $pdf,"filename" => $filename];
         }
@@ -117,10 +119,21 @@ class PdfGeneratorService implements PdfGeneratorInterface
 
     public function downloadReceipt($data): array
     {
-        $data = json_decode($data, true);
-        $filename = "receipt-" . $data[2] . '-' . Str::random(8) . ".pdf";
-        $pdf = PDF::loadView('exports.payments', ['data' => $data])
-            ->stream($filename);
+        $payments = Payment::with(['invoice', 'taxpayer', 'user', 'tax_label'])
+            ->whereIn('uuid', $data)
+            ->get();
+
+        if ($payments->isEmpty()) {
+            return ['success' => false, 'message' => 'Aucun paiement trouvé.'];
+        }
+
+        $firstPayment = $payments->first();
+        $filename = "receipt-" . $firstPayment->reference . '-' . Str::random(8) . ".pdf";
+        $pdf = PDF::loadView('exports.payments', [
+            'payments' => $payments,
+            'commune' => $this->commune,
+        ])->setPaper('a5', 'landscape')->stream($filename);
+
         return ['success' => true, 'pdf' => $pdf, 'filename' => $filename];
     }
     public function generateTitleWithAction($action = null): array
@@ -264,13 +277,15 @@ class PdfGeneratorService implements PdfGeneratorInterface
                     ->setPaper('a4', 'landscape')
                     ->save(storage_path("app/exports/{$filename}"));
 
-                foreach ($data as $invoice) {
-                    if ($invoice->edition_state == "PRINT") {
-                        $invoice->edition_state = "bPRINT";
-                        $invoice->status = InvoiceStatusEnums::PENDING->value;
-                        $invoice->save();
+                DB::transaction(function () use ($data) {
+                    foreach ($data as $invoice) {
+                        if ($invoice->edition_state == "PRINT") {
+                            $invoice->edition_state = "bPRINT";
+                            $invoice->status = InvoiceStatusEnums::PENDING->value;
+                            $invoice->save();
+                        }
                     }
-                }
+                });
                 return ['success' => true, 'pdf' => $pdf,'file_name' => $filename];
             }
         }
