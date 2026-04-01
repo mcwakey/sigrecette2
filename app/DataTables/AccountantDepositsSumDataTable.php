@@ -44,7 +44,7 @@ class AccountantDepositsSumDataTable extends DataTable
     {
         return $model
             ->select(
-                'id',
+                DB::raw('MIN(id) AS id'),
                 DB::raw('SUM(amount) AS amount'),
                 DB::raw('MAX(reference_deposit) AS reference_deposit'),
                 DB::raw('MAX(status) AS status'),
@@ -52,7 +52,7 @@ class AccountantDepositsSumDataTable extends DataTable
             )
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->whereIn('payments.status', [PaymentStatusEnums::DONE->value, PaymentStatusEnums::ACCOUNTED->value])
-            ->groupBy('reference_deposit', 'reference_deposit')
+            ->groupBy('reference_deposit')
             ->orderBy('reference_deposit', 'asc');
     }
     /**
