@@ -90,6 +90,7 @@ class SyncInController extends Controller
                             $paymentStatus = $taxpayerPayment['dataStatus'] ?? null;
                             if ($paymentStatus !== null) {
                                 unset($taxpayerPayment['_id'], $taxpayerPayment['time'], $taxpayerPayment['dataStatus']);
+                                $taxpayerPayment['user_id'] = $userId;
                                 $paymentInserts[] = $this->transformKeysToSnakeCase($taxpayerPayment);
                             }
                         }
