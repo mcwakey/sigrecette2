@@ -19,6 +19,7 @@ class SyncInController extends Controller
     public function syncIn(Request $request)
     {
         $data = $request->input('data', []);
+        $step = 'initializing';
 
         DB::beginTransaction();
         try {
@@ -38,10 +39,12 @@ class SyncInController extends Controller
 
                         if (empty($value['dataStatus']) || isset($value['dataStatus'])) {
                             if ($value['dataStatus'] == $this->new) {
+                                $step = 'creating taxpayer (id: ' . ($value['_id'] ?? 'unknown') . ')';
                                 $value['createdBy'] = $userId;
                                 $taxpayer = Taxpayer::create($this->transformKeysToSnakeCase($value));
                                 $taxpayerId = $taxpayer->id;
                             } else {
+                                $step = 'updating taxpayer (id: ' . $taxpayerId . ')';
                                 $value['updatedBy'] = $userId;
                                 Taxpayer::where('id', $taxpayerId)
                                     ->update($this->transformKeysToSnakeCase($value));
@@ -57,12 +60,14 @@ class SyncInController extends Controller
                                 if ($taxpayerTaxable['dataStatus'] == $this->new) {
                                     $newTaxables[] = $transformed;
                                 } else {
+                                    $step = 'updating taxpayer taxable (id: ' . ($taxpayerTaxable['_id'] ?? 'unknown') . ')';
                                     TaxpayerTaxable::where('id', $taxpayerTaxable['_id'])
                                         ->update($transformed);
                                 }
                             }
                         }
                         if (!empty($newTaxables)) {
+                            $step = 'inserting ' . count($newTaxables) . ' taxable(s) for taxpayer (id: ' . $taxpayerId . ')';
                             TaxpayerTaxable::insert($newTaxables);
                         }
 
@@ -85,11 +90,13 @@ class SyncInController extends Controller
 
             // Batch update invoices
             foreach ($invoiceUpdates as $invoiceId => $updateData) {
+                $step = 'updating invoice (id: ' . $invoiceId . ')';
                 Invoice::where('id', $invoiceId)->update($updateData);
             }
 
             // Batch insert payments
             if (!empty($paymentInserts)) {
+                $step = 'inserting ' . count($paymentInserts) . ' payment(s)';
                 foreach (array_chunk($paymentInserts, 500) as $chunk) {
                     Payment::insert($chunk);
                 }
@@ -99,8 +106,17 @@ class SyncInController extends Controller
             return response()->json(true, 200);
         } catch (\Exception $e) {
             DB::rollBack();
-            \Illuminate\Support\Facades\Log::error('Error in syncIn: ' . $e->getMessage());
-            return response()->json(['error' => 'Data sync failed'], 500);
+            \Illuminate\Support\Facades\Log::error('SyncIn failed at step [' . $step . ']: ' . $e->getMessage(), [
+                'step' => $step,
+                'exception' => $e,
+            ]);
+            return response()->json([
+                'error' => 'Data sync failed',
+                'step' => $step,
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ], 500);
         }
     }
     private function transformKeysToSnakeCase(array $data)
