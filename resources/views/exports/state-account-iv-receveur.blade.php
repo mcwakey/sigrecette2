@@ -47,10 +47,10 @@ $stock_r = \App\Models\StockRequest::find($data[0]);
     <tr>
     <td colspan="1"  style="border: none; margin: 0;text-align: left">
 
-        @if($commune->getImageUrlAttribute()!=null)
-            <img src="{{$commune->getImageUrlAttribute()}}" alt="Logo" style="width: 50px; height: 50px;">
+        @if($commune->getImageUrlAttributeDirect()!=null)
+            <img src="{{$commune->getImageUrlAttributeDirect()}}" alt="Logo" style="width: 50px; height: 50px;">
         @else
-            <img src="{{public_path('assets/media/images_exports/image3.jpg')}}" alt="Logo" style="width: 50px; height: 50px;">
+            <img src="{{asset('assets/media/images_exports/image3.jpg')}}" alt="Logo" style="width: 50px; height: 50px;">
         @endif
     </td>
     <td colspan="4"  style="border: none; margin: 0;text-align: left">

@@ -139,7 +139,7 @@
     <table>
         <tr class="text-start">
             <td class="boder-div-blaw">
-                <img src="{{public_path('assets/media/images_exports/image1.png')}}" class="img-fluid" alt="...">
+                <img src="{{asset('assets/media/images_exports/image1.png')}}" class="img-fluid" alt="...">
                 <div class="details">
                     <h6><span class="write"> {{$commune->title}}</span></h6>
                     <h6>TEL :<span class="write"> {{$commune->phone_number}}</span></h6>
@@ -147,14 +147,14 @@
                 </div>
             </td>
             <td class="center-image">
-                @if($commune->getImageUrlAttribute()!=null)
-                <img src="{{$commune->getImageUrlAttribute()}}" alt="..." class="img-thumbnail">
+                @if($commune->getImageUrlAttributeDirect()!=null)
+                <img src="{{$commune->getImageUrlAttributeDirect()}}" alt="..." class="img-thumbnail">
                 @else
-                    <img src="{{public_path('assets/media/images_exports/image3.jpg')}}" alt="..." class="img-thumbnail">
+                    <img src="{{asset('assets/media/images_exports/image3.jpg')}}" alt="..." class="img-thumbnail">
                 @endif
             </td>
             <td class="boder-div-red">
-                <img src="{{public_path('assets/media/images_exports/image2.png')}}" class="img-fluid" alt="...">
+                <img src="{{asset('assets/media/images_exports/image2.png')}}" class="img-fluid" alt="...">
                 <div class="details">
                     <h6><span class="write"> {{$commune->treasury_name}}</span></h6>
                     <h6>Adresse :<span class="write"> {{$commune->treasury_address}}</span></h6>
@@ -359,10 +359,10 @@
                 <td class="">
                     <p>Le Maire <span>{{ " ".$commune->mayor_name}}</span></p>
                 </td>
-                @if($commune->getImageUrlAttribute('sign')!=null)
+                @if($commune->getImageUrlAttributeDirect('sign')!=null)
                 <td class="">
                     <div>
-                        <img src="{{$commune->getImageUrlAttribute('sign')}}" alt="Sign" style="width: 90px; height: auto;">
+                        <img src="{{$commune->getImageUrlAttributeDirect('sign')}}" alt="Sign" style="width: 90px; height: auto;">
                     </div>
                 </td>
                 @endif

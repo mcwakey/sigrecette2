@@ -44,7 +44,7 @@
 <body>
 <table >
     <tr>
-        <td colspan="1" style="border: none; margin: 0;padding: 2px; text-align: center;" > <img src="{{$commune->getImageUrlAttribute()}}" alt="Logo" style="width: 50px; height: 50px;"></td>
+        <td colspan="1" style="border: none; margin: 0;padding: 2px; text-align: center;" > <img src="{{$commune->getImageUrlAttributeDirect()}}" alt="Logo" style="width: 50px; height: 50px;"></td>
 
         <td colspan="3"  style="border: none; padding: 2px;text-align: left;">
             {{$commune->region_name}}

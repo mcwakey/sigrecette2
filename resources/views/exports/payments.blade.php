@@ -121,8 +121,8 @@
     <table class="header-table">
         <tr>
             <td style="width: 60px;">
-                @if($commune->getImageUrlAttribute() != null)
-                    <img src="{{ $commune->getImageUrlAttribute() }}" alt="Logo" style="width: 50px; height: 50px;">
+                @if($commune->getImageUrlAttributeDirect() != null)
+                    <img src="{{ $commune->getImageUrlAttributeDirect() }}" alt="Logo" style="width: 50px; height: 50px;">
                 @endif
             </td>
             <td class="header-center">

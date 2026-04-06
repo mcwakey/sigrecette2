@@ -18,7 +18,7 @@ use App\Models\Year;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Spatie\Browsershot\Browsershot;
 
 class PdfGeneratorService implements PdfGeneratorInterface
 {
@@ -56,7 +56,7 @@ class PdfGeneratorService implements PdfGeneratorInterface
             $filename = "Avis-" . (isset($invoice) ? $invoice->invoice_no : $default_invoice->invoice_no) . '-' . date('Ymd_His') . ".pdf";
             if ($action == null) {
                 $action = 1;
-                $pdf = PDF::loadView(
+                $pdf = $this->buildPdfResponse(
                     "exports." . $templateName,
                     ['data' => $default_invoice, 'action' => $action, "commune" => $this->commune,
                     'qrcodeSvg' => $this->qrcodeGeneratorService->generate(
@@ -64,22 +64,21 @@ class PdfGeneratorService implements PdfGeneratorInterface
                         $this->commune->getImageUrlAttribute()
                     ),
                     'is_relance' => $is_relance,
-                    ]
-                )
-                    ->stream($filename);
+                    ],
+                    $filename
+                );
                 $invoice = $default_invoice;
             } else {
-                $pdf = PDF::loadView(
+                $pdf = $this->buildPdfResponse(
                     "exports." . $templateName,
                     ['data' => $default_invoice, 'action' => $action,
                         'invoice' => $invoice,
                         "commune" => $this->commune,
-                     'qrcodeSvg' => $this->qrcodeGeneratorService->generate($invoice->invoice_no)
-                        ,
+                     'qrcodeSvg' => $this->qrcodeGeneratorService->generate($invoice->invoice_no),
                         'is_relance' => $is_relance,
-                    ]
-                )
-                    ->stream($filename);
+                    ],
+                    $filename
+                );
             }
             if (isset($invoice) && $invoice->edition_state == null) {
                 DB::transaction(function () use ($invoice) {
@@ -103,15 +102,12 @@ class PdfGeneratorService implements PdfGeneratorInterface
         }
         if ($this->checkIfCommuneIsNotNull() && $data !== []) {
             $filename = "Avis-liste-" . count($data) . '-' . date('Ymd_His') . ".pdf";
-            $pdf =
-                PDF::loadView(
-                    "exports." . $template,
-                    ['data' => $data, 'titles' => $this->generateTitleWithAction($action),
-                    "commune" => $this->commune,
-                    "action" => $action]
-                )
-                    ->setPaper('a4', 'landscape')
-                    ->stream($filename);
+            $pdf = $this->buildPdfResponse(
+                "exports." . $template,
+                ['data' => $data, 'titles' => $this->generateTitleWithAction($action),
+                 "commune" => $this->commune, "action" => $action],
+                $filename, 'a4', true
+            );
             return ['success' => true, 'pdf' => $pdf];
         }
         return ['success' => false, 'message' => 'Invalid data structure.'];
@@ -129,10 +125,10 @@ class PdfGeneratorService implements PdfGeneratorInterface
 
         $firstPayment = $payments->first();
         $filename = "receipt-" . $firstPayment->reference . '-' . Str::random(8) . ".pdf";
-        $pdf = PDF::loadView('exports.payments', [
+        $pdf = $this->buildPdfResponse('exports.payments', [
             'payments' => $payments,
-            'commune' => $this->commune,
-        ])->setPaper('a5', 'landscape')->stream($filename);
+            'commune'  => $this->commune,
+        ], $filename, 'a5', true);
 
         return ['success' => true, 'pdf' => $pdf, 'filename' => $filename];
     }
@@ -204,11 +200,49 @@ class PdfGeneratorService implements PdfGeneratorInterface
     {
         return $this->commune != null;
     }
+
+    /**
+     * Render a Blade view to PDF via headless Chromium (Browsershot) and return
+     * an HTTP Response carrying the raw PDF bytes.  The Response is both
+     * returnable from a controller (inline display) and supports getContent()
+     * for callers that need raw bytes (e.g. ZIP generation).
+     */
+    private function buildPdfResponse(
+        string  $view,
+        array   $data,
+        string  $filename,
+        string  $format = 'a4',
+        bool    $landscape = false
+    ): \Illuminate\Http\Response {
+        $html = view($view, $data)->render();
+
+        $shot = Browsershot::html($html)
+            ->setNodeBinary(config('browsershot.node_binary', 'node'))
+            ->setNpmBinary(config('browsershot.npm_binary', 'npm'))
+            ->setNodeModulePath(config('browsershot.node_modules_path', base_path()) . '/node_modules')
+            ->noSandbox()
+            ->format($format);
+
+        if (config('browsershot.chrome_path')) {
+            $shot->setChromePath(config('browsershot.chrome_path'));
+        }
+
+        if ($landscape) {
+            $shot->landscape();
+        }
+
+        $content = $shot->pdf();
+
+        return response($content, 200, [
+            'Content-Type'        => 'application/pdf',
+            'Content-Disposition' => "inline; filename=\"{$filename}\"",
+        ]);
+    }
     public function generateStateValueCollectorPdf($data, string $template, $action): array
     {
         if ($this->checkIfCommuneIsNotNull()) {
             $filename = "StateValueCollector" . Str::random(8) . ".pdf";
-            $pdf = PDF::loadView("exports." . $template, ['data' => $data, "commune" => $this->commune])->setPaper('a4', 'landscape')->stream($filename);
+            $pdf = $this->buildPdfResponse("exports." . $template, ['data' => $data, "commune" => $this->commune], $filename, 'a4', true);
             return ['success' => true, 'pdf' => $pdf];
         }
         return ['success' => false, 'message' => 'Invalid data structure.'];
@@ -217,7 +251,7 @@ class PdfGeneratorService implements PdfGeneratorInterface
     {
         if ($this->checkIfCommuneIsNotNull()) {
             $filename = "StateValueCollector" . Str::random(8) . ".pdf";
-            $pdf = PDF::loadView("exports." . $template, ['data' => $data, "commune" => $this->commune])->setPaper('a4', 'landscape')->stream($filename);
+            $pdf = $this->buildPdfResponse("exports." . $template, ['data' => $data, "commune" => $this->commune], $filename, 'a4', true);
             return ['success' => true, 'pdf' => $pdf];
         }
         return ['success' => false, 'message' => 'Invalid data structure.'];
@@ -227,7 +261,7 @@ class PdfGeneratorService implements PdfGeneratorInterface
         if ($this->checkIfCommuneIsNotNull() && count($data) > 0) {
             $data = Taxpayer::getInvoiceAndPayments($data[0]);
             $filename = "Fiche-contribuable" . Str::random(8) . ".pdf";
-            $pdf = PDF::loadView("exports." . $template, ['data' => $data, "commune" => $this->commune])->setPaper('a4')->stream($filename);
+            $pdf = $this->buildPdfResponse("exports." . $template, ['data' => $data, "commune" => $this->commune], $filename);
             return ['success' => true, 'pdf' => $pdf];
         }
         return ['success' => false, 'message' => 'Invalid data structure.'];
@@ -236,7 +270,7 @@ class PdfGeneratorService implements PdfGeneratorInterface
     {
         $data = Payment::getPrintData();
         $filename = 'Livre-journal_de_Regie.pdf';
-        $pdf = PDF::loadView("exports." . $template, ['data' => $data, "commune" => $this->commune, 'logo_url' => $this->commune->getImageUrlAttribute()])->setPaper('a4', 'landscape')->stream($filename);
+        $pdf = $this->buildPdfResponse("exports." . $template, ['data' => $data, "commune" => $this->commune, 'logo_url' => $this->commune->getImageUrlAttributeDirect()], $filename, 'a4', true);
         return ['success' => true, 'pdf' => $pdf];
     }
     public function generateBordereauListPdf(string $templateName, $action, PrintFile|null $printFile = null)
@@ -267,15 +301,28 @@ class PdfGeneratorService implements PdfGeneratorInterface
             $data = $printFile->invoices()->get();
             if (count($data) > 0) {
                 $filename = $type . "-" . date('Ymd_His') . ".pdf";
-                $pdf = PDF::loadView(
-                    "exports." . $templateName,
-                    ['data' => $data, 'titles' => $this->generateTitleWithAction($action),
-                    "commune" => $this->commune,
-                    "action" => $action,
-                    'print' => $printFile]
+                $shot = \Spatie\Browsershot\Browsershot::html(
+                    view("exports." . $templateName, [
+                        'data'   => $data,
+                        'titles' => $this->generateTitleWithAction($action),
+                        'commune' => $this->commune,
+                        'action' => $action,
+                        'print'  => $printFile,
+                    ])->render()
                 )
-                    ->setPaper('a4', 'landscape')
-                    ->save(storage_path("app/exports/{$filename}"));
+                    ->setNodeBinary(config('browsershot.node_binary', 'node'))
+                    ->setNpmBinary(config('browsershot.npm_binary', 'npm'))
+                    ->setNodeModulePath(config('browsershot.node_modules_path', base_path()) . '/node_modules')
+                    ->noSandbox()
+                    ->format('a4')
+                    ->landscape();
+
+                if (config('browsershot.chrome_path')) {
+                    $shot->setChromePath(config('browsershot.chrome_path'));
+                }
+
+                $pdfContent = $shot->pdf();
+                file_put_contents(storage_path("app/exports/{$filename}"), $pdfContent);
 
                 DB::transaction(function () use ($data) {
                     foreach ($data as $invoice) {
@@ -286,7 +333,7 @@ class PdfGeneratorService implements PdfGeneratorInterface
                         }
                     }
                 });
-                return ['success' => true, 'pdf' => $pdf,'file_name' => $filename];
+                return ['success' => true, 'file_name' => $filename];
             }
         }
         return ['success' => false, 'message' => 'Invalid data structure.'];
@@ -304,7 +351,7 @@ class PdfGeneratorService implements PdfGeneratorInterface
         );
         if ($this->checkIfCommuneIsNotNull() && count($data) > 0) {
             $filename = "Journal_des_avis_des_sommes_à_payer_confiés_par_le_receveur" . "-" . date('Ymd_His') . ".pdf";
-            $pdf = PDF::loadView("exports." . $template, ['data' => $data, 'titles' => $this->generateTitleWithAction($action), "commune" => $this->commune, "action" => $action])->setPaper('a4', 'landscape')->stream($filename);
+            $pdf = $this->buildPdfResponse("exports." . $template, ['data' => $data, 'titles' => $this->generateTitleWithAction($action), "commune" => $this->commune, "action" => $action], $filename, 'a4', true);
             return ['success' => true, 'pdf' => $pdf];
         }
         return ['success' => false, 'message' => 'Invalid data structure.'];
@@ -322,7 +369,7 @@ class PdfGeneratorService implements PdfGeneratorInterface
         );
         if ($this->checkIfCommuneIsNotNull() && count($data) > 0) {
             $filename = "Registre-journal-des-avis-distribués" . Str::random(8) . ".pdf";
-            $pdf = PDF::loadView("exports." . $template, ['data' => $data, 'titles' => $this->generateTitleWithAction($action), "commune" => $this->commune, "action" => $action])->setPaper('a4', 'landscape')->stream($filename);
+            $pdf = $this->buildPdfResponse("exports." . $template, ['data' => $data, 'titles' => $this->generateTitleWithAction($action), "commune" => $this->commune, "action" => $action], $filename, 'a4', true);
             return ['success' => true, 'pdf' => $pdf];
         }
         return ['success' => false, 'message' => 'Invalid data structure.'];
@@ -363,7 +410,7 @@ class PdfGeneratorService implements PdfGeneratorInterface
         }
         if ($this->checkIfCommuneIsNotNull() && isset($printFile) && count($data) > 0) {
             $filename = $type . "-" . $printFile->id . "-" . date('Ymd_His') . ".pdf";
-            $pdf = PDF::loadView("exports." . $template, ['data' => $data, 'titles' => $this->generateTitleWithAction($action), "commune" => $this->commune, "action" => $action, 'print' => $printFile, 'agent' => $user])->setPaper('a4', 'landscape')->stream($filename);
+            $pdf = $this->buildPdfResponse("exports." . $template, ['data' => $data, 'titles' => $this->generateTitleWithAction($action), "commune" => $this->commune, "action" => $action, 'print' => $printFile, 'agent' => $user], $filename, 'a4', true);
             return ['success' => true, 'pdf' => $pdf];
         }
         return ['success' => false, 'message' => 'Invalid data structure.'];
@@ -381,7 +428,7 @@ class PdfGeneratorService implements PdfGeneratorInterface
             ->where('status', '=', InvoiceStatusEnums::APPROVED->value)->get();
         if ($this->checkIfCommuneIsNotNull() && count($data) > 0) {
             $filename = "Registre-journal_des_déclarations_préalables_des_usagers" . Str::random(8) . ".pdf";
-            $pdf = PDF::loadView("exports." . $template, ['data' => $data, 'titles' => $this->generateTitleWithAction($action), "commune" => $this->commune, "action" => $action])->setPaper('a4', 'landscape')->stream($filename);
+            $pdf = $this->buildPdfResponse("exports." . $template, ['data' => $data, 'titles' => $this->generateTitleWithAction($action), "commune" => $this->commune, "action" => $action], $filename, 'a4', true);
             return ['success' => true, 'pdf' => $pdf];
         }
         return ['success' => false, 'message' => 'Invalid data structure.'];
@@ -393,7 +440,7 @@ class PdfGeneratorService implements PdfGeneratorInterface
             $period = $data[1];
             $data = StockTransfer::buildAndGetStockTransferWithQuery($period);
             $filename = "ETAT_DE_COMPTABILITE_DES_VALEURS_INACTIVES_DU_COLLECTEUR" . Str::random(8) . ".pdf";
-            $pdf = PDF::loadView("exports." . $template, ['data' => $data, "commune" => $this->commune, 'user' => $user, 'period' => $data[1]])->setPaper('a4', 'landscape')->stream($filename);
+            $pdf = $this->buildPdfResponse("exports." . $template, ['data' => $data, "commune" => $this->commune, 'user' => $user, 'period' => $data[1]], $filename, 'a4', true);
             return ['success' => true, 'pdf' => $pdf];
         }
         return ['success' => false, 'message' => 'Invalid data structure.'];

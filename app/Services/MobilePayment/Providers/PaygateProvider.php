@@ -65,7 +65,7 @@ class PaygateProvider implements MobilePaymentProviderInterface
         $config = config('mobile-payment.providers.paygate');
 
         try {
-            $response = Http::withHeaders([])
+            $response = Http::withHeaders([]) 
                 ->timeout($config['timeout'])
                 ->post($config['base_url'] . '/api/v1/status', [
                     'auth_token' => $config['api_key'],
