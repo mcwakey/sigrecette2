@@ -35,7 +35,7 @@ class SyncInController extends Controller
                         $taxpayerTaxables = $value['taxpayerTaxables'] ?? [];
                         $taxpayerInvoices = $value['invoices'] ?? [];
                         $taxpayerPayments = $value['payments'] ?? [];
-                        unset($value['_id'], $value['ereaId'], $value['userId'], $value['dataStatus'], $value['taxpayerTaxables'], $value['invoices'], $value['payments']);
+                        unset($value['_id'], $value['time'], $value['ereaId'], $value['userId'], $value['dataStatus'], $value['taxpayerTaxables'], $value['invoices'], $value['payments']);
                         $value['from_mobile_and_validate_state'] = TaxpayerStateEnums::PENDING->value;
 
                         if ($taxpayerStatus !== null) {
