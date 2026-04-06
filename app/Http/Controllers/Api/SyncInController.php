@@ -77,12 +77,12 @@ class SyncInController extends Controller
 
                         // Collect invoice updates for batch processing
                         foreach ($taxpayerInvoices as $taxpayerInvoice) {
-                            $invoiceStatus = $taxpayerInvoice['dataStatus'] ?? null;
-                            if ($invoiceStatus !== null) {
+                            // $invoiceStatus = $taxpayerInvoice['dataStatus'] ?? null;
+                            // if ($invoiceStatus !== null) {
                                 $invoiceId = $taxpayerInvoice['_id'];
                                 unset($taxpayerInvoice['_id'], $taxpayerInvoice['time'], $taxpayerInvoice['dataStatus']);
                                 $invoiceUpdates[$invoiceId] = $this->transformKeysToSnakeCase($taxpayerInvoice);
-                            }
+                            // }
                         }
 
                         // Collect payment inserts for batch processing
