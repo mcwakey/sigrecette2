@@ -34,12 +34,12 @@ class SyncInController extends Controller
                         $taxpayerTaxables = $value['taxpayerTaxables'] ?? [];
                         $taxpayerInvoices = $value['invoices'] ?? [];
                         $taxpayerPayments = $value['payments'] ?? [];
-                        unset($value['ereaId']);
+                        unset($value['ereaId'], $value['_id']);
                         $value['from_mobile_and_validate_state'] = TaxpayerStateEnums::PENDING->value;
 
                         if (empty($value['dataStatus']) || isset($value['dataStatus'])) {
                             if ($value['dataStatus'] == $this->new) {
-                                $step = 'creating taxpayer (id: ' . ($value['_id'] ?? 'unknown') . ')';
+                                $step = 'creating taxpayer (id: ' . ($taxpayerId ?? 'unknown') . ')';
                                 $value['createdBy'] = $userId;
                                 $taxpayer = Taxpayer::create($this->transformKeysToSnakeCase($value));
                                 $taxpayerId = $taxpayer->id;

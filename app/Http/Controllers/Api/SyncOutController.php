@@ -101,11 +101,11 @@ class SyncOutController extends Controller
             ];
         }
         return  [
-                    'taxpayers' => SearchTaxpayerResource::collection(collect([])),
-                     'taxpayer_taxables' =>   SearchTaxpayerTaxableResource::collection(collect([])),
-                     'invoices' => SearchInvoiceResource::collection(collect([])),
-                     'taxables' =>   SearchTaxpayerTaxableResource::collection(collect([])),
-                         'taxlabels' =>   SearchTaxpayerTaxableResource::collection(collect([])),
-            ];
+            'taxpayers' => SearchTaxpayerResource::collection(collect([])),
+            'taxpayer_taxables' =>   SearchTaxpayerTaxableResource::collection(collect([])),
+            'invoices' => SearchInvoiceResource::collection(collect([])),
+            'taxables' =>   SearchTaxpayerTaxableResource::collection(collect([])),
+            'taxlabels' =>   SearchTaxpayerTaxableResource::collection(collect([])),
+        ];
     }
 }
