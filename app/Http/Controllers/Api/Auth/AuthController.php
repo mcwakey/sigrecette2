@@ -29,8 +29,15 @@ class AuthController extends Controller
             'name' => $user->name,
             'email' => $user->email,
             'role' => __($user->getRoleNames()->first()),
-            'permissions' => $user->getAllPermissions()->pluck('name'),
             'zone' => $user->zone->name,
+            'mobile_payment' => [
+                'enabled' => config('features.mobile_payment_feature', false),
+                'default_provider' => config('mobile-payment.default_provider'),
+                'transaction_expiry_minutes' => config('mobile-payment.transaction_expiry_minutes'),
+                'verification' => config('mobile-payment.verification'),
+                'providers' => config('mobile-payment.providers'),
+            ],
+            'permissions' => $user->getAllPermissions()->pluck('name'),
         ], 200);
     }
     public function logout(Request $request)
