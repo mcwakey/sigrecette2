@@ -31,14 +31,15 @@ class SyncInController extends Controller
                     foreach ($taxpayerData as $value) {
                         $userId = $value['userId'] ?? null;
                         $taxpayerId = $value['_id'] ?? null;
+                        $taxpayerStatus = $value['dataStatus'] ?? null;
                         $taxpayerTaxables = $value['taxpayerTaxables'] ?? [];
                         $taxpayerInvoices = $value['invoices'] ?? [];
                         $taxpayerPayments = $value['payments'] ?? [];
-                        unset($value['ereaId'], $value['_id']);
+                        unset($value['_id'], $value['ereaId'], $value['userId'], $value['dataStatus'], $value['taxpayerTaxables'], $value['invoices'], $value['payments']);
                         $value['from_mobile_and_validate_state'] = TaxpayerStateEnums::PENDING->value;
 
-                        if (empty($value['dataStatus']) || isset($value['dataStatus'])) {
-                            if ($value['dataStatus'] == $this->new) {
+                        if ($taxpayerStatus !== null) {
+                            if ($taxpayerStatus == $this->new) {
                                 $step = 'creating taxpayer (id: ' . ($taxpayerId ?? 'unknown') . ')';
                                 $value['createdBy'] = $userId;
                                 $taxpayer = Taxpayer::create($this->transformKeysToSnakeCase($value));
@@ -54,14 +55,17 @@ class SyncInController extends Controller
                         // Batch collect new taxables, update existing ones
                         $newTaxables = [];
                         foreach ($taxpayerTaxables as $taxpayerTaxable) {
-                            if (empty($taxpayerTaxable['dataStatus']) || isset($taxpayerTaxable['dataStatus'])) {
+                            $taxableStatus = $taxpayerTaxable['dataStatus'] ?? null;
+                            if ($taxableStatus !== null) {
                                 $taxpayerTaxable['taxpayer_id'] = $taxpayerId;
+                                $taxableId = $taxpayerTaxable['_id'] ?? null;
+                                unset($taxpayerTaxable['_id'], $taxpayerTaxable['dataStatus']);
                                 $transformed = $this->transformKeysToSnakeCase($taxpayerTaxable);
-                                if ($taxpayerTaxable['dataStatus'] == $this->new) {
+                                if ($taxableStatus == $this->new) {
                                     $newTaxables[] = $transformed;
                                 } else {
-                                    $step = 'updating taxpayer taxable (id: ' . ($taxpayerTaxable['_id'] ?? 'unknown') . ')';
-                                    TaxpayerTaxable::where('id', $taxpayerTaxable['_id'])
+                                    $step = 'updating taxpayer taxable (id: ' . ($taxableId ?? 'unknown') . ')';
+                                    TaxpayerTaxable::where('id', $taxableId)
                                         ->update($transformed);
                                 }
                             }
@@ -73,14 +77,19 @@ class SyncInController extends Controller
 
                         // Collect invoice updates for batch processing
                         foreach ($taxpayerInvoices as $taxpayerInvoice) {
-                            if (empty($taxpayerInvoice['dataStatus']) || isset($taxpayerInvoice['dataStatus'])) {
-                                $invoiceUpdates[$taxpayerInvoice['_id']] = $this->transformKeysToSnakeCase($taxpayerInvoice);
+                            $invoiceStatus = $taxpayerInvoice['dataStatus'] ?? null;
+                            if ($invoiceStatus !== null) {
+                                $invoiceId = $taxpayerInvoice['_id'];
+                                unset($taxpayerInvoice['_id'], $taxpayerInvoice['dataStatus']);
+                                $invoiceUpdates[$invoiceId] = $this->transformKeysToSnakeCase($taxpayerInvoice);
                             }
                         }
 
                         // Collect payment inserts for batch processing
                         foreach ($taxpayerPayments as $taxpayerPayment) {
-                            if (empty($taxpayerPayment['dataStatus']) || isset($taxpayerPayment['dataStatus'])) {
+                            $paymentStatus = $taxpayerPayment['dataStatus'] ?? null;
+                            if ($paymentStatus !== null) {
+                                unset($taxpayerPayment['_id'], $taxpayerPayment['dataStatus']);
                                 $paymentInserts[] = $this->transformKeysToSnakeCase($taxpayerPayment);
                             }
                         }
