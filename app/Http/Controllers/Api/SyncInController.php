@@ -59,7 +59,7 @@ class SyncInController extends Controller
                             if ($taxableStatus !== null) {
                                 $taxpayerTaxable['taxpayer_id'] = $taxpayerId;
                                 $taxableId = $taxpayerTaxable['_id'] ?? null;
-                                unset($taxpayerTaxable['_id'], $taxpayerTaxable['dataStatus']);
+                                unset($taxpayerTaxable['_id'], $taxpayerTaxable['time'], $taxpayerTaxable['dataStatus']);
                                 $transformed = $this->transformKeysToSnakeCase($taxpayerTaxable);
                                 if ($taxableStatus == $this->new) {
                                     $newTaxables[] = $transformed;
