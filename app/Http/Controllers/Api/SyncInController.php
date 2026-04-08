@@ -90,8 +90,9 @@ class SyncInController extends Controller
                         foreach ($taxpayerPayments as $taxpayerPayment) {
                             $paymentStatus = $taxpayerPayment['dataStatus'] ?? null;
                             if ($paymentStatus !== null) {
-                                unset($taxpayerPayment['_id'], $taxpayerPayment['time'], $taxpayerPayment['dataStatus']);
+                                unset($taxpayerPayment['_id'], $taxpayerPayment['time'], $taxpayerPayment['reference'], $taxpayerPayment['dataStatus']);
                                 $taxpayerPayment['user_id'] = $userId;
+                                $taxpayerPayment['status'] = 'PENDING';
                                 $transformed = $this->transformKeysToSnakeCase($taxpayerPayment);
                                 $transformed['invoice_type'] = $transformed['invoice_type'] ?? 'TITRE';
                                 $paymentInserts[] = $transformed;
