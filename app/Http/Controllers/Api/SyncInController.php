@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Enums\TaxpayerStateEnums;
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
+use App\Models\MobilePaymentTransaction;
 use App\Models\Payment;
 use App\Models\Taxpayer;
 use App\Models\TaxpayerTaxable;
@@ -107,8 +108,39 @@ class SyncInController extends Controller
             // Batch insert payments
             if (!empty($paymentInserts)) {
                 $step = 'inserting ' . count($paymentInserts) . ' payment(s)';
+                $mobileTransactionInserts = [];
+
+                foreach ($paymentInserts as &$payment) {
+                    // If DIGI payment, collect data for mobile_payment_transactions
+                    if (($payment['payment_type'] ?? null) === 'DIGI') {
+                        $mobileTransactionInserts[] = [
+                            'reference' => $payment['reference'] ?? Str::uuid()->toString(),
+                            'invoice_id' => $payment['invoice_id'] ?? null,
+                            'taxpayer_id' => $payment['taxpayer_id'] ?? null,
+                            'amount' => $payment['amount'] ?? 0,
+                            'phone_number' => $payment['phone_number'] ?? '',
+                            'provider' => $payment['provider'] ?? '',
+                            'network' => $payment['network'] ?? null,
+                            'external_id' => $payment['external_id'] ?? null,
+                            'status' => $this->mapPaymentStatusToTransactionStatus($payment['status'] ?? 'PENDING'),
+                            'user_id' => $payment['user_id'] ?? null,
+                            'created_at' => $payment['created_at'] ?? now(),
+                            'updated_at' => now(),
+                        ];
+                    }
+                }
+                unset($payment);
+
                 foreach (array_chunk($paymentInserts, 500) as $chunk) {
                     Payment::insert($chunk);
+                }
+
+                // Insert mobile payment transaction records for DIGI payments
+                if (!empty($mobileTransactionInserts)) {
+                    $step = 'inserting ' . count($mobileTransactionInserts) . ' mobile payment transaction(s)';
+                    foreach (array_chunk($mobileTransactionInserts, 500) as $chunk) {
+                        MobilePaymentTransaction::insert($chunk);
+                    }
                 }
             }
 
@@ -137,5 +169,17 @@ class SyncInController extends Controller
             $snakeCaseData[$snakeCaseKey] = is_array($value) ? $this->transformKeysToSnakeCase($value) : $value;
         }
         return $snakeCaseData;
+    }
+
+    private function mapPaymentStatusToTransactionStatus(string $paymentStatus): string
+    {
+        return match ($paymentStatus) {
+            'ACCOUNTED', 'DONE' => 'success',
+            'CANCELED' => 'failed',
+            'EXPIRED' => 'expired',
+            'VERIFYING' => 'verifying',
+            'FAILED' => 'failed',
+            default => 'pending',
+        };
     }
 }

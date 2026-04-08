@@ -13,6 +13,7 @@ class MobilePaymentTransaction extends Model
         'amount',
         'phone_number',
         'provider',
+        'network',
         'external_id',
         'status',
         'verification_attempts',
