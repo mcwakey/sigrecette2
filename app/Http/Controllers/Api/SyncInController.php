@@ -92,8 +92,9 @@ class SyncInController extends Controller
                             if ($paymentStatus !== null) {
                                 unset($taxpayerPayment['_id'], $taxpayerPayment['time'], $taxpayerPayment['dataStatus']);
                                 $taxpayerPayment['user_id'] = $userId;
-                                $taxpayerPayment['invoice_type'] = 'TITRE';
-                                $paymentInserts[] = $this->transformKeysToSnakeCase($taxpayerPayment);
+                                $transformed = $this->transformKeysToSnakeCase($taxpayerPayment);
+                                $transformed['invoice_type'] = $transformed['invoice_type'] ?? 'TITRE';
+                                $paymentInserts[] = $transformed;
                             }
                         }
                     }
@@ -109,7 +110,6 @@ class SyncInController extends Controller
             // Batch insert payments
             if (!empty($paymentInserts)) {
                 $step = 'inserting ' . count($paymentInserts) . ' payment(s)';
-                $paymentInserts['invoice_type'] = 'TITRE';
                 $mobileTransactionInserts = [];
 
                 foreach ($paymentInserts as &$payment) {
