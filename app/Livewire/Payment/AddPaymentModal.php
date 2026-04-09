@@ -82,7 +82,7 @@ class AddPaymentModal extends Component
             $rules['code'] = Rule::in($this->validCodes);
         }
         if ($this->payment_type === PaymentTypeEnums::DIGI->value) {
-            $rules['phone_number'] = ['required', 'string'];
+            $rules['phone_number'] = ['required', 'digits:8'];
             $rules['network'] = ['required', Rule::in(Constants::MOBILE_NETWORKS)];
         }
         return $rules;

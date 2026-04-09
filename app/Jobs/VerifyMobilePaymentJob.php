@@ -15,11 +15,14 @@ class VerifyMobilePaymentJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $tries = 5;
-
     public function __construct(
         public MobilePaymentTransaction $transaction,
     ) {}
+
+    public function tries(): int
+    {
+        return config('mobile-payment.verification.max_attempts', 5);
+    }
 
     public function backoff(): array
     {
@@ -41,7 +44,7 @@ class VerifyMobilePaymentJob implements ShouldQueue
 
         $result = $service->verifyWithProvider($this->transaction);
 
-        if ($result === 'pending' && $this->attempts() < $this->tries) {
+        if ($result === 'pending' && $this->attempts() < $this->tries()) {
             $this->release($this->backoff()[$this->attempts() - 1] ?? 300);
         }
     }
