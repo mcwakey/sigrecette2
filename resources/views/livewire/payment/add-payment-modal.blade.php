@@ -234,13 +234,15 @@
 
                         {{-- Mobile payment status feedback --}}
                         @if($mobile_payment_status)
-                        <div class="row mb-5" @if($mobile_payment_status === 'verifying') wire:poll.15s="checkMobilePaymentStatus" @endif>
+                        <div class="row mb-5" @if($mobile_payment_status === 'verifying') wire:poll.30s="checkMobilePaymentStatus" @endif>
                             @if($mobile_payment_status === 'verifying')
                             <div class="notice d-flex bg-light-info rounded border-info border border-dashed p-4">
                                 <div class="d-flex align-items-center">
                                     <span class="spinner-border spinner-border-sm text-info me-3"></span>
                                     <span class="text-info fw-semibold">{{ $mobile_payment_message }}</span>
                                 </div>
+                                
+                                        <button type="button" wire:click="cancelPayment" class="btn btn-sm btn-light-danger w-auto">Nouveau paiement</button>
                             </div>
                             @elseif($mobile_payment_status === 'success')
                             <div class="notice d-flex bg-light-success rounded border-success border border-dashed p-4">
