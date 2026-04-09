@@ -359,7 +359,7 @@ class AddPaymentModal extends Component
             ]);
         }
 
-        $this->mobile_transaction_id = null;
+        // $this->mobile_transaction_id = null;
         $this->mobile_payment_status = 'failed';
         $this->mobile_payment_message = 'Paiement annulé par l\'utilisateur.';
     }
