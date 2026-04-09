@@ -67,9 +67,10 @@ class PaygateProvider implements MobilePaymentProviderInterface
         try {
             $response = Http::withHeaders([])
                 ->timeout($config['timeout'])
-                ->post($config['base_url'] . '/api/v1/status', [
+                ->post($config['base_url'] . '/api/v2/status', [
                     'auth_token' => $config['api_key'],
                     'tx_reference' => $reference,
+                    'identifier' => $reference,
                 ]);
 
             $body = $response->json();
