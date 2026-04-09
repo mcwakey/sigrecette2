@@ -87,7 +87,7 @@ class PaygateProvider implements MobilePaymentProviderInterface
                 2 => 'pending',
                 4 => 'failed',  // expired
                 6 => 'failed',  // cancelled
-                default => 'pending',
+                default => 'failed', // unknown/no status code
             };
 
             return [

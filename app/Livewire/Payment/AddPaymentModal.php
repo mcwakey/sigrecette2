@@ -314,6 +314,26 @@ class AddPaymentModal extends Component
         $this->mobile_payment_message = 'Vérification en cours... (tentative ' . $transaction->verification_attempts . ')';
     }
 
+    public function cancelPayment()
+    {
+        if (!$this->mobile_transaction_id) {
+            return;
+        }
+
+        $transaction = MobilePaymentTransaction::find($this->mobile_transaction_id);
+        if ($transaction && in_array($transaction->status, ['pending', 'verifying'])) {
+            $transaction->update(['status' => 'failed']);
+            Log::channel('daily')->info('Mobile payment: manually cancelled by user', [
+                'transaction_id' => $transaction->id,
+                'reference' => $transaction->reference,
+            ]);
+        }
+
+        $this->mobile_transaction_id = null;
+        $this->mobile_payment_status = 'failed';
+        $this->mobile_payment_message = 'Paiement annulé par l\'utilisateur.';
+    }
+
     public function resetMobilePayment()
     {
         $this->mobile_transaction_id = null;

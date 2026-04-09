@@ -99,12 +99,19 @@ class MobilePaymentService
             'provider_response' => $result['raw'] ?? $transaction->provider_response,
         ]);
 
-        if ($result['status'] === 'success') {
+        $status = $result['status'] ?? null;
+
+        if (empty($status)) {
+            $this->handleVerificationFailure($transaction);
+            return 'failed';
+        }
+
+        if ($status === 'success') {
             $this->handleVerificationSuccess($transaction);
             return 'success';
         }
 
-        if ($result['status'] === 'failed') {
+        if ($status === 'failed') {
             $this->handleVerificationFailure($transaction);
             return 'failed';
         }
@@ -135,6 +142,9 @@ class MobilePaymentService
             $meta = $transaction->meta ?? [];
             $code = $meta['code'] ?? null;
 
+            $notes = 'Paiement mobile vérifié. Réf: ' . $transaction->reference
+                . ($transaction->external_id ? ' | ID ext: ' . $transaction->external_id : '');
+
             $paymentData = [
                 'invoice_id' => $invoice->invoice_no,
                 'taxpayer_id' => $transaction->taxpayer_id,
@@ -146,11 +156,12 @@ class MobilePaymentService
                 'remaining_amount' => 0,
                 'user_id' => $transaction->user_id,
                 'invoice_type' => $invoice->type,
-                'status' => PaymentStatusEnums::ACCOUNTED->value,
+                'status' => PaymentStatusEnums::PENDING->value,
                 'provider' => $transaction->provider,
+                'network' => $transaction->network ?? null,
                 'phone_number' => $transaction->phone_number,
                 'external_id' => $transaction->external_id,
-                'notes' => 'Paiement mobile vérifié automatiquement',
+                'notes' => $notes,
             ];
 
             $paid = Payment::getPaid($invoice->invoice_no);
