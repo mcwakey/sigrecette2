@@ -242,7 +242,7 @@
                                     <span class="text-info fw-semibold">{{ $mobile_payment_message }}</span>
                                 </div>
                                 
-                                        <button type="button" wire:click="cancelPayment" class="btn btn-sm btn-light-danger w-auto">Nouveau paiement</button>
+                                        <button type="button" wire:click="cancelPayment" class="btn btn-sm btn-light-danger w-auto">Annuler</button>
                             </div>
                             @elseif($mobile_payment_status === 'success')
                             <div class="notice d-flex bg-light-success rounded border-success border border-dashed p-4">

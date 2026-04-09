@@ -44,8 +44,16 @@ class VerifyMobilePaymentJob implements ShouldQueue
 
         $result = $service->verifyWithProvider($this->transaction);
 
-        if ($result === 'pending' && $this->attempts() < $this->tries()) {
-            $this->release($this->backoff()[$this->attempts() - 1] ?? 300);
+        if ($result === 'pending') {
+            $attempt = $this->transaction->fresh()->verification_attempts;
+            $maxAttempts = $this->tries();
+            if ($attempt < $maxAttempts) {
+                $delay = $this->backoff()[$attempt - 1] ?? end($this->backoff());
+                static::dispatch($this->transaction->fresh())
+                    ->delay(now()->addSeconds($delay));
+            } else {
+                $this->transaction->update(['status' => 'failed']);
+            }
         }
     }
 

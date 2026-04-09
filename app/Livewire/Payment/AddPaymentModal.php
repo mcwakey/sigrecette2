@@ -310,8 +310,38 @@ class AddPaymentModal extends Component
             return;
         }
 
+        // Actively verify with provider, respecting config backoff between attempts
+        $maxAttempts = config('mobile-payment.verification.max_attempts', 5);
+        $backoffs = config('mobile-payment.verification.backoff_seconds', [10, 30, 60, 120, 300]);
+        $attemptIndex = max(0, $transaction->verification_attempts - 1);
+        $backoff = $backoffs[$attemptIndex] ?? end($backoffs);
+
+        $shouldCheck = $transaction->verification_attempts < $maxAttempts
+            && (!$transaction->last_checked_at || $transaction->last_checked_at->addSeconds($backoff)->isPast());
+
+        if ($shouldCheck) {
+            /** @var MobilePaymentService $service */
+            $service = app(MobilePaymentService::class);
+            $result = $service->verifyWithProvider($transaction);
+            $transaction->refresh();
+
+            if ($result === 'success') {
+                $this->mobile_payment_status = 'success';
+                $this->mobile_payment_message = 'Paiement confirmé avec succès!';
+                $this->dispatch('refreshPayments');
+                return;
+            }
+
+            if ($result === 'failed') {
+                $this->mobile_payment_status = 'failed';
+                $this->mobile_payment_message = 'Le paiement a échoué. Veuillez réessayer.';
+                return;
+            }
+        }
+
+        $nextCheckIn = $shouldCheck ? ($backoffs[$transaction->verification_attempts] ?? end($backoffs)) : $backoff;
         $this->mobile_payment_status = 'verifying';
-        $this->mobile_payment_message = 'Vérification en cours... (tentative ' . $transaction->verification_attempts . ')';
+        $this->mobile_payment_message = 'Vérification en cours... (tentative ' . $transaction->verification_attempts . '/' . $maxAttempts . ', prochaine vérification dans ' . $nextCheckIn . 's)';
     }
 
     public function cancelPayment()
