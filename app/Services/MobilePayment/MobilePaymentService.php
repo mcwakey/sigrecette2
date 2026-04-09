@@ -142,15 +142,14 @@ class MobilePaymentService
             $meta = $transaction->meta ?? [];
             $code = $meta['code'] ?? null;
 
-            $notes = 'Paiement mobile vérifié. Réf: ' . $transaction->reference
-                . ($transaction->external_id ? ' | ID ext: ' . $transaction->external_id : '');
+            $notes = 'Paiement mobile vérifié. Réf: ' . $transaction->reference;
 
             $paymentData = [
                 'invoice_id' => $invoice->invoice_no,
                 'taxpayer_id' => $transaction->taxpayer_id,
                 'amount' => $transaction->amount,
                 'payment_type' => 'DIGI',
-                'reference' => $transaction->reference,
+                // 'reference' => $transaction->reference,
                 'code' => $code,
                 'description' => "Avis " . $invoice->invoice_no,
                 'remaining_amount' => 0,

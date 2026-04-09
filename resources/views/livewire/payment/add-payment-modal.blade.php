@@ -234,7 +234,7 @@
 
                         {{-- Mobile payment status feedback --}}
                         @if($mobile_payment_status)
-                        <div class="row mb-5" @if($mobile_payment_status === 'verifying') wire:poll.3s="checkMobilePaymentStatus" @endif>
+                        <div class="row mb-5" @if($mobile_payment_status === 'verifying') wire:poll.15s="checkMobilePaymentStatus" @endif>
                             @if($mobile_payment_status === 'verifying')
                             <div class="notice d-flex bg-light-info rounded border-info border border-dashed p-4">
                                 <div class="d-flex align-items-center">
