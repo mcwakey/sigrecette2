@@ -29,6 +29,16 @@ class Commune extends Model
         'url',
         'qr_code_enabled',
         'carry_forward_previous_year',
+        'mobile_payment_enabled',
+        'sms_enabled',
+        'default_payment_provider',
+    ];
+
+    protected $casts = [
+        'qr_code_enabled' => 'boolean',
+        'carry_forward_previous_year' => 'boolean',
+        'mobile_payment_enabled' => 'boolean',
+        'sms_enabled' => 'boolean',
     ];
     protected static function booted()
     {

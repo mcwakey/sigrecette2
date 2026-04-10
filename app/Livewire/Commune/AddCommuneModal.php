@@ -7,6 +7,7 @@ use App\Traits\DispatchesMessages;
 use http\Url;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class AddCommuneModal extends Component
@@ -31,6 +32,9 @@ class AddCommuneModal extends Component
     public $url;
     public $qr_code_enabled = false;
     public $carry_forward_previous_year = false;
+    public $mobile_payment_enabled = false;
+    public $sms_enabled = false;
+    public $default_payment_provider = '';
     public $email;
     public $logo;
     public $saved_logo;
@@ -49,6 +53,9 @@ class AddCommuneModal extends Component
         'treasury_rib' => 'nullable|sometimes|string',
         'qr_code_enabled' => 'required|boolean',
         'carry_forward_previous_year' => 'required|boolean',
+        'mobile_payment_enabled' => 'required|boolean',
+        'sms_enabled' => 'required|boolean',
+        'default_payment_provider' => 'nullable|string',
     ];
     protected $listeners = [
         'delete_user' => 'deleteUser',
@@ -87,6 +94,9 @@ class AddCommuneModal extends Component
                     'url' => $this->url,
                     'qr_code_enabled' => $this->qr_code_enabled,
                     'carry_forward_previous_year' => $this->carry_forward_previous_year,
+                    'mobile_payment_enabled' => $this->mobile_payment_enabled,
+                    'sms_enabled' => $this->sms_enabled,
+                    'default_payment_provider' => $this->default_payment_provider ?: null,
                 ];
                 if ($this->logo) {
                     $data['logo_path'] = $this->logo->store('logo', 'public');
@@ -109,6 +119,7 @@ class AddCommuneModal extends Component
                 } else {
                     $this->dispatchMessage('Commune');
                 }
+                Cache::forget('first_commune');
             });
             // Reset the form fields after successful submission
             $this->reset();
@@ -150,6 +161,9 @@ class AddCommuneModal extends Component
             $this->email = $commune->email;
             $this->qr_code_enabled = $commune->qr_code_enabled;
             $this->carry_forward_previous_year = $commune->carry_forward_previous_year;
+            $this->mobile_payment_enabled = (bool) $commune->mobile_payment_enabled;
+            $this->sms_enabled = (bool) $commune->sms_enabled;
+            $this->default_payment_provider = $commune->default_payment_provider ?? '';
         }catch (\Exception $e) {
 
         }

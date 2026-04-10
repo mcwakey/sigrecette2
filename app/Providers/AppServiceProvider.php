@@ -88,6 +88,17 @@ class AppServiceProvider extends ServiceProvider
             if (!$year) {
                 Cache::rememberForever('active_year', fn() => Year::getActiveYear());
             }
+
+            // Commune settings override .env config values
+            if ($commune) {
+                config([
+                    'features.mobile_payment_feature' => (bool) $commune->mobile_payment_enabled,
+                    'features.sms_notifications_feature' => (bool) $commune->sms_enabled,
+                ]);
+                if ($commune->default_payment_provider) {
+                    config(['mobile-payment.default_provider' => $commune->default_payment_provider]);
+                }
+            }
             $month = $year
                 ? Carbon::createFromFormat('m', $year->current_month)->monthName
                 : null;

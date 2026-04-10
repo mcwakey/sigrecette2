@@ -97,6 +97,32 @@
                                             @endif
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td class="text-gray-500">Paiement mobile :</td>
+                                        <td class="text-gray-800">
+                                            @if($commune->mobile_payment_enabled)
+                                                <span class="badge badge-light-success">Activé</span>
+                                            @else
+                                                <span class="badge badge-light-danger">Désactivé</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-gray-500">Notifications SMS :</td>
+                                        <td class="text-gray-800">
+                                            @if($commune->sms_enabled)
+                                                <span class="badge badge-light-success">Activé</span>
+                                            @else
+                                                <span class="badge badge-light-danger">Désactivé</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-gray-500">Prestataire de paiement :</td>
+                                        <td class="text-gray-800">
+                                            {{ $commune->default_payment_provider ? strtoupper($commune->default_payment_provider) : 'Par défaut (.env)' }}
+                                        </td>
+                                    </tr>
 
 
 

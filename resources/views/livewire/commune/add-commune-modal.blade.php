@@ -267,6 +267,45 @@
                                 </div>
                             </div>
 
+                            <div class="separator separator-dashed my-2"></div>
+                            <div class="row w-100 mb-4">
+                                <div class="col-md-4">
+                                    <label class="fw-semibold fs-6 mb-2">{{ __('Paiement mobile') }}</label>
+                                    <div class="form-check form-switch form-check-custom form-check-solid" style="border: none;">
+                                        <input class="form-check-input" type="checkbox" id="toggle_mobile_payment"
+                                               wire:model.live.debounce.250ms="mobile_payment_enabled"
+                                               @if($mobile_payment_enabled) checked @endif />
+                                        <label class="form-check-label" for="toggle_mobile_payment">
+                                            {{ __('Activer le paiement mobile') }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="fw-semibold fs-6 mb-2">{{ __('Notifications SMS') }}</label>
+                                    <div class="form-check form-switch form-check-custom form-check-solid" style="border: none;">
+                                        <input class="form-check-input" type="checkbox" id="toggle_sms"
+                                               wire:model.live.debounce.250ms="sms_enabled"
+                                               @if($sms_enabled) checked @endif />
+                                        <label class="form-check-label" for="toggle_sms">
+                                            {{ __('Activer les SMS') }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="fw-semibold fs-6 mb-2">{{ __('Prestataire de paiement par défaut') }}</label>
+                                    <select wire:model="default_payment_provider" class="form-select"
+                                            data-dropdown-parent="#kt_modal_add_commune">
+                                        <option value="">{{ __('Utiliser la valeur par défaut (.env)') }}</option>
+                                        <option value="paygate">PayGate</option>
+                                        <option value="qosic">QOSIC</option>
+                                        <option value="fedapay">FedaPay</option>
+                                    </select>
+                                    @error('default_payment_provider')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+
                             <div class="col-md-12 mb-4">
                                 <label class="fw-semibold fs-6 mb-2">{{ __('URL site web') }}</label>
                                 <div class="input-group mb-5">
