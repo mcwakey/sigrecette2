@@ -3,26 +3,36 @@
 namespace App\Services;
 
 use App\Models\SmsLog;
+use App\Services\Sms\SmsProviderFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class SmsService
 {
+    public function __construct(
+        protected SmsProviderFactory $factory,
+    ) {}
+
     public function send(string $phoneNumber, string $message, ?Model $loggable = null): SmsLog
     {
+        $provider = $this->factory->make();
+
         $log = SmsLog::create([
             'phone_number' => $phoneNumber,
             'message' => $message,
-            'provider' => config('mobile-payment.sms.provider'),
+            'provider' => $provider->getName(),
             'status' => 'pending',
             'loggable_type' => $loggable ? get_class($loggable) : null,
             'loggable_id' => $loggable?->getKey(),
         ]);
 
         try {
-            $this->sendViaProvider($phoneNumber, $message);
-            $log->update(['status' => 'sent']);
+            $result = $provider->send($phoneNumber, $message);
+
+            $log->update([
+                'status' => $result['success'] ? 'sent' : 'failed',
+                'meta' => $result['raw'] ?? [],
+            ]);
         } catch (\Throwable $e) {
             $log->update([
                 'status' => 'failed',
@@ -31,31 +41,11 @@ class SmsService
 
             Log::channel('daily')->warning('SMS send failed', [
                 'phone' => $phoneNumber,
+                'provider' => $provider->getName(),
                 'error' => $e->getMessage(),
             ]);
         }
 
         return $log;
-    }
-
-    protected function sendViaProvider(string $phoneNumber, string $message): void
-    {
-        $apiKey = config('mobile-payment.sms.api_key');
-        $senderId = config('mobile-payment.sms.sender_id');
-
-        if (empty($apiKey)) {
-            Log::channel('daily')->info('SMS not sent — no API key configured', [
-                'phone' => $phoneNumber,
-            ]);
-            return;
-        }
-
-        // Generic SMS API call — adapt to your actual SMS provider
-        Http::timeout(15)->post(config('mobile-payment.sms.provider'), [
-            'api_key' => $apiKey,
-            'sender_id' => $senderId,
-            'to' => $phoneNumber,
-            'message' => $message,
-        ]);
     }
 }

@@ -52,6 +52,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(MobilePaymentService::class, fn(Application $app) => new MobilePaymentService(
             $app->make(MobilePaymentProviderFactory::class),
         ));
+        $this->app->singleton(\App\Services\Sms\SmsProviderFactory::class);
         $this->app->singleton(SmsService::class);
     }
     /**
@@ -97,6 +98,9 @@ class AppServiceProvider extends ServiceProvider
                 ]);
                 if ($commune->default_payment_provider) {
                     config(['mobile-payment.default_provider' => $commune->default_payment_provider]);
+                }
+                if ($commune->default_sms_provider) {
+                    config(['mobile-payment.sms.default_provider' => $commune->default_sms_provider]);
                 }
             }
             $month = $year

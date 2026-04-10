@@ -16,7 +16,7 @@ class HandleMobilePaymentVerified
     {
         $transaction = $event->transaction;
 
-        if (!config('mobile-payment.sms.enabled')) {
+        if (!config('features.sms_notifications_feature')) {
             return;
         }
 

@@ -32,6 +32,7 @@ class Commune extends Model
         'mobile_payment_enabled',
         'sms_enabled',
         'default_payment_provider',
+        'default_sms_provider',
     ];
 
     protected $casts = [

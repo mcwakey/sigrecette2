@@ -305,6 +305,21 @@
                                     @enderror
                                 </div>
                             </div>
+                            <div class="row w-100 mb-4">
+                                <div class="col-md-4">
+                                    <label class="fw-semibold fs-6 mb-2">{{ __('Prestataire SMS par défaut') }}</label>
+                                    <select wire:model="default_sms_provider" class="form-select"
+                                            data-dropdown-parent="#kt_modal_add_commune">
+                                        <option value="">{{ __('Utiliser la valeur par défaut (.env)') }}</option>
+                                        <option value="smsvas">SMSVAS</option>
+                                        <option value="bestcom">Bestcom</option>
+                                        <option value="nalo">Nalo Solutions</option>
+                                    </select>
+                                    @error('default_sms_provider')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
 
                             <div class="col-md-12 mb-4">
                                 <label class="fw-semibold fs-6 mb-2">{{ __('URL site web') }}</label>

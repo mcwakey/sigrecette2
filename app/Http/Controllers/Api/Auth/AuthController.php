@@ -37,6 +37,12 @@ class AuthController extends Controller
                 'phone_number' => $commune->phone_number,
                 'logo_url' => $commune->getImageUrlAttributeDirect('logo'),
             ] : null,
+            'sms' => [
+                'enabled' => config('features.sms_notifications_feature', false),
+                'default_provider' => config('mobile-payment.sms.default_provider'),
+                'sender_id' => config('mobile-payment.sms.sender_id'),
+                'providers' => array_keys(config('mobile-payment.sms.providers', [])),
+            ],
             'mobile_payment' => [
                 'enabled' => config('features.mobile_payment_feature', false),
                 'default_provider' => config('mobile-payment.default_provider'),

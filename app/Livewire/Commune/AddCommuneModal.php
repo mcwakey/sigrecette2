@@ -35,6 +35,7 @@ class AddCommuneModal extends Component
     public $mobile_payment_enabled = false;
     public $sms_enabled = false;
     public $default_payment_provider = '';
+    public $default_sms_provider = '';
     public $email;
     public $logo;
     public $saved_logo;
@@ -56,6 +57,7 @@ class AddCommuneModal extends Component
         'mobile_payment_enabled' => 'required|boolean',
         'sms_enabled' => 'required|boolean',
         'default_payment_provider' => 'nullable|string',
+        'default_sms_provider' => 'nullable|string',
     ];
     protected $listeners = [
         'delete_user' => 'deleteUser',
@@ -97,6 +99,7 @@ class AddCommuneModal extends Component
                     'mobile_payment_enabled' => $this->mobile_payment_enabled,
                     'sms_enabled' => $this->sms_enabled,
                     'default_payment_provider' => $this->default_payment_provider ?: null,
+                    'default_sms_provider' => $this->default_sms_provider ?: null,
                 ];
                 if ($this->logo) {
                     $data['logo_path'] = $this->logo->store('logo', 'public');
@@ -164,6 +167,7 @@ class AddCommuneModal extends Component
             $this->mobile_payment_enabled = (bool) $commune->mobile_payment_enabled;
             $this->sms_enabled = (bool) $commune->sms_enabled;
             $this->default_payment_provider = $commune->default_payment_provider ?? '';
+            $this->default_sms_provider = $commune->default_sms_provider ?? '';
         }catch (\Exception $e) {
 
         }
