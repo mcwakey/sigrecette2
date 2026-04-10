@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\AuthRequest;
+use App\Models\Commune;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,6 +24,7 @@ class AuthController extends Controller
             ], 404);
         }
         $token = $user->createToken($user->email . '-AuthToken')->plainTextToken;
+        $commune = Commune::getFirstCommune();
         return response()->json([
             'access_token' => $token,
             'user_id' => $user->id,
@@ -30,6 +32,11 @@ class AuthController extends Controller
             'email' => $user->email,
             'role' => __($user->getRoleNames()->first()),
             'zone' => $user->zone->name,
+            'commune' => $commune ? [
+                'title' => $commune->title,
+                'phone_number' => $commune->phone_number,
+                'logo_url' => $commune->getImageUrlAttributeDirect('logo'),
+            ] : null,
             'mobile_payment' => [
                 'enabled' => config('features.mobile_payment_feature', false),
                 'default_provider' => config('mobile-payment.default_provider'),
