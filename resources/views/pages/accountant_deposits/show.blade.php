@@ -193,12 +193,13 @@
                             "Content-Type": "application/json"
                         },
                         body: jsonData
-                         });
+                         }).then(function() {
                      let url ="{{ route('generatePdf', ['data' => ':jsonData', 'type' => ':r_type', 'action' => ':selectedValue']) }}";
                     url = url.replace(':jsonData', encodeURIComponent(null));
                     url = url.replace(':r_type', encodeURIComponent(r_type));
                     url = url.replace(':selectedValue', encodeURIComponent(selectedValue));
-                    window.location.href = url;
+                    window.open(url, '_blank');
+                    });
                 });
             });
 

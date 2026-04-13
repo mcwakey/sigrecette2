@@ -554,9 +554,9 @@ $filters = [
                             "Content-Type": "application/json"
                         },
                         body: jsonData
-                         });
-
+                         }).then(function() {
                         window.open(url,'_blank');
+                        });
                     });
                 });
             }

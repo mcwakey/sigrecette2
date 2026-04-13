@@ -22,7 +22,7 @@ class PrintService implements PrintServiceInterface
             1   => $this->handleReceipt($data,$pdfGenerator),
             2   => $this->handleTypeTwo($action, $data, $user,$pdfGenerator),
             11  => $pdfGenerator->generataxpayerFormPdf($data, 'taxpayer-form'),
-            6   => $pdfGenerator->generateStateAcountIvCollectorPdf($data, 'state-account-iv-collectorc'),
+            6   => $pdfGenerator->generateStateAccountIvCollectorPdf($data, 'state-account-iv-collectorc'),
             7   => $pdfGenerator->generateStateValueCollectorPdf($data, 'state-account-iv-receveur', $action),
             8   => $pdfGenerator->generateStateValueCollectorPdf($data, 'state-versement-collecteur', $action),
             9   => $pdfGenerator->generateStateValueCollectorPdf($data, 'state-versement-regisseur', $action),

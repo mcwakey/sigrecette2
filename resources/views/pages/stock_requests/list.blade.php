@@ -304,7 +304,7 @@
                     url = url.replace(':jsonData', encodeURIComponent(jsonData));
                     url = url.replace(':r_type', encodeURIComponent(r_type));
                     url = url.replace(':selectedValue', encodeURIComponent(selectedValue));
-                    window.location.href = url;
+                    window.open(url, '_blank');
                 });
             });
 

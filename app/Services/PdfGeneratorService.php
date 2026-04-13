@@ -388,12 +388,12 @@ class PdfGeneratorService implements PdfGeneratorInterface
     }
     public function generateStateAccountIvCollectorPdf($data, string $template): array
     {
-        if (count($data) > 2) {
+        if (count($data) >= 2) {
             $user = User::find($data[0]);
             $period = $data[1];
-            $data = StockTransfer::buildAndGetStockTransferWithQuery($period);
+            $stockData = StockTransfer::buildAndGetStockTransferWithQuery($period);
             $filename = "ETAT_DE_COMPTABILITE_DES_VALEURS_INACTIVES_DU_COLLECTEUR" . Str::random(8) . ".pdf";
-            $pdf = PDF::loadView("exports." . $template, ['data' => $data, "commune" => $this->commune, 'user' => $user, 'period' => $data[1]])->setPaper('a4', 'landscape')->stream($filename);
+            $pdf = PDF::loadView("exports." . $template, ['data' => $stockData, "commune" => $this->commune, 'user' => $user, 'period' => $period])->setPaper('a4', 'landscape')->stream($filename);
             return ['success' => true, 'pdf' => $pdf];
         }
         return ['success' => false, 'message' => 'Invalid data structure.'];
