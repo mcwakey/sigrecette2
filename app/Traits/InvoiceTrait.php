@@ -248,7 +248,10 @@ trait InvoiceTrait
                         $query->where('name', $type);
                     });
             } elseif ($type === PrintNameEnums::BORDEREAU->value) {
-                $query = $query->where("invoices.reduce_amount", "=", '')
+                $query = $query->where(function ($q) {
+                        $q->where("invoices.reduce_amount", "=", '')
+                          ->orWhereNull("invoices.reduce_amount");
+                    })
                     ->WhereDoesntHave('printFiles', function ($query) use ($type) {
                         $query->where('name', $type);
                     });
@@ -280,7 +283,10 @@ trait InvoiceTrait
                         $query->where('name', $type);
                     });
             } elseif ($type === PrintNameEnums::BORDEREAU->value) {
-                $query = $query->where("invoices.reduce_amount", "=", '')
+                $query = $query->where(function ($q) {
+                        $q->where("invoices.reduce_amount", "=", '')
+                          ->orWhereNull("invoices.reduce_amount");
+                    })
                     -> whereHas('printFiles', function ($query) use ($type) {
                         $query->where('name', $type);
                     });

@@ -25,7 +25,7 @@ class DownloadInvoiceZipService implements DownloadInvoiceZipInterface
              foreach ($dto->uuids as $invoiceUid) {
                  $result =$pdfGenerator->generateInvoicePdf([$invoiceUid], 'invoices', $dto->action);
                  if ($result['success']) {
-                     $zip->addFromString($result['filename'], $result['pdf']);
+                     $zip->addFromString($result['filename'], $result['pdf']->getContent());
                  } else {
                      Log::warning("Impossible de générer le PDF pour l'UUID: {$invoiceUid}");
                  }

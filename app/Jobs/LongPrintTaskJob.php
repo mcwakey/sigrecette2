@@ -13,6 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class LongPrintTaskJob implements ShouldQueue
 {
@@ -23,7 +24,7 @@ class LongPrintTaskJob implements ShouldQueue
 
     public $timeout = 300;
 
-    public $tries = 3;
+    public $tries = 1;
 
 
     /**
@@ -62,6 +63,13 @@ class LongPrintTaskJob implements ShouldQueue
         }
         if ($result['success']) {
             $this->user->notify(new FileReadyNotification($result['file_name'], $this->user->id));
+        } else {
+            Log::error("Échec de la génération du fichier", [
+                'type' => $this->printType,
+                'action' => $this->action,
+                'message' => $result['message'] ?? 'Aucune donnée trouvée',
+            ]);
+            $this->fail(new \Exception($result['message'] ?? "Échec de la génération pour le type: {$this->printType}"));
         }
 
 
