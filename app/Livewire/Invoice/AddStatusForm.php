@@ -29,6 +29,7 @@ class AddStatusForm extends Component
     public $type;
     public $edit_mode = false;
     public $reason_for_reject;
+    public $bypass_print_check = false;
     public function rules()
     {
         return [
@@ -56,7 +57,7 @@ class AddStatusForm extends Component
     {
         $this->validate();
         $invoice = Invoice::find($this->invoice_id);
-        if ($invoice && $invoice->reduce_amount == '' && ($this->status == InvoiceStatusEnums::APPROVED->value || $this->status == InvoiceStatusEnums::APPROVED_CANCELLATION->value || $this->status == InvoiceStatusEnums::REJECTED->value) && ($invoice->type == Constants::INVOICE_TYPE_TITRE && $invoice->edition_state != "bPRINT")) {
+        if (!$this->bypass_print_check && $invoice && $invoice->reduce_amount == '' && ($this->status == InvoiceStatusEnums::APPROVED->value || $this->status == InvoiceStatusEnums::APPROVED_CANCELLATION->value || $this->status == InvoiceStatusEnums::REJECTED->value) && ($invoice->type == Constants::INVOICE_TYPE_TITRE && $invoice->edition_state != "bPRINT")) {
             if (!$invoice->edition_state) {
                 $this->error_message = "Veuillez au préalable imprimer l'avis.";
             } elseif ($invoice->edition_state == "PRINT") {

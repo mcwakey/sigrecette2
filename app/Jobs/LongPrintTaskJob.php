@@ -69,7 +69,6 @@ class LongPrintTaskJob implements ShouldQueue
                 'action' => $this->action,
                 'message' => $result['message'] ?? 'Aucune donnée trouvée',
             ]);
-            $this->fail(new \Exception($result['message'] ?? "Échec de la génération pour le type: {$this->printType}"));
         }
 
 

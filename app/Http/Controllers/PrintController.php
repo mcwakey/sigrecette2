@@ -6,8 +6,10 @@ use App\Actions\DownloadMultipleInvoiceAction;
 use App\Actions\PrintWithData;
 use App\Actions\PrintWithoutData;
 use App\DataTables\PrintablesDataTable;
+use App\Models\Commune;
 use App\Models\PrintFile;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -45,5 +47,27 @@ class PrintController extends Controller
     {
 
         return $actionExecute->execute($action);
+    }
+
+    public function testBordereauTemplate()
+    {
+        $commune = Commune::first();
+        $pdfGenerator = app(\App\Contracts\PdfGeneratorInterface::class);
+        $titles = $pdfGenerator->generateTitleWithAction(1);
+
+        $pdf = Pdf::loadView('exports.invoices-list', [
+            'data' => collect(),
+            'titles' => $titles,
+            'commune' => $commune,
+            'action' => 1,
+            'print' => (object) [
+                'last_sequence_number' => 0,
+                'total_last_sequence' => 0,
+            ],
+        ])
+            ->setPaper('a4', 'landscape')
+            ->stream('bordereau-test-' . date('Ymd_His') . '.pdf');
+
+        return $pdf;
     }
 }

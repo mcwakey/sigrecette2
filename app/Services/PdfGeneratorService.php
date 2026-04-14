@@ -17,6 +17,7 @@ use App\Models\User;
 use App\Models\Year;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -247,8 +248,20 @@ class PdfGeneratorService implements PdfGeneratorInterface
         } elseif ($action == 2) {
             $type = PrintNameEnums::BORDEREAU_REDUCTION->value;
         }
+        Log::info('generateBordereauListPdf called', [
+            'action' => $action,
+            'type' => $type,
+            'printFile' => $printFile?->id,
+            'commune' => $this->commune?->id,
+        ]);
         if ($type != null && $printFile == null) {
             $data = Invoice::getPrintData([InvoiceStatusEnums::PENDING->value], $type);
+            Log::info('getPrintData result', [
+                'status_filter' => InvoiceStatusEnums::PENDING->value,
+                'type_filter' => $type,
+                'count' => count($data),
+                'invoice_ids' => $data->pluck('id')->toArray(),
+            ]);
             if (count($data) > 0) {
                 $total = 0;
                 foreach ($data as $datum) {
@@ -263,8 +276,13 @@ class PdfGeneratorService implements PdfGeneratorInterface
                 $printFile = Invoice::getPrintFile([InvoiceStatusEnums::PENDING->value], $type);
             }
         }
+        Log::info('generateBordereauListPdf printFile check', [
+            'printFile' => $printFile?->id,
+            'communeIsNotNull' => $this->checkIfCommuneIsNotNull(),
+        ]);
         if ($printFile != null && $this->checkIfCommuneIsNotNull()) {
             $data = $printFile->invoices()->get();
+            Log::info('printFile invoices count', ['count' => count($data)]);
             if (count($data) > 0) {
                 $filename = $type . "-" . date('Ymd_His') . ".pdf";
                 $pdf = PDF::loadView(

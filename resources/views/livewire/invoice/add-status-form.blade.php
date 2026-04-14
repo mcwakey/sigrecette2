@@ -49,6 +49,13 @@
                 <textarea name="notes"  wire:model="reason_for_reject" class="form-control" rows="2" placeholder=""></textarea>
                 @error('reason_for_reject')<span class="text-danger  text-wrap">{{ $message }}</span>@enderror
             </div>
+
+            <div class="form-check form-switch mt-3">
+                <input class="form-check-input" type="checkbox" wire:model="bypass_print_check" id="bypass_print_check">
+                <label class="form-check-label text-warning fw-semibold fs-7" for="bypass_print_check">
+                    {{ __('Ignorer la vérification d\'impression') }}
+                </label>
+            </div>
         @endif
 
 

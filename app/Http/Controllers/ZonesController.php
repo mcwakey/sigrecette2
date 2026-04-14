@@ -47,7 +47,10 @@ class ZonesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateZoneRequest $request, Zone $zone)\n    {\n        //\n    }
+    public function update(UpdateZoneRequest $request, Zone $zone)
+    {
+        //
+    }
     /**
      * Remove the specified resource from storage.
      */
