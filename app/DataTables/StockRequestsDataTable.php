@@ -110,7 +110,7 @@ class StockRequestsDataTable extends DataTable
             ->groupBy('stock_requests.req_id')
             ->whereBetween('stock_requests.created_at', [$this->startDate, $this->endDate])
             ->where('stock_requests.req_no', $this->reqNo)
-            ->orderBy('req_id', 'desc');
+            ->orderBy('stock_requests.req_id', 'desc');
     }
     /**
      * Optional method if you want to use the html builder.

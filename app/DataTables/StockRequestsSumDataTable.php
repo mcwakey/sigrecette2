@@ -59,7 +59,7 @@ class StockRequestsSumDataTable extends DataTable
             )
             ->whereBetween('stock_requests.created_at', [$this->startDate, $this->endDate])
             ->groupBy('stock_requests.req_no')
-            ->orderBy('req_id', 'desc');
+            ->orderByDesc(DB::raw('MAX(stock_requests.created_at)'));
     }
     /**
      * Optional method if you want to use the html builder.
