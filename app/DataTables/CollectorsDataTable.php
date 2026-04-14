@@ -94,8 +94,7 @@ class CollectorsDataTable extends DataTable
             )
             ->whereBetween('stock_transfers.created_at', [$this->startDate, $this->endDate])
             ->groupBy('stock_transfers.to_user_id', 'stock_transfers.period_to')
-            ->orderBy('trans_id', 'desc')
-            ;
+            ->orderByDesc(DB::raw('MAX(stock_transfers.created_at)'));
     }
     /**
      * Optional method if you want to use the html builder.
@@ -109,7 +108,7 @@ class CollectorsDataTable extends DataTable
             ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
-            ->orderBy(0, 'desc')
+            ->parameters(['order' => []])
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/stock_transfers/columns/_draw-scripts.js')) . "}");
     }
     /**

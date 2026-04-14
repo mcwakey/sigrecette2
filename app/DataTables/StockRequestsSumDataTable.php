@@ -59,7 +59,7 @@ class StockRequestsSumDataTable extends DataTable
             )
             ->whereBetween('stock_requests.created_at', [$this->startDate, $this->endDate])
             ->groupBy('stock_requests.req_no')
-            ->orderByDesc(DB::raw('MAX(stock_requests.created_at)'));
+            ->orderByDesc(DB::raw('MAX(stock_requests.id)'));
     }
     /**
      * Optional method if you want to use the html builder.
@@ -73,7 +73,7 @@ class StockRequestsSumDataTable extends DataTable
             ->dom('rt<\'row\'<\'col-sm-12 col-md-5\'l><\'col-sm-12 col-md-7\'p>>')
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
-            ->orderBy(0, 'desc')
+            ->parameters(['order' => []])
             ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/stock_requests/columns/_draw-scripts.js')) . "}");
     }
     /**
