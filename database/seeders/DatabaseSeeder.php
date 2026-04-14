@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
                 EreasSeeder::class,
                 ZonesSeeder::class,
                 IdTypesSeeder::class,
-                TaxpayersSeeder::class,
+                // TaxpayersSeeder::class,
                 UsersSeeder::class,
                 RolesPermissionsSeeder::class,
             );
