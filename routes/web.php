@@ -147,6 +147,7 @@ Route::middleware(['throttle:global'])->group(function () {
         Route::get('/prints', [PrintController::class, 'index'])->name("prints");
         Route::get('/print-all-invoice', [PrintController::class, 'downloadMultipleInvoicePdf'])->name("print-all-invoice");
         Route::get('/test-bordereau-template', [PrintController::class, 'testBordereauTemplate'])->name("test-bordereau-template");
+        Route::get('/test-print-all-pending', [PrintController::class, 'testPrintAllPending'])->name("test-print-all-pending");
         Route::get('/exports', [ExportController::class, 'index'])->name("exports");
         Route::get('/exports-invoice', [ExportController::class, 'downloadExportInvoice'])->name("exports-invoice");
         Route::get('/exports/backup', [ExportController::class, 'backup'])->name("export_backup");

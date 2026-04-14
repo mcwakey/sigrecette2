@@ -551,6 +551,10 @@ $filters = [
                             window.open("{{ route('test-bordereau-template') }}", '_blank');
                             return;
                         }
+                        if(selectedValue==='test-print-all'){
+                            window.open("{{ route('test-print-all-pending') }}", '_blank');
+                            return;
+                        }
                         fetch("{{ route('store.session.params') }}", {
                         method: "POST",
                         headers: {
@@ -605,7 +609,8 @@ $filters = [
                         addPrintMenuItem('{{ __('Imprimer tous les avis') }}', '00');
                         addPrintMenuItem('{{ __('Bordereau journal des avis des sommes à payer') }}', '1');
                         addPrintMenuItem('{{ __('Bordereau journal des avis de réduction ou d\'annulation') }}', '2');
-                        addPrintMenuItem('{{ __('Test template bordereau (vide)') }}', 'test-bordereau');
+                        addPrintMenuItem('{{ __('Test bordereau (pending)') }}', 'test-bordereau');
+                        addPrintMenuItem('{{ __('Test imprimer tous (pending)') }}', 'test-print-all');
                         agentDiv.classList.add( "d-none")
                     }else if(  selectedValue ==="{{ App\Enums\InvoiceStatusEnums::PENDING->value}}" ||  selectedValue ==="{{ App\Enums\InvoiceStatusEnums::APPROVED->value}}" && aucomptant){
                         addPrintMenuItem('{{ __('Registre-journal des déclarations préalables des usagers') }}', '77');

@@ -6,7 +6,9 @@ use App\Actions\DownloadMultipleInvoiceAction;
 use App\Actions\PrintWithData;
 use App\Actions\PrintWithoutData;
 use App\DataTables\PrintablesDataTable;
+use App\Enums\InvoiceStatusEnums;
 use App\Models\Commune;
+use App\Models\Invoice;
 use App\Models\PrintFile;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -15,6 +17,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
+use ZipArchive;
 
 
 class PrintController extends Controller
@@ -51,16 +54,15 @@ class PrintController extends Controller
 
     public function testBordereauTemplate()
     {
-        $commune = Commune::first();
+        $commune = Commune::first() ?? $this->makeDummyCommune();
         $pdfGenerator = app(\App\Contracts\PdfGeneratorInterface::class);
         $titles = $pdfGenerator->generateTitleWithAction(1);
 
-        $data = \App\Models\Invoice::where('type', 'TITRE')
+        $data = Invoice::where('type', 'TITRE')
+            ->where('status', InvoiceStatusEnums::PENDING->value)
             ->with(['taxpayer.town.canton', 'taxpayer.zone'])
             ->limit(50)
             ->get();
-
-        $total = $data->sum('amount');
 
         $pdf = Pdf::loadView('exports.invoices-list', [
             'data' => $data,
@@ -76,5 +78,73 @@ class PrintController extends Controller
             ->stream('bordereau-test-' . date('Ymd_His') . '.pdf');
 
         return $pdf;
+    }
+
+    public function testPrintAllPending()
+    {
+        $commune = Commune::first() ?? $this->makeDummyCommune();
+
+        $invoices = Invoice::where('type', 'TITRE')
+            ->where('status', InvoiceStatusEnums::PENDING->value)
+            ->with([
+                'invoiceitems.taxpayer_taxable.taxable.tax_label',
+                'taxpayer_taxables.taxable.tax_label',
+                'taxpayer.town.canton',
+                'taxpayer.zone',
+                'taxpayer.category',
+                'taxpayer.activity',
+                'payments',
+            ])
+            ->get();
+
+        if ($invoices->isEmpty()) {
+            return back()->with('error', 'Aucune facture PENDING TITRE trouvée.');
+        }
+
+        $zip = new ZipArchive();
+        $fileName = 'test_print_all_pending.zip';
+        $zipFilePath = storage_path("app/exports/{$fileName}");
+
+        if (file_exists($zipFilePath)) {
+            unlink($zipFilePath);
+        }
+
+        if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+            return back()->with('error', 'Impossible de créer le fichier ZIP.');
+        }
+
+        foreach ($invoices as $invoice) {
+            $pdfFilename = 'Avis-' . $invoice->invoice_no . '-' . date('Ymd_His') . '.pdf';
+            $pdf = Pdf::loadView('exports.invoices', [
+                'data' => $invoice,
+                'action' => 1,
+                'commune' => $commune,
+                'qrcodeSvg' => null,
+                'is_relance' => false,
+            ])->output();
+
+            $zip->addFromString($pdfFilename, $pdf);
+        }
+
+        $zip->close();
+
+        return response()->download($zipFilePath, $fileName)->deleteFileAfterSend(true);
+    }
+
+    private function makeDummyCommune(): Commune
+    {
+        $commune = new Commune();
+        $commune->name = 'Commune Test';
+        $commune->title = 'Mairie de Test';
+        $commune->region_name = 'Région Test';
+        $commune->mayor_name = 'Maire Test';
+        $commune->phone_number = '00000000';
+        $commune->address = 'Adresse Test';
+        $commune->treasury_name = 'Trésorerie Test';
+        $commune->treasury_address = 'Adresse Trésorerie Test';
+        $commune->treasury_rib = '0000000000';
+        $commune->qr_code_enabled = false;
+        $commune->carry_forward_previous_year = false;
+        return $commune;
     }
 }
