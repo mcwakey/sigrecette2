@@ -55,8 +55,15 @@ class PrintController extends Controller
         $pdfGenerator = app(\App\Contracts\PdfGeneratorInterface::class);
         $titles = $pdfGenerator->generateTitleWithAction(1);
 
+        $data = \App\Models\Invoice::where('type', 'TITRE')
+            ->with(['taxpayer.town.canton', 'taxpayer.zone'])
+            ->limit(50)
+            ->get();
+
+        $total = $data->sum('amount');
+
         $pdf = Pdf::loadView('exports.invoices-list', [
-            'data' => collect(),
+            'data' => $data,
             'titles' => $titles,
             'commune' => $commune,
             'action' => 1,

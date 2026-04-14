@@ -49,6 +49,7 @@ Route::middleware(['throttle:api'])->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/v1/user/notifications', [NotificationController::class, 'notifications']);
         Route::post('/v1/user/notification/update', [NotificationController::class, 'updateNotification']);
+        Route::post('/v1/user/notifications/mark-all-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAllRead');
     });
 
     Route::middleware('auth:sanctum')->prefix('/v1')->group(function () {

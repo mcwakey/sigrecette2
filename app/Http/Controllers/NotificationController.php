@@ -17,7 +17,7 @@ class NotificationController extends Controller
         $user = User::find($userId);
         $notifications = $user->unreadNotifications;
         foreach ($notifications as $value) {
-            $taxpayer = Taxpayer::find($value->data['taxpayer_id']);
+            $taxpayer = isset($value->data['taxpayer_id']) ? Taxpayer::find($value->data['taxpayer_id']) : null;
             $date = Carbon::parse($value->created_at)->diffForHumans();
             $tempData = [
                 'notification' => $value,

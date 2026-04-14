@@ -9,12 +9,18 @@
 
     <div class="d-flex flex-column bgi-no-repeat rounded-top">
         <!--begin::Title-->
-        <h3 class=" fw-semibold px-9 mt-10 -mb-4">
-            Notifications
-            <span class="fs-8 opacity-75 ps-3 badge badge-light-danger"
-                id="notif-counter">{{ count(Auth::user()->unreadNotifications) }}
-            </span>
-        </h3>
+        <div class="d-flex align-items-center justify-content-between px-9 mt-10 mb-0">
+            <h3 class="fw-semibold mb-0">
+                Notifications
+                <span class="fs-8 opacity-75 ps-3 badge badge-light-danger"
+                    id="notif-counter">{{ count(Auth::user()->unreadNotifications) }}
+                </span>
+            </h3>
+            <button type="button" class="btn btn-sm btn-light-primary py-1 px-3 fs-8" id="mark-all-read-btn"
+                title="Tout marquer comme lu">
+                <i class="ki-duotone ki-double-check fs-6"><span class="path1"></span><span class="path2"></span></i> Tout lu
+            </button>
+        </div>
         <!--end::Title-->
         <!--begin::Tabs-->
         <ul class="nav nav-line-tabs nav-line-tabs-2x nav-stretch fw-semibold px-9">
@@ -253,6 +259,21 @@
         function createNotifTemplate(data, size) {
             let html = ``;
             data.forEach(element => {
+                let notifData = element.notification.data;
+                let linkHtml;
+                if (notifData.type === 'file_is_ready') {
+                    linkHtml = `
+                        <a href="/download/${encodeURIComponent(notifData.file_name)}/${encodeURIComponent(element.notification.id)}" class="fs-6 text-gray-800 text-hover-primary fw-bold" target="_blank">
+                            Télécharger le fichier
+                        </a>
+                        <div class="text-gray-500 fs-7">${element.date}</div>`;
+                } else {
+                    linkHtml = `
+                        <a data-notif="true" href="/invoices?invoice_id=${notifData.invoice_id}&notif_id=${element.notification.id}" class="fs-6 text-gray-800 text-hover-primary fw-bold">
+                            ${getTitleByNotifType(notifData.type, notifData.invoice_id)}
+                        </a>
+                        <div class="text-gray-500 fs-7">Montant : ${notifData.amount} FCFA - ${element.date}</div>`;
+                }
                 html += `
 				<div class="d-flex flex-stack py-4">
 					<div class="d-flex align-items-center">
@@ -263,10 +284,7 @@
 						</div>
 
 						<div class="mb-0 me-2">
-							<a data-notif="true"  href="/invoices?invoice_id=${element.notification.data.invoice_id}&notif_id=${element.notification.id}" class="fs-6 text-gray-800 text-hover-primary fw-bold">
-								${getTitleByNotifType(element.notification.data.type,element.notification.data.invoice_id)}
-							</a>
-							<div class="text-gray-500 fs-7">Montant : ${element.notification.data.amount} FCFA - ${element.date}</div>
+							${linkHtml}
 						</div>
 					</div>
 				</div>
@@ -298,12 +316,38 @@
             } = notifData[0];
 
             if (parseInt(localStorage.getItem('notifSize')) < size) {
+                // Check for new file_is_ready notifications
+                data.forEach(function(item) {
+                    if (item.notification && item.notification.data && item.notification.data.type === 'file_is_ready') {
+                        showFileReadyAlert(item.notification.data.file_name, item.notification.id);
+                    }
+                });
+
                 localStorage.setItem('notifSize', size);
                 notifCounter.innerHTML = size;
                 notifSound.play();
             }
 
             createNotifTemplate(data, size);
+        }
+
+        function showFileReadyAlert(fileName, notifId) {
+            let downloadUrl = `/download/${encodeURIComponent(fileName)}/${encodeURIComponent(notifId)}`;
+            let alertHtml = `
+                <div class="alert alert-success alert-dismissible d-flex align-items-center position-fixed bottom-0 end-0 m-4 shadow-lg" role="alert" style="z-index: 9999; min-width: 350px;">
+                    <i class="ki-duotone ki-file-down fs-2hx text-success me-4"><span class="path1"></span><span class="path2"></span></i>
+                    <div>
+                        <h4 class="alert-heading fs-6 fw-bold mb-1">Fichier prêt !</h4>
+                        <p class="mb-2 fs-7">Votre fichier ZIP est prêt au téléchargement.</p>
+                        <a href="${downloadUrl}" target="_blank" class="btn btn-sm btn-success">Télécharger</a>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>`;
+            document.body.insertAdjacentHTML('beforeend', alertHtml);
+            setTimeout(function() {
+                let alert = document.querySelector('.alert.position-fixed.bottom-0.end-0');
+                if (alert) alert.remove();
+            }, 30000);
         }
 
         async function makeNotifRequest() {
@@ -335,6 +379,28 @@
         setInterval(async () => {
             await makeNotifRequest()
         }, 10000);
+
+        // Mark all notifications as read
+        document.getElementById('mark-all-read-btn').addEventListener('click', async function() {
+            try {
+                const response = await fetch('/api/v1/user/notifications/mark-all-read', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+                        'Accept': 'application/json',
+                    },
+                    credentials: 'same-origin',
+                });
+                if (response.ok) {
+                    notifCounter.innerHTML = '0';
+                    localStorage.setItem('notifSize', 0);
+                    if (firstNotifTemplateDiv) firstNotifTemplateDiv.innerHTML = '';
+                    if (notifTemplateDiv) notifTemplateDiv.innerHTML = '';
+                    if (notNotif) notNotif.innerHTML = 'Aucune notification.';
+                    notifSpan.classList.add('d-none');
+                }
+            } catch (e) { }
+        });
 
 
         if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
