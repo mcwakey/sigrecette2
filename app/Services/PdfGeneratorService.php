@@ -85,6 +85,7 @@ class PdfGeneratorService implements PdfGeneratorInterface
             if (isset($invoice) && $invoice->edition_state == null) {
                 DB::transaction(function () use ($invoice) {
                     $invoice->edition_state = "PRINT";
+                    $invoice->printed_at = now();
                     $invoice->save();
                 });
             }

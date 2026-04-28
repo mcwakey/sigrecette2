@@ -148,6 +148,16 @@
                             <div class="fw-bold mt-5">{{ __('joined date') }}</div>
                             <div class="text-gray-600">{{ $invoice->created_at->format('d M Y') }}</div>
                             <!--begin::Details item-->
+                            <!--begin::Details item-->
+                            <div class="fw-bold mt-5">{{ __('Imprimé le') }}</div>
+                            <div class="text-gray-600">
+                                @if($invoice->printed_at)
+                                    <span class="badge badge-light-success">{{ $invoice->printed_at->format('d M Y H:i') }}</span>
+                                @else
+                                    <span class="badge badge-light-warning">{{ __('Non imprimé') }}</span>
+                                @endif
+                            </div>
+                            <!--begin::Details item-->
                         </div>
                     </div>
                     <!--end::Details content-->

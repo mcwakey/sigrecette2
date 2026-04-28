@@ -608,8 +608,7 @@
 
 
 <script>
-
-
+(function() {
 let datePickerbtn = document.getElementById("date-picker-btn-one");
 let datePickerInput = document.getElementById("date-picker-input-one");
 let calendar = document.getElementById("calendar-one");
@@ -946,5 +945,6 @@ document?.addEventListener('click', function(event){
     }
 });
 
+})();
 </script>
 @endpush
