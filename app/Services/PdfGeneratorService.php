@@ -82,10 +82,14 @@ class PdfGeneratorService implements PdfGeneratorInterface
                 )
                     ->stream($filename);
             }
-            if (isset($invoice) && $invoice->edition_state == null) {
+            if (isset($invoice) && ($invoice->edition_state == null || $invoice->printed_at == null)) {
                 DB::transaction(function () use ($invoice) {
-                    $invoice->edition_state = "PRINT";
-                    $invoice->printed_at = now();
+                    if ($invoice->edition_state == null) {
+                        $invoice->edition_state = "PRINT";
+                    }
+                    if ($invoice->printed_at == null) {
+                        $invoice->printed_at = now();
+                    }
                     $invoice->save();
                 });
             }
