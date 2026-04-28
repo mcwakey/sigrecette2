@@ -29,7 +29,7 @@ class InvoicesDataTable extends DataTable
     public function dataTable(QueryBuilder $query, Request $request): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->rawColumns(['invoice', 'status'])
+            ->rawColumns(['invoice', 'status', 'printed_at'])
             ->editColumn('taxpayers.name', function (Invoice $invoice) {
                 return view('pages/invoices.columns._invoice', ['invoice' => $invoice]);
             })
@@ -84,6 +84,9 @@ class InvoicesDataTable extends DataTable
             })
             ->addColumn('type', function (Invoice $invoice) {
                 return $invoice->type;
+            })
+            ->editColumn('printed_at', function (Invoice $invoice) {
+                return view('pages/invoices.columns._printed', ['invoice' => $invoice]);
             })
             ->addColumn('action', function (Invoice $invoice) {
                 return view('pages/invoices.columns._actions', ['invoice' => $invoice]);
@@ -178,6 +181,7 @@ class InvoicesDataTable extends DataTable
             Column::make('taxpayer_id')->visible(false),
             Column::make('reason_for_reject')->title(__('reason_for_reject')),
             Column::make('type')->title(__('invoice_type')),
+            Column::make('printed_at')->title(__('Impression'))->visible(false),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
                 ->exportable(true)
@@ -200,6 +204,9 @@ class InvoicesDataTable extends DataTable
                 } elseif ($this->state == InvoiceStatusEnums::PENDING->value) {
                     if (in_array($column->name, ['paid', 'remains_to_be_paid', 'to_date', 'validity', 'delivery_date', 'reason_for_reject', 'type'])) {
                         $column->visible(false);
+                    }
+                    if ($column->name === 'printed_at') {
+                        $column->visible(true);
                     }
                 } elseif ($this->state == InvoiceStatusEnums::REJECTED->value) {
                     if (in_array($column->name, ['paid', 'remains_to_be_paid', 'to_date', 'validity', 'delivery_date'])) {

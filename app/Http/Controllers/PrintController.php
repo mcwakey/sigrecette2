@@ -86,6 +86,7 @@ class PrintController extends Controller
 
         $invoices = Invoice::where('type', 'TITRE')
             ->where('status', InvoiceStatusEnums::PENDING->value)
+            ->whereNull('printed_at')
             ->with([
                 'invoiceitems.taxpayer_taxable.taxable.tax_label',
                 'taxpayer_taxables.taxable.tax_label',
