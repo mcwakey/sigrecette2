@@ -47,6 +47,10 @@ class Invoice extends Model implements FormatDateInterface
         'status' => 'DRAFT',
     ];
 
+    protected $casts = [
+        'printed_at' => 'datetime',
+    ];
+
     public function scopeOfStatus($query, string $status)
     {
         return $query->where('status', $status);

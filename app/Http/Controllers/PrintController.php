@@ -125,6 +125,14 @@ class PrintController extends Controller
             ])->output();
 
             $zip->addFromString($pdfFilename, $pdf);
+
+            if ($invoice->edition_state == null) {
+                $invoice->edition_state = 'PRINT';
+            }
+            if ($invoice->printed_at == null) {
+                $invoice->printed_at = now();
+            }
+            $invoice->save();
         }
 
         $zip->close();

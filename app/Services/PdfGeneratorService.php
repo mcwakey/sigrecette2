@@ -50,6 +50,7 @@ class PdfGeneratorService implements PdfGeneratorInterface
              * @var Invoice $data
              */
             $default_invoice = $data[0];
+            $invoice = $default_invoice;
             if ($action == 2 || (intval($default_invoice->invoice_no) !== $default_invoice->id)) {
                 $action = 2;
                 $invoice = Invoice::find($default_invoice->invoice_no);
