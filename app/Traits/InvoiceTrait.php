@@ -301,6 +301,7 @@ trait InvoiceTrait
     {
         return Invoice::where('status', $status)
             ->where('type', Constants::TITRE)
+            ->whereNull('printed_at')
             ->select('uuid')
             ->pluck('uuid')
             ->toArray();
