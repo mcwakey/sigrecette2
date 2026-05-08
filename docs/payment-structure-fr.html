@@ -1,0 +1,1236 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><title>SIG-RECETTE — Structure des Paiements</title><style>@page { size: A4; margin: 18mm 16mm 18mm 16mm; }
+* { box-sizing: border-box; }
+html, body { font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif; color: #1f2328; line-height: 1.5; font-size: 11pt; }
+body { max-width: 820px; margin: 0 auto; padding: 0 4px; }
+h1, h2, h3, h4 { color: #0b3d91; line-height: 1.25; page-break-after: avoid; }
+h1 { font-size: 22pt; border-bottom: 3px solid #0b3d91; padding-bottom: 6px; margin-top: 0; }
+h2 { font-size: 16pt; border-bottom: 1px solid #c9d4e3; padding-bottom: 4px; margin-top: 28px; }
+h3 { font-size: 13pt; margin-top: 22px; }
+h4 { font-size: 11.5pt; margin-top: 18px; }
+p, li { font-size: 10.5pt; }
+blockquote { border-left: 4px solid #0b3d91; background: #f4f7fb; margin: 12px 0; padding: 8px 14px; color: #243447; }
+code { font-family: "Consolas", "Cascadia Mono", "Courier New", monospace; background: #f1f3f5; padding: 1px 4px; border-radius: 3px; font-size: 9.8pt; }
+pre { background: #0f172a; color: #e2e8f0; padding: 12px 14px; border-radius: 6px; overflow-x: auto; font-size: 9.5pt; line-height: 1.45; page-break-inside: avoid; }
+pre code { background: transparent; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 10px 0 18px; font-size: 10pt; page-break-inside: avoid; }
+th, td { border: 1px solid #c9d4e3; padding: 6px 9px; text-align: left; vertical-align: top; }
+th { background: #0b3d91; color: #fff; font-weight: 600; }
+tr:nth-child(even) td { background: #f7f9fc; }
+a { color: #0b3d91; text-decoration: none; word-break: break-word; }
+ul, ol { padding-left: 22px; }
+hr { border: none; border-top: 1px solid #c9d4e3; margin: 24px 0; }
+.toc { background: #f4f7fb; border: 1px solid #c9d4e3; border-radius: 6px; padding: 8px 18px; }
+.cover { text-align: center; padding: 80px 0 30px; page-break-after: always; }
+.cover h1 { border: none; font-size: 30pt; margin-bottom: 8px; }
+.cover .sub { color: #475569; font-size: 13pt; }
+.cover .meta { margin-top: 60px; color: #64748b; font-size: 10pt; }</style></head><body><div class="cover">
+  <h1>SIG-RECETTE</h1>
+  <div class="sub">Structure, Procédure &amp; Flux des Paiements</div>
+  <div class="meta">Laravel 10 · Livewire 3 · Symfony Workflow<br>Espèces · Chèque · Mobile Money (QOSIC / FedaPay / PayGate)</div>
+</div><h1>SIG-RECETTE — Structure, Procédure &amp; Flux des Paiements</h1>
+<blockquote>
+<p><strong>Public :</strong> Développeurs, intégrateurs, agents comptables et administrateurs de projet de SIG-RECETTE.
+<strong>Périmètre :</strong> Description complète du domaine paiement — modèle de données, machine d'état, services, intégration mobile-money, synchronisation, notifications et procédures de bout en bout.
+<strong>Stack :</strong> Laravel 10 / PHP 8.2 · Livewire 3 · Symfony Workflow (<code>zerodahero/laravel-workflow</code>) · Spatie Permissions (chaînes françaises) · Barryvdh DomPDF.</p>
+</blockquote>
+<hr />
+<h2>Table des matières</h2>
+<ol>
+<li><a href="#1-vue-densemble">Vue d'ensemble</a></li>
+<li><a href="#2-glossaire-m%C3%A9tier">Glossaire métier</a></li>
+<li><a href="#3-architecture-g%C3%A9n%C3%A9rale">Architecture générale</a></li>
+<li><a href="#4-mod%C3%A8le-de-donn%C3%A9es">Modèle de données</a></li>
+<li><a href="#5-%C3%A9num%C3%A9rations">Énumérations</a></li>
+<li><a href="#6-machine-d%C3%A9tat-des-avis-workflow">Machine d'état des avis (workflow)</a></li>
+<li><a href="#7-cycle-de-vie-dun-paiement">Cycle de vie d'un paiement</a></li>
+<li><a href="#8-proc%C3%A9dure-de-paiement-en-esp%C3%A8ces-ou-par-ch%C3%A8que">Procédure de paiement en espèces ou par chèque</a></li>
+<li><a href="#9-proc%C3%A9dure-de-paiement-mobile--num%C3%A9rique">Procédure de paiement mobile / numérique</a></li>
+<li><a href="#10-suivi-des-soldes-par-code-taxe">Suivi des soldes par code taxe</a></li>
+<li><a href="#11-g%C3%A9n%C3%A9ration-de-re%C3%A7us-et-de-pdf">Génération de reçus et de PDF</a></li>
+<li><a href="#12-synchronisation-avec-lapplication-de-collecte-distante">Synchronisation avec l'application de collecte distante</a></li>
+<li><a href="#13-%C3%A9v%C3%A9nements-%C3%A9couteurs-jobs-et-notifications">Événements, écouteurs, jobs et notifications</a></li>
+<li><a href="#14-autorisations-et-permissions">Autorisations et permissions</a></li>
+<li><a href="#15-r%C3%A9f%C3%A9rence-des-routes">Référence des routes</a></li>
+<li><a href="#16-r%C3%A9f%C3%A9rence-de-configuration">Référence de configuration</a></li>
+<li><a href="#17-r%C3%A9f%C3%A9rence-des-migrations-de-base-de-donn%C3%A9es">Référence des migrations de base de données</a></li>
+<li><a href="#18-proc%C3%A9dures-%C3%A9tape-par-%C3%A9tape">Procédures étape par étape</a></li>
+<li><a href="#19-r%C3%A9solution-des-probl%C3%A8mes">Résolution des problèmes</a></li>
+</ol>
+<hr />
+<h2>1. Vue d'ensemble</h2>
+<p>SIG-RECETTE gère <strong>l'émission des avis de mise en recouvrement (<code>Invoice</code>)</strong> et <strong>la collecte des paiements (<code>Payment</code>)</strong> pour une régie de recettes publiques. Trois canaux de paiement sont pris en charge :</p>
+<table>
+<thead>
+<tr>
+<th>Canal</th>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Espèces</td>
+<td><code>CASH</code></td>
+<td>Paiement au guichet enregistré par un agent</td>
+</tr>
+<tr>
+<td>Chèque</td>
+<td><code>CHEQUE</code></td>
+<td>Paiement par chèque bancaire avec référence</td>
+</tr>
+<tr>
+<td>Numérique / Mobile money</td>
+<td><code>DIGI</code></td>
+<td>Paiement via QOSIC, FedaPay ou PayGate (TMONEY / FLOOZ)</td>
+</tr>
+</tbody>
+</table>
+<p>Les paiements sont toujours <strong>rattachés à un <code>Invoice</code></strong> et donc à un <strong><code>Taxpayer</code></strong> (redevable). L'avis parcourt une <strong>machine d'état Symfony Workflow</strong> contrôlée avant de pouvoir être encaissé, et chaque paiement est <strong>ventilé par code taxe</strong> afin de permettre un reporting par ligne de recette.</p>
+<hr />
+<h2>2. Glossaire métier</h2>
+<table>
+<thead>
+<tr>
+<th>Terme (FR / EN)</th>
+<th>Signification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Avis / Invoice</td>
+<td>Avis de mise en recouvrement émis à un redevable (<code>Invoice</code>)</td>
+</tr>
+<tr>
+<td>Avis sur titre — <code>TITRE</code></td>
+<td>Avis formel nécessitant une approbation avant encaissement</td>
+</tr>
+<tr>
+<td>Avis au comptant — <code>COMPTANT</code></td>
+<td>Avis immédiat émis sur place (sans exigence de numéro d'ordre)</td>
+</tr>
+<tr>
+<td>Redevable / Taxpayer</td>
+<td>Personne physique ou morale redevable de la taxe (<code>Taxpayer</code>)</td>
+</tr>
+<tr>
+<td>Article taxable / TaxpayerTaxable</td>
+<td>Ligne taxable rattachée à un redevable (<code>TaxpayerTaxable</code>)</td>
+</tr>
+<tr>
+<td>Code</td>
+<td>Code comptable identifiant une taxe / ligne de recette (<code>TaxLabel.code</code>)</td>
+</tr>
+<tr>
+<td>Régisseur</td>
+<td>Agent habilité à valider la chaîne de collecte</td>
+</tr>
+<tr>
+<td>Receveur / Collector</td>
+<td>Agent qui perçoit physiquement les fonds</td>
+</tr>
+<tr>
+<td>Versement / Deposit</td>
+<td>Remise de fonds du collecteur au comptable</td>
+</tr>
+<tr>
+<td>Annulation / Réduction</td>
+<td>Lignes de paiement « négatives » utilisées pour annuler ou réduire un avis approuvé</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>3. Architecture générale</h2>
+<pre><code>┌──────────────────────── COUCHE UI ───────────────────────┐
+│  Composants Livewire (AddPaymentModal, MobilePaymentActions, …) │
+│  DataTables (InvoicesDataTable, MobilePaymentsDataTable, …)     │
+└────────────────────────────┬─────────────────────────────┘
+                             │
+┌──────────────────────── COUCHE HTTP ─────────────────────┐
+│  InvoiceController · PaymentController · MobilePaymentController │
+│  CollectorDepositController · SyncV1PaymentsController (API)     │
+└────────────────────────────┬─────────────────────────────┘
+                             │
+┌──────────────────────── COUCHE SERVICE ──────────────────┐
+│  MobilePaymentService          MobilePaymentProviderFactory │
+│   ├─ QosicProvider              ├─ FedapayProvider           │
+│   └─ PaygateProvider                                         │
+│  InvoiceCodeBalanceService    PaymentImportService          │
+│  PdfGeneratorService          QrcodeGeneratorService        │
+└────────────────────────────┬─────────────────────────────┘
+                             │
+┌──────────────────────── COUCHE DOMAINE ──────────────────┐
+│  Invoice (WorkflowTrait + InvoiceTrait)                  │
+│  Payment (PaymentTrait)                                  │
+│  MobilePaymentTransaction                                │
+│  InvoiceCodeBalance · InvoiceItem · Taxpayer             │
+└────────────────────────────┬─────────────────────────────┘
+                             │
+┌──────────────────────── COUCHE INFRA ────────────────────┐
+│  Symfony Workflow · Queue · Notifications · DomPDF · SMS │
+│  Externes : QOSIC · FedaPay · PayGate                    │
+└──────────────────────────────────────────────────────────┘
+</code></pre>
+<hr />
+<h2>4. Modèle de données</h2>
+<h3>4.1 <code>Invoice</code> — <a href="../app/Models/Invoice.php">app/Models/Invoice.php</a></h3>
+<p>Champs principaux :</p>
+<table>
+<thead>
+<tr>
+<th>Champ</th>
+<th>Type</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>invoice_no</code></td>
+<td>chaîne (unique)</td>
+<td>Numéro d'avis public</td>
+</tr>
+<tr>
+<td><code>order_no</code></td>
+<td>chaîne</td>
+<td>Numéro d'ordre requis pour les avis <code>TITRE</code> pour passer en <code>PENDING</code></td>
+</tr>
+<tr>
+<td><code>taxpayer_id</code></td>
+<td>FK</td>
+<td>Redevable concerné</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>float</td>
+<td>Montant total facturé</td>
+</tr>
+<tr>
+<td><code>reduce_amount</code></td>
+<td>float</td>
+<td>Montant après réduction (si réduit)</td>
+</tr>
+<tr>
+<td><code>qty</code></td>
+<td>float</td>
+<td>Quantité (articles taxables)</td>
+</tr>
+<tr>
+<td><code>from_date</code> / <code>to_date</code></td>
+<td>date</td>
+<td>Période de couverture</td>
+</tr>
+<tr>
+<td><code>pay_status</code></td>
+<td>chaîne</td>
+<td><code>OWING</code> · <code>PART PAID</code> · <code>PAID</code></td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>chaîne</td>
+<td>État du workflow (voir §6)</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td>chaîne</td>
+<td><code>TITRE</code> ou <code>COMPTANT</code></td>
+</tr>
+<tr>
+<td><code>delivery</code></td>
+<td>chaîne</td>
+<td><code>NOT DELIVERED</code> / <code>DELIVERED</code></td>
+</tr>
+<tr>
+<td><code>delivery_date</code>, <code>delivery_to</code></td>
+<td>date / chaîne</td>
+<td>Informations de livraison</td>
+</tr>
+<tr>
+<td><code>edition_state</code>, <code>printed_at</code></td>
+<td>chaîne / datetime</td>
+<td>Suivi de l'impression</td>
+</tr>
+<tr>
+<td><code>notes</code></td>
+<td>json</td>
+<td><code>previous_invoice_id</code>, <code>remaining_amount</code>, <code>free_text</code></td>
+</tr>
+<tr>
+<td><code>uuid</code></td>
+<td>chaîne</td>
+<td>Clé d'idempotence pour la synchronisation</td>
+</tr>
+</tbody>
+</table>
+<p>Relations clés : <code>taxpayer()</code>, <code>payments()</code>, <code>invoiceitems()</code>, <code>taxpayer_taxables()</code>, <code>printFiles()</code>.</p>
+<p>Méthodes clés (via <code>InvoiceTrait</code> + modèle) :</p>
+<ul>
+<li><code>can($state)</code> / <code>submitToState($state)</code> — gardes et transitions du workflow.</li>
+<li><code>get_remains_to_be_paid()</code> — montant restant à payer.</li>
+<li><code>isValid()</code> — non rejeté / annulé / réduit et non déjà PAID.</li>
+<li><code>canGetPayment()</code> — l'avis est dans un état permettant un paiement.</li>
+<li><code>sumAmountsByTaxCode($invoice)</code> — totaux regroupés par <code>code</code>.</li>
+<li><code>getCode($id, $amount, $paymentData)</code> — ventile un montant de paiement sur les codes taxe de l'avis (produit une ligne <code>Payment</code> par code).</li>
+<li><code>returnPaidAndSumByCode($invoice)</code> — payé vs facturé par code.</li>
+<li><code>retrieveByUUIDs(array $uuids)</code> — chargement eager pour export / PDF.</li>
+</ul>
+<p>Scopes utiles : <code>ofStatus</code>, <code>approved</code>, <code>unpaid</code>, <code>forTaxpayer</code>, <code>inDateRange</code>.</p>
+<h3>4.2 <code>Payment</code> — <a href="../app/Models/Payment.php">app/Models/Payment.php</a></h3>
+<p>Champs principaux :</p>
+<table>
+<thead>
+<tr>
+<th>Champ</th>
+<th>Type</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>amount</code></td>
+<td>float</td>
+<td>Montant payé</td>
+</tr>
+<tr>
+<td><code>payment_type</code></td>
+<td>chaîne enum</td>
+<td><code>CASH</code> · <code>CHEQUE</code> · <code>DIGI</code></td>
+</tr>
+<tr>
+<td><code>invoice_type</code></td>
+<td>chaîne</td>
+<td>Copie dénormalisée de <code>Invoice.type</code></td>
+</tr>
+<tr>
+<td><code>reference</code></td>
+<td>chaîne</td>
+<td>Référence du paiement (n° chèque, ref transaction, …)</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>chaîne</td>
+<td>ex. <code>Annulation</code>, <code>Réduction</code>, texte libre</td>
+</tr>
+<tr>
+<td><code>remaining_amount</code></td>
+<td>chaîne</td>
+<td>Restant sur l'avis au moment du paiement</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>chaîne</td>
+<td><code>PENDING</code> · <code>ACCOUNTED</code> · <code>DONE</code> · <code>CANCELED</code> · <code>VERIFYING</code> · <code>FAILED</code> · <code>EXPIRED</code></td>
+</tr>
+<tr>
+<td><code>code</code></td>
+<td>chaîne</td>
+<td>Code taxe auquel cette ligne de paiement est imputée</td>
+</tr>
+<tr>
+<td><code>taxpayer_id</code>, <code>invoice_id</code></td>
+<td>FK</td>
+<td>Cibles</td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td>FK</td>
+<td>Utilisateur émetteur</td>
+</tr>
+<tr>
+<td><code>r_user_id</code></td>
+<td>FK</td>
+<td>Utilisateur récepteur (collecteur)</td>
+</tr>
+<tr>
+<td><code>deposit</code></td>
+<td>float / ref</td>
+<td>Référence du versement collecteur</td>
+</tr>
+<tr>
+<td><code>notes</code></td>
+<td>texte</td>
+<td>Notes libres</td>
+</tr>
+<tr>
+<td><code>uuid</code></td>
+<td>chaîne</td>
+<td>Clé d'idempotence pour la synchronisation</td>
+</tr>
+<tr>
+<td><code>provider</code></td>
+<td>chaîne</td>
+<td><code>qosic</code> · <code>fedapay</code> · <code>paygate</code> (DIGI uniquement)</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>chaîne</td>
+<td><code>TMONEY</code> · <code>FLOOZ</code> (DIGI uniquement)</td>
+</tr>
+<tr>
+<td><code>phone_number</code>, <code>external_id</code></td>
+<td>chaîne</td>
+<td>DIGI uniquement</td>
+</tr>
+<tr>
+<td><code>verification_attempts</code>, <code>last_checked_at</code>, <code>expires_at</code></td>
+<td>mixte</td>
+<td>Métadonnées de vérification DIGI</td>
+</tr>
+</tbody>
+</table>
+<p>Relations : <code>invoice()</code>, <code>taxpayer()</code>, <code>user()</code>, <code>r_user()</code>, <code>tax_label()</code>, <code>mobilePaymentTransaction()</code>, <code>stock_transfers()</code>.</p>
+<p>Méthodes du trait (<code>PaymentTrait</code>) :</p>
+<ul>
+<li><code>getPaymentsByStatus($invoice_id, $status)</code></li>
+<li><code>getPaid($invoice_id)</code> — somme des paiements effectifs</li>
+<li><code>getPaidNotAccounted($invoice_id)</code> — versements en attente de comptabilisation</li>
+<li><code>getRestToPaid(Invoice $invoice)</code></li>
+<li><code>getPrintData()</code> — paiements pour le PDF (exclut <code>PENDING</code>, <code>Annulation</code>, <code>Réduction</code>)</li>
+</ul>
+<blockquote>
+<p>Un paiement métier peut produire <strong>plusieurs lignes <code>Payment</code></strong> — une par code taxe — via <code>Invoice::getCode()</code>.</p>
+</blockquote>
+<h3>4.3 <code>MobilePaymentTransaction</code> — <a href="../app/Models/MobilePaymentTransaction.php">app/Models/MobilePaymentTransaction.php</a></h3>
+<p>Trace la conversation avec un prestataire mobile-money pour une tentative <code>DIGI</code>. Une transaction peut produire plusieurs lignes <code>Payment</code> finales après vérification.</p>
+<table>
+<thead>
+<tr>
+<th>Champ</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>reference</code> (unique)</td>
+<td>Référence interne envoyée au prestataire</td>
+</tr>
+<tr>
+<td><code>invoice_id</code>, <code>taxpayer_id</code>, <code>user_id</code></td>
+<td>Cibles</td>
+</tr>
+<tr>
+<td><code>amount</code> (decimal 15,2)</td>
+<td>Montant demandé</td>
+</tr>
+<tr>
+<td><code>phone_number</code></td>
+<td>Téléphone du payeur</td>
+</tr>
+<tr>
+<td><code>provider</code></td>
+<td><code>qosic</code> · <code>fedapay</code> · <code>paygate</code></td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td><code>TMONEY</code> · <code>FLOOZ</code></td>
+</tr>
+<tr>
+<td><code>external_id</code></td>
+<td>Identifiant de transaction chez le prestataire</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>pending</code> → <code>verifying</code> → <code>success</code> / <code>failed</code> / <code>expired</code></td>
+</tr>
+<tr>
+<td><code>verification_attempts</code>, <code>last_checked_at</code>, <code>verified_at</code>, <code>expires_at</code></td>
+<td>Métadonnées de polling</td>
+</tr>
+<tr>
+<td><code>provider_response</code> (json)</td>
+<td>Dernière réponse brute du prestataire</td>
+</tr>
+<tr>
+<td><code>meta</code> (json)</td>
+<td>Ex. code taxe, métadonnées libres</td>
+</tr>
+</tbody>
+</table>
+<p>Helpers : <code>isPending()</code>, <code>isVerifying()</code>, <code>isSuccess()</code>, <code>isFailed()</code>, <code>isExpired()</code>.</p>
+<h3>4.4 <code>InvoiceItem</code> — <a href="../app/Models/InvoiceItem.php">app/Models/InvoiceItem.php</a></h3>
+<p><code>invoice_id</code>, <code>taxpayer_taxable_id</code>, <code>qty</code>, <code>amount</code>, <code>ii_tariff</code>, <code>ii_seize</code>. Lignes de détail agrégées pour calculer le total de l'avis.</p>
+<h3>4.5 <code>InvoiceCodeBalance</code> — <a href="../app/Models/InvoiceCodeBalance.php">app/Models/InvoiceCodeBalance.php</a></h3>
+<p>Vue matérialisée de « combien est dû / payé par code taxe » pour un avis. Maintenu par <code>InvoiceCodeBalanceService</code>. Clé unique sur <code>(invoice_id, code)</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Champ</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>invoice_id</code>, <code>taxpayer_id</code>, <code>code</code>, <code>year</code></td>
+<td>Identité</td>
+</tr>
+<tr>
+<td><code>amount_billed</code></td>
+<td>Somme des lignes d'avis pour ce code</td>
+</tr>
+<tr>
+<td><code>amount_paid</code></td>
+<td>Somme des paiements effectifs pour ce code (exclut <code>Annulation</code> / <code>Réduction</code>)</td>
+</tr>
+<tr>
+<td><code>remaining_amount</code></td>
+<td>Différence calculée</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>OWING</code> · <code>PAID</code></td>
+</tr>
+<tr>
+<td><code>last_payment_at</code></td>
+<td>Horodatage du dernier paiement applicable</td>
+</tr>
+</tbody>
+</table>
+<h3>4.6 <code>Taxpayer</code> — <a href="../app/Models/Taxpayer.php">app/Models/Taxpayer.php</a></h3>
+<p>Contient <code>tnif</code>, <code>nif</code>, <code>name</code>, <code>mobilephone</code>, <code>telephone</code>, <code>email</code>, <code>address</code>. Utilisé pour l'identification sur les avis, les notifications SMS et les paiements numériques.</p>
+<hr />
+<h2>5. Énumérations</h2>
+<p>Toutes les énumérations se trouvent dans <a href="../app/Enums/">app/Enums/</a> en tant qu'énumérations PHP 8.1 natives à valeurs chaîne, consommées via <code>-&gt;value</code> (pas de casts Eloquent — voir les notes du projet).</p>
+<h3>5.1 <code>PaymentTypeEnums</code></h3>
+<pre><code>CASH    = 'CASH'
+CHEQUE  = 'CHEQUE'
+DIGI    = 'DIGI'
+</code></pre>
+<h3>5.2 <code>PaymentStatusEnums</code></h3>
+<pre><code>PENDING    paiement enregistré, non encore comptabilisé (état par défaut du DIGI avant vérification)
+VERIFYING  DIGI : prestataire a accepté, polling en cours
+ACCOUNTED  paiement comptabilisé dans un versement / grand livre
+DONE       entièrement apuré
+CANCELED   paiement annulé manuellement
+FAILED     DIGI : rejet du prestataire / échec de vérification
+EXPIRED    DIGI : transaction expirée sans confirmation
+</code></pre>
+<h3>5.3 <code>InvoicePayStatusEnums</code></h3>
+<pre><code>OWING       = 'OWING'        // rien payé
+PART_PAID   = 'PART PAID'    // partiellement payé
+PAID        = 'PAID'         // entièrement payé
+</code></pre>
+<h3>5.4 <code>InvoiceStatusEnums</code> (états du workflow)</h3>
+<pre><code>DRAFT
+P_ACCEPTED              = 'ACCEPTED WITHOUT ORDER NO'
+ACCEPTED                = 'ACCEPTED'
+REJECTED_BY_OR
+PENDING
+REJECTED
+APPROVED
+APPROVED_CANCELLATION   = 'APPROVED-CANCELLATION-OR-REDUCTION'
+CANCELED                = 'APPROVED-CANCELED'
+REDUCED                 = 'APPROVED-REDUCED'
+</code></pre>
+<h3>5.5 Constantes — <a href="../app/Helpers/Constants.php">app/Helpers/Constants.php</a></h3>
+<pre><code>PROVIDER_QOSIC   = 'qosic'
+PROVIDER_FEDAPAY = 'fedapay'
+PROVIDER_PAYGATE = 'paygate'
+MOBILE_PROVIDERS = [qosic, fedapay, paygate]
+
+NETWORK_TMONEY = 'TMONEY'
+NETWORK_FLOOZ  = 'FLOOZ'
+MOBILE_NETWORKS = [TMONEY, FLOOZ]
+
+ANNULATION = 'Annulation'   // marqueur pour les lignes de paiement d'annulation
+REDUCTION  = 'Réduction'    // marqueur pour les lignes de paiement de réduction
+
+INVOICE_TYPE_TITRE    = 'TITRE'
+INVOICE_TYPE_COMPTANT = 'COMPTANT'
+</code></pre>
+<hr />
+<h2>6. Machine d'état des avis (workflow)</h2>
+<p>Le cycle de vie d'un avis est piloté par une machine d'état Symfony déclarée dans <a href="../config/workflow.php">config/workflow.php</a> et enregistrée via <a href="../config/workflow_registry.php">config/workflow_registry.php</a>. Le nom du workflow est <code>invoice</code>.</p>
+<h3>6.1 États (places)</h3>
+<pre><code>DRAFT
+ACCEPTED WITHOUT ORDER NO              (intermédiaire)
+ACCEPTED
+REJECTED_BY_OR                         (terminal)
+PENDING
+REJECTED                               (terminal)
+APPROVED
+APPROVED-CANCELLATION-OR-REDUCTION
+APPROVED-CANCELED                      (terminal)
+APPROVED-REDUCED                       (terminal)
+</code></pre>
+<h3>6.2 Transitions</h3>
+<table>
+<thead>
+<tr>
+<th>Transition</th>
+<th>De</th>
+<th>Vers</th>
+<th>Garde</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>submit_for_accepted</code></td>
+<td><code>DRAFT</code></td>
+<td><code>ACCEPTED</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>submit_for_reject_by_ord</code></td>
+<td><code>DRAFT</code></td>
+<td><code>REJECTED_BY_OR</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>submit_for_pending</code></td>
+<td><code>ACCEPTED</code></td>
+<td><code>PENDING</code></td>
+<td><code>InvoiceGuard::canSubmitForPending</code> (<code>order_no</code> renseigné <strong>OU</strong> <code>type == COMPTANT</code>)</td>
+</tr>
+<tr>
+<td><code>submit_for_approved</code></td>
+<td><code>PENDING</code></td>
+<td><code>APPROVED</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>submit_for_approved_cancellation</code></td>
+<td><code>PENDING</code></td>
+<td><code>APPROVED-CANCELLATION-OR-REDUCTION</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>submit_for_rejected</code></td>
+<td><code>PENDING</code></td>
+<td><code>REJECTED</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>submit_for_reduced</code></td>
+<td><code>APPROVED</code> / <code>APPROVED-CANCELLATION…</code></td>
+<td><code>APPROVED-REDUCED</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>submit_for_canceled</code></td>
+<td><code>APPROVED</code> / <code>APPROVED-CANCELLATION…</code></td>
+<td><code>APPROVED-CANCELED</code></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3>6.3 Diagramme de transitions</h3>
+<pre><code>                ┌─────────┐
+                │  DRAFT  │
+                └────┬────┘
+                     │ submit_for_accepted               submit_for_reject_by_ord
+                     ▼                                            │
+               ┌──────────┐                                       ▼
+               │ ACCEPTED │                            ┌────────────────────┐
+               └────┬─────┘                            │  REJECTED_BY_OR    │
+                    │ submit_for_pending  (gardé)      └────────────────────┘
+                    ▼
+              ┌──────────┐
+              │ PENDING  │──── submit_for_rejected ───► REJECTED
+              └────┬─────┘
+                   │ submit_for_approved          submit_for_approved_cancellation
+                   ▼                                          │
+            ┌────────────┐                                    ▼
+            │ APPROVED   │◄──────────────► APPROVED-CANCELLATION-OR-REDUCTION
+            └─────┬──────┘
+                  │ submit_for_canceled              submit_for_reduced
+                  ▼                                          ▼
+        APPROVED-CANCELED                          APPROVED-REDUCED
+</code></pre>
+<p>Les transitions sont observées par <a href="../app/Listeners/InvoiceWorkflowSubscriber.php">InvoiceWorkflowSubscriber</a> qui diffuse les notifications et les post-actions (libération des articles taxables en cas de rejet, notification des agents, etc.).</p>
+<blockquote>
+<p><strong>Un paiement ne peut être ajouté que lorsque l'avis est en <code>APPROVED</code> (ou <code>APPROVED-CANCELLATION-OR-REDUCTION</code>).</strong> Vérifié par <code>Invoice::canGetPayment()</code> et <code>PaymentPolicy</code>.</p>
+</blockquote>
+<hr />
+<h2>7. Cycle de vie d'un paiement</h2>
+<pre><code>                ┌─────────┐
+                │ PENDING │ ◄──── créé (DIGI initial / CASH/CHÈQUE non comptabilisé)
+                └────┬────┘
+                     │
+                     │  (DIGI uniquement) prestataire initié
+                     ▼
+                ┌──────────┐
+                │VERIFYING │ ─── vérification par polling (VerifyMobilePaymentJob)
+                └────┬─────┘
+             succès │       │ échec / expiration
+                    ▼       ▼
+              ┌─────────┐ ┌──────────┐ ┌──────────┐
+              │  DONE   │ │  FAILED  │ │ EXPIRED  │
+              └────┬────┘ └──────────┘ └──────────┘
+                   │
+                   │ versement / clôture des comptes
+                   ▼
+              ┌──────────┐
+              │ACCOUNTED │
+              └──────────┘
+</code></pre>
+<p><code>CANCELED</code> est utilisé lorsqu'une ligne de paiement est annulée manuellement. Les paiements avec <code>description = &quot;Annulation&quot;</code> ou <code>&quot;Réduction&quot;</code> ne sont pas comptés comme paiements effectifs par <code>getPrintData()</code> et <code>InvoiceCodeBalanceService</code>.</p>
+<hr />
+<h2>8. Procédure de paiement en espèces ou par chèque</h2>
+<p>Composant : <a href="../app/Livewire/Payment/AddPaymentModal.php">app/Livewire/Payment/AddPaymentModal.php</a>.</p>
+<ol>
+<li>L'agent ouvre la fiche d'un redevable ou d'un avis.</li>
+<li>Déclenche le <strong>AddPaymentModal</strong> (<code>payment_type = CASH</code> ou <code>CHEQUE</code>).</li>
+<li>Champs requis :
+<ul>
+<li><code>amount</code> (≤ montant restant sur l'avis).</li>
+<li><code>payment_type</code> ∈ {<code>CASH</code>, <code>CHEQUE</code>}.</li>
+<li><code>reference</code> (recommandé pour <code>CHEQUE</code>).</li>
+<li><code>notes</code> (optionnel).</li>
+</ul>
+</li>
+<li>À la validation :
+<ol>
+<li>Le montant est <strong>ventilé par code taxe</strong> via <code>Invoice::getCode($invoice_id, $amount, $paymentData)</code>.</li>
+<li>Une ligne <code>Payment</code> est créée <strong>par code taxe</strong>, toutes partageant la même <code>reference</code> et <code>created_at</code>.</li>
+<li><code>Invoice.pay_status</code> est recalculé : <code>OWING → PART PAID → PAID</code> via <code>getRestToPaid()</code>.</li>
+<li><code>InvoiceCodeBalanceService::syncForInvoice($invoice)</code> est appelé pour mettre à jour les totaux par code.</li>
+<li>Si entièrement payé, la notification <code>InvoicePaid</code> est émise.</li>
+</ol>
+</li>
+<li>L'agent peut immédiatement imprimer le reçu PDF (voir §11).</li>
+</ol>
+<p>Cycle de vie d'une ligne CASH/CHÈQUE :</p>
+<pre><code>PENDING (créé) → ACCOUNTED (ajouté à un versement) → DONE (clôturé par le comptable)
+</code></pre>
+<p><code>CANCELED</code> est accessible manuellement si la politique l'autorise.</p>
+<hr />
+<h2>9. Procédure de paiement mobile / numérique</h2>
+<p>La logique de bout en bout se trouve dans <a href="../app/Services/MobilePayment/MobilePaymentService.php">app/Services/MobilePayment/MobilePaymentService.php</a>. Elle est <strong>basée sur la vérification active, jamais sur un webhook de confiance</strong>.</p>
+<h3>9.1 Séquence</h3>
+<pre><code>Agent / Redevable          Livewire           MobilePaymentService        Prestataire       Queue
+─────────────────          ────────           ─────────────────────       ───────────       ─────
+  payer (DIGI) ──────────► AddPaymentModal
+                                 │
+                                 │ initiate({prestataire, montant, téléphone, réseau, avis})
+                                 ▼
+                          MobilePaymentService.initiate()
+                                 │
+                                 │ crée MobilePaymentTransaction (status=pending)
+                                 │ providerFactory.make(provider).initiate(payload)
+                                 │──────────────────────────────────────────► Prestataire
+                                 │ ◄──── ack / external_id / erreur ─────────
+                                 │ status = verifying | failed
+                                 │ dispatch VerifyMobilePaymentJob ──────────────────────► Queue
+                                 ▼
+                              retour TX                                                       │
+                                                                                              │
+                                                       Job : essais 1..5, backoff [10,30,60,120,300]s
+                                                                                              ▼
+                                                    prestataire.verify(reference) ──────► Prestataire
+                                                                                              │
+                                                    résultat ∈ {success, failed, pending}     │
+                                                                                              │
+                          en cas de succès :                                                  │
+                            crée lignes Payment (une par code taxe via Invoice::getCode)      │
+                            met à jour Invoice.pay_status                                     │
+                            émet MobilePaymentVerified ─► HandleMobilePaymentVerified         │
+                                                          (envoie SMS au redevable)           │
+                          si pending : re-dispatch avec backoff                               │
+                          si échec / expiration : marque la transaction failed/expired        │
+</code></pre>
+<h3>9.2 Données validées par <code>AddPaymentModal</code></h3>
+<ul>
+<li><code>amount</code> requis, ≤ restant.</li>
+<li><code>payment_type = DIGI</code>.</li>
+<li><code>phone_number</code> — 8 chiffres.</li>
+<li><code>network</code> ∈ <code>MOBILE_NETWORKS</code> (<code>TMONEY</code>, <code>FLOOZ</code>).</li>
+<li><code>provider</code> ∈ <code>MOBILE_PROVIDERS</code> (<code>qosic</code>, <code>fedapay</code>, <code>paygate</code>).</li>
+</ul>
+<h3>9.3 Abstraction prestataire</h3>
+<p><code>MobilePaymentProviderInterface</code> expose :</p>
+<pre><code class="language-php">public function initiate(array $data): array;     // retourne ['ok'=&gt;bool, 'external_id'=&gt;?, 'response'=&gt;...]
+public function verify(string $reference): array; // retourne ['status'=&gt;'success|failed|pending', ...]
+</code></pre>
+<p>Implémentations concrètes :</p>
+<ul>
+<li><a href="../app/Services/MobilePayment/Providers/QosicProvider.php">QosicProvider</a></li>
+<li><a href="../app/Services/MobilePayment/Providers/FedapayProvider.php">FedapayProvider</a></li>
+<li><a href="../app/Services/MobilePayment/Providers/PaygateProvider.php">PaygateProvider</a></li>
+</ul>
+<p>La fabrique est <a href="../app/Services/MobilePayment/MobilePaymentProviderFactory.php">MobilePaymentProviderFactory</a>.</p>
+<h3>9.4 Politique de relance et d'expiration</h3>
+<p>Définie dans <a href="../config/mobile-payment.php">config/mobile-payment.php</a> :</p>
+<pre><code>transaction_expiry_minutes = 1               # par défaut
+verification.max_attempts  = 3
+verification.backoff_seconds = [10, 30, 60, 120, 300]
+</code></pre>
+<p><a href="../app/Jobs/VerifyMobilePaymentJob.php">VerifyMobilePaymentJob</a> effectue 5 tentatives avec le backoff ci-dessus. Les transactions expirées sont balayées par <a href="../app/Jobs/ExpireStaleMobilePaymentsJob.php">ExpireStaleMobilePaymentsJob</a>.</p>
+<h3>9.5 Relance manuelle</h3>
+<p><a href="../app/Livewire/Payment/MobilePaymentActions.php">MobilePaymentActions</a> expose une action <code>retryVerification($id)</code> (visible dans l'écran <strong>Paiements mobiles</strong>) pour les transactions bloquées en <code>pending</code> / <code>verifying</code>.</p>
+<hr />
+<h2>10. Suivi des soldes par code taxe</h2>
+<p>Service : <a href="../app/Services/Sync/InvoiceCodeBalanceService.php">app/Services/Sync/InvoiceCodeBalanceService.php</a>.</p>
+<p>À chaque modification d'un avis (émission, paiement, annulation, réduction), <code>syncForInvoice($invoice)</code> :</p>
+<ol>
+<li>Agrège <code>amount_billed</code> par <code>code</code> depuis <code>invoice_items</code> jointés à <code>taxpayer_taxables</code> / <code>tax_labels</code>.</li>
+<li>Agrège <code>amount_paid</code> par <code>code</code> depuis <code>payments</code>, <strong>en excluant</strong> les lignes dont <code>description</code> est <code>Annulation</code> ou <code>Réduction</code>.</li>
+<li>Met à jour ou crée une ligne <code>invoice_code_balances</code> par <code>(invoice_id, code)</code> avec <code>remaining_amount</code> et <code>status</code> (<code>OWING</code> / <code>PAID</code>).</li>
+<li>Supprime les lignes de solde obsolètes pour les codes qui ne figurent plus dans l'avis.</li>
+</ol>
+<p>Cette table est la source de vérité pour le reporting par code (grands livres, versements comptable, vues de recouvrement).</p>
+<hr />
+<h2>11. Génération de reçus et de PDF</h2>
+<p>Service : <a href="../app/Services/PdfGeneratorService.php">app/Services/PdfGeneratorService.php</a> (utilise <code>Barryvdh\DomPDF\Facade\Pdf</code>).</p>
+<p>API publique :</p>
+<pre><code class="language-php">PdfGeneratorService::generateInvoicePdf(
+    array  $uuids,           // un ou plusieurs UUID d'avis
+    string $templateName,    // resources/views/exports/{templateName}.blade.php
+    ?int   $action = null,   // 1 = notice, 2 = reçu
+    bool   $is_relance = false
+): array  // ['success'=&gt;bool, 'pdf'=&gt;stream, 'filename'=&gt;string]
+</code></pre>
+<p>Comportement :</p>
+<ul>
+<li>Charge les avis en eager loading via <code>Invoice::retrieveByUUIDs()</code>.</li>
+<li>Ajoute un QR code via <a href="../app/Services/QrcodeGeneratorService.php">QrcodeGeneratorService</a> — utilisé par les collecteurs pour la réconciliation sur le terrain.</li>
+<li>Lors de la première génération, renseigne <code>edition_state = 'PRINT'</code> et <code>printed_at = now()</code>.</li>
+<li>Les templates se trouvent dans <code>resources/views/exports/</code> (ex. <code>invoices.blade.php</code>).</li>
+</ul>
+<p>Routes d'impression :</p>
+<ul>
+<li><code>GET /prints</code> — interface de file d'attente d'impression.</li>
+<li><code>GET /print-all-invoice</code> — téléchargement PDF en masse (<code>PrintController@downloadMultipleInvoicePdf</code>).</li>
+</ul>
+<hr />
+<h2>12. Synchronisation avec l'application de collecte distante</h2>
+<p>Une application mobile compagnon collecte les paiements sur le terrain et synchronise avec SIG-RECETTE. Voir <a href="sync-entites-paiements.md">docs/sync-entites-paiements.md</a> et <a href="sync-implementation.md">docs/sync-implementation.md</a>.</p>
+<h3>12.1 Entités et sens de synchronisation</h3>
+<table>
+<thead>
+<tr>
+<th>Entité</th>
+<th>Sens</th>
+<th>Objet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Invoice</code></td>
+<td>local → distant</td>
+<td>L'app distante affiche les avis impayés</td>
+</tr>
+<tr>
+<td><code>InvoiceItem</code></td>
+<td>local → distant (lecture seule)</td>
+<td>Lignes de détail</td>
+</tr>
+<tr>
+<td><code>Taxpayer</code></td>
+<td>local → distant (lecture seule)</td>
+<td>Identification &amp; contact</td>
+</tr>
+<tr>
+<td><code>TaxpayerTaxable</code></td>
+<td>local → distant (lecture seule)</td>
+<td>Contexte des articles taxables</td>
+</tr>
+<tr>
+<td><code>Payment</code></td>
+<td>distant → local</td>
+<td>Paiements collectés sur le terrain remontés vers le local</td>
+</tr>
+</tbody>
+</table>
+<h3>12.2 Points d'API — <a href="../routes/api.php">routes/api.php</a></h3>
+<pre><code>GET  /api/v1/sync/invoices          → Api/Sync/V1/SyncV1InvoicesController@index
+GET  /api/v1/sync/payments          → Api/Sync/V1/SyncV1PaymentsController@index   (export paiements locaux)
+POST /api/v1/sync/payments          → Api/Sync/V1/SyncV1PaymentsController@store   (import paiements distants)
+
+POST /api/v1/search/invoices        → SearchInvoiceController@search
+POST /api/v1/search/taxpayers       → SearchTaxpayerController@search
+POST /api/v1/search/taxpayerstaxables → SearchTaxpayerTaxableController@search
+</code></pre>
+<h3>12.3 Idempotence et filtres</h3>
+<ul>
+<li>Idempotent via <code>uuid</code> sur <code>Invoice</code> et <code>Payment</code> (UUID v4 généré à la création).</li>
+<li>Incrémental via <code>?updated_since=&lt;ISO 8601&gt;</code>.</li>
+<li>Filtrage par année active via <code>Year::getActiveYear()</code>.</li>
+<li>Pagination via <code>?per_page=</code>.</li>
+</ul>
+<h3>12.4 Service d'import</h3>
+<p><a href="../app/Services/Sync/PaymentImportService.php">PaymentImportService</a> :</p>
+<pre><code class="language-php">PaymentImportService::import(array $payments): [
+    'created' =&gt; int,
+    'updated' =&gt; int,
+    'skipped' =&gt; int,
+    'errors'  =&gt; array,
+]
+</code></pre>
+<p>Pour chaque entrée :</p>
+<ol>
+<li>Résolution de l'avis via <code>invoice_uuid</code>.</li>
+<li><code>Payment::firstOrCreate(['uuid' =&gt; …], $attributes)</code> puis mise à jour si existant.</li>
+<li>Recalcul de <code>Invoice.pay_status</code> et appel à <code>InvoiceCodeBalanceService</code>.</li>
+</ol>
+<h3>12.5 Jobs en arrière-plan</h3>
+<ul>
+<li><a href="../app/Jobs/SyncImportPaymentsJob.php">SyncImportPaymentsJob</a> — récupère les paiements distants page par page (délai 120s, 3 tentatives).</li>
+<li><a href="../app/Jobs/SyncExportInvoicesJob.php">SyncExportInvoicesJob</a> — pousse les avis vers le distant.</li>
+</ul>
+<p>Les exécutions de synchronisation sont tracées dans les enregistrements <code>SyncRun</code> utilisés comme curseur.</p>
+<hr />
+<h2>13. Événements, écouteurs, jobs et notifications</h2>
+<h3>13.1 Événements</h3>
+<table>
+<thead>
+<tr>
+<th>Événement</th>
+<th>Objet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MobilePaymentVerified</code></td>
+<td>Émis lorsqu'une <code>MobilePaymentTransaction</code> passe en <code>success</code></td>
+</tr>
+</tbody>
+</table>
+<h3>13.2 Écouteurs</h3>
+<table>
+<thead>
+<tr>
+<th>Écouteur</th>
+<th>Réagit à</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HandleMobilePaymentVerified</code></td>
+<td><code>MobilePaymentVerified</code></td>
+<td>Envoie le SMS <em>« Votre paiement de {montant} FCFA pour l'avis {invoice_no} a été confirmé. Réf : {reference} »</em> (conditionné par <code>features.sms_notifications_feature</code>)</td>
+</tr>
+<tr>
+<td><code>InvoiceWorkflowSubscriber</code></td>
+<td><code>workflow.invoice.{enter,leave,transition,guard}</code></td>
+<td>Notifie les utilisateurs concernés (<code>InvoiceAccepted</code>, <code>InvoiceApproved</code>, <code>InvoiceRejected</code>), libère les <code>TaxpayerTaxable</code> réservés en cas de rejet, etc.</td>
+</tr>
+</tbody>
+</table>
+<h3>13.3 Jobs</h3>
+<table>
+<thead>
+<tr>
+<th>Job</th>
+<th>Objet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VerifyMobilePaymentJob</code></td>
+<td>Interroge le prestataire — 5 tentatives, backoff [10, 30, 60, 120, 300] s</td>
+</tr>
+<tr>
+<td><code>ExpireStaleMobilePaymentsJob</code></td>
+<td>Marque comme <code>expired</code> les transactions dont <code>expires_at</code> est dépassé</td>
+</tr>
+<tr>
+<td><code>SyncImportPaymentsJob</code></td>
+<td>Récupère les paiements depuis le distant</td>
+</tr>
+<tr>
+<td><code>SyncExportInvoicesJob</code></td>
+<td>Pousse les avis vers le distant</td>
+</tr>
+</tbody>
+</table>
+<h3>13.4 Notifications (canal base de données)</h3>
+<p><code>InvoiceCreated</code>, <code>InvoiceAccepted</code>, <code>InvoiceApproved</code>, <code>InvoiceRejected</code>, <code>InvoicePaid</code> — toutes dans <a href="../app/Notifications/">app/Notifications/</a>.</p>
+<hr />
+<h2>14. Autorisations et permissions</h2>
+<p>Les chaînes de permission sont en <strong>français</strong> et gérées par Spatie.</p>
+<h3>14.1 <code>InvoicePolicy</code> — <a href="../app/Policies/InvoicePolicy.php">app/Policies/InvoicePolicy.php</a></h3>
+<table>
+<thead>
+<tr>
+<th>Capacité</th>
+<th>Permission requise</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>viewAny</code> / <code>view</code></td>
+<td>Tout utilisateur authentifié</td>
+</tr>
+<tr>
+<td><code>create</code></td>
+<td><em>peut émettre un avis au comptant</em> <strong>OU</strong> <em>peut émettre un avis sur titre</em></td>
+</tr>
+<tr>
+<td><code>update</code></td>
+<td><em>peut accepter un avis sur titre</em>, <em>peut prendre en charge…</em>, <em>peut ajouter date de livraison</em>, <em>peut ajouter numéro d'ordre</em></td>
+</tr>
+<tr>
+<td><code>delete</code></td>
+<td><em>peut rejeter un avis</em> (et variantes déléguées)</td>
+</tr>
+<tr>
+<td><code>reduce</code></td>
+<td><em>peut réduire un avis</em> (titre / comptant)</td>
+</tr>
+</tbody>
+</table>
+<h3>14.2 <code>PaymentPolicy</code> — <a href="../app/Policies/PaymentPolicy.php">app/Policies/PaymentPolicy.php</a></h3>
+<table>
+<thead>
+<tr>
+<th>Capacité</th>
+<th>Permission requise</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>viewAny</code> / <code>view</code></td>
+<td>Tout utilisateur authentifié</td>
+</tr>
+<tr>
+<td><code>create</code></td>
+<td><em>peut ajouter un paiement</em></td>
+</tr>
+<tr>
+<td><code>update</code></td>
+<td><em>peut accepter un paiement</em> <strong>OU</strong> <em>peut comptabiliser un paiement</em></td>
+</tr>
+<tr>
+<td><code>delete</code></td>
+<td><em>peut supprimer un paiement</em></td>
+</tr>
+</tbody>
+</table>
+<h3>14.3 <code>InvoiceGuard</code> — <a href="../app/Guards/InvoiceGuard.php">app/Guards/InvoiceGuard.php</a></h3>
+<p><code>canSubmitForPending</code> bloque <code>ACCEPTED → PENDING</code> sauf si <code>order_no</code> est renseigné ou <code>type == COMPTANT</code>.</p>
+<hr />
+<h2>15. Référence des routes</h2>
+<h3>15.1 Web — <a href="../routes/web.php">routes/web.php</a></h3>
+<pre><code>GET  /invoices                              InvoiceController@index
+GET  /invoices/{id}                         InvoiceController@show
+GET  /mobile-payments                       MobilePaymentController@index
+
+GET  /accounts/collector-deposits           CollectorDepositController@index
+GET  /accounts/collector-deposits/{id}      CollectorDepositController@show
+GET  /accounts/accountant-deposits-title    AccountantDepositController@index
+GET  /accounts/accountant-deposits-outright AccountantDepositOutrightController@index
+GET  /accounts/ledgers                      LedgerController@index
+
+GET  /recoveries                            RecoveryController@index
+GET  /prints                                PrintController@index
+GET  /print-all-invoice                     PrintController@downloadMultipleInvoicePdf
+</code></pre>
+<h3>15.2 API — <a href="../routes/api.php">routes/api.php</a></h3>
+<pre><code>GET  /api/v1/sync/invoices                  Api/Sync/V1/SyncV1InvoicesController@index
+GET  /api/v1/sync/payments                  Api/Sync/V1/SyncV1PaymentsController@index
+POST /api/v1/sync/payments                  Api/Sync/V1/SyncV1PaymentsController@store
+
+POST /api/v1/search/invoices                SearchInvoiceController@search
+POST /api/v1/search/taxpayers               SearchTaxpayerController@search
+POST /api/v1/search/taxpayerstaxables       SearchTaxpayerTaxableController@search
+</code></pre>
+<hr />
+<h2>16. Référence de configuration</h2>
+<h3>16.1 <a href="../config/mobile-payment.php">config/mobile-payment.php</a></h3>
+<pre><code class="language-php">'default_provider'           =&gt; env('MOBILE_PAYMENT_DEFAULT_PROVIDER', 'paygate'),
+'transaction_expiry_minutes' =&gt; env('MOBILE_PAYMENT_EXPIRY_MINUTES', 1),
+
+'verification' =&gt; [
+    'max_attempts'    =&gt; 3,
+    'backoff_seconds' =&gt; [10, 30, 60, 120, 300],
+],
+
+'providers' =&gt; [
+    'qosic'   =&gt; ['base_url'=&gt;env('QOSIC_BASE_URL'),   'username'=&gt;env('QOSIC_USERNAME'), 'password'=&gt;env('QOSIC_PASSWORD'), 'merchant_id'=&gt;env('QOSIC_MERCHANT_ID'), 'timeout'=&gt;30],
+    'fedapay' =&gt; ['base_url'=&gt;env('FEDAPAY_BASE_URL','https://sandbox-api.fedapay.com'), 'secret_key'=&gt;env('FEDAPAY_SECRET_KEY'), 'public_key'=&gt;env('FEDAPAY_PUBLIC_KEY'), 'timeout'=&gt;30],
+    'paygate' =&gt; ['base_url'=&gt;env('PAYGATE_BASE_URL'), /* … */ ],
+],
+</code></pre>
+<h3>16.2 <a href="../config/workflow.php">config/workflow.php</a> / <a href="../config/workflow_registry.php">config/workflow_registry.php</a></h3>
+<p>Déclarent la machine d'état <code>invoice</code> (états et transitions listés au §6).</p>
+<h3>16.3 <a href="../config/sync.php">config/sync.php</a></h3>
+<p>Contient les endpoints, tokens et paramètres de pagination pour l'application de collecte distante.</p>
+<h3>16.4 Clés <code>.env</code> requises (liées au paiement)</h3>
+<pre><code>MOBILE_PAYMENT_DEFAULT_PROVIDER=paygate
+MOBILE_PAYMENT_EXPIRY_MINUTES=1
+
+QOSIC_BASE_URL=
+QOSIC_USERNAME=
+QOSIC_PASSWORD=
+QOSIC_MERCHANT_ID=
+
+FEDAPAY_BASE_URL=https://sandbox-api.fedapay.com
+FEDAPAY_SECRET_KEY=
+FEDAPAY_PUBLIC_KEY=
+
+PAYGATE_BASE_URL=
+PAYGATE_*=…
+
+QUEUE_CONNECTION=database          # requis pour VerifyMobilePaymentJob
+</code></pre>
+<hr />
+<h2>17. Référence des migrations de base de données</h2>
+<h3>17.1 <code>invoices</code> (migration ancre)</h3>
+<p><a href="../database/migrations/2024_02_03_000548_create_invoices_table.php">2024_02_03_000548_create_invoices_table.php</a></p>
+<pre><code class="language-sql">id             BIGINT PK AUTOINC (démarre à 100001)
+invoice_no     VARCHAR
+order_no       VARCHAR
+status         VARCHAR DEFAULT 'DRAFT'
+pay_status     VARCHAR DEFAULT 'OWING'
+delivery       VARCHAR DEFAULT 'NOT DELIVERED'
+delivery_date  DATE
+from_date      DATE
+to_date        DATE
+qty            DOUBLE
+amount         DOUBLE DEFAULT 0
+taxpayer_id    FK → taxpayers.id
+created_at, updated_at
+</code></pre>
+<p>Les migrations progressives ajoutent <code>validity</code>, <code>reduce_amount</code>, <code>delivery_to</code>, <code>uuid</code>, <code>type</code>, <code>is_on_recovery_print</code>, <code>edition_state</code>, <code>notes (json)</code>, <code>reason_for_reject</code>, <code>printed_at</code>.</p>
+<h3>17.2 <code>payments</code></h3>
+<p><a href="../database/migrations/2024_02_26_005552_create_payments_table.php">2024_02_26_005552_create_payments_table.php</a> — colonnes de base, puis migrations incrémentales ajoutent <code>remaining_amount</code>, <code>user_id</code>, <code>uuid</code>, <code>code</code>, <code>invoice_type</code>, <code>notes</code>, référence de versement ; enfin :</p>
+<ul>
+<li><code>2026_03_28_000001_add_mobile_payment_fields_to_payments_table.php</code> — <code>provider</code>, <code>phone_number</code>, <code>external_id</code>, <code>verification_attempts</code>, <code>last_checked_at</code>, <code>expires_at</code>.</li>
+<li><code>2026_04_08_000001_add_network_column_to_payments_and_mobile_payment_transactions_tables.php</code> — <code>network</code>.</li>
+</ul>
+<h3>17.3 <code>mobile_payment_transactions</code></h3>
+<p><a href="../database/migrations/2026_03_28_000002_create_mobile_payment_transactions_table.php">2026_03_28_000002_create_mobile_payment_transactions_table.php</a></p>
+<pre><code class="language-sql">id, reference UNIQUE,
+invoice_id FK, taxpayer_id FK NULL, user_id FK NULL,
+amount DECIMAL(15,2), phone_number, provider, network,
+external_id, status DEFAULT 'pending',
+verification_attempts SMALLINT DEFAULT 0,
+last_checked_at, verified_at, expires_at,
+provider_response JSON, meta JSON,
+INDEX (invoice_id, status), INDEX (status, expires_at), INDEX (provider)
+</code></pre>
+<h3>17.4 <code>invoice_code_balances</code></h3>
+<p><a href="../database/migrations/2026_03_01_000000_create_invoice_code_balances_table.php">2026_03_01_000000_create_invoice_code_balances_table.php</a></p>
+<pre><code class="language-sql">invoice_id FK, taxpayer_id FK,
+code, year,
+amount_billed, amount_paid, remaining_amount,
+status DEFAULT 'OWING', last_payment_at,
+UNIQUE (invoice_id, code)
+INDEX (taxpayer_id, code, year)
+INDEX (taxpayer_id, year)
+</code></pre>
+<hr />
+<h2>18. Procédures étape par étape</h2>
+<h3>18.1 Émettre un avis et encaisser un paiement en espèces (<code>COMPTANT</code>)</h3>
+<ol>
+<li><strong>Ouvrir la fiche d'un redevable</strong> → cliquer <em>Nouvel avis</em>.</li>
+<li>Remplir le <code>AddInvoiceModal</code> (redevable, articles, période). Choisir <code>type = COMPTANT</code>.</li>
+<li>Valider → avis créé en <code>DRAFT</code>.</li>
+<li>Appliquer les transitions :
+<ul>
+<li><code>submit_for_accepted</code> (<code>DRAFT → ACCEPTED</code>).</li>
+<li><code>submit_for_pending</code> (<code>ACCEPTED → PENDING</code>) — <strong>autorisé parce que <code>type = COMPTANT</code></strong> même sans <code>order_no</code>.</li>
+<li><code>submit_for_approved</code> (<code>PENDING → APPROVED</code>).</li>
+</ul>
+</li>
+<li>Ouvrir <code>AddPaymentModal</code>, choisir <code>CASH</code>, saisir le montant, valider.</li>
+<li>Le système crée une ligne <code>Payment</code> par code taxe, recalcule <code>pay_status</code> et actualise <code>invoice_code_balances</code>.</li>
+<li>Imprimer le reçu (§11).</li>
+</ol>
+<h3>18.2 Émettre un avis sur titre (<code>TITRE</code>) — numéro d'ordre obligatoire</h3>
+<ol>
+<li>Idem ci-dessus avec <code>type = TITRE</code>.</li>
+<li>Après <code>ACCEPTED</code>, l'agent <strong>doit</strong> renseigner <code>order_no</code> (permission <em>peut ajouter numéro d'ordre</em>).</li>
+<li><code>submit_for_pending</code> réussit alors ; sinon <code>InvoiceGuard::canSubmitForPending</code> bloque la transition.</li>
+<li>Poursuivre avec l'approbation et le paiement.</li>
+</ol>
+<h3>18.3 Encaisser un paiement numérique (DIGI)</h3>
+<ol>
+<li>Ouvrir <code>AddPaymentModal</code> sur un avis en <code>APPROVED</code>.</li>
+<li>Choisir <code>DIGI</code>, sélectionner le prestataire (<code>paygate</code> par défaut), le réseau (<code>TMONEY</code>/<code>FLOOZ</code>), saisir le <strong>numéro à 8 chiffres</strong>.</li>
+<li>Valider → <code>MobilePaymentService::initiate()</code> crée une <code>MobilePaymentTransaction (pending)</code>, appelle le prestataire et met en file un <code>VerifyMobilePaymentJob</code>.</li>
+<li>Le redevable valide la demande USSD/application sur son téléphone.</li>
+<li>Le job interroge le prestataire avec backoff. En cas de <code>success</code>, les lignes <code>Payment</code> sont créées, <code>pay_status</code> mis à jour, l'événement <code>MobilePaymentVerified</code> est émis et le redevable reçoit un SMS de confirmation.</li>
+<li>Si le polling épuise les tentatives ou que <code>expires_at</code> est dépassé, la transaction est marquée <code>failed</code> / <code>expired</code>. L'agent peut utiliser <em>Réessayer</em> depuis la page <strong>Paiements mobiles</strong>.</li>
+</ol>
+<h3>18.4 Annuler ou réduire un avis approuvé</h3>
+<ol>
+<li>Depuis <code>APPROVED</code>, transition <code>submit_for_approved_cancellation</code> → <code>APPROVED-CANCELLATION-OR-REDUCTION</code>.</li>
+<li>Puis :
+<ul>
+<li><code>submit_for_canceled</code> → <code>APPROVED-CANCELED</code>, <strong>et</strong> créer un paiement correctif avec <code>description = &quot;Annulation&quot;</code>.</li>
+<li><code>submit_for_reduced</code> → <code>APPROVED-REDUCED</code>, <strong>et</strong> créer un paiement correctif avec <code>description = &quot;Réduction&quot;</code> et mettre à jour <code>Invoice.reduce_amount</code>.</li>
+</ul>
+</li>
+<li>Ces lignes <code>Annulation</code> / <code>Réduction</code> sont exclues de <code>getPrintData()</code> et du calcul du solde par code.</li>
+</ol>
+<h3>18.5 Clôturer un versement collecteur</h3>
+<ol>
+<li>Aller dans <em>Comptes → Versements régisseur</em> (<code>/accounts/collector-deposits</code>).</li>
+<li>Sélectionner la plage de dates ; le système liste les lignes <code>Payment</code> avec <code>r_user_id = collecteur courant</code> et <code>status = PENDING</code>.</li>
+<li>Valider le versement : <code>status</code> passe à <code>ACCOUNTED</code>, la colonne <code>deposit</code> est renseignée.</li>
+<li>Les versements comptable sont ensuite clôturés sous <em>Versements comptable</em> (titre / comptant), ce qui les fait passer à <code>DONE</code>.</li>
+</ol>
+<h3>18.6 Synchroniser avec l'application de collecte distante</h3>
+<ol>
+<li>Planifier <a href="../app/Jobs/SyncExportInvoicesJob.php">SyncExportInvoicesJob</a> afin que le distant dispose toujours des avis <code>APPROVED</code> à jour.</li>
+<li>Planifier <a href="../app/Jobs/SyncImportPaymentsJob.php">SyncImportPaymentsJob</a> toutes les X minutes — il appelle <code>GET /api/v1/sync/payments?updated_since=…&amp;per_page=…</code>, puis <code>PaymentImportService::import()</code>.</li>
+<li>Le curseur (<code>updated_since</code>) est persisté via <code>SyncRun</code>.</li>
+</ol>
+<hr />
+<h2>19. Résolution des problèmes</h2>
+<table>
+<thead>
+<tr>
+<th>Symptôme</th>
+<th>Cause probable</th>
+<th>Où chercher</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Impossible de faire passer l'avis de <code>ACCEPTED</code> à <code>PENDING</code></td>
+<td><code>order_no</code> absent sur un avis <code>TITRE</code></td>
+<td><code>InvoiceGuard::canSubmitForPending</code></td>
+</tr>
+<tr>
+<td><code>AddPaymentModal</code> rejette le montant</td>
+<td>Montant &gt; <code>Invoice::get_remains_to_be_paid()</code></td>
+<td>Règles de validation dans <code>AddPaymentModal</code></td>
+</tr>
+<tr>
+<td>DIGI bloqué en <code>verifying</code></td>
+<td>Queue non démarrée ou délai d'attente prestataire</td>
+<td>Lancer <code>php artisan queue:work</code> ; inspecter <code>mobile_payment_transactions.last_checked_at</code>, <code>provider_response</code> ; cliquer <em>Réessayer</em></td>
+</tr>
+<tr>
+<td>DIGI finit en <code>expired</code></td>
+<td><code>transaction_expiry_minutes</code> trop court ou redevable n'a pas validé</td>
+<td><code>config/mobile-payment.php</code>, <code>ExpireStaleMobilePaymentsJob</code></td>
+</tr>
+<tr>
+<td>Soldes par code obsolètes</td>
+<td><code>InvoiceCodeBalanceService::syncForInvoice()</code> non appelé</td>
+<td>Déclencher en enregistrant un <code>Payment</code> sur l'avis ; ou resynchroniser via tinker</td>
+</tr>
+<tr>
+<td>Import sync indique <code>skipped</code></td>
+<td>Même <code>payment.uuid</code> déjà importé (idempotence)</td>
+<td>Comportement attendu</td>
+</tr>
+<tr>
+<td>Le reçu PDF affiche des lignes <code>Annulation</code></td>
+<td>Ces lignes sont normalement masquées ; vérifier le filtre <code>description</code> dans <code>Payment::getPrintData()</code></td>
+<td><code>app/Traits/PaymentTrait.php</code></td>
+</tr>
+<tr>
+<td>Notification jamais envoyée</td>
+<td><code>features.sms_notifications_feature</code> désactivé ou identifiants SMS absents</td>
+<td><code>config/features.php</code>, <code>SmsService</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>Annexe — Aide-mémoire de référence rapide</h3>
+<pre><code>États avis     : DRAFT → ACCEPTED → PENDING → APPROVED → (CANCELED|REDUCED)
+Statut paiement: OWING → PART PAID → PAID
+Types paiement : CASH | CHEQUE | DIGI
+Prestataires   : qosic | fedapay | paygate
+Réseaux mobiles: TMONEY | FLOOZ
+Statut TX DIGI : pending → verifying → success | failed | expired
+Statut Payment : PENDING → ACCOUNTED → DONE   (CANCELED, + DIGI : VERIFYING/FAILED/EXPIRED)
+Clé idempotence: uuid (Invoice &amp; Payment)
+Soldes/code    : invoice_code_balances (unique sur invoice_id+code)
+</code></pre>
+<p><em>Document généré pour le projet SIG-RECETTE.</em></p>
+</body></html>

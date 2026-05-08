@@ -1,0 +1,1239 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>SIG-RECETTE — Payment Structure</title><style>@page { size: A4; margin: 18mm 16mm 18mm 16mm; }
+* { box-sizing: border-box; }
+html, body { font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif; color: #1f2328; line-height: 1.5; font-size: 11pt; }
+body { max-width: 820px; margin: 0 auto; padding: 0 4px; }
+h1, h2, h3, h4 { color: #0b3d91; line-height: 1.25; page-break-after: avoid; }
+h1 { font-size: 22pt; border-bottom: 3px solid #0b3d91; padding-bottom: 6px; margin-top: 0; }
+h2 { font-size: 16pt; border-bottom: 1px solid #c9d4e3; padding-bottom: 4px; margin-top: 28px; }
+h3 { font-size: 13pt; margin-top: 22px; }
+h4 { font-size: 11.5pt; margin-top: 18px; }
+p, li { font-size: 10.5pt; }
+blockquote { border-left: 4px solid #0b3d91; background: #f4f7fb; margin: 12px 0; padding: 8px 14px; color: #243447; }
+code { font-family: "Consolas", "Cascadia Mono", "Courier New", monospace; background: #f1f3f5; padding: 1px 4px; border-radius: 3px; font-size: 9.8pt; }
+pre { background: #0f172a; color: #e2e8f0; padding: 12px 14px; border-radius: 6px; overflow-x: auto; font-size: 9.5pt; line-height: 1.45; page-break-inside: avoid; }
+pre code { background: transparent; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 10px 0 18px; font-size: 10pt; page-break-inside: avoid; }
+th, td { border: 1px solid #c9d4e3; padding: 6px 9px; text-align: left; vertical-align: top; }
+th { background: #0b3d91; color: #fff; font-weight: 600; }
+tr:nth-child(even) td { background: #f7f9fc; }
+a { color: #0b3d91; text-decoration: none; word-break: break-word; }
+ul, ol { padding-left: 22px; }
+hr { border: none; border-top: 1px solid #c9d4e3; margin: 24px 0; }
+.toc { background: #f4f7fb; border: 1px solid #c9d4e3; border-radius: 6px; padding: 8px 18px; }
+.cover { text-align: center; padding: 80px 0 30px; page-break-after: always; }
+.cover h1 { border: none; font-size: 30pt; margin-bottom: 8px; }
+.cover .sub { color: #475569; font-size: 13pt; }
+.cover .meta { margin-top: 60px; color: #64748b; font-size: 10pt; }</style></head><body><div class="cover">
+  <h1>SIG-RECETTE</h1>
+  <div class="sub">Payment Structure, Procedure &amp; Workflow</div>
+  <div class="meta">
+    Laravel 10 · Livewire 3 · Symfony Workflow<br>
+    Cash · Cheque · Mobile Money (QOSIC / FedaPay / PayGate)
+  </div>
+</div><h1>SIG-RECETTE — Payment Structure, Procedure &amp; Workflow</h1>
+<blockquote>
+<p><strong>Audience:</strong> Developers, integrators, accounting agents and project administrators of SIG-RECETTE.
+<strong>Scope:</strong> Complete description of the payment domain — data model, state machine, services, mobile-money integration, synchronization, notifications and end-to-end procedure.
+<strong>Stack:</strong> Laravel 10 / PHP 8.2 · Livewire 3 · Symfony Workflow (<code>zerodahero/laravel-workflow</code>) · Spatie Permissions (French strings) · Barryvdh DomPDF.</p>
+</blockquote>
+<hr />
+<h2>Table of contents</h2>
+<ol>
+<li><a href="#1-overview">Overview</a></li>
+<li><a href="#2-domain-glossary">Domain glossary</a></li>
+<li><a href="#3-high-level-architecture">High-level architecture</a></li>
+<li><a href="#4-data-model">Data model</a></li>
+<li><a href="#5-enumerations">Enumerations</a></li>
+<li><a href="#6-invoice-state-machine-workflow">Invoice state machine (workflow)</a></li>
+<li><a href="#7-payment-lifecycle">Payment lifecycle</a></li>
+<li><a href="#8-cash--cheque-payment-procedure">Cash &amp; cheque payment procedure</a></li>
+<li><a href="#9-mobile-money--digital-payment-procedure">Mobile-money / digital payment procedure</a></li>
+<li><a href="#10-per-tax-code-balance-tracking">Per-tax-code balance tracking</a></li>
+<li><a href="#11-receipts-and-pdf-generation">Receipts and PDF generation</a></li>
+<li><a href="#12-synchronization-with-the-remote-collection-app">Synchronization with the remote collection app</a></li>
+<li><a href="#13-events-listeners-jobs-and-notifications">Events, listeners, jobs and notifications</a></li>
+<li><a href="#14-authorization-and-permissions">Authorization and permissions</a></li>
+<li><a href="#15-routes-reference">Routes reference</a></li>
+<li><a href="#16-configuration-reference">Configuration reference</a></li>
+<li><a href="#17-database-migrations-reference">Database migrations reference</a></li>
+<li><a href="#18-step-by-step-procedures">Step-by-step procedures</a></li>
+<li><a href="#19-troubleshooting">Troubleshooting</a></li>
+</ol>
+<hr />
+<h2>1. Overview</h2>
+<p>SIG-RECETTE manages the <strong>issuance of tax notices (<code>Invoice</code>)</strong> and the <strong>collection of payments (<code>Payment</code>)</strong> for a public-revenue authority. It supports three payment channels:</p>
+<table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cash</td>
+<td><code>CASH</code></td>
+<td>Counter cash payments recorded by an agent</td>
+</tr>
+<tr>
+<td>Cheque</td>
+<td><code>CHEQUE</code></td>
+<td>Bank cheque payment with reference</td>
+</tr>
+<tr>
+<td>Digital / Mobile money</td>
+<td><code>DIGI</code></td>
+<td>Payment through QOSIC, FedaPay or PayGate (TMONEY / FLOOZ)</td>
+</tr>
+</tbody>
+</table>
+<p>Payments are always <strong>attached to an <code>Invoice</code></strong> and therefore to a <strong><code>Taxpayer</code></strong>. The invoice itself moves through a controlled <strong>Symfony Workflow state machine</strong> before it becomes payable, and each payment is <strong>split per tax code</strong> so reporting can be done per revenue line.</p>
+<hr />
+<h2>2. Domain glossary</h2>
+<table>
+<thead>
+<tr>
+<th>Term (FR / EN)</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Avis / Invoice</td>
+<td>Tax notice issued to a taxpayer (<code>Invoice</code>)</td>
+</tr>
+<tr>
+<td>Avis sur titre — <code>TITRE</code></td>
+<td>Formal title-based invoice that must be approved before collection</td>
+</tr>
+<tr>
+<td>Avis au comptant — <code>COMPTANT</code></td>
+<td>Immediate, on-the-spot invoice (skips the order-number requirement)</td>
+</tr>
+<tr>
+<td>Redevable / Taxpayer</td>
+<td>The natural or legal person liable for the tax (<code>Taxpayer</code>)</td>
+</tr>
+<tr>
+<td>Article taxable / TaxpayerTaxable</td>
+<td>A taxable line item attached to a taxpayer (<code>TaxpayerTaxable</code>)</td>
+</tr>
+<tr>
+<td>Code</td>
+<td>Internal accounting code identifying a tax / revenue line (<code>TaxLabel.code</code>)</td>
+</tr>
+<tr>
+<td>Régisseur</td>
+<td>Agent authorised to validate the chain of collection</td>
+</tr>
+<tr>
+<td>Receveur / Collector</td>
+<td>Agent that physically collects the money</td>
+</tr>
+<tr>
+<td>Versement / Deposit</td>
+<td>Money handed over by a collector to the accountant</td>
+</tr>
+<tr>
+<td>Annulation / Réduction</td>
+<td>Special &quot;negative&quot; Payment rows used to cancel or reduce an approved invoice</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>3. High-level architecture</h2>
+<pre><code>┌──────────────────────── UI LAYER ────────────────────────┐
+│  Livewire components (AddPaymentModal, MobilePaymentActions, …) │
+│  DataTables (InvoicesDataTable, MobilePaymentsDataTable, …)     │
+└────────────────────────────┬─────────────────────────────┘
+                             │
+┌──────────────────────── HTTP LAYER ──────────────────────┐
+│  InvoiceController · PaymentController · MobilePaymentController │
+│  CollectorDepositController · SyncV1PaymentsController (API)     │
+└────────────────────────────┬─────────────────────────────┘
+                             │
+┌──────────────────────── SERVICE LAYER ───────────────────┐
+│  MobilePaymentService          MobilePaymentProviderFactory │
+│   ├─ QosicProvider              ├─ FedapayProvider           │
+│   └─ PaygateProvider                                         │
+│  InvoiceCodeBalanceService    PaymentImportService          │
+│  PdfGeneratorService          QrcodeGeneratorService        │
+└────────────────────────────┬─────────────────────────────┘
+                             │
+┌──────────────────────── DOMAIN LAYER ────────────────────┐
+│  Invoice (WorkflowTrait + InvoiceTrait)                  │
+│  Payment (PaymentTrait)                                  │
+│  MobilePaymentTransaction                                │
+│  InvoiceCodeBalance · InvoiceItem · Taxpayer             │
+└────────────────────────────┬─────────────────────────────┘
+                             │
+┌──────────────────────── INFRA LAYER ─────────────────────┐
+│  Symfony Workflow · Queue · Notifications · DomPDF · SMS │
+│  External: QOSIC · FedaPay · PayGate                     │
+└──────────────────────────────────────────────────────────┘
+</code></pre>
+<hr />
+<h2>4. Data model</h2>
+<h3>4.1 <code>Invoice</code> — <a href="../app/Models/Invoice.php">app/Models/Invoice.php</a></h3>
+<p>Main fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>invoice_no</code></td>
+<td>string (unique)</td>
+<td>Public invoice number</td>
+</tr>
+<tr>
+<td><code>order_no</code></td>
+<td>string</td>
+<td>Order number required for <code>TITRE</code> invoices to become <code>PENDING</code></td>
+</tr>
+<tr>
+<td><code>taxpayer_id</code></td>
+<td>FK</td>
+<td>Taxpayer this notice belongs to</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>float</td>
+<td>Total billed amount</td>
+</tr>
+<tr>
+<td><code>reduce_amount</code></td>
+<td>float</td>
+<td>Amount after reduction (when reduced)</td>
+</tr>
+<tr>
+<td><code>qty</code></td>
+<td>float</td>
+<td>Quantity (taxable items)</td>
+</tr>
+<tr>
+<td><code>from_date</code> / <code>to_date</code></td>
+<td>date</td>
+<td>Coverage period</td>
+</tr>
+<tr>
+<td><code>pay_status</code></td>
+<td>string</td>
+<td><code>OWING</code> · <code>PART PAID</code> · <code>PAID</code></td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>string</td>
+<td>Workflow state (see §6)</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td>string</td>
+<td><code>TITRE</code> or <code>COMPTANT</code></td>
+</tr>
+<tr>
+<td><code>delivery</code></td>
+<td>string</td>
+<td><code>NOT DELIVERED</code> / <code>DELIVERED</code></td>
+</tr>
+<tr>
+<td><code>delivery_date</code>, <code>delivery_to</code></td>
+<td>date / string</td>
+<td>Delivery info</td>
+</tr>
+<tr>
+<td><code>edition_state</code>, <code>printed_at</code></td>
+<td>string / datetime</td>
+<td>Print tracking</td>
+</tr>
+<tr>
+<td><code>notes</code></td>
+<td>json</td>
+<td><code>previous_invoice_id</code>, <code>remaining_amount</code>, <code>free_text</code></td>
+</tr>
+<tr>
+<td><code>uuid</code></td>
+<td>string</td>
+<td>Sync idempotency key</td>
+</tr>
+</tbody>
+</table>
+<p>Key relationships: <code>taxpayer()</code>, <code>payments()</code>, <code>invoiceitems()</code>, <code>taxpayer_taxables()</code>, <code>printFiles()</code>.</p>
+<p>Key methods (via <code>InvoiceTrait</code> + model):</p>
+<ul>
+<li><code>can($state)</code> / <code>submitToState($state)</code> — workflow guards &amp; transitions.</li>
+<li><code>get_remains_to_be_paid()</code> — remaining amount.</li>
+<li><code>isValid()</code> — not rejected/canceled/reduced and not already PAID.</li>
+<li><code>canGetPayment()</code> — invoice is in a state where a payment is allowed.</li>
+<li><code>sumAmountsByTaxCode($invoice)</code> — totals grouped by <code>code</code>.</li>
+<li><code>getCode($id, $amount, $paymentData)</code> — splits a payment amount across the invoice tax codes (used to create one <code>Payment</code> row per code).</li>
+<li><code>returnPaidAndSumByCode($invoice)</code> — paid vs billed per code.</li>
+<li><code>retrieveByUUIDs(array $uuids)</code> — eager load for export / PDF.</li>
+</ul>
+<p>Useful scopes: <code>ofStatus</code>, <code>approved</code>, <code>unpaid</code>, <code>forTaxpayer</code>, <code>inDateRange</code>.</p>
+<h3>4.2 <code>Payment</code> — <a href="../app/Models/Payment.php">app/Models/Payment.php</a></h3>
+<p>Main fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>amount</code></td>
+<td>float</td>
+<td>Amount paid</td>
+</tr>
+<tr>
+<td><code>payment_type</code></td>
+<td>enum-like string</td>
+<td><code>CASH</code> · <code>CHEQUE</code> · <code>DIGI</code></td>
+</tr>
+<tr>
+<td><code>invoice_type</code></td>
+<td>string</td>
+<td>Denormalised copy of <code>Invoice.type</code></td>
+</tr>
+<tr>
+<td><code>reference</code></td>
+<td>string</td>
+<td>Payment reference (cheque no, transaction ref, …)</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>string</td>
+<td>e.g. <code>Annulation</code>, <code>Réduction</code>, free text</td>
+</tr>
+<tr>
+<td><code>remaining_amount</code></td>
+<td>string</td>
+<td>Remaining on the invoice at the moment of the payment</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>string</td>
+<td><code>PENDING</code> · <code>ACCOUNTED</code> · <code>DONE</code> · <code>CANCELED</code> · <code>VERIFYING</code> · <code>FAILED</code> · <code>EXPIRED</code></td>
+</tr>
+<tr>
+<td><code>code</code></td>
+<td>string</td>
+<td>Tax code this payment line is allocated to</td>
+</tr>
+<tr>
+<td><code>taxpayer_id</code>, <code>invoice_id</code></td>
+<td>FK</td>
+<td>Targets</td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td>FK</td>
+<td>Issuing user</td>
+</tr>
+<tr>
+<td><code>r_user_id</code></td>
+<td>FK</td>
+<td>Receiving user (collector)</td>
+</tr>
+<tr>
+<td><code>deposit</code></td>
+<td>float / ref</td>
+<td>Collector deposit reference</td>
+</tr>
+<tr>
+<td><code>notes</code></td>
+<td>text</td>
+<td>Free notes</td>
+</tr>
+<tr>
+<td><code>uuid</code></td>
+<td>string</td>
+<td>Sync idempotency key</td>
+</tr>
+<tr>
+<td><code>provider</code></td>
+<td>string</td>
+<td><code>qosic</code> · <code>fedapay</code> · <code>paygate</code> (DIGI only)</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>string</td>
+<td><code>TMONEY</code> · <code>FLOOZ</code> (DIGI only)</td>
+</tr>
+<tr>
+<td><code>phone_number</code>, <code>external_id</code></td>
+<td>string</td>
+<td>DIGI only</td>
+</tr>
+<tr>
+<td><code>verification_attempts</code>, <code>last_checked_at</code>, <code>expires_at</code></td>
+<td>mixed</td>
+<td>DIGI verification meta</td>
+</tr>
+</tbody>
+</table>
+<p>Relationships: <code>invoice()</code>, <code>taxpayer()</code>, <code>user()</code>, <code>r_user()</code>, <code>tax_label()</code>, <code>mobilePaymentTransaction()</code>, <code>stock_transfers()</code>.</p>
+<p>Key trait methods (<code>PaymentTrait</code>):</p>
+<ul>
+<li><code>getPaymentsByStatus($invoice_id, $status)</code></li>
+<li><code>getPaid($invoice_id)</code> — sum of effective payments</li>
+<li><code>getPaidNotAccounted($invoice_id)</code> — pending deposits</li>
+<li><code>getRestToPaid(Invoice $invoice)</code></li>
+<li><code>getPrintData()</code> — payments for PDF (excludes <code>PENDING</code>, <code>Annulation</code>, <code>Réduction</code>)</li>
+</ul>
+<blockquote>
+<p>One business payment may produce <strong>several <code>Payment</code> rows</strong> — one per tax code — through <code>Invoice::getCode()</code>.</p>
+</blockquote>
+<h3>4.3 <code>MobilePaymentTransaction</code> — <a href="../app/Models/MobilePaymentTransaction.php">app/Models/MobilePaymentTransaction.php</a></h3>
+<p>Tracks the conversation with a mobile-money provider for a single <code>DIGI</code> attempt. One transaction can produce several final <code>Payment</code> rows once verified.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>reference</code> (unique)</td>
+<td>Internal reference sent to the provider</td>
+</tr>
+<tr>
+<td><code>invoice_id</code>, <code>taxpayer_id</code>, <code>user_id</code></td>
+<td>Targets</td>
+</tr>
+<tr>
+<td><code>amount</code> (decimal 15,2)</td>
+<td>Requested amount</td>
+</tr>
+<tr>
+<td><code>phone_number</code></td>
+<td>Payer phone</td>
+</tr>
+<tr>
+<td><code>provider</code></td>
+<td><code>qosic</code> · <code>fedapay</code> · <code>paygate</code></td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td><code>TMONEY</code> · <code>FLOOZ</code></td>
+</tr>
+<tr>
+<td><code>external_id</code></td>
+<td>Provider's transaction id</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>pending</code> → <code>verifying</code> → <code>success</code> / <code>failed</code> / <code>expired</code></td>
+</tr>
+<tr>
+<td><code>verification_attempts</code>, <code>last_checked_at</code>, <code>verified_at</code>, <code>expires_at</code></td>
+<td>Polling metadata</td>
+</tr>
+<tr>
+<td><code>provider_response</code> (json)</td>
+<td>Raw last response</td>
+</tr>
+<tr>
+<td><code>meta</code> (json)</td>
+<td>E.g. tax code, free metadata</td>
+</tr>
+</tbody>
+</table>
+<p>Helpers: <code>isPending()</code>, <code>isVerifying()</code>, <code>isSuccess()</code>, <code>isFailed()</code>, <code>isExpired()</code>.</p>
+<h3>4.4 <code>InvoiceItem</code> — <a href="../app/Models/InvoiceItem.php">app/Models/InvoiceItem.php</a></h3>
+<p><code>invoice_id</code>, <code>taxpayer_taxable_id</code>, <code>qty</code>, <code>amount</code>, <code>ii_tariff</code>, <code>ii_seize</code>. The line items aggregated to compute the invoice total.</p>
+<h3>4.5 <code>InvoiceCodeBalance</code> — <a href="../app/Models/InvoiceCodeBalance.php">app/Models/InvoiceCodeBalance.php</a></h3>
+<p>Materialised view of &quot;how much is owed / paid per tax code&quot; for an invoice. Maintained by <code>InvoiceCodeBalanceService</code>. Unique on <code>(invoice_id, code)</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>invoice_id</code>, <code>taxpayer_id</code>, <code>code</code>, <code>year</code></td>
+<td>Identity</td>
+</tr>
+<tr>
+<td><code>amount_billed</code></td>
+<td>Sum of invoice items for this code</td>
+</tr>
+<tr>
+<td><code>amount_paid</code></td>
+<td>Sum of effective payments for this code (excludes <code>Annulation</code> / <code>Réduction</code>)</td>
+</tr>
+<tr>
+<td><code>remaining_amount</code></td>
+<td>Computed difference</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>OWING</code> · <code>PAID</code></td>
+</tr>
+<tr>
+<td><code>last_payment_at</code></td>
+<td>Last applicable payment timestamp</td>
+</tr>
+</tbody>
+</table>
+<h3>4.6 <code>Taxpayer</code> — <a href="../app/Models/Taxpayer.php">app/Models/Taxpayer.php</a></h3>
+<p>Holds <code>tnif</code>, <code>nif</code>, <code>name</code>, <code>mobilephone</code>, <code>telephone</code>, <code>email</code>, <code>address</code>. Drives identification on invoices, SMS notifications and digital payments.</p>
+<hr />
+<h2>5. Enumerations</h2>
+<p>All enums live in <a href="../app/Enums/">app/Enums/</a> as native PHP 8.1 string enums and are consumed via <code>-&gt;value</code> (no Eloquent casts — see project notes).</p>
+<h3>5.1 <code>PaymentTypeEnums</code></h3>
+<pre><code>CASH    = 'CASH'
+CHEQUE  = 'CHEQUE'
+DIGI    = 'DIGI'
+</code></pre>
+<h3>5.2 <code>PaymentStatusEnums</code></h3>
+<pre><code>PENDING    payment recorded, not yet accounted (also default for DIGI before verification)
+VERIFYING  DIGI: provider has accepted, polling in progress
+ACCOUNTED  payment has been booked into a deposit / ledger
+DONE       fully reconciled
+CANCELED   payment voided
+FAILED     DIGI: provider rejected / verification failed
+EXPIRED    DIGI: transaction expired without confirmation
+</code></pre>
+<h3>5.3 <code>InvoicePayStatusEnums</code></h3>
+<pre><code>OWING       = 'OWING'        // nothing paid
+PART_PAID   = 'PART PAID'    // some paid
+PAID        = 'PAID'         // fully paid
+</code></pre>
+<h3>5.4 <code>InvoiceStatusEnums</code> (workflow places)</h3>
+<pre><code>DRAFT
+P_ACCEPTED              = 'ACCEPTED WITHOUT ORDER NO'
+ACCEPTED                = 'ACCEPTED'
+REJECTED_BY_OR
+PENDING
+REJECTED
+APPROVED
+APPROVED_CANCELLATION   = 'APPROVED-CANCELLATION-OR-REDUCTION'
+CANCELED                = 'APPROVED-CANCELED'
+REDUCED                 = 'APPROVED-REDUCED'
+</code></pre>
+<h3>5.5 Constants — <a href="../app/Helpers/Constants.php">app/Helpers/Constants.php</a></h3>
+<pre><code>PROVIDER_QOSIC   = 'qosic'
+PROVIDER_FEDAPAY = 'fedapay'
+PROVIDER_PAYGATE = 'paygate'
+MOBILE_PROVIDERS = [qosic, fedapay, paygate]
+
+NETWORK_TMONEY = 'TMONEY'
+NETWORK_FLOOZ  = 'FLOOZ'
+MOBILE_NETWORKS = [TMONEY, FLOOZ]
+
+ANNULATION = 'Annulation'   // marker for cancellation Payment rows
+REDUCTION  = 'Réduction'    // marker for reduction Payment rows
+
+INVOICE_TYPE_TITRE    = 'TITRE'
+INVOICE_TYPE_COMPTANT = 'COMPTANT'
+</code></pre>
+<hr />
+<h2>6. Invoice state machine (workflow)</h2>
+<p>The invoice lifecycle is driven by a Symfony state-machine declared in <a href="../config/workflow.php">config/workflow.php</a> and registered via <a href="../config/workflow_registry.php">config/workflow_registry.php</a>. The workflow name is <code>invoice</code>.</p>
+<h3>6.1 Places</h3>
+<pre><code>DRAFT
+ACCEPTED WITHOUT ORDER NO     (intermediate)
+ACCEPTED
+REJECTED_BY_OR                (terminal)
+PENDING
+REJECTED                      (terminal)
+APPROVED
+APPROVED-CANCELLATION-OR-REDUCTION
+APPROVED-CANCELED             (terminal)
+APPROVED-REDUCED              (terminal)
+</code></pre>
+<h3>6.2 Transitions</h3>
+<table>
+<thead>
+<tr>
+<th>Transition</th>
+<th>From</th>
+<th>To</th>
+<th>Guard</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>submit_for_accepted</code></td>
+<td><code>DRAFT</code></td>
+<td><code>ACCEPTED</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>submit_for_reject_by_ord</code></td>
+<td><code>DRAFT</code></td>
+<td><code>REJECTED_BY_OR</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>submit_for_pending</code></td>
+<td><code>ACCEPTED</code></td>
+<td><code>PENDING</code></td>
+<td><code>InvoiceGuard::canSubmitForPending</code> (<code>order_no</code> set <strong>OR</strong> <code>type == COMPTANT</code>)</td>
+</tr>
+<tr>
+<td><code>submit_for_approved</code></td>
+<td><code>PENDING</code></td>
+<td><code>APPROVED</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>submit_for_approved_cancellation</code></td>
+<td><code>PENDING</code></td>
+<td><code>APPROVED-CANCELLATION-OR-REDUCTION</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>submit_for_rejected</code></td>
+<td><code>PENDING</code></td>
+<td><code>REJECTED</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>submit_for_reduced</code></td>
+<td><code>APPROVED</code> / <code>APPROVED-CANCELLATION…</code></td>
+<td><code>APPROVED-REDUCED</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>submit_for_canceled</code></td>
+<td><code>APPROVED</code> / <code>APPROVED-CANCELLATION…</code></td>
+<td><code>APPROVED-CANCELED</code></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3>6.3 Transition diagram</h3>
+<pre><code>                ┌─────────┐
+                │  DRAFT  │
+                └────┬────┘
+                     │ submit_for_accepted               submit_for_reject_by_ord
+                     ▼                                            │
+               ┌──────────┐                                       ▼
+               │ ACCEPTED │                            ┌────────────────────┐
+               └────┬─────┘                            │  REJECTED_BY_OR    │
+                    │ submit_for_pending  (guarded)    └────────────────────┘
+                    ▼
+              ┌──────────┐
+              │ PENDING  │──── submit_for_rejected ───► REJECTED
+              └────┬─────┘
+                   │ submit_for_approved          submit_for_approved_cancellation
+                   ▼                                          │
+            ┌────────────┐                                    ▼
+            │ APPROVED   │◄──────────────► APPROVED-CANCELLATION-OR-REDUCTION
+            └─────┬──────┘
+                  │ submit_for_canceled              submit_for_reduced
+                  ▼                                          ▼
+        APPROVED-CANCELED                          APPROVED-REDUCED
+</code></pre>
+<p>Transitions are observed by <a href="../app/Listeners/InvoiceWorkflowSubscriber.php">InvoiceWorkflowSubscriber</a> which fans out notifications and post-actions (release of taxables on rejection, agent notifications, etc.).</p>
+<blockquote>
+<p><strong>Payment can only be added when the invoice is in <code>APPROVED</code> (or <code>APPROVED-CANCELLATION-OR-REDUCTION</code>).</strong> This is checked by <code>Invoice::canGetPayment()</code> and by <code>PaymentPolicy</code>.</p>
+</blockquote>
+<hr />
+<h2>7. Payment lifecycle</h2>
+<pre><code>                ┌─────────┐
+                │ PENDING │ ◄──── created (DIGI initial / unaccounted CASH/CHEQUE)
+                └────┬────┘
+                     │
+                     │  (DIGI only) provider initiated
+                     ▼
+                ┌──────────┐
+                │ VERIFYING│ ─── verify polling (VerifyMobilePaymentJob)
+                └────┬─────┘
+            success │       │ failure / timeout
+                    ▼       ▼
+              ┌─────────┐ ┌──────────┐ ┌──────────┐
+              │ DONE    │ │ FAILED   │ │ EXPIRED  │
+              └────┬────┘ └──────────┘ └──────────┘
+                   │
+                   │ deposit / closing of accounts
+                   ▼
+              ┌──────────┐
+              │ACCOUNTED │
+              └──────────┘
+</code></pre>
+<p><code>CANCELED</code> is used when a payment row is voided manually. Payments with <code>description = &quot;Annulation&quot;</code> or <code>&quot;Réduction&quot;</code> are not counted as effective payments by <code>getPrintData()</code> and <code>InvoiceCodeBalanceService</code>.</p>
+<hr />
+<h2>8. Cash &amp; cheque payment procedure</h2>
+<p>Component: <a href="../app/Livewire/Payment/AddPaymentModal.php">app/Livewire/Payment/AddPaymentModal.php</a>.</p>
+<ol>
+<li>Agent opens a taxpayer or invoice screen.</li>
+<li>Triggers the <strong>AddPaymentModal</strong> (<code>payment_type = CASH</code> or <code>CHEQUE</code>).</li>
+<li>Required fields:
+<ul>
+<li><code>amount</code> (≤ remaining_amount on invoice).</li>
+<li><code>payment_type</code> ∈ {<code>CASH</code>, <code>CHEQUE</code>}.</li>
+<li><code>reference</code> (recommended for <code>CHEQUE</code>).</li>
+<li>Optional <code>notes</code>.</li>
+</ul>
+</li>
+<li>On submit:
+<ol>
+<li>The amount is <strong>split per tax code</strong> via <code>Invoice::getCode($invoice_id, $amount, $paymentData)</code>.</li>
+<li>One <code>Payment</code> row is created <strong>per tax code</strong>, all sharing the same <code>reference</code> and <code>created_at</code>.</li>
+<li><code>Invoice.pay_status</code> is recomputed: <code>OWING → PART PAID → PAID</code> based on <code>getRestToPaid()</code>.</li>
+<li><code>InvoiceCodeBalanceService::syncForInvoice($invoice)</code> is called to refresh per-code totals.</li>
+<li>If fully paid, <code>InvoicePaid</code> notification is dispatched.</li>
+</ol>
+</li>
+<li>Agent can immediately print the receipt PDF (see §11).</li>
+</ol>
+<p>Status lifecycle for a CASH/CHEQUE row:</p>
+<pre><code>PENDING (created) → ACCOUNTED (added to a deposit/versement) → DONE (closed by accountant)
+</code></pre>
+<p><code>CANCELED</code> is reachable manually if the policy allows it.</p>
+<hr />
+<h2>9. Mobile-money / digital payment procedure</h2>
+<p>End-to-end logic lives in <a href="../app/Services/MobilePayment/MobilePaymentService.php">app/Services/MobilePayment/MobilePaymentService.php</a> and is <strong>verification-based, never webhook-trusted</strong>.</p>
+<h3>9.1 Sequence</h3>
+<pre><code>Agent / Taxpayer                Livewire           MobilePaymentService          Provider          Queue
+──────────────                  ────────           ─────────────────────         ────────          ─────
+   pay (DIGI) ────────────────► AddPaymentModal
+                                     │
+                                     │ initiate({provider, amount, phone, network, invoice})
+                                     ▼
+                                MobilePaymentService.initiate()
+                                     │
+                                     │ create MobilePaymentTransaction (status=pending)
+                                     │ providerFactory.make(provider).initiate(payload)
+                                     │──────────────────────────────────────────► Provider
+                                     │ ◄──── ack / external_id / error ──────────
+                                     │ status = verifying | failed
+                                     │ dispatch VerifyMobilePaymentJob ─────────────────────────► Queue
+                                     ▼
+                                  return TX                                                          │
+                                                                                                     │
+                                                              Job: try 1..5, backoff [10,30,60,120,300]s
+                                                                                                     ▼
+                                                               provider.verify(reference)  ───────► Provider
+                                                                                                     │
+                                                               result ∈ {success, failed, pending}   │
+                                                                                                     │
+                                  on success:                                                        │
+                                    create Payment rows (one per tax code via Invoice::getCode)      │
+                                    update Invoice.pay_status                                        │
+                                    fire MobilePaymentVerified event ─► HandleMobilePaymentVerified  │
+                                                                       (sends SMS to taxpayer)       │
+                                  on pending: re-dispatch with backoff                               │
+                                  on failed/timeout: mark transaction failed/expired                 │
+</code></pre>
+<h3>9.2 Inputs validated by <code>AddPaymentModal</code></h3>
+<ul>
+<li><code>amount</code> required, ≤ remaining.</li>
+<li><code>payment_type = DIGI</code>.</li>
+<li><code>phone_number</code> — 8 digits.</li>
+<li><code>network</code> ∈ <code>MOBILE_NETWORKS</code> (<code>TMONEY</code>, <code>FLOOZ</code>).</li>
+<li><code>provider</code> ∈ <code>MOBILE_PROVIDERS</code> (<code>qosic</code>, <code>fedapay</code>, <code>paygate</code>).</li>
+</ul>
+<h3>9.3 Provider abstraction</h3>
+<p><code>MobilePaymentProviderInterface</code> exposes:</p>
+<pre><code class="language-php">public function initiate(array $data): array;     // returns ['ok'=&gt;bool, 'external_id'=&gt;?, 'response'=&gt;...]
+public function verify(string $reference): array; // returns ['status'=&gt;'success|failed|pending', ...]
+</code></pre>
+<p>Concrete implementations:</p>
+<ul>
+<li><a href="../app/Services/MobilePayment/Providers/QosicProvider.php">QosicProvider</a></li>
+<li><a href="../app/Services/MobilePayment/Providers/FedapayProvider.php">FedapayProvider</a></li>
+<li><a href="../app/Services/MobilePayment/Providers/PaygateProvider.php">PaygateProvider</a></li>
+</ul>
+<p>The factory is <a href="../app/Services/MobilePayment/MobilePaymentProviderFactory.php">MobilePaymentProviderFactory</a>.</p>
+<h3>9.4 Retry &amp; expiry policy</h3>
+<p>Defined in <a href="../config/mobile-payment.php">config/mobile-payment.php</a>:</p>
+<pre><code>transaction_expiry_minutes = 1               # default
+verification.max_attempts  = 3
+verification.backoff_seconds = [10, 30, 60, 120, 300]
+</code></pre>
+<p><a href="../app/Jobs/VerifyMobilePaymentJob.php">VerifyMobilePaymentJob</a> implements 5 attempts with the backoff above; expired transactions are swept by <a href="../app/Jobs/ExpireStaleMobilePaymentsJob.php">ExpireStaleMobilePaymentsJob</a>.</p>
+<h3>9.5 Manual retry</h3>
+<p><a href="../app/Livewire/Payment/MobilePaymentActions.php">MobilePaymentActions</a> exposes a <code>retryVerification($id)</code> action (visible in the <strong>mobile-payments</strong> screen) for transactions stuck in <code>pending</code> / <code>verifying</code>.</p>
+<hr />
+<h2>10. Per-tax-code balance tracking</h2>
+<p>Service: <a href="../app/Services/Sync/InvoiceCodeBalanceService.php">app/Services/Sync/InvoiceCodeBalanceService.php</a>.</p>
+<p>For every invoice change (issuance, payment, cancellation, reduction), <code>syncForInvoice($invoice)</code>:</p>
+<ol>
+<li>Aggregates <code>amount_billed</code> by <code>code</code> from <code>invoice_items</code> joined to <code>taxpayer_taxables</code> / <code>tax_labels</code>.</li>
+<li>Aggregates <code>amount_paid</code> by <code>code</code> from <code>payments</code>, <strong>excluding</strong> rows whose <code>description</code> is <code>Annulation</code> or <code>Réduction</code>.</li>
+<li>Upserts an <code>invoice_code_balances</code> row per <code>(invoice_id, code)</code> with <code>remaining_amount</code> and <code>status</code> (<code>OWING</code> / <code>PAID</code>).</li>
+<li>Deletes stale balance rows for codes no longer present in the invoice.</li>
+</ol>
+<p>This table is the source of truth for per-code reporting (ledgers, accountant deposits, recovery views).</p>
+<hr />
+<h2>11. Receipts and PDF generation</h2>
+<p>Service: <a href="../app/Services/PdfGeneratorService.php">app/Services/PdfGeneratorService.php</a> (uses <code>Barryvdh\DomPDF\Facade\Pdf</code>).</p>
+<p>Public API:</p>
+<pre><code class="language-php">PdfGeneratorService::generateInvoicePdf(
+    array  $uuids,           // one or more invoice UUIDs
+    string $templateName,    // resources/views/exports/{templateName}.blade.php
+    ?int   $action = null,   // 1 = notice, 2 = receipt
+    bool   $is_relance = false
+): array  // ['success'=&gt;bool, 'pdf'=&gt;stream, 'filename'=&gt;string]
+</code></pre>
+<p>Behaviour:</p>
+<ul>
+<li>Eager-loads invoices via <code>Invoice::retrieveByUUIDs()</code>.</li>
+<li>Adds a QR code through <a href="../app/Services/QrcodeGeneratorService.php">QrcodeGeneratorService</a> — used by collectors to reconcile in the field.</li>
+<li>On the first successful generation, sets <code>edition_state = 'PRINT'</code> and <code>printed_at = now()</code>.</li>
+<li>Templates live in <code>resources/views/exports/</code> (e.g. <code>invoices.blade.php</code>).</li>
+</ul>
+<p>Routes for printing:</p>
+<ul>
+<li><code>GET /prints</code> — print queue UI.</li>
+<li><code>GET /print-all-invoice</code> — bulk PDF download (<code>PrintController@downloadMultipleInvoicePdf</code>).</li>
+</ul>
+<hr />
+<h2>12. Synchronization with the remote collection app</h2>
+<p>A companion mobile app collects payments in the field and syncs back to SIG-RECETTE. See <a href="sync-entites-paiements.md">docs/sync-entites-paiements.md</a> and <a href="sync-implementation.md">docs/sync-implementation.md</a>.</p>
+<h3>12.1 Entities and direction</h3>
+<table>
+<thead>
+<tr>
+<th>Entity</th>
+<th>Direction</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Invoice</code></td>
+<td>local → remote</td>
+<td>Remote app shows unpaid notices</td>
+</tr>
+<tr>
+<td><code>InvoiceItem</code></td>
+<td>local → remote (read-only)</td>
+<td>Detail lines</td>
+</tr>
+<tr>
+<td><code>Taxpayer</code></td>
+<td>local → remote (read-only)</td>
+<td>Identification &amp; contact</td>
+</tr>
+<tr>
+<td><code>TaxpayerTaxable</code></td>
+<td>local → remote (read-only)</td>
+<td>Context of taxables</td>
+</tr>
+<tr>
+<td><code>Payment</code></td>
+<td>remote → local</td>
+<td>Field-collected payments uploaded back</td>
+</tr>
+</tbody>
+</table>
+<h3>12.2 API endpoints — <a href="../routes/api.php">routes/api.php</a></h3>
+<pre><code>GET  /api/v1/sync/invoices          → Api/Sync/V1/SyncV1InvoicesController@index
+GET  /api/v1/sync/payments          → Api/Sync/V1/SyncV1PaymentsController@index   (export local payments)
+POST /api/v1/sync/payments          → Api/Sync/V1/SyncV1PaymentsController@store   (import remote payments)
+
+POST /api/v1/search/invoices        → SearchInvoiceController@search
+POST /api/v1/search/taxpayers       → SearchTaxpayerController@search
+POST /api/v1/search/taxpayerstaxables → SearchTaxpayerTaxableController@search
+</code></pre>
+<h3>12.3 Idempotency &amp; filters</h3>
+<ul>
+<li>Idempotent via <code>uuid</code> on <code>Invoice</code> and <code>Payment</code> (UUID v4 generated at creation).</li>
+<li>Incremental via <code>?updated_since=&lt;ISO 8601&gt;</code>.</li>
+<li>Active-year scoping via <code>Year::getActiveYear()</code>.</li>
+<li>Pagination via <code>?per_page=</code>.</li>
+</ul>
+<h3>12.4 Import service</h3>
+<p><a href="../app/Services/Sync/PaymentImportService.php">PaymentImportService</a>:</p>
+<pre><code class="language-php">PaymentImportService::import(array $payments): [
+    'created' =&gt; int,
+    'updated' =&gt; int,
+    'skipped' =&gt; int,
+    'errors'  =&gt; array,
+]
+</code></pre>
+<p>For each item:</p>
+<ol>
+<li>Resolve invoice by <code>invoice_uuid</code>.</li>
+<li><code>Payment::firstOrCreate(['uuid' =&gt; …], $attributes)</code> and update if existing.</li>
+<li>Recompute <code>Invoice.pay_status</code> and call <code>InvoiceCodeBalanceService</code>.</li>
+</ol>
+<h3>12.5 Background jobs</h3>
+<ul>
+<li><a href="../app/Jobs/SyncImportPaymentsJob.php">SyncImportPaymentsJob</a> — pulls remote payments page-by-page (timeout 120s, 3 tries).</li>
+<li><a href="../app/Jobs/SyncExportInvoicesJob.php">SyncExportInvoicesJob</a> — pushes invoices to the remote.</li>
+</ul>
+<p>Sync runs are tracked in <code>SyncRun</code> records used as a cursor.</p>
+<hr />
+<h2>13. Events, listeners, jobs and notifications</h2>
+<h3>13.1 Events</h3>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MobilePaymentVerified</code></td>
+<td>Fired when a <code>MobilePaymentTransaction</code> becomes <code>success</code></td>
+</tr>
+</tbody>
+</table>
+<h3>13.2 Listeners</h3>
+<table>
+<thead>
+<tr>
+<th>Listener</th>
+<th>Reacts to</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HandleMobilePaymentVerified</code></td>
+<td><code>MobilePaymentVerified</code></td>
+<td>Sends SMS <em>&quot;Votre paiement de {amount} FCFA pour l'avis {invoice_no} a été confirmé. Ref: {reference}&quot;</em> (gated by <code>features.sms_notifications_feature</code>)</td>
+</tr>
+<tr>
+<td><code>InvoiceWorkflowSubscriber</code></td>
+<td><code>workflow.invoice.{enter,leave,transition,guard}</code></td>
+<td>Notifies role-appropriate users (<code>InvoiceAccepted</code>, <code>InvoiceApproved</code>, <code>InvoiceRejected</code>), releases reserved <code>TaxpayerTaxable</code> rows on rejection, etc.</td>
+</tr>
+</tbody>
+</table>
+<h3>13.3 Jobs</h3>
+<table>
+<thead>
+<tr>
+<th>Job</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VerifyMobilePaymentJob</code></td>
+<td>Polls the provider — 5 tries, backoff [10, 30, 60, 120, 300] s</td>
+</tr>
+<tr>
+<td><code>ExpireStaleMobilePaymentsJob</code></td>
+<td>Marks transactions past <code>expires_at</code> as <code>expired</code></td>
+</tr>
+<tr>
+<td><code>SyncImportPaymentsJob</code></td>
+<td>Pulls payments from remote</td>
+</tr>
+<tr>
+<td><code>SyncExportInvoicesJob</code></td>
+<td>Pushes invoices to remote</td>
+</tr>
+</tbody>
+</table>
+<h3>13.4 Notifications (database channel)</h3>
+<p><code>InvoiceCreated</code>, <code>InvoiceAccepted</code>, <code>InvoiceApproved</code>, <code>InvoiceRejected</code>, <code>InvoicePaid</code> — all in <a href="../app/Notifications/">app/Notifications/</a>.</p>
+<hr />
+<h2>14. Authorization and permissions</h2>
+<p>Permissions strings are in <strong>French</strong> and managed by Spatie.</p>
+<h3>14.1 <code>InvoicePolicy</code> — <a href="../app/Policies/InvoicePolicy.php">app/Policies/InvoicePolicy.php</a></h3>
+<table>
+<thead>
+<tr>
+<th>Ability</th>
+<th>Required permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>viewAny</code> / <code>view</code></td>
+<td>open to any authenticated user</td>
+</tr>
+<tr>
+<td><code>create</code></td>
+<td><em>peut émettre un avis au comptant</em> <strong>OR</strong> <em>peut émettre un avis sur titre</em></td>
+</tr>
+<tr>
+<td><code>update</code></td>
+<td><em>peut accepter un avis sur titre</em>, <em>peut prendre en charge…</em>, <em>peut ajouter date de livraison</em>, <em>peut ajouter numéro d'ordre</em></td>
+</tr>
+<tr>
+<td><code>delete</code></td>
+<td><em>peut rejeter un avis</em> (and delegate variants)</td>
+</tr>
+<tr>
+<td><code>reduce</code></td>
+<td><em>peut réduire un avis</em> (titre / comptant)</td>
+</tr>
+</tbody>
+</table>
+<h3>14.2 <code>PaymentPolicy</code> — <a href="../app/Policies/PaymentPolicy.php">app/Policies/PaymentPolicy.php</a></h3>
+<table>
+<thead>
+<tr>
+<th>Ability</th>
+<th>Required permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>viewAny</code> / <code>view</code></td>
+<td>any authenticated user</td>
+</tr>
+<tr>
+<td><code>create</code></td>
+<td><em>peut ajouter un paiement</em></td>
+</tr>
+<tr>
+<td><code>update</code></td>
+<td><em>peut accepter un paiement</em> <strong>OR</strong> <em>peut comptabiliser un paiement</em></td>
+</tr>
+<tr>
+<td><code>delete</code></td>
+<td><em>peut supprimer un paiement</em></td>
+</tr>
+</tbody>
+</table>
+<h3>14.3 <code>InvoiceGuard</code> — <a href="../app/Guards/InvoiceGuard.php">app/Guards/InvoiceGuard.php</a></h3>
+<p><code>canSubmitForPending</code> blocks <code>ACCEPTED → PENDING</code> unless <code>order_no</code> is set or <code>type == COMPTANT</code>.</p>
+<hr />
+<h2>15. Routes reference</h2>
+<h3>15.1 Web — <a href="../routes/web.php">routes/web.php</a></h3>
+<pre><code>GET  /invoices                              InvoiceController@index
+GET  /invoices/{id}                         InvoiceController@show
+GET  /mobile-payments                       MobilePaymentController@index
+
+GET  /accounts/collector-deposits           CollectorDepositController@index
+GET  /accounts/collector-deposits/{id}      CollectorDepositController@show
+GET  /accounts/accountant-deposits-title    AccountantDepositController@index
+GET  /accounts/accountant-deposits-outright AccountantDepositOutrightController@index
+GET  /accounts/ledgers                      LedgerController@index
+
+GET  /recoveries                            RecoveryController@index
+GET  /prints                                PrintController@index
+GET  /print-all-invoice                     PrintController@downloadMultipleInvoicePdf
+</code></pre>
+<h3>15.2 API — <a href="../routes/api.php">routes/api.php</a></h3>
+<pre><code>GET  /api/v1/sync/invoices                  Api/Sync/V1/SyncV1InvoicesController@index
+GET  /api/v1/sync/payments                  Api/Sync/V1/SyncV1PaymentsController@index
+POST /api/v1/sync/payments                  Api/Sync/V1/SyncV1PaymentsController@store
+
+POST /api/v1/search/invoices                SearchInvoiceController@search
+POST /api/v1/search/taxpayers               SearchTaxpayerController@search
+POST /api/v1/search/taxpayerstaxables       SearchTaxpayerTaxableController@search
+</code></pre>
+<hr />
+<h2>16. Configuration reference</h2>
+<h3>16.1 <a href="../config/mobile-payment.php">config/mobile-payment.php</a></h3>
+<pre><code class="language-php">'default_provider'           =&gt; env('MOBILE_PAYMENT_DEFAULT_PROVIDER', 'paygate'),
+'transaction_expiry_minutes' =&gt; env('MOBILE_PAYMENT_EXPIRY_MINUTES', 1),
+
+'verification' =&gt; [
+    'max_attempts'    =&gt; 3,
+    'backoff_seconds' =&gt; [10, 30, 60, 120, 300],
+],
+
+'providers' =&gt; [
+    'qosic'   =&gt; ['base_url'=&gt;env('QOSIC_BASE_URL'),   'username'=&gt;env('QOSIC_USERNAME'), 'password'=&gt;env('QOSIC_PASSWORD'), 'merchant_id'=&gt;env('QOSIC_MERCHANT_ID'), 'timeout'=&gt;30],
+    'fedapay' =&gt; ['base_url'=&gt;env('FEDAPAY_BASE_URL','https://sandbox-api.fedapay.com'), 'secret_key'=&gt;env('FEDAPAY_SECRET_KEY'), 'public_key'=&gt;env('FEDAPAY_PUBLIC_KEY'), 'timeout'=&gt;30],
+    'paygate' =&gt; ['base_url'=&gt;env('PAYGATE_BASE_URL'), /* … */ ],
+],
+</code></pre>
+<h3>16.2 <a href="../config/workflow.php">config/workflow.php</a> / <a href="../config/workflow_registry.php">config/workflow_registry.php</a></h3>
+<p>Declare the <code>invoice</code> state machine (states &amp; transitions listed in §6).</p>
+<h3>16.3 <a href="../config/sync.php">config/sync.php</a></h3>
+<p>Holds endpoints, tokens and pagination for the remote collection app.</p>
+<h3>16.4 Required <code>.env</code> keys (payment-related)</h3>
+<pre><code>MOBILE_PAYMENT_DEFAULT_PROVIDER=paygate
+MOBILE_PAYMENT_EXPIRY_MINUTES=1
+
+QOSIC_BASE_URL=
+QOSIC_USERNAME=
+QOSIC_PASSWORD=
+QOSIC_MERCHANT_ID=
+
+FEDAPAY_BASE_URL=https://sandbox-api.fedapay.com
+FEDAPAY_SECRET_KEY=
+FEDAPAY_PUBLIC_KEY=
+
+PAYGATE_BASE_URL=
+PAYGATE_*=…
+
+QUEUE_CONNECTION=database          # required for VerifyMobilePaymentJob
+</code></pre>
+<hr />
+<h2>17. Database migrations reference</h2>
+<h3>17.1 <code>invoices</code> (anchor migration)</h3>
+<p><a href="../database/migrations/2024_02_03_000548_create_invoices_table.php">2024_02_03_000548_create_invoices_table.php</a></p>
+<pre><code class="language-sql">id             BIGINT PK AUTOINC (starts at 100001)
+invoice_no     VARCHAR
+order_no       VARCHAR
+status         VARCHAR DEFAULT 'DRAFT'
+pay_status     VARCHAR DEFAULT 'OWING'
+delivery       VARCHAR DEFAULT 'NOT DELIVERED'
+delivery_date  DATE
+from_date      DATE
+to_date        DATE
+qty            DOUBLE
+amount         DOUBLE DEFAULT 0
+taxpayer_id    FK → taxpayers.id
+created_at, updated_at
+</code></pre>
+<p>Progressive migrations add <code>validity</code>, <code>reduce_amount</code>, <code>delivery_to</code>, <code>uuid</code>, <code>type</code>, <code>is_on_recovery_print</code>, <code>edition_state</code>, <code>notes (json)</code>, <code>reason_for_reject</code>, <code>printed_at</code>.</p>
+<h3>17.2 <code>payments</code></h3>
+<p><a href="../database/migrations/2024_02_26_005552_create_payments_table.php">2024_02_26_005552_create_payments_table.php</a> — base columns, then incremental migrations add <code>remaining_amount</code>, <code>user_id</code>, <code>uuid</code>, <code>code</code>, <code>invoice_type</code>, <code>notes</code>, deposit reference; finally:</p>
+<ul>
+<li><code>2026_03_28_000001_add_mobile_payment_fields_to_payments_table.php</code> — <code>provider</code>, <code>phone_number</code>, <code>external_id</code>, <code>verification_attempts</code>, <code>last_checked_at</code>, <code>expires_at</code>.</li>
+<li><code>2026_04_08_000001_add_network_column_to_payments_and_mobile_payment_transactions_tables.php</code> — <code>network</code>.</li>
+</ul>
+<h3>17.3 <code>mobile_payment_transactions</code></h3>
+<p><a href="../database/migrations/2026_03_28_000002_create_mobile_payment_transactions_table.php">2026_03_28_000002_create_mobile_payment_transactions_table.php</a></p>
+<pre><code class="language-sql">id, reference UNIQUE,
+invoice_id FK, taxpayer_id FK NULL, user_id FK NULL,
+amount DECIMAL(15,2), phone_number, provider, network,
+external_id, status DEFAULT 'pending',
+verification_attempts SMALLINT DEFAULT 0,
+last_checked_at, verified_at, expires_at,
+provider_response JSON, meta JSON,
+INDEX (invoice_id, status), INDEX (status, expires_at), INDEX (provider)
+</code></pre>
+<h3>17.4 <code>invoice_code_balances</code></h3>
+<p><a href="../database/migrations/2026_03_01_000000_create_invoice_code_balances_table.php">2026_03_01_000000_create_invoice_code_balances_table.php</a></p>
+<pre><code class="language-sql">invoice_id FK, taxpayer_id FK,
+code, year,
+amount_billed, amount_paid, remaining_amount,
+status DEFAULT 'OWING', last_payment_at,
+UNIQUE (invoice_id, code)
+INDEX (taxpayer_id, code, year)
+INDEX (taxpayer_id, year)
+</code></pre>
+<hr />
+<h2>18. Step-by-step procedures</h2>
+<h3>18.1 Issue a new invoice and collect a cash payment (<code>COMPTANT</code>)</h3>
+<ol>
+<li><strong>Open a taxpayer file</strong> → click <em>Nouvel avis</em>.</li>
+<li>Fill the <code>AddInvoiceModal</code> (taxpayer, taxables, period). Choose <code>type = COMPTANT</code>.</li>
+<li>Submit → invoice created in <code>DRAFT</code>.</li>
+<li>Apply transitions:
+<ul>
+<li><code>submit_for_accepted</code> (<code>DRAFT → ACCEPTED</code>).</li>
+<li><code>submit_for_pending</code> (<code>ACCEPTED → PENDING</code>) — <strong>allowed because <code>type = COMPTANT</code></strong> even without <code>order_no</code>.</li>
+<li><code>submit_for_approved</code> (<code>PENDING → APPROVED</code>).</li>
+</ul>
+</li>
+<li>Open <code>AddPaymentModal</code>, choose <code>CASH</code>, type the amount, save.</li>
+<li>The system creates one <code>Payment</code> per tax code, recomputes <code>pay_status</code> and refreshes <code>invoice_code_balances</code>.</li>
+<li>Print the receipt (§11).</li>
+</ol>
+<h3>18.2 Issue a <code>TITRE</code> invoice (must have an order number)</h3>
+<ol>
+<li>Same as above with <code>type = TITRE</code>.</li>
+<li>After <code>ACCEPTED</code>, the agent <strong>must</strong> set <code>order_no</code> (permission <em>peut ajouter numéro d'ordre</em>).</li>
+<li>Then <code>submit_for_pending</code> succeeds; otherwise the <code>InvoiceGuard::canSubmitForPending</code> blocks the transition.</li>
+<li>Continue with approval and payment.</li>
+</ol>
+<h3>18.3 Collect a digital payment (DIGI)</h3>
+<ol>
+<li>Open <code>AddPaymentModal</code> on an <code>APPROVED</code> invoice.</li>
+<li>Pick <code>DIGI</code>, choose provider (<code>paygate</code> default), network (<code>TMONEY</code>/<code>FLOOZ</code>), enter the <strong>8-digit</strong> phone.</li>
+<li>Save → <code>MobilePaymentService::initiate()</code> creates a <code>MobilePaymentTransaction (pending)</code>, calls the provider, and queues a <code>VerifyMobilePaymentJob</code>.</li>
+<li>The taxpayer validates the USSD/app prompt on their phone.</li>
+<li>The job polls the provider with backoff. On <code>success</code>, <code>Payment</code> rows are created, <code>pay_status</code> updated, <code>MobilePaymentVerified</code> event fires, the taxpayer receives an SMS confirmation.</li>
+<li>If polling exhausts attempts or <code>expires_at</code> passes, the transaction is marked <code>failed</code>/<code>expired</code>. The agent can use <code>Retry</code> from the <strong>Mobile payments</strong> page.</li>
+</ol>
+<h3>18.4 Cancel or reduce an approved invoice</h3>
+<ol>
+<li>From <code>APPROVED</code>, transition <code>submit_for_approved_cancellation</code> → <code>APPROVED-CANCELLATION-OR-REDUCTION</code>.</li>
+<li>Then either:
+<ul>
+<li><code>submit_for_canceled</code> → <code>APPROVED-CANCELED</code>, <strong>and</strong> create a corrective <code>Payment</code> with <code>description = &quot;Annulation&quot;</code>.</li>
+<li><code>submit_for_reduced</code> → <code>APPROVED-REDUCED</code>, <strong>and</strong> create a corrective <code>Payment</code> with <code>description = &quot;Réduction&quot;</code>, plus update <code>Invoice.reduce_amount</code>.</li>
+</ul>
+</li>
+<li>These <code>Annulation</code>/<code>Réduction</code> rows are excluded from <code>getPrintData()</code> and from the per-code balance computation.</li>
+</ol>
+<h3>18.5 Close a collector's deposit</h3>
+<ol>
+<li>Open <em>Comptes → Versements régisseur</em> (<code>/accounts/collector-deposits</code>).</li>
+<li>Pick the date range, the system lists <code>Payment</code> rows where <code>r_user_id = current collector</code> and <code>status = PENDING</code>.</li>
+<li>Validate the deposit: <code>status</code> becomes <code>ACCOUNTED</code>, the <code>deposit</code> column is filled.</li>
+<li>Accountant deposits are then closed under <em>Versements comptable</em> (titre / comptant) which moves them to <code>DONE</code>.</li>
+</ol>
+<h3>18.6 Synchronize with the remote collection app</h3>
+<ol>
+<li>Schedule <a href="../app/Jobs/SyncExportInvoicesJob.php">SyncExportInvoicesJob</a> so the remote always sees current <code>APPROVED</code> notices.</li>
+<li>Schedule <a href="../app/Jobs/SyncImportPaymentsJob.php">SyncImportPaymentsJob</a> every X minutes — it calls <code>GET /api/v1/sync/payments?updated_since=…&amp;per_page=…</code>, then <code>PaymentImportService::import()</code>.</li>
+<li>Cursor (<code>updated_since</code>) is persisted via <code>SyncRun</code>.</li>
+</ol>
+<hr />
+<h2>19. Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Likely cause</th>
+<th>Where to look</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cannot move invoice from <code>ACCEPTED</code> to <code>PENDING</code></td>
+<td><code>order_no</code> missing on a <code>TITRE</code></td>
+<td><code>InvoiceGuard::canSubmitForPending</code></td>
+</tr>
+<tr>
+<td><code>AddPaymentModal</code> rejects amount</td>
+<td>Amount &gt; <code>Invoice::get_remains_to_be_paid()</code></td>
+<td>Validation rules in <code>AddPaymentModal</code></td>
+</tr>
+<tr>
+<td>DIGI stuck in <code>verifying</code></td>
+<td>Job queue not running, or provider timeout</td>
+<td>Run <code>php artisan queue:work</code>; inspect <code>mobile_payment_transactions.last_checked_at</code>, <code>provider_response</code>; click <em>Retry</em></td>
+</tr>
+<tr>
+<td>DIGI ends <code>expired</code></td>
+<td><code>transaction_expiry_minutes</code> too low or taxpayer didn't validate</td>
+<td><code>config/mobile-payment.php</code>, <code>ExpireStaleMobilePaymentsJob</code></td>
+</tr>
+<tr>
+<td>Per-code totals look stale</td>
+<td><code>InvoiceCodeBalanceService::syncForInvoice()</code> not called</td>
+<td>Trigger by saving any <code>Payment</code> on the invoice; or re-sync via tinker</td>
+</tr>
+<tr>
+<td>Sync import says <code>skipped</code></td>
+<td>Same <code>payment.uuid</code> already imported (idempotency)</td>
+<td>Expected behaviour</td>
+</tr>
+<tr>
+<td>PDF receipt shows <code>Annulation</code> lines</td>
+<td>These rows are normally hidden; check <code>description</code> filter in <code>Payment::getPrintData()</code></td>
+<td><code>app/Traits/PaymentTrait.php</code></td>
+</tr>
+<tr>
+<td>Notification never sent</td>
+<td><code>features.sms_notifications_feature</code> disabled or SMS provider creds missing</td>
+<td><code>config/features.php</code>, <code>SmsService</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>Appendix — Quick reference cheat-sheet</h3>
+<pre><code>Invoice states  : DRAFT → ACCEPTED → PENDING → APPROVED → (CANCELED|REDUCED)
+Pay status      : OWING → PART PAID → PAID
+Payment types   : CASH | CHEQUE | DIGI
+DIGI providers  : qosic | fedapay | paygate
+DIGI networks   : TMONEY | FLOOZ
+DIGI tx status  : pending → verifying → success | failed | expired
+Payment status  : PENDING → ACCOUNTED → DONE   (CANCELED, plus DIGI-only VERIFYING/FAILED/EXPIRED)
+Idempotency key : uuid (Invoice &amp; Payment)
+Per-code totals : invoice_code_balances (unique on invoice_id+code)
+</code></pre>
+<p><em>Document generated for the SIG-RECETTE project.</em></p>
+</body></html>
